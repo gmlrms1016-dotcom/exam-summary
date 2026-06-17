@@ -1,0 +1,501 @@
+<!-- ===================================================================== -->
+<!-- 컴퓨터공학기초 · 기말 완전정리                                         -->
+<!-- 시험범위: 6장 인공지능·딥러닝 / 7장 컴퓨팅 사고력 / 9장 DB / 10장 네트워크 -->
+<!-- 디자인은 웹프로그래밍 페이지와 동일한 기말정리.css 를 재사용합니다.       -->
+<!-- ===================================================================== -->
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컴퓨터공학기초 기말 완전정리</title>
+    <link rel="stylesheet" href="기말정리.css"> <!-- 웹 페이지와 같은 초록 테마 재사용 -->
+    <style>
+        /* 이 페이지에서만 쓰는 작은 추가 스타일 */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 14px;
+            color: var(--main);
+            font-weight: 800;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        /* 단원 큰 제목 배지(주차 대신 '장' 표시 색 강조) */
+        .chap { background: #2d526d; }   /* 단원 배지: 파랑 */
+        /* OX/핵심 포인트 강조표의 정답 칸 */
+        .ox td:last-child { color: var(--main); font-weight: 800; white-space: nowrap; }
+    </style>
+</head>
+
+<body>
+<div class="wrap">
+
+    <!-- 과목 선택(허브)으로 돌아가기 -->
+    <a class="back-link" href="index.html">← 과목 선택으로 돌아가기</a>
+
+    <!-- ===================== 머리말 ===================== -->
+    <header class="page-head">
+        <h1>컴퓨터공학기초 · 기말 완전정리</h1>
+        <p>시험범위 : 6장 인공지능·딥러닝 · 7장 컴퓨팅 사고력 · 9장 데이터베이스 · 10장 네트워크</p>
+    </header>
+
+    <div class="tip">
+        📖 <b>이 페이지 보는 법</b> : 각 단원은 ① 핵심 개념 → ② 시험 단골 정리표 → ③ 암기 포인트(팁) 순서입니다.
+        맨 아래 <b>📝 자가체크 퀴즈</b>로 외운 내용을 확인하세요. (출제 4단원 + 객관식·괄호채우기·주관식 기준)
+    </div>
+
+    <!-- ===================== 목차 ===================== -->
+    <nav class="toc">
+        <a href="#s6">6장 인공지능·딥러닝</a>
+        <a href="#s7">7장 컴퓨팅 사고력</a>
+        <a href="#s9">9장 데이터베이스</a>
+        <a href="#s10">10장 네트워크</a>
+        <a href="#quiz" style="background:#d9772b;color:#fff;">📝 자가체크 퀴즈</a>
+    </nav>
+
+
+    <!-- ================================================================= -->
+    <!-- 6장 인공지능과 딥러닝                                              -->
+    <!-- ================================================================= -->
+    <section class="card" id="s6">
+        <h2>6장 인공지능과 딥러닝<span class="week chap">6장</span></h2>
+
+        <h3>① AI의 역사 — 기호주의 ↔ 연결주의</h3>
+        <p>'인공지능' 용어를 처음 제시한 사람은 <b>존 매카시</b>(1956 다트머스 회의). <b>튜링</b>은 '튜링 테스트'를 제안했습니다.</p>
+        <table class="ref">
+            <tr><th>구분</th><th>설명</th></tr>
+            <tr><td>기호주의</td><td>규칙(지식)을 사람이 직접 입력 → 규칙 기반</td></tr>
+            <tr><td>연결주의</td><td>인공신경망(뇌의 신경망 흉내)으로 학습 → 딥러닝으로 발전</td></tr>
+        </table>
+        <div class="tip">초기엔 <b>기호주의</b>, 딥러닝은 <b>연결주의</b>의 발전. "AI 전체 = 기호주의도 포함"이므로 <b>'데이터 기반 학습'은 머신러닝(ML)의 설명</b>입니다.</div>
+
+        <h3>② 머신러닝 = 데이터로 규칙을 자동 생성</h3>
+        <p>전통 프로그래밍은 <b>사람이 규칙을 작성</b>하지만, 머신러닝은 <b>데이터로 규칙을 자동 생성</b>합니다.</p>
+        <p><b>머신러닝 수행 과정 (순서 시험 단골!)</b> : <b>수집 → 전처리 → 학습 → 평가 → 시각화</b></p>
+        <table class="ref">
+            <tr><th>용어</th><th>뜻</th></tr>
+            <tr><td>표본 = 인스턴스 = 데이터 포인트</td><td>모두 같은 의미 (데이터 한 개)</td></tr>
+            <tr><td>레이블(label)</td><td>정답값 (위 용어들과 의미가 다름)</td></tr>
+            <tr><td>분류(Classification)</td><td>남/여 같은 '유형'을 맞힘 (유형 수 = 2)</td></tr>
+            <tr><td>회귀(Regression)</td><td>연속적인 '값'을 예측</td></tr>
+        </table>
+
+        <h3>③ 학습 방법 3가지 (가장 중요!)</h3>
+        <table class="ref">
+            <tr><th>종류</th><th>특징</th><th>예시</th></tr>
+            <tr><td>지도학습</td><td>레이블(정답) 있음 — 분류·회귀</td><td>선형모델, KNN</td></tr>
+            <tr><td>비지도학습</td><td>레이블 없음 — 비슷한 것끼리 묶음</td><td>군집화(K-평균), 차원축소</td></tr>
+            <tr><td>강화학습</td><td>보상(reward)을 최대화하도록 학습</td><td>게임 AI, 로봇 제어</td></tr>
+        </table>
+        <div class="tip"><b>KNN·선형모델 = 지도학습</b>, <b>K-평균·차원축소 = 비지도학습</b>, <b>보상 최대화 = 강화학습</b>. 자주 헷갈리니 꼭 구분!</div>
+
+        <h3>④ 퍼셉트론 · 신경망 학습</h3>
+        <table class="ref">
+            <tr><th>용어</th><th>뜻</th></tr>
+            <tr><td>입력(Input)</td><td>학습 데이터로 주어짐</td></tr>
+            <tr><td>가중치(Weight)</td><td>입력의 중요도 — <b>학습으로 구해지는 결과값</b></td></tr>
+            <tr><td>편향(Bias)</td><td>활성화 여부 기준값 — <b>학습으로 구해지는 결과값</b></td></tr>
+            <tr><td>출력(Output)</td><td>가중치·편향을 이용해 계산</td></tr>
+            <tr><td>활성화 함수</td><td>ReLU, 시그모이드(Sigmoid)</td></tr>
+            <tr><td>손실=비용=목적 함수</td><td>오차(목표값) — <b>활성화 함수 아님!</b></td></tr>
+            <tr><td>오차역전파</td><td>오차를 <b>출력층 → 입력층</b>으로 거꾸로 전달</td></tr>
+            <tr><td>경사하강법</td><td>손실 <b>최소</b> 지점을 찾아가는 방법 (최소화 방향 학습)</td></tr>
+        </table>
+
+        <h3>⑤ 딥러닝 프레임워크 · 도구</h3>
+        <table class="ref">
+            <tr><th>도구</th><th>특징 / 만든 곳</th></tr>
+            <tr><td>텐서플로(TensorFlow)</td><td>구글</td></tr>
+            <tr><td>케라스(Keras)</td><td>프랑소아 숄레 — 고수준 API</td></tr>
+            <tr><td>파이토치(PyTorch)</td><td>테슬라 오토파일럿, 우버 Pyro 사용</td></tr>
+            <tr><td>ONNX</td><td>프레임워크 간 모델 교환</td></tr>
+            <tr><td>사이킷런(scikit-learn)</td><td>일반 머신러닝 (신경망 전용 아님)</td></tr>
+        </table>
+
+        <h3>⑥ 핵심 용어 (괄호채우기 단골)</h3>
+        <table class="ref ox">
+            <tr><th>설명</th><th>용어</th></tr>
+            <tr><td>AI가 인간 지능을 넘어서는 순간</td><td>특이점(Singularity)</td></tr>
+            <tr><td>진짜 같은 가짜를 생성하는 신경망</td><td>GAN(생성적 적대 신경망)</td></tr>
+            <tr><td>원본 위에 다른 영상을 합성하는 기술</td><td>딥페이크(Deepfake)</td></tr>
+            <tr><td>뇌 신경망을 흉내 낸 AI 접근</td><td>연결주의(Connectionism)</td></tr>
+            <tr><td>모델을 학습시키는 데이터 (≠test data)</td><td>학습(훈련) 데이터(Training data)</td></tr>
+            <tr><td>정답 없이 비슷한 특성끼리 묶는 비지도 학습</td><td>군집화(Clustering)</td></tr>
+            <tr><td>입력층과 출력층 사이의 층</td><td>은닉층(Hidden Layer)</td></tr>
+            <tr><td>은닉층이 여러 개인 신경망</td><td>심층신경망(DNN)</td></tr>
+        </table>
+    </section>
+
+
+    <!-- ================================================================= -->
+    <!-- 7장 컴퓨팅 사고력                                                  -->
+    <!-- ================================================================= -->
+    <section class="card" id="s7">
+        <h2>7장 컴퓨팅 사고력<span class="week chap">7장</span></h2>
+
+        <h3>① 컴퓨팅 사고력이란</h3>
+        <p>전문가만이 아니라 <b>모두가 배워야 할 보편 역량</b>이며, <b>'인간'의 사고방법</b>입니다(컴퓨터의 사고 아님). 코딩 능력'만'을 뜻하지 않습니다.</p>
+
+        <h3>② 구성 요소 4가지 (시험 핵심!)</h3>
+        <table class="ref">
+            <tr><th>요소</th><th>뜻</th></tr>
+            <tr><td>문제 분해(Decomposition)</td><td>복잡한 문제를 작은 문제로 나눔</td></tr>
+            <tr><td>패턴 인식(Pattern Recognition)</td><td>유사·반복되는 특징을 찾아 일반화</td></tr>
+            <tr><td>추상화(Abstraction)</td><td>핵심만 남기고 불필요한 세부 제거·단순화</td></tr>
+            <tr><td>알고리즘(Algorithm)</td><td>해결 절차를 순서대로 표현</td></tr>
+        </table>
+        <div class="tip">'<b>문제 융합</b>'은 구성 요소가 <b>아닙니다</b>(올바른 건 문제 <b>분해</b>). 마인드맵·지하철 노선도는 <b>추상화</b>의 예입니다.</div>
+
+        <h3>③ 추상화 — 자세히</h3>
+        <p>핵심 요소만 남기고, 중요 정보를 선택하며, 불필요 세부를 제거하고, 공통 특징을 일반화하여 <b>현실 문제를 모델로 표현</b>하는 과정. (예: 지하철 노선도 — 실제 거리·곡선은 생략하고 역 순서만 표현)</p>
+
+        <h3>④ 알고리즘 표현 방법</h3>
+        <table class="ref">
+            <tr><th>방법</th><th>설명</th></tr>
+            <tr><td>순서도(흐름도, 플로차트)</td><td>표준 기호·도형으로 절차를 그림으로 표현</td></tr>
+            <tr><td>의사코드(Pseudocode)</td><td>프로그래밍 언어와 비슷한 형식의 글</td></tr>
+            <tr><td>자연어</td><td>일반 문장으로 표현</td></tr>
+        </table>
+        <div class="tip">알고리즘은 <b>의사코드'만'</b>이 아니라 순서도·자연어 등 여러 방법으로 표현됩니다. 마인드맵은 <b>하향식</b>(중심 → 세부), 트리(나무) 구조입니다.</div>
+
+        <h3>⑤ SW 교육 방법 · 도구</h3>
+        <table class="ref">
+            <tr><td>언플러그드(Unplugged)</td><td>컴퓨터(도구) 없이 연필·종이·게임으로 학습</td></tr>
+            <tr><td>피지컬 컴퓨팅</td><td>로봇·블록·회로로 직접 만들며 배움</td></tr>
+            <tr><td>앱 인벤터(App Inventor)</td><td>블록으로 앱을 만드는 교육 도구</td></tr>
+            <tr><td>블록리(Blockly)</td><td>구글이 만든 블록 기반 교육 라이브러리</td></tr>
+        </table>
+        <p>우리나라 <b>초등학생</b>도 SW교육으로 컴퓨팅 사고력을 배웁니다.</p>
+    </section>
+
+
+    <!-- ================================================================= -->
+    <!-- 9장 데이터베이스                                                   -->
+    <!-- ================================================================= -->
+    <section class="card" id="s9">
+        <h2>9장 데이터베이스<span class="week chap">9장</span></h2>
+
+        <h3>① DB의 특징</h3>
+        <p><b>통합(중복 최소화)</b>, 저장, <b>공유(동시 접근)</b>, 실시간 접근, 계속적 변화, <b>데이터 독립성</b>, <b>무결성</b>.</p>
+        <div class="tip">DB의 특징은 중복 '<b>최소화</b>'지 '중복 데이터'가 아닙니다. <b>잘못된 값 입력 → 무결성 위반</b>.</div>
+
+        <h3>② 기본 용어 & DB vs DBMS</h3>
+        <table class="ref">
+            <tr><th>용어</th><th>뜻</th></tr>
+            <tr><td>필드(Field)</td><td>데이터의 종류(열)</td></tr>
+            <tr><td>레코드(Record)</td><td>관련 필드의 모음(행) — '필드 종류'가 아님</td></tr>
+            <tr><td>DB</td><td>관련 데이터의 집합(저장소)</td></tr>
+            <tr><td>DBMS</td><td>DB를 생성·관리·운영하는 소프트웨어(사용자–DB 인터페이스)</td></tr>
+        </table>
+
+        <h3>③ 데이터 추상화 3단계 & 스키마·독립성</h3>
+        <table class="ref">
+            <tr><td>외부 단계</td><td>사용자 뷰(View)</td></tr>
+            <tr><td>개념 단계</td><td>전체 논리 구조</td></tr>
+            <tr><td>내부 단계</td><td>물리적 저장 구조</td></tr>
+        </table>
+        <table class="ref">
+            <tr><td>스키마(Schema)</td><td>DB 구조·제약조건을 명세한 것</td></tr>
+            <tr><td>논리적 독립성</td><td>개념 스키마 변경이 외부 스키마에 영향 없음</td></tr>
+            <tr><td>물리적 독립성</td><td>내부(저장구조) 변경이 개념 스키마에 영향 없음</td></tr>
+        </table>
+
+        <h3>④ DB 모델 3가지</h3>
+        <table class="ref">
+            <tr><th>모델</th><th>특징</th></tr>
+            <tr><td>계층형</td><td>트리 구조, 부모–자식 1:N (자식 여러 개 가능)</td></tr>
+            <tr><td>망형</td><td>그래프 구조, N:M, 링크로 연결</td></tr>
+            <tr><td>관계형</td><td>테이블·키 사용, 포인터 없음</td></tr>
+        </table>
+
+        <h3>⑤ 관계형 구성요소 & 키</h3>
+        <table class="ref">
+            <tr><td>릴레이션(Relation)</td><td>테이블</td></tr>
+            <tr><td>튜플(Tuple)</td><td>행(레코드 = 관계 사례=인스턴스)</td></tr>
+            <tr><td>속성(Attribute)</td><td>열</td></tr>
+            <tr><td>도메인(Domain)</td><td>속성이 가질 수 있는 값의 범위</td></tr>
+            <tr><td>주키(Primary Key)</td><td>튜플을 식별하는 대표키</td></tr>
+            <tr><td>후보키(Candidate Key)</td><td>유일성 + 최소성 만족</td></tr>
+            <tr><td>외래키(Foreign Key)</td><td>다른 릴레이션의 <b>기본키를 참조</b></td></tr>
+        </table>
+
+        <h3>⑥ 관계 연산</h3>
+        <table class="ref">
+            <tr><td>Insert</td><td>레코드(튜플) 생성·삽입</td></tr>
+            <tr><td>Delete</td><td>레코드 삭제</td></tr>
+            <tr><td>Select(Project)</td><td>부분집합으로 새 관계 생성 — '<b>Search</b>'가 아님</td></tr>
+            <tr><td>조인(Join)</td><td>공통 속성으로 두 릴레이션 결합</td></tr>
+            <tr><td>디비전(Division)</td><td>나누기 연산</td></tr>
+            <tr><td>교집합(Intersection)</td><td>공통 튜플 추출</td></tr>
+        </table>
+        <div class="tip"><b>merge는 관계 연산이 아닙니다.</b> 레코드 생성 = <b>insert</b>.</div>
+
+        <h3>⑦ DBMS 종류 · ODBC · NoSQL</h3>
+        <table class="ref">
+            <tr><td>MySQL</td><td>오라클 소유 오픈소스</td></tr>
+            <tr><td>SQLite</td><td>모바일 내장 DB (윈도우에서도 사용 가능)</td></tr>
+            <tr><td>몽고 DB(MongoDB)</td><td>문서형 NoSQL, 형식은 JSON(BSON)</td></tr>
+            <tr><td>ODBC</td><td>응용프로그램이 각 DB 고유 인터페이스를 몰라도 <b>표준 방식</b>으로 다양한 DB에 접근하게 하는 미들웨어 (DB 종류 독립, 교체 쉬움)</td></tr>
+        </table>
+        <div class="tip"><b>다양한 DB 표준 접근 = ODBC</b>. 문서 DB(몽고)는 <b>비관계형(NoSQL)</b>이지 RDBMS가 아닙니다.</div>
+
+        <h3>⑧ SQL 예제 (dbtest — 테이블 2개 만들고 조회)</h3>
+        <pre><code>-- 테이블 2개 생성
+CREATE TABLE student (id INTEGER PRIMARY KEY, name TEXT, dept TEXT);
+CREATE TABLE course  (cid INTEGER PRIMARY KEY, title TEXT, sid INTEGER);
+-- 데이터 삽입
+INSERT INTO student VALUES (1, '윤희근', '컴퓨터공학');
+INSERT INTO course  VALUES (101, '데이터베이스', 1);
+-- 각 테이블 조회 (SELECT * = 모든 내용 조회)
+SELECT * FROM student;
+SELECT * FROM course;</code></pre>
+    </section>
+
+
+    <!-- ================================================================= -->
+    <!-- 10장 네트워크                                                      -->
+    <!-- ================================================================= -->
+    <section class="card" id="s10">
+        <h2>10장 네트워크<span class="week chap">10장</span></h2>
+
+        <h3>① 네트워크 & OSI 7계층</h3>
+        <p>네트워크는 <b>서로 다른 시스템 간</b>에도 정보를 교환합니다(동일 시스템에만 아님).</p>
+        <p><b>OSI 7계층 (ISO 표준)</b> : 물리 → 데이터링크 → 네트워크 → 전송 → 세션 → 표현 → 응용</p>
+        <table class="ref">
+            <tr><th>계층</th><th>역할</th></tr>
+            <tr><td>데이터링크</td><td>인접 노드 간 전송</td></tr>
+            <tr><td>전송</td><td>발신지 → 목적지 실제 전송</td></tr>
+            <tr><td>표현</td><td>표현 방식 관리·암호화·압축</td></tr>
+        </table>
+
+        <h3>② 네트워크 장치</h3>
+        <table class="ref">
+            <tr><td>라우터(Router)</td><td>네트워크 계층에서 IP 보고 패킷 <b>최적 경로 결정·전달</b>, 서로 다른 망 연결</td></tr>
+            <tr><td>브리지/스위치</td><td>같은 기관 LAN 세그먼트 연결 (둘 이상 LAN을 한 네트워크로 = 브리지)</td></tr>
+            <tr><td>게이트웨이(Gateway)</td><td>서로 다른 프로토콜 망 연결(프로토콜 변환)</td></tr>
+        </table>
+
+        <h3>③ LAN/WAN & 인터넷 역사</h3>
+        <p>이더넷·FDDI 등은 <b>LAN 표준</b>. WAN은 국가·국가 간 연결. 광섬유는 대역폭이 아주 <b>큼</b>. 인터넷의 시초는 <b>ARPANET</b>(NSFNET 아님).</p>
+
+        <h3>④ TCP/IP 4계층</h3>
+        <p><b>네트워크 접속 → 인터넷 → 전송 → 응용</b></p>
+        <table class="ref">
+            <tr><td>인터넷 계층</td><td>IP 주소 지정과 라우팅(경로 배정) 담당 (IP·ICMP·ARP)</td></tr>
+            <tr><td>전송 계층 — TCP</td><td>연결형, 신뢰성·흐름·오류 제어</td></tr>
+            <tr><td>전송 계층 — UDP</td><td>비연결형, 빠르나 신뢰성 낮음</td></tr>
+        </table>
+
+        <h3>⑤ 웹·프로토콜·마크업</h3>
+        <table class="ref">
+            <tr><td>HTTP</td><td>웹 문서 전송 규약 (웹 서버가 요청에 응답)</td></tr>
+            <tr><td>FTP</td><td>File Transfer Protocol (파일 전송) — 'Folder' 아님</td></tr>
+            <tr><td>SMTP</td><td>이메일 통신 규약</td></tr>
+            <tr><td>Telnet</td><td>원격 접속</td></tr>
+            <tr><td>HTML / XML</td><td>HyperText / eXtensible Markup Language (eXtreme 아님)</td></tr>
+            <tr><td>ASP</td><td>서버에서 처리 (브라우저가 해독 안 함)</td></tr>
+        </table>
+
+        <h3>⑥ 도메인 · DNS · IP</h3>
+        <table class="ref">
+            <tr><td>도메인 이름</td><td>외우기 어려운 숫자 IP를 대신하는 단어 주소</td></tr>
+            <tr><td>DNS(Domain Name System)</td><td>도메인 이름 ↔ 실제 IP 변환 (변환 호스트 = DNS 서버)</td></tr>
+            <tr><td>kr / .com</td><td>kr = Korea 국가코드(kernel 아님) / .com = 사업(상업)</td></tr>
+            <tr><td>IPv6</td><td>차세대 IP. <b>IPv4 주소 고갈 해결</b> (128비트, 16비트씩 8그룹, 콜론(:) 구분, 16진수)</td></tr>
+            <tr><td>IP 클래스</td><td>A(대형망)·B(중형망)·C(소형망)·D(멀티캐스트)·E(예약/연구용)</td></tr>
+        </table>
+        <div class="tip"><b>URL 구조</b> : <code>프로토콜://호스트(도메인):포트/경로/파일?질의</code><br>
+            예) <code>https://www.dongyang.ac.kr/path/index.html</code> → https=프로토콜, dongyang.ac.kr=호스트(도메인), /path/=경로, index.html=파일</div>
+
+        <h3>⑦ 핵심 용어 (괄호채우기 단골)</h3>
+        <table class="ref ox">
+            <tr><th>설명</th><th>용어</th></tr>
+            <tr><td>통신 규칙·약속</td><td>프로토콜(Protocol)</td></tr>
+            <tr><td>인터넷 자원의 주소(주소창)</td><td>URL</td></tr>
+            <tr><td>일정 길이로 나눈 전송 단위</td><td>패킷(Packet)</td></tr>
+            <tr><td>차세대 128비트 IP 주소</td><td>IPv6</td></tr>
+            <tr><td>웹에서 HTTP 요청에 응답하는 프로그램</td><td>웹 서버(Web Server)</td></tr>
+        </table>
+    </section>
+
+
+    <!-- ================================================================= -->
+    <!-- 자가체크 퀴즈                                                      -->
+    <!-- ================================================================= -->
+    <section class="card" id="quiz">
+        <h2>📝 자가체크 퀴즈<span class="week chap">전 단원</span></h2>
+        <p>빈칸에 답을 적고 <b>확인</b>을 누르세요. 모르면 <b>정답 보기</b>로 확인할 수 있어요. (띄어쓰기·영문 대소문자·괄호는 무시하고 채점)</p>
+        <div id="quiz-score">맞힌 문제 : 0 / 16</div>
+
+        <!-- 각 문제: data-answers 에 '정답|허용답안1|허용답안2' 형식 -->
+        <div class="quiz-item" data-answers="존 매카시|매카시|john mccarthy|mccarthy">
+            <div class="quiz-q"><span class="quiz-cat">6장</span> '인공지능' 용어를 처음 제시한 사람은?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="수집-전처리-학습-평가-시각화|수집 전처리 학습 평가 시각화|수집,전처리,학습,평가,시각화">
+            <div class="quiz-q"><span class="quiz-cat">6장</span> 머신러닝 수행 과정 순서를 쓰시오. (수집 → ? → ? → ? → ?)</div>
+            <input type="text" placeholder="예: 수집-전처리-학습-평가-시각화">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="비지도학습|비지도|unsupervised">
+            <div class="quiz-q"><span class="quiz-cat">6장</span> 레이블(정답) 없이 비슷한 것끼리 묶는 군집화는 어떤 학습?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="강화학습|강화|reinforcement">
+            <div class="quiz-q"><span class="quiz-cat">6장</span> 보상(reward)을 최대화하도록 학습하는 방법은?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="가중치,편향|가중치와 편향|weight,bias|가중치 편향">
+            <div class="quiz-q"><span class="quiz-cat">6장</span> 퍼셉트론이 학습으로 구하는 결과값 2가지는?</div>
+            <input type="text" placeholder="예: 가중치, 편향">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="오차역전파|역전파|backpropagation">
+            <div class="quiz-q"><span class="quiz-cat">6장</span> 오차를 출력층 → 입력층으로 거꾸로 전달하는 것은?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="텐서플로|tensorflow|텐서플로우">
+            <div class="quiz-q"><span class="quiz-cat">6장</span> 구글이 만든 딥러닝 프레임워크는?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="특이점|singularity|싱귤래리티">
+            <div class="quiz-q"><span class="quiz-cat">6장</span> AI가 인간 지능을 넘어서는 순간을 뜻하는 용어는?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="문제분해,패턴인식,추상화,알고리즘|분해,패턴인식,추상화,알고리즘">
+            <div class="quiz-q"><span class="quiz-cat">7장</span> 컴퓨팅 사고력의 구성 요소 4가지는?</div>
+            <input type="text" placeholder="예: 문제분해, 패턴인식, 추상화, 알고리즘">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="추상화|abstraction">
+            <div class="quiz-q"><span class="quiz-cat">7장</span> 핵심만 남기고 불필요한 세부를 제거·단순화하는 것은? (지하철 노선도가 예)</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="언플러그드|unplugged|언플러그드 교육">
+            <div class="quiz-q"><span class="quiz-cat">7장</span> 컴퓨터(도구) 없이 연필·종이·게임으로 배우는 교육은?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="레코드|튜플|행|record">
+            <div class="quiz-q"><span class="quiz-cat">9장</span> 관련 필드의 모음(행)을 무엇이라 하는가?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="외래키|foreign key|포린키">
+            <div class="quiz-q"><span class="quiz-cat">9장</span> 다른 릴레이션의 기본키를 참조하는 키는?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="odbc|open database connectivity">
+            <div class="quiz-q"><span class="quiz-cat">9장</span> 표준 방식으로 다양한 DB에 접근하게 하는 미들웨어는?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="라우터|router">
+            <div class="quiz-q"><span class="quiz-cat">10장</span> IP를 보고 패킷의 최적 경로를 정해 서로 다른 망을 연결하는 장치는?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-item" data-answers="dns|domain name system|도메인 네임 시스템">
+            <div class="quiz-q"><span class="quiz-cat">10장</span> 도메인 이름을 실제 IP 주소로 바꿔주는 시스템은?</div>
+            <input type="text" placeholder="답 입력">
+            <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+    </section>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>컴퓨터공학기초 기말 완전정리 · 출제 6·7·9·10장 기준 · © 2026 윤희근</p>
+    </footer>
+
+</div>
+
+<!-- ===================== 퀴즈 채점 스크립트 ===================== -->
+<script>
+    // 정규화: 공백·괄호 제거 + 소문자 → 띄어쓰기/괄호/대소문자 무시 채점
+    function norm(s) {
+        return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[()]/g, '');
+    }
+    var items = document.querySelectorAll('.quiz-item');
+    var total = items.length;
+
+    function updateScore() {
+        var solved = document.querySelectorAll('.quiz-item[data-solved="1"]').length;
+        document.getElementById('quiz-score').textContent = '맞힌 문제 : ' + solved + ' / ' + total;
+    }
+
+    items.forEach(function (item) {
+        var answers = (item.dataset.answers || '').split('|');
+        var input = item.querySelector('input');
+        var fb = item.querySelector('.quiz-feedback');
+        var first = answers[0];
+
+        // [확인] 버튼: 입력값을 정답들과 비교
+        item.querySelector('.check').addEventListener('click', function () {
+            var ok = answers.some(function (a) { return norm(a) === norm(input.value); });
+            if (ok) {
+                fb.className = 'quiz-feedback ok';
+                fb.innerHTML = '✅ 정답입니다!';
+                item.dataset.solved = '1';
+            } else {
+                fb.className = 'quiz-feedback no';
+                fb.innerHTML = '❌ 다시 생각해 보세요. <span class="ans">정답: <b>' + first + '</b></span>';
+            }
+            updateScore();
+        });
+
+        // [정답 보기] 버튼: 채점 없이 정답만 표시
+        item.querySelector('.show').addEventListener('click', function () {
+            fb.className = 'quiz-feedback ok';
+            fb.innerHTML = '💡 정답: <span class="ans-code">' + first + '</span>';
+        });
+
+        // Enter 키로도 확인되게
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') item.querySelector('.check').click();
+        });
+    });
+</script>
+</body>
+</html>
