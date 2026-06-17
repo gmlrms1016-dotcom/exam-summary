@@ -5,4 +5,4 @@
 - 학습 26개 주제: 개념 설명 + 속성표 + 실제 결과 + 소스코드
 - 퀴즈 102문항(HTML 46 · CSS 56): 한 문제씩 랜덤 / 전체 목록 두 모드
 
-➡️ **바로 보기:** https://gmlrms1016-dotcom.github.io/gmlrms1016-dotcom.github.io-web-programming-final-review-/
+➡️ **바로 보기:** https://gmlrms1016-dotcom.github.io/exam-summary/
