@@ -1329,6 +1329,248 @@ p    { overflow: scroll; }      /* 넘치면 스크롤바 */</code></pre>
     <!-- ↑↑↑ 퀴즈 채점 엔진 끝 ↑↑↑ -->
 
 
+
+    <!-- ================================================================= -->
+    <!-- 28. 코드 빈칸 채우기 (시험 대비 · 한 문제씩) — 채점만 JavaScript     -->
+    <!-- ▼▼ 이 <section> 한 블록만 통째로 복사해 넣으면 됩니다 ▼▼            -->
+    <!-- ================================================================= -->
+    <section class="card" id="codequiz">
+        <h2>28. 코드 빈칸 채우기<span class="week">시험 대비</span></h2>
+        <p>코딩테스트처럼 <b>예시 코드의 빈칸(노란 칸)에 직접 코드를 입력</b>하고 <b>채점</b>하세요.
+           <b>한 문제씩</b> 풀 수 있고(이전/다음/랜덤), 맞은 칸은 <span style="color:#2e9e5b;font-weight:700;">초록</span>·틀린 칸은 <span style="color:#d64545;font-weight:700;">빨강</span>으로 표시됩니다.</p>
+        <div class="tip">⚙️ 이 퀴즈의 <b>채점 기능만</b> JavaScript로 동작합니다. 띄어쓰기·세미콜론(;)·대소문자는 자동으로 무시됩니다.
+           정답이 여러 표현이면(예: <code>&lt;p&gt;</code>·<code>p</code>) 둘 다 정답 처리됩니다.</div>
+
+        <div id="cq-bar">
+            <span id="cq-progress"></span>
+            <span id="cq-score"></span>
+        </div>
+        <div id="cq-stage"></div>
+        <div id="cq-nav">
+            <button class="quiz-btn ghost" data-nav="prev">◀ 이전</button>
+            <button class="quiz-btn ghost" data-nav="random">🎲 랜덤</button>
+            <button class="quiz-btn next" data-nav="next">다음 ▶</button>
+        </div>
+
+        <style>
+          #codequiz #cq-bar{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+            align-items:center; margin:10px 0; font-size:14px; }
+          #codequiz #cq-progress .quiz-cat{ vertical-align:middle; }
+          #codequiz #cq-score{ font-weight:700; color:#d9772b; }
+          #codequiz .cq-code{ white-space:pre; overflow-x:auto; line-height:2.1; font-size:13px; }
+          #codequiz .cq-blank{ font-family:Consolas,"D2Coding",monospace; font-size:0.92em;
+            background:#fffbe6; color:#1e2530; border:1px solid #d9772b; border-radius:4px;
+            padding:1px 5px; margin:0 2px; }
+          #codequiz .cq-blank:focus{ outline:2px solid #d9772b; }
+          #codequiz .cq-blank.ok{ background:#e7f7ec; border-color:#2e9e5b; color:#176b39; }
+          #codequiz .cq-blank.bad{ background:#fdeaea; border-color:#d64545; color:#a62121; }
+          #codequiz #cq-nav{ display:flex; gap:8px; margin-top:14px; }
+          #codequiz #cq-nav button{ flex:1; }
+        </style>
+
+        <!-- ↓↓↓ 코드 빈칸 채점 엔진 (문제·정답 데이터 + 채점/이동 동작) ↓↓↓ -->
+        <script>
+        (function(){
+          // code 의 @@번호@@ = 빈칸. blanks[번호].ans = 정답들(여러 표현 허용), size = 칸 너비
+          var Q = [
+            // ===== HTML 기초 =====
+            {cat:'HTML기초', title:'HTML 문서의 기본 뼈대(선언·머리·본문)를 완성하세요. (여는·닫는 태그 모두)', code:'<!@@0@@ html>\n<html>\n<@@1@@>\n    <meta charset="UTF-8">\n    <@@2@@>제목</@@3@@>\n</@@4@@>\n<@@5@@>\n    내용\n</@@6@@>\n</html>', blanks:[{ans:['DOCTYPE','doctype'],size:9},{ans:['head'],size:6},{ans:['title'],size:7},{ans:['title'],size:7},{ans:['head'],size:6},{ans:['body'],size:6},{ans:['body'],size:6}], explain:'문서선언 → head(설정) → title(탭 제목) → body(본문). 태그는 여는 것·닫는 것이 짝.'},
+            {cat:'HTML기초', title:'head 안: 한글이 안 깨지게 하는 charset 값과, 외부 CSS를 연결하는 link의 두 속성을 채우세요.', code:'<head>\n    <meta charset="@@0@@">\n    <link @@1@@="stylesheet" @@2@@="style.css">\n</head>', blanks:[{ans:['utf-8'],size:7},{ans:['rel'],size:5},{ans:['href'],size:6}], explain:'charset=UTF-8(한글), link은 rel(관계)+href(경로)로 CSS 연결.'},
+            {cat:'텍스트', title:'가장 큰 제목 / 문단 / 줄바꿈에 쓰는 태그를 각각 넣으세요.', code:'<@@0@@>가장 큰 제목</@@1@@>\n<@@2@@>한 문단입니다.</@@3@@>\n첫째 줄<@@4@@>둘째 줄', blanks:[{ans:['h1'],size:4},{ans:['h1'],size:4},{ans:['p'],size:4},{ans:['p'],size:4},{ans:['<br>','br','<br/>'],size:6}], explain:'h1(제목)·p(문단)은 여닫는 짝, br(줄바꿈)은 빈 태그.'},
+
+            // ===== 텍스트 =====
+            {cat:'텍스트', title:'글자를 "중요" 의미로 굵게 강조하는 태그를 넣으세요.', code:'이건 <@@0@@>아주 중요한</@@1@@> 내용입니다.', blanks:[{ans:['strong'],size:8},{ans:['strong'],size:8}], explain:'strong=의미상 중요(굵게). 단순 굵게는 b.'},
+            {cat:'텍스트', title:'취소선(틀린 답)과 형광펜 강조에 쓰는 태그를 각각 넣으세요.', code:'<@@0@@>틀린 답</@@1@@> 정답은 <@@2@@>이것</@@3@@>!', blanks:[{ans:['del'],size:5},{ans:['del'],size:5},{ans:['mark'],size:6},{ans:['mark'],size:6}], explain:'del=취소선, mark=형광펜 강조.'},
+            {cat:'텍스트', title:'아래 첨자(H2O의 2)와 위 첨자(2의 10승)를 만드는 태그를 각각 넣으세요.', code:'H<@@0@@>2</@@1@@>O,   2<@@2@@>10</@@3@@>', blanks:[{ans:['sub'],size:5},{ans:['sub'],size:5},{ans:['sup'],size:5},{ans:['sup'],size:5}], explain:'sub=아래첨자, sup=위첨자.'},
+            {cat:'텍스트', title:'화면에 부등호 < 를 글자 그대로 보이게 하는 특수문자를 넣으세요.', code:'<p>3 @@0@@ 5 이다</p>   <!-- 화면: 3 < 5 -->', blanks:[{ans:['&lt;'],size:6}], explain:'< 는 &lt;, > 는 &gt;, & 는 &amp; 로 씁니다.'},
+
+            // ===== 목록 =====
+            {cat:'목록', title:'점(동그라미)으로 표시되는 순서 없는 목록 태그와, 그 한 항목 태그를 넣으세요.', code:'<@@0@@>\n    <@@1@@>사과</@@2@@>\n</@@3@@>', blanks:[{ans:['ul'],size:4},{ans:['li'],size:4},{ans:['li'],size:4},{ans:['ul'],size:4}], explain:'ul=점 목록, 항목은 li. (번호 목록은 ol)'},
+            {cat:'목록', title:'번호 목록에서 시작 번호를 3으로 지정하는 속성을 넣으세요.', code:'<ol @@0@@="3">\n    <li>셋째부터</li>\n</ol>', blanks:[{ans:['start'],size:6}], explain:'ol의 start 속성으로 시작 번호 지정.'},
+            {cat:'목록', title:'용어와 그 설명을 짝짓는 설명형 목록의 용어 태그와 설명 태그를 넣으세요.', code:'<dl>\n    <@@0@@>HTML</@@1@@>\n    <@@2@@>마크업 언어</@@3@@>\n</dl>', blanks:[{ans:['dt'],size:4},{ans:['dt'],size:4},{ans:['dd'],size:4},{ans:['dd'],size:4}], explain:'dl 안에 dt(용어)+dd(설명).'},
+
+            // ===== 표 =====
+            {cat:'표', title:'표의 한 행 / 머리칸(굵고 가운데) / 일반칸 태그를 각각 넣으세요. (여는·닫는 모두)', code:'<table>\n    <@@0@@>\n        <@@1@@>이름</@@2@@>\n    </@@3@@>\n    <@@4@@>\n        <@@5@@>홍길동</@@6@@>\n    </@@7@@>\n</table>', blanks:[{ans:['tr'],size:4},{ans:['th'],size:4},{ans:['th'],size:4},{ans:['tr'],size:4},{ans:['tr'],size:4},{ans:['td'],size:4},{ans:['td'],size:4},{ans:['tr'],size:4}], explain:'tr=행, th=머리칸(굵고 가운데), td=일반칸.'},
+            {cat:'표', title:'표 칸을 가로로 2칸 합치는 속성과, 세로로 2칸 합치는 속성을 넣으세요.', code:'<td @@0@@="2">가로로 2칸</td>\n<td @@1@@="2">세로로 2칸</td>', blanks:[{ans:['colspan'],size:8},{ans:['rowspan'],size:8}], explain:'colspan=가로 합침, rowspan=세로 합침.'},
+            {cat:'표', title:'표 위에 제목을 붙이는 태그를 넣으세요.', code:'<table>\n    <@@0@@>성적표</@@1@@>\n    <tr><td>A</td></tr>\n</table>', blanks:[{ans:['caption'],size:9},{ans:['caption'],size:9}], explain:'caption은 <table> 바로 안 첫 줄에.'},
+
+            // ===== 링크·이미지 =====
+            {cat:'링크·이미지', title:'클릭하면 새 탭에서 열리는 링크가 되도록: 주소를 적는 속성과 target 값을 넣으세요.', code:'<a @@0@@="https://naver.com" target="@@1@@">네이버</a>', blanks:[{ans:['href'],size:6},{ans:['_blank','blank'],size:8}], explain:'href=주소, target="_blank"=새 탭.'},
+            {cat:'링크·이미지', title:'이미지를 넣을 때: 파일 경로 속성과, 안 뜰 때 대신 보일 글자 속성을 넣으세요.', code:'<img @@0@@="cat.jpg" @@1@@="고양이">', blanks:[{ans:['src'],size:5},{ans:['alt'],size:5}], explain:'src=파일 경로, alt=안 뜰 때 대체 텍스트.'},
+            {cat:'링크·이미지', title:'같은 페이지 안 id="top" 위치로 이동하려면 주소 맨 앞에 붙이는 기호를 넣으세요.', code:'<a href="@@0@@top">맨 위로</a>', blanks:[{ans:['#'],size:4}], explain:'#id 로 같은 페이지 안 해당 요소로 이동.'},
+            {cat:'링크·이미지', title:'문서 안에 다른 웹페이지(page.html)를 창처럼 끼워넣는 태그를 넣으세요.', code:'<@@0@@ src="page.html"></@@1@@>', blanks:[{ans:['iframe'],size:8},{ans:['iframe'],size:8}], explain:'iframe=인라인 프레임(영상·지도 등 삽입).'},
+
+            // ===== 폼 =====
+            {cat:'폼', title:'폼이 데이터를 보낼 주소 속성과, 전송 방식(get/post) 속성을 넣으세요.', code:'<form @@0@@="/login" @@1@@="post">\n    ...\n</form>', blanks:[{ans:['action'],size:7},{ans:['method'],size:7}], explain:'action=보낼 주소, method=방식(get/post).'},
+            {cat:'폼', title:'라벨(label)과 입력칸(input)을 같은 값으로 연결하는 두 속성을 넣으세요.', code:'<label @@0@@="user">아이디</label>\n<input type="text" @@1@@="user">', blanks:[{ans:['for'],size:5},{ans:['id'],size:4}], explain:'label의 for ↔ input의 id 를 같은 값으로 연결.'},
+            {cat:'폼', title:'글자가 가려지는(●●●) 입력 type과, 제출 버튼 type을 넣으세요.', code:'<input type="@@0@@">\n<input type="@@1@@" value="로그인">', blanks:[{ans:['password'],size:10},{ans:['submit'],size:8}], explain:'password=●●● 가림, submit=제출 버튼.'},
+            {cat:'폼', title:'여러 보기 중 "하나만" 고르는 type과, "여러 개" 고르는 type을 넣으세요.', code:'성별: <input type="@@0@@" name="g">\n취미: <input type="@@1@@" name="h">', blanks:[{ans:['radio'],size:7},{ans:['checkbox'],size:9}], explain:'radio=같은 name 중 하나만, checkbox=여러 개 선택.'},
+            {cat:'폼', title:'펼침 목록(드롭다운)을 만드는 태그와, 그 안의 항목 태그를 넣으세요.', code:'<@@0@@>\n    <@@1@@>서울</@@2@@>\n</@@3@@>', blanks:[{ans:['select'],size:8},{ans:['option'],size:8},{ans:['option'],size:8},{ans:['select'],size:8}], explain:'select 안에 option 항목들.'},
+            {cat:'폼', title:'여러 줄 입력칸의 "안내 글씨" 속성과, "반드시 입력" 속성을 넣으세요.', code:'<textarea @@0@@="내용 입력"></textarea>\n<input type="text" @@1@@>', blanks:[{ans:['placeholder'],size:12},{ans:['required'],size:9}], explain:'placeholder=흐린 안내문, required=필수 입력.'},
+
+            // ===== 선택자 =====
+            {cat:'선택자', title:'CSS에서 id가 box인 요소를 고르는 선택자를 넣으세요.', code:'@@0@@ {\n    color: red;\n}', blanks:[{ans:['#box'],size:7}], explain:'id 선택자는 # (페이지에 하나뿐).'},
+            {cat:'선택자', title:'CSS에서 class가 box인 요소를 고르는 선택자를 넣으세요.', code:'@@0@@ {\n    color: blue;\n}', blanks:[{ans:['.box'],size:7}], explain:'class 선택자는 . (여러 곳 재사용).'},
+            {cat:'선택자', title:'CSS에서 모든 요소를 한 번에 고르는 선택자(초기화용)를 넣으세요.', code:'@@0@@ {\n    margin: 0;\n    box-sizing: border-box;\n}', blanks:[{ans:['*'],size:4}], explain:'* = 전체 선택자.'},
+            {cat:'선택자', title:'링크에 마우스를 올렸을 때만 적용되는 상태 선택자를 넣으세요.', code:'a@@0@@ {\n    color: orange;\n}', blanks:[{ans:[':hover'],size:8}], explain:':hover = 마우스 올림 상태(가상클래스).'},
+            {cat:'선택자', title:'h1과 h2에 같은 스타일을 한 번에 줄 때, 두 선택자 사이에 넣는 기호를 넣으세요.', code:'h1@@0@@h2 {\n    text-align: center;\n}', blanks:[{ans:[','],size:4}], explain:'쉼표(,)로 여러 선택자를 묶습니다.'},
+
+            // ===== 색상 =====
+            {cat:'색상', title:'글자색을 정하는 속성과, 배경색을 정하는 속성을 넣으세요.', code:'p {\n    @@0@@: white;\n    @@1@@: navy;\n}', blanks:[{ans:['color'],size:7},{ans:['background-color','background'],size:18}], explain:'color=글자색, background-color=배경색.'},
+            {cat:'색상', title:'투명도까지 주는 색 표현 방식과, 50% 반투명을 뜻하는 투명도 값을 넣으세요.', code:'.dim {\n    background: @@0@@(0, 0, 0, @@1@@);\n}', blanks:[{ans:['rgba'],size:6},{ans:['0.5','.5'],size:5}], explain:'rgba의 네 번째 값(0~1)이 투명도.'},
+            {cat:'색상', title:'16진수(#)로 "빨강"을 나타내는 색 값을 넣으세요.', code:'h1 {\n    color: #@@0@@;\n}', blanks:[{ans:['ff0000','f00'],size:8}], explain:'#ff0000=빨강(짧게 #f00).'},
+
+            // ===== 글자 =====
+            {cat:'글자', title:'글자 크기 속성과, 글꼴(폰트) 속성을 넣으세요.', code:'p {\n    @@0@@: 16px;\n    @@1@@: "맑은 고딕", sans-serif;\n}', blanks:[{ans:['font-size'],size:10},{ans:['font-family'],size:12}], explain:'font-size=크기, font-family=글꼴.'},
+            {cat:'글자', title:'텍스트를 가운데로 정렬하는 속성을 넣으세요.', code:'h1 {\n    @@0@@: center;\n}', blanks:[{ans:['text-align'],size:11}], explain:'text-align: left/center/right.'},
+            {cat:'글자', title:'글자에 밑줄을 긋는 값과, 링크의 밑줄을 없애는 값을 각각 넣으세요.', code:'.u { text-decoration: @@0@@; }\na  { text-decoration: @@1@@; }', blanks:[{ans:['underline'],size:11},{ans:['none'],size:6}], explain:'underline=밑줄, none=밑줄 제거.'},
+            {cat:'글자', title:'글자를 굵게 만들 때 쓰는 속성을 넣으세요. (값은 bold)', code:'b {\n    @@0@@: bold;\n}', blanks:[{ans:['font-weight'],size:12}], explain:'font-weight: bold(=700).'},
+            {cat:'글자', title:'문단의 줄 간격(줄 높이)을 정하는 속성을 넣으세요.', code:'p {\n    @@0@@: 1.8;\n}', blanks:[{ans:['line-height'],size:12}], explain:'line-height=줄 높이(간격).'},
+            {cat:'글자', title:'영문을 모두 대문자로 바꾸는 text-transform 값을 넣으세요.', code:'.cap {\n    text-transform: @@0@@;\n}', blanks:[{ans:['uppercase'],size:11}], explain:'uppercase=대문자, lowercase=소문자, capitalize=첫 글자.'},
+
+            // ===== 배경 =====
+            {cat:'배경', title:'배경에 이미지를 넣는 표현(괄호 함수)과, 이미지가 반복되지 않게 하는 값을 넣으세요.', code:'body {\n    background-image: @@0@@(bg.jpg);\n    background-repeat: @@1@@;\n}', blanks:[{ans:['url'],size:5},{ans:['no-repeat'],size:10}], explain:'url(경로)로 이미지, no-repeat로 반복 끔.'},
+            {cat:'배경', title:'배경 이미지를 비율 유지하며 영역에 꽉 채우는 background-size 값을 넣으세요.', code:'.hero {\n    background-size: @@0@@;\n}', blanks:[{ans:['cover'],size:7}], explain:'cover=비율 유지하며 꽉 채움(contain=안에 맞춤).'},
+            {cat:'배경', title:'이미지를 비율 유지하며 정해진 칸 크기에 맞추는 속성을 넣으세요.', code:'img {\n    width: 100px; height: 100px;\n    @@0@@: cover;\n}', blanks:[{ans:['object-fit'],size:11}], explain:'object-fit: cover/contain (이미지 맞춤).'},
+
+            // ===== 박스모델 =====
+            {cat:'박스모델', title:'테두리 "안쪽" 여백 속성과, 요소 "사이(바깥)" 여백 속성을 넣으세요.', code:'.box {\n    @@0@@: 20px;   /* 테두리 안쪽 */\n    @@1@@: 10px;   /* 요소 사이 */\n}', blanks:[{ans:['padding'],size:8},{ans:['margin'],size:8}], explain:'padding=안쪽 여백, margin=바깥 여백.'},
+            {cat:'박스모델', title:'테두리 종류를 "실선"으로 만드는 값을 넣으세요. (border: 두께 종류 색)', code:'.box {\n    border: 2px @@0@@ red;\n}', blanks:[{ans:['solid'],size:7}], explain:'border: 두께 종류 색. 실선=solid(점선 dotted/dashed).'},
+            {cat:'박스모델', title:'너비가 정해진 블록 요소를 가로 가운데로 정렬하는 margin 값을 넣으세요.', code:'.box {\n    width: 300px;\n    margin: 0 @@0@@;\n}', blanks:[{ans:['auto'],size:6}], explain:'margin: 0 auto; (좌우 auto = 가로 가운데).'},
+            {cat:'박스모델', title:'정사각형 요소를 완전한 원으로 만드는 border-radius 값을 넣으세요.', code:'.circle {\n    width: 80px; height: 80px;\n    border-radius: @@0@@;\n}', blanks:[{ans:['50%'],size:5}], explain:'정사각형 + border-radius:50% = 원.'},
+            {cat:'박스모델', title:'테두리·안쪽여백까지 포함해 너비를 계산하게 하는 box-sizing 값을 넣으세요.', code:'* {\n    box-sizing: @@0@@;\n}', blanks:[{ans:['border-box'],size:11}], explain:'border-box=테두리·패딩 포함 너비.'},
+
+            // ===== display =====
+            {cat:'display', title:'여러 개를 한 줄로 나열하면서 너비·높이도 줄 수 있는 display 값을 넣으세요.', code:'.tag {\n    display: @@0@@;\n}', blanks:[{ans:['inline-block'],size:13}], explain:'inline-block=옆으로 나열되면서 width/height 적용.'},
+            {cat:'display', title:'요소를 완전히 숨겨서 그 자리(공간)까지 사라지게 하는 display 값을 넣으세요.', code:'.hide {\n    display: @@0@@;\n}', blanks:[{ans:['none'],size:6}], explain:'display:none=자리까지 제거.'},
+            {cat:'display', title:'요소를 안 보이게 하되 원래 자리(공간)는 그대로 남기는 visibility 값을 넣으세요. (47번 display:none과 차이!)', code:'.ghost {\n    visibility: @@0@@;\n}', blanks:[{ans:['hidden'],size:8}], explain:'visibility:hidden=안 보이지만 자리는 남음(display:none과 차이!).'},
+            {cat:'display', title:'내용이 영역을 넘칠 때 스크롤바가 생기게 하는 overflow 값을 넣으세요.', code:'.box {\n    height: 100px;\n    overflow: @@0@@;\n}', blanks:[{ans:['scroll','auto'],size:7}], explain:'overflow: scroll/auto(스크롤), hidden(잘라 숨김).'},
+
+            // ===== position =====
+            {cat:'position', title:'부모를 기준점으로(첫 칸), 자식을 좌표로 배치하는(둘째 칸) position 값과, 위쪽 좌표 속성을 넣으세요.', code:'.parent { position: @@0@@; }\n.child  {\n    position: @@1@@;\n    @@2@@: 0; left: 0;\n}', blanks:[{ans:['relative'],size:9},{ans:['absolute'],size:9},{ans:['top'],size:5}], explain:'부모 relative(기준) + 자식 absolute + top/left.'},
+            {cat:'position', title:'스크롤해도 항상 화면 같은 자리에 고정되는 position 값을 넣으세요.', code:'.top-menu {\n    position: @@0@@;\n    top: 0;\n}', blanks:[{ans:['fixed'],size:7}], explain:'fixed=화면에 완전 고정.'},
+            {cat:'position', title:'평소엔 흐르다가 스크롤 중 지정 위치에 달라붙는 position 값을 넣으세요.', code:'header {\n    position: @@0@@;\n    top: 0;\n}', blanks:[{ans:['sticky'],size:7}], explain:'sticky=스크롤 중 지정 위치에 달라붙음.'},
+            {cat:'position', title:'요소가 겹칠 때 더 앞(위)으로 오게 하는 속성을 넣으세요.', code:'.front {\n    position: absolute;\n    @@0@@: 10;\n}', blanks:[{ans:['z-index'],size:8}], explain:'z-index 큰 값이 위로.'},
+
+            // ===== float =====
+            {cat:'float', title:'요소를 왼쪽으로 띄우는 속성과, 그 영향을 끊어 다음 줄로 내리는 속성을 넣으세요.', code:'img    { @@0@@: left; }\nfooter { @@1@@: both; }', blanks:[{ans:['float'],size:6},{ans:['clear'],size:6}], explain:'float:left(띄움), clear:both(해제).'},
+
+            // ===== flex =====
+            {cat:'flex', title:'자식을 가로·세로 정중앙에 두려면: 레이아웃을 켜는 display 값과 가로 정렬 속성, 세로 정렬 속성을 넣으세요.', code:'.box {\n    display: @@0@@;\n    @@1@@: center;   /* 가로 */\n    @@2@@: center;   /* 세로 */\n}', blanks:[{ans:['flex'],size:6},{ans:['justify-content'],size:16},{ans:['align-items'],size:13}], explain:'flex + justify-content(가로) + align-items(세로).'},
+            {cat:'flex', title:'flex에서 자식들을 양 끝으로 벌리고 사이를 균등하게 하는 justify-content 값을 넣으세요.', code:'.bar {\n    display: flex;\n    justify-content: @@0@@;\n}', blanks:[{ans:['space-between'],size:14}], explain:'space-between=양 끝 정렬 + 사이 균등.'},
+            {cat:'flex', title:'flex에서 자식을 세로로 쌓는 flex-direction 값과, 자식 사이 간격 속성을 넣으세요.', code:'.col {\n    display: flex;\n    flex-direction: @@0@@;\n    @@1@@: 10px;\n}', blanks:[{ans:['column'],size:8},{ans:['gap'],size:5}], explain:'flex-direction:column=세로, gap=자식 사이 간격.'},
+
+            // ===== grid =====
+            {cat:'grid', title:'격자 레이아웃을 켜는 display 값과, 3등분할 때 한 칸 너비 단위를 넣으세요.', code:'.box {\n    display: @@0@@;\n}\n/* 자식을 같은 너비 3칸으로: repeat(3, @@1@@) */', blanks:[{ans:['grid'],size:6},{ans:['1fr'],size:5}], explain:'display:grid + repeat(3, 1fr)=같은 너비 3칸.'},
+            {cat:'grid', title:'grid에서 열의 개수·너비를 직접 정하는 속성을 넣으세요. (예: 1fr 2fr)', code:'.grid {\n    display: grid;\n    @@0@@: 1fr 2fr;\n}', blanks:[{ans:['grid-template-columns'],size:22}], explain:'grid-template-columns로 열 개수·너비 지정(1fr:2fr).'},
+
+            // ===== 전환·애니메이션 =====
+            {cat:'전환·애니', title:'마우스 올렸을 때의 변화를 0.3초 동안 부드럽게 만드는 속성을 넣으세요.', code:'.btn {\n    @@0@@: 0.3s;\n}\n.btn:hover { background: red; }', blanks:[{ans:['transition'],size:11}], explain:'transition=변화를 부드럽게(시간 지정).'},
+            {cat:'전환·애니', title:'요소를 1.2배 확대하는 transform 함수와, 45도 회전하는 함수를 각각 넣으세요.', code:'.zoom:hover { transform: @@0@@(1.2); }\n.spin      { transform: @@1@@(45deg); }', blanks:[{ans:['scale'],size:7},{ans:['rotate'],size:7}], explain:'scale(확대), rotate(회전).'},
+            {cat:'전환·애니', title:'애니메이션 동작 단계(0%~100%)를 정의하는 규칙(@로 시작)과, "무한 반복" 값을 넣으세요.', code:'@@0@@ move {\n    from { left: 0; }\n    to   { left: 100px; }\n}\n.ball {\n    position: relative;\n    animation: move 2s @@1@@;\n}', blanks:[{ans:['@keyframes','keyframes'],size:12},{ans:['infinite'],size:9}], explain:'@keyframes로 단계 정의 → animation 적용, infinite=무한 반복.'},
+
+            // ===== 반응형 =====
+            {cat:'반응형', title:'반응형을 위해 head에 넣는 meta의 name 값(화면 폭을 기기에 맞춤)을 넣으세요.', code:'<meta name="@@0@@" content="width=device-width, initial-scale=1">', blanks:[{ans:['viewport'],size:9}], explain:'viewport=기기 폭에 맞춤(반응형 필수).'},
+            {cat:'반응형', title:'화면 너비가 700px 이하일 때 다른 스타일을 적용하는 규칙(@로 시작)을 넣으세요.', code:'@@0@@ (max-width: 700px) {\n    .menu { display: none; }\n}', blanks:[{ans:['@media','media'],size:8}], explain:'@media (max-width:px)로 화면 크기별 스타일.'}
+          ];
+
+          var stage  = document.getElementById('cq-stage');
+          var progEl = document.getElementById('cq-progress');
+          var scoreEl= document.getElementById('cq-score');
+          var navBar = document.getElementById('cq-nav');
+          var solved = new Array(Q.length).fill(false);
+          var cur = 0;
+
+          function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+          function norm(s){ return s.toLowerCase().replace(/\s+/g,'').replace(/;+$/,''); }
+
+          function codeHTML(item){
+            return esc(item.code).replace(/@@(\d+)@@/g, function(m, n){
+              var b = item.blanks[+n];
+              return '<input class="cq-blank" data-bi="'+n+'" size="'+(b.size||10)+'" autocomplete="off" spellcheck="false">';
+            });
+          }
+          function updateScore(){ scoreEl.textContent = '맞힌 문제: ' + solved.filter(Boolean).length + ' / ' + Q.length; }
+
+          function render(){
+            var item = Q[cur];
+            progEl.innerHTML = '문제 <b>' + (cur+1) + '</b> / ' + Q.length +
+              ' <span class="quiz-cat">' + item.cat + '</span>' +
+              (solved[cur] ? ' <span style="color:#2e9e5b;font-weight:700;">✔ 푼 문제</span>' : '');
+            stage.innerHTML =
+              '<div class="quiz-item">' +
+                '<div class="quiz-q">' + (cur+1) + '. ' + item.title + '</div>' +
+                '<pre class="cq-code">' + codeHTML(item) + '</pre>' +
+                '<div class="quiz-btns">' +
+                  '<button class="quiz-btn" data-act="check">채점</button>' +
+                  '<button class="quiz-btn ghost" data-act="show">정답 보기</button>' +
+                  '<button class="quiz-btn ghost" data-act="reset">지우기</button>' +
+                '</div>' +
+                '<div class="quiz-feedback"></div>' +
+              '</div>';
+            updateScore();
+            var f = stage.querySelector('.cq-blank'); if(f) f.focus();
+          }
+
+          stage.addEventListener('click', function(e){
+            var btn = e.target.closest('button'); if(!btn) return;
+            var item = Q[cur];
+            var inputs = stage.querySelectorAll('.cq-blank');
+            var fb = stage.querySelector('.quiz-feedback');
+            var act = btn.dataset.act;
+            if(act === 'show'){
+              inputs.forEach(function(inp){ inp.value = item.blanks[+inp.dataset.bi].ans[0]; inp.className = 'cq-blank ok'; });
+              fb.className = 'quiz-feedback ok';
+              fb.innerHTML = '📌 정답입니다.<span class="ans">' + esc(item.explain) + '</span>';
+              return;
+            }
+            if(act === 'reset'){
+              inputs.forEach(function(inp){ inp.value=''; inp.className='cq-blank'; });
+              fb.className = 'quiz-feedback'; fb.innerHTML = ''; return;
+            }
+            var correct = 0, empty = true;
+            inputs.forEach(function(inp){
+              var b = item.blanks[+inp.dataset.bi];
+              if(inp.value.trim() !== '') empty = false;
+              var ok = b.ans.some(function(a){ return norm(a) === norm(inp.value); });
+              inp.className = 'cq-blank ' + (ok ? 'ok' : 'bad');
+              if(ok) correct++;
+            });
+            if(empty){ inputs.forEach(function(inp){ inp.className='cq-blank'; }); fb.className='quiz-feedback no'; fb.innerHTML='✏️ 빈칸을 입력해 주세요.'; return; }
+            if(correct === inputs.length){
+              solved[cur] = true; updateScore();
+              progEl.innerHTML = '문제 <b>'+(cur+1)+'</b> / '+Q.length+' <span class="quiz-cat">'+item.cat+'</span> <span style="color:#2e9e5b;font-weight:700;">✔ 푼 문제</span>';
+              fb.className='quiz-feedback ok';
+              fb.innerHTML='✅ 모두 정답입니다! ('+correct+' / '+inputs.length+') · Enter 또는 <b>다음 ▶</b><span class="ans">'+esc(item.explain)+'</span>';
+            } else {
+              fb.className='quiz-feedback no';
+              fb.innerHTML='❌ '+correct+' / '+inputs.length+' 맞았어요. 빨간 칸을 다시 보세요. (초록 = 정답)';
+            }
+          });
+
+          stage.addEventListener('keydown', function(e){
+            if(e.key !== 'Enter' || !e.target.classList.contains('cq-blank')) return;
+            if(solved[cur]){ go(1); } else { stage.querySelector('button[data-act="check"]').click(); }
+          });
+
+          function go(d){
+            if(d === 'rand'){ cur = Math.floor(Math.random()*Q.length); }
+            else { cur = (cur + d + Q.length) % Q.length; }
+            render();
+            document.getElementById('codequiz').scrollIntoView({block:'start'});
+          }
+          navBar.addEventListener('click', function(e){
+            var b = e.target.closest('button'); if(!b) return;
+            var n = b.dataset.nav;
+            if(n==='prev') go(-1); else if(n==='next') go(1); else if(n==='random') go('rand');
+          });
+
+          render();
+        })();
+        </script>
+        <!-- ↑↑↑ 코드 빈칸 채점 엔진 끝 ↑↑↑ -->
+    </section>
+
     <!-- ===================== 꼬리말(푸터) ===================== -->
     <footer class="page-head" style="margin-top:30px;"> <!-- footer: 꼬리말 시맨틱 태그 -->
         <p>웹프로그래밍 기초 · 1~13주차 완전 정리 끝 (JS 제외) · 시험 잘 보세요! 💪</p>
