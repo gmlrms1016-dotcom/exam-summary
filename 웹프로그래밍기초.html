@@ -1164,6 +1164,10 @@ p    { overflow: scroll; }      /* 넘치면 스크롤바 */</code></pre>
     function norm(s){ return s.toLowerCase().replace(/\s+/g,'').replace(/;+$/,''); }
     // 코드(< > &)를 화면에 글자 그대로 보여주기 위한 이스케이프
     function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    // [복습용] 틀린/정답보기한 문제를 review.js가 읽는 전역 저장소에 기록·삭제
+    function plainTxt(s){ return String(s).replace(/<[^>]+>/g,'').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&'); }
+    function reportWeb(i){ (window.__examWrong=window.__examWrong||{})['web'+i] = {q: plainTxt(quizData[i].q), opts: [], ans: '정답: ' + plainTxt(quizData[i].a[0]) + ' — ' + plainTxt(quizData[i].explain)}; }
+    function clearWeb(i){ if(window.__examWrong) delete window.__examWrong['web'+i]; }
 
     // 문제가 HTML 문제인지 CSS 문제인지 분야로 판단 (공통 요구사항)
     const HTML_CATS = ['HTML기초','텍스트','목록','표','링크·이미지','폼'];
@@ -1215,19 +1219,21 @@ p    { overflow: scroll; }      /* 넘치면 스크롤바 */</code></pre>
       const item = quizData[i];
       const fb = card.querySelector('.quiz-feedback');
       if(act === 'hint'){ fb.className = 'quiz-feedback no'; fb.innerHTML = '💡 힌트: ' + esc(item.hint); return; }
-      if(act === 'show'){ fb.className = 'quiz-feedback ok'; fb.innerHTML = '📌 정답(그대로 입력하면 정답): <code class="ans-code">' + esc(item.a[0]) + '</code><span class="ans">' + esc(item.explain) + '</span>'; return; }
+      if(act === 'show'){ fb.className = 'quiz-feedback ok'; fb.innerHTML = '📌 정답(그대로 입력하면 정답): <code class="ans-code">' + esc(item.a[0]) + '</code><span class="ans">' + esc(item.explain) + '</span>'; reportWeb(i); return; }
       // 채점
       const val = card.querySelector('input').value;
       if(norm(val) === ''){ fb.className='quiz-feedback no'; fb.innerHTML='✏️ 답을 입력해 주세요.'; return; }
       const ok = item.a.some(function(a){ return norm(a) === norm(val); });
       if(ok){
         solved[i] = true;
+        clearWeb(i);
         fb.className = 'quiz-feedback ok';
         const more = card.closest('#single-area') ? ' (Enter 또는 <b>다음 문제 ▶</b>로 넘어가기)' : '';
         fb.innerHTML = '✅ 정답입니다!' + more + '<span class="ans">' + esc(item.explain) + '</span>';
       } else {
         fb.className = 'quiz-feedback no';
         fb.innerHTML = '❌ 다시 생각해 보세요. (힌트 버튼을 눌러보세요)';
+        reportWeb(i);
       }
       updateScore();
     }

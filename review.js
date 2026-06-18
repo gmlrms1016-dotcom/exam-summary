@@ -59,6 +59,11 @@
             var ans = (item.dataset.answers || "").split("|")[0];
             out.push({ no: "", q: full, opts: [], ans: "정답: " + ans });
         });
+        // 3) 커스텀 엔진(예: 웹 태그 퀴즈)이 전역에 보고한 오답
+        var extra = window.__examWrong;
+        if (extra) Object.keys(extra).forEach(function (k) {
+            var r = extra[k]; if (r) out.push({ no: r.no || "", q: r.q || "", opts: r.opts || [], ans: r.ans || "" });
+        });
         return out;
     }
 
@@ -156,6 +161,12 @@
     overlay.querySelector("#rv-close").addEventListener("click", closeModal);
     overlay.addEventListener("click", function (e) { if (e.target === overlay) closeModal(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+
+    // 어떤 퀴즈 엔진이든 클릭 후 배지 자동 갱신 (웹 태그퀴즈 data-act 버튼 포함)
+    document.addEventListener("click", function (e) {
+        if (overlay.contains(e.target) || e.target === fab) return;  // 모달/버튼 자체는 제외
+        setTimeout(updateBadge, 0);
+    });
 
     updateBadge();
 })();
