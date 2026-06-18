@@ -1,8 +1,7 @@
 <!-- ===================================================================== -->
-<!-- 파이썬프로그래밍 · 기말(PB 실기) 완전정리                              -->
-<!-- 시험범위: 15주차 PB 기말고사 4문제 (grade / lengths / turtlestar / locker) -->
-<!-- 풀이 코드는 15주차 (답지).py = 교수님 의도 정답 기준                     -->
-<!-- 디자인은 웹·컴공 페이지와 동일한 style.css 재사용                       -->
+<!-- 파이썬프로그래밍 · 기말(PB 실기) — 인앱 코드 실행·채점                  -->
+<!-- 시험범위: 15주차 PB 기말고사 4문제. 풀이 코드는 15주차 (답지).py 기준    -->
+<!-- 코드 실행/채점: Pyodide(pyrun.js + grader.py) · turtle은 가상 실행      -->
 <!-- ===================================================================== -->
 
 <!DOCTYPE html>
@@ -16,10 +15,26 @@
     <style>
         .back-link { display:inline-block; margin-bottom:14px; color:var(--main); font-weight:800; text-decoration:none; font-size:14px; }
         .back-link:hover { text-decoration:underline; }
-        .chap { background:#2d526d; }                 /* 파일명 배지: 파랑 */
-        pre.io { background:#0f1b14; }                 /* 출력 결과 박스: 더 진한 초록빛 */
+        .chap { background:#2d526d; }
+        pre.io { background:#0f1b14; }
         pre.io::before { content:"▶ 출력 결과"; color:#7fd49a; }
         pre.io code { color:#dff5e6; }
+        /* 코드 에디터 & 실행 */
+        .pyprob { margin:8px 0 12px; }
+        .py-editor { width:100%; min-height:240px; box-sizing:border-box; font-family:Consolas,"D2Coding",monospace; font-size:13px; line-height:1.55; background:#1e2530; color:#e6edf3; border:1px solid #2d3a4a; border-radius:10px; padding:12px; white-space:pre; tab-size:4; resize:vertical; }
+        .py-btns { margin:10px 0; display:flex; gap:8px; flex-wrap:wrap; }
+        .py-run { background:#2d6a4f; color:#fff; border:none; border-radius:8px; padding:10px 18px; font-weight:800; cursor:pointer; font-family:inherit; font-size:14px; }
+        .py-run:disabled { opacity:.6; cursor:default; }
+        .py-reset { background:#eceeec; color:#444; border:none; border-radius:8px; padding:10px 16px; font-weight:700; cursor:pointer; font-family:inherit; font-size:14px; }
+        .py-result { font-weight:800; margin:6px 0; font-size:14.5px; min-height:20px; line-height:1.5; }
+        .py-result.ok { color:#176c3a; } .py-result.no { color:#b3261e; }
+        .py-output { background:#0f1b14; color:#dff5e6; border-radius:8px; padding:10px 12px; font-size:13px; white-space:pre-wrap; }
+        .py-output:empty { display:none; }
+        /* 정답 코드 접이식 */
+        .akey { border:1px solid var(--line); border-radius:10px; background:#fbfdfb; margin:12px 0; }
+        .akey > summary { cursor:pointer; font-weight:800; color:var(--main); padding:11px 15px; }
+        .akey[open] > summary { border-bottom:1px solid var(--line); }
+        .akey > pre, .akey > .tip { margin:12px 15px; }
     </style>
 </head>
 
@@ -30,12 +45,13 @@
 
     <header class="page-head">
         <h1>파이썬프로그래밍 · 기말 완전정리</h1>
-        <p>시험범위 : PB(실기) 기말고사 4문제 — match-case · map/zip · turtle · try/except·random</p>
+        <p>시험범위 : PB(실기) 기말 4문제 — 웹에서 코드를 직접 실행·채점해 보세요</p>
     </header>
 
     <div class="tip">
-        📖 <b>이 페이지 보는 법</b> : 각 문제는 ① <b>문제 지문</b> → ② <b>출력 결과</b> → ③ <b>핵심 개념</b> →
-        ④ <b>풀이(정답 코드)</b> 순서입니다. 풀이는 15주차 <b>(답지).py(교수님 정답)</b> 기준이며, 맨 아래 <b>📝 빈칸채우기</b>로 핵심 문법을 점검하세요.
+        ✍️ <b>이 페이지 보는 법</b> : 각 문제의 <b>문제·출력·핵심 개념</b>을 보고, <b>코드 에디터</b>에 직접 작성한 뒤
+        <b>[▶ 실행 &amp; 채점]</b>을 누르면 브라우저 안에서 파이썬이 실행되어 <b>정답/오답</b>을 알려줍니다.
+        막히면 <b>‘정답 코드 보기’</b>로 확인하세요. <span style="color:#d9772b;font-weight:700;">※ 최초 실행 시 파이썬 환경을 받느라 수십 초 걸립니다.</span>
     </div>
 
     <nav class="toc">
@@ -43,12 +59,11 @@
         <a href="#p2">02 lengths (단어길이)</a>
         <a href="#p3">03 turtle (사각형)</a>
         <a href="#p4">04 locker (사물함)</a>
-        <a href="#quiz" style="background:#d9772b;color:#fff;">📝 빈칸채우기</a>
     </nav>
 
 <section class="card" id="p1">
   <h2>01. 점수 → 학점 변환 (match-case)<span class="week chap">grade_학번</span></h2>
-  <div class="tip">📄 <b>문제</b> : <b>match-case</b> 구문을 활용하여 입력받은 점수를 학점으로 반환하는 프로그램을 완성하시오. 함수의 매개변수는 <b>int로 타입 힌트</b>를 준다.</div>
+  <div class="tip">📄 <b>문제</b> : <b>match-case</b> 구문으로 점수를 학점으로 반환하는 <code>get_grade(score)</code>를 작성하세요. <b>main()은 이미 주어져 있습니다.</b></div>
   <p style="font-size:14px;">▸ 90이상 100이하 <b>A+</b> · 80이상 90미만 <b>A</b> · 70이상 80미만 <b>B+</b> · 60이상 70미만 <b>B</b> · 50이상 60미만 <b>C+</b> · 40이상 50미만 <b>C</b> · 나머지 <b>F</b></p>
   <h3>출력 결과</h3>
   <pre class="io"><code>점수를 입력하세요: 90
@@ -59,35 +74,23 @@
 유효하지 않은 입력입니다. 숫자를 입력해주세요.</code></pre>
   <h3>핵심 개념</h3>
   <table class="ref"><tr><th>개념</th><th>설명</th></tr>
-    <tr><td>match-case</td><td>파이썬 3.10+ 분기 구문. <b>답지</b>는 점수를 <code>str(score).zfill(2)[0]</code>(2자리 문자열로 만든 뒤 맨 앞 자리)로 바꿔 <code>case "9"</code>처럼 분기. 100점은 <code>case "1" if score==100</code>으로 처리</td></tr>
-    <tr><td>타입 힌트</td><td><code>def get_grade(score: int):</code> 처럼 매개변수 자료형을 표기(강제는 아님)</td></tr>
-    <tr><td>입력 검증</td><td><code>score.isdigit()</code>로 숫자인지 확인 후 <code>int()</code> 변환, <code>0 &lt;= score &lt;= 100</code> 범위 검사</td></tr>
+    <tr><td>match-case</td><td>파이썬 3.10+ 분기. <code>case _ if 90&lt;=score&lt;=100:</code> 가드 또는 <code>str(score).zfill(2)[0]</code> 맨 앞자리 분기</td></tr>
+    <tr><td>타입 힌트</td><td><code>def get_grade(score: int):</code></td></tr>
+    <tr><td>채점 방식</td><td>get_grade(점수)를 여러 점수로 호출해 학점이 맞는지 자동 검사</td></tr>
   </table>
-  <h3>풀이 (정답 코드)</h3>
-  <pre><code>def get_grade(score: int):                 # 점수(int 타입 힌트)를 받아 학점 문자열 반환
-    match str(score).zfill(2)[0]:          # 점수를 2자리 문자열로 만든 뒤 &#x27;맨 앞 자리&#x27;로 분기
-        case &quot;9&quot;:                          # 90~99 → A+
-            return &quot;A+&quot;
-        case &quot;8&quot;:                          # 80~89 → A
-            return &quot;A&quot;
-        case &quot;7&quot;:                          # 70~79 → B+
-            return &quot;B+&quot;
-        case &quot;6&quot;:                          # 60~69 → B
-            return &quot;B&quot;
-        case &quot;5&quot;:                          # 50~59 → C+
-            return &quot;C+&quot;
-        case &quot;4&quot;:                          # 40~49 → C
-            return &quot;C&quot;
-        case &quot;1&quot; if score == 100:          # 앞자리 &#x27;1&#x27;이면서 정확히 100점 → A+
-            return &quot;A+&quot;
-        case _:                            # 나머지(0~39 등) → F
-            return &quot;F&quot;
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="1" data-title="점수 → 학점 변환 (match-case)">
+    <textarea class="py-editor" spellcheck="false"># get_grade(score) 함수만 작성하세요. main()은 이미 주어져 있습니다.
+def get_grade(score: int):
+    # TODO: match-case로 점수→학점 반환
+    #   90~100 A+ / 80~89 A / 70~79 B+ / 60~69 B / 50~59 C+ / 40~49 C / 나머지 F
+    pass
 
 
 def main():
     while True:
         score = input(&quot;점수를 입력하세요: &quot;)
-        if score.isdigit():                       # 숫자로만 이뤄졌는지 검증
+        if score.isdigit():
             score = int(score)
             if 0 &lt;= score &lt;= 100:
                 print(f&quot;당신의 학점은 {get_grade(score)} 입니다.&quot;)
@@ -97,13 +100,55 @@ def main():
             print(&quot;유효하지 않은 입력입니다. 숫자를 입력해주세요.&quot;)
 
 
-if __name__ == &quot;__main__&quot;:      # 직접 실행할 때만 (import 시 실행 안 됨)
+if __name__ == &quot;__main__&quot;:
+    main()</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>def get_grade(score: int):                 # 점수(int 타입 힌트)를 받아 학점 문자열 반환
+    match str(score).zfill(2)[0]:          # 점수를 2자리 문자열로 만든 뒤 &#x27;맨 앞 자리&#x27;로 분기
+        case &quot;9&quot;:
+            return &quot;A+&quot;
+        case &quot;8&quot;:
+            return &quot;A&quot;
+        case &quot;7&quot;:
+            return &quot;B+&quot;
+        case &quot;6&quot;:
+            return &quot;B&quot;
+        case &quot;5&quot;:
+            return &quot;C+&quot;
+        case &quot;4&quot;:
+            return &quot;C&quot;
+        case &quot;1&quot; if score == 100:
+            return &quot;A+&quot;
+        case _:
+            return &quot;F&quot;
+
+
+def main():
+    while True:
+        score = input(&quot;점수를 입력하세요: &quot;)
+        if score.isdigit():
+            score = int(score)
+            if 0 &lt;= score &lt;= 100:
+                print(f&quot;당신의 학점은 {get_grade(score)} 입니다.&quot;)
+            else:
+                print(&quot;잘못된 점수입니다. 0에서 100 사이의 값을 입력해주세요.&quot;)
+        else:
+            print(&quot;유효하지 않은 입력입니다. 숫자를 입력해주세요.&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
     main()</code></pre>
+    <div class="tip">채점은 get_grade 함수만 호출합니다(입력 루프는 실행 안 함). 0~100 전 구간을 검사해요.</div>
+  </details>
 </section>
 
 <section class="card" id="p2">
   <h2>02. 문자열 각 단어 길이 추출 (map · zip)<span class="week chap">lengths_학번</span></h2>
-  <div class="tip">📄 <b>문제</b> : <b>map(len, words)</b>를 활용해 입력 문자열에서 각 단어의 길이를 추출하는 프로그램을 완성하시오.</div>
+  <div class="tip">📄 <b>문제</b> : <b>map(len, words)</b>로 입력 문자열에서 각 단어의 길이를 추출해 출력하세요.</div>
   <h3>출력 결과</h3>
   <pre class="io"><code>문자열을 입력하세요: Your submitted manuscript is currently under review
 각 단어의 길이:
@@ -116,77 +161,113 @@ under: 5글자
 review: 6글자</code></pre>
   <h3>핵심 개념</h3>
   <table class="ref"><tr><th>개념</th><th>설명</th></tr>
-    <tr><td>split()</td><td>문자열을 <b>공백 기준</b>으로 나눠 단어 리스트 생성 (예: <code>"a b c".split()</code> → <code>['a','b','c']</code>)</td></tr>
-    <tr><td>map(함수, 반복형)</td><td>각 원소에 함수를 일괄 적용. <code>map(len, words)</code> = 각 단어 길이. <code>list()</code>로 리스트화</td></tr>
-    <tr><td>zip()</td><td>여러 리스트를 <b>같은 위치끼리 묶음</b>. <code>for word, length in zip(단어들, 길이들)</code> 로 짝지어 출력</td></tr>
+    <tr><td>split()</td><td>문자열을 공백 기준으로 나눠 단어 리스트 생성</td></tr>
+    <tr><td>map(len, words)</td><td>각 단어 길이 계산 → <code>list()</code>로 변환</td></tr>
+    <tr><td>zip()</td><td>단어와 길이를 짝지어 <code>"단어: N글자"</code> 출력</td></tr>
   </table>
-  <h3>풀이 (정답 코드)</h3>
-  <pre><code>def calculate_word_lengths(text):       # 문자열을 받아 각 단어 길이 리스트를 반환
-    words = text.split()                # split(): 공백 기준으로 단어 분리
-    return list(map(len, words))        # map(len, words): 각 단어 길이를 리스트로
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="2" data-title="문자열 각 단어 길이 추출 (map · zip)">
+    <textarea class="py-editor" spellcheck="false"># 각 단어의 길이를 출력하는 프로그램을 완성하세요.
+def calculate_word_lengths(text):
+    # TODO: split() 으로 단어 분리 후 map(len, ...) 으로 각 단어 길이 리스트 반환
+    pass
 
 
 input_text = input(&quot;문자열을 입력하세요: &quot;)
-word_lengths = calculate_word_lengths(input_text)   # 각 단어 길이 리스트 생성
+# TODO: calculate_word_lengths 로 word_lengths 만들기
 
 print(&quot;각 단어의 길이:&quot;)
-for word, length in zip(input_text.split(), word_lengths):  # 단어·길이를 짝지어 꺼냄
-    print(f&quot;{word}: {length}글자&quot;)                  # &quot;단어: N글자&quot; 형식 출력</code></pre>
+# TODO: zip() 으로 단어와 길이를 짝지어 &quot;단어: N글자&quot; 출력
+</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>def calculate_word_lengths(text):
+    words = text.split()
+    return list(map(len, words))
+
+
+input_text = input(&quot;문자열을 입력하세요: &quot;)
+word_lengths = calculate_word_lengths(input_text)
+
+print(&quot;각 단어의 길이:&quot;)
+for word, length in zip(input_text.split(), word_lengths):
+    print(f&quot;{word}: {length}글자&quot;)</code></pre>
+    <div class="tip">채점은 위 예시 문자열을 입력으로 넣고 출력이 정답과 같은지 비교합니다.</div>
+  </details>
 </section>
 
 <section class="card" id="p3">
   <h2>03. turtle로 사각형 임의 위치·색칠 (random)<span class="week chap">turtlestar_학번</span></h2>
-  <div class="tip">📄 <b>문제</b> : 모듈 <b>turtle</b>로 임의의 위치에 <b>사각형</b>을 그리고, 리스트에 지정한 색으로 각각 다르게 칠하는 프로그램을 작성하시오. 그릴 개수(1~6)를 입력받는다.</div>
-  <p style="font-size:14px;">▸ 색상 <code>color = [red, orange, yellow, green, blue, magenta]</code> · 모양 거북이 · 창 600×600 · 속도 3 · 한 변 100픽셀</p>
+  <div class="tip">📄 <b>문제</b> : <b>turtle</b>로 임의 위치에 <b>사각형</b>을 그리고 각각 다른 색으로 칠하세요. 개수(1~6)를 입력받습니다.</div>
+  <p style="font-size:14px;">▸ 색상 <code>[red, orange, yellow, green, blue, magenta]</code> · 거북이 · 600×600 · 속도 3 · 한 변 100</p>
   <h3>핵심 개념</h3>
   <table class="ref"><tr><th>개념</th><th>설명</th></tr>
-    <tr><td>입력 범위 검증</td><td><code>while True</code> + <code>if 1 &lt;= count &lt;= 6</code> 로 1~6 정상 범위만 통과(아니면 다시 입력)</td></tr>
-    <tr><td>random.randint(a, b)</td><td>a~b 사이 <b>무작위 정수</b>. <code>random.randint(-200, 200)</code>로 x·y 좌표 생성</td></tr>
-    <tr><td>펜 제어 pu()/pd()</td><td><code>pu()</code>(=penup) 펜 올려 이동(자국 X), <code>pd()</code>(=pendown) 펜 내려 그리기</td></tr>
-    <tr><td>채우기 fillcolor/begin_fill/end_fill</td><td><code>fillcolor(색)</code>로 색 지정 후 <code>begin_fill()</code>…<code>end_fill()</code> 사이 도형을 색칠</td></tr>
-    <tr><td>사각형 그리기</td><td>한 변 100픽셀, <code>forward(100)</code> 후 <code>left(90)</code>를 <b>4번</b> 반복 → 정사각형 ■</td></tr>
+    <tr><td>random.randint(-200,200)</td><td>x·y 무작위 좌표</td></tr>
+    <tr><td>pu()/pd()</td><td>펜 올림(이동)/내림(그리기)</td></tr>
+    <tr><td>fillcolor + begin_fill/end_fill</td><td>색 지정 후 그 사이 도형을 색칠</td></tr>
+    <tr><td>사각형</td><td>forward(100) 후 left(90) ×4</td></tr>
   </table>
-  <h3>풀이 (정답 코드)</h3>
-  <pre><code>import turtle as t
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="3" data-title="turtle로 사각형 임의 위치·색칠 (random)">
+    <textarea class="py-editor" spellcheck="false">import turtle as t
 import random
 
-color = [&quot;red&quot;, &quot;orange&quot;, &quot;yellow&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;magenta&quot;]  # 색상 6개
+# TODO:
+#  - color = [red, orange, yellow, green, blue, magenta]
+#  - 그릴 개수(1~6)를 input 으로 받기
+#  - 모양 거북이, 창 600x600, 속도 3
+#  - 임의 위치(random.randint(-200,200))에 사각형(한 변 100, forward(100)+left(90) ×4)
+#  - 각 도형을 color[i] 로 begin_fill ~ end_fill 색칠
+</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>import turtle as t
+import random
 
-while True:                              # 올바른 개수가 들어올 때까지 반복
+color = [&quot;red&quot;, &quot;orange&quot;, &quot;yellow&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;magenta&quot;]
+
+while True:
     count = int(input(&quot;몇개?(1~6범위 입력)&quot;))
-    if 1 &lt;= count &lt;= 6:                  # 1~6 정상 범위면
+    if 1 &lt;= count &lt;= 6:
         print(&quot;정상범위 입니다. 프로그램을 실행합니다.&quot;)
-        break                           # 반복 탈출
-    else:                               # 범위 밖이면
-        print(&quot;비정상범위 입니다. 다시 입력 부탁드립니다.\n&quot;)
-        continue                        # 다시 입력받기
+        break
+    else:
+        print(&quot;비정상범위 입니다. 다시 입력 부탁드립니다.&quot;)
+        continue
 
-t.shape(&quot;turtle&quot;)          # 모양: 거북이
-t.setup(600, 600)          # 그래픽 창 600x600
-t.speed(3)                 # 속도 3
+t.shape(&quot;turtle&quot;)
+t.setup(600, 600)
+t.speed(3)
 
-for i in range(count):                   # 입력한 개수만큼 반복
-    x = random.randint(-200, 200)        # 무작위 x좌표 (-200~200)
-    y = random.randint(-200, 200)        # 무작위 y좌표
-    t.pu()                               # 펜 올리기(이동 자국 X)
-    t.goto(x, y)                         # 임의 위치로 이동
-    t.pd()                               # 펜 내리기(그리기 시작)
+for i in range(count):
+    x = random.randint(-200, 200)
+    y = random.randint(-200, 200)
+    t.pu()
+    t.goto(x, y)
+    t.pd()
 
-    t.fillcolor(color[i])                # i번째 색을 채우기 색으로
-    t.begin_fill()                       # 채우기 시작
-    for _ in range(4):                   # 사각형: 네 변 반복
-        t.forward(100)                   # 한 변 100픽셀 전진
-        t.left(90)                       # 90도 회전
-    t.end_fill()                         # 채우기 끝
+    t.fillcolor(color[i])
+    t.begin_fill()
+    for _ in range(4):
+        t.forward(100)
+        t.left(90)
+    t.end_fill()
 
-t.done()                                 # 창 유지</code></pre>
-  <div class="tip">⚠️ 시험지 PDF 지문은 <b>‘별 6개’</b>지만, <b>답지(교수님 정답)</b>는 <b>사각형</b>으로 구현되어 있어 <b>답지 기준</b>으로 작성했습니다. 만약 별(★)로 그리려면 안쪽 반복을 <code>for _ in range(5): forward(100); right(144)</code> 로 바꾸면 됩니다.</div>
+t.done()</code></pre>
+    <div class="tip">⚠️ 브라우저에선 그래픽 창을 못 띄웁니다. <b>가상 실행</b>으로 '도형 개수·forward(100)·색칠' 동작을 검사해 채점합니다. (시험지는 ‘별’이지만 답지가 사각형이라 사각형 기준)</div>
+  </details>
 </section>
 
 <section class="card" id="p4">
   <h2>04. 사물함 번호 배정 (try/except · random.sample)<span class="week chap">locker_학번</span></h2>
-  <div class="tip">📄 <b>문제</b> : n명의 학생에게 <b>두 자리 자연수</b> 번호를 갖는 사물함을 배정하는 프로그램을 작성하시오. (학생 수 1~10, x 입력 시 종료)</div>
-  <p style="font-size:14px;">▸ <b>student_count()</b> try/except 예외처리·반복 입력 · <b>locker_num()</b> random.sample 중복없이 배정 · <b>main()</b> import 시 실행 안 됨</p>
+  <div class="tip">📄 <b>문제</b> : n명에게 <b>두 자리 자연수</b> 사물함 번호를 배정하세요. (1~10명, x 입력 시 종료)</div>
+  <p style="font-size:14px;">▸ <b>student_count()</b> try/except 검증 · <b>locker_num()</b> random.sample · <b>main()</b> import 시 실행 안 됨</p>
   <h3>출력 결과</h3>
   <pre class="io"><code>사물함 배정을 시작합니다.
 학생수를 입력하세요: 150
@@ -197,156 +278,80 @@ t.done()                                 # 창 유지</code></pre>
 10명에게 배정된 사물함 번호는 다음과 같습니다: [12, 24, 33, 86, 25, 27, 56, 72, 45, 90]</code></pre>
   <h3>핵심 개념</h3>
   <table class="ref"><tr><th>개념</th><th>설명</th></tr>
-    <tr><td>try / except</td><td>오류가 날 수 있는 코드를 <code>try:</code>에, 오류 처리(숫자 변환 실패 등)를 <code>except Exception as e:</code>에 작성</td></tr>
-    <tr><td>random.sample(범위, k)</td><td><b>중복 없이</b> k개 무작위 추출. <code>range(10, 100)</code> = 두 자리 자연수 10~99</td></tr>
-    <tr><td>if __name__ == &quot;__main__&quot;</td><td>파일을 <b>직접 실행</b>할 때만 main() 호출, <b>import 되면 실행 안 됨</b></td></tr>
+    <tr><td>try / except</td><td>숫자 변환 실패 등 예외 처리</td></tr>
+    <tr><td>random.sample(range(10,100), k)</td><td>두 자리(10~99) k개 중복 없이</td></tr>
+    <tr><td>if __name__ == &quot;__main__&quot;</td><td>직접 실행할 때만 main() 호출</td></tr>
   </table>
-  <h3>풀이 (정답 코드)</h3>
-  <pre><code>import random
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="4" data-title="사물함 번호 배정 (try/except · random.sample)">
+    <textarea class="py-editor" spellcheck="false">import random
 
-def student_count():                     # 학생 수를 입력받아 검증 후 반환
+def student_count():
+    # TODO: try/except 로 1~10 입력 검증, &#x27;x&#x27; 입력 시 종료
+    pass
+
+
+def locker_num(count):
+    # TODO: random.sample 로 두 자리(10~99) 번호 count개 중복 없이
+    pass
+
+
+def main():
+    # TODO: 시작 메시지 → 학생 수 입력 → 사물함 번호 출력
+    pass
+
+
+if __name__ == &quot;__main__&quot;:
+    main()</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>import random
+
+def student_count():
     while True:
-        try:                             # 숫자 변환 오류 대비 예외 처리
+        try:
             a = input(&quot;학생수를 입력하세요: &quot;)
-            if a == &quot;x&quot; or a == &quot;X&quot;:     # x 입력 시 종료
+            if a == &quot;x&quot; or a == &quot;X&quot;:
                 print(&quot;프로그램 종료.&quot;)
-                break                    # while 탈출 → None 반환
-            input_count = int(a)         # 정수 변환(실패 시 except로)
+                break
+            input_count = int(a)
             if input_count &lt; 1 or input_count &gt; 10:
                 print(&quot;범위를 벗어났습니다. 올바른 값을 입력하세요.&quot;)
             else:
-                return input_count       # 1~10 유효값 반환
-        except Exception as e:           # 숫자가 아닌 입력 등 모든 예외
+                return input_count
+        except Exception as e:
             print(&quot;숫자가 아닙니다. 올바른 값을 입력하세요.&quot;)
 
 
-def locker_num(count):                   # 사물함 번호 배정
-    return random.sample(range(10, 100), count)   # 10~99 중 중복없이 count개
+def locker_num(count):
+    return random.sample(range(10, 100), count)
 
 
 def main():
     print(&quot;사물함 배정을 시작합니다.&quot;)
     count = student_count()
-    if count == None:                    # x로 종료한 경우
+    if count == None:
         exit()
     lockers = locker_num(count)
     print(f&quot;{count}명에게 배정된 사물함 번호는 다음과 같습니다: {lockers}&quot;)
 
 
-if __name__ == &quot;__main__&quot;:      # import 시 실행되지 않도록
+if __name__ == &quot;__main__&quot;:
     main()</code></pre>
-</section>
-
-<section class="card" id="quiz">
-  <h2>📝 빈칸채우기 (자가체크)<span class="week chap">전 문제</span></h2>
-  <p>빈칸에 답을 적고 <b>확인</b>을 누르세요. 모르면 <b>정답 보기</b>로 확인하세요. (띄어쓰기·괄호·대소문자 무시 채점)</p>
-  <div id="quiz-score">맞힌 문제 : 0 / 12</div>
-  <div class="quiz-item" data-answers="match|매치">
-    <div class="quiz-q"><span class="quiz-cat">문제1</span> 점수 분기에 쓰는 파이썬 3.10+ 구문은? (예: ____ score:)</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="타입힌트|type hint|타입hint">
-    <div class="quiz-q"><span class="quiz-cat">문제1</span> 매개변수에 <code>score: int</code> 처럼 자료형을 표시하는 것을?</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="split|split()">
-    <div class="quiz-q"><span class="quiz-cat">문제2</span> 문자열을 공백 기준으로 나눠 리스트로 만드는 메서드는?</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="map">
-    <div class="quiz-q"><span class="quiz-cat">문제2</span> 각 원소에 함수를 일괄 적용하는 내장 함수는? (예: ____(len, words))</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="zip|zip()">
-    <div class="quiz-q"><span class="quiz-cat">문제2</span> 여러 리스트를 같은 위치끼리 묶는 내장 함수는?</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="len|len()">
-    <div class="quiz-q"><span class="quiz-cat">문제2</span> 단어 하나의 글자 수(길이)를 구하는 내장 함수는?</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="random.randint|randint">
-    <div class="quiz-q"><span class="quiz-cat">문제3</span> -200~200 사이 무작위 정수를 만드는 함수는?</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="pu|penup|pu()|penup()">
-    <div class="quiz-q"><span class="quiz-cat">문제3</span> 펜을 올려 자국 없이 이동하는 turtle 메서드는? (penup의 약자)</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="begin_fill|beginfill|begin_fill()">
-    <div class="quiz-q"><span class="quiz-cat">문제3</span> 도형 색칠을 시작/끝내는 메서드 쌍은? (시작 메서드)</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="except|try except|tryexcept">
-    <div class="quiz-q"><span class="quiz-cat">문제4</span> 잘못된 입력을 예외 처리하는 구문 두 키워드는? (try ____)</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="random.sample|sample">
-    <div class="quiz-q"><span class="quiz-cat">문제4</span> 중복 없이 k개를 무작위로 뽑는 함수는?</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
-  <div class="quiz-item" data-answers="__main__|main">
-    <div class="quiz-q"><span class="quiz-cat">문제4</span> import 시 실행을 막는 조건: if __name__ == "____"</div>
-    <input type="text" placeholder="답 입력">
-    <div class="quiz-btns"><button class="quiz-btn check">확인</button><button class="quiz-btn ghost show">정답 보기</button></div>
-    <div class="quiz-feedback"></div>
-  </div>
+    <div class="tip">채점은 학생 수 <b>10</b>을 입력으로 넣고, 두 자리 번호 10개가 중복 없이 출력되는지 확인합니다.</div>
+  </details>
 </section>
 
     <footer class="page-head" style="margin-top:30px;">
-        <p>파이썬프로그래밍 기말(PB) 완전정리 · 4문제 풀이 + 빈칸채우기 · © 2026 윤희근</p>
+        <p>파이썬프로그래밍 기말(PB) · 인앱 코드 실행·채점(Pyodide) · © 2026 윤희근</p>
     </footer>
 
 </div>
 
-<!-- ===================== 빈칸채우기 채점 스크립트 ===================== -->
-<script>
-    function norm(s) { return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[()]/g, ''); }
-    var items = document.querySelectorAll('.quiz-item');
-    var total = items.length;
-    function updateScore() {
-        var solved = document.querySelectorAll('.quiz-item[data-solved="1"]').length;
-        document.getElementById('quiz-score').textContent = '맞힌 문제 : ' + solved + ' / ' + total;
-    }
-    items.forEach(function (item) {
-        var answers = (item.dataset.answers || '').split('|');
-        var input = item.querySelector('input');
-        var fb = item.querySelector('.quiz-feedback');
-        var first = answers[0];
-        item.querySelector('.check').addEventListener('click', function () {
-            var ok = answers.some(function (a) { return norm(a) === norm(input.value); });
-            if (ok) { fb.className = 'quiz-feedback ok'; fb.innerHTML = '✅ 정답입니다!'; item.dataset.solved = '1'; }
-            else { fb.className = 'quiz-feedback no'; fb.innerHTML = '❌ 다시 생각해 보세요. <span class="ans">정답: <b>' + first + '</b></span>'; }
-            updateScore();
-        });
-        item.querySelector('.show').addEventListener('click', function () {
-            fb.className = 'quiz-feedback ok'; fb.innerHTML = '💡 정답: <span class="ans-code">' + first + '</span>';
-        });
-        input.addEventListener('keydown', function (e) { if (e.key === 'Enter') item.querySelector('.check').click(); });
-    });
-</script>
+<script src="pyrun.js"></script>
 <script src="review.js"></script>
 </body>
 </html>
