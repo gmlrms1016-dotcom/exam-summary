@@ -1,0 +1,420 @@
+<!-- ===================================================================== -->
+<!-- 프로그래밍방법론 · 기말 완전정리 — 순서도(Flowgorithm)→파이썬 + 인앱 코드 실행 -->
+<!-- 시험범위: 9~14주차 (선택구조 / 반복구조 / 함수·재귀 / 클래스)              -->
+<!-- 코드 실행/채점: Pyodide(pyrun.js + grader_pm.py)                          -->
+<!-- ===================================================================== -->
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍방법론 기말 완전정리</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .back-link { display:inline-block; margin-bottom:14px; color:var(--main); font-weight:800; text-decoration:none; font-size:14px; }
+        .back-link:hover { text-decoration:underline; }
+        .chap { background:#7a4ea3; }                 /* 프방법 = 보라 계열 포인트 */
+        pre.io { background:#0f1b14; }
+        pre.io::before { content:"▶ 출력 결과"; color:#7fd49a; }
+        pre.io code { color:#dff5e6; }
+        /* 순서도 설명 */
+        .flow-svg { width:100%; max-width:720px; height:auto; display:block; margin:10px auto 4px; background:#fbfcff; border:1px solid var(--line); border-radius:12px; }
+        .flow-legend { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:13px; margin:8px 0 4px; }
+        .flow-legend span { display:inline-flex; align-items:center; gap:6px; }
+        .swatch { width:22px; height:14px; display:inline-block; border:1.5px solid #4a5b7a; }
+        .swatch.term { border-radius:9px; background:#eef4ff; }
+        .swatch.io   { background:#fff3e0; transform:skewX(-18deg); }
+        .swatch.proc { background:#eaf7ee; }
+        .swatch.cond { background:#fdeaf1; transform:rotate(45deg) scale(.8); }
+        /* 코드 에디터 & 실행 (파이썬 페이지와 동일) */
+        .pyprob { margin:8px 0 12px; }
+        .py-editor { width:100%; min-height:230px; box-sizing:border-box; font-family:Consolas,"D2Coding",monospace; font-size:13px; line-height:1.55; background:#1e2530; color:#e6edf3; border:1px solid #2d3a4a; border-radius:10px; padding:12px; white-space:pre; tab-size:4; resize:vertical; }
+        .py-btns { margin:10px 0; display:flex; gap:8px; flex-wrap:wrap; }
+        .py-run { background:#2d6a4f; color:#fff; border:none; border-radius:8px; padding:10px 18px; font-weight:800; cursor:pointer; font-family:inherit; font-size:14px; }
+        .py-run:disabled { opacity:.6; cursor:default; }
+        .py-reset { background:#eceeec; color:#444; border:none; border-radius:8px; padding:10px 16px; font-weight:700; cursor:pointer; font-family:inherit; font-size:14px; }
+        .py-result { font-weight:800; margin:6px 0; font-size:14.5px; min-height:20px; line-height:1.5; }
+        .py-result.ok { color:#176c3a; } .py-result.no { color:#b3261e; }
+        .py-output { background:#0f1b14; color:#dff5e6; border-radius:8px; padding:10px 12px; font-size:13px; white-space:pre-wrap; }
+        .py-output:empty { display:none; }
+        /* 정답 코드 접이식 */
+        .akey { border:1px solid var(--line); border-radius:10px; background:#fbfdfb; margin:12px 0; }
+        .akey > summary { cursor:pointer; font-weight:800; color:var(--main); padding:11px 15px; }
+        .akey[open] > summary { border-bottom:1px solid var(--line); }
+        .akey > pre, .akey > .tip { margin:12px 15px; }
+    </style>
+</head>
+
+<body>
+<div class="wrap">
+
+    <a class="back-link" href="index.html">← 과목 선택으로 돌아가기</a>
+
+    <header class="page-head">
+        <h1>프로그래밍방법론 · 기말 완전정리</h1>
+        <p>시험범위 : 9~14주차 — 순서도(Flowgorithm)로 설계하고 파이썬으로 구현하기</p>
+    </header>
+
+    <div class="tip">
+        ✍️ <b>이 과목의 핵심</b> : <b>문제 → 순서도(Flowgorithm)로 흐름 설계 → 파이썬 코드로 변환</b>입니다.
+        아래에서 <b>순서도 기호·3대 제어구조</b>를 먼저 정리하고, 각 문제는 <b>코드 에디터</b>에 직접 작성한 뒤
+        <b>[▶ 실행 &amp; 채점]</b>으로 브라우저 안에서 바로 채점받으세요.
+        <span style="color:#d9772b;font-weight:700;">※ 최초 실행 시 파이썬 환경을 받느라 수십 초 걸립니다.</span>
+    </div>
+
+    <nav class="toc">
+        <a href="#flow">📐 순서도 → 파이썬</a>
+        <a href="#p1">01 윤년 (선택)</a>
+        <a href="#p2">02 가위바위보 (중첩 if)</a>
+        <a href="#p3">03 별 삼각형 (반복)</a>
+        <a href="#p4">04 구구단 (반복)</a>
+        <a href="#p5">05 팩토리얼 (재귀)</a>
+        <a href="#p6">06 Student (클래스)</a>
+    </nav>
+
+<!-- ===================== 순서도 정리 ===================== -->
+<section class="card" id="flow">
+  <h2>📐 순서도(Flowgorithm) → 파이썬 변환<span class="week chap">9~14주 · 공통</span></h2>
+
+  <h3>1) 순서도 기호</h3>
+  <div class="flow-legend">
+    <span><i class="swatch term"></i> 타원 = 시작/끝</span>
+    <span><i class="swatch io"></i> 평행사변형 = 입력/출력</span>
+    <span><i class="swatch proc"></i> 직사각형 = 처리(대입·계산)</span>
+    <span><i class="swatch cond"></i> 마름모 = 조건(판단)</span>
+    <span>→ 화살표 = 실행 흐름</span>
+  </div>
+  <table class="ref"><tr><th>기호</th><th>의미</th><th>파이썬 예</th></tr>
+    <tr><td>타원(시작/끝)</td><td>프로그램의 시작과 종료</td><td>코드의 처음·끝</td></tr>
+    <tr><td>평행사변형(입출력)</td><td>값을 입력받거나 출력</td><td><code>input()</code> / <code>print()</code></td></tr>
+    <tr><td>직사각형(처리)</td><td>변수에 값 대입·계산</td><td><code>add = a + b</code></td></tr>
+    <tr><td>마름모(조건)</td><td>참/거짓으로 흐름 분기</td><td><code>if ... else ...</code></td></tr>
+  </table>
+
+  <h3>2) 3대 제어구조</h3>
+  <table class="ref"><tr><th>구조</th><th>순서도 모양</th><th>파이썬</th></tr>
+    <tr><td>순차</td><td>위 → 아래 일렬</td><td>한 줄씩 차례대로 실행</td></tr>
+    <tr><td>선택</td><td>마름모에서 참/거짓 갈래</td><td><code>if / elif / else</code></td></tr>
+    <tr><td>반복</td><td>되돌아가는(루프) 화살표</td><td><code>for</code> / <code>while</code></td></tr>
+  </table>
+
+  <h3>3) 예제 — 가위바위보 순서도</h3>
+  <p style="font-size:14px;">아래 순서도가 곧 <b>2번 문제(<code>judge</code>)</b>의 설계도입니다. 마름모(조건) → <code>if</code>, 중첩 마름모 → 중첩 <code>if</code>로 그대로 옮기면 됩니다.</p>
+
+  <svg class="flow-svg" viewBox="0 0 720 560" xmlns="http://www.w3.org/2000/svg" font-family="'맑은 고딕',Arial,sans-serif" font-size="14">
+    <defs>
+      <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+        <path d="M0,0 L7,3 L0,6 Z" fill="#4a5b7a"/>
+      </marker>
+    </defs>
+    <style>
+      .ln { stroke:#4a5b7a; stroke-width:1.6; fill:none; marker-end:url(#arr); }
+      .nd { stroke:#4a5b7a; stroke-width:1.6; }
+      .tx { fill:#1d241e; text-anchor:middle; dominant-baseline:middle; }
+      .lb { fill:#7a4ea3; font-weight:800; font-size:12px; }
+    </style>
+
+    <!-- 시작 -->
+    <ellipse class="nd" cx="200" cy="34" rx="60" ry="22" fill="#eef4ff"/>
+    <text class="tx" x="200" y="34">시작</text>
+    <!-- 입력 -->
+    <polygon class="nd" points="118,82 290,82 272,120 100,120" fill="#fff3e0"/>
+    <text class="tx" x="196" y="101">player, computer 입력</text>
+    <!-- 조건1 -->
+    <polygon class="nd" points="200,148 312,196 200,244 88,196" fill="#fdeaf1"/>
+    <text class="tx" x="200" y="196">player == computer ?</text>
+    <!-- 조건2 -->
+    <polygon class="nd" points="200,286 330,338 200,390 70,338" fill="#fdeaf1"/>
+    <text class="tx" x="200" y="332">player 가</text>
+    <text class="tx" x="200" y="349">이기는 조합 ?</text>
+    <!-- 짐 -->
+    <rect class="nd" x="150" y="424" width="100" height="40" rx="4" fill="#eaf7ee"/>
+    <text class="tx" x="200" y="444">"짐"</text>
+    <!-- 끝 -->
+    <ellipse class="nd" cx="200" cy="520" rx="60" ry="22" fill="#eef4ff"/>
+    <text class="tx" x="200" y="520">끝</text>
+    <!-- 비김 (오른쪽) -->
+    <rect class="nd" x="402" y="176" width="108" height="40" rx="4" fill="#eaf7ee"/>
+    <text class="tx" x="456" y="196">"비김"</text>
+    <!-- 이김 (오른쪽) -->
+    <rect class="nd" x="402" y="318" width="108" height="40" rx="4" fill="#eaf7ee"/>
+    <text class="tx" x="456" y="338">"이김"</text>
+
+    <!-- 흐름선 -->
+    <path class="ln" d="M200,56 L200,80"/>                      <!-- 시작→입력 -->
+    <path class="ln" d="M196,120 L200,146"/>                    <!-- 입력→조건1 -->
+    <path class="ln" d="M200,244 L200,284"/>                    <!-- 조건1 거짓→조건2 -->
+    <text class="lb" x="210" y="266">거짓</text>
+    <path class="ln" d="M200,390 L200,422"/>                    <!-- 조건2 거짓→짐 -->
+    <text class="lb" x="210" y="412">거짓</text>
+    <path class="ln" d="M200,464 L200,498"/>                    <!-- 짐→끝 -->
+    <!-- 조건1 참 → 비김 -->
+    <path class="ln" d="M312,196 L400,196"/>
+    <text class="lb" x="350" y="186">참</text>
+    <!-- 조건2 참 → 이김 -->
+    <path class="ln" d="M330,338 L400,338"/>
+    <text class="lb" x="360" y="328">참</text>
+    <!-- 비김·이김 → 오른쪽 레일 → 끝 -->
+    <path class="ln" d="M510,196 L600,196 L600,520 L262,520"/>
+    <path d="M510,338 L600,338" class="nd" fill="none"/>
+  </svg>
+
+  <details class="akey"><summary>💡 위 순서도를 파이썬으로 옮기면 (2번 정답과 동일)</summary>
+    <pre><code>def judge(player, computer):
+    if player == computer:          # 마름모1
+        return &quot;비김&quot;
+    else:
+        if (player == &quot;가위&quot; and computer == &quot;보&quot;) or \
+           (player == &quot;바위&quot; and computer == &quot;가위&quot;) or \
+           (player == &quot;보&quot; and computer == &quot;바위&quot;):   # 마름모2
+            return &quot;이김&quot;
+        else:
+            return &quot;짐&quot;</code></pre>
+  </details>
+</section>
+
+<!-- ===================== 01 윤년 ===================== -->
+<section class="card" id="p1">
+  <h2>01. 윤년 판별 (선택구조)<span class="week chap">13주 · 선택</span></h2>
+  <div class="tip">📄 <b>문제</b> : 연도를 받아 <b>윤년이면 "윤년", 평년이면 "평년"</b>을 반환하는 <code>leap(year)</code>를 작성하세요.</div>
+  <p style="font-size:14px;">▸ <b>윤년 규칙</b> : <code>4의 배수</code> <b>그리고</b> <code>100의 배수가 아님</code> <b>또는</b> <code>400의 배수</code></p>
+  <h3>핵심 개념</h3>
+  <table class="ref"><tr><th>개념</th><th>설명</th></tr>
+    <tr><td>나머지 연산 %</td><td><code>year % 4 == 0</code> → 4로 나누어떨어짐</td></tr>
+    <tr><td>and / or 우선순위</td><td><code>and</code>가 <code>or</code>보다 먼저 → <code>(A and B) or C</code></td></tr>
+    <tr><td>채점 방식</td><td>2000·1900·2024·2023 등 여러 연도로 자동 검사</td></tr>
+  </table>
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="1" data-title="윤년 판별 (선택구조)">
+    <textarea class="py-editor" spellcheck="false"># 윤년이면 &quot;윤년&quot;, 평년이면 &quot;평년&quot; 을 반환하세요.
+# 윤년 규칙: (4의 배수 and 100의 배수 아님) or 400의 배수
+def leap(year):
+    # TODO: if 로 판별 후 문자열 반환
+    pass
+
+
+# (참고) 실제로는 아래처럼 입력받아 사용합니다.
+# year = int(input(&quot;년도 입력: &quot;))
+# print(f&quot;{year}년은 {leap(year)}입니다.&quot;)
+</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>def leap(year):
+    if year % 4 == 0 and year % 100 != 0 or year % 400 == 0:
+        return &quot;윤년&quot;
+    else:
+        return &quot;평년&quot;</code></pre>
+    <div class="tip">2000년은 400의 배수라 윤년, 1900년은 100의 배수지만 400의 배수가 아니라 평년이에요.</div>
+  </details>
+</section>
+
+<!-- ===================== 02 가위바위보 ===================== -->
+<section class="card" id="p2">
+  <h2>02. 가위바위보 승부 판정 (중첩 if)<span class="week chap">10주 · 선택</span></h2>
+  <div class="tip">📄 <b>문제</b> : <code>judge(player, computer)</code>가 <b>"비김" / "이김"(player 승) / "짐"</b> 중 하나를 반환하게 하세요. (위 순서도 그대로)</div>
+  <p style="font-size:14px;">▸ player가 이기는 3조합 : (가위→보) · (바위→가위) · (보→바위)</p>
+  <h3>핵심 개념</h3>
+  <table class="ref"><tr><th>개념</th><th>설명</th></tr>
+    <tr><td>중첩 if</td><td>마름모(조건) 안에 또 마름모 → <code>else:</code> 안의 <code>if</code></td></tr>
+    <tr><td>복합 조건 or</td><td>이기는 3가지 경우를 <code>or</code>로 한 번에</td></tr>
+    <tr><td>문자열 비교</td><td><code>player == "가위"</code></td></tr>
+  </table>
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="2" data-title="가위바위보 승부 판정 (중첩 if)">
+    <textarea class="py-editor" spellcheck="false"># player, computer 의 가위/바위/보 로 승부를 판정해 반환하세요.
+def judge(player, computer):
+    # TODO: 중첩 if
+    #  - 같으면 &quot;비김&quot;
+    #  - player 가 이기는 3조합이면 &quot;이김&quot;
+    #  - 나머지는 &quot;짐&quot;
+    pass
+</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>def judge(player, computer):
+    if player == computer:
+        return &quot;비김&quot;
+    else:
+        if (player == &quot;가위&quot; and computer == &quot;보&quot;) or \
+           (player == &quot;바위&quot; and computer == &quot;가위&quot;) or \
+           (player == &quot;보&quot; and computer == &quot;바위&quot;):
+            return &quot;이김&quot;
+        else:
+            return &quot;짐&quot;</code></pre>
+    <div class="tip">9가지 경우(비김3·이김3·짐3)를 모두 자동 검사합니다.</div>
+  </details>
+</section>
+
+<!-- ===================== 03 별 삼각형 ===================== -->
+<section class="card" id="p3">
+  <h2>03. 별(*) 삼각형 (중첩 반복)<span class="week chap">11주 · 반복</span></h2>
+  <div class="tip">📄 <b>문제</b> : 줄 수 <code>n</code>을 입력받아 <b>직각삼각형 별</b>을 출력하세요. (i번째 줄에 별 i개)</div>
+  <h3>출력 결과 (n=5)</h3>
+  <pre class="io"><code>*
+**
+***
+****
+*****</code></pre>
+  <h3>핵심 개념</h3>
+  <table class="ref"><tr><th>개념</th><th>설명</th></tr>
+    <tr><td>중첩 for</td><td>바깥 for=줄, 안쪽 for=별 개수</td></tr>
+    <tr><td>print(end="")</td><td>줄바꿈 없이 이어서 출력</td></tr>
+    <tr><td>print()</td><td>한 줄 다 찍고 줄바꿈</td></tr>
+  </table>
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="3" data-title="별 삼각형 (중첩 반복)">
+    <textarea class="py-editor" spellcheck="false"># 입력한 줄 수만큼 별 직각삼각형을 출력하세요.
+n = int(input(&quot;줄 수: &quot;))
+# TODO: 중첩 for 로 i번째 줄에 별 i개 출력
+</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>n = int(input(&quot;줄 수: &quot;))
+for line in range(1, n + 1):
+    for star in range(line):
+        print(&quot;*&quot;, end=&quot;&quot;)
+    print()</code></pre>
+    <div class="tip">채점은 n=5를 입력해 별 삼각형이 정확한지 비교합니다. (줄 끝 공백은 무시)</div>
+  </details>
+</section>
+
+<!-- ===================== 04 구구단 ===================== -->
+<section class="card" id="p4">
+  <h2>04. 구구단 한 단 (반복)<span class="week chap">11주 · 반복</span></h2>
+  <div class="tip">📄 <b>문제</b> : 단(<code>dan</code>)을 입력받아 <code>1~9</code>까지 곱셈식을 출력하세요.</div>
+  <h3>출력 결과 (dan=3)</h3>
+  <pre class="io"><code>3 * 1 = 3
+3 * 2 = 6
+3 * 3 = 9
+...
+3 * 9 = 27</code></pre>
+  <h3>핵심 개념</h3>
+  <table class="ref"><tr><th>개념</th><th>설명</th></tr>
+    <tr><td>range(1, 10)</td><td>1부터 9까지 (10은 미포함)</td></tr>
+    <tr><td>f-string</td><td><code>f"{dan} * {j} = {dan*j}"</code></td></tr>
+  </table>
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="4" data-title="구구단 한 단 (반복)">
+    <textarea class="py-editor" spellcheck="false"># 입력한 단의 구구단(1~9)을 출력하세요.
+dan = int(input(&quot;단: &quot;))
+# TODO: for 로 1~9 반복하며 &quot;dan * j = 곱&quot; 출력
+</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>dan = int(input(&quot;단: &quot;))
+for j in range(1, 10):
+    print(f&quot;{dan} * {j} = {dan * j}&quot;)</code></pre>
+    <div class="tip">채점은 dan=3을 입력해 3단 9줄이 맞는지 비교합니다.</div>
+  </details>
+</section>
+
+<!-- ===================== 05 팩토리얼 ===================== -->
+<section class="card" id="p5">
+  <h2>05. 팩토리얼 (재귀 함수)<span class="week chap">13주 · 함수</span></h2>
+  <div class="tip">📄 <b>문제</b> : <code>n!</code> 을 <b>재귀</b>로 계산하는 <code>factorial(n)</code>을 작성하세요. (n ≥ 1)</div>
+  <p style="font-size:14px;">▸ <code>factorial(5) = 5 × 4 × 3 × 2 × 1 = 120</code></p>
+  <h3>핵심 개념</h3>
+  <table class="ref"><tr><th>개념</th><th>설명</th></tr>
+    <tr><td>재귀(recursion)</td><td>함수가 자기 자신을 호출</td></tr>
+    <tr><td>종료조건</td><td><code>n == 1</code> 이면 1 반환 (무한재귀 방지)</td></tr>
+    <tr><td>재귀식</td><td><code>n * factorial(n - 1)</code></td></tr>
+  </table>
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="5" data-title="팩토리얼 (재귀 함수)">
+    <textarea class="py-editor" spellcheck="false"># n! 을 재귀로 계산하는 함수를 작성하세요. (n >= 1)
+def factorial(n):
+    # TODO: 종료조건(n==1 → 1) + 재귀호출(n * factorial(n-1))
+    pass
+</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>def factorial(n):
+    if n == 1:
+        return 1
+    else:
+        return n * factorial(n - 1)</code></pre>
+    <div class="tip">채점은 1!~8! 을 호출해 값이 맞는지 확인합니다.</div>
+  </details>
+</section>
+
+<!-- ===================== 06 Student 클래스 ===================== -->
+<section class="card" id="p6">
+  <h2>06. Student 클래스 (성적 합·평균)<span class="week chap">14주 · 클래스</span></h2>
+  <div class="tip">📄 <b>문제</b> : 학생의 4과목 점수를 저장하고 <b>총점·평균</b>을 구하는 <code>Student</code> 클래스를 완성하세요.</div>
+  <p style="font-size:14px;">▸ <code>__init__(self, name, korean, math, english, science)</code> · <code>get_sum()</code> · <code>get_average()</code></p>
+  <h3>핵심 개념</h3>
+  <table class="ref"><tr><th>개념</th><th>설명</th></tr>
+    <tr><td>__init__ / self</td><td>객체 생성 시 속성 초기화, <code>self.korean = korean</code></td></tr>
+    <tr><td>메서드</td><td>객체에 속한 함수 — 합/평균 계산</td></tr>
+    <tr><td>메서드 재사용</td><td><code>get_average</code>는 <code>self.get_sum()/4</code></td></tr>
+  </table>
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="6" data-title="Student 클래스 (합·평균)">
+    <textarea class="py-editor" spellcheck="false"># 4과목 점수를 저장하고 총점·평균을 구하는 클래스를 완성하세요.
+class Student:
+    def __init__(self, name, korean, math, english, science):
+        # TODO: 5개 속성 저장 (self.name, self.korean, ...)
+        pass
+
+    def get_sum(self):
+        # TODO: 네 과목 점수의 합 반환
+        pass
+
+    def get_average(self):
+        # TODO: 평균(합 / 4) 반환
+        pass
+</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>class Student:
+    def __init__(self, name, korean, math, english, science):
+        self.name = name
+        self.korean = korean
+        self.math = math
+        self.english = english
+        self.science = science
+
+    def get_sum(self):
+        return self.korean + self.math + self.english + self.science
+
+    def get_average(self):
+        return self.get_sum() / 4</code></pre>
+    <div class="tip">채점은 Student("홍길동", 100, 80, 90, 70) 로 합 340·평균 85.0 이 나오는지 확인합니다.</div>
+  </details>
+</section>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>프로그래밍방법론 기말 · 순서도(Flowgorithm)→파이썬 · 인앱 코드 실행·채점(Pyodide) · © 2026 윤희근</p>
+    </footer>
+
+</div>
+
+<script>
+    // 이 페이지는 프방법 전용 채점기를 사용
+    window.GRADER_SRC = "grader_pm.py";
+    window.PROB_LABEL = "프방법";
+</script>
+<script src="pyrun.js"></script>
+<script src="review.js"></script>
+</body>
+</html>

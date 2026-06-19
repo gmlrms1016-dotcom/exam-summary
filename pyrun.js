@@ -27,8 +27,9 @@
             await loadPyodideScript();
             var py = await loadPyodide();
             setStatus("⏳ 채점기 불러오는 중…");
-            var src = await fetch("grader.py").then(function (r) {
-                if (!r.ok) throw new Error("grader.py 로드 실패");
+            var graderSrc = window.GRADER_SRC || "grader.py";   // 과목별 채점기 교체 가능(기본: 파이썬)
+            var src = await fetch(graderSrc).then(function (r) {
+                if (!r.ok) throw new Error(graderSrc + " 로드 실패");
                 return r.text();
             });
             py.runPython(src);
@@ -59,7 +60,7 @@
             var key = "py" + pid;
             window.__examWrong = window.__examWrong || {};
             if (res.ok) { delete window.__examWrong[key]; }
-            else { window.__examWrong[key] = { q: "[파이썬 " + pid + "번] " + (card.dataset.title || ""), opts: [], ans: '정답: 페이지의 "정답 코드 보기" 참고' }; }
+            else { window.__examWrong[key] = { q: "[" + (window.PROB_LABEL || "파이썬") + " " + pid + "번] " + (card.dataset.title || ""), opts: [], ans: '정답: 페이지의 "정답 코드 보기" 참고' }; }
         } catch (e) {
             resEl.className = "py-result no";
             resEl.textContent = "⚠️ 실행 환경 오류: " + (e && e.message ? e.message : e);
