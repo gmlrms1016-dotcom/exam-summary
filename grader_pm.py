@@ -147,4 +147,53 @@ def grade(pid, code):
         return {'ok': ok, 'msg': '정답! 클래스 속성·메서드가 올바르게 동작해요 🎉' if ok else
                 '오답 — get_sum/get_average 결과를 확인하세요.', 'output': detail}
 
+    # ---------- 7번: Cars 클래스 (속성 · setter · 동작 메서드 채점) ----------
+    if pid == 7:
+        out, ns, err = _run(code, [], as_main=True)
+        if err:
+            return {'ok': False, 'msg': '실행 오류가 났어요.', 'output': err}
+        C = ns.get('Cars')
+        if C is None:
+            return {'ok': False, 'msg': 'Cars 클래스를 정의하세요.', 'output': ''}
+        # 동작 메서드 호출 시 print 출력을 가로채는 헬퍼
+        def _call(obj, name, *args):
+            buf = io.StringIO(); old = sys.stdout; sys.stdout = buf
+            try:
+                m = getattr(obj, name, None)
+                if not callable(m):
+                    return None, '__NOMETHOD__'
+                r = m(*args)
+            except Exception as e:
+                sys.stdout = old
+                return None, 'ERR(' + type(e).__name__ + ')'
+            finally:
+                sys.stdout = old
+            return r, buf.getvalue()
+        try:
+            car = C("DYU", "red", 2, "2Ton")
+        except Exception as e:
+            return {'ok': False, 'msg': 'Cars("DYU","red",2,"2Ton") 객체 생성에서 오류가 났어요.',
+                    'output': type(e).__name__ + ': ' + str(e)}
+        bad = []
+        # (1) __init__ 속성 저장
+        attrs = {'model': 'DYU', 'color': 'red', 'number': 2, 'weight': '2Ton'}
+        for k, v in attrs.items():
+            if getattr(car, k, '__MISS__') != v:
+                bad.append('속성 self.%s 저장값이 달라요 (기대 %r)' % (k, v))
+        # (2) 동작 메서드 존재 여부
+        for m in ['forward', 'backward', 'stop', 'getcolor', 'modelname', 'setcolor']:
+            if not callable(getattr(car, m, None)):
+                bad.append('%s() 메서드를 정의하세요' % m)
+        # (3) setter: setcolor 가 self.color 를 실제로 바꾸는지
+        _r, _o = _call(car, 'setcolor', 'blue')
+        if _o != '__NOMETHOD__' and getattr(car, 'color', None) != 'blue':
+            bad.append('setcolor("blue") 후 self.color 가 "blue" 로 바뀌어야 해요')
+        if bad:
+            return {'ok': False, 'msg': '오답 — %d군데를 확인하세요.' % len(bad),
+                    'output': '\n'.join('  · ' + b for b in bad[:8])}
+        # 참고 출력(동작 메서드가 무엇을 찍는지)
+        f_out = _call(car, 'forward')[1]
+        return {'ok': True, 'msg': '정답! __init__ 속성 + setter + 동작 메서드가 모두 잘 동작해요 🎉',
+                'output': '속성 model=DYU·color(원래 red→setcolor후 blue)·number=2·weight=2Ton\nforward() 출력 예: ' + (f_out.strip() or '(출력 없음)')}
+
     return {'ok': False, 'msg': '알 수 없는 문제 번호', 'output': ''}

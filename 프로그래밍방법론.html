@@ -69,7 +69,7 @@
         ✍️ <b>이 과목의 핵심</b> : <b>문제 → 순서도(Flowgorithm)로 흐름 설계 → 파이썬 코드로 변환</b>입니다. (시험범위 9~14주차)
         아래 <b>📐 순서도 정리</b>에는 <b>내가 과제로 직접 그린 Flowgorithm 캡처</b>(선택·반복·함수·클래스)가 들어 있어요.
         이어지는 문제는 <b>코드 에디터</b>에 직접 작성한 뒤 <b>[▶ 실행 &amp; 채점]</b>으로 브라우저에서 바로 채점받으세요.
-        <b>14주차 클래스</b>가 특히 중요합니다(👉 6번 문제).
+        <b>14주차 클래스</b>가 특히 중요합니다(👉 6·7번 문제 — Student·Cars).
         <span style="color:#d9772b;font-weight:700;">※ 최초 실행 시 파이썬 환경을 받느라 수십 초 걸립니다.</span>
     </div>
 
@@ -81,6 +81,7 @@
         <a href="#p4">04 구구단 (반복)</a>
         <a href="#p5">05 팩토리얼 (재귀)</a>
         <a href="#p6">06 Student (클래스)</a>
+        <a href="#p7">07 Cars (클래스)</a>
     </nav>
 
 <!-- ===================== 순서도 정리 ===================== -->
@@ -456,6 +457,90 @@ class Student:
     def get_average(self):
         return self.get_sum() / 4</code></pre>
     <div class="tip">채점은 Student("홍길동", 100, 80, 90, 70) 로 합 340·평균 85.0 이 나오는지 확인합니다.</div>
+  </details>
+</section>
+
+<!-- ===================== 07 Cars 클래스 ===================== -->
+<section class="card" id="p7">
+  <h2>07. Cars 클래스 (속성 · setter · 동작 메서드)<span class="week chap">14주 · 클래스</span></h2>
+  <div class="tip">📄 <b>문제</b> : 자동차의 정보(모델·색상·번호·무게)를 저장하고 <b>전진/후진/정지</b> 같은 <b>동작 메서드</b>와 <b>색상 변경(setter)</b>을 갖는 <code>Cars</code> 클래스를 완성하세요. <span style="color:#d9772b;font-weight:700;">(★ 14주차 핵심 — Student와 함께 클래스 2종을 꼭 익혀두기)</span></div>
+  <p style="font-size:14px;">▸ <code>__init__(self, model, color, number, weight)</code> · <code>forward()</code>·<code>backward()</code>·<code>stop()</code>(동작 출력) · <code>setcolor(color)</code>(색 변경) · <code>getcolor()</code>·<code>modelname()</code>(정보 출력)</p>
+  <h3>핵심 개념</h3>
+  <table class="ref"><tr><th>개념</th><th>설명</th></tr>
+    <tr><td>여러 속성 초기화</td><td><code>__init__</code>에서 <code>self.model = model</code> 처럼 4개 속성 저장</td></tr>
+    <tr><td>동작 메서드</td><td>값을 받지 않고 <b>행동을 출력</b> — <code>print("앞으로 갑니다.")</code></td></tr>
+    <tr><td>setter(설정자)</td><td><code>setcolor(self, color)</code>가 <code>self.color = color</code>로 <b>객체 상태를 변경</b></td></tr>
+    <tr><td>Student와 차이</td><td>Student는 <b>계산값을 return</b>, Cars는 <b>동작을 print + 상태 변경</b></td></tr>
+  </table>
+  <h3>✍️ 코드 작성 &amp; 실행</h3>
+  <div class="pyprob" data-pid="7" data-title="Cars 클래스 (속성·setter·동작 메서드)">
+    <textarea class="py-editor" spellcheck="false"># 자동차 정보를 저장하고 동작/색변경 메서드를 갖는 클래스를 완성하세요.
+class Cars:
+    def __init__(self, model, color, number, weight):
+        # TODO: 4개 속성 저장 (self.model, self.color, self.number, self.weight)
+        pass
+
+    def forward(self):
+        # TODO: "앞으로 갑니다." 출력
+        pass
+
+    def backward(self):
+        # TODO: "뒤로 갑니다." 출력
+        pass
+
+    def stop(self):
+        # TODO: "멈춥니다." 출력
+        pass
+
+    def setcolor(self, color):
+        # TODO: self.color 를 새 색으로 변경(setter)
+        pass
+
+    def getcolor(self):
+        # TODO: 현재 색상 출력
+        pass
+
+    def modelname(self):
+        # TODO: 모델 이름 출력
+        pass
+</textarea>
+    <div class="py-btns"><button class="py-run" type="button">▶ 실행 &amp; 채점</button><button class="py-reset" type="button">초기화</button></div>
+    <div class="py-result"></div>
+    <pre class="py-output"></pre>
+  </div>
+  <details class="akey"><summary>💡 정답 코드 보기</summary>
+    <pre><code>class Cars:
+    def __init__(self, model, color, number, weight):
+        self.model = model
+        self.color = color
+        self.number = number
+        self.weight = weight
+
+    def forward(self):
+        print("앞으로 갑니다.")
+
+    def backward(self):
+        print("뒤로 갑니다.")
+
+    def stop(self):
+        print("멈춥니다.")
+
+    def setcolor(self, color):     # setter: 객체의 색상 속성을 바꿈
+        self.color = color
+
+    def getcolor(self):
+        print(f"이 차의 색상은 {self.color} 입니다.")
+
+    def modelname(self):
+        print(f"모델 이름은 {self.model} 입니다.")
+
+
+# 사용 예
+mycar = Cars("DYU", "red", 2, "2Ton")
+mycar.forward()        # 앞으로 갑니다.
+mycar.setcolor("blue") # 색상 red → blue 로 변경
+mycar.getcolor()       # 이 차의 색상은 blue 입니다.</code></pre>
+    <div class="tip">채점은 <code>Cars("DYU","red",2,"2Ton")</code>의 속성 저장, 동작 메서드 정의, 그리고 <code>setcolor("blue")</code> 후 <code>color</code>가 실제로 바뀌는지(setter)를 확인합니다.</div>
   </details>
 </section>
 

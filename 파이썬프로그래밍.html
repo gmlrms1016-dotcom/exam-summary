@@ -353,7 +353,7 @@ if __name__ == &quot;__main__&quot;:
 
 <script src="pyrun.js"></script>
 <script src="review.js"></script>
-<!-- [복습 완료 모드] ?done=1 : 시험 끝 → 배너 + 모든 정답 코드 펼치기 -->
+<!-- [복습 완료 모드] ?done=1 : 시험 끝 → 배너 + 에디터에 정답 코드 입력 + ✅ 표시 + 정답 펼치기 -->
 <script>
 (function(){
   if(!/[?&]done=1/.test(location.search)) return;
@@ -362,10 +362,18 @@ if __name__ == &quot;__main__&quot;:
     var bn = document.createElement('div');
     bn.id = 'done-banner';
     bn.style.cssText = 'background:#176c3a;color:#fff;border-radius:12px;padding:16px 18px;margin:0 0 18px;font-weight:800;text-align:center;line-height:1.6;';
-    bn.innerHTML = '🎉 시험 종료 · <b>복습 모드</b><br><span style="font-weight:600;font-size:14px;color:#d8efe2;">모든 ‘정답 코드’가 펼쳐져 있습니다. 코드 실행기는 그대로 연습할 수 있어요.</span>';
+    bn.innerHTML = '🎉 시험 종료 · <b>복습 모드</b><br><span style="font-weight:600;font-size:14px;color:#d8efe2;">모든 문제에 <b>정답 코드가 입력</b>되어 있습니다. [▶ 실행 &amp; 채점]을 누르면 ✅ 정답이 그대로 확인돼요.</span>';
     wrap.insertBefore(bn, wrap.firstChild.nextSibling);
   }
-  document.querySelectorAll('details.akey').forEach(function(d){ d.open = true; });
+  // 각 문제: 에디터에 정답 코드 채워넣기 + ✅ 안내 + 정답 코드 펼치기
+  document.querySelectorAll('section.card').forEach(function(sec){
+    var ed = sec.querySelector('.py-editor');
+    var key = sec.querySelector('details.akey pre code');
+    if(ed && key){ ed.value = key.textContent; }   // 정답 코드를 에디터에 입력
+    var res = sec.querySelector('.py-result');
+    if(res){ res.className = 'py-result ok'; res.textContent = '✅ 정답 코드가 입력되어 있어요 — [▶ 실행 & 채점]으로 확인하세요. (복습 모드)'; }
+    var d = sec.querySelector('details.akey'); if(d) d.open = true;
+  });
 })();
 </script>
 </body>

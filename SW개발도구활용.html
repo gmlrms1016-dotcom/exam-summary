@@ -24,6 +24,17 @@
         pre.cmd .p { color:#7fd49a; font-weight:700; } /* 프롬프트 $ */
         code.k { background:#eef3f7; color:#234; border:1px solid #cfdce6; border-radius:5px; padding:1px 6px; font-family:Consolas,"D2Coding",monospace; font-size:.92em; }
 
+        /* git log --graph 결과(슬라이드 색감 재현) */
+        .graph { background:#11161c; color:#cfe3d6; border-radius:9px; padding:11px 14px; margin:6px 0 4px;
+                 font-family:Consolas,"D2Coding",monospace; font-size:12.5px; line-height:1.7; white-space:pre; overflow-x:auto; }
+        .graph .head { color:#3fb1ff; font-weight:700; }   /* HEAD */
+        .graph .mn   { color:#56d364; font-weight:700; }   /* 지역 브랜치 */
+        .graph .rm   { color:#f0883e; font-weight:700; }   /* origin/원격 */
+        .graph .hsh  { color:#e3b341; }                    /* 커밋 해시 */
+        .gcap { font-size:12.5px; color:#5b7682; margin:8px 0 2px; font-weight:700; }
+        .res { background:#eef6f0; border-left:4px solid #2d6a4f; border-radius:6px; padding:8px 12px; font-size:13px; margin:6px 0 2px; }
+        .res b { color:#1f5b41; }
+
         /* Git 4영역 흐름 다이어그램 */
         .git-flow { width:100%; max-width:900px; height:auto; display:block; margin:10px auto; background:#fbfcff; border:1px solid var(--line); border-radius:12px; }
 
@@ -233,6 +244,20 @@ git rebase main
 git checkout main
 git merge function
 git push origin main</code></pre>
+
+      <div class="gcap">📊 (1) 직후 — <code>git log --all --oneline --graph -n 4</code> : 세 갈래로 <b>분기</b></div>
+      <div class="graph"><span class="hsh">* 22720c6</span> (<span class="head">HEAD -&gt; bugfix</span>) bug 수정
+| <span class="hsh">* ed9024b</span> (<span class="mn">function</span>) function 개발중
+| <span class="hsh">* f3a255f</span> (<span class="mn">main</span>) main 개발중
+|/
+<span class="hsh">* f8cff61</span> (<span class="rm">origin/main, origin/HEAD</span>) merging</div>
+
+      <div class="gcap">📊 (4) merge 직후 — fast-forward로 <b>한 줄(선형)</b> 정리 완료</div>
+      <div class="graph"><span class="hsh">* 4394170</span> (<span class="head">HEAD -&gt; main</span>, <span class="mn">function</span>) function 개발중
+<span class="hsh">* c585ab8</span> main 개발중
+<span class="hsh">* 22720c6</span> bug 수정
+<span class="hsh">* f8cff61</span> (<span class="rm">origin/main, origin/HEAD</span>) merging</div>
+      <div class="res">→ rebase로 <b>분기 → 선형</b>으로 펴진 뒤, 일직선이라 <b>fast-forward 병합</b>(<code>main</code>·<code>function</code>이 같은 커밋).</div>
     </div>
   </details>
 
@@ -251,6 +276,20 @@ git commit -m "five apples"     <span class="c"># 5개가 1개 커밋으로</spa
 
 <span class="c">(3) 원격에 push</span>
 git push origin main</code></pre>
+
+      <div class="gcap">📊 squash merge + commit 직후 — <code>-n 7</code> : <code>apple</code>의 커밋 5개는 그대로, <code>main</code>엔 “five apples” 1개</div>
+      <div class="graph"><span class="hsh">* 41cfb3f</span> (<span class="head">HEAD -&gt; main</span>) five apples
+<span class="hsh">* 319c83d</span> (<span class="mn">apple</span>) apple
+<span class="hsh">* ed8d1de</span> apple
+<span class="hsh">* 32619e0</span> apple
+<span class="hsh">* ff69d3e</span> apple
+<span class="hsh">* e1b8efa</span> apple
+<span class="hsh">* 4394170</span> (<span class="rm">origin/main, origin/HEAD</span>) function 개발중</div>
+
+      <div class="gcap">📊 push 후 최종 — <code>-n 2</code> : 깔끔하게 <b>한 줄</b></div>
+      <div class="graph"><span class="hsh">* 41cfb3f</span> (<span class="head">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>) five apples
+<span class="hsh">* 4394170</span> function 개발중</div>
+      <div class="res">→ <b>squash</b>는 자잘한 커밋 5개를 <b>“five apples” 한 커밋</b>으로 합쳐 이력을 깔끔하게.</div>
     </div>
   </details>
 </section>
