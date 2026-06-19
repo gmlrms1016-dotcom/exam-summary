@@ -17,6 +17,9 @@
 <body>                                         <!-- 본문: 화면에 보이는 영역 시작 -->
 <div class="wrap">                            <!-- 전체를 감싸 가운데 정렬하는 박스 -->
 
+    <!-- 과목 선택으로 돌아가기 (다른 과목과 동일) -->
+    <a class="back-link" href="index.html" style="display:inline-block;margin-bottom:14px;color:var(--main);font-weight:800;text-decoration:none;font-size:14px;">← 과목 선택으로 돌아가기</a>
+
     <!-- ===================== 머리말(헤더) ===================== -->
     <header class="page-head">                <!-- [5주차] header: 머리말 시맨틱 태그 -->
         <h1>웹프로그래밍 기초 · 완전 정리</h1> <!-- [2주차] h1: 가장 큰 제목 -->
@@ -1342,10 +1345,9 @@ p    { overflow: scroll; }      /* 넘치면 스크롤바 */</code></pre>
       if (_wrap && !document.getElementById('done-banner')) {
         var _bn = document.createElement('div');
         _bn.id = 'done-banner';
-        _bn.style.cssText = 'background:#2d6a4f;color:#fff;padding:16px 18px;border-radius:12px;margin:0 0 18px;line-height:1.65;';
-        _bn.innerHTML = '🎉 <b>수고하셨습니다!</b> 웹프로그래밍 기초 시험은 <b>끝났어요.</b><br>' +
-                        '아래 퀴즈는 <b>정답이 모두 입력되고 해설이 모두 표시된 복습 모드</b>입니다.';
-        _wrap.insertBefore(_bn, _wrap.children[1] || null);   // 뒤로가기 링크 다음
+        _bn.style.cssText = 'background:#176c3a;color:#fff;border-radius:12px;padding:16px 18px;margin:0 0 18px;font-weight:800;text-align:center;line-height:1.6;';
+        _bn.innerHTML = '🎉 시험 종료 · <b>복습 모드</b><br><span style="font-weight:600;font-size:14px;color:#d8efe2;">모든 객관식·빈칸의 정답과 해설이 공개됩니다.</span>';
+        _wrap.insertBefore(_bn, _wrap.children[1] || null);   // 뒤로가기 링크 다음(맨 위)
       }
       // 태그 퀴즈: 목록 모드로 전환 후 전 문항 정답 입력 + 채점(✅ + 해설)
       setMode('list');

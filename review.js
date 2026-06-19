@@ -170,3 +170,61 @@
 
     updateBadge();
 })();
+
+/* =====================================================================
+   소스코드 복사 버튼 (전 과목 공통)
+   - 모든 <pre><code> 코드블록 우측 상단에 "복사" 버튼을 자동으로 붙임
+   - 제외: 입출력 예시(.io), 실행 결과(.py-output), 코드 입력창(textarea.py-editor)
+   - 클릭 시 코드의 textContent를 클립보드로 복사
+   ===================================================================== */
+(function () {
+    "use strict";
+
+    var css = ""
+        + ".codecopy{position:relative;}"
+        + ".codecopy>.cc-btn{position:absolute;top:7px;right:8px;z-index:6;"
+        + "background:rgba(255,255,255,.14);color:#e6edf3;border:1px solid rgba(255,255,255,.34);"
+        + "border-radius:7px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;"
+        + "font-family:inherit;line-height:1.2;transition:background .12s;}"
+        + ".codecopy>.cc-btn:hover{background:rgba(255,255,255,.3);}"
+        + ".codecopy>.cc-btn.done{background:#2d6a4f;color:#fff;border-color:#2d6a4f;}";
+    var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+
+    function fallbackCopy(text) {
+        var ta = document.createElement("textarea");
+        ta.value = text; ta.style.position = "fixed"; ta.style.top = "-9999px"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        try { document.execCommand("copy"); } catch (e) { }
+        document.body.removeChild(ta);
+    }
+
+    function decorate(pre) {
+        if (pre.classList.contains("io")) return;           // 입출력 예시 제외
+        if (pre.classList.contains("py-output")) return;    // 실행 결과 제외
+        var code = pre.querySelector("code");
+        if (!code) return;                                  // <code> 없는 블록 제외
+        if (pre.parentNode && pre.parentNode.classList && pre.parentNode.classList.contains("codecopy")) return;
+
+        var wrap = document.createElement("div");
+        wrap.className = "codecopy";
+        pre.parentNode.insertBefore(wrap, pre);
+        wrap.appendChild(pre);
+
+        var btn = document.createElement("button");
+        btn.type = "button"; btn.className = "cc-btn"; btn.textContent = "⧉ 복사";
+        wrap.appendChild(btn);
+
+        btn.addEventListener("click", function () {
+            var text = code.textContent;
+            function done() {
+                btn.textContent = "복사됨 ✓"; btn.classList.add("done");
+                setTimeout(function () { btn.textContent = "⧉ 복사"; btn.classList.remove("done"); }, 1600);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+            } else { fallbackCopy(text); done(); }
+        });
+    }
+
+    document.querySelectorAll("pre").forEach(decorate);
+})();
