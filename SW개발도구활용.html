@@ -645,6 +645,154 @@ git push origin main</code></pre>
     <div class="mcq-exp"><b>정답 A</b> — <code>feature</code> 라벨이 사라짐 = 병합이 끝난 브랜치 삭제 <code>git branch -d feature</code>. (병합 안 된 브랜치를 강제 삭제할 땐 <code>-D</code>)</div>
   </div>
 
+  <div class="mcq logq" data-correct="A">
+    <p class="mcq-q"><span class="mcq-no">8</span>아래 <b>[보기1]</b>에서 <b>[보기2]</b>로 만들려면? <span style="font-weight:500;color:#5b7682;">(HEAD 위에 새 커밋 1개가 쌓임)</span></p>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">보기1 (현재)</div>
+        <pre class="lqlog"><span class="h">* a1b2c3d</span> (<span class="hd">HEAD -&gt; feature</span>) 작업 시작</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">보기2 (목표)</div>
+        <pre class="lqlog"><span class="h">* e4f5g6h</span> (<span class="hd">HEAD -&gt; feature</span>) 기능 구현
+<span class="h">* a1b2c3d</span> 작업 시작</pre></div>
+    </div>
+    <button class="opt" data-opt="A"><b>A.</b> git add . → git commit -m "기능 구현"</button>
+    <button class="opt" data-opt="B"><b>B.</b> git push origin feature</button>
+    <button class="opt" data-opt="C"><b>C.</b> git switch -c 기능구현</button>
+    <button class="opt" data-opt="D"><b>D.</b> git merge feature</button>
+    <div class="mcq-exp"><b>정답 A</b> — 변경을 <code>git add .</code>로 올리고 <code>git commit</code>하면 HEAD 위에 <b>새 커밋 1개</b>가 생김. push는 원격 업로드, merge는 병합.</div>
+  </div>
+
+  <div class="mcq logq" data-correct="B">
+    <p class="mcq-q"><span class="mcq-no">9</span>아래 <b>[보기1]</b>에서 <b>[보기2]</b>로 만들려면? <span style="font-weight:500;color:#5b7682;">(커밋 개수는 1개 그대로, 메시지·해시만 바뀜)</span></p>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">보기1 (현재)</div>
+        <pre class="lqlog"><span class="h">* a1b2c3d</span> (<span class="hd">HEAD -&gt; main</span>) wip</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">보기2 (목표)</div>
+        <pre class="lqlog"><span class="h">* 9f8e7d6</span> (<span class="hd">HEAD -&gt; main</span>) 로그인 기능 완성</pre></div>
+    </div>
+    <button class="opt" data-opt="A"><b>A.</b> git commit -m "로그인 기능 완성"</button>
+    <button class="opt" data-opt="B"><b>B.</b> git commit --amend -m "로그인 기능 완성"</button>
+    <button class="opt" data-opt="C"><b>C.</b> git reset --hard HEAD^</button>
+    <button class="opt" data-opt="D"><b>D.</b> git rebase main</button>
+    <div class="mcq-exp"><b>정답 B</b> — <b>마지막 커밋 메시지만 수정</b> = <code>git commit --amend</code>. 일반 <code>commit</code>이면 커밋이 하나 더 생겨 2개가 됨(해시도 바뀐 건 amend가 커밋을 다시 쓰기 때문).</div>
+  </div>
+
+  <div class="mcq logq" data-correct="C">
+    <p class="mcq-q"><span class="mcq-no">10</span>아래 <b>[보기1]</b>에서 <b>[보기2]</b>로 만들려면? <span style="font-weight:500;color:#5b7682;">(원격 origin/main이 앞서 있고, 로컬 main이 따라옴)</span></p>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">보기1 (현재)</div>
+        <pre class="lqlog"><span class="h">* 8c8c8c8</span> (<span class="rm">origin/main</span>) 원격에서 추가된 작업
+<span class="h">* 6b6b6b6</span> (<span class="hd">HEAD -&gt; main</span>) 이전 작업</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">보기2 (목표)</div>
+        <pre class="lqlog"><span class="h">* 8c8c8c8</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main</span>) 원격에서 추가된 작업
+<span class="h">* 6b6b6b6</span> 이전 작업</pre></div>
+    </div>
+    <button class="opt" data-opt="A"><b>A.</b> git push origin main</button>
+    <button class="opt" data-opt="B"><b>B.</b> git switch origin/main</button>
+    <button class="opt" data-opt="C"><b>C.</b> git pull origin main</button>
+    <button class="opt" data-opt="D"><b>D.</b> git commit -m "..."</button>
+    <div class="mcq-exp"><b>정답 C</b> — 원격이 앞서 있고 로컬이 따라옴 = <b>원격→로컬</b>로 가져와 병합 <code>git pull</code>. <code>push</code>는 반대 방향(로컬→원격, 문제 6과 비교).</div>
+  </div>
+
+  <div class="mcq logq" data-correct="B">
+    <p class="mcq-q"><span class="mcq-no">11</span>아래 <b>[보기1]</b>에서 <b>[보기2]</b>로 만들려면? <span style="font-weight:500;color:#5b7682;">(원격 라벨 origin/feature만 사라짐, 로컬 feature는 그대로)</span></p>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">보기1 (현재)</div>
+        <pre class="lqlog"><span class="h">* a1a1a1a</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main</span>) main
+| <span class="h">* b2b2b2b</span> (<span class="br">feature</span>, <span class="rm">origin/feature</span>) feature 작업
+|/
+<span class="h">* c0c0c0c</span> base</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">보기2 (목표)</div>
+        <pre class="lqlog"><span class="h">* a1a1a1a</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main</span>) main
+| <span class="h">* b2b2b2b</span> (<span class="br">feature</span>) feature 작업
+|/
+<span class="h">* c0c0c0c</span> base</pre></div>
+    </div>
+    <button class="opt" data-opt="A"><b>A.</b> git branch -d feature</button>
+    <button class="opt" data-opt="B"><b>B.</b> git push origin -d feature</button>
+    <button class="opt" data-opt="C"><b>C.</b> git branch -D feature</button>
+    <button class="opt" data-opt="D"><b>D.</b> git switch feature</button>
+    <div class="mcq-exp"><b>정답 B</b> — <code>origin/feature</code>(원격) 라벨만 사라짐 = <b>원격 브랜치 삭제</b> <code>git push origin -d feature</code>(= <code>--delete</code>). <code>branch -d/-D</code>는 <b>로컬</b> 브랜치를 지움(문제 7과 비교).</div>
+  </div>
+
+  <div class="mcq logq" data-correct="D">
+    <p class="mcq-q"><span class="mcq-no">12</span>아래 <b>[보기1]</b>에서 <b>[보기2]</b>로 만들려면? <span style="font-weight:500;color:#5b7682;">(dev 브랜치가 생겼지만 HEAD는 여전히 main)</span></p>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">보기1 (현재)</div>
+        <pre class="lqlog"><span class="h">* a1b2c3d</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main</span>) 첫 커밋</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">보기2 (목표)</div>
+        <pre class="lqlog"><span class="h">* a1b2c3d</span> (<span class="hd">HEAD -&gt; main</span>, <span class="br">dev</span>, <span class="rm">origin/main</span>) 첫 커밋</pre></div>
+    </div>
+    <button class="opt" data-opt="A"><b>A.</b> git switch -c dev</button>
+    <button class="opt" data-opt="B"><b>B.</b> git merge dev</button>
+    <button class="opt" data-opt="C"><b>C.</b> git switch dev</button>
+    <button class="opt" data-opt="D"><b>D.</b> git branch dev</button>
+    <div class="mcq-exp"><b>정답 D</b> — 새 브랜치를 <b>만들기만</b>(HEAD는 main 그대로) = <code>git branch dev</code>. <code>switch -c dev</code>였다면 <code>HEAD-&gt;dev</code>로 옮겨감(문제 1과 비교).</div>
+  </div>
+
+  <div class="mcq logq" data-correct="C">
+    <p class="mcq-q"><span class="mcq-no">13</span>아래 <b>[보기1]</b>에서 <b>[보기2]</b>로 만들려면? <span style="font-weight:500;color:#5b7682;">(HEAD가 main에서 '이미 있는' feature로 이동)</span></p>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">보기1 (현재)</div>
+        <pre class="lqlog"><span class="h">* b2b2b2b</span> (<span class="br">feature</span>) feature 작업
+<span class="h">* a1a1a1a</span> (<span class="hd">HEAD -&gt; main</span>) main</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">보기2 (목표)</div>
+        <pre class="lqlog"><span class="h">* b2b2b2b</span> (<span class="hd">HEAD -&gt; feature</span>) feature 작업
+<span class="h">* a1a1a1a</span> (<span class="br">main</span>) main</pre></div>
+    </div>
+    <button class="opt" data-opt="A"><b>A.</b> git switch -c feature</button>
+    <button class="opt" data-opt="B"><b>B.</b> git branch feature</button>
+    <button class="opt" data-opt="C"><b>C.</b> git switch feature</button>
+    <button class="opt" data-opt="D"><b>D.</b> git merge feature</button>
+    <div class="mcq-exp"><b>정답 C</b> — 이미 있는 브랜치로 <b>HEAD만 이동</b> = <code>git switch feature</code>. <code>-c</code>는 새로 만들 때(이미 있으면 오류), <code>branch</code>는 만들기만(전환 X).</div>
+  </div>
+
+  <div class="mcq logq" data-correct="B">
+    <p class="mcq-q"><span class="mcq-no">14</span>아래 <b>[보기1]</b>에서 <b>[보기2]</b>로 만들려면? <span style="font-weight:500;color:#5b7682;">(마지막 커밋 C3가 사라지고 HEAD가 C2로 되돌아감)</span></p>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">보기1 (현재)</div>
+        <pre class="lqlog"><span class="h">* c3c3c3c</span> (<span class="hd">HEAD -&gt; main</span>) C3 작업
+<span class="h">* b2b2b2b</span> C2 작업
+<span class="h">* a1a1a1a</span> C1 작업</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">보기2 (목표)</div>
+        <pre class="lqlog"><span class="h">* b2b2b2b</span> (<span class="hd">HEAD -&gt; main</span>) C2 작업
+<span class="h">* a1a1a1a</span> C1 작업</pre></div>
+    </div>
+    <button class="opt" data-opt="A"><b>A.</b> git commit --amend</button>
+    <button class="opt" data-opt="B"><b>B.</b> git reset --hard HEAD^</button>
+    <button class="opt" data-opt="C"><b>C.</b> git rebase main</button>
+    <button class="opt" data-opt="D"><b>D.</b> git merge HEAD^</button>
+    <div class="mcq-exp"><b>정답 B</b> — 마지막 커밋을 <b>통째로 되돌리기</b> = <code>git reset</code> (<code>HEAD^</code> = 1개 전). <code>--hard</code>는 작업 내용까지 모두 취소. (<code>--soft/--mixed</code>는 파일·스테이지를 남기지만 로그에서 커밋이 사라지는 건 동일)</div>
+  </div>
+
+  <div class="mcq logq" data-correct="A">
+    <p class="mcq-q"><span class="mcq-no">15</span>아래 <b>[보기1]</b>에서 <b>[보기2]</b>로 만들려면? <span style="font-weight:500;color:#5b7682;">(rebase 도중 충돌 → 코드 수정까지 끝낸 상태)</span></p>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">보기1 (현재 · rebase 진행 중)</div>
+        <pre class="lqlog"><span style="color:#e3b341;">(git rebase main 도중 충돌 → 충돌 코드 수정 완료)</span>
+<span class="h">* c1c1c1c</span> (<span class="hd">HEAD</span>) feature 작업
+| <span class="h">* b2b2b2b</span> (<span class="br">main</span>) main 작업
+|/
+<span class="h">* a0a0a0a</span> 공통 조상</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">보기2 (목표 · 선형)</div>
+        <pre class="lqlog"><span class="h">* d3d3d3d</span> (<span class="hd">HEAD -&gt; feature</span>) feature 작업
+<span class="h">* b2b2b2b</span> (<span class="br">main</span>) main 작업
+<span class="h">* a0a0a0a</span> 공통 조상</pre></div>
+    </div>
+    <button class="opt" data-opt="A"><b>A.</b> git add . → git rebase --continue</button>
+    <button class="opt" data-opt="B"><b>B.</b> git rebase --abort</button>
+    <button class="opt" data-opt="C"><b>C.</b> git add . → git commit -m "..."</button>
+    <button class="opt" data-opt="D"><b>D.</b> git merge main</button>
+    <div class="mcq-exp"><b>정답 A</b> — rebase 도중 충돌은 <b>수정 → <code>git add .</code> → <code>git rebase --continue</code></b>로 이어서 진행(<code>commit</code> 아님!). <code>--abort</code>는 rebase 자체를 취소해 원래대로 되돌림.</div>
+  </div>
+
   <h3>객관식 — 보기를 클릭하면 정답·해설이 보여요</h3>
   <div class="mcq" data-correct="B">
     <p class="mcq-q"><span class="mcq-no">1</span>작업 디렉토리의 변경 파일을 <b>스테이징 영역</b>에 올리는 명령어는?</p>
