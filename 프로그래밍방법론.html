@@ -36,6 +36,23 @@
         .flowshot a { display:block; }
         .flowshot img { width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:10px; background:#fff; cursor:zoom-in; }
         .flowshot figcaption { font-size:12.5px; color:#5b675d; margin-top:6px; line-height:1.5; }
+        /* 클린 재작성 순서도(벡터) — 화질 손상 없음 */
+        .fsvg { display:block; width:100%; height:auto; margin:8px auto 2px; background:#fbfcff; border:1px solid var(--line); border-radius:10px; font-family:'맑은 고딕',Arial,sans-serif; }
+        .fsvg .ln { stroke:#575757; stroke-width:1.5; fill:none; marker-end:url(#fa); }
+        .fsvg .mg { stroke:#575757; stroke-width:1.5; fill:none; }
+        .fsvg .nd { stroke-width:1.4; }
+        .fsvg .tx { fill:#3a3a3a; text-anchor:middle; dominant-baseline:middle; font-size:13px; }
+        .fsvg .sm { font-size:11px; }
+        .fsvg .lb { fill:#555; font-weight:700; font-size:11.5px; text-anchor:middle; }
+        .fsvg .term { fill:#ece1f5; stroke:#aa86cf; }     /* 단말 (주프로그램/종료) — 보라 */
+        .fsvg .ptx  { fill:#6a4c93; font-weight:700; }    /* 단말 글자 보라 */
+        .fsvg .decl { fill:#fbf8cc; stroke:#c6bc60; }     /* 선언·대입 — 노랑 */
+        .fsvg .in   { fill:#d4e7f7; stroke:#6e9bca; }     /* 입력 — 파랑 */
+        .fsvg .out  { fill:#d8f5d8; stroke:#6cb16c; }     /* 출력 — 초록 */
+        .fsvg .cond { fill:#fcdad6; stroke:#df9d96; }     /* 조건(마름모) — 분홍 */
+        .fsvg .loop { fill:#fce0b5; stroke:#e0a44e; }     /* 반복(육각형) — 주황 */
+        .fsvg .dot  { fill:#fcdad6; stroke:#df9d96; }     /* 연결점 */
+        .fsvg .bar  { stroke:#c6bc60; stroke-width:1.2; } /* 선언 도형 좌측 이중선 */
         /* 코드 에디터 & 실행 (파이썬 페이지와 동일) */
         .pyprob { margin:8px 0 12px; }
         .py-editor { width:100%; min-height:230px; box-sizing:border-box; font-family:Consolas,"D2Coding",monospace; font-size:13px; line-height:1.55; background:#1e2530; color:#e6edf3; border:1px solid #2d3a4a; border-radius:10px; padding:12px; white-space:pre; tab-size:4; resize:vertical; }
@@ -111,51 +128,362 @@
   </table>
 
   <h3>3) 내가 제출한 Flowgorithm 순서도 (실제 과제 캡처)</h3>
-  <p style="font-size:14px;">9~14주차 과제로 <b>직접 그린 순서도</b>입니다. 변환 규칙 → 마름모는 <code>if/elif/else</code>, 육각형(반복)은 <code>for/while</code>, 서브프로그램은 <code>def</code>, 반환값은 <code>return</code>. <span style="color:#7a4ea3;">(이미지를 클릭하면 크게 볼 수 있어요)</span></p>
+  <p style="font-size:14px;">9~14주차 과제로 <b>직접 그린 순서도</b>를 <b>벡터(SVG)로 다시 그렸습니다</b> — 아무리 확대해도 글자가 또렷합니다. 변환 규칙 → 마름모는 <code>if/elif/else</code>, 육각형(반복)은 <code>for/while</code>, 서브프로그램은 <code>def</code>, 반환값은 <code>return</code>.</p>
+
+  <!-- 모든 클린 순서도가 공유하는 화살표 마커 -->
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs>
+    <marker id="fa" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#575757"/></marker>
+  </defs></svg>
 
   <h4 class="flow-grp">① 선택구조 — 마름모(조건)로 분기</h4>
-  <div class="flow-grid">
-    <figure class="flowshot">
-      <a href="pm-img/flow-rps.png" target="_blank" rel="noopener"><img src="pm-img/flow-rps.png" alt="가위바위보 순서도" loading="lazy"></a>
-      <figcaption><b>가위바위보</b> : <code>player==computer</code>면 비김, 거짓이면 <b>중첩 마름모</b>로 이김/짐 판정. 👉 <a href="#p2">2번 문제</a>의 설계도</figcaption>
-    </figure>
-    <figure class="flowshot">
-      <a href="pm-img/flow-calc.png" target="_blank" rel="noopener"><img src="pm-img/flow-calc.png" alt="부호 계산기 순서도" loading="lazy"></a>
-      <figcaption><b>부호 계산기</b> : <code>op</code> 값에 따라 +·−·× 로 갈라지는 <b>elif 사슬</b>(중첩 분기).</figcaption>
-    </figure>
-    <figure class="flowshot">
-      <a href="pm-img/flow-fee.png" target="_blank" rel="noopener"><img src="pm-img/flow-fee.png" alt="입장 요금 순서도" loading="lazy"></a>
-      <figcaption><b>입장 요금</b> : <code>age&lt;8 or age&gt;=60</code> → 무료(0), 아니면 6000원. <code>or</code> 복합조건.</figcaption>
-    </figure>
-    <figure class="flowshot">
-      <a href="pm-img/flow-score.png" target="_blank" rel="noopener"><img src="pm-img/flow-score.png" alt="성적 합격 판정 순서도" loading="lazy"></a>
-      <figcaption><b>성적 합격 판정</b> : 여러 조건을 <code>and</code>로 묶은 <b>하나의 큰 마름모</b>로 합격/불합격.</figcaption>
-    </figure>
-  </div>
+
+  <!-- ── 가위바위보 ── -->
+  <figure class="flowshot">
+    <svg class="fsvg" style="max-width:560px" viewBox="0 0 720 750" xmlns="http://www.w3.org/2000/svg">
+      <rect class="nd term" x="175" y="10" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="235" y="27">주프로그램</text>
+      <rect class="nd decl" x="120" y="58" width="230" height="38"/>
+      <line class="bar" x1="128" y1="58" x2="128" y2="96"/><line class="bar" x1="132" y1="58" x2="132" y2="96"/>
+      <text class="tx" x="241" y="77">문자열 player, computer</text>
+      <polygon class="nd out" points="91,109 395,109 379,147 75,147"/>
+      <text class="tx sm" x="235" y="128">출력 "player의 가위,바위,보 중에 하나 입력"</text>
+      <polygon class="nd in" points="184,163 300,163 286,197 170,197"/>
+      <text class="tx" x="235" y="180">입력 player</text>
+      <polygon class="nd out" points="86,213 400,213 384,251 70,251"/>
+      <text class="tx sm" x="235" y="232">출력 "computer의 가위,바위,보 중에 하나 입력"</text>
+      <polygon class="nd in" points="174,267 310,267 296,301 160,301"/>
+      <text class="tx" x="235" y="284">입력 computer</text>
+      <polygon class="nd cond" points="235,318 330,352 235,386 140,352"/>
+      <text class="tx" x="235" y="352">player==computer</text>
+      <polygon class="nd out" points="519,334 615,334 601,370 505,370"/>
+      <text class="tx" x="560" y="352">출력 "비김"</text>
+      <polygon class="nd cond" points="235,420 400,480 235,540 70,480"/>
+      <text class="tx sm" x="235" y="455">(player=="가위" and computer</text>
+      <text class="tx sm" x="235" y="470">=="보") or (player=="바위" and</text>
+      <text class="tx sm" x="235" y="485">computer=="가위") or (player</text>
+      <text class="tx sm" x="235" y="500">=="보" and computer=="바위")</text>
+      <polygon class="nd out" points="34,582 120,582 106,618 20,618"/>
+      <text class="tx" x="70" y="600">출력 "짐"</text>
+      <polygon class="nd out" points="364,582 450,582 436,618 350,618"/>
+      <text class="tx" x="400" y="600">출력 "이김"</text>
+      <circle class="nd dot" cx="235" cy="656" r="7"/>
+      <circle class="nd dot" cx="560" cy="690" r="7"/>
+      <rect class="nd term" x="500" y="705" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="560" y="722">종료</text>
+      <path class="ln" d="M235,44 L235,56"/>
+      <path class="ln" d="M235,96 L235,107"/>
+      <path class="ln" d="M235,147 L235,161"/>
+      <path class="ln" d="M235,197 L235,211"/>
+      <path class="ln" d="M235,251 L235,265"/>
+      <path class="ln" d="M235,301 L235,316"/>
+      <path class="ln" d="M330,352 L503,352"/><text class="lb" x="416" y="343">참</text>
+      <path class="ln" d="M235,386 L235,418"/><text class="lb" x="258" y="404">거짓</text>
+      <path class="ln" d="M70,480 L70,580"/><text class="lb" x="92" y="502">거짓</text>
+      <path class="ln" d="M400,480 L400,580"/><text class="lb" x="416" y="502">참</text>
+      <path class="ln" d="M70,618 L70,656 L228,656"/>
+      <path class="ln" d="M400,618 L400,656 L242,656"/>
+      <path class="ln" d="M235,663 L235,690 L553,690"/>
+      <path class="ln" d="M560,370 L560,683"/>
+      <path class="ln" d="M560,697 L560,704"/>
+    </svg>
+    <figcaption><b>가위바위보</b> : <code>player==computer</code>면 비김, 거짓이면 <b>중첩 마름모</b>로 이김/짐 판정. 👉 <a href="#p2">2번 문제</a>의 설계도</figcaption>
+  </figure>
+
+  <!-- ── 부호 계산기 (elif 사슬) ── -->
+  <figure class="flowshot">
+    <svg class="fsvg" style="max-width:540px" viewBox="0 0 740 850" xmlns="http://www.w3.org/2000/svg">
+      <rect class="nd term" x="175" y="9" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="235" y="26">주프로그램</text>
+      <rect class="nd decl" x="165" y="54" width="140" height="36"/>
+      <line class="bar" x1="173" y1="54" x2="173" y2="90"/><line class="bar" x1="177" y1="54" x2="177" y2="90"/>
+      <text class="tx" x="237" y="72">정수 num1</text>
+      <rect class="nd decl" x="165" y="100" width="140" height="36"/>
+      <line class="bar" x1="173" y1="100" x2="173" y2="136"/><line class="bar" x1="177" y1="100" x2="177" y2="136"/>
+      <text class="tx" x="237" y="118">정수 num2</text>
+      <rect class="nd decl" x="165" y="146" width="140" height="36"/>
+      <line class="bar" x1="173" y1="146" x2="173" y2="182"/><line class="bar" x1="177" y1="146" x2="177" y2="182"/>
+      <text class="tx" x="237" y="164">문자열 op</text>
+      <polygon class="nd out" points="114,196 370,196 356,232 100,232"/>
+      <text class="tx sm" x="235" y="214">출력 "첫번째 숫자를 입력하세요."</text>
+      <polygon class="nd in" points="184,245 300,245 286,279 170,279"/>
+      <text class="tx" x="235" y="262">입력 num1</text>
+      <polygon class="nd out" points="104,292 380,292 366,328 90,328"/>
+      <text class="tx sm" x="235" y="310">출력 "부호를 입력하세요(ex:+,-,*)"</text>
+      <polygon class="nd in" points="189,341 295,341 281,375 175,375"/>
+      <text class="tx" x="235" y="358">입력 op</text>
+      <polygon class="nd out" points="114,388 370,388 356,424 100,424"/>
+      <text class="tx sm" x="235" y="406">출력 "두번째 숫자를 입력하세요."</text>
+      <polygon class="nd in" points="184,437 300,437 286,471 170,471"/>
+      <text class="tx" x="235" y="454">입력 num2</text>
+      <polygon class="nd cond" points="235,492 315,524 235,556 155,524"/>
+      <text class="tx" x="235" y="524">op=="+"</text>
+      <polygon class="nd cond" points="235,584 315,616 235,648 155,616"/>
+      <text class="tx" x="235" y="616">op=="-"</text>
+      <polygon class="nd cond" points="235,676 315,708 235,740 155,708"/>
+      <text class="tx" x="235" y="708">op=="*"</text>
+      <polygon class="nd out" points="429,506 665,506 651,542 415,542"/>
+      <text class="tx sm" x="540" y="524">출력 ""&amp;num1&amp;"+"&amp;num2&amp;"="&amp;num1+num2&amp;""</text>
+      <polygon class="nd out" points="429,598 665,598 651,634 415,634"/>
+      <text class="tx sm" x="540" y="616">출력 ""&amp;num1&amp;"-"&amp;num2&amp;"="&amp;num1-num2&amp;""</text>
+      <polygon class="nd out" points="429,690 665,690 651,726 415,726"/>
+      <text class="tx sm" x="540" y="708">출력 ""&amp;num1&amp;"*"&amp;num2&amp;"="&amp;num1*num2&amp;""</text>
+      <circle class="nd dot" cx="235" cy="786" r="7"/>
+      <rect class="nd term" x="175" y="801" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="235" y="818">종료</text>
+      <path class="ln" d="M235,43 L235,53"/>
+      <path class="ln" d="M235,90 L235,99"/>
+      <path class="ln" d="M235,136 L235,145"/>
+      <path class="ln" d="M235,182 L235,195"/>
+      <path class="ln" d="M235,232 L235,244"/>
+      <path class="ln" d="M235,279 L235,291"/>
+      <path class="ln" d="M235,328 L235,340"/>
+      <path class="ln" d="M235,375 L235,387"/>
+      <path class="ln" d="M235,424 L235,436"/>
+      <path class="ln" d="M235,471 L235,491"/>
+      <path class="ln" d="M315,524 L427,524"/><text class="lb" x="362" y="514">참</text>
+      <path class="ln" d="M235,556 L235,583"/><text class="lb" x="254" y="572">거짓</text>
+      <path class="ln" d="M315,616 L427,616"/><text class="lb" x="362" y="606">참</text>
+      <path class="ln" d="M235,648 L235,675"/><text class="lb" x="254" y="664">거짓</text>
+      <path class="ln" d="M315,708 L427,708"/><text class="lb" x="362" y="698">참</text>
+      <path class="ln" d="M235,740 L235,779"/><text class="lb" x="254" y="760">거짓</text>
+      <path class="mg" d="M540,542 L540,558 L705,558"/>
+      <path class="mg" d="M540,634 L540,650 L705,650"/>
+      <path class="mg" d="M540,726 L540,742 L705,742"/>
+      <path class="ln" d="M705,558 L705,786 L242,786"/>
+      <path class="ln" d="M235,793 L235,800"/>
+    </svg>
+    <figcaption><b>부호 계산기</b> : <code>op</code> 값에 따라 +·−·× 로 갈라지는 <b>elif 사슬</b>(중첩 분기).</figcaption>
+  </figure>
+
+  <!-- ── 입장 요금 ── -->
+  <figure class="flowshot">
+    <svg class="fsvg" style="max-width:500px" viewBox="0 0 720 560" xmlns="http://www.w3.org/2000/svg">
+      <rect class="nd term" x="240" y="9" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="300" y="26">주프로그램</text>
+      <rect class="nd decl" x="235" y="58" width="130" height="36"/>
+      <line class="bar" x1="243" y1="58" x2="243" y2="94"/><line class="bar" x1="247" y1="58" x2="247" y2="94"/>
+      <text class="tx" x="305" y="76">정수 age</text>
+      <rect class="nd decl" x="235" y="108" width="130" height="36"/>
+      <line class="bar" x1="243" y1="108" x2="243" y2="144"/><line class="bar" x1="247" y1="108" x2="247" y2="144"/>
+      <text class="tx" x="305" y="126">정수 price</text>
+      <polygon class="nd in" points="249,159 365,159 351,193 235,193"/>
+      <text class="tx" x="300" y="176">입력 age</text>
+      <polygon class="nd cond" points="300,210 420,250 300,290 180,250"/>
+      <text class="tx" x="300" y="250">age&lt;8 or age&gt;=60</text>
+      <rect class="nd decl" x="90" y="341" width="120" height="38"/>
+      <text class="tx" x="150" y="360">price ← 6000</text>
+      <rect class="nd decl" x="410" y="341" width="120" height="38"/>
+      <text class="tx" x="470" y="360">price ← 0</text>
+      <polygon class="nd out" points="64,412 250,412 236,448 50,448"/>
+      <text class="tx sm" x="150" y="430">출력 ""&amp;price&amp;"원입니다."</text>
+      <polygon class="nd out" points="384,412 570,412 556,448 370,448"/>
+      <text class="tx sm" x="470" y="430">출력 ""&amp;price&amp;"원입니다."</text>
+      <circle class="nd dot" cx="300" cy="480" r="7"/>
+      <rect class="nd term" x="240" y="503" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="300" y="520">종료</text>
+      <path class="ln" d="M300,43 L300,57"/>
+      <path class="ln" d="M300,94 L300,107"/>
+      <path class="ln" d="M300,144 L300,158"/>
+      <path class="ln" d="M300,193 L300,208"/>
+      <path class="ln" d="M180,250 L150,250 L150,340"/><text class="lb" x="200" y="224">거짓</text>
+      <path class="ln" d="M420,250 L470,250 L470,340"/><text class="lb" x="400" y="224">참</text>
+      <path class="ln" d="M150,379 L150,411"/>
+      <path class="ln" d="M470,379 L470,411"/>
+      <path class="ln" d="M150,448 L150,480 L293,480"/>
+      <path class="ln" d="M470,448 L470,480 L307,480"/>
+      <path class="ln" d="M300,487 L300,502"/>
+    </svg>
+    <figcaption><b>입장 요금</b> : <code>age&lt;8 or age&gt;=60</code> → 무료(0), 아니면 6000원. <code>or</code> 복합조건.</figcaption>
+  </figure>
+
+  <!-- ── 성적 합격 판정 ── -->
+  <figure class="flowshot">
+    <svg class="fsvg" style="max-width:560px" viewBox="0 0 760 760" xmlns="http://www.w3.org/2000/svg">
+      <rect class="nd term" x="260" y="9" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="320" y="26">주프로그램</text>
+      <rect class="nd decl" x="170" y="58" width="300" height="36"/>
+      <line class="bar" x1="178" y1="58" x2="178" y2="94"/><line class="bar" x1="182" y1="58" x2="182" y2="94"/>
+      <text class="tx sm" x="328" y="76">정수 wndrks, rlakf, rhkwp, cnfruf</text>
+      <polygon class="nd out" points="204,106 450,106 436,142 190,142"/>
+      <text class="tx sm" x="320" y="124">출력 "중간고사 점수를 입력하세요"</text>
+      <polygon class="nd in" points="259,153 385,153 371,187 245,187"/>
+      <text class="tx" x="320" y="170">입력 wndrks</text>
+      <polygon class="nd out" points="204,198 450,198 436,234 190,234"/>
+      <text class="tx sm" x="320" y="216">출력 "기말고사 점수를 입력하세요"</text>
+      <polygon class="nd in" points="259,245 385,245 371,279 245,279"/>
+      <text class="tx" x="320" y="262">입력 rlakf</text>
+      <polygon class="nd out" points="204,290 450,290 436,326 190,326"/>
+      <text class="tx sm" x="320" y="308">출력 "과제물 점수를 입력하세요"</text>
+      <polygon class="nd in" points="259,337 385,337 371,371 245,371"/>
+      <text class="tx" x="320" y="354">입력 rhkwp</text>
+      <polygon class="nd out" points="209,382 445,382 431,418 195,418"/>
+      <text class="tx sm" x="320" y="400">출력 "출결 점수를 입력하세요"</text>
+      <polygon class="nd in" points="259,429 385,429 371,463 245,463"/>
+      <text class="tx" x="320" y="446">입력 cnfruf</text>
+      <polygon class="nd cond" points="320,472 530,548 320,624 110,548"/>
+      <text class="tx sm" x="320" y="513">wndrks&lt;=100 and rlakf&lt;=100</text>
+      <text class="tx sm" x="320" y="527">and rhkwp&lt;=100 and cnfruf</text>
+      <text class="tx sm" x="320" y="541">&lt;=16 and wndrks+rlakf+rhkwp</text>
+      <text class="tx sm" x="320" y="555">&gt;=200 and cnfruf&gt;=12 and</text>
+      <text class="tx sm" x="320" y="569">wndrks&gt;=50 and rlakf&gt;=50 and</text>
+      <text class="tx sm" x="320" y="583">rhkwp&gt;=50</text>
+      <polygon class="nd out" points="69,644 165,644 151,680 55,680"/>
+      <text class="tx" x="110" y="662">출력 "불합격"</text>
+      <polygon class="nd out" points="489,644 585,644 571,680 475,680"/>
+      <text class="tx" x="530" y="662">출력 "합격"</text>
+      <circle class="nd dot" cx="320" cy="700" r="7"/>
+      <rect class="nd term" x="260" y="719" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="320" y="736">종료</text>
+      <path class="ln" d="M320,43 L320,57"/>
+      <path class="ln" d="M320,94 L320,105"/>
+      <path class="ln" d="M320,142 L320,152"/>
+      <path class="ln" d="M320,187 L320,197"/>
+      <path class="ln" d="M320,234 L320,244"/>
+      <path class="ln" d="M320,279 L320,289"/>
+      <path class="ln" d="M320,326 L320,336"/>
+      <path class="ln" d="M320,371 L320,381"/>
+      <path class="ln" d="M320,418 L320,428"/>
+      <path class="ln" d="M320,463 L320,471"/>
+      <path class="ln" d="M110,548 L110,643"/><text class="lb" x="92" y="540">거짓</text>
+      <path class="ln" d="M530,548 L530,643"/><text class="lb" x="548" y="540">참</text>
+      <path class="ln" d="M110,680 L110,700 L313,700"/>
+      <path class="ln" d="M530,680 L530,700 L327,700"/>
+      <path class="ln" d="M320,707 L320,718"/>
+    </svg>
+    <figcaption><b>성적 합격 판정</b> : 여러 조건을 <code>and</code>로 묶은 <b>하나의 큰 마름모</b>로 합격/불합격.</figcaption>
+  </figure>
 
   <h4 class="flow-grp">② 반복구조 — 육각형(루프)</h4>
-  <div class="flow-grid">
-    <figure class="flowshot">
-      <a href="pm-img/flow-star.png" target="_blank" rel="noopener"><img src="pm-img/flow-star.png" alt="별 삼각형 순서도" loading="lazy"></a>
-      <figcaption><b>별 삼각형</b> : <code>line</code> 루프 안에 <code>space</code>·<code>star</code> 루프가 들어간 <b>중첩 반복</b>. 👉 <a href="#p3">3번 문제</a></figcaption>
-    </figure>
-  </div>
+
+  <!-- ── 별(*) 삼각형 (중첩 for) ── -->
+  <figure class="flowshot">
+    <svg class="fsvg" style="max-width:580px" viewBox="0 0 640 620" xmlns="http://www.w3.org/2000/svg">
+      <rect class="nd term" x="90" y="9" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="150" y="26">주프로그램</text>
+      <rect class="nd decl" x="55" y="56" width="190" height="36"/>
+      <line class="bar" x1="63" y1="56" x2="63" y2="92"/><line class="bar" x1="67" y1="56" x2="67" y2="92"/>
+      <text class="tx sm" x="153" y="74">정수 line, space, star</text>
+      <polygon class="nd loop" points="74,118 226,118 240,140 226,162 74,162 60,140"/>
+      <text class="tx sm" x="150" y="140">line = 1부터 5까지</text>
+      <polygon class="nd loop" points="246,178 414,178 430,200 414,222 246,222 230,200"/>
+      <text class="tx sm" x="330" y="200">space = 0부터 5-line까지</text>
+      <polygon class="nd out" points="479,253 575,253 561,287 465,287"/>
+      <text class="tx" x="520" y="270">출력 " "</text>
+      <polygon class="nd loop" points="251,368 409,368 424,390 409,412 251,412 235,390"/>
+      <text class="tx sm" x="330" y="390">star = 1부터 line까지</text>
+      <polygon class="nd out" points="479,443 575,443 561,477 465,477"/>
+      <text class="tx" x="520" y="460">출력 "*"</text>
+      <polygon class="nd out" points="299,523 375,523 361,557 285,557"/>
+      <text class="tx" x="330" y="540">출력 ""</text>
+      <rect class="nd term" x="90" y="523" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="150" y="540">종료</text>
+      <path class="ln" d="M150,43 L150,55"/>
+      <path class="ln" d="M150,92 L150,117"/>
+      <path class="ln" d="M240,140 L330,140 L330,177"/><text class="lb" x="290" y="129">다음</text>
+      <path class="ln" d="M150,162 L150,522"/><text class="lb" x="126" y="186">완료</text>
+      <path class="ln" d="M430,200 L520,200 L520,252"/><text class="lb" x="472" y="189">다음</text>
+      <path class="ln" d="M330,222 L330,367"/><text class="lb" x="306" y="252">완료</text>
+      <path class="ln" d="M520,288 L520,312 L450,312 L450,203"/>
+      <path class="ln" d="M424,390 L520,390 L520,442"/><text class="lb" x="472" y="379">다음</text>
+      <path class="ln" d="M330,412 L330,522"/><text class="lb" x="306" y="442">완료</text>
+      <path class="ln" d="M520,478 L520,500 L450,500 L450,393"/>
+      <path class="ln" d="M330,558 L330,580 L30,580 L30,140 L58,140"/>
+    </svg>
+    <figcaption><b>별 삼각형</b> : <code>line</code> 루프 안에 <code>space</code>·<code>star</code> 루프가 들어간 <b>중첩 반복</b>(육각형은 <code>for</code>, 다음=반복 / 완료=탈출). 👉 <a href="#p3">3번 문제</a></figcaption>
+  </figure>
 
   <h4 class="flow-grp">③ 함수 — 서브프로그램 + 반환값</h4>
-  <div class="flow-grid">
-    <figure class="flowshot">
-      <a href="pm-img/flow-func.png" target="_blank" rel="noopener"><img src="pm-img/flow-func.png" alt="max 함수 순서도" loading="lazy"></a>
-      <figcaption><b>max 서브프로그램</b> : 주프로그램과 <b>별도 블록</b>으로 만들고 <b>반환값(return)</b>으로 큰 수를 돌려줌 → 파이썬 <code>def / return</code>. 👉 <a href="#p5">5번 문제</a>도 함수</figcaption>
-    </figure>
-  </div>
+
+  <!-- ── max 함수 (주프로그램 + 서브프로그램) ── -->
+  <figure class="flowshot">
+    <svg class="fsvg" style="max-width:660px" viewBox="0 0 760 410" xmlns="http://www.w3.org/2000/svg">
+      <line x1="360" y1="14" x2="360" y2="395" stroke="#e3e3e3" stroke-width="1" stroke-dasharray="4 4"/>
+      <!-- 주프로그램 -->
+      <rect class="nd term" x="120" y="9" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="180" y="26">주프로그램</text>
+      <rect class="nd decl" x="115" y="56" width="130" height="36"/>
+      <line class="bar" x1="123" y1="56" x2="123" y2="92"/><line class="bar" x1="127" y1="56" x2="127" y2="92"/>
+      <text class="tx" x="187" y="74">정수 num1</text>
+      <rect class="nd decl" x="115" y="102" width="130" height="36"/>
+      <line class="bar" x1="123" y1="102" x2="123" y2="138"/><line class="bar" x1="127" y1="102" x2="127" y2="138"/>
+      <text class="tx" x="187" y="120">정수 num2</text>
+      <rect class="nd decl" x="115" y="148" width="130" height="36"/>
+      <text class="tx" x="180" y="166">num1 ← 10</text>
+      <rect class="nd decl" x="115" y="194" width="130" height="36"/>
+      <text class="tx" x="180" y="212">num2 ← 20</text>
+      <polygon class="nd out" points="31,255 345,255 329,301 15,301"/>
+      <text class="tx sm" x="180" y="271">출력 "num1와 num2중 큰수는</text>
+      <text class="tx sm" x="180" y="289">"&amp;max(num1,num2)&amp;" 입니다."</text>
+      <rect class="nd term" x="120" y="323" width="120" height="34" rx="17"/>
+      <text class="tx ptx" x="180" y="340">종료</text>
+      <path class="ln" d="M180,43 L180,55"/>
+      <path class="ln" d="M180,92 L180,101"/>
+      <path class="ln" d="M180,138 L180,147"/>
+      <path class="ln" d="M180,184 L180,193"/>
+      <path class="ln" d="M180,230 L180,254"/>
+      <path class="ln" d="M180,301 L180,322"/>
+      <!-- max 서브프로그램 -->
+      <rect class="nd term" x="435" y="17" width="210" height="46" rx="23"/>
+      <text class="tx ptx" x="540" y="33">max</text>
+      <text class="tx ptx sm" x="540" y="51">(정수 input1, 정수 input2)</text>
+      <rect class="nd decl" x="475" y="86" width="130" height="36"/>
+      <line class="bar" x1="483" y1="86" x2="483" y2="122"/><line class="bar" x1="487" y1="86" x2="487" y2="122"/>
+      <text class="tx" x="547" y="104">정수 bigger</text>
+      <polygon class="nd cond" points="540,140 625,172 540,204 455,172"/>
+      <text class="tx" x="540" y="172">input1&gt;input2</text>
+      <rect class="nd decl" x="330" y="252" width="150" height="36"/>
+      <text class="tx" x="405" y="270">bigger ← input2</text>
+      <rect class="nd decl" x="600" y="252" width="150" height="36"/>
+      <text class="tx" x="675" y="270">bigger ← input1</text>
+      <circle class="nd dot" cx="540" cy="320" r="7"/>
+      <rect class="nd term" x="440" y="342" width="200" height="36" rx="18"/>
+      <text class="tx ptx sm" x="540" y="360">반환값 정수 bigger</text>
+      <path class="ln" d="M540,63 L540,85"/>
+      <path class="ln" d="M540,122 L540,139"/>
+      <path class="ln" d="M455,172 L405,172 L405,251"/><text class="lb" x="470" y="159">거짓</text>
+      <path class="ln" d="M625,172 L675,172 L675,251"/><text class="lb" x="628" y="159">참</text>
+      <path class="ln" d="M405,288 L405,310 L533,310"/>
+      <path class="ln" d="M675,288 L675,310 L547,310"/>
+      <path class="ln" d="M540,327 L540,341"/>
+    </svg>
+    <figcaption><b>max 서브프로그램</b> : 주프로그램과 <b>별도 블록</b>으로 만들고 <b>반환값(return)</b>으로 큰 수를 돌려줌 → 파이썬 <code>def / return</code>. 👉 <a href="#p5">5번 문제</a>도 함수</figcaption>
+  </figure>
 
   <h4 class="flow-grp">④ 클래스 — 순서도엔 없음, 파이썬에서만 <span style="color:#d9772b;">(★ 시험 중요)</span></h4>
-  <div class="flow-grid">
-    <figure class="flowshot">
-      <a href="pm-img/class-cars.png" target="_blank" rel="noopener"><img src="pm-img/class-cars.png" alt="Cars 클래스" loading="lazy"></a>
-      <figcaption><b>Cars 클래스</b> : <code>__init__</code>으로 속성(model·color·number…) 저장 + 메서드(forward/stop/getcolor…). 클래스는 순서도 대신 <b>코드로</b>. 👉 <a href="#p6">6번 문제</a></figcaption>
-    </figure>
-  </div>
+  <figure class="flowshot">
+    <pre><code>class Cars:
+    def __init__(self, model, color, number, weight):
+        self.model = model
+        self.color = color
+        self.number = number
+        self.weight = weight
+
+    def modelname(self):
+        print(f"모델 이름은 {self.model} 입니다.")
+
+    def setcolor(self, color):
+        self.color = color
+
+    def getcolor(self):
+        print(f"이 차의 색상은 {self.color} 입니다.")
+
+    def forward(self):
+        print("앞으로 갑니다.")
+
+    def backward(self):
+        print("뒤로 갑니다.")
+
+    def stop(self):
+        print("멈춥니다.")
+
+mycar  = Cars("DYU", "red", 2, "2Ton")
+mycar1 = Cars("DDU", "blue", 5, "5Ton")
+mycar.forward()      # 앞으로 갑니다.
+mycar.getcolor()     # 이 차의 색상은 red 입니다.
+mycar.setcolor("black")   # 색상 변경(setter)
+mycar.getcolor()     # 이 차의 색상은 black 입니다.</code></pre>
+    <figcaption><b>Cars 클래스</b> : <code>__init__</code>으로 속성(model·color·number…) 저장 + 메서드(forward/stop/getcolor…). 클래스는 순서도 대신 <b>코드로</b> 그립니다. 👉 <a href="#p6">6번 문제</a></figcaption>
+  </figure>
 
   <h3>4) 한눈에 보는 예제 — 가위바위보 순서도(클린 재작성)</h3>
   <p style="font-size:14px;">아래 순서도가 곧 <b>2번 문제(<code>judge</code>)</b>의 설계도입니다. 마름모(조건) → <code>if</code>, 중첩 마름모 → 중첩 <code>if</code>로 그대로 옮기면 됩니다.</p>
