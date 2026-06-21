@@ -108,6 +108,7 @@
         .lqlog .hd { color:#3fb1ff; font-weight:700; }   /* HEAD -> */
         .lqlog .br { color:#56d364; font-weight:700; }   /* 지역 브랜치 */
         .lqlog .rm { color:#f0883e; font-weight:700; }   /* origin/원격 */
+        .lqpair .lqlog { font-size:10.5px; line-height:1.55; padding:9px 10px; }  /* 2단 비교는 더 작게(가로 잘림 최소화) */
         .lqarrow { font-weight:900; color:#2f6f8f; font-size:20px; text-align:center; line-height:1.2; }
         .lqarrow small { display:block; font-size:10px; color:#5b7682; font-weight:700; }
 
@@ -836,6 +837,395 @@ Fast-forward</span>
       <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (bugfix 삭제됨)</div>
         <pre class="lqlog"><span class="h">* 093c46b</span> (<span class="hd">HEAD -&gt; main</span>) main 개발중
 <span class="h">* 81e3afd</span> 공통 커밋</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <p style="font-size:12.5px;color:#5b7682;margin:16px 0 8px;border-top:1px dashed var(--line);padding-top:13px;"><b>↓ 실습 1~4 답지 흐름</b>을 처음부터 끝까지 <b>log 변화</b>로 따라가기 (22~42번 · 보기1 → 보기2)</p>
+
+  <div class="cmdq" data-answer='git clone https://github.com/rawonDY/TeamProject.git|git clone <url>'>
+    <div class="cmdq-q"><span class="cmdq-no">22</span>원격 <code>https://github.com/rawonDY/TeamProject.git</code> 를 로컬로 <b>복제</b>하려면?<span class="tag">실습1</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (로컬에 없음)</div>
+        <pre class="lqlog">(로컬에 저장소 없음)</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (복제 완료)</div>
+        <pre class="lqlog"><span class="h">* 9a1b2c3</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git switch -c bug|git checkout -b bug|git branch bug git switch bug|git branch bug git checkout bug">
+    <div class="cmdq-q"><span class="cmdq-no">23</span><code>bug</code> 브랜치를 <b>만들고 그 위로 이동</b>해 보기2처럼 만들려면?<span class="tag">실습1</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (main)</div>
+        <pre class="lqlog"><span class="h">* 9a1b2c3</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (bug로 이동)</div>
+        <pre class="lqlog"><span class="h">* 9a1b2c3</span> (<span class="hd">HEAD -&gt; bug</span>, <span class="br">main</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer='git commit -m "code1.txt 파일에 내용 추가"'>
+    <div class="cmdq-q"><span class="cmdq-no">24</span><code>code1.txt</code>를 add한 뒤 메시지 <code>code1.txt 파일에 내용 추가</code> 로 <b>커밋</b>하려면?<span class="tag">실습1</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (커밋 전)</div>
+        <pre class="lqlog"><span class="h">* 9a1b2c3</span> (<span class="hd">HEAD -&gt; bug</span>, <span class="br">main</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (bug에 커밋 추가)</div>
+        <pre class="lqlog"><span class="h">* 4f5e6d7</span> (<span class="hd">HEAD -&gt; bug</span>) code1.txt 파일에 내용 추가
+<span class="h">* 9a1b2c3</span> (<span class="br">main</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git push origin bug">
+    <div class="cmdq-q"><span class="cmdq-no">25</span><code>bug</code> 브랜치를 원격에 <b>업로드</b>해 보기2(<code>origin/bug</code> 생성)처럼 만들려면?<span class="tag">실습1</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (origin/bug 없음)</div>
+        <pre class="lqlog"><span class="h">* 4f5e6d7</span> (<span class="hd">HEAD -&gt; bug</span>) code1.txt 파일에 내용 추가
+<span class="h">* 9a1b2c3</span> (<span class="br">main</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (origin/bug 생김)</div>
+        <pre class="lqlog"><span class="h">* 4f5e6d7</span> (<span class="hd">HEAD -&gt; bug</span>, <span class="rm">origin/bug</span>) code1.txt 파일에 내용 추가
+<span class="h">* 9a1b2c3</span> (<span class="br">main</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git switch main|git checkout main">
+    <div class="cmdq-q"><span class="cmdq-no">26</span>PR 병합을 마치고 <code>main</code> 브랜치로 <b>전환</b>하려면?<span class="tag">실습1</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (bug)</div>
+        <pre class="lqlog"><span class="h">* 4f5e6d7</span> (<span class="hd">HEAD -&gt; bug</span>, <span class="rm">origin/bug</span>) code1.txt 파일에 내용 추가
+<span class="h">* 9a1b2c3</span> (<span class="br">main</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (main으로)</div>
+        <pre class="lqlog"><span class="h">* 4f5e6d7</span> (<span class="br">bug</span>, <span class="rm">origin/bug</span>) code1.txt 파일에 내용 추가
+<span class="h">* 9a1b2c3</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git pull origin main|git pull">
+    <div class="cmdq-q"><span class="cmdq-no">27</span>GitHub에서 PR이 병합돼 <code>origin/main</code>이 앞섰습니다. 로컬 <code>main</code>에 <b>받아오려면</b>?<span class="tag">실습1</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (로컬이 뒤처짐)</div>
+        <pre class="lqlog"><span class="h">* 5b6c7d8</span> (<span class="rm">origin/main, origin/HEAD</span>) Merge pull request #1
+<span class="h">* 9a1b2c3</span> (<span class="hd">HEAD -&gt; main</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (로컬 최신화)</div>
+        <pre class="lqlog"><span class="h">* 5b6c7d8</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>) Merge pull request #1
+<span class="h">* 9a1b2c3</span> upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git push -u origin main">
+    <div class="cmdq-q"><span class="cmdq-no">28</span>첫 커밋 + <code>origin</code> 연결까지 끝났습니다. <b>처음 업로드 + 추적관계(-u)</b>로 보기2처럼 만들려면?<span class="tag">실습2</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (origin/main 없음)</div>
+        <pre class="lqlog"><span class="h">* 6574e55</span> (<span class="hd">HEAD -&gt; main</span>) add code1.txt and code2.txt</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (원격에 main 생성)</div>
+        <pre class="lqlog"><span class="h">* 6574e55</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>) add code1.txt and code2.txt</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git switch function|git checkout function">
+    <div class="cmdq-q"><span class="cmdq-no">29</span><code>main</code> 커밋을 마쳤습니다. 이제 <code>function</code> 브랜치로 <b>전환</b>하려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (main)</div>
+        <pre class="lqlog"><span class="h">* 853f7a4</span> (<span class="hd">HEAD -&gt; main</span>) main 개발중
+<span class="h">* 81e3afd</span> (<span class="br">function</span>, <span class="br">bugfix</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (function으로)</div>
+        <pre class="lqlog"><span class="h">* 853f7a4</span> (<span class="br">main</span>) main 개발중
+<span class="h">* 81e3afd</span> (<span class="hd">HEAD -&gt; function</span>, <span class="br">bugfix</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer='git commit -m "function 개발중"'>
+    <div class="cmdq-q"><span class="cmdq-no">30</span><code>function</code>에서 작업을 add한 뒤 메시지 <code>function 개발중</code> 으로 <b>커밋</b>해 보기2처럼(갈래짐) 만들려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (function = 시작점)</div>
+        <pre class="lqlog"><span class="h">* 853f7a4</span> (<span class="br">main</span>) main 개발중
+<span class="h">* 81e3afd</span> (<span class="hd">HEAD -&gt; function</span>, <span class="br">bugfix</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (function 커밋 → 분기)</div>
+        <pre class="lqlog"><span class="h">* a2e0673</span> (<span class="hd">HEAD -&gt; function</span>) function 개발중
+| <span class="h">* 853f7a4</span> (<span class="br">main</span>) main 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="br">bugfix</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git switch bugfix|git checkout bugfix">
+    <div class="cmdq-q"><span class="cmdq-no">31</span><code>bugfix</code> 브랜치로 <b>전환</b>하려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (function)</div>
+        <pre class="lqlog"><span class="h">* a2e0673</span> (<span class="hd">HEAD -&gt; function</span>) function 개발중
+| <span class="h">* 853f7a4</span> (<span class="br">main</span>) main 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="br">bugfix</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (bugfix로)</div>
+        <pre class="lqlog"><span class="h">* a2e0673</span> (<span class="br">function</span>) function 개발중
+| <span class="h">* 853f7a4</span> (<span class="br">main</span>) main 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="hd">HEAD -&gt; bugfix</span>, <span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git rebase bugfix">
+    <div class="cmdq-q"><span class="cmdq-no">32</span><code>main</code>에서 <code>bugfix</code>를 main 위로 가져와 <b>선형</b>으로 만들려면? <span style="color:#5b7682;">(main에 있다고 가정)</span><span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (세 갈래 분기)</div>
+        <pre class="lqlog"><span class="h">* 853f7a4</span> (<span class="hd">HEAD -&gt; main</span>) main 개발중
+| <span class="h">* d1f88b5</span> (<span class="br">bugfix</span>) bug 수정
+|/
+| <span class="h">* a2e0673</span> (<span class="br">function</span>) function 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (main이 bugfix 위로)</div>
+        <pre class="lqlog"><span class="h">* 093c46b</span> (<span class="hd">HEAD -&gt; main</span>) main 개발중
+<span class="h">* d1f88b5</span> (<span class="br">bugfix</span>) bug 수정
+| <span class="h">* a2e0673</span> (<span class="br">function</span>) function 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git branch -d bugfix|git branch -D bugfix">
+    <div class="cmdq-q"><span class="cmdq-no">33</span>이미 main에 합쳐진 <code>bugfix</code> 브랜치 라벨을 <b>삭제</b>하려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (bugfix 라벨 남음)</div>
+        <pre class="lqlog"><span class="h">* 093c46b</span> (<span class="hd">HEAD -&gt; main</span>) main 개발중
+<span class="h">* d1f88b5</span> (<span class="br">bugfix</span>) bug 수정
+| <span class="h">* a2e0673</span> (<span class="br">function</span>) function 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (bugfix 라벨 사라짐)</div>
+        <pre class="lqlog"><span class="h">* 093c46b</span> (<span class="hd">HEAD -&gt; main</span>) main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+| <span class="h">* a2e0673</span> (<span class="br">function</span>) function 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git switch function|git checkout function">
+    <div class="cmdq-q"><span class="cmdq-no">34</span>이제 <code>function</code>도 펴려고 합니다. <code>function</code>으로 <b>전환</b>하려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (main)</div>
+        <pre class="lqlog"><span class="h">* 093c46b</span> (<span class="hd">HEAD -&gt; main</span>) main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+| <span class="h">* a2e0673</span> (<span class="br">function</span>) function 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (function으로)</div>
+        <pre class="lqlog"><span class="h">* 093c46b</span> (<span class="br">main</span>) main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+| <span class="h">* a2e0673</span> (<span class="hd">HEAD -&gt; function</span>) function 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git rebase main">
+    <div class="cmdq-q"><span class="cmdq-no">35</span><code>function</code>(HEAD)을 <code>main</code> 위로 옮겨 <b>완전한 선형</b>으로 만들려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (function만 갈라짐)</div>
+        <pre class="lqlog"><span class="h">* 093c46b</span> (<span class="br">main</span>) main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+| <span class="h">* a2e0673</span> (<span class="hd">HEAD -&gt; function</span>) function 개발중
+|/
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (한 줄)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; function</span>) function 개발중
+<span class="h">* 093c46b</span> (<span class="br">main</span>) main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git switch main|git checkout main">
+    <div class="cmdq-q"><span class="cmdq-no">36</span>병합을 하려고 <code>main</code>으로 <b>전환</b>하려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (function)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; function</span>) function 개발중
+<span class="h">* 093c46b</span> (<span class="br">main</span>) main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (main으로)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="br">function</span>) function 개발중
+<span class="h">* 093c46b</span> (<span class="hd">HEAD -&gt; main</span>) main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git merge function">
+    <div class="cmdq-q"><span class="cmdq-no">37</span><code>main</code>에 <code>function</code>을 <b>fast-forward 병합</b>하려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (main이 뒤)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="br">function</span>) function 개발중
+<span class="h">* 093c46b</span> (<span class="hd">HEAD -&gt; main</span>) main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (main이 따라붙음)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; main</span>, <span class="br">function</span>) function 개발중
+<span class="h">* 093c46b</span> main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git branch -d function|git branch -D function">
+    <div class="cmdq-q"><span class="cmdq-no">38</span>병합이 끝난 <code>function</code> 브랜치 라벨을 <b>삭제</b>하려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (function 라벨 남음)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; main</span>, <span class="br">function</span>) function 개발중
+<span class="h">* 093c46b</span> main 개발중
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (function 라벨 삭제)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; main</span>) function 개발중
+<span class="h">* 093c46b</span> main 개발중
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git push|git push origin main">
+    <div class="cmdq-q"><span class="cmdq-no">39</span>선형 정리가 끝난 결과를 <b>원격에 올려</b> 보기2처럼 만들려면?<span class="tag">실습3</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (origin이 뒤)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; main</span>) function 개발중
+<span class="h">* 093c46b</span> main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+<span class="h">* 81e3afd</span> (<span class="rm">origin/main, origin/HEAD</span>) upload two files</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (origin 최신화)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>) function 개발중
+<span class="h">* 093c46b</span> main 개발중
+<span class="h">* d1f88b5</span> bug 수정
+<span class="h">* 81e3afd</span> upload two files</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git branch apple">
+    <div class="cmdq-q"><span class="cmdq-no">40</span><code>apple</code> 브랜치를 <b>만들기만</b>(전환 X) 하려면?<span class="tag">실습4</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (apple 없음)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>) function 개발중
+<span class="h">* 093c46b</span> main 개발중</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (apple 라벨 추가 · HEAD는 main)</div>
+        <pre class="lqlog"><span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>, <span class="br">apple</span>) function 개발중
+<span class="h">* 093c46b</span> main 개발중</pre></div>
+    </div>
+    <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer='git merge --squash apple git commit -m "five apples"'>
+    <div class="cmdq-q"><span class="cmdq-no">41</span><code>apple</code>의 커밋 5개를 <code>main</code>에 <b>1개로 압축 병합 + 커밋</b>해 보기2처럼 만들려면? <span class="tag">실습4</span></div>
+    <div style="font-size:12px;color:#5b7682;margin:-2px 0 2px;">💡 <code>merge --squash</code>는 커밋을 안 만듦 → <b>두 줄</b> 필요 : <code>git merge --squash apple</code> → <code>git commit -m "five apples"</code> (Shift+Enter로 줄바꿈)</div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (apple 5커밋, main에 있음)</div>
+        <pre class="lqlog"><span class="h">* f21f6ca</span> (<span class="br">apple</span>) apple
+<span class="h">* 1031176</span> apple
+<span class="h">* ce81c5f</span> apple
+<span class="h">* 03aa389</span> apple
+<span class="h">* 11ba92a</span> apple
+<span class="h">* 654d816</span> (<span class="hd">HEAD -&gt; main</span>, <span class="rm">origin/main, origin/HEAD</span>) function 개발중</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (main에 1커밋으로)</div>
+        <pre class="lqlog"><span class="h">* f07c03d</span> (<span class="hd">HEAD -&gt; main</span>) five apples
+| <span class="h">* f21f6ca</span> (<span class="br">apple</span>) apple
+| <span class="h">* 1031176</span> apple
+| <span class="h">* ce81c5f</span> apple
+| <span class="h">* 03aa389</span> apple
+| <span class="h">* 11ba92a</span> apple
+|/
+<span class="h">* 654d816</span> (<span class="rm">origin/main, origin/HEAD</span>) function 개발중</pre></div>
+    </div>
+    <textarea rows="2" placeholder="두 줄로 입력 (Shift+Enter로 줄바꿈), 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
+    <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
+    <div class="cmdq-fb"></div>
+  </div>
+
+  <div class="cmdq" data-answer="git branch -D apple">
+    <div class="cmdq-q"><span class="cmdq-no">42</span>squash-merge한 <code>apple</code>은 ‘미병합’ 취급이라 <code>-d</code>로 안 지워집니다. <b>강제 삭제</b>하려면?<span class="tag">실습4</span></div>
+    <div class="lqpair">
+      <div class="lqcol"><div class="lqlabel">📋 보기1 — 지금 (apple 5커밋 남음)</div>
+        <pre class="lqlog"><span class="h">* f07c03d</span> (<span class="hd">HEAD -&gt; main</span>) five apples
+| <span class="h">* f21f6ca</span> (<span class="br">apple</span>) apple
+| <span class="h">* 1031176</span> apple
+|/
+<span class="h">* 654d816</span> (<span class="rm">origin/main, origin/HEAD</span>) function 개발중</pre></div>
+      <div class="lqarrow">➜<small>명령어?</small></div>
+      <div class="lqcol"><div class="lqlabel b2">🎯 보기2 — 목표 (apple 삭제, 선형)</div>
+        <pre class="lqlog"><span class="h">* f07c03d</span> (<span class="hd">HEAD -&gt; main</span>) five apples
+<span class="h">* 654d816</span> (<span class="rm">origin/main, origin/HEAD</span>) function 개발중</pre></div>
     </div>
     <textarea rows="1" placeholder="명령어 입력 (예: git add .) — 두 줄은 Shift+Enter, 채점은 Enter" spellcheck="false" autocomplete="off"></textarea>
     <div class="cmdq-btns"><button class="cmdq-btn check">확인</button><button class="cmdq-btn show">정답 보기</button></div>
