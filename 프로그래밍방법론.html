@@ -547,22 +547,17 @@ mycar.getcolor()     # 이 차의 색상은 black 입니다.</code></pre>
   </svg>
 
   <details class="akey"><summary>💡 위 순서도를 파이썬으로 옮기면 (2번 정답과 동일)</summary>
-    <pre><code># [의사코드]
-#  player, computer 입력
-#  IF player == computer THEN  "비김" 출력
-#  ELSE IF player가 이기는 3조합 THEN  "이김" 출력
-#  ELSE  "짐" 출력
-player = input(&quot;나(가위/바위/보): &quot;)
-computer = input(&quot;컴퓨터(가위/바위/보): &quot;)
-if player == computer:              # 마름모1
-    print(&quot;비김&quot;)
-else:
-    if (player == &quot;가위&quot; and computer == &quot;보&quot;) or \
-       (player == &quot;바위&quot; and computer == &quot;가위&quot;) or \
-       (player == &quot;보&quot; and computer == &quot;바위&quot;):   # 마름모2
-        print(&quot;이김&quot;)
-    else:
-        print(&quot;짐&quot;)</code></pre>
+    <pre><code>player = input(&quot;나(가위/바위/보): &quot;)  # 내 손 입력
+computer = input(&quot;컴퓨터(가위/바위/보): &quot;)  # 컴퓨터 손 입력
+if player == computer:  # 마름모1: 두 손이 같으면
+    print(&quot;비김&quot;)  # 비김 출력
+else:  # 다르면
+    if ((player == &quot;가위&quot; and computer == &quot;보&quot;)  # 마름모2: 가위로 보를 이기거나
+            or (player == &quot;바위&quot; and computer == &quot;가위&quot;)  # 바위로 가위를 이기거나
+            or (player == &quot;보&quot; and computer == &quot;바위&quot;)):  # 보로 바위를 이기면
+        print(&quot;이김&quot;)  # 이김 출력
+    else:  # 그 외에는
+        print(&quot;짐&quot;)  # 짐 출력</code></pre>
   </details>
 </section>
 
@@ -587,17 +582,11 @@ else:
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code># [의사코드]
-#  연도 입력
-#  IF (4의 배수 AND 100의 배수 아님) OR 400의 배수 THEN
-#      &quot;윤년&quot; 출력
-#  ELSE
-#      &quot;평년&quot; 출력
-year = int(input(&quot;연도 입력: &quot;))
-if year % 4 == 0 and year % 100 != 0 or year % 400 == 0:
-    print(&quot;윤년&quot;)
-else:
-    print(&quot;평년&quot;)</code></pre>
+    <pre><code>year = int(input(&quot;연도 입력: &quot;))  # 연도를 정수로 입력받기
+if year % 4 == 0 and year % 100 != 0 or year % 400 == 0:  # 만약 (4의 배수 그리고 100의 배수 아님) 또는 400의 배수 라면
+    print(&quot;윤년&quot;)  # 윤년이라고 출력
+else:  # 그렇지 않으면
+    print(&quot;평년&quot;)  # 평년이라고 출력</code></pre>
     <div class="tip">2000년은 400의 배수라 윤년, 1900년은 100의 배수지만 400의 배수가 아니라 평년이에요.</div>
   </details>
 </section>
@@ -623,23 +612,17 @@ else:
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code># [의사코드]
-#  player, computer 입력
-#  IF player == computer THEN  &quot;비김&quot; 출력
-#  ELSE
-#      IF player가 이기는 3조합 THEN  &quot;이김&quot; 출력
-#      ELSE  &quot;짐&quot; 출력
-player = input(&quot;나(가위/바위/보): &quot;)
-computer = input(&quot;컴퓨터(가위/바위/보): &quot;)
-if player == computer:
-    print(&quot;비김&quot;)
-else:
-    if (player == &quot;가위&quot; and computer == &quot;보&quot;) or \
-       (player == &quot;바위&quot; and computer == &quot;가위&quot;) or \
-       (player == &quot;보&quot; and computer == &quot;바위&quot;):
-        print(&quot;이김&quot;)
-    else:
-        print(&quot;짐&quot;)</code></pre>
+    <pre><code>player = input(&quot;나(가위/바위/보): &quot;)  # 내 손 입력
+computer = input(&quot;컴퓨터(가위/바위/보): &quot;)  # 컴퓨터 손 입력
+if player == computer:  # 만약 두 손이 같으면
+    print(&quot;비김&quot;)  # 비김 출력
+else:  # 다르면 (중첩 if 로 승패 판정)
+    if ((player == &quot;가위&quot; and computer == &quot;보&quot;)  # 가위로 보를 이기거나
+            or (player == &quot;바위&quot; and computer == &quot;가위&quot;)  # 바위로 가위를 이기거나
+            or (player == &quot;보&quot; and computer == &quot;바위&quot;)):  # 보로 바위를 이기면
+        print(&quot;이김&quot;)  # 이김 출력
+    else:  # 그 외에는
+        print(&quot;짐&quot;)  # 짐 출력</code></pre>
     <div class="tip">9가지 경우(비김3·이김3·짐3)를 모두 자동 검사합니다.</div>
   </details>
 </section>
@@ -668,17 +651,11 @@ else:
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code># [의사코드]
-#  n 입력
-#  FOR line = 1 TO n
-#      FOR star = 1 TO line
-#          별 1개 출력(줄바꿈 없이)
-#      줄바꿈
-n = int(input(&quot;줄 수: &quot;))
-for line in range(1, n + 1):
-    for star in range(line):
-        print(&quot;*&quot;, end=&quot;&quot;)
-    print()</code></pre>
+    <pre><code>n = int(input(&quot;줄 수: &quot;))  # 줄 수 n 을 정수로 입력
+for line in range(1, n + 1):  # 1번째 줄부터 n번째 줄까지 반복
+    for star in range(line):  # 현재 줄 번호만큼 반복
+        print(&quot;*&quot;, end=&quot;&quot;)  # 별 1개를 줄바꿈 없이 출력
+    print()  # 한 줄을 다 찍었으면 줄바꿈</code></pre>
     <div class="tip">채점은 n=5를 입력해 별 삼각형이 정확한지 비교합니다. (줄 끝 공백은 무시)</div>
   </details>
 </section>
@@ -706,13 +683,9 @@ for line in range(1, n + 1):
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code># [의사코드]
-#  dan 입력
-#  FOR j = 1 TO 9
-#      &quot;dan * j = (dan*j)&quot; 출력
-dan = int(input(&quot;단: &quot;))
-for j in range(1, 10):
-    print(f&quot;{dan} * {j} = {dan * j}&quot;)</code></pre>
+    <pre><code>dan = int(input(&quot;단: &quot;))  # 출력할 단을 정수로 입력
+for j in range(1, 10):  # j를 1부터 9까지 반복
+    print(f&quot;{dan} * {j} = {dan * j}&quot;)  # &quot;단 * j = 곱&quot; 형식으로 출력</code></pre>
     <div class="tip">채점은 dan=3을 입력해 3단 9줄이 맞는지 비교합니다.</div>
   </details>
 </section>
@@ -738,19 +711,14 @@ for j in range(1, 10):
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code># [의사코드]
-#  FUNCTION factorial(n)
-#      IF n == 1 THEN  return 1            // 종료조건
-#      ELSE  return n * factorial(n - 1)   // 재귀호출
-#  n 입력 → factorial(n) 출력
-def factorial(n):
-    if n == 1:
-        return 1
-    else:
-        return n * factorial(n - 1)
+    <pre><code>def factorial(n):  # n! 을 구하는 재귀 함수 정의
+    if n == 1:  # 종료조건: n이 1이면
+        return 1  # 1을 돌려주고 재귀를 멈춤
+    else:  # 그 외에는
+        return n * factorial(n - 1)  # n × (n-1)! 로 자기 자신을 호출
 
-n = int(input(&quot;n: &quot;))
-print(factorial(n))</code></pre>
+n = int(input(&quot;n: &quot;))  # n 을 정수로 입력
+print(factorial(n))  # factorial(n) 결과를 출력</code></pre>
     <div class="tip">채점은 1~8을 입력해 출력된 팩토리얼 값이 맞는지 확인합니다.</div>
   </details>
 </section>
@@ -777,29 +745,23 @@ print(factorial(n))</code></pre>
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code># [의사코드]
-#  CLASS Student
-#      __init__(name, 국,수,영,과): 5개 속성 저장
-#      get_sum(): 네 과목 합 return
-#      get_average(): get_sum() / 4 return
-#  객체 생성 → 총점·평균 print 출력
-class Student:
-    def __init__(self, name, korean, math, english, science):
-        self.name = name
-        self.korean = korean
-        self.math = math
-        self.english = english
-        self.science = science
+    <pre><code>class Student:  # 학생 클래스 정의
+    def __init__(self, name, korean, math, english, science):  # 생성자: 이름·4과목 점수 받기
+        self.name = name  # 이름 속성 저장
+        self.korean = korean  # 국어 점수 저장
+        self.math = math  # 수학 점수 저장
+        self.english = english  # 영어 점수 저장
+        self.science = science  # 과학 점수 저장
 
-    def get_sum(self):
-        return self.korean + self.math + self.english + self.science
+    def get_sum(self):  # 총점을 구하는 메서드
+        return self.korean + self.math + self.english + self.science  # 네 과목 합을 반환
 
-    def get_average(self):
-        return self.get_sum() / 4
+    def get_average(self):  # 평균을 구하는 메서드
+        return self.get_sum() / 4  # 총점 ÷ 4 를 반환
 
-s = Student(&quot;홍길동&quot;, 100, 80, 90, 70)
-print(s.get_sum())       # 340
-print(s.get_average())   # 85.0</code></pre>
+s = Student(&quot;홍길동&quot;, 100, 80, 90, 70)  # 객체 생성(점수 전달)
+print(s.get_sum())  # 총점 340 출력
+print(s.get_average())  # 평균 85.0 출력</code></pre>
     <div class="tip">채점은 Student("홍길동", 100, 80, 90, 70) 로 합 340·평균 85.0 이 나오고, 이를 print 했는지 확인합니다.</div>
   </details>
 </section>
@@ -830,45 +792,36 @@ print(s.get_average())   # 85.0</code></pre>
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code># [의사코드]
-#  CLASS Cars
-#      __init__(model,color,number,weight): 4개 속성 저장
-#      forward()/backward()/stop(): 동작 문장 print
-#      setcolor(color): self.color 변경 (setter)
-#      getcolor()/modelname(): 현재 색상/모델 print
-#  객체 생성 → forward → setcolor("blue") → getcolor → modelname 출력
-class Cars:
-    def __init__(self, model, color, number, weight):
-        self.model = model
-        self.color = color
-        self.number = number
-        self.weight = weight
+    <pre><code>class Cars:  # 자동차 클래스 정의
+    def __init__(self, model, color, number, weight):  # 생성자: 4개 정보 받기
+        self.model = model  # 모델 저장
+        self.color = color  # 색상 저장
+        self.number = number  # 번호 저장
+        self.weight = weight  # 무게 저장
 
-    def forward(self):
-        print(&quot;앞으로 갑니다.&quot;)
+    def forward(self):  # 전진 동작 메서드
+        print(&quot;앞으로 갑니다.&quot;)  # 전진 메시지 출력
 
-    def backward(self):
-        print(&quot;뒤로 갑니다.&quot;)
+    def backward(self):  # 후진 동작 메서드
+        print(&quot;뒤로 갑니다.&quot;)  # 후진 메시지 출력
 
-    def stop(self):
-        print(&quot;멈춥니다.&quot;)
+    def stop(self):  # 정지 동작 메서드
+        print(&quot;멈춥니다.&quot;)  # 정지 메시지 출력
 
-    def setcolor(self, color):     # setter: 객체의 색상 속성을 바꿈
-        self.color = color
+    def setcolor(self, color):  # setter: 색상을 바꾸는 메서드
+        self.color = color  # self.color 를 새 색으로 변경
 
-    def getcolor(self):
-        print(f&quot;이 차의 색상은 {self.color} 입니다.&quot;)
+    def getcolor(self):  # 현재 색상 확인 메서드
+        print(f&quot;이 차의 색상은 {self.color} 입니다.&quot;)  # 현재 색상 출력
 
-    def modelname(self):
-        print(f&quot;모델 이름은 {self.model} 입니다.&quot;)
+    def modelname(self):  # 모델 이름 확인 메서드
+        print(f&quot;모델 이름은 {self.model} 입니다.&quot;)  # 모델명 출력
 
-
-# 사용 예
-mycar = Cars(&quot;DYU&quot;, &quot;red&quot;, 2, &quot;2Ton&quot;)
-mycar.forward()        # 앞으로 갑니다.
-mycar.setcolor(&quot;blue&quot;) # 색상 red → blue 로 변경
-mycar.getcolor()       # 이 차의 색상은 blue 입니다.
-mycar.modelname()      # 모델 이름은 DYU 입니다.</code></pre>
+mycar = Cars(&quot;DYU&quot;, &quot;red&quot;, 2, &quot;2Ton&quot;)  # 객체 생성
+mycar.forward()  # 앞으로 갑니다.
+mycar.setcolor(&quot;blue&quot;)  # 색상 red → blue 로 변경
+mycar.getcolor()  # 이 차의 색상은 blue 입니다.
+mycar.modelname()  # 모델 이름은 DYU 입니다.</code></pre>
     <div class="tip">채점은 <code>Cars("DYU","red",2,"2Ton")</code>의 속성 저장·메서드·setter 동작과, <code>setcolor("blue")</code> 후 사용 예를 <b>print 출력</b>했는지까지 확인합니다.</div>
   </details>
 </section>
