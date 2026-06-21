@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SW개발도구활용 기말 완전정리 · Git</title>
     <link rel="stylesheet" href="style.css">
+    <script src="schedule.js"></script> <!-- 시험 시작 +3h 지나면 자동 복습(done) 모드 -->
     <style>
         .back-link { display:inline-block; margin-bottom:14px; color:var(--main); font-weight:800; text-decoration:none; font-size:14px; }
         .back-link:hover { text-decoration:underline; }
@@ -152,7 +153,7 @@
 <body>
 <div class="wrap">
 
-    <a class="back-link" href="index.html">← 과목 선택으로 돌아가기</a>
+    <a class="back-link" href="index.html#sem1-final">← 과목 선택으로 돌아가기</a>
 
     <header class="page-head">
         <h1>SW개발도구활용 · 기말 완전정리</h1>
@@ -1678,6 +1679,37 @@ Fast-forward</span>
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
+})();
+</script>
+<!-- [복습 완료 모드] ?done=1 (시험 시작 +3h 경과 시 schedule.js가 자동 부여) : 정답·해설 공개 + 배너 -->
+<script>
+(function(){
+  if(!/[?&]done=1/.test(location.search)) return;
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var wrap = document.querySelector('.wrap');
+  if(wrap && !document.getElementById('done-banner')){
+    var bn = document.createElement('div');
+    bn.id = 'done-banner';
+    bn.style.cssText = 'background:#176c3a;color:#fff;border-radius:12px;padding:16px 18px;margin:10px 0 18px;font-weight:800;text-align:center;line-height:1.6;';
+    bn.innerHTML = '🎉 시험 종료 · <b>복습 모드</b><br><span style="font-weight:600;font-size:14px;color:#d8efe2;">모든 객관식·명령어 문제의 정답과 해설이 공개됩니다.</span>';
+    wrap.insertBefore(bn, wrap.firstChild);
+  }
+  // 객관식: 정답 표시 + 해설 공개
+  document.querySelectorAll('.mcq').forEach(function(q){
+    if(q.classList.contains('answered')) return;
+    q.classList.add('answered');
+    var correct = q.dataset.correct;
+    q.querySelectorAll('.opt').forEach(function(b){ if(b.dataset.opt===correct) b.classList.add('correct'); });
+    var exp = q.querySelector('.mcq-exp'); if(exp) exp.style.display='block';
+  });
+  // 명령어 주관식(cmdq): 정답 채우고 공개
+  document.querySelectorAll('.cmdq').forEach(function(item){
+    if(item.dataset.solved==='1') return;
+    var ans = (item.dataset.answer||'').split('|')[0];
+    var ta = item.querySelector('textarea'); if(ta){ ta.value = ans; ta.readOnly = true; ta.classList.remove('no'); ta.classList.add('ok'); }
+    item.dataset.solved = '1'; item.dataset.wrong = '';
+    var fb = item.querySelector('.cmdq-fb'); if(fb){ fb.style.display='block'; fb.className='cmdq-fb ok'; fb.innerHTML = '💡 정답: <code>'+esc(ans)+'</code>'; }
+  });
 })();
 </script>
 <script src="review.js"></script>

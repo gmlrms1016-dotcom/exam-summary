@@ -1,152 +1,100 @@
 <!-- ===================================================================== -->
-<!-- 전공 기말 완전정리 · 과목 선택 허브(index)                              -->
-<!-- exam-summary 첫 화면: 전공 5과목을 버튼으로 선택                        -->
-<!--  · 프로그래밍방법론   → 프로그래밍방법론.html (예정, 06-22)              -->
-<!--  · SW개발도구활용     → SW개발도구활용.html (예정, 06-22)               -->
-<!--  · 컴퓨터공학기초     → 컴퓨터공학기초.html?done=1 (시험 완료·복습)      -->
-<!--  · 파이썬프로그래밍   → 파이썬프로그래밍.html?done=1 (시험 완료·복습)    -->
-<!--  · 웹프로그래밍 기초  → 웹프로그래밍기초.html?done=1 (시험 완료·복습)    -->
+<!-- 전공 정리 허브(index)                                                  -->
+<!--  화면(해시 라우팅):                                                    -->
+<!--   #home        → 개강 카운트다운 + [1학년1학기][1학년2학기]            -->
+<!--   #sem1        → 1학년1학기: [기말고사]  (중간고사는 종료)             -->
+<!--   #sem1-final  → 기존 5과목 허브(기말 정리) — 시험완료/복습 자동 계산  -->
+<!--   #sem2        → 1학년2학기: [중간고사][기말고사] (버튼에 실시간 D-)   -->
+<!--   #sem2-mid / #sem2-final → 준비 예정 placeholder                      -->
+<!--  · 시험 일정/완료 판정은 schedule.js(EXAM_SCHEDULE) 공유               -->
 <!-- ===================================================================== -->
-
 <!DOCTYPE html>
 <html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전공 기말 완전정리 · 과목 선택</title>
+    <title>전공 정리 · 학기 선택</title>
+    <script src="schedule.js"></script>
     <style>
-        /* 색상 변수(웹프로그래밍 페이지와 동일한 초록 테마) */
         :root {
-            --main: #2d6a4f;     /* 메인 초록 */
-            --point: #d9772b;    /* 포인트 주황 */
-            --bg: #f4f6f4;       /* 배경 */
-            --card: #ffffff;     /* 카드 흰색 */
-            --line: #d7ddd7;     /* 테두리 */
-            --ink: #1d241e;      /* 글자색 */
-            --muted: #9aa69c;    /* 흐린 글자(준비중) */
+            --main: #2d6a4f; --point: #d9772b; --bg: #f4f6f4; --card: #ffffff;
+            --line: #d7ddd7; --ink: #1d241e; --muted: #9aa69c;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: "맑은 고딕", Arial, sans-serif;
-            line-height: 1.7;
-            color: var(--ink);
-            background: var(--bg);
-            padding: 24px;
-        }
+        body { font-family: "맑은 고딕", Arial, sans-serif; line-height: 1.7; color: var(--ink); background: var(--bg); padding: 24px; }
         .wrap { max-width: 960px; margin: 0 auto; }
 
-        /* 머리말 */
-        .page-head {
-            background: var(--main);
-            color: #fff;
-            text-align: center;
-            padding: 36px 20px;
-            border-radius: 14px;
-            margin-bottom: 24px;
+        /* 개강 카운트다운 바 (맨 위) */
+        .ddaybar {
+            background: linear-gradient(135deg, #2d6a4f, #1b4d39); color: #fff;
+            border-radius: 14px; padding: 18px 20px; text-align: center;
+            font-size: 16px; font-weight: 700; margin-bottom: 18px;
+            box-shadow: 0 6px 18px rgba(45,106,79,.18);
         }
-        .page-head h1 { font-size: 30px; }
-        .page-head p { color: #d8efe2; margin-top: 6px; }
+        .ddaybar .big { display:block; font-size: 24px; font-weight: 900; margin-top: 4px; letter-spacing:.5px; font-variant-numeric: tabular-nums; }
+        .ddaybar small { color:#cdeBD9; }
 
-        /* 안내 팁 */
-        .tip {
-            background: #fff8e6;
-            border-left: 5px solid var(--point);
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
+        .page-head { background: var(--main); color: #fff; text-align: center; padding: 30px 20px; border-radius: 14px; margin-bottom: 22px; }
+        .page-head h1 { font-size: 28px; }
+        .page-head p { color: #d8efe2; margin-top: 6px; font-size: 15px; }
+
+        .tip { background: #fff8e6; border-left: 5px solid var(--point); padding: 12px 16px; border-radius: 6px; margin-bottom: 22px; font-size: 14px; }
         .tip b { color: var(--point); }
 
-        /* 과목 버튼 격자 */
-        .subjects {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2열 */
-            gap: 16px;
+        /* 큰 선택 버튼(학기/시험) */
+        .biggrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .bigbtn {
+            display: block; width: 100%; text-align: left; text-decoration: none; font-family: inherit;
+            background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 26px 24px;
+            cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s; color: var(--ink);
         }
+        .bigbtn:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(45,106,79,.16); border-color: var(--main); }
+        .bigbtn .t { font-size: 22px; font-weight: 900; color: var(--main); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+        .bigbtn .s { font-size: 13.5px; color: #5b675d; margin-top: 8px; }
+        .bigbtn.soon { background:#f7f8f7; cursor:not-allowed; }
+        .bigbtn.soon .t { color: var(--muted); }
+        .bigbtn.soon:hover { transform:none; box-shadow:none; border-color:var(--line); }
+        .bigbtn.exam { border-left: 6px solid var(--point); }
 
-        /* 과목 버튼 공통(버튼/링크 둘 다 같은 모양) */
-        .subject {
-            display: block;
-            width: 100%;
-            text-align: left;
-            text-decoration: none;
-            font-family: inherit;
-            background: var(--card);
-            border: 1px solid var(--line);
-            border-radius: 14px;
-            padding: 22px;
-            cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
-        }
-        .subject:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(45, 106, 79, 0.15);
-            border-color: var(--main);
-        }
-        .subject .name {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .subject .desc {
-            font-size: 13px;
-            color: #5b675d;
-            margin-top: 8px;
-        }
+        /* 버튼 안 실시간 카운트다운 칩 */
+        .cd { display:inline-block; font-size: 12.5px; font-weight: 800; padding: 4px 11px; border-radius: 50px;
+              background:#fff1e6; color:#b3590f; border:1px solid #f0c089; font-variant-numeric: tabular-nums; }
+        .cd.wk { background:#eef3f7; color:#33546c; border-color:#cfdce6; }
+        .cd.now { background:#fde7e7; color:#b3261e; border-color:#f3b4ab; }
 
-        /* 상태 배지 */
-        .badge {
-            font-size: 11px;
-            font-weight: 800;
-            padding: 3px 10px;
-            border-radius: 50px;
-            vertical-align: middle;
-        }
-        .badge.done { background: var(--main); color: #fff; }
-        .badge.soon { background: #eceeec; color: var(--muted); }
-        .badge.next { background: #d9772b; color: #fff; }              /* 다음(임박) 시험 */
-        .badge.fin  { background: #6b7d70; color: #fff; }              /* 끝난 시험 */
-        /* 끝난 시험 카드: 차분하게(연한 회색) + 왼쪽 강조선 */
-        .subject.fin { background: #f3f5f3; border-left: 5px solid #6b7d70; }
-        .subject.fin .name { color: #515f56; }
-        /* 임박 시험 카드: 주황 강조선 */
-        .subject.next { border-left: 5px solid var(--point); }
-        /* 시험일 칩 */
-        .day { display:inline-block; font-size:11px; font-weight:800; padding:3px 9px; border-radius:50px; background:#eef3f7; color:#33546c; border:1px solid #cfdce6; vertical-align:middle; }
-        .day.tmr { background:#fff1e6; color:#b3590f; border-color:#f0c089; }   /* 내일 = 더 눈에 띄게 */
-        /* 실시간 시험 카운트다운 */
-        .countdown { display:inline-block; font-size:12px; font-weight:800; padding:3px 11px; border-radius:50px; background:#fff1e6; color:#b3590f; border:1px solid #f0c089; vertical-align:middle; font-variant-numeric:tabular-nums; }
-        .countdown.soon-wk { background:#eef3f7; color:#33546c; border-color:#cfdce6; }   /* 다음주 */
-        .countdown.now { background:#fde7e7; color:#b3261e; border-color:#f3b4ab; }       /* 시작/지남 */
+        .backbtn { background:none; border:none; color:var(--main); font-weight:800; font-size:14px; cursor:pointer;
+                   font-family:inherit; padding:6px 0; margin-bottom:10px; }
+        .backbtn:hover { text-decoration: underline; }
 
-        /* '준비중' 버튼은 흐리게 표시 */
-        .subject.soon { background: #f7f8f7; }
-        .subject.soon .name { color: var(--muted); }
-        .subject.soon:hover {
-            transform: none;
-            box-shadow: none;
-            border-color: var(--line);
-            cursor: not-allowed;
-        }
+        /* 과목 격자(기말 허브) */
+        .subjects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .subject { display:block; width:100%; text-align:left; text-decoration:none; font-family:inherit;
+                   background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; cursor:pointer;
+                   transition: transform .15s, box-shadow .15s, border-color .15s; }
+        .subject:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(45,106,79,.15); border-color: var(--main); }
+        .subject .name { font-size:20px; font-weight:800; color:var(--main); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .subject .desc { font-size:13px; color:#5b675d; margin-top:8px; }
+        .subject.next { border-left:5px solid var(--point); }
+        .subject.fin { background:#f3f5f3; border-left:5px solid #6b7d70; }
+        .subject.fin .name { color:#515f56; }
 
-        /* 꼬리말 */
-        footer {
-            text-align: center;
-            color: #7b857d;
-            font-size: 13px;
-            margin-top: 28px;
-        }
+        .badge { font-size:11px; font-weight:800; padding:3px 10px; border-radius:50px; vertical-align:middle; }
+        .badge.fin { background:#6b7d70; color:#fff; }
+        .countdown { display:inline-block; font-size:12px; font-weight:800; padding:3px 11px; border-radius:50px;
+                     background:#fff1e6; color:#b3590f; border:1px solid #f0c089; font-variant-numeric: tabular-nums; }
+        .countdown.soon-wk { background:#eef3f7; color:#33546c; border-color:#cfdce6; }
+        .countdown.now { background:#fde7e7; color:#b3261e; border-color:#f3b4ab; }
 
-        /* 작은 화면: 1열로 */
+        .ph { background:#fff; border:1px dashed var(--line); border-radius:14px; padding:40px 24px; text-align:center; color:#5b675d; font-size:15px; }
+        .ph b { color: var(--main); }
+
+        footer { text-align:center; color:#7b857d; font-size:13px; margin-top:28px; }
+
         @media screen and (max-width: 700px) {
             body { padding: 14px; }
-            .subjects { grid-template-columns: 1fr; }
-            .page-head h1 { font-size: 24px; }
+            .biggrid, .subjects { grid-template-columns: 1fr; }
+            .page-head h1 { font-size: 23px; }
         }
     </style>
 </head>
@@ -154,78 +102,208 @@
 <body>
 <div class="wrap">
 
-    <header class="page-head">
-        <h1>📚 전공 기말 완전정리</h1>
-        <p>동양미래대학교 · 2026년 1학기 — 아래에서 과목을 선택하세요</p>
-    </header>
+    <!-- ================= HOME ================= -->
+    <section class="screen" id="home">
+        <div class="ddaybar" id="ddaybar">불러오는 중…</div>
+        <header class="page-head">
+            <h1>📚 전공 학습 정리</h1>
+            <p>동양미래대학교 · 학기를 선택하세요</p>
+        </header>
+        <div class="biggrid">
+            <button class="bigbtn" type="button" data-go="sem1">
+                <div class="t">🎓 1학년 1학기</div>
+                <div class="s">기말고사 완전정리 — 5과목 (시험 완료 과목은 자동으로 복습 모드)</div>
+            </button>
+            <button class="bigbtn" type="button" data-go="sem2">
+                <div class="t">🎓 1학년 2학기</div>
+                <div class="s">중간·기말고사까지 남은 시간을 실시간으로 확인</div>
+            </button>
+        </div>
+        <footer>© 2026 윤희근 · 전공 정리 모음</footer>
+    </section>
 
-    <div class="tip" style="text-align: center;">
-        ⏳ 과목별 <b>기말 시험까지 남은 시간</b>이 실시간으로 표시됩니다 · <span class="badge soon">준비중</span> = 정리 예정 · <span class="badge fin">시험 완료</span> = 끝난 시험(복습 모드)
-    </div>
+    <!-- ================= 1학년 1학기 ================= -->
+    <section class="screen" id="sem1" hidden>
+        <button class="backbtn" type="button" data-back="home">← 학기 선택</button>
+        <header class="page-head">
+            <h1>🎓 1학년 1학기</h1>
+            <p>시험을 선택하세요</p>
+        </header>
+        <div class="biggrid">
+            <button class="bigbtn" type="button" data-go="sem1-final">
+                <div class="t">📝 기말고사</div>
+                <div class="s">기존에 정리한 5과목 — 프로그래밍방법론 · SW개발도구활용 · 컴퓨터공학기초 · 파이썬프로그래밍 · 웹프로그래밍 기초</div>
+            </button>
+        </div>
+        <p class="tip" style="margin-top:18px;">ℹ️ 1학년 1학기 <b>중간고사</b>는 이미 종료되어 따로 정리하지 않습니다.</p>
+    </section>
 
-    <div class="subjects">
+    <!-- ================= 1학년 1학기 · 기말 허브(기존 작업물) ================= -->
+    <section class="screen" id="sem1-final" hidden>
+        <button class="backbtn" type="button" data-back="sem1">← 1학년 1학기</button>
+        <header class="page-head">
+            <h1>📚 전공 기말 완전정리</h1>
+            <p>동양미래대학교 · 2026년 1학기 — 과목을 선택하세요</p>
+        </header>
+        <div class="tip" style="text-align:center;">
+            ⏳ 과목별 <b>기말 시험까지 남은 시간</b>이 실시간 표시됩니다 · 시험 시작 <b>+3시간</b>이 지나면 자동으로
+            <span class="badge fin">✅ 시험 완료</span> + 복습 모드로 바뀝니다.
+        </div>
+        <div class="subjects" id="subject-list">
+            <a class="subject" data-file="프로그래밍방법론.html" data-exam="2026-06-22T10:00:00" href="프로그래밍방법론.html">
+                <div class="name">프로그래밍방법론 <span class="state"></span></div>
+                <div class="desc">순서도(Flowgorithm)→파이썬 — 선택구조 / 반복구조 / 함수·재귀 / 클래스 (코드 직접 실행·채점)</div>
+            </a>
+            <a class="subject" data-file="SW개발도구활용.html" data-exam="2026-06-22T14:00:00" href="SW개발도구활용.html">
+                <div class="name">SW개발도구활용 <span class="state"></span></div>
+                <div class="desc">13주차 Git 집중정리 — 버전관리 개념 / add·commit·push / branch·merge / 명령어 + 퀴즈</div>
+            </a>
+            <a class="subject" data-file="컴퓨터공학기초.html" data-exam="2026-06-18T10:00:00" href="컴퓨터공학기초.html">
+                <div class="name">컴퓨터공학기초 <span class="state"></span></div>
+                <div class="desc">6장 AI / 7장 컴퓨팅사고력 / 9장 DB / 10장 네트워크 — 객관식·빈칸 정리</div>
+            </a>
+            <a class="subject" data-file="파이썬프로그래밍.html" data-exam="2026-06-19T10:00:00" href="파이썬프로그래밍.html">
+                <div class="name">파이썬프로그래밍 <span class="state"></span></div>
+                <div class="desc">PB 실기 4문제 + 코드 실행기 — 복습 모드에서 정답 코드 자동 입력</div>
+            </a>
+            <a class="subject" data-file="웹프로그래밍기초.html" data-exam="2026-06-20T10:00:00" href="웹프로그래밍기초.html">
+                <div class="name">웹프로그래밍 기초 <span class="state"></span></div>
+                <div class="desc">HTML/CSS 정리 + 태그 퀴즈 — 복습 모드에서 정답·해설 공개</div>
+            </a>
+        </div>
+    </section>
 
-        <!-- 시험 임박 순서로 배치. 끝난 시험(컴공·파이썬·웹)은 맨 뒤로 + 복습 모드(?done=1). -->
+    <!-- ================= 1학년 2학기 ================= -->
+    <section class="screen" id="sem2" hidden>
+        <button class="backbtn" type="button" data-back="home">← 학기 선택</button>
+        <header class="page-head">
+            <h1>🎓 1학년 2학기</h1>
+            <p>시험까지 남은 시간 (실시간)</p>
+        </header>
+        <div class="biggrid">
+            <button class="bigbtn exam" type="button" data-go="sem2-mid" data-exam-target="2026-10-19T09:00:00">
+                <div class="t">📝 중간고사 <span class="cd">…</span></div>
+                <div class="s">10월 19일 시작 · 클릭하면 상세</div>
+            </button>
+            <button class="bigbtn exam" type="button" data-go="sem2-final" data-exam-target="2026-12-07T09:00:00">
+                <div class="t">📝 기말고사 <span class="cd">…</span></div>
+                <div class="s">12월 7일 시작 · 클릭하면 상세</div>
+            </button>
+        </div>
+    </section>
 
-        <!-- 1) 프로그래밍방법론 — 다음(가장 임박) 시험, 정리 완료 → 이동 -->
-        <a class="subject next" href="프로그래밍방법론.html">
-            <div class="name">프로그래밍방법론 <span class="countdown" data-exam="2026-06-22T10:00:00"></span></div>
-            <div class="desc">순서도(Flowgorithm)→파이썬 — 선택구조 / 반복구조 / 함수·재귀 / 클래스 (코드 직접 실행·채점)</div>
-        </a>
+    <section class="screen" id="sem2-mid" hidden>
+        <button class="backbtn" type="button" data-back="sem2">← 1학년 2학기</button>
+        <header class="page-head"><h1>📝 2학기 중간고사</h1><p id="sem2-mid-cd">남은 시간 계산 중…</p></header>
+        <div class="ph">🛠️ <b>아직 정리 전이에요.</b><br>2학기가 시작되면(8/25) 과목별 정리가 여기에 추가됩니다.</div>
+    </section>
 
-        <!-- 2) SW개발도구활용 — 예정 시험, 정리 완료 → 이동 -->
-        <a class="subject next" href="SW개발도구활용.html">
-            <div class="name">SW개발도구활용 <span class="countdown" data-exam="2026-06-22T14:00:00"></span></div>
-            <div class="desc">13주차 Git 집중정리 — 버전관리 개념 / add·commit·push / branch·merge / 명령어 + 퀴즈</div>
-        </a>
-
-        <!-- 3) 컴퓨터공학기초 — 시험 끝남 → 복습 모드(?done=1) -->
-        <a class="subject fin" href="컴퓨터공학기초.html?done=1">
-            <div class="name">컴퓨터공학기초 <span class="badge fin">✅ 시험 완료</span></div>
-            <div class="desc">🎉 시험 끝! 복습 모드 — 정답·해설이 모두 공개됩니다 (6장 AI / 7장 컴퓨팅사고력 / 9장 DB / 10장 네트워크)</div>
-        </a>
-
-        <!-- 4) 파이썬프로그래밍 — 시험 끝남 → 복습 모드(?done=1) -->
-        <a class="subject fin" href="파이썬프로그래밍.html?done=1">
-            <div class="name">파이썬프로그래밍 <span class="badge fin">✅ 시험 완료</span></div>
-            <div class="desc">🎉 시험 끝! 복습 모드 — 정답 코드가 모두 펼쳐집니다 (PB 실기 4문제 + 코드 실행기)</div>
-        </a>
-
-        <!-- 5) 웹프로그래밍 기초 — 시험 끝남(맨 뒤) → 복습 모드(?done=1) -->
-        <a class="subject fin" href="웹프로그래밍기초.html?done=1">
-            <div class="name">웹프로그래밍 기초 <span class="badge fin">✅ 시험 완료</span></div>
-            <div class="desc">🎉 시험 끝! 복습 모드 — 정답·해설이 모두 공개됩니다 (HTML/CSS 정리 + 퀴즈)</div>
-        </a>
-
-    </div>
-
-    <footer>© 2026 윤희근 · 전공 기말 정리 모음</footer>
+    <section class="screen" id="sem2-final" hidden>
+        <button class="backbtn" type="button" data-back="sem2">← 1학년 2학기</button>
+        <header class="page-head"><h1>📝 2학기 기말고사</h1><p id="sem2-final-cd">남은 시간 계산 중…</p></header>
+        <div class="ph">🛠️ <b>아직 정리 전이에요.</b><br>2학기가 시작되면(8/25) 과목별 정리가 여기에 추가됩니다.</div>
+    </section>
 
 </div>
 
-<!-- 실시간 시험 카운트다운 -->
 <script>
-    function renderCountdowns() {
-        var now = Date.now();
-        document.querySelectorAll('.countdown').forEach(function (el) {
-            var t = new Date(el.dataset.exam).getTime();
-            var diff = t - now;
-            el.classList.remove('soon-wk', 'now');
-            if (diff <= 0) {
-                el.classList.add('now');
-                el.textContent = (diff > -6 * 3600 * 1000) ? '🎓 시험 시간!' : '시험 종료';
-                return;
-            }
-            var s = Math.floor(diff / 1000);
-            var d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600),
-                m = Math.floor(s % 3600 / 60), sec = s % 60;
-            if (d >= 2) el.classList.add('soon-wk');
-            var str = (d > 0 ? d + '일 ' : '') + h + '시간 ' + m + '분 ' + sec + '초';
-            el.textContent = '⏳ ' + str + ' 남음';
-        });
+(function () {
+    "use strict";
+    var GRACE = window.EXAM_GRACE_MS || (3 * 3600 * 1000);
+    var DDAY = { open: "2026-08-25T09:00:00", mid: "2026-10-19T09:00:00", final: "2026-12-07T09:00:00" };
+
+    function fmt(diff) {                 // ms(양수) → "N일 N시간 N분 N초"
+        var s = Math.floor(diff / 1000);
+        var d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600),
+            m = Math.floor(s % 3600 / 60), sec = s % 60;
+        return (d > 0 ? d + "일 " : "") + h + "시간 " + m + "분 " + sec + "초";
     }
-    renderCountdowns();
-    setInterval(renderCountdowns, 1000);
+
+    /* ---------- 화면(해시) 라우팅 ---------- */
+    var SCREENS = ["home", "sem1", "sem1-final", "sem2", "sem2-mid", "sem2-final"];
+    function show(id) {
+        if (SCREENS.indexOf(id) < 0) id = "home";
+        SCREENS.forEach(function (s) { document.getElementById(s).hidden = (s !== id); });
+        window.scrollTo(0, 0);
+    }
+    function route() { show((location.hash || "#home").slice(1)); }
+    window.addEventListener("hashchange", route);
+    document.querySelectorAll("[data-go]").forEach(function (b) {
+        b.addEventListener("click", function () { location.hash = b.dataset.go; });
+    });
+    document.querySelectorAll("[data-back]").forEach(function (b) {
+        b.addEventListener("click", function () { location.hash = b.dataset.back || "home"; });
+    });
+
+    /* ---------- 기말 허브: 시험완료/카운트다운 자동 계산 + 정렬 ---------- */
+    var listEl = document.getElementById("subject-list");
+    function tickHub() {
+        var cards = [].slice.call(listEl.querySelectorAll(".subject"));
+        cards.forEach(function (a) {
+            var file = a.dataset.file, exam = new Date(a.dataset.exam).getTime();
+            var diff = exam - Date.now(), finished = Date.now() >= exam + GRACE;
+            var st = a.querySelector(".state");
+            if (finished) {
+                if (a.dataset.fin !== "1") {
+                    a.dataset.fin = "1"; a.classList.remove("next"); a.classList.add("fin");
+                    a.setAttribute("href", file + "?done=1");
+                    st.innerHTML = '<span class="badge fin">✅ 시험 완료</span>';
+                }
+            } else {
+                if (a.dataset.fin !== "0") {
+                    a.dataset.fin = "0"; a.classList.remove("fin"); a.classList.add("next");
+                    a.setAttribute("href", file);
+                    st.innerHTML = '<span class="countdown"></span>';
+                }
+                var cd = a.querySelector(".countdown");
+                if (diff > 0) {
+                    cd.className = "countdown" + (diff >= 2 * 86400000 ? " soon-wk" : "");
+                    cd.textContent = "⏳ " + fmt(diff) + " 남음";
+                } else {
+                    cd.className = "countdown now"; cd.textContent = "🎓 시험 중!";
+                }
+            }
+        });
+        // 정렬: 미완료(임박순) → 완료(최근순)
+        cards.sort(function (x, y) {
+            var fx = x.dataset.fin === "1", fy = y.dataset.fin === "1";
+            if (fx !== fy) return fx ? 1 : -1;
+            var tx = new Date(x.dataset.exam).getTime(), ty = new Date(y.dataset.exam).getTime();
+            return fx ? (ty - tx) : (tx - ty);
+        });
+        cards.forEach(function (c) { listEl.appendChild(c); });
+    }
+
+    /* ---------- 개강 + 2학기 시험 카운트다운 ---------- */
+    function tickDday() {
+        var el = document.getElementById("ddaybar");
+        var diff = new Date(DDAY.open).getTime() - Date.now();
+        if (diff > 0) el.innerHTML = '🌱 2학기 개강까지 <span class="big">' + fmt(diff) + '</span><small>2026년 8월 25일</small>';
+        else el.innerHTML = '🎉 개강했습니다 · 2학기 화이팅!';
+    }
+    function tickExamBtns() {
+        document.querySelectorAll("[data-exam-target]").forEach(function (el) {
+            var diff = new Date(el.dataset.examTarget).getTime() - Date.now();
+            var span = el.querySelector(".cd"); if (!span) return;
+            if (diff > 0) {
+                span.className = "cd" + (diff >= 2 * 86400000 ? " wk" : "");
+                span.textContent = "⏳ " + fmt(diff) + " 남음";
+            } else { span.className = "cd now"; span.textContent = "🎓 시험 기간!"; }
+        });
+        setP("sem2-mid-cd", DDAY.mid, "중간고사");
+        setP("sem2-final-cd", DDAY.final, "기말고사");
+    }
+    function setP(id, iso, label) {
+        var el = document.getElementById(id); if (!el) return;
+        var diff = new Date(iso).getTime() - Date.now();
+        el.textContent = diff > 0 ? (label + "까지 " + fmt(diff) + " 남음") : (label + " 기간입니다 · 화이팅!");
+    }
+
+    function tickAll() { tickDday(); tickExamBtns(); tickHub(); }
+    tickAll();
+    setInterval(tickAll, 1000);
+    route();
+})();
 </script>
 </body>
 </html>

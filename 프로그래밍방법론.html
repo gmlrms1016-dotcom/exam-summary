@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로그래밍방법론 기말 완전정리</title>
     <link rel="stylesheet" href="style.css">
+    <script src="schedule.js"></script> <!-- 시험 시작 +3h 지나면 자동 복습(done) 모드 -->
     <style>
         .back-link { display:inline-block; margin-bottom:14px; color:var(--main); font-weight:800; text-decoration:none; font-size:14px; }
         .back-link:hover { text-decoration:underline; }
@@ -75,7 +76,7 @@
 <body>
 <div class="wrap">
 
-    <a class="back-link" href="index.html">← 과목 선택으로 돌아가기</a>
+    <a class="back-link" href="index.html#sem1-final">← 과목 선택으로 돌아가기</a>
 
     <header class="page-head">
         <h1>프로그래밍방법론 · 기말 완전정리</h1>
@@ -838,6 +839,32 @@ mycar.modelname()  # 모델 이름은 DYU 입니다.</code></pre>
     window.PROB_LABEL = "프방법";
 </script>
 <script src="pyrun.js"></script>
+<!-- [복습 완료 모드] ?done=1 (시험 시작 +3h 경과 시 schedule.js가 자동 부여) : 정답 코드 자동 입력 + 배너 -->
+<script>
+(function(){
+  if(!/[?&]done=1/.test(location.search)) return;
+  var wrap = document.querySelector('.wrap');
+  if(wrap && !document.getElementById('done-banner')){
+    var bn = document.createElement('div');
+    bn.id = 'done-banner';
+    bn.style.cssText = 'background:#176c3a;color:#fff;border-radius:12px;padding:16px 18px;margin:0 0 18px;font-weight:800;text-align:center;line-height:1.6;';
+    bn.innerHTML = '🎉 시험 종료 · <b>복습 모드</b><br><span style="font-weight:600;font-size:14px;color:#d8efe2;">모든 문제에 <b>정답 코드</b>가 입력돼 있어요. [▶ 실행 &amp; 채점]을 누르면 ✅ 정답이 그대로 확인됩니다.</span>';
+    wrap.insertBefore(bn, wrap.firstChild);
+  }
+  // 각 문제 에디터에 그 문제의 정답 코드를 채우고, 정답 보기를 펼침
+  document.querySelectorAll('.pyprob').forEach(function(prob){
+    var sec = prob.closest('section');
+    var ans = sec && sec.querySelector('.akey pre code');
+    var ed = prob.querySelector('.py-editor');
+    if(ans && ed){
+      ed.value = ans.textContent.replace(/\s+$/, '');
+      var res = prob.querySelector('.py-result');
+      if(res){ res.className = 'py-result ok'; res.textContent = '✅ 복습 모드 — 정답 코드가 입력돼 있어요. [▶ 실행 & 채점]으로 확인하세요.'; }
+    }
+    var ak = sec && sec.querySelector('details.akey'); if(ak) ak.open = true;
+  });
+})();
+</script>
 <script src="review.js"></script>
 </body>
 </html>
