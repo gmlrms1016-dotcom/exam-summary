@@ -65,6 +65,9 @@
                     background:rgba(255,255,255,.16); overflow:hidden; }
         .hero-bar i { display:block; height:100%; width:0; border-radius:var(--r-pill);
                       background:linear-gradient(90deg,#bfe9d1,#8ad9b0); transition:width .8s var(--ease); }
+        .hero-pct { margin-top:7px; font-size:11.5px; font-weight:600; color:#bfe0cd;
+                    font-variant-numeric:tabular-nums; letter-spacing:.2px; }
+        .hero-pct b { font-weight:800; color:#eafff2; }
         .hero-done { font-size:24px; font-weight:800; padding:10px 0 4px; }
         @media (max-width:480px){ .seg{ min-width:62px; padding:9px 6px 7px; } .seg-n{ font-size:25px; } }
 
@@ -155,6 +158,7 @@
             <div class="hero-clock" id="dday-clock"></div>
             <div class="hero-date" id="dday-date">—</div>
             <div class="hero-bar"><i id="dday-bar"></i></div>
+            <div class="hero-pct" id="dday-pct">—</div>
         </div>
         <div class="biggrid">
             <button class="bigbtn" type="button" data-go="sem1">
@@ -356,15 +360,19 @@
     function tickHero() {
         var el = document.getElementById("dday-clock");
         var bar = document.getElementById("dday-bar");
+        var pct = document.getElementById("dday-pct");
         var open = new Date(DDAY.open).getTime(), now = Date.now(), diff = open - now;
         if (diff > 0) {
             var p = parts(diff);
             el.innerHTML = seg(p.d, "일") + seg(pad(p.h), "시간") + seg(pad(p.m), "분") + seg(pad(p.s), "초");
             var bs = new Date(BREAK_START).getTime();
-            bar.style.width = Math.max(0, Math.min(100, (now - bs) / (open - bs) * 100)).toFixed(1) + "%";
+            var ratio = Math.max(0, Math.min(100, (now - bs) / (open - bs) * 100));
+            bar.style.width = ratio.toFixed(1) + "%";
+            pct.innerHTML = "방학 <b>" + ratio.toFixed(5) + "%</b> 진행";
         } else {
             el.innerHTML = '<div class="hero-done">🎉 개강했어요!</div>';
             bar.style.width = "100%";
+            pct.innerHTML = "방학 <b>100.00000%</b> 진행";
         }
     }
 
