@@ -1,8 +1,10 @@
 <!-- ===================================================================== -->
 <!-- 전공 정리 허브(index) · 화면(해시 라우팅)                              -->
-<!--   #home  개강 카운트다운 + [1학기][2학기]                              -->
-<!--   #sem1  1학기 → [기말고사]      #sem1-final  5과목 허브               -->
-<!--   #sem2  2학기 → [중간][기말]     #sem2-mid / #sem2-final  과목 추가용  -->
+<!--   #home  개강 카운트다운 + 학기 버튼(1학년만 노출, 2~4학년은 hidden)   -->
+<!--   #sem1  1학년1학기 → [기말]      #sem1-final  5과목 허브              -->
+<!--   #sem2~#sem8  학기 → [중간][기말]  #semN-mid / #semN-final  과목 추가용-->
+<!--   · 2~4학년 학기 버튼은 home 에서 hidden — 때가 되면 hidden 만 지우면 됨-->
+<!--   · SCREENS 는 .screen 을 자동 수집 → 화면 추가해도 JS 수정 불필요      -->
 <!--  시험 일정/완료 판정은 schedule.js(EXAM_SCHEDULE) 공유                  -->
 <!--  ▸ .subjects 안에 .subject[data-file][data-exam] 카드만 넣으면          -->
 <!--    카운트다운·정렬·'복습 모드' 전환이 전부 자동 (2학기도 동일)          -->
@@ -171,6 +173,38 @@
                 <span class="bb-body"><span class="bb-t">1학년 2학기</span><span class="bb-s">중간·기말 D-카운트다운</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
             </button>
+
+            <!-- ▼ 2학년~4학년: 아직 한참 남아 숨김(hidden). 해당 학기가 오면 그 버튼의 hidden 만 지우면 노출됩니다. -->
+            <button class="bigbtn" type="button" data-go="sem3" hidden>
+                <span class="bb-ic">📙</span>
+                <span class="bb-body"><span class="bb-t">2학년 1학기</span><span class="bb-s">중간·기말 (예정)</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn" type="button" data-go="sem4" hidden>
+                <span class="bb-ic">📕</span>
+                <span class="bb-body"><span class="bb-t">2학년 2학기</span><span class="bb-s">중간·기말 (예정)</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn" type="button" data-go="sem5" hidden>
+                <span class="bb-ic">📓</span>
+                <span class="bb-body"><span class="bb-t">3학년 1학기</span><span class="bb-s">중간·기말 (예정)</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn" type="button" data-go="sem6" hidden>
+                <span class="bb-ic">📔</span>
+                <span class="bb-body"><span class="bb-t">3학년 2학기</span><span class="bb-s">중간·기말 (예정)</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn" type="button" data-go="sem7" hidden>
+                <span class="bb-ic">📒</span>
+                <span class="bb-body"><span class="bb-t">4학년 1학기</span><span class="bb-s">중간·기말 (예정)</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn" type="button" data-go="sem8" hidden>
+                <span class="bb-ic">🎓</span>
+                <span class="bb-body"><span class="bb-t">4학년 2학기</span><span class="bb-s">중간·기말 (예정)</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
         </div>
         <p class="foot">전공 학습 정리 · © 2026 윤희근</p>
     </section>
@@ -277,6 +311,229 @@
         <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>2학기 개강 후 과목별 정리가 추가됩니다.</div>
     </section>
 
+    <!-- ════════ 2학년 ~ 4학년 (미래 학기) ════════
+         · home 의 해당 학기 버튼에서 hidden 을 지우면 메뉴에 노출됩니다.
+         · 과목 추가: 각 학기의 .subjects(#semN-mid-list / #semN-final-list) 안에
+           <a class="subject" data-file="파일.html" data-exam="ISO일시" href="파일.html"> 카드를 넣고,
+           카드를 넣으면 .ph(준비 중) 한 줄을 지우면 됩니다. (카운트다운·정렬·복습전환 자동)
+         · 시험 일정은 카드의 data-exam 으로 동작합니다. (schedule.js 등록은 과목 페이지 자동 복습용) -->
+
+    <!-- ════════ 2학년 1학기 ════════ -->
+    <section class="screen" id="sem3" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="home">‹ 학기 선택</button>
+            <h1>2학년 1학기</h1>
+        </div>
+        <div class="biggrid">
+            <button class="bigbtn exam" type="button" data-go="sem3-mid">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">중간고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn exam" type="button" data-go="sem3-final">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">기말고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+        </div>
+    </section>
+    <section class="screen" id="sem3-mid" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem3">‹ 2학년 1학기</button>
+            <h1>2학년 1학기 중간고사</h1>
+        </div>
+        <div class="subjects" id="sem3-mid-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+    <section class="screen" id="sem3-final" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem3">‹ 2학년 1학기</button>
+            <h1>2학년 1학기 기말고사</h1>
+        </div>
+        <div class="subjects" id="sem3-final-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+
+    <!-- ════════ 2학년 2학기 ════════ -->
+    <section class="screen" id="sem4" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="home">‹ 학기 선택</button>
+            <h1>2학년 2학기</h1>
+        </div>
+        <div class="biggrid">
+            <button class="bigbtn exam" type="button" data-go="sem4-mid">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">중간고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn exam" type="button" data-go="sem4-final">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">기말고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+        </div>
+    </section>
+    <section class="screen" id="sem4-mid" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem4">‹ 2학년 2학기</button>
+            <h1>2학년 2학기 중간고사</h1>
+        </div>
+        <div class="subjects" id="sem4-mid-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+    <section class="screen" id="sem4-final" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem4">‹ 2학년 2학기</button>
+            <h1>2학년 2학기 기말고사</h1>
+        </div>
+        <div class="subjects" id="sem4-final-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+
+    <!-- ════════ 3학년 1학기 ════════ -->
+    <section class="screen" id="sem5" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="home">‹ 학기 선택</button>
+            <h1>3학년 1학기</h1>
+        </div>
+        <div class="biggrid">
+            <button class="bigbtn exam" type="button" data-go="sem5-mid">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">중간고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn exam" type="button" data-go="sem5-final">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">기말고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+        </div>
+    </section>
+    <section class="screen" id="sem5-mid" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem5">‹ 3학년 1학기</button>
+            <h1>3학년 1학기 중간고사</h1>
+        </div>
+        <div class="subjects" id="sem5-mid-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+    <section class="screen" id="sem5-final" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem5">‹ 3학년 1학기</button>
+            <h1>3학년 1학기 기말고사</h1>
+        </div>
+        <div class="subjects" id="sem5-final-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+
+    <!-- ════════ 3학년 2학기 ════════ -->
+    <section class="screen" id="sem6" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="home">‹ 학기 선택</button>
+            <h1>3학년 2학기</h1>
+        </div>
+        <div class="biggrid">
+            <button class="bigbtn exam" type="button" data-go="sem6-mid">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">중간고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn exam" type="button" data-go="sem6-final">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">기말고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+        </div>
+    </section>
+    <section class="screen" id="sem6-mid" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem6">‹ 3학년 2학기</button>
+            <h1>3학년 2학기 중간고사</h1>
+        </div>
+        <div class="subjects" id="sem6-mid-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+    <section class="screen" id="sem6-final" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem6">‹ 3학년 2학기</button>
+            <h1>3학년 2학기 기말고사</h1>
+        </div>
+        <div class="subjects" id="sem6-final-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+
+    <!-- ════════ 4학년 1학기 ════════ -->
+    <section class="screen" id="sem7" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="home">‹ 학기 선택</button>
+            <h1>4학년 1학기</h1>
+        </div>
+        <div class="biggrid">
+            <button class="bigbtn exam" type="button" data-go="sem7-mid">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">중간고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn exam" type="button" data-go="sem7-final">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">기말고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+        </div>
+    </section>
+    <section class="screen" id="sem7-mid" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem7">‹ 4학년 1학기</button>
+            <h1>4학년 1학기 중간고사</h1>
+        </div>
+        <div class="subjects" id="sem7-mid-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+    <section class="screen" id="sem7-final" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem7">‹ 4학년 1학기</button>
+            <h1>4학년 1학기 기말고사</h1>
+        </div>
+        <div class="subjects" id="sem7-final-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+
+    <!-- ════════ 4학년 2학기 ════════ -->
+    <section class="screen" id="sem8" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="home">‹ 학기 선택</button>
+            <h1>4학년 2학기</h1>
+        </div>
+        <div class="biggrid">
+            <button class="bigbtn exam" type="button" data-go="sem8-mid">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">중간고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+            <button class="bigbtn exam" type="button" data-go="sem8-final">
+                <span class="bb-ic">📝</span>
+                <span class="bb-body"><span class="bb-t">기말고사</span><span class="bb-s">일정 미정</span></span>
+                <span class="bb-go" aria-hidden="true">›</span>
+            </button>
+        </div>
+    </section>
+    <section class="screen" id="sem8-mid" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem8">‹ 4학년 2학기</button>
+            <h1>4학년 2학기 중간고사</h1>
+        </div>
+        <div class="subjects" id="sem8-mid-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+    <section class="screen" id="sem8-final" hidden>
+        <div class="head">
+            <button class="backbtn" type="button" data-back="sem8">‹ 4학년 2학기</button>
+            <h1>4학년 2학기 기말고사</h1>
+        </div>
+        <div class="subjects" id="sem8-final-list"></div>
+        <div class="ph"><span class="em">🗂️</span><b>준비 중</b><br>해당 학기 개강 후 과목별 정리가 추가됩니다.</div>
+    </section>
+
 </div>
 
 <script>
@@ -304,8 +561,9 @@
         return d.getFullYear() + "년 " + (d.getMonth() + 1) + "월 " + d.getDate() + "일 (" + WD[d.getDay()] + ")";
     }
 
-    /* ───── 화면(해시) 라우팅 ───── */
-    var SCREENS = ["home", "sem1", "sem1-final", "sem2", "sem2-mid", "sem2-final"];
+    /* ───── 화면(해시) 라우팅 ─────
+       .screen 섹션을 모두 자동 수집 → 학기/시험 화면을 추가해도 JS 수정 불필요 */
+    var SCREENS = [].map.call(document.querySelectorAll(".screen"), function (s) { return s.id; });
     function show(id) {
         if (SCREENS.indexOf(id) < 0) id = "home";
         SCREENS.forEach(function (s) { document.getElementById(s).hidden = (s !== id); });
