@@ -171,7 +171,7 @@
     <!-- ════════ HOME ════════ -->
     <section class="screen" id="home">
         <div class="hero">
-            <div class="hero-eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21v-7.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M11.5 13.5C11.5 10.5 9.2 8.2 6 8.2c-.3 0-.6.3-.6.6 0 3 2.3 5.3 5.5 5.3.3 0 .6-.3.6-.6Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M12.5 12C12.5 8.7 14.8 6 18 6c.3 0 .6.3.6.6 0 3.3-2.3 6-5.5 6-.3 0-.6-.3-.6-.6Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>2학기 개강까지</div>
+            <div class="hero-eyebrow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21v-7.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M11.5 13.5C11.5 10.5 9.2 8.2 6 8.2c-.3 0-.6.3-.6.6 0 3 2.3 5.3 5.5 5.3.3 0 .6-.3.6-.6Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M12.5 12C12.5 8.7 14.8 6 18 6c.3 0 .6.3.6.6 0 3.3-2.3 6-5.5 6-.3 0-.6-.3-.6-.6Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span id="dday-eyebrow">겨울방학까지</span></div>
             <div class="hero-clock" id="dday-clock"></div>
             <div class="hero-date" id="dday-date">—</div>
             <div class="hero-bar"><i id="dday-bar"></i></div>
@@ -565,8 +565,13 @@
 (function () {
     "use strict";
     var GRACE = window.EXAM_GRACE_MS || (3 * 3600 * 1000);
-    var DDAY = { open: "2026-08-25T09:00:00", mid: "2026-10-19T09:00:00", final: "2026-12-07T09:00:00" };
-    var BREAK_START = "2026-06-22T17:00:00";          // 여름방학 시작(마지막 기말 종료=진행바 기준점)
+    var DDAY = {
+        open:       "2026-08-25T09:00:00",   // 2학기 개강 (학기 진행바 기준점)
+        mid:        "2026-10-19T09:00:00",
+        final:      "2026-12-07T09:00:00",
+        breakStart: "2026-12-12T00:00:00",   // 동계방학 시작 (26.12.12 토)
+        nextOpen:   "2027-03-02T09:00:00"    // 2학년 1학기 개강 (동계방학 27.02.28 종료 · 3/1 삼일절 → 3/2)
+    };
     var DAY = 86400000, NEAR = 2 * DAY;               // 2일 미만이면 '임박'
     var WD = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -648,23 +653,39 @@
 
     /* ───── 개강 히어로 + 방학 진행바 ───── */
     function seg(n, l) { return '<div class="seg"><span class="seg-n">' + n + '</span><span class="seg-l">' + l + '</span></div>'; }
+    /* 단계 자동 전환: ①학기중→겨울방학까지  ②방학중→2학년 개강까지  ③개강완료 */
     function tickHero() {
-        var el = document.getElementById("dday-clock");
-        var bar = document.getElementById("dday-bar");
-        var pct = document.getElementById("dday-pct");
-        var open = new Date(DDAY.open).getTime(), now = Date.now(), diff = open - now;
-        if (diff > 0) {
-            var p = parts(diff);
-            el.innerHTML = seg(p.d, "일") + seg(pad(p.h), "시간") + seg(pad(p.m), "분") + seg(pad(p.s), "초");
-            var bs = new Date(BREAK_START).getTime();
-            var ratio = Math.max(0, Math.min(100, (now - bs) / (open - bs) * 100));
-            bar.style.width = ratio.toFixed(1) + "%";
-            pct.innerHTML = "방학 <b>" + ratio.toFixed(5) + "%</b> 진행";
-        } else {
+        var el   = document.getElementById("dday-clock");
+        var bar  = document.getElementById("dday-bar");
+        var pct  = document.getElementById("dday-pct");
+        var eye  = document.getElementById("dday-eyebrow");
+        var dateEl = document.getElementById("dday-date");
+        var now   = Date.now();
+        var openMs = new Date(DDAY.open).getTime();        // 2학기 개강
+        var brkMs  = new Date(DDAY.breakStart).getTime();  // 동계방학 시작
+        var nextMs = new Date(DDAY.nextOpen).getTime();    // 2학년 개강
+
+        var target, base, barLabel, targetIso;
+        if (now < brkMs) {                 // ① 학기 중 → 겨울방학까지
+            target = brkMs; base = openMs; targetIso = DDAY.breakStart;
+            eye.textContent = "겨울방학까지"; barLabel = "학기";
+        } else if (now < nextMs) {         // ② 방학 중 → 2학년 개강까지
+            target = nextMs; base = brkMs; targetIso = DDAY.nextOpen;
+            eye.textContent = "2학년 개강까지"; barLabel = "방학";
+        } else {                           // ③ 2학년 개강 완료
+            eye.textContent = "2학년 개강";
             el.innerHTML = '<div class="hero-done">' + IC.party + '개강했어요!</div>';
             bar.style.width = "100%";
             pct.innerHTML = "방학 <b>100.00000%</b> 진행";
+            dateEl.textContent = kdate(DDAY.nextOpen);
+            return;
         }
+        var diff = target - now, p = parts(diff);
+        el.innerHTML = seg(p.d, "일") + seg(pad(p.h), "시간") + seg(pad(p.m), "분") + seg(pad(p.s), "초");
+        var ratio = Math.max(0, Math.min(100, (now - base) / (target - base) * 100));
+        bar.style.width = ratio.toFixed(1) + "%";
+        pct.innerHTML = barLabel + " <b>" + ratio.toFixed(5) + "%</b> 진행";
+        dateEl.textContent = kdate(targetIso);
     }
 
     /* ───── 2학기 시험 버튼/상세 카운트다운 ───── */
@@ -685,7 +706,6 @@
     }
 
     function tickAll() { tickHero(); tickExamBtns(); tickHub(); }
-    document.getElementById("dday-date").textContent = kdate(DDAY.open);  // 개강일 요일 자동 표기
     tickAll();
     setInterval(tickAll, 1000);
     route();
