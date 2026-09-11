@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍언어실습 · 완전 정리</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="schedule.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+    <a class="back-link" href="index.html#sem2-mid" style="display:inline-block;margin-bottom:14px;color:var(--main);font-weight:800;text-decoration:none;font-size:14px;">← 과목 선택으로 돌아가기</a>
+
+    <header class="page-head">
+        <h1>프로그래밍언어실습 · 완전 정리</h1>
+        <p>1주차 ~ 2주차 C 언어 · 개념 + 실행과정 + 소스코드</p>
+    </header>
+
+    <div class="tip">
+        📖 <b>이 페이지 보는 법</b> : 각 칸은 ① 개념 → ② 표 정리 → ③ <b>&lt;/&gt; 코드</b>(주석 포함) 순서입니다. 주차 배지로 진도를 확인하세요.
+    </div>
+
+    <nav class="toc">
+        <a href="#s1">1.강의개요</a>
+        <a href="#s2">2.실행과정</a>
+        <a href="#s3">3.빌드·파일</a>
+        <a href="#s4">4.출력함수</a>
+        <a href="#s5">5.함수구조</a>
+        <a href="#s6">6.실습·퀴즈</a>
+    </nav>
+
+    <section class="card" id="s1">
+        <h2>1. 강의 개요와 C 언어 특징<span class="week">1주차</span></h2>
+        <table class="ref">
+            <tr><th>항목</th><th>내용</th></tr>
+            <tr><td>교재</td><td>Perfect C(3판) · 강환수·강환일·이동규 · 인피니티북스</td></tr>
+            <tr><td>평가</td><td>출석 20% + 중간 40% + 기말 40% (과제·실습은 가산점)</td></tr>
+            <tr><td>주의</td><td>결석 4회 F · 지각 3회 = 결석 1회</td></tr>
+            <tr><td>프로그램</td><td>Visual Studio C++ Community 2022 (사용자 계정 <b>반드시 영문</b>)</td></tr>
+        </table>
+        <h3>C 언어의 3가지 특징</h3>
+        <table class="ref">
+            <tr><th>특징</th><th>설명</th></tr>
+            <tr><td>절차지향 언어</td><td>함수 중심으로 구현되는 procedural language · 구조적 프로그래밍</td></tr>
+            <tr><td>간결·효율</td><td>다양한 연산과 이미 개발된 시스템 라이브러리 제공</td></tr>
+            <tr><td>이식성</td><td>다양한 CPU와 플랫폼의 컴파일러를 지원</td></tr>
+        </table>
+        <div class="tip"><b>용어</b> — <b>프로그램</b>: 처리 방법과 순서를 기술한 명령어와 자료의 모음 / <b>프로그래밍 언어</b>: 사람이 컴퓨터에게 지시할 명령어를 기술하려고 만든 언어</div>
+    </section>
+
+    <section class="card" id="s2">
+        <h2>2. C 프로그램 실행 과정<span class="week">1주차</span></h2>
+        <p>C 프로그램은 <b>4단계</b>를 거쳐 실행됩니다. 시험에 자주 나오는 핵심 흐름입니다.</p>
+        <table class="ref">
+            <tr><th>단계</th><th>내용</th></tr>
+            <tr><td>① 소스코드 작성</td><td>C 문법으로 코드 작성 → <b>.c</b> 파일</td></tr>
+            <tr><td>② 컴파일(Compile)</td><td>컴파일러가 기계어로 변환 → <b>.obj</b> (또는 .o) 오브젝트 파일</td></tr>
+            <tr><td>③ 링킹(Linking)</td><td>여러 오브젝트 파일 + 라이브러리를 연결 → <b>.exe</b> (또는 a.out)</td></tr>
+            <tr><td>④ 실행(Execution)</td><td>컴파일된 프로그램을 실행해 결과 확인</td></tr>
+        </table>
+        <h3>첫 프로그램 (hello.c)</h3>
+        <pre><code>// hello.c
+#include &lt;stdio.h&gt;          // 표준 입출력 헤더 포함
+int main(void) {            // main(): 프로그램 시작 지점
+    printf("hello world!"); // 화면 출력
+    return 0;               // 프로그램 정상 종료
+}</code></pre>
+        <div class="tip"><b>Visual Studio 단축키</b> — 모두 저장 <b>Ctrl+Shift+S</b> · 빌드 <b>Ctrl+Shift+B</b> · 실행 <b>Ctrl+F5</b><br>⚠️ 새 항목 추가 시 파일명에 확장자 <b>.c</b> 를 생략하면 <b>.cpp</b> 로 저장됩니다.</div>
+    </section>
+
+    <section class="card" id="s3">
+        <h2>3. 빌드 과정과 생성되는 파일<span class="week">2주차</span></h2>
+        <p>소스 작성 → <b>전처리(preprocessor)</b> → <b>빌드(컴파일+링크)</b> → 실행 순서로 진행됩니다.</p>
+        <table class="ref">
+            <tr><th>파일</th><th>설명</th></tr>
+            <tr><td>소스 파일 (*.c)</td><td>C 문법으로 작성한 원본 파일</td></tr>
+            <tr><td>목적 파일 (*.obj)</td><td>컴파일러가 소스를 컴파일하면 생성</td></tr>
+            <tr><td>실행 파일 (*.exe)</td><td>하나 이상의 목적 파일을 <b>링커</b>가 연결해 생성</td></tr>
+        </table>
+        <pre><code>소스 작성  →  전처리  →  빌드(컴파일 + 링크)  →  실행
+(hello.c)              (.obj)          (.exe)</code></pre>
+    </section>
+
+    <section class="card" id="s4">
+        <h2>4. 출력 함수 정리<span class="week">2주차</span></h2>
+        <table class="ref">
+            <tr><th>함수</th><th>설명</th></tr>
+            <tr><td>printf("…")</td><td>서식 출력 · <b>자동 줄바꿈 없음</b> (\n 직접 입력)</td></tr>
+            <tr><td>puts("…")</td><td>문자열 출력 후 <b>자동으로 줄바꿈</b></td></tr>
+            <tr><td>putc()</td><td>문자 하나 출력</td></tr>
+        </table>
+        <pre><code>// P02-PutString/02put.c
+#include &lt;stdio.h&gt;
+int main() {
+    printf("hello world!\n");   // \n 을 직접 넣어야 줄바꿈
+    puts("C 언어, 재미있다!");   // puts 는 자동 줄바꿈
+    return 0;
+}</code></pre>
+    </section>
+
+    <section class="card" id="s5">
+        <h2>5. 함수와 프로그램 구조<span class="week">2주차</span></h2>
+        <div class="tip"><b>암기</b> — ① <b>C언어는 함수들로 구성</b>된다  ② <b>C언어는 main() 함수로 시작</b>된다(자동 실행)  ③ 다른 함수는 <b>호출해야</b> 실행된다</div>
+        <p>함수는 <b>표준 라이브러리 함수</b>(printf 등)와 <b>사용자 정의 함수</b>로 나뉩니다.</p>
+        <pre><code>#include &lt;stdio.h&gt;
+void func1(void);            // 함수 원형(선언)
+
+int main(void) {
+    printf("main() start!!!\n");
+    func1();                 // ← 호출해야 실행된다
+    printf("main() end!!!\n");
+    return 0;
+}
+void func1(void) {           // 함수 정의
+    printf("func1() start!!!\n");
+    printf("func1() end!!!\n");
+}</code></pre>
+    </section>
+
+    <section class="card" id="s6">
+        <h2>6. 실습 오류와 퀴즈 정답<span class="week">2주차</span></h2>
+        <h3>자주 나는 오류</h3>
+        <table class="ref">
+            <tr><th>상황</th><th>설명</th></tr>
+            <tr><td>세미콜론(;) 누락</td><td>printf("…") 뒤에 ; 를 빠뜨리면 컴파일 오류</td></tr>
+            <tr><td>닫는 따옴표 누락</td><td>문자열의 " 를 닫지 않으면 오류</td></tr>
+            <tr><td>시작 프로젝트</td><td>여러 프로젝트 중 실행할 것을 <b>[시작 프로젝트로 설정]</b> (굵은 글씨로 표시됨)</td></tr>
+        </table>
+        <h3>연습문제 정답 — 함수 호출 순서</h3>
+        <pre><code>// quiz-01-02-function.c
+#include &lt;stdio.h&gt;
+void func1(void);
+void func2(void);
+
+int main(void) {
+    printf("안녕하세요\n");
+    func2();        // "제 이름은"
+    func1();        // "gdhong 입니다."
+    return 0;
+}
+void func1(void) { printf("gdhong 입니다. \n"); }
+void func2(void) { printf("제 이름은"); }</code></pre>
+    </section>
+
+</div>
+</body>
+</html>

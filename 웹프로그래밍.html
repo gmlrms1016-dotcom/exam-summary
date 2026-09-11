@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹프로그래밍 · 완전 정리</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="schedule.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+    <a class="back-link" href="index.html#sem2-mid" style="display:inline-block;margin-bottom:14px;color:var(--main);font-weight:800;text-decoration:none;font-size:14px;">← 과목 선택으로 돌아가기</a>
+
+    <header class="page-head">
+        <h1>웹프로그래밍 · 완전 정리</h1>
+        <p>1주차 ~ 3주차 (강좌 OT · 9/1 · 9/8) · 강의시간에 나온 내용 전부 정리</p>
+    </header>
+
+    <div class="tip">
+        📖 <b>이 페이지 보는 법</b> : ⚠️ 교수님이 <b>강의시간에 말한 내용을 전부 시험(100문제)</b>으로 낸다고 하셨습니다. 한 항목도 건너뛰지 마세요. ★는 필수 암기입니다.
+    </div>
+
+    <nav class="toc">
+        <a href="#s1">1.강의안내</a>
+        <a href="#s2">2.프런트vs백엔드</a>
+        <a href="#s3">3.정적vs동적</a>
+        <a href="#s4">4.3요소·브라우저</a>
+        <a href="#s5">5.JS활용·환경</a>
+        <a href="#s6">6.실행단계</a>
+        <a href="#s7">7.이벤트</a>
+        <a href="#s8">8.함수선언3</a>
+        <a href="#s9">9.객체구성</a>
+        <a href="#s10">10.변수선언</a>
+        <a href="#s11">11.자료형</a>
+        <a href="#s12">12.형변환</a>
+        <a href="#s13">13.템플릿문자열</a>
+        <a href="#s14">14.Node.js</a>
+        <a href="#s15">15.메모리구조</a>
+        <a href="#s16">16.연산자</a>
+    </nav>
+
+    <section class="card" id="s1">
+        <h2>1. 강의 안내와 평가<span class="week">1주차</span></h2>
+        <table class="ref">
+            <tr><th>항목</th><th>내용</th></tr>
+            <tr><td>담당</td><td>장용미 교수 · 연구실 1호관 607호 · 연락은 <b>eClass 쪽지</b></td></tr>
+            <tr><td>평가</td><td>출석 20% + <b>중간고사 30%(필기)</b> + 기말고사 30%(추후협의) + 과제·기타 20%</td></tr>
+        </table>
+        <div class="tip">🔴 <b>시험 안내</b> — 교수님이 <b>강의시간에 말한 내용을 전부 시험 문제(100문제)로 낸다</b>고 하셨습니다. 아래 전 항목이 시험 범위입니다.</div>
+    </section>
+
+    <section class="card" id="s2">
+        <h2>2. 웹프로그래밍이란 · 프런트엔드 vs 백엔드 ★<span class="week">1주차</span></h2>
+        <table class="ref">
+            <tr><th>구분</th><th>설명</th></tr>
+            <tr><td><b>프런트엔드</b> (Front-end)</td><td><b>클라이언트(웹브라우저)</b>에서 실행되는 기술</td></tr>
+            <tr><td><b>백엔드</b> (Back-end)</td><td><b>서버</b>에서 실행되는 기술</td></tr>
+        </table>
+        <p><b>웹서비스 프로세스</b> — 클라이언트(브라우저)가 URL로 <b>요청(Request)</b> → 서버가 처리 → 결과를 <b>응답(Response)</b>. 웹서버는 웹 애플리케이션을 실행해 브라우저가 요청한 기능을 수행한 뒤 결과를 응답합니다.</p>
+        <pre><code>클라이언트(PC)  ──요청(Request)──▶  서버
+                                    │ 처리 (필요하면 DB 연동)
+클라이언트(PC)  ◀──응답(Response)──┘
+             HTTP 프로토콜을 통해 주고받음</code></pre>
+    </section>
+
+    <section class="card" id="s3">
+        <h2>3. 정적 vs 동적 · MPA vs SPA ★<span class="week">1주차</span></h2>
+        <table class="ref">
+            <tr><th>구분</th><th>설명</th></tr>
+            <tr><td>정적(Static) 콘텐츠</td><td><b>변하지 않는</b> 콘텐츠 · 예) news.html 파일을 그대로 전달</td></tr>
+            <tr><td>동적(Dynamic) 콘텐츠</td><td>서버에서 <b>동적으로 만들어진</b> 콘텐츠 · 예) login.jsp → '홍길동, 안녕!'</td></tr>
+        </table>
+        <p><b>동적 처리 흐름</b> : 요청 → <b>컨테이너(Container)</b>에서 실행코드 실행 → DB 연동 → 결과(html 또는 data 형식) 응답 → 브라우저가 렌더링</p>
+        <div class="tip"><b>MPA vs SPA</b> — <b>M</b>ulti <b>P</b>age Application(여러 페이지) vs <b>S</b>ingle <b>P</b>age Application(단일 페이지)<br>결과 형식은 <b>html 형식</b>(jsp) 또는 <b>data 형식</b>(JSON) 두 가지입니다.</div>
+    </section>
+
+    <section class="card" id="s4">
+        <h2>4. 웹페이지 구성 3요소와 브라우저 구조 ★<span class="week">1주차</span></h2>
+        <table class="ref">
+            <tr><th>요소</th><th>역할</th><th>영문</th></tr>
+            <tr><td><b>HTML</b></td><td>웹페이지의 <b>구조와 내용</b></td><td>Hyper Text Markup Language</td></tr>
+            <tr><td><b>CSS</b></td><td>웹페이지의 <b>모양</b></td><td>Cascading Style Sheet</td></tr>
+            <tr><td><b>JS</b></td><td>웹페이지의 <b>행동/동작</b></td><td>JavaScript</td></tr>
+        </table>
+        <h3>브라우저의 기본 구조 (7가지)</h3>
+        <table class="ref">
+            <tr><th>구성</th><th>설명</th></tr>
+            <tr><td>사용자 인터페이스</td><td>주소표시줄·이전/다음·북마크 등 (페이지 표시 창 제외)</td></tr>
+            <tr><td>브라우저 엔진</td><td>UI와 렌더링 엔진 사이의 동작을 제어</td></tr>
+            <tr><td><b>렌더링 엔진</b></td><td>요청한 콘텐츠 표시 — <b>HTML·CSS를 파싱</b>하여 화면에 표시</td></tr>
+            <tr><td>통신</td><td>HTTP 요청 등 네트워크 호출 (플랫폼 독립적 인터페이스)</td></tr>
+            <tr><td>UI 백엔드</td><td>콤보박스·창 등 기본 장치를 그림 (OS UI 체계 사용)</td></tr>
+            <tr><td><b>자바스크립트 해석기</b></td><td>자바스크립트 코드를 해석하고 실행</td></tr>
+            <tr><td>자료 저장소</td><td>쿠키 등 자원 저장 (HTML5 웹 데이터베이스 포함)</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s5">
+        <h2>5. 자바스크립트로 할 수 있는 일 · 환경설정<span class="week">1주차</span></h2>
+        <table class="ref">
+            <tr><th>분야</th><th>내용</th></tr>
+            <tr><td>웹 클라이언트 앱</td><td>브라우저에서 실행할 수 있는 <b>유일한</b> 프로그래밍 언어</td></tr>
+            <tr><td>웹 서버 개발</td><td><b>Node.js</b> 등장으로 서버도 JS로 개발 가능 (페이팔 결제시스템에도 활용, 빠름)</td></tr>
+            <tr><td>모바일 앱</td><td><b>React Native</b>(페이스북) — JS로 네이티브 앱 개발</td></tr>
+            <tr><td>데스크톱 앱</td><td><b>Electron</b> 모듈 (VS Code 등)</td></tr>
+            <tr><td>게임 개발</td><td><b>Unity</b> 게임엔진(JS 기반)</td></tr>
+            <tr><td>데이터베이스</td><td><b>MongoDB</b> — JS를 활용하는 NoSQL</td></tr>
+        </table>
+        <div class="tip"><b>설치 3종</b> — Chrome(브라우저) · Visual Studio Code(에디터) · Node.js(런타임)<br>실습 폴더 생성 → VS Code 〔File〕→〔Open Folder〕 → JS 실행은 〔Terminal〕→〔New Terminal〕 에서 <code>node 파일명.js</code></div>
+    </section>
+
+    <section class="card" id="s6">
+        <h2>6. 웹문서 실행 단계 ★필수암기<span class="week">2주차</span></h2>
+        <div class="tip"><b>DOM 트리 → 렌더 트리 → 페인팅(Painting) → 결과 화면</b></div>
+        <p>브라우저는 HTML을 파싱해 <b>DOM 트리</b>를 만들고, CSS와 결합해 <b>렌더 트리</b>를 구성한 뒤 <b>페인팅</b>하여 화면에 출력합니다.</p>
+        <table class="ref">
+            <tr><th>용어</th><th>설명</th></tr>
+            <tr><td><b>리플로우</b> (Reflow)</td><td>요소의 <b>넓이·크기·배치</b>를 다시 계산·조정하는 과정</td></tr>
+            <tr><td><b>리페인트</b> (Repaint)</td><td>요소의 <b>색상·모양</b>을 다시 그리는 과정</td></tr>
+        </table>
+        <div class="tip"><b>파싱(Parsing)</b> = 분석 / <b>크롤링(Crawling)</b> = 콘텐츠를 긁어오는 것<br>태그 안에 태그를 넣는 것을 <b>중첩</b>이라고 합니다. 예) <code>&lt;div&gt;&lt;h1&gt;&lt;/h1&gt;&lt;/div&gt;</code></div>
+    </section>
+
+    <section class="card" id="s7">
+        <h2>7. 이벤트 4요소 ★필수암기<span class="week">2주차</span></h2>
+        <div class="tip"><b>이벤트 · 이벤트 소스 · 이벤트 핸들러(=이벤트 리스너) · 이벤트 객체</b></div>
+        <table class="ref">
+            <tr><th>요소</th><th>설명</th></tr>
+            <tr><td>이벤트</td><td>웹에서 발생하는 사건 (클릭 등)</td></tr>
+            <tr><td>이벤트 소스</td><td>이벤트가 발생한 <b>근원지</b> (예: button)</td></tr>
+            <tr><td>이벤트 핸들러(리스너)</td><td>이벤트 <b>처리 방법</b>을 담은 코드를 등록</td></tr>
+            <tr><td>이벤트 객체</td><td>발생한 이벤트의 <b>정보</b>를 담은 객체</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s8">
+        <h2>8. 함수 선언 3가지 방법 ★필수암기<span class="week">2주차</span></h2>
+        <h3>① 선언적 함수</h3>
+        <pre><code>function btnClick(){
+    ...
+}
+btnClick();   // 호출</code></pre>
+        <h3>② 표현적 함수 (익명 함수)</h3>
+        <pre><code>let btnClick = function(){
+    ...
+};
+btnClick();   // 호출</code></pre>
+        <h3>③ 화살표 함수</h3>
+        <pre><code>let btnClick = () =&gt; {
+    ...
+};
+btnClick();   // 호출</code></pre>
+        <div class="tip">함수도 <b>데이터(값)처럼 변수에 담아 넘겨줄 수 있습니다</b>. (일급 객체)</div>
+    </section>
+
+    <section class="card" id="s9">
+        <h2>9. 객체의 구성요소 ★필수암기<span class="week">2주차</span></h2>
+        <div class="tip"><b>객체의 구성요소 = 속성(변수) + 메서드(함수)</b><br>비유: <b>붕어빵틀 = 클래스(Class)</b> / <b>붕어빵 = 객체(Object)</b></div>
+        <p>즉 클래스는 <b>설계도(틀)</b>, 객체는 그 틀로 찍어낸 <b>실체(인스턴스)</b>입니다. 속성 접근은 프로퍼티, 동작 호출은 메서드입니다.</p>
+        <pre><code>class Person {
+    String name;          // 속성(변수)
+    void eat(){ ... }     // 메서드(함수)
+}
+P1 = new Person();
+P2 = new Person();
+P2.eat();                 // "쩝쩝"
+P2.name = "쭈굴";          // P2 객체에 대입
+P1.name = "한주";          // P1 객체에 대입</code></pre>
+    </section>
+
+    <section class="card" id="s10">
+        <h2>10. 변수와 선언 키워드 ★필수암기<span class="week">3주차</span></h2>
+        <div class="tip"><b>변수 = 메모리상의 값을 담는 그릇</b> · 선언 키워드 3가지: <b>var / let / const</b></div>
+        <table class="ref">
+            <tr><th>키워드</th><th>특징</th></tr>
+            <tr><td><b>let</b></td><td>변수의 <b>중복 정의(재선언) 불가능</b></td></tr>
+            <tr><td><b>var</b></td><td>중복 정의 <b>가능</b> (구버전 방식)</td></tr>
+            <tr><td><b>const</b></td><td>상수 — <b>값 변경 불가</b></td></tr>
+        </table>
+        <p>ES6부터 JS를 어디서든 쓸 수 있게 되면서 <b>let</b> 이 등장했습니다.</p>
+    </section>
+
+    <section class="card" id="s11">
+        <h2>11. JS 자료형과 객체 ★필수암기<span class="week">3주차</span></h2>
+        <table class="ref">
+            <tr><th>구분</th><th>종류</th></tr>
+            <tr><td><b>원시형</b> (Primitive)</td><td>String / Number / Boolean (+ null, undefined)</td></tr>
+            <tr><td><b>참조형</b> (Reference)</td><td>객체(Object)</td></tr>
+        </table>
+        <div class="tip"><b>기본 데이터타입 5종</b> — 문자열, 숫자, 부울린(Boolean), <b>undefined</b>, <b>null</b><br><b>객체</b> = 사용자정의 객체 + 내장 객체</div>
+        <table class="ref">
+            <tr><th>항목</th><th>설명</th></tr>
+            <tr><td>숫자형</td><td>정수와 실수 구분 없이 <b>하나의 number</b> 로 처리 (int/double 구분 없음)</td></tr>
+            <tr><td>NaN</td><td>계산 오류·부정확한 연산 시 반환 (Not a Number)</td></tr>
+            <tr><td>null</td><td><b>의도적으로</b> 비운 값</td></tr>
+            <tr><td>undefined</td><td>값이 <b>할당되지 않은</b> 상태 (초기화 안 함)</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s12">
+        <h2>12. 형변환 ★필수암기<span class="week">3주차</span></h2>
+        <table class="ref">
+            <tr><th>구분</th><th>설명</th></tr>
+            <tr><td>명시적 형변환</td><td><b>String() / Number() / Boolean()</b> 함수를 직접 사용</td></tr>
+            <tr><td>묵시적(암묵적) 형변환</td><td>연산 과정에서 <b>자동으로</b> 타입이 변환됨</td></tr>
+        </table>
+        <pre><code>"10" + 5           ===&gt;  "105"   // 묵시적 형변환 (문자열 연결)
+Number("10") + 5   ===&gt;  15      // 명시적 형변환 (숫자로 변환)</code></pre>
+        <div class="tip"><b>형변환 = 캐스팅(Casting)</b>. 피연산자의 type이 다르면 <b>type을 통일한 뒤 연산</b>합니다.<br>비교 연산자: <b>==</b> 는 값만 비교 / <b>===</b> 는 <b>값과 타입을 모두</b> 비교</div>
+    </section>
+
+    <section class="card" id="s13">
+        <h2>13. 템플릿 문자열 ★암기<span class="week">3주차</span></h2>
+        <p>백틱( <b>`</b> )으로 감싸고 <b>${ }</b> 안에 표현식을 넣으면 문자열 안에서 계산됩니다.</p>
+        <pre><code>console.log(`273 + 52의 값은 ${273 + 52}입니다`)
+// 출력: 273 + 52의 값은 325입니다</code></pre>
+    </section>
+
+    <section class="card" id="s14">
+        <h2>14. Node.js ★필수암기<span class="week">3주차</span></h2>
+        <div class="tip"><b>Node.js = 자바스크립트 코드가 단독으로 실행될 수 있는 런타임 실행 플랫폼</b></div>
+        <p>JS가 브라우저 밖에서도 단독 실행되게 해주는 소프트웨어입니다. (자바의 JVM과 유사한 역할로 비교해서 기억하세요.)</p>
+    </section>
+
+    <section class="card" id="s15">
+        <h2>15. 메모리 구조 (스택 vs 힙)<span class="week">3주차</span></h2>
+        <table class="ref">
+            <tr><th>구분</th><th>설명</th></tr>
+            <tr><td><b>스택</b> (Stack)</td><td>작고 빠르며 정리된 저장 공간 — <b>원시형</b> 값 저장 (선입선출식 관리)</td></tr>
+            <tr><td><b>힙</b> (Heap)</td><td>크고 유동적인 저장 공간 — <b>참조형(객체)</b> 저장</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s16">
+        <h2>16. [참고] 연산자 (교재 02장)<span class="week">3주차</span></h2>
+        <table class="ref">
+            <tr><th>종류</th><th>내용</th></tr>
+            <tr><td>복합 대입</td><td>+= , -= , *= , /= , %= &nbsp; 예) a += 1 은 a = a+1</td></tr>
+            <tr><td>증감</td><td>변수++ / ++변수 (후위·전위), 변수-- / --변수</td></tr>
+            <tr><td>typeof</td><td>string·number·boolean·undefined·function·object·symbol·bigint 중 하나 반환</td></tr>
+            <tr><td>입력 함수</td><td><b>prompt</b>(메시지, 기본값) 문자열 입력 / <b>confirm</b>() 확인·취소(true/false) 반환</td></tr>
+        </table>
+    </section>
+
+</div>
+</body>
+</html>

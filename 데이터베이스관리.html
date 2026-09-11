@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 · 완전 정리</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="schedule.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+    <a class="back-link" href="index.html#sem2-mid" style="display:inline-block;margin-bottom:14px;color:var(--main);font-weight:800;text-decoration:none;font-size:14px;">← 과목 선택으로 돌아가기</a>
+
+    <header class="page-head">
+        <h1>데이터베이스관리 · 완전 정리</h1>
+        <p>1주차 ~ 3주차 · DB 개념 + DBMS + 데이터언어 + 기본키 + MySQL 실습</p>
+    </header>
+
+    <div class="tip">
+        📖 <b>이 페이지 보는 법</b> : 각 칸은 ① 개념 → ② 표 정리 → ③ <b>&lt;/&gt; SQL 코드</b> 순서입니다. ★표시는 시험 단골입니다.
+    </div>
+
+    <nav class="toc">
+        <a href="#s1">1.강의개요</a>
+        <a href="#s2">2.정의·특성</a>
+        <a href="#s3">3.파일시스템vs DBMS</a>
+        <a href="#s4">4.구성요소·사용자</a>
+        <a href="#s5">5.데이터언어</a>
+        <a href="#s6">6.키(Key)</a>
+        <a href="#s7">7.MySQL실습</a>
+    </nav>
+
+    <section class="card" id="s1">
+        <h2>1. 강의 개요<span class="week">1주차</span></h2>
+        <table class="ref">
+            <tr><th>항목</th><th>내용</th></tr>
+            <tr><td>담당</td><td>김희숙 교수 (jasmin11@hanmail.net)</td></tr>
+            <tr><td>교재</td><td>SQL과 NoSQL 기반의 데이터베이스 입문 · 박성진 · 생능출판사(2023.2)</td></tr>
+            <tr><td>평가</td><td>출석 20% + 중간 30% + 기말 30% + 과제 20%</td></tr>
+            <tr><td>주의</td><td>결석 4회 F · 지각 3회 = 결석 1회</td></tr>
+            <tr><td>프로그램</td><td>MySQL 8.0, MongoDB (계정은 <b>반드시 영문</b>)</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s2">
+        <h2>2. 데이터베이스 정의와 특성 ★핵심<span class="week">1~3주차</span></h2>
+        <div class="tip"><b>정의 암기</b> — 한 조직의 여러 응용시스템들이 데이터를 <b>공유</b>할 수 있도록 <b>통합·저장</b>된 <b>운영</b> 데이터의 집합체</div>
+        <h3>① DB 정의 4가지</h3>
+        <table class="ref">
+            <tr><th>용어</th><th>의미</th></tr>
+            <tr><td>공유 (shared data)</td><td>여러 응용시스템이 함께 사용</td></tr>
+            <tr><td>통합 (integrated data)</td><td><b>중복의 최소화</b></td></tr>
+            <tr><td>저장 (stored data)</td><td>저장장치에 저장</td></tr>
+            <tr><td>운영 (operational data)</td><td>조직 운영에 필요한 데이터</td></tr>
+        </table>
+        <h3>② DB 특성 4가지</h3>
+        <table class="ref">
+            <tr><th>특성</th><th>영문</th></tr>
+            <tr><td>실시간 접근</td><td>real time accessibility</td></tr>
+            <tr><td>계속 변화</td><td>continuous evolution</td></tr>
+            <tr><td>동시 공유</td><td>concurrent sharing</td></tr>
+            <tr><td>내용으로 참조</td><td>contents reference</td></tr>
+        </table>
+        <p><b>테이블(릴레이션)</b> = 행과 열로 구성된 2차원 표 형태. 예) 학생(번호, 이름, 학년, 분반, 학과번호)</p>
+    </section>
+
+    <section class="card" id="s3">
+        <h2>3. 파일시스템 vs DBMS ★핵심<span class="week">3주차</span></h2>
+        <table class="ref">
+            <tr><th>구분</th><th>내용</th></tr>
+            <tr><td>파일시스템 단점</td><td>① <b>데이터 중복성</b>  ② <b>데이터 종속성</b>(프로그램이 변경되면 데이터도 변경해야 함)</td></tr>
+            <tr><td>DBMS 장점</td><td>① <b>중복 최소화</b>  ② <b>데이터 독립성</b>(논리적·물리적)</td></tr>
+            <tr><td>DBMS 단점</td><td>비용, 교육</td></tr>
+        </table>
+        <p><b>DBMS</b> = 데이터베이스를 관리하는 시스템 소프트웨어. 사용자·응용프로그램과 DB 사이의 <b>인터페이스</b> 역할을 하는 논리적 프로그램.</p>
+        <div class="tip">대표 DBMS — MySQL · Oracle · MS SQL · DB2 · MariaDB · CUBRID · PostgreSQL</div>
+    </section>
+
+    <section class="card" id="s4">
+        <h2>4. DB 시스템 구성요소와 사용자<span class="week">3주차</span></h2>
+        <div class="tip"><b>구성요소 암기</b> — 데이터(데이터베이스) · <b>하드웨어(HW)</b> · <b>DBMS</b> · <b>사용자</b> · (데이터언어)</div>
+        <table class="ref">
+            <tr><th>사용자</th><th>역할</th></tr>
+            <tr><td>DBA (데이터베이스 관리자)</td><td><b>슈퍼유저</b>. DB를 구축하고 시스템을 자체적으로 운영·통제</td></tr>
+            <tr><td>응용 프로그래머</td><td>응용 프로그램을 작성</td></tr>
+            <tr><td>일반 사용자</td><td>최종 사용자(end user)</td></tr>
+        </table>
+        <p><b>DBA 역할</b> — 구성요소 선정, 구조 정의, 물리적 저장구조·접근방법 결정, 무결성 제약조건 정의, 보안·접근권한 정책, 백업·회복 기법, 성능 감시·분석, DB 재구성</p>
+    </section>
+
+    <section class="card" id="s5">
+        <h2>5. 데이터 언어 (SQL) ★핵심<span class="week">3주차</span></h2>
+        <table class="ref">
+            <tr><th>구분</th><th>영문</th><th>명령어</th><th>담당</th></tr>
+            <tr><td><b>DDL</b> 데이터 정의어</td><td>Data Definition Language</td><td>CREATE · ALTER · DROP</td><td>DBA</td></tr>
+            <tr><td><b>DML</b> 데이터 조작어</td><td>Data Manipulation Language</td><td>INSERT · SELECT · UPDATE · DELETE</td><td>일반 사용자</td></tr>
+            <tr><td><b>DCL</b> 데이터 제어어</td><td>Data Control Language</td><td>GRANT · REVOKE (DENY)</td><td>DBA</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s6">
+        <h2>6. 키(Key) ★핵심<span class="week">3주차</span></h2>
+        <table class="ref">
+            <tr><th>종류</th><th>설명</th></tr>
+            <tr><td>기본키 (Primary Key)</td><td>각 투플을 <b>유일하게 구별</b>하는 하나 이상의 속성 집합 · <b>중복 불가 · 필수 입력</b></td></tr>
+            <tr><td>외래키 (Foreign Key)</td><td>다른 테이블을 참조하는 키</td></tr>
+            <tr><td>복합키</td><td>두 개 이상의 속성을 묶어 기본키로 사용</td></tr>
+        </table>
+        <pre><code>-- 복합키 예: 수강(학번, 과목번호, 성적)
+CREATE TABLE 수강(
+  학번      char(5),
+  과목번호  char(5),
+  성적      int,
+  PRIMARY KEY(학번, 과목번호)   -- 복합키
+);</code></pre>
+        <div class="tip"><b>[Quiz 32p] 기본키 찾기 정답</b> — 인사기록: <b>사원번호</b> / 가족관계: <b>{사원번호, 이름}</b> / 거래처: <b>{사원명, 거래처}</b></div>
+    </section>
+
+    <section class="card" id="s7">
+        <h2>7. MySQL 실습<span class="week">2~3주차</span></h2>
+        <div class="tip"><b>실습 4단계 ★</b> — ① 데이터베이스(스키마) 생성 → ② 테이블 생성 → ③ 데이터 입력 → ④ 데이터 조회</div>
+        <h3>① 학생 테이블</h3>
+        <pre><code>CREATE DATABASE testdb DEFAULT CHARACTER SET utf8mb4;
+USE testdb;
+
+CREATE TABLE 학생(
+  학번      int          NOT NULL,
+  이름      varchar(30)  NOT NULL,
+  성적      int,
+  지도교수  char(2),
+  PRIMARY KEY(학번)
+);
+insert into 학생 values('100','Kim',92,'P1');
+insert into 학생 values('200','Park',88,'P2');
+select * from 학생;</code></pre>
+        <h3>② 제품 테이블 + 조건 검색</h3>
+        <pre><code>USE testdb;
+DROP TABLE if exists 제품;
+CREATE TABLE 제품(
+  제품번호  char(3)      NOT NULL,
+  제품명    varchar(20),
+  재고량    int,
+  단가      int,
+  제조업체  varchar(20),
+  PRIMARY KEY(제품번호)
+);
+INSERT INTO 제품 VALUES('P01','그냥만두',5000,4500,'대한식품');
+INSERT INTO 제품 VALUES('P02','매운쫄면',2500,5500,'민국푸드');
+
+-- 제품명, 재고량 검색
+SELECT 제품명, 재고량 FROM 제품;
+-- 제조업체가 '대한식품'인 제품명·단가·제조업체 검색
+SELECT 제품명, 단가, 제조업체 FROM 제품 WHERE 제조업체='대한식품';</code></pre>
+        <h3>③ 자료형 정리</h3>
+        <table class="ref">
+            <tr><th>자료형</th><th>설명</th></tr>
+            <tr><td>1 byte</td><td>8 bit</td></tr>
+            <tr><td>문자형 char(n)</td><td><b>고정</b> 문자열 · 예) 주민등록번호</td></tr>
+            <tr><td>문자형 varchar(n)</td><td><b>가변</b> 문자열 · 예) 주소, 영화제목</td></tr>
+            <tr><td>정수형 int</td><td>4 byte = 32 bit</td></tr>
+        </table>
+        <div class="tip">⚠️ <b>들여쓰기는 Tab 말고 Spacebar 4번</b> · MySQL Workbench 실행: 한 줄 <b>Ctrl+Enter</b> / 여러 줄 <b>Ctrl+Shift+Enter</b><br>GUI로 입력했다면 오른쪽 하단 <b>Apply</b> 를 눌러야 저장됩니다.</div>
+    </section>
+
+</div>
+</body>
+</html>

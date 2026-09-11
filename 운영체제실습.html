@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운영체제실습 · 완전 정리</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="schedule.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+    <a class="back-link" href="index.html#sem2-mid" style="display:inline-block;margin-bottom:14px;color:var(--main);font-weight:800;text-decoration:none;font-size:14px;">← 과목 선택으로 돌아가기</a>
+
+    <header class="page-head">
+        <h1>운영체제실습 · 완전 정리</h1>
+        <p>1주차 ~ 3주차 Rocky Linux · 명령어 + 마운트 + 권한 + 사용자 관리</p>
+    </header>
+
+    <div class="tip">
+        📖 <b>이 페이지 보는 법</b> : 각 칸은 ① 개념 → ② <b>명령어 표</b> → ③ <b>&lt;/&gt; 실제 터미널</b> 순서입니다. 명령어는 그대로 따라 치면 됩니다.
+    </div>
+
+    <nav class="toc">
+        <a href="#s1">1.실습환경</a>
+        <a href="#s2">2.기본명령어</a>
+        <a href="#s3">3.디렉터리</a>
+        <a href="#s4">4.마운트</a>
+        <a href="#s5">5.inode·링크</a>
+        <a href="#s6">6.접근권한</a>
+        <a href="#s7">7.사용자관리</a>
+    </nav>
+
+    <section class="card" id="s1">
+        <h2>1. 실습 환경과 네트워크 확인<span class="week">1주차</span></h2>
+        <table class="ref">
+            <tr><th>항목</th><th>내용</th></tr>
+            <tr><td>환경</td><td>VMware 가상머신 위에 <b>Rocky Linux</b></td></tr>
+            <tr><td>참고 카페</td><td>cafe.naver.com/thisislinux</td></tr>
+        </table>
+        <h3>ipconfig /all 로 확인한 것</h3>
+        <table class="ref">
+            <tr><th>어댑터</th><th>변경 사항</th></tr>
+            <tr><td>VMnet1</td><td>임대 만료 시간이 갱신됨</td></tr>
+            <tr><td>VMnet8</td><td>DHCP 비활성화 → 수동 IP(192.168.111.1)로 변경, 기존 임대·DHCP 서버 정보 사라짐</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s2">
+        <h2>2. 기본 명령어와 프롬프트<span class="week">1주차</span></h2>
+        <table class="ref">
+            <tr><th>명령</th><th>설명</th></tr>
+            <tr><td>ls -l</td><td>상세 정보(권한·크기·수정일) 표시 · <b>숨김 파일 제외</b></td></tr>
+            <tr><td>ls -al</td><td>상세 정보 + <b>마침표(.)로 시작하는 숨김 파일까지</b></td></tr>
+            <tr><td>whoami</td><td>현재 로그인한 사용자 계정 이름</td></tr>
+            <tr><td>pwd</td><td>현재 작업 중인 폴더의 <b>절대 경로</b></td></tr>
+        </table>
+        <div class="tip"><b>프롬프트 기호 ★</b> — <b>$</b> : 일반 사용자(권한 제한) / <b>#</b> : 관리자(root, 모든 권한)</div>
+    </section>
+
+    <section class="card" id="s3">
+        <h2>3. 디렉터리 탐색·생성·삭제<span class="week">2주차</span></h2>
+        <pre><code># 탐색
+tree                 # 디렉터리 구조를 트리로 출력
+tree / -L 4          # 루트부터 4단계 깊이까지
+ls -i                # inode 번호 출력
+ls -R                # 하위까지 재귀 출력
+
+# 이동
+cd ..                # 상위 디렉터리
+cd /home             # 절대 경로
+cd rocky             # 상대 경로
+cd ~                 # 홈 디렉터리
+
+# 생성 / 삭제
+mkdir test_dir              # 생성
+mkdir t1 t2 t3              # 여러 개 동시
+mkdir -p tem/data/guest     # 중간 디렉터리까지 한 번에
+rmdir tem                   # '빈' 디렉터리만 삭제
+rm -rf test_dir             # 비어있지 않아도 강제 삭제 (주의!)
+poweroff                    # 시스템 종료 및 전원 차단</code></pre>
+    </section>
+
+    <section class="card" id="s4">
+        <h2>4. 마운트(mount)와 저장장치<span class="week">3주차</span></h2>
+        <p><b>mount</b> = 저장장치(디스크·DVD·USB)를 디렉터리 트리에 연결하는 것. 해제는 <b>umount</b>.</p>
+        <table class="ref">
+            <tr><th>출력</th><th>의미</th></tr>
+            <tr><td>/dev/sda2 on / type xfs</td><td>주 디스크가 루트(/)에 xfs로 마운트</td></tr>
+            <tr><td>proc on /proc</td><td>프로세스 정보 가상 파일시스템</td></tr>
+            <tr><td>tmpfs on /dev/shm</td><td>메모리 기반 임시 파일시스템</td></tr>
+            <tr><td>/dev/sr0 on /run/media/…</td><td><b>DVD</b>가 iso9660(ro=읽기전용)으로 마운트</td></tr>
+        </table>
+        <pre><code>mount                    # 마운트된 파일시스템 전체 목록
+umount /dev/cdrom        # 마운트 해제
+
+# CD 삽입 후 mount 결과 맨 아래에 추가되는 줄
+/dev/sr0 on /run/media/root/Rocky-10-0-x86_64-dvd type iso9660 (ro,...)
+
+cd /run/media/root/Rocky-10-0-x86_64-dvd/
+ls -l        # AppStream  BaseOS  EFI  images  LICENSE  media.repo ...</code></pre>
+        <div class="tip"><b>리눅스 USB 포맷 호환</b> — <b>FAT</b>(File Allocation Table) : <b>O</b> &nbsp;/&nbsp; <b>NTFS</b> : <b>X</b></div>
+    </section>
+
+    <section class="card" id="s5">
+        <h2>5. inode와 링크 ★핵심<span class="week">3주차</span></h2>
+        <p><b>inode</b> = 파일의 정보(크기·소유자·권한·데이터 위치)를 담은 고유 번호표. 파일 1개당 1개. <b>이름이 달라도 inode가 같으면 같은 파일</b>입니다.</p>
+        <table class="ref">
+            <tr><th>구분</th><th>명령</th><th>inode</th><th>원본 삭제 시</th></tr>
+            <tr><td>하드 링크</td><td><code>ln 원본 링크</code></td><td>원본과 <b>동일</b></td><td><b>내용 유지</b></td></tr>
+            <tr><td>심볼릭 링크</td><td><code>ln -s 원본 링크</code></td><td><b>새 번호</b></td><td><b>연결 끊김</b></td></tr>
+        </table>
+        <pre><code>cp /etc/hosts ex_data     # 실습용 원본
+ls -i                     # inode 확인
+ln    ex_data ex_data.ln  # 하드 링크
+ln -s ex_data ex_data.sl  # 심볼릭 링크
+
+202726865 ex_data         ← 원본
+202726865 ex_data.ln      ← 같은 inode!
+202727542 ex_data.sl      ← 다른 inode!
+
+rm ex_data                # 원본 삭제
+  ex_data.ln  → 384바이트 그대로 살아있음
+  ex_data.sl  → ex_data 를 가리키지만 대상이 없어 깨짐
+touch ex_data             # 재생성하면 심볼릭 링크 복구</code></pre>
+        <div class="tip">심볼릭 링크는 Windows의 <b>바로 가기</b>와 같은 개념입니다.</div>
+    </section>
+
+    <section class="card" id="s6">
+        <h2>6. 접근 권한 (chmod) ★핵심<span class="week">3주차</span></h2>
+        <h3>① 기호 모드 (심볼릭 모드)</h3>
+        <table class="ref">
+            <tr><th>구분</th><th>값</th></tr>
+            <tr><td>대상</td><td><b>u</b> 소유자 · <b>g</b> 그룹 · <b>o</b> 기타 · <b>a</b> 전체</td></tr>
+            <tr><td>연산</td><td><b>+</b> 추가 · <b>-</b> 제거 · <b>=</b> 지정</td></tr>
+            <tr><td>권한</td><td><b>r</b> 읽기 · <b>w</b> 쓰기 · <b>x</b> 실행</td></tr>
+        </table>
+        <pre><code>chmod u+w centos_cp.txt      # 소유자에게 쓰기 추가
+chmod u-w centos_cp.txt      # 소유자 쓰기 제거 → -r--r--r--
+chmod u+x,go+w story.txt     # 쉼표로 여러 대상 동시 지정
+chmod u-x,go-w story.txt     # 원상복구</code></pre>
+        <h3>② 8진수(숫자) 모드</h3>
+        <table class="ref">
+            <tr><th></th><th>u (소유자)</th><th>g (그룹)</th><th>o (기타)</th></tr>
+            <tr><td>권한</td><td>읽기(r)·쓰기(w)·실행(x)</td><td>읽기(r)·쓰기(w)·실행(x)</td><td>읽기(r)·쓰기(w)·실행(x)</td></tr>
+            <tr><td>자릿값</td><td>400 + 200 + 100</td><td>40 + 20 + 10</td><td>4 + 2 + 1</td></tr>
+        </table>
+        <div class="tip">각 자리는 <b>r=4, w=2, x=1</b> 의 합 → <b>755</b>=rwxr-xr-x · <b>644</b>=rw-r--r-- · <b>777</b>=rwxrwxrwx</div>
+        <pre><code>chmod 775 centos_cp.txt      # -rwxrwxr-x
+rm -i yesterday.txt          # -i : 삭제 전 하나씩 확인(대화식)</code></pre>
+    </section>
+
+    <section class="card" id="s7">
+        <h2>7. 사용자와 그룹 관리 ★핵심<span class="week">3주차</span></h2>
+        <table class="ref">
+            <tr><th>명령</th><th>설명</th></tr>
+            <tr><td>useradd user100</td><td>사용자 생성</td></tr>
+            <tr><td>useradd -g YHG user100</td><td><b>그룹을 지정</b>해서 생성</td></tr>
+            <tr><td>userdel -r user100</td><td>사용자 삭제 (<b>-r</b>은 홈 디렉터리까지)</td></tr>
+            <tr><td>groupadd YHG</td><td>그룹 생성</td></tr>
+            <tr><td>passwd user100</td><td>비밀번호 설정·변경</td></tr>
+            <tr><td>head / tail / tail -5</td><td>파일 앞·뒤 내용 확인</td></tr>
+        </table>
+        <h3>관리 파일 3종</h3>
+        <table class="ref">
+            <tr><th>파일</th><th>내용</th><th>필드 구조</th></tr>
+            <tr><td>/etc/passwd</td><td>사용자 계정</td><td>이름 : x : <b>UID</b> : <b>GID</b> : 설명 : 홈디렉터리 : 셸</td></tr>
+            <tr><td>/etc/group</td><td>그룹</td><td>그룹명 : x : <b>GID</b> : 소속 사용자</td></tr>
+            <tr><td>/etc/shadow</td><td>암호</td><td>이름 : <b>암호화 해시</b> : 최종변경일 : …</td></tr>
+        </table>
+        <pre><code>groupadd YHG              # GID 1001 생성
+useradd -g YHG user100
+useradd -g YHG user200
+
+user100:x:1001:1001::/home/user100:/bin/bash
+user200:x:1002:1001::/home/user200:/bin/bash
+                 ↑ UID는 다르지만 GID는 1001로 같다 = 같은 그룹</code></pre>
+        <div class="tip"><b>passwd 주의</b> — 8자 미만이면 경고가 뜨고, 두 번 입력이 다르면 <b>일치하지 않습니다</b> 오류가 납니다.<br><b>/etc/shadow</b> 에서 <b>!</b> 나 <b>*</b> 로 시작하면 <b>로그인 불가 계정</b>입니다.</div>
+    </section>
+
+</div>
+</body>
+</html>
