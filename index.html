@@ -42,7 +42,7 @@
         body { font-family:var(--font); line-height:1.6; color:var(--ink);
                background:radial-gradient(1100px 540px at 50% -10%, #e9f2ec 0%, transparent 60%), var(--bg);
                padding:28px 20px 48px; -webkit-font-smoothing:antialiased; min-height:100vh; }
-        .wrap { max-width:880px; margin:0 auto; }
+        .wrap { margin:0 auto; }   /* 폭 제한 없이 화면 가로를 꽉 채움 (좌우 여백은 body padding) */
 
         /* 화면 전환 — 부드러운 페이드 */
         .screen { animation:rise .34s var(--ease) both; }
@@ -115,7 +115,7 @@
         .head .sub { font-size:13.5px; color:var(--ink-2); margin-top:4px; font-variant-numeric:tabular-nums; }
 
         /* ───── 과목 격자(기말 허브) ───── */
-        .subjects { display:grid; gap:12px; }
+        .subjects { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
         .subjects:empty { display:none; }
         .subject { display:flex; align-items:center; gap:14px; text-decoration:none; font-family:inherit; color:var(--ink);
                    background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:16px 18px;
@@ -151,6 +151,7 @@
               background:var(--accent-bg); color:#b3590f; border:1px solid #f3d3ad; font-variant-numeric:tabular-nums; white-space:nowrap; }
         .cd.wk { background:#eef3f7; color:#33546c; border-color:#d3e0ea; }
         .cd.live { background:#fde7e7; color:#b3261e; border-color:#f3b4ab; }
+        @media (max-width:480px){ .c-t { display:none; } }   /* 폰: 칩은 D-day 만 → 과목명이 한 줄에 들어가 카드 높이 유지 */
 
         /* 준비중 placeholder */
         .ph { background:var(--card); border:1px dashed var(--line-2); border-radius:var(--r); padding:44px 24px;
@@ -214,7 +215,7 @@
             .haksa-frame { height:360px; }
         }
 
-        @media (max-width:640px){ .biggrid { grid-template-columns:1fr; } .head h1{ font-size:21px; } }
+        @media (max-width:640px){ .biggrid { grid-template-columns:minmax(0,1fr); } .head h1{ font-size:21px; } }
         @media (prefers-reduced-motion:reduce){ * { animation:none !important; transition:none !important; } }
     </style>
 </head>
@@ -714,6 +715,11 @@
     function chip(diff) {                             // "D-64 · 07:59:30" / 1일 미만은 시계만
         var p = parts(diff); return (p.d > 0 ? "D-" + p.d + " · " : "") + clock(diff);
     }
+    function chipHTML(diff) {                         // chip 과 같은 내용을 D-day / 시각으로 나눔 → 폰에서는 시각(.c-t)을 숨김
+        var p = parts(diff);
+        return p.d > 0 ? '<span>D-' + p.d + '<span class="c-t"> · ' + clock(diff) + '</span></span>'   // 한 span 으로 감싸야 flex gap 이 안 끼어 PC 모양이 chip 과 똑같음
+                       : clock(diff);
+    }
     function kdate(iso) {                             // "2026년 8월 25일 (화)"
         var d = new Date(iso);
         return d.getFullYear() + "년 " + (d.getMonth() + 1) + "월 " + d.getDate() + "일 (" + WD[d.getDay()] + ")";
@@ -754,7 +760,7 @@
                     a.dataset.fin = "0"; a.classList.remove("fin");
                     a.setAttribute("href", file);
                     if (diff > 0) {
-                        st.innerHTML = '<span class="pill ' + (diff < NEAR ? "soon" : "wk") + '">' + IC.clock + ' ' + chip(diff) + '</span>';
+                        st.innerHTML = '<span class="pill ' + (diff < NEAR ? "soon" : "wk") + '">' + IC.clock + ' ' + chipHTML(diff) + '</span>';
                     } else {
                         st.innerHTML = '<span class="pill live">' + IC.cap + ' 시험 중</span>';
                     }
@@ -813,7 +819,7 @@
         document.querySelectorAll("[data-exam-target]").forEach(function (el) {
             var diff = new Date(el.dataset.examTarget).getTime() - Date.now();
             var span = el.querySelector(".cd"); if (!span) return;
-            if (diff > 0) { span.className = "cd" + (diff >= NEAR ? " wk" : ""); span.textContent = chip(diff); }
+            if (diff > 0) { span.className = "cd" + (diff >= NEAR ? " wk" : ""); span.innerHTML = chipHTML(diff); }
             else { span.className = "cd live"; span.innerHTML = IC.cap + ' 시험 기간'; }
         });
         cap("sem2-mid-cd", DDAY.mid, "중간고사");
