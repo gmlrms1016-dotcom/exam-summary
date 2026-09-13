@@ -1,0 +1,40 @@
+name: 학사일정 갱신
+
+on:
+  schedule:
+    - cron: "0 21 * * *"   # 매일 06:00 (한국시간)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/fetch_haksa.py"
+      - ".github/workflows/haksa.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: haksa
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 학교 홈페이지에서 학사일정 가져오기
+        run: python3 scripts/fetch_haksa.py
+
+      - name: 바뀐 내용이 있으면 커밋
+        run: |
+          if git diff --quiet -- haksa.json; then
+            echo "변경 없음"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add haksa.json
+          git commit -m "학사일정 자동 갱신"
+          git pull --rebase origin main
+          git push origin HEAD:main

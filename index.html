@@ -173,19 +173,46 @@
         @media (max-width:480px){ .cheer-in { font-size:12.5px; padding:10px 15px; } }
         @media (prefers-reduced-motion:reduce){ .cheer-t { transition:none; } }
 
-        /* ───── 학사일정 (학교 홈페이지 iframe) ───── */
+        /* ───── 학사일정 (haksa.json 목록 · 전체 달력은 접어 둔 iframe) ───── */
         .haksa { margin:0 0 22px; background:var(--card); border:1px solid var(--line);
                  border-radius:var(--r); box-shadow:var(--sh-2); overflow:hidden; }
         .haksa-head { display:flex; align-items:center; justify-content:space-between; gap:10px;
-                      padding:13px 16px; border-bottom:1px solid var(--line); }
+                      padding:11px 14px; border-bottom:1px solid var(--line); }
         .haksa-t { display:flex; align-items:center; gap:8px; font-size:15px; font-weight:800; color:var(--main-d); }
         .haksa-t svg { width:18px; height:18px; flex:0 0 auto; }
+        .haksa-nav { display:flex; align-items:center; gap:4px; }
+        .haksa-month { min-width:84px; text-align:center; font-size:13.5px; font-weight:800; color:var(--ink);
+                       font-variant-numeric:tabular-nums; }
+        .haksa-arrow { width:28px; height:28px; border:0; border-radius:50%; background:var(--brand-bg);
+                       color:var(--main); font:inherit; font-size:17px; line-height:1; cursor:pointer; }
+        .haksa-arrow:hover:not(:disabled) { background:#dcebe1; }
+        .haksa-arrow:disabled { opacity:.35; cursor:default; }
+        .haksa-list { list-style:none; margin:0; padding:4px 0; max-height:212px; overflow-y:auto;
+                      overscroll-behavior:contain; }
+        .haksa-list li { display:flex; align-items:baseline; gap:12px; padding:7px 16px; font-size:13.5px; line-height:1.45; }
+        .haksa-list li + li { border-top:1px dashed var(--line); }
+        .haksa-d { flex:0 0 158px; color:var(--ink-2); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; }
+        .haksa-n { flex:1 1 auto; color:var(--ink); font-weight:600; }
+        .haksa-list li.is-past { opacity:.45; }
+        .haksa-now { display:inline-block; margin-left:6px; padding:1px 7px; border-radius:var(--r-pill);
+                     background:var(--accent-bg); color:var(--point); font-size:11px; font-weight:800; vertical-align:1px; }
+        .haksa-list li.haksa-empty { display:block; color:var(--muted); text-align:center; padding:18px 16px; }
+        .haksa-foot { display:flex; align-items:center; justify-content:space-between; gap:10px;
+                      padding:8px 14px; border-top:1px solid var(--line); background:#fbfcfb; }
+        .haksa-more { border:0; background:none; padding:4px 0; font:inherit; font-size:12.5px; font-weight:700;
+                      color:var(--ink-2); cursor:pointer; }
+        .haksa-more:hover { color:var(--main); }
         .haksa-open { font-size:12.5px; font-weight:700; color:var(--main); text-decoration:none; white-space:nowrap;
-                      padding:6px 11px; border-radius:var(--r-pill); background:var(--brand-bg);
+                      padding:5px 11px; border-radius:var(--r-pill); background:var(--brand-bg);
                       transition:background .2s var(--ease); }
         .haksa-open:hover { background:#dcebe1; }
-        .haksa-frame { display:block; width:100%; height:640px; border:0; background:#fff; }
-        @media (max-width:480px){ .haksa-head { padding:11px 13px; } .haksa-frame { height:520px; } }
+        .haksa-frame { display:block; width:100%; height:380px; border:0; border-top:1px solid var(--line); background:#fff; }
+        @media (max-width:480px){
+            .haksa-list { max-height:236px; }
+            .haksa-list li { flex-direction:column; gap:1px; padding:7px 14px; }
+            .haksa-d { flex:none; font-size:12px; }
+            .haksa-frame { height:360px; }
+        }
 
         @media (max-width:640px){ .biggrid { grid-template-columns:1fr; } .head h1{ font-size:21px; } }
         @media (prefers-reduced-motion:reduce){ * { animation:none !important; transition:none !important; } }
@@ -205,13 +232,22 @@
             <div class="hero-pct" id="dday-pct">—</div>
         </div>
 
-        <!-- 학사일정 · 동양미래대학교 홈페이지를 iframe 으로 삽입 -->
-        <div class="haksa">
+        <!-- 학사일정 · haksa.json(학교 홈페이지에서 매일 자동 갱신)을 이번 달 목록으로 표시 -->
+        <div class="haksa" id="haksa">
             <div class="haksa-head">
                 <span class="haksa-t"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.5"/><path d="M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>학사일정</span>
-                <a class="haksa-open" href="https://www.dongyang.ac.kr/dmu/4749/subview.do" target="_blank" rel="noopener">새 창에서 열기 ›</a>
+                <div class="haksa-nav">
+                    <button class="haksa-arrow" type="button" id="haksa-prev" aria-label="이전 달">‹</button>
+                    <span class="haksa-month" id="haksa-month" aria-live="polite">—</span>
+                    <button class="haksa-arrow" type="button" id="haksa-next" aria-label="다음 달">›</button>
+                </div>
             </div>
-            <iframe class="haksa-frame" src="https://www.dongyang.ac.kr/dmu/4749/subview.do" title="동양미래대학교 학사일정" loading="lazy"></iframe>
+            <ul class="haksa-list" id="haksa-list"><li class="haksa-empty">학사일정을 불러오는 중…</li></ul>
+            <div class="haksa-foot">
+                <button class="haksa-more" type="button" id="haksa-cal-btn" aria-expanded="false">전체 달력 보기</button>
+                <a class="haksa-open" href="https://www.dongyang.ac.kr/dmu/4749/subview.do" target="_blank" rel="noopener">학교 홈페이지 ›</a>
+            </div>
+            <iframe class="haksa-frame" id="haksa-frame" title="동양미래대학교 학사일정" hidden></iframe>
         </div>
 
         <div class="biggrid">
@@ -793,6 +829,77 @@
     tickAll();
     setInterval(tickAll, 1000);
     route();
+})();
+</script>
+
+<!-- ════════ 학사일정 · haksa.json 을 월별 목록으로 표시 ════════ -->
+<script>
+(function () {
+    "use strict";
+    var SRC = "https://www.dongyang.ac.kr/dmu/4749/subview.do";
+    var list = document.getElementById("haksa-list");
+    if (!list) return;
+    var monthEl = document.getElementById("haksa-month");
+    var prevBtn = document.getElementById("haksa-prev");
+    var nextBtn = document.getElementById("haksa-next");
+    var calBtn  = document.getElementById("haksa-cal-btn");
+    var frame   = document.getElementById("haksa-frame");
+
+    /* 전체 달력(학교 페이지)은 버튼을 눌렀을 때만 불러온다 */
+    calBtn.addEventListener("click", function () {
+        var open = frame.hidden;
+        if (open && !frame.getAttribute("src")) frame.src = SRC;
+        frame.hidden = !open;
+        calBtn.setAttribute("aria-expanded", String(open));
+        calBtn.textContent = open ? "전체 달력 접기" : "전체 달력 보기";
+    });
+
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    function ymd(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+    function esc(t) { var x = document.createElement("span"); x.textContent = t; return x.innerHTML; }
+
+    var groups = [], byGroup = {}, idx = 0, today = ymd(new Date());
+
+    function render() {
+        var g = groups[idx];
+        monthEl.textContent = +g.slice(0, 4) + "년 " + +g.slice(5, 7) + "월";
+        prevBtn.disabled = idx === 0;
+        nextBtn.disabled = idx === groups.length - 1;
+        var first = -1;
+        list.innerHTML = byGroup[g].map(function (e, i) {
+            var past = e.end < today;
+            var now  = !past && e.start <= today;
+            if (!past && first < 0) first = i;
+            var tag = now ? '<span class="haksa-now">' + (e.start === e.end ? "오늘" : "진행 중") + "</span>" : "";
+            return "<li" + (past ? ' class="is-past"' : "") + '><span class="haksa-d">' + esc(e.label) +
+                   '</span><span class="haksa-n">' + esc(e.title) + tag + "</span></li>";
+        }).join("");
+        /* 끝난 일정은 위로 넘기고, 진행 중·다가오는 일정부터 보이도록 목록을 자동 스크롤 */
+        list.scrollTop = first > 0 ? list.children[first].offsetTop - list.children[0].offsetTop : 0;
+    }
+
+    prevBtn.addEventListener("click", function () { if (idx > 0) { idx--; render(); } });
+    nextBtn.addEventListener("click", function () { if (idx < groups.length - 1) { idx++; render(); } });
+
+    fetch("haksa.json", { cache: "no-cache" })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (data) {
+            data.events.forEach(function (e) {
+                if (!byGroup[e.group]) { byGroup[e.group] = []; groups.push(e.group); }
+                byGroup[e.group].push(e);
+            });
+            groups.sort();
+            if (!groups.length) throw new Error("empty");
+            var cur = today.slice(0, 7);
+            idx = groups.indexOf(cur);
+            if (idx < 0) idx = cur < groups[0] ? 0 : groups.length - 1;
+            render();
+        })
+        .catch(function () {
+            list.innerHTML = '<li class="haksa-empty">일정을 불러오지 못했습니다. 오른쪽 아래 ‘학교 홈페이지’에서 확인하세요.</li>';
+            monthEl.textContent = "—";
+            prevBtn.disabled = nextBtn.disabled = true;
+        });
 })();
 </script>
 
