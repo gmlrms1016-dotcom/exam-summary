@@ -173,6 +173,20 @@
         @media (max-width:480px){ .cheer-in { font-size:12.5px; padding:10px 15px; } }
         @media (prefers-reduced-motion:reduce){ .cheer-t { transition:none; } }
 
+        /* ───── 학사일정 (학교 홈페이지 iframe) ───── */
+        .haksa { margin:0 0 22px; background:var(--card); border:1px solid var(--line);
+                 border-radius:var(--r); box-shadow:var(--sh-2); overflow:hidden; }
+        .haksa-head { display:flex; align-items:center; justify-content:space-between; gap:10px;
+                      padding:13px 16px; border-bottom:1px solid var(--line); }
+        .haksa-t { display:flex; align-items:center; gap:8px; font-size:15px; font-weight:800; color:var(--main-d); }
+        .haksa-t svg { width:18px; height:18px; flex:0 0 auto; }
+        .haksa-open { font-size:12.5px; font-weight:700; color:var(--main); text-decoration:none; white-space:nowrap;
+                      padding:6px 11px; border-radius:var(--r-pill); background:var(--brand-bg);
+                      transition:background .2s var(--ease); }
+        .haksa-open:hover { background:#dcebe1; }
+        .haksa-frame { display:block; width:100%; height:640px; border:0; background:#fff; }
+        @media (max-width:480px){ .haksa-head { padding:11px 13px; } .haksa-frame { height:520px; } }
+
         @media (max-width:640px){ .biggrid { grid-template-columns:1fr; } .head h1{ font-size:21px; } }
         @media (prefers-reduced-motion:reduce){ * { animation:none !important; transition:none !important; } }
     </style>
@@ -190,6 +204,16 @@
             <div class="hero-bar"><i id="dday-bar"></i></div>
             <div class="hero-pct" id="dday-pct">—</div>
         </div>
+
+        <!-- 학사일정 · 동양미래대학교 홈페이지를 iframe 으로 삽입 -->
+        <div class="haksa">
+            <div class="haksa-head">
+                <span class="haksa-t"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.5"/><path d="M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>학사일정</span>
+                <a class="haksa-open" href="https://www.dongyang.ac.kr/dmu/4749/subview.do" target="_blank" rel="noopener">새 창에서 열기 ›</a>
+            </div>
+            <iframe class="haksa-frame" src="https://www.dongyang.ac.kr/dmu/4749/subview.do" title="동양미래대학교 학사일정" loading="lazy"></iframe>
+        </div>
+
         <div class="biggrid">
             <button class="bigbtn" type="button" data-go="sem1">
                 <span class="bb-ic g1"><svg viewBox="0 0 24 24" fill="none"><path d="M12 6.6C9.8 5 6.4 4.6 3.5 5.1A1 1 0 0 0 2.7 6.1v11.3a1 1 0 0 0 1.2 1c2.5-.5 5.6-.1 8.1 1.5 2.5-1.6 5.6-2 8.1-1.5a1 1 0 0 0 1.2-1V6.1a1 1 0 0 0-.8-1C17.6 4.6 14.2 5 12 6.6Z" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 6.6V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
