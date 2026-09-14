@@ -6,6 +6,18 @@
     <title>프로그래밍언어실습 · 완전 정리</title>
     <link rel="stylesheet" href="style.css">
     <script src="schedule.js"></script>
+    <style>
+        /* 출력 결과 박스 · 정답 접이식 (파이썬프로그래밍.html 과 동일) */
+        pre.io { background:#0f1b14; }
+        pre.io::before { content:"▶ 출력 결과"; color:#7fd49a; }
+        pre.io code { color:#dff5e6; }
+        .akey { border:1px solid var(--line); border-radius:10px; background:#fbfdfb; margin:12px 0; }
+        .akey > summary { cursor:pointer; font-weight:800; color:var(--main); padding:11px 15px; }
+        .akey[open] > summary { border-bottom:1px solid var(--line); }
+        .akey > pre, .akey > .tip { margin:12px 15px; }
+        /* 강의자료에서 가려진 빈칸 */
+        .blank { background:var(--point); color:#fff; border-radius:4px; padding:0 8px; }
+    </style>
 </head>
 <body>
 <div class="wrap">
@@ -14,7 +26,7 @@
 
     <header class="page-head">
         <h1>프로그래밍언어실습 · 완전 정리</h1>
-        <p>1주차 ~ 2주차 C 언어 · 개념 + 실행과정 + 소스코드</p>
+        <p>1주차 ~ 2주차 C 언어 · 개념 + 실행과정 + 소스코드 · 3주차 ★시험문제(sizeof · printf 서식)</p>
     </header>
 
     <div class="tip">
@@ -28,6 +40,7 @@
         <a href="#s4">4.출력함수</a>
         <a href="#s5">5.함수구조</a>
         <a href="#s6">6.실습·퀴즈</a>
+        <a href="#s7">7.★시험문제</a>
     </nav>
 
     <section class="card" id="s1">
@@ -141,6 +154,87 @@ int main(void) {
 }
 void func1(void) { printf("gdhong 입니다. \n"); }
 void func2(void) { printf("제 이름은"); }</code></pre>
+    </section>
+
+    <section class="card" id="s7">
+        <h2>7. ★ 시험문제 — sizeof · printf 서식<span class="week">3주차</span></h2>
+        <div class="tip">🎯 <b>시험 포인트</b> — 강의자료 <b>23p [실습 1-05]</b> sizeof 실행결과 쓰기 · <b>27p [quiz 1-01]</b> 출력결과가 나오도록 printf 서식 채우기 + 오류 수정. 먼저 직접 풀어 보고 <b>💡 정답</b>을 펼쳐 확인하세요.</div>
+
+        <h3>먼저 암기 — 자료형 크기와 printf 서식</h3>
+        <table class="ref">
+            <tr><th>자료형</th><th>크기 (sizeof)</th><th>printf 서식</th><th>비고</th></tr>
+            <tr><td>char</td><td>1</td><td>%c</td><td>문자 1개 · 'w'</td></tr>
+            <tr><td>int</td><td>4</td><td>%d</td><td>정수 상수(10)는 int</td></tr>
+            <tr><td>float</td><td>4</td><td>%f</td><td>3.14f 처럼 f 를 붙인 실수</td></tr>
+            <tr><td>double</td><td>8</td><td>%lf (printf 는 %f 도 가능)</td><td>실수 상수(3.14159)는 double</td></tr>
+        </table>
+
+        <h3>문제 ① 실행결과를 쓰시오 — [실습 1-05] ex01_05-sizeof.c<span class="week">강의자료 23p</span></h3>
+        <pre><code>// ex01_05-sizeof.c
+#include &lt;stdio.h&gt;
+int main() {
+    char gender;
+    int age;
+    float weight;
+    double height;
+
+    printf("변수의 할당크기\n");
+    printf("gender: %d, age: %d, weight: %d, height: %d\n\n",
+        sizeof(gender), sizeof(age), sizeof(weight), sizeof(height));
+
+    printf("자료형 크기\n");
+    printf("char: %d, int: %d, float: %d, double: %d\n\n",
+        sizeof(char), sizeof(int), sizeof(float), sizeof(double));
+
+    printf("정수형상수: %d, 실수형상수: %d\n",
+        sizeof(10), sizeof(3.14159));
+    return 0;
+}</code></pre>
+        <details class="akey"><summary>💡 정답(실행결과) 보기</summary>
+            <pre class="io"><code>변수의 할당크기
+gender: 1, age: 4, weight: 4, height: 8
+
+자료형 크기
+char: 1, int: 4, float: 4, double: 8
+
+정수형상수: 4, 실수형상수: 8</code></pre>
+            <div class="tip"><b>풀이</b> — sizeof 는 크기(바이트 수)를 <b>정수</b>로 돌려주므로 %d 로 출력합니다. 변수의 크기는 자료형 크기와 같고(char 1 · int 4 · float 4 · double 8), <b>sizeof(10)</b>은 정수 상수라 int → <b>4</b>, <b>sizeof(3.14159)</b>는 실수 상수라 double → <b>8</b>입니다.</div>
+        </details>
+        <div class="tip"><b>수업 중 “시험문제!”</b> — sizeof(float) 를 %f, sizeof(double) 을 %lf, sizeof(char) 를 %c 로 출력하는 코드가 나오면 틀린 것 → <b>전부 %d</b> (결과: int 4 · float 4 · double 8 · char 1)</div>
+
+        <h3>문제 ② 출력결과가 나오도록 프로그램을 작성하시오 — [quiz 1-01] quiz01-01_ex01.c<span class="week">강의자료 27p</span></h3>
+        <pre class="io"><code>성별: w, 나이: 21, 신장: 165.700000</code></pre>
+        <pre><code>// quiz01-01_ex01.c
+#include &lt;stdio.h&gt;
+int main() {
+    char gender;
+    int age;
+    double height;
+
+    gender = 'w';
+    age = 21;
+    height = 165.7
+
+    printf("<span class="blank">  빈칸  </span>%lf\n", gender, age, height);
+    return 0;
+}</code></pre>
+        <details class="akey"><summary>💡 정답 코드 보기</summary>
+            <pre><code>// quiz01-01_ex01.c (정답)
+#include &lt;stdio.h&gt;
+int main() {
+    char gender;
+    int age;
+    double height;
+
+    gender = 'w';
+    age = 21;
+    height = 165.7;     // ① 세미콜론(;) 누락 → 컴파일 오류
+
+    printf("성별: %c, 나이: %d, 신장: %lf\n", gender, age, height);   // ② 빈칸
+    return 0;
+}</code></pre>
+            <div class="tip"><b>풀이</b> — char → <b>%c</b> · int → <b>%d</b> · double → <b>%lf</b> (printf 에서는 %f 도 OK). 실수는 소수점 아래 <b>6자리</b>까지 출력되므로 165.7 → <b>165.700000</b>. 자료 속 <b>height = 165.7</b> 뒤에 세미콜론이 빠져 있어 그대로 두면 컴파일 오류가 납니다.</div>
+        </details>
     </section>
 
 
