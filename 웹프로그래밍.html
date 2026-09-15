@@ -371,7 +371,7 @@ console.log(++num8);   // 12 출력 (11 → 12 로 먼저 증가)</code></pre>
 if (changeVar == "") { changeVar = "입력없음"; }
 changeVar = changeVar == "" ? "입력없음" : changeVar;   // 삼항 연산자
 changeVar = changeVar || "입력없음";                    // 단락 평가 (취소=null 까지 처리)</code></pre>
-        <div class="tip">⚠️ 실습 파일 <b>0915_04.html</b> 은 <code>querySelector("#result")</code> 인데 태그 id 가 <b>content</b> 라서 <b>null 오류</b>가 납니다 → <code>#content</code> 로 맞춰야 화면에 출력돼요. prompt 에서 <b>취소</b>를 누르면 null 이 들어와 <code>== ""</code> 검사로는 못 거릅니다 (<code>||</code> 는 처리됨).</div>
+        <div class="tip">⚠️ 수업 코드 <b>0915_04.html</b> 은 <code>querySelector("#result")</code> 인데 태그 id 가 <b>content</b> 라서 <b>null 오류</b>가 났어요 → <code>#content</code> 로 맞춰야 화면에 출력돼요. (4주차 폴더의 실습 파일은 고쳐 둠) prompt 에서 <b>취소</b>를 누르면 null 이 들어와 <code>== ""</code> 검사로는 못 거릅니다 (<code>||</code> 는 처리됨).</div>
     </section>
 
     <section class="card" id="s23">
