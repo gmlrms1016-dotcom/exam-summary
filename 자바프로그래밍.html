@@ -38,6 +38,7 @@
         <a href="#s14">14.continue·break</a>
         <a href="#s15">15.배열</a>
         <a href="#s16">16.main·예외처리</a>
+        <a href="#quiz">✏️퀴즈</a>
     </nav>
 
     <section class="card" id="s1">
@@ -355,10 +356,160 @@ finally {
         <div class="tip">예제 3-15 — <code>catch(ArithmeticException e)</code> 로 “0으로 나눌 수 없습니다! 다시 입력하세요” 출력 후 다시 입력 → 100 ÷ 5 → <b>몫은 20</b></div>
     </section>
 
+    <section class="card" id="quiz">
+        <h2>✏️ 퀴즈 — 객관식 10 · 주관식 10<span class="week">2~4주차</span></h2>
+        <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
+        <div class="quiz-score" id="quiz-score"></div>
+        <h3>객관식</h3>
+        <div class="mcq" data-correct="A">
+            <p class="mcq-q"><span class="mcq-no">1</span>자바의 <b>WORA</b> 에 대한 설명으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 한 번 작성한 코드가 모든 플랫폼에서 실행된다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 실행할 때마다 플랫폼별로 다시 컴파일해야 한다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> Windows 에서만 실행된다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 포인터로 메모리를 직접 제어한다</button>
+            <div class="mcq-exp"><b>정답 A</b> — Write Once Run Anywhere — 바이트코드(<code>.class</code>)를 각 OS 의 JVM 이 실행합니다.</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">2</span>자바의 <b>기본 타입(8개)</b> 이 <b>아닌</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>boolean</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>char</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>String</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>long</code></button>
+            <div class="mcq-exp"><b>정답 C</b> — <code>String</code> 은 클래스(레퍼런스 타입)입니다. 기본 타입 = boolean · char · byte · short · int · long · float · double</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">3</span><code>System.out.println((int)2.9 + 1.8);</code> 의 출력은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 4</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 3.8</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 4.7</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 3</button>
+            <div class="mcq-exp"><b>정답 B</b> — <code>(int)2.9</code> 가 먼저 2가 되고 2 + 1.8 = 3.8. <code>(int)(2.9 + 1.8)</code> 이면 4</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">4</span><b>do-while</b> 문의 특징으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 조건을 먼저 검사한 뒤 실행한다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 한 번도 실행되지 않을 수 있다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 작업문이 무조건 최소 1번 실행된다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 반복조건을 생략할 수 있다</button>
+            <div class="mcq-exp"><b>정답 C</b> — do-while 은 실행 후 조건을 검사해서 최소 1번 실행됩니다. 반복조건을 생략하면 컴파일 오류.</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">5</span>정수를 <b>0으로 나눌 때</b> 발생하는 예외는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>NullPointerException</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>ArithmeticException</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>NumberFormatException</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>InputMismatchException</code></button>
+            <div class="mcq-exp"><b>정답 B</b> — 0으로 나누기 = ArithmeticException · 정수가 아닌 문자열 변환 = NumberFormatException · Scanner 입력 타입 불일치 = InputMismatchException</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">6</span>JVM 에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 바이트코드를 해석·실행하는 가상기계다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> JVM 자체는 플랫폼에 독립적이다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 인터프리터 방식으로 실행한다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 운영체제마다 따로 제공된다</button>
+            <div class="mcq-exp"><b>정답 B</b> — <b>JVM 자체는 플랫폼 종속적</b>(OS 마다 제공)이고, <b>바이트코드가 플랫폼 독립적</b>입니다.</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">7</span><code>switch</code> 문의 <code>case</code> 값으로 <b>쓸 수 없는</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 정수 리터럴 (예: 10)</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 문자 리터럴 (예: 'A')</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 문자열 리터럴 (예: "카페라떼")</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 실수 리터럴 (예: 3.5)</button>
+            <div class="mcq-exp"><b>정답 D</b> — case 값은 <b>문자 · 정수 · 문자열</b> 리터럴만 가능 (실수 불가)</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">8</span>다음 배열 선언 중 <b>컴파일 오류</b>가 나는 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>int a[] = new int[10];</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>int[] a;</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>int a[10];</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>int a[] = {1, 2, 3};</code></button>
+            <div class="mcq-exp"><b>정답 C</b> — 자바는 <b>선언할 때 크기를 지정할 수 없음</b> → <code>int a[10];</code> 은 컴파일 오류</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">9</span><code>Scanner</code> 로 <b>정수</b>를 입력받는 메서드는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>next()</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>nextInt()</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>nextLine()</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>readInt()</code></button>
+            <div class="mcq-exp"><b>정답 B</b> — next() 문자열 · <b>nextInt() 정수</b> · nextDouble() 실수 · nextBoolean() 논리값</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">10</span><code>main()</code> 메소드의 원형에 <b>반드시 들어가는 것이 아닌</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> public</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> static</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> void</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> final</button>
+            <div class="mcq-exp"><b>정답 D</b> — <code>public static void main(String[] args)</code> — 반드시 public · static · void, 매개변수는 문자열 배열</div>
+        </div>
+        <h3>주관식</h3>
+        <div class="quiz-item" data-answers=".class|class" data-explain=".java → javac 컴파일 → .class (JVM 이 실행)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 1</span>자바 소스를 컴파일하면 만들어지는 <b>바이트코드 파일</b>의 확장자는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="3" data-explain="후위 증가: 대입(a=3)이 먼저, 증가(d=4)가 나중">
+            <p class="quiz-q"><span class="quiz-cat">주관식 2</span><code>int d = 3; int a = d++;</code> 실행 후 <b>a</b> 의 값은?</p>
+            <input type="text" placeholder="숫자 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="55" data-explain="1부터 10까지의 합 = 55 (예제 3-1)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 3</span><code>int sum = 0; for (int i = 1; i &lt;= 10; i++) sum += i;</code> 실행 후 <b>sum</b> 의 값은?</p>
+            <input type="text" placeholder="숫자 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="length" data-explain="배열은 객체이고 length 필드가 배열 크기입니다.">
+            <p class="quiz-q"><span class="quiz-cat">주관식 4</span>배열의 <b>크기</b>를 알려 주는 필드 이름은? (예: intArray.____)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="finally" data-explain="try { } catch (예외타입 e) { } finally { } — finally 는 생략 가능">
+            <p class="quiz-q"><span class="quiz-cat">주관식 5</span>try-catch 에서 예외 발생 여부와 <b>상관없이 무조건 실행</b>되는 블록 키워드는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="9" data-explain="% 는 나머지 (69 / 10 = 6 은 몫)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 6</span><code>69 % 10</code> 의 결과는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="23" data-explain="5000 / 60 = 83 → 83 % 60 = 23 (5000초 = 1시간 23분 20초)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 7</span><code>int time = 5000;</code> 일 때 <code>(time / 60) % 60</code> 의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="5" data-explain="a &gt; b 가 false → 콜론 뒤 (b - a) = 5">
+            <p class="quiz-q"><span class="quiz-cat">주관식 8</span>a=3, b=8 일 때 <code>(a &gt; b) ? (a - b) : (b - a)</code> 의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="break" data-explain="break 가 없으면 다음 case 로 계속 실행(fall-through)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 9</span>switch 문에서 <b>다음 case 로 넘어가지 않고</b> 빠져나오게 하는 키워드는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="equals|equals()" data-full="equals()" data-explain="text.equals(&quot;exit&quot;) — 문자열 비교는 == 가 아니라 equals()">
+            <p class="quiz-q"><span class="quiz-cat">주관식 10</span>자바에서 <b>문자열 내용이 같은지 비교</b>할 때 쓰는 메서드 이름은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
 
     <footer class="page-head" style="margin-top:30px;">
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
+<script src="quiz.js"></script>
+<script src="review.js"></script>
 </body>
 </html>

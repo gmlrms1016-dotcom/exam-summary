@@ -29,6 +29,7 @@
         <a href="#s5">5.데이터언어</a>
         <a href="#s6">6.키(Key)</a>
         <a href="#s7">7.MySQL실습</a>
+        <a href="#quiz">✏️퀴즈</a>
     </nav>
 
     <section class="card" id="s1">
@@ -163,10 +164,160 @@ SELECT 제품명, 단가, 제조업체 FROM 제품 WHERE 제조업체='대한식
         <div class="tip">⚠️ <b>들여쓰기는 Tab 말고 Spacebar 4번</b> · MySQL Workbench 실행: 한 줄 <b>Ctrl+Enter</b> / 여러 줄 <b>Ctrl+Shift+Enter</b><br>GUI로 입력했다면 오른쪽 하단 <b>Apply</b> 를 눌러야 저장됩니다.</div>
     </section>
 
+    <section class="card" id="quiz">
+        <h2>✏️ 퀴즈 — 객관식 10 · 주관식 10<span class="week">1~3주차</span></h2>
+        <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
+        <div class="quiz-score" id="quiz-score"></div>
+        <h3>객관식</h3>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">1</span>데이터베이스 <b>정의 4가지</b>에 해당하지 <b>않는</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 공유 데이터 (shared)</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 통합 데이터 (integrated)</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 저장 데이터 (stored)</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 임시 데이터 (temporary)</button>
+            <div class="mcq-exp"><b>정답 D</b> — DB 정의 4가지 = 공유 · 통합 · 저장 · <b>운영</b>(operational) 데이터</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">2</span>파일시스템과 비교한 <b>DBMS 의 장점</b>은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 데이터 중복성 증가</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 데이터 종속성</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 데이터 독립성</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 비용이 적게 든다</button>
+            <div class="mcq-exp"><b>정답 C</b> — 파일시스템 단점 = 중복성·종속성 / DBMS 장점 = 중복 최소화·데이터 독립성 / DBMS 단점 = 비용·교육</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">3</span><b>DML(데이터 조작어)</b> 에 속하지 <b>않는</b> 명령은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>SELECT</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>INSERT</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>UPDATE</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>CREATE</code></button>
+            <div class="mcq-exp"><b>정답 D</b> — <code>CREATE</code> 는 DDL(정의어)입니다. DML = INSERT · SELECT · UPDATE · DELETE</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">4</span>기본키(Primary Key)에 대한 설명으로 옳지 <b>않은</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 각 투플을 유일하게 구별한다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 중복된 값을 가질 수 없다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 값을 입력하지 않아도 된다 (NULL 허용)</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 두 개 이상의 속성을 묶어 복합키로 만들 수 있다</button>
+            <div class="mcq-exp"><b>정답 C</b> — 기본키는 중복 불가 · <b>필수 입력</b>입니다.</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">5</span>주민등록번호처럼 <b>길이가 고정된</b> 문자열에 알맞은 자료형은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>varchar(n)</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>char(n)</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>int</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>double</code></button>
+            <div class="mcq-exp"><b>정답 B</b> — <code>char(n)</code> 고정 문자열 · <code>varchar(n)</code> 가변 문자열(주소, 영화제목)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">6</span>데이터베이스 정의 4가지 중 <b>중복의 최소화</b>를 뜻하는 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 공유 데이터</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 통합 데이터</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 저장 데이터</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 운영 데이터</button>
+            <div class="mcq-exp"><b>정답 B</b> — <b>통합(integrated)</b> = 중복의 최소화 · 공유 = 여러 응용시스템이 함께 사용</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">7</span>데이터베이스의 <b>특성이 아닌</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 실시간 접근</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 계속 변화</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 동시 공유</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 주소로 참조</button>
+            <div class="mcq-exp"><b>정답 D</b> — 특성 4가지 = 실시간 접근 · 계속 변화 · 동시 공유 · <b>내용으로 참조</b></div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">8</span>데이터베이스 시스템의 <b>구성요소가 아닌</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 데이터(데이터베이스)</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 하드웨어</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> DBMS</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 컴파일러</button>
+            <div class="mcq-exp"><b>정답 D</b> — 구성요소 = 데이터 · 하드웨어 · DBMS · 사용자 (+ 데이터 언어)</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">9</span><b>DBMS 의 단점</b>으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 데이터가 중복된다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 프로그램이 바뀌면 데이터도 바꿔야 한다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 비용이 들고 교육이 필요하다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 여러 사용자가 공유할 수 없다</button>
+            <div class="mcq-exp"><b>정답 C</b> — DBMS 단점 = <b>비용, 교육</b> / 중복·종속은 파일시스템의 단점</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">10</span>MySQL Workbench 에서 <b>여러 줄(전체)을 실행</b>하는 단축키는? (강의 기준)</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> Ctrl+Enter</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> Ctrl+Shift+Enter</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> Ctrl+F5</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> Alt+Enter</button>
+            <div class="mcq-exp"><b>정답 B</b> — 한 줄 실행 Ctrl+Enter / <b>여러 줄 실행 Ctrl+Shift+Enter</b></div>
+        </div>
+        <h3>주관식</h3>
+        <div class="quiz-item" data-answers="DBA" data-explain="DBA = 데이터베이스 관리자 (DDL·DCL 담당)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 1</span>DB 를 구축하고 시스템을 운영·통제하는 <b>슈퍼유저</b>를 영문 약자로 쓰면?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="GRANT" data-explain="DCL = GRANT(부여) · REVOKE(회수)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 2</span>사용자에게 <b>권한을 부여</b>하는 DCL 명령어는?</p>
+            <input type="text" placeholder="명령어 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="Data Definition Language" data-explain="DDL 데이터 정의어 = CREATE · ALTER · DROP">
+            <p class="quiz-q"><span class="quiz-cat">주관식 3</span><b>DDL</b> 의 영문 풀네임은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="USE testdb;|USE testdb" data-explain="CREATE DATABASE 로 만든 뒤 USE 로 선택합니다.">
+            <p class="quiz-q"><span class="quiz-cat">주관식 4</span><code>testdb</code> 데이터베이스를 <b>사용하도록 선택</b>하는 SQL 문은?</p>
+            <input type="text" placeholder="SQL 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="SELECT 제품명 FROM 제품 WHERE 제조업체=&#x27;대한식품&#x27;;|SELECT 제품명 FROM 제품 WHERE 제조업체=&#x27;대한식품&#x27;|SELECT 제품명 FROM 제품 WHERE 제조업체=&quot;대한식품&quot;;|SELECT 제품명 FROM 제품 WHERE 제조업체=&quot;대한식품&quot;" data-explain="SELECT 속성 FROM 테이블 WHERE 조건;">
+            <p class="quiz-q"><span class="quiz-cat">주관식 5</span>제품 테이블에서 제조업체가 '대한식품'인 <b>제품명</b>만 검색하는 SQL 문은?</p>
+            <input type="text" placeholder="SQL 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="DML" data-explain="Data Manipulation Language — 일반 사용자가 사용">
+            <p class="quiz-q"><span class="quiz-cat">주관식 6</span>INSERT · SELECT · UPDATE · DELETE 가 속하는 <b>데이터 조작어</b>의 영문 약자는?</p>
+            <input type="text" placeholder="SQL 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="DBMS" data-explain="DataBase Management System — MySQL · Oracle · MS SQL 등">
+            <p class="quiz-q"><span class="quiz-cat">주관식 7</span>사용자·응용프로그램과 데이터베이스 사이의 <b>인터페이스 역할</b>을 하는 시스템 소프트웨어는? (영문 약자)</p>
+            <input type="text" placeholder="SQL 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="복합키|복합 키|composite key" data-full="복합키" data-explain="예) 수강(학번, 과목번호, 성적) → PRIMARY KEY(학번, 과목번호)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 8</span>두 개 이상의 속성을 묶어서 기본키로 사용하는 키는?</p>
+            <input type="text" placeholder="SQL 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="외래키|외래 키|foreign key" data-full="외래키" data-explain="Foreign Key">
+            <p class="quiz-q"><span class="quiz-cat">주관식 9</span>다른 테이블(의 기본키)을 <b>참조</b>하는 키는?</p>
+            <input type="text" placeholder="SQL 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="학번,과목번호|{학번,과목번호}|PRIMARY KEY(학번,과목번호)|과목번호,학번|{과목번호,학번}|PRIMARY KEY(과목번호,학번)" data-full="{학번, 과목번호}" data-explain="한 학생이 여러 과목을 들으므로 학번만으로는 구별이 안 되어 복합키를 씁니다. (쓰는 순서는 상관없음)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 10</span><code>수강(학번, 과목번호, 성적)</code> 테이블의 <b>기본키</b>는? (쉼표로 구분)</p>
+            <input type="text" placeholder="SQL 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
 
     <footer class="page-head" style="margin-top:30px;">
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
+<script src="quiz.js"></script>
+<script src="review.js"></script>
 </body>
 </html>

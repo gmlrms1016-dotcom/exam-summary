@@ -37,6 +37,7 @@ index.html          첫 화면(허브) — 학기/시험 선택 + 개강·시험
 schedule.js         ★ 시험 일정 단일 소스 + "시험 +3h 자동 복습 전환"
 style.css           과목 페이지 공용 테마(초록)
 review.js           과목 페이지 공용 — 틀린 문제 모아 복사 + 코드블록 복사 버튼
+quiz.js             2학기 과목 페이지 공용 퀴즈 — 객관식(.mcq)·주관식(.quiz-item) 채점 + 복습 모드
 pyrun.js            Pyodide 인앱 파이썬 실행기   grader.py / grader_pm.py  채점 로직
 <과목>.html         과목별 정리 페이지 5개
 pm-img/ · sw-img/   과목 이미지

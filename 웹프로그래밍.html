@@ -45,6 +45,7 @@
         <a href="#s21">21.단락평가</a>
         <a href="#s22">22.??·typeof·삼항</a>
         <a href="#s23">23.매개변수</a>
+        <a href="#quiz">✏️퀴즈</a>
     </nav>
 
     <section class="card" id="s1">
@@ -393,10 +394,160 @@ printName();                     // 인수 없음 → person의 값이 없음</c
         <div class="tip"><b>복습 — 함수 선언 3가지</b>: 선언적 함수 · 표현적(익명) 함수 · 화살표 함수 (→ 8번 참고)</div>
     </section>
 
+    <section class="card" id="quiz">
+        <h2>✏️ 퀴즈 — 객관식 10 · 주관식 10<span class="week">2~4주차</span></h2>
+        <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
+        <div class="quiz-score" id="quiz-score"></div>
+        <h3>객관식</h3>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">1</span>웹문서를 웹브라우저로 실행하는 <b>단계 순서</b>로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 렌더 트리 → DOM 트리 → 페인팅 → 결과 화면</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> DOM 트리 → 렌더 트리 → 페인팅 → 결과 화면</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> DOM 트리 → 페인팅 → 렌더 트리 → 결과 화면</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 페인팅 → DOM 트리 → 렌더 트리 → 결과 화면</button>
+            <div class="mcq-exp"><b>정답 B</b> — HTML 을 파싱해 DOM 트리 → CSS 와 결합해 렌더 트리 → 페인팅 → 결과 화면</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">2</span>변수 선언 키워드 중 <b>값을 바꿀 수 없는(상수)</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>var</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>let</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>const</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>function</code></button>
+            <div class="mcq-exp"><b>정답 C</b> — <code>const</code> 는 상수(값 변경 불가), <code>let</code> 은 재선언 불가, <code>var</code> 는 재선언 가능(구버전 방식)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">3</span><code>"10" === 10</code> 의 결과와 이유로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> true — 값이 같기 때문</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> false — 타입이 다르기 때문</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> true — 자동으로 형변환되기 때문</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 오류가 발생한다</button>
+            <div class="mcq-exp"><b>정답 B</b> — <code>===</code> 는 값과 타입을 모두 비교합니다. <code>"10" == 10</code> 은 형변환 후 값만 비교해서 true 입니다.</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">4</span>다음 중 <b>falsy 값이 아닌</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>0</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>""</code> (빈 문자열)</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>null</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>"0"</code> (문자열 0)</button>
+            <div class="mcq-exp"><b>정답 D</b> — falsy 8가지: false · 0 · -0 · 0n · "" · null · undefined · NaN. 문자열 <code>"0"</code> 은 truthy 입니다.</div>
+        </div>
+        <div class="mcq" data-correct="A">
+            <p class="mcq-q"><span class="mcq-no">5</span><code>let num8 = 10; console.log(num8++);</code> 의 출력은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 10</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 11</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 12</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 9</button>
+            <div class="mcq-exp"><b>정답 A</b> — 후위 증가는 현재 값(10)을 먼저 출력한 뒤 11로 증가합니다. <code>++num8</code> 이면 먼저 증가해서 11.</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">6</span>이벤트의 <b>4요소가 아닌</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 이벤트 소스</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 이벤트 핸들러(리스너)</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 이벤트 객체</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 이벤트 트리</button>
+            <div class="mcq-exp"><b>정답 D</b> — 4요소 = 이벤트 · 이벤트 소스 · 이벤트 핸들러(=리스너) · 이벤트 객체</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">7</span>JS 자료형 중 <b>원시형(Primitive)이 아닌</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> String</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> Number</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> Boolean</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 객체(Object)</button>
+            <div class="mcq-exp"><b>정답 D</b> — 원시형 String · Number · Boolean (+ null · undefined) / <b>참조형 = 객체</b></div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">8</span><code>"10" + 5</code> 의 결과는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 15</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> "105"</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> NaN</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 오류</button>
+            <div class="mcq-exp"><b>정답 B</b> — 문자열 + 숫자 → 숫자가 문자열로 <b>묵시적 형변환</b>되어 이어 붙음 → "105"</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">9</span><b>CSS</b> 의 주석 문법은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>// 주석</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>&lt;!-- 주석 --&gt;</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>/* 주석 */</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code># 주석</code></button>
+            <div class="mcq-exp"><b>정답 C</b> — HTML &lt;!-- --&gt; · <b>CSS /* */</b> · JS // 한 줄, /* */ 여러 줄</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">10</span><code>document.querySelector("#result")</code> 에 대한 설명으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> id 로만 찾을 수 있고 # 를 붙이면 안 된다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> CSS 선택자(#아이디 · .클래스 · 태그)로 첫 번째 요소를 찾는다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 조건에 맞는 모든 요소를 배열로 돌려준다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 클래스 이름으로만 찾는다</button>
+            <div class="mcq-exp"><b>정답 B</b> — querySelector 는 <b>CSS 선택자</b>로 <b>첫 번째</b> 요소를 찾습니다. (getElementById 는 # 없이 id 만)</div>
+        </div>
+        <h3>주관식</h3>
+        <div class="quiz-item" data-answers="Node.js|nodejs|노드js|노드.js" data-explain="Node.js = 자바스크립트 코드가 단독으로 실행될 수 있는 런타임 실행 플랫폼">
+            <p class="quiz-q"><span class="quiz-cat">주관식 1</span>자바스크립트 코드가 브라우저 밖에서도 <b>단독으로 실행</b>될 수 있게 해 주는 런타임 실행 플랫폼은? ★시험(주관식)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="메서드|메소드|method|메서드함수|메소드함수" data-explain="객체의 구성요소 = 속성(변수) + 메서드(함수) · 붕어빵틀=클래스, 붕어빵=객체">
+            <p class="quiz-q"><span class="quiz-cat">주관식 2</span>객체의 구성요소 = 속성(변수) + ______(함수) — 빈칸에 들어갈 말은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="&lt;!-- --&gt;|&lt;!--주석--&gt;" data-explain="HTML &lt;!-- --&gt; · CSS /* */ · JS // 와 /* */">
+            <p class="quiz-q"><span class="quiz-cat">주관식 3</span><b>HTML</b> 의 주석 문법은? (여는 기호와 닫는 기호를 함께)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="입력없음|&quot;입력없음&quot;" data-explain="|| 는 왼쪽이 falsy(&quot;&quot;)면 오른쪽 값을 돌려줍니다. (&amp;&amp; 는 왼쪽이 truthy 일 때 오른쪽)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 4</span><code>let changeVar = ""; changeVar = changeVar || "입력없음";</code> 실행 후 changeVar 의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="??" data-explain="null 병합 연산자 ?? — 0 ?? 5 는 0, 0 || 5 는 5">
+            <p class="quiz-q"><span class="quiz-cat">주관식 5</span>왼쪽 값이 <b>null 또는 undefined 일 때만</b> 오른쪽 값을 돌려주는 연산자 기호는?</p>
+            <input type="text" placeholder="기호 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="undefined" data-explain="값이 없음을 일부러 표시할 때는 null 을 대입합니다.">
+            <p class="quiz-q"><span class="quiz-cat">주관식 6</span>변수를 <b>선언만 하고 값을 넣지 않으면</b> 그 변수의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="${}" data-full="${ }" data-explain="`273 + 52의 값은 ${273 + 52}입니다` → 325">
+            <p class="quiz-q"><span class="quiz-cat">주관식 7</span>템플릿 문자열(백틱) 안에 <b>표현식을 넣는 문법</b>은? (기호만)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="Number|Number()|parseInt|parseInt()" data-full="Number()" data-explain="명시적 형변환: String() / Number() / Boolean() — parseInt() 도 숫자로 변환">
+            <p class="quiz-q"><span class="quiz-cat">주관식 8</span>문자열 <code>"10"</code> 을 숫자로 바꾸는 <b>명시적 형변환 함수</b> 이름은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="boolean|&quot;boolean&quot;|&#x27;boolean&#x27;" data-full="&quot;boolean&quot;" data-explain="typeof 는 값의 타입을 문자열로 반환합니다. (typeof null 은 &quot;object&quot;)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 9</span><code>typeof true</code> 의 결과는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="매개변수|파라미터|parameter" data-full="매개변수(파라미터)" data-explain="호출할 때 실제로 넘기는 값은 인수(argument)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 10</span>함수를 <b>정의할 때</b> 값을 받으려고 괄호 안에 적는 변수를 무엇이라고 할까?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
 
     <footer class="page-head" style="margin-top:30px;">
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
+<script src="quiz.js"></script>
+<script src="review.js"></script>
 </body>
 </html>
