@@ -96,8 +96,6 @@
         .bb-t { display:block; font-size:18px; font-weight:800; line-height:1.35; color:var(--main); }
         .bb-go { flex:none; color:#bcccc1; font-size:24px; font-weight:700; line-height:1; transition:transform .16s var(--ease), color .16s; }
         .bigbtn:hover .bb-go { transform:translateX(3px); color:var(--main); }
-        .bigbtn.exam .bb-ic { background:var(--accent-bg); color:var(--point); }
-        .bigbtn.exam .bb-t { color:var(--point); }
         /* 비활성(종료) 카드 */
         .bigbtn.soon { cursor:default; background:#f6f8f6; box-shadow:none; }
         .bigbtn.soon:hover { transform:none; box-shadow:none; border-color:var(--line); }
@@ -367,12 +365,13 @@
             <div class="sub">시험까지 남은 시간 (실시간)</div>
         </div>
         <div class="biggrid">
-            <button class="bigbtn exam" type="button" data-go="sem2-mid" data-exam-target="2026-10-19T14:00:00">
+            <button class="bigbtn" type="button" data-go="sem2-mid" data-exam-target="2026-10-19T14:00:00">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">중간고사</span></span>
                 <span class="cd">…</span>
             </button>
-            <button class="bigbtn exam" type="button" data-go="sem2-final" data-exam-target="2026-12-07T14:00:00">
+            <button class="bigbtn" type="button" data-go="sem2-final" data-exam-target="2026-12-07T14:00:00"
+                    data-unlock-after="프로그래밍언어실습.html,운영체제실습.html,웹프로그래밍.html,데이터베이스관리.html,자바프로그래밍.html">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">기말고사</span></span>
                 <span class="cd">…</span>
@@ -471,12 +470,12 @@
             <h1>2학년 1학기</h1>
         </div>
         <div class="biggrid">
-            <button class="bigbtn exam" type="button" data-go="sem3-mid">
+            <button class="bigbtn" type="button" data-go="sem3-mid">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">중간고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
             </button>
-            <button class="bigbtn exam" type="button" data-go="sem3-final">
+            <button class="bigbtn" type="button" data-go="sem3-final">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">기말고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
@@ -507,12 +506,12 @@
             <h1>2학년 2학기</h1>
         </div>
         <div class="biggrid">
-            <button class="bigbtn exam" type="button" data-go="sem4-mid">
+            <button class="bigbtn" type="button" data-go="sem4-mid">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">중간고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
             </button>
-            <button class="bigbtn exam" type="button" data-go="sem4-final">
+            <button class="bigbtn" type="button" data-go="sem4-final">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">기말고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
@@ -543,12 +542,12 @@
             <h1>3학년 1학기</h1>
         </div>
         <div class="biggrid">
-            <button class="bigbtn exam" type="button" data-go="sem5-mid">
+            <button class="bigbtn" type="button" data-go="sem5-mid">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">중간고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
             </button>
-            <button class="bigbtn exam" type="button" data-go="sem5-final">
+            <button class="bigbtn" type="button" data-go="sem5-final">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">기말고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
@@ -579,12 +578,12 @@
             <h1>3학년 2학기</h1>
         </div>
         <div class="biggrid">
-            <button class="bigbtn exam" type="button" data-go="sem6-mid">
+            <button class="bigbtn" type="button" data-go="sem6-mid">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">중간고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
             </button>
-            <button class="bigbtn exam" type="button" data-go="sem6-final">
+            <button class="bigbtn" type="button" data-go="sem6-final">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">기말고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
@@ -615,12 +614,12 @@
             <h1>4학년 1학기</h1>
         </div>
         <div class="biggrid">
-            <button class="bigbtn exam" type="button" data-go="sem7-mid">
+            <button class="bigbtn" type="button" data-go="sem7-mid">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">중간고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
             </button>
-            <button class="bigbtn exam" type="button" data-go="sem7-final">
+            <button class="bigbtn" type="button" data-go="sem7-final">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">기말고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
@@ -651,12 +650,12 @@
             <h1>4학년 2학기</h1>
         </div>
         <div class="biggrid">
-            <button class="bigbtn exam" type="button" data-go="sem8-mid">
+            <button class="bigbtn" type="button" data-go="sem8-mid">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">중간고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
             </button>
-            <button class="bigbtn exam" type="button" data-go="sem8-final">
+            <button class="bigbtn" type="button" data-go="sem8-final">
                 <span class="bb-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2.5h8L18.5 7v13.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 2.5V7H18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h7M8 15.5h7M8 8.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                 <span class="bb-body"><span class="bb-t">기말고사</span></span>
                 <span class="bb-go" aria-hidden="true">›</span>
@@ -730,6 +729,8 @@
     var SCREENS = [].map.call(document.querySelectorAll(".screen"), function (s) { return s.id; });
     function show(id) {
         if (SCREENS.indexOf(id) < 0) id = "home";
+        var lockBtn = document.querySelector('[data-go="' + id + '"][data-unlock-after]');
+        if (lockBtn && isLocked(lockBtn)) id = id.replace(/-(mid|final)$/, "");   // 잠긴 시험 화면 → 학기 화면으로
         SCREENS.forEach(function (s) { document.getElementById(s).hidden = (s !== id); });
         window.scrollTo(0, 0);
     }
@@ -814,6 +815,28 @@
         dateEl.textContent = kdate(targetIso);
     }
 
+    /* ───── 앞 시험이 끝나기 전 다음 시험 버튼 잠금 ─────
+       data-unlock-after 에 적은 과목들의 시험이 모두 끝나야(schedule.js: 시작 +3시간) 열림
+       예) 2학기 기말고사 버튼은 2학기 5과목 중간고사가 모두 끝난 뒤 열림 */
+    function isLocked(el) {
+        if (!window.isExamFinished) return false;
+        return el.dataset.unlockAfter.split(",").some(function (f) { return !window.isExamFinished(f.trim()); });
+    }
+    function tickLocks() {
+        document.querySelectorAll("[data-unlock-after]").forEach(function (el) {
+            var locked = isLocked(el);
+            if (el.disabled === locked && el.dataset.lockReady) return;
+            el.dataset.lockReady = "1";
+            el.disabled = locked;
+            el.classList.toggle("soon", locked);
+            el.setAttribute("aria-disabled", locked ? "true" : "false");
+            el.title = locked ? "중간고사가 끝나면 열려요" : "";
+            var t = el.querySelector(".bb-t"), tag = t && t.querySelector(".tag-lock");
+            if (locked && t && !tag) { tag = document.createElement("span"); tag.className = "tag-done tag-lock"; tag.textContent = "중간고사 후"; t.appendChild(document.createTextNode(" ")); t.appendChild(tag); }
+            if (!locked && tag) { tag.previousSibling && tag.previousSibling.nodeType === 3 && tag.parentNode.removeChild(tag.previousSibling); tag.parentNode.removeChild(tag); }
+        });
+    }
+
     /* ───── 2학기 시험 버튼/상세 카운트다운 ───── */
     function tickExamBtns() {
         document.querySelectorAll("[data-exam-target]").forEach(function (el) {
@@ -831,7 +854,7 @@
         el.textContent = diff > 0 ? (label + "까지 " + chip(diff)) : (label + " 기간 · 화이팅!");
     }
 
-    function tickAll() { tickHero(); tickExamBtns(); tickHub(); }
+    function tickAll() { tickHero(); tickExamBtns(); tickLocks(); tickHub(); }
     tickAll();
     setInterval(tickAll, 1000);
     route();

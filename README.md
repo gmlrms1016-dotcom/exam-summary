@@ -39,6 +39,7 @@ index.html          첫 화면(허브) — 학기/시험 선택 + 개강·시험
 schedule.js         ★ 시험 일정 단일 소스 + "시험 +3h 자동 복습 전환"
 style.css           과목 페이지 공용 테마(초록) — 화이트모드 기준
 theme.js            ★ 전 페이지 공용 — 다크모드(기본) / 화이트모드 전환 (오른쪽 위 ☀️/🌙 버튼)
+codecolor.js        전 페이지 공용 — 소스코드 색칠(VS Code 고대비 색) · theme.js 가 자동으로 불러옴
 review.js           과목 페이지 공용 — 틀린 문제 모아 복사 + 코드블록 복사 버튼
 quiz.js             2학기 과목 페이지 공용 퀴즈 — 객관식(.mcq)·주관식(.quiz-item) 채점 + 복습 모드
 weeks.js            2학기 과목 페이지의 1~15주차 버튼 — 진도 나간 주차만 열림, 8주차 중간고사 · 15주차 기말고사, 새 탭으로 열기
@@ -106,6 +107,12 @@ window.isExamFinished("X.html")                      // → true/false
 - **새 페이지**: `<head>` 의 `<meta charset>` 바로 다음 줄에 `<script src="theme.js"></script>` (weeks/ 안은 `../theme.js`). 다크 전용 CSS 는 페이지에 따로 쓰지 말고 화이트 기준으로만 작성하세요. 새 공용 부품의 다크 색을 정확히 맞추고 싶으면 `DARK_CSS` 에 `html[data-theme=dark] .클래스{…}` 한 줄을 추가합니다.
 - 오른쪽 위(`top:14px; right:14px`, 44px)는 전환 버튼 자리라 고정 UI 를 두지 않습니다. 변환에서 빼고 싶은 요소는 `data-theme-skip` 속성.
 
+### 🎨 소스코드 색 — `codecolor.js` (VS Code Dark High Contrast)
+- 모든 `<pre><code>` 를 highlight.js(cdnjs)로 분석해 VS Code 고대비 색으로 칠합니다. 화이트·다크 모드 모두 같은 색(검은 바탕)입니다. theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다.
+- 색: 키워드·자료형 `#569cd6` · 흐름 제어(if·for·return) `#c586c0` · 클래스 `#4ec9b0` · 함수 `#dcdcaa` · 변수 `#9cdcfe` · 문자열 `#ce9178` · 숫자 `#b5cea8` · 주석 `#7ca668` · `%d` `#9cdcfe` · `\n` `#d7ba7d`
+- 언어: `<code class="language-sql">` 처럼 적으면 그 언어, 없으면 과목 기본 언어(프로그래밍언어실습 c · 자바 java · 웹 html/js/css · 데이터베이스 sql · 운영체제·Git bash · 파이썬·방법론 python)
+- 칠하지 않는 블록: 실행 결과 `pre.io` · `pre.py-output` · `language-text`, Git 로그 `pre.lqlog` · `pre.finlog`, `<code>` 없는 `pre`, 그리고 `pre.no-hl`. 블록 안 기존 `<span>`(빈칸 등)은 그대로 둡니다.
+
 ### 색 (CSS 변수)
 | 변수 | 값 | 용도 |
 |------|------|------|
@@ -154,9 +161,10 @@ window.isExamFinished("X.html")                      // → true/false
 </a>
 ```
 
-### 시험 버튼(2학기처럼 버튼에 D- 표시)
+### 시험 버튼(1학기와 같은 .bigbtn, 오른쪽에 D- 표시)
+> 앞 시험이 끝나기 전에는 잠급니다: `data-unlock-after="과목1.html,과목2.html,…"` 를 붙이면 그 과목들의 시험(schedule.js 시작 +3시간)이 **모두** 끝날 때까지 회색(`.soon`)·클릭 불가·`중간고사 후` 표시, 끝나면 자동으로 열립니다. (예: 2학기 기말고사 버튼)
 ```html
-<button class="bigbtn exam" type="button" data-go="이동할화면id"
+<button class="bigbtn" type="button" data-go="이동할화면id"
         data-exam-target="2026-10-19T09:00:00">
   <span class="bb-ic">📝</span>
   <span class="bb-body"><span class="bb-t">중간고사</span></span>   <!-- 제목만, 세로 가운데 정렬 -->

@@ -10,12 +10,22 @@
        ① 공용 부품(헤더·카드·목차·표·팁·퀴즈·주차 버튼·첫 화면)은 아래 DARK_CSS 로 색을 직접 지정
        ② 그 밖에 페이지마다 직접 쓴 색(인라인 style·SVG 등)은 무채색·파랑으로 자동 변환
    - 오른쪽 위 ☀️/🌙 버튼으로 전환 · 주소 뒤 ?theme=light / ?theme=dark 로도 지정 가능
+   - 소스코드 색칠 codecolor.js 도 여기서 함께 불러옴 (VS Code 고대비 색)
    ===================================================================== */
 (function () {
     "use strict";
 
     var KEY = "exam-summary-theme";
     var root = document.documentElement;
+
+    // 소스코드 색칠(codecolor.js)도 모든 페이지에서 함께 불러옴 — theme.js 와 같은 폴더
+    var selfSrc = document.currentScript && document.currentScript.src;
+    if (selfSrc && !document.getElementById("codecolor-js")) {
+        var cc = document.createElement("script");
+        cc.id = "codecolor-js";
+        cc.src = selfSrc.replace(/theme\.js(\?.*)?$/, "codecolor.js");
+        (document.head || root).appendChild(cc);
+    }
 
     function load() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
     function store(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
@@ -177,10 +187,6 @@
         "html[data-theme=dark] .bigbtn:hover .bb-ic{background:#33373c}",
         "html[data-theme=dark] .bb-t{color:#f5f5f5}",
         "html[data-theme=dark] .bb-go,html[data-theme=dark] .bigbtn:hover .bb-go{color:#a8a8a8}",
-        "html[data-theme=dark] .bigbtn.exam{background:#0095f6;border-color:#0095f6}",
-        "html[data-theme=dark] .bigbtn.exam:hover{background:#1877f2;border-color:#1877f2}",
-        "html[data-theme=dark] .bigbtn.exam .bb-ic{background:rgba(255,255,255,.18);color:#fff}",
-        "html[data-theme=dark] .bigbtn.exam .bb-t,html[data-theme=dark] .bigbtn.exam .bb-go{color:#fff}",
         "html[data-theme=dark] .bigbtn.soon{background:#13171b;border-color:#1c1f23}",
         "html[data-theme=dark] .bigbtn.soon:hover{background:#13171b;border-color:#1c1f23}",
         "html[data-theme=dark] .bigbtn.soon .bb-ic{background:#1c1f23;color:#737373}",
@@ -203,8 +209,6 @@
         "html[data-theme=dark] .pill.wk,html[data-theme=dark] .cd.wk{background:#25292e;color:#f5f5f5;border-color:#25292e}",
         "html[data-theme=dark] .pill.live,html[data-theme=dark] .cd.live{background:#ed4956;color:#fff;border-color:#ed4956}",
         "html[data-theme=dark] .pill.fin{background:#25292e;color:#a8a8a8;border-color:#25292e}",
-        "html[data-theme=dark] .bigbtn.exam .cd,html[data-theme=dark] .bigbtn.exam .cd.wk{background:rgba(255,255,255,.2);border-color:transparent;color:#fff}",
-        "html[data-theme=dark] .bigbtn.exam .cd.live{background:#ed4956;border-color:#ed4956}",
         "html[data-theme=dark] .ph{background:#13171b;border-color:#3a3e43;color:#a8a8a8}",
         "html[data-theme=dark] .ph .em{color:#737373}",
         "html[data-theme=dark] .ph b{color:#f5f5f5}",
