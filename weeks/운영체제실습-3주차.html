@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운영체제실습 3주차 · 마운트 · 링크 · 권한 · 사용자관리</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../운영체제실습.html">← 운영체제실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🐧 운영체제실습 · 3주차</h1>
+        <p>마운트 · 링크 · 권한 · 사용자관리</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-2주차.html">‹ 이전 · <b>2주차</b><br><small>리눅스 명령어 실습</small></a><a class="next" href="운영체제실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~3주차 반영)</small></a></nav>
+
+<div class="tip">🐧 <b>운영체제실습 3주차</b> — 마운트 / inode·링크 / 접근 권한 / 사용자·그룹 관리. 실습 터미널 기록을 주제별로 재정리했습니다. (명령·출력 원본 로그 전체는 노션 페이지 토글에 보존)</div>
+<section class="card">
+<h2>1. 마운트(mount)와 저장장치</h2>
+<div class="tip">💡 <b>mount</b> = 저장장치(디스크·DVD·USB)를 디렉터리 트리의 특정 위치에 연결하는 것. 연결을 끊을 때는 <b>umount</b>. 리눅스는 마운트해야 장치에 접근할 수 있습니다.</div>
+<h3>1-1. 마운트 목록 확인</h3>
+<pre><code class="language-bash">mount          # 현재 마운트된 모든 파일시스템 목록</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>출력</th><th>의미</th></tr>
+<tr><td>/dev/sda2 on / type xfs</td><td>주 디스크가 루트(/)에 xfs로 마운트</td></tr>
+<tr><td>devtmpfs on /dev</td><td>장치 파일 시스템</td></tr>
+<tr><td>tmpfs on /dev/shm</td><td>메모리 기반 임시 파일시스템</td></tr>
+<tr><td>proc on /proc</td><td>프로세스 정보 가상 파일시스템</td></tr>
+<tr><td>sysfs on /sys</td><td>커널·장치 정보</td></tr>
+<tr><td>cgroup2 on /sys/fs/cgroup</td><td>자원 제어 그룹</td></tr>
+</tbody></table>
+<h3>1-2. DVD(CD) 마운트 후 비교</h3>
+<p>CD를 넣고 세팅하면 마운트 목록 <b>맨 아래에 한 줄이 추가</b>됩니다.</p>
+<pre><code class="language-bash">/dev/sr0 on /run/media/root/Rocky-10-0-x86_64-dvd type iso9660
+      (ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048,
+       uid=0,gid=0,dmode=500,fmode=400,iocharset=utf8,uhelper=udisks2)</code></pre>
+<div class="tip">🔎 <b>포인트</b> — <code>/dev/sr0</code>(광학드라이브)가 <code>/run/media/root/...</code> 에 <b>iso9660</b> 형식으로 마운트됨. <code>ro</code> 는 읽기 전용.</div>
+<h3>1-3. 마운트된 DVD 내용 확인</h3>
+<pre><code class="language-bash">root@localhost:~# cd /run/media/root/Rocky-10-0-x86_64-dvd/
+root@localhost:/run/media/root/Rocky-10-0-x86_64-dvd# ls -l
+합계 25
+drwxr-xr-x 1 root root 2048 2025년  6월  1일 AppStream
+drwxr-xr-x 1 root root 2048 2025년  6월  1일 BaseOS
+drwxr-xr-x 1 root root 2048 2025년  6월  1일 EFI
+-r--r--r-- 1 root root 2204 2025년  6월  1일 LICENSE
+drwxr-xr-x 1 root root 2048 2025년  6월  1일 images
+-r--r--r-- 1 root root   89 2025년  6월  1일 media.repo
+
+root@localhost:~# umount /dev/cdrom     # 사용 후 마운트 해제</code></pre>
+<div class="tip">💾 <b>리눅스 USB 포맷 호환</b> — <b>FAT</b>(File Allocation Table) : <b>O</b> (인식 가능) · <b>NTFS</b> : <b>X</b> (기본 상태에서는 인식 불가)</div>
+</section>
+<section class="card">
+<h2>2. inode와 링크</h2>
+<div class="tip">💡 <b>inode</b> = 파일의 정보(크기·소유자·권한·데이터 위치)를 담은 고유 번호표. 파일 1개당 1개. <b>이름이 달라도 inode가 같으면 같은 파일</b>입니다. → <code>ls -i</code> 로 확인</div>
+<h3>2-1. 하드 링크 vs 심볼릭 링크</h3>
+<table class="ref">
+<tbody style="min-width:595px;">
+<tr><th>구분</th><th>명령</th><th>inode</th><th>원본 삭제 시</th></tr>
+<tr><td><b>하드 링크</b></td><td><code>ln 원본 링크명</code></td><td>원본과 <b>동일</b></td><td><b>내용 유지</b> (파일 살아있음)</td></tr>
+<tr><td><b>심볼릭 링크</b></td><td><code>ln -s 원본 링크명</code></td><td><b>새 번호</b></td><td><b>깨짐</b> (경로만 가리키므로)</td></tr>
+</tbody></table>
+<p>실습에서 확인한 inode 번호:</p>
+<table class="ref">
+<tbody>
+<tr><th>파일</th><th>inode</th><th>설명</th></tr>
+<tr><td>ex_data</td><td>202726865</td><td>원본</td></tr>
+<tr><td>ex_data.ln</td><td><b>202726865</b></td><td>하드 링크 — 원본과 같음</td></tr>
+<tr><td>ex_data.sl</td><td>202727542</td><td>심볼릭 링크 — 다름</td></tr>
+</tbody></table>
+<h3>2-2. 실습 흐름</h3>
+<pre><code class="language-bash">cp /etc/hosts ex_data        # 실습용 원본 생성
+ls -i                        # inode 번호 확인
+ln    ex_data ex_data.ln     # 하드 링크
+ln -s ex_data ex_data.sl     # 심볼릭 링크
+rm ex_data                   # 원본 삭제 → 링크 상태 비교
+touch ex_data                # 원본 재생성 → 심볼릭 링크 복구</code></pre>
+<div class="tip">✅ <b>핵심 결과</b> — 원본(<code>ex_data</code>)을 지우면 <code>ex_data.ln</code>(하드) 은 <b>384바이트 그대로 살아있고</b>, <code>ex_data.sl</code>(심볼릭) 은 <code>ex_data</code> 를 가리키지만 <b>대상이 없어 깨진 링크</b>가 됩니다. 다시 <code>touch ex_data</code> 로 만들면 심볼릭 링크가 <b>되살아납니다</b>.</div>
+</section>
+<section class="card">
+<h2>3. 파일·디렉터리 기본 작업</h2>
+<pre><code class="language-bash">mkdir chap_05        # 실습 디렉터리 생성
+cd chap_05           # 이동
+pwd                  # /root/chap_05  현재 위치 확인
+nano                 # 편집기 (Ctrl+X → Y → Enter 로 저장)
+vi                   # 편집기
+cp /etc/hosts centos_cp.txt    # 실습용 파일 복사
+ls -l                # 상세 목록</code></pre>
+<div class="tip">⭐ <b>[내가 표시한 중요]</b> <code>ls -l</code> 결과 <code>-rw-r--r-- 1 root root 384 9월 10일 15:06 centos_cp.txt</code> → 권한 변경 실습의 <b>출발점</b>이 되는 기본 권한 <code>rw-r--r--</code> (644)</div>
+</section>
+<section class="card">
+<h2>4. 접근 권한 (chmod) ★핵심</h2>
+<h3>4-1. 기호 모드 (심볼릭 모드)</h3>
+<div class="tip">🔑 <b>대상</b> — <code>u</code> 소유자 · <code>g</code> 그룹 · <code>o</code> 기타 사용자 · <code>a</code> 전체 사용자 / <b>연산</b> — <code>+</code> 권한 추가 · <code>-</code> 권한 제거 · <code>=</code> 권한 지정 / <b>권한</b> — <code>r</code> 읽기 · <code>w</code> 쓰기 · <code>x</code> 실행</div>
+<pre><code class="language-bash">chmod u+w centos_cp.txt        # 소유자에게 쓰기 추가
+chmod u-w centos_cp.txt        # 소유자 쓰기 제거 → -r--r--r--
+chmod u+x,go+w story.txt       # 여러 대상을 쉼표로 동시 지정
+chmod u-x,go-w story.txt       # 원상복구</code></pre>
+<div class="tip">⭐ <b>[내가 표시한 중요]</b> 기본 권한 <code>rw-r--r--</code> 에서 <code>d rwx rw- rw-</code> 로 변경했다가 다시 원상복구해서 <code>rw-r--r--</code> 로 바꾼다.</div>
+<h3>4-2. 8진수(숫자) 모드</h3>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th></th><th>u (소유자)</th><th>g (그룹)</th><th>o (기타)</th></tr>
+<tr><td>권한</td><td>읽기(r) · 쓰기(w) · 실행(x)</td><td>읽기(r) · 쓰기(w) · 실행(x)</td><td>읽기(r) · 쓰기(w) · 실행(x)</td></tr>
+<tr><td>자릿값</td><td>400 + 200 + 100</td><td>40 + 20 + 10</td><td>4 + 2 + 1</td></tr>
+</tbody></table>
+<div class="tip">🧮 각 자리는 <b>r=4, w=2, x=1</b> 을 더한 값 — <code>755</code> = rwx(4+2+1) r-x(4+1) r-x(4+1) · <code>644</code> = rw- r-- r-- · <code>775</code> = rwx rwx r-x</div>
+<pre><code class="language-bash">chmod 775 centos_cp.txt        # -rwxrwxr-x 로 변경
+chmod 775 yesterday.txt
+rm -i yesterday.txt            # -i : 삭제 전 하나씩 확인(대화식)</code></pre>
+</section>
+<section class="card">
+<h2>5. 사용자와 그룹 관리 ★핵심</h2>
+<h3>5-1. 명령어</h3>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>useradd user100</code></td><td>사용자 생성</td></tr>
+<tr><td><code>useradd -g YHG user100</code></td><td><b>그룹을 지정</b>해서 사용자 생성</td></tr>
+<tr><td><code>userdel -r user100</code></td><td>사용자 삭제 (<code>-r</code> 은 홈 디렉터리까지)</td></tr>
+<tr><td><code>groupadd YHG</code></td><td>그룹 생성</td></tr>
+<tr><td><code>passwd user100</code></td><td>비밀번호 설정·변경</td></tr>
+<tr><td><code>head</code> / <code>tail</code> / <code>tail -5</code></td><td>파일 앞·뒤 내용 확인 (<code>-5</code> 는 5줄)</td></tr>
+</tbody></table>
+<h3>5-2. 관리 파일 3종</h3>
+<table class="ref">
+<tbody>
+<tr><th>파일</th><th>내용</th><th>필드 구조</th></tr>
+<tr><td><code>/etc/passwd</code></td><td>사용자 계정 정보</td><td>이름 : x : <b>UID</b> : <b>GID</b> : 설명 : 홈디렉터리 : 셸</td></tr>
+<tr><td><code>/etc/group</code></td><td>그룹 정보</td><td>그룹명 : x : <b>GID</b> : 소속 사용자</td></tr>
+<tr><td><code>/etc/shadow</code></td><td>암호화된 비밀번호</td><td>이름 : <b>암호화 해시</b> : 최종변경일 : …</td></tr>
+</tbody></table>
+<div class="tip">🔎 <b>실습에서 확인한 것</b> — <code>groupadd YHG</code> 로 만든 그룹(GID <b>1001</b>)에 <code>useradd -g YHG</code> 로 user100·user200을 넣으니 두 계정의 <b>GID가 똑같이 1001</b>로 찍힘 — <code>user100:x:1001:1001:...</code> / <code>user200:x:1002:1001:...</code> → <b>UID는 다르지만 GID는 같다</b> = 같은 그룹 소속</div>
+<div class="tip">⚠️ <code>passwd</code> 실행 시 <b>8자 미만이면 경고</b>가 뜨고, 두 번 입력이 다르면 <code>죄송하지만, 비밀번호가 일치하지 않습니다</code> 오류가 납니다.</div>
+<div class="tip">🔒 <b>/etc/shadow 필드 읽는 법</b> — <code>사용자명 : 암호화된비밀번호 : 최종변경일 : 최소 : 최대 : 경고 : 비활성 : 만료</code>. 해시의 <code>$y$</code> 는 <b>yescrypt</b> 알고리즘, <code>$j9T$</code> 는 파라미터, 그 다음이 <b>salt$해시</b>입니다. <code>!</code> 또는 <code>*</code> 로 시작하면(dnsmasq, tcpdump 등) <b>로그인 불가 계정</b>이라는 뜻입니다.</div>
+</section>
+<section class="card">
+<h2>6. 이번 주 명령어 총정리</h2>
+<table class="ref">
+<tbody>
+<tr><th>분류</th><th>명령</th><th>설명</th></tr>
+<tr><td>마운트</td><td><code>mount</code></td><td>마운트된 파일시스템 목록</td></tr>
+<tr><td>마운트</td><td><code>umount /dev/cdrom</code></td><td>마운트 해제</td></tr>
+<tr><td>링크</td><td><code>ls -i</code></td><td>inode 번호 확인</td></tr>
+<tr><td>링크</td><td><code>ln 원본 링크</code></td><td>하드 링크 (inode 공유)</td></tr>
+<tr><td>링크</td><td><code>ln -s 원본 링크</code></td><td>심볼릭 링크 (경로 참조)</td></tr>
+<tr><td>파일</td><td><code>cp 원본 대상</code></td><td>복사</td></tr>
+<tr><td>파일</td><td><code>touch 파일</code></td><td>빈 파일 생성 / 시각 갱신</td></tr>
+<tr><td>파일</td><td><code>rm -i 파일</code></td><td>확인하며 삭제</td></tr>
+<tr><td>권한</td><td><code>chmod u+w 파일</code></td><td>기호 모드</td></tr>
+<tr><td>권한</td><td><code>chmod 775 파일</code></td><td>8진수 모드</td></tr>
+<tr><td>사용자</td><td><code>useradd</code> / <code>userdel -r</code></td><td>사용자 생성 / 삭제</td></tr>
+<tr><td>사용자</td><td><code>groupadd</code> / <code>useradd -g</code></td><td>그룹 생성 / 그룹 지정 생성</td></tr>
+<tr><td>사용자</td><td><code>passwd 사용자</code></td><td>비밀번호 설정</td></tr>
+<tr><td>확인</td><td><code>head</code> / <code>tail</code> / <code>tail -5</code></td><td>파일 앞·뒤 내용 보기</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>7. 과제 연계 (교재 221~229쪽)</h2>
+<div class="tip">📘 이번 주 과제는 교재 <b>Chapter 04 실습 8·9</b> 입니다. <b>실습 8</b> (221~225쪽) — 파일 허가권·소유권: <code>chmod</code> <code>chown</code> <code>chgrp</code> <code>su</code> / <b>실습 9</b> (227~229쪽) — 하드/심볼릭 링크: <code>ln</code> <code>ln -s</code> <code>ls -il</code> / 특수 권한 <b>setuid(4) · setgid(2) · sticky(1)</b> 는 226쪽 참고</div>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-2주차.html">‹ 이전 · <b>2주차</b><br><small>리눅스 명령어 실습</small></a><a class="next" href="운영체제실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~3주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「운영체제실습 · 3주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

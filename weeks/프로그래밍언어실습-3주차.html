@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍언어실습 3주차 · 변수·상수·자료형 (ch03)</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../프로그래밍언어실습.html">← 프로그래밍언어실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>💾 프로그래밍언어실습 · 3주차</h1>
+        <p>변수·상수·자료형 (ch03)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-2주차.html">‹ 이전 · <b>2주차</b><br><small>C 기본 실습 (ch02)</small></a><a class="next" href="프로그래밍언어실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~3주차 반영)</small></a></nav>
+
+<div class="tip">자료: C-Lect03-ch03-변수상수-stu-pdf.pdf · 수업 필기 · gpt대화내용.txt · workC 실습 코드(w03 · w03_quiz01 · w03_extra)</div>
+<div class="tip">🎯 <b>시험 포인트</b> — 강의자료 <b>23p</b> [실습 1-05] sizeof 실행결과 쓰기 · <b>27p</b> [quiz 1-01] 빈칸채우기(printf 서식) + 오류 수정 · 수업 중 "시험문제!" sizeof 서식 고치기 (→ 8장)</div>
+<section class="card">
+<h2>1. 변수와 상수 ★핵심</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 변수(variable): 프로그램이 실행되는 동안 값이 바뀌는 정보, 데이터를 저장·처리하는 <b>기억장소</b></li><li><span class="wk-tag star">⭐ 강조</span> — 상수(constant): 한 번 정해지면 프로그램이 끝날 때까지 바뀌지 않는 정보 → <code>const</code></li><li><span class="wk-tag note">✍️ 필기</span> — 기억장소 할당 = 주소(address) = 번지. 컴파일 타임에 변수 이름이 기억장치 주소로 바뀐다 (예: <code>n</code> → 100번지, 메모리 주소 100 101 102 103 …)</li><li><span class="wk-tag note">✍️ 필기</span> — 소스(<code>.c</code>) → 컴파일(<code>.obj</code>) → 링크(<code>.exe</code>) → 실행 / 컴파일 타임 ↔ 런 타임</li><li>변수 선언: 저장공간 할당 / 변수 초기화: 선언하면서 초깃값 대입</li></ul>
+<pre><code class="language-c">int n;          // 선언: 4byte 공간만 할당 (어떤 값인지 모름)
+n = 10;         // 대입
+n = 20;         // 변수는 값이 바뀔 수 있다
+
+int value = 0;              // 선언 + 초기화
+char name = 'a';            // 'a' 의 ASCII 코드 97 저장
+int data1, data2, data3;    // 여러 변수 한 줄 선언</code></pre>
+<ul><li>변수 표기법: 카멜 표기법 <code>myName</code> · 헝가리언 표기법 <code>c_name</code></li><li>변수 이름 규칙: 영문자·숫자·밑줄만 사용 / 숫자로 시작 X / 공백 X / 대·소문자 구별 / 예약어(키워드) 사용 X</li></ul>
+</section>
+<section class="card">
+<h2>2. 자료형 크기와 서식 ★시험</h2>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>구분</th><th>자료형</th><th>크기</th><th>printf 서식</th><th>비고</th></tr>
+<tr><td>문자형</td><td><code>char</code></td><td>1byte</td><td><code>%c</code></td><td>-128 ~ 127 (unsigned char: 0 ~ 255)</td></tr>
+<tr><td>정수형</td><td><code>short</code></td><td>2byte</td><td><code>%d</code></td><td>-32,768 ~ 32,767</td></tr>
+<tr><td>정수형</td><td><code>int</code></td><td>4byte</td><td><code>%d</code></td><td>-2,147,483,648 ~ 2,147,483,647</td></tr>
+<tr><td>정수형</td><td><code>long</code></td><td>4byte (VS) / 8byte (Mac·Linux)</td><td><code>%ld</code></td><td>강의자료 표 기준 int와 같은 범위</td></tr>
+<tr><td>실수형</td><td><code>float</code></td><td>4byte</td><td><code>%f</code></td><td>소수점 아래 6자리 출력</td></tr>
+<tr><td>실수형</td><td><code>double</code></td><td>8byte</td><td><code>%lf</code> (printf 는 <code>%f</code> 도 가능)</td><td>scanf 로 입력받을 때는 반드시 <code>%lf</code></td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — <code>signed</code>(부호 있음, 기본값) ↔ <code>unsigned</code>(부호 없음) · 예: <code>signed int n;</code> / <code>unsigned int n;</code></li><li><span class="wk-tag star">⭐ 강조</span> — 부호 비트: 맨 앞 1비트가 0이면 양수, 1이면 음수 → 1byte 부호 있음 -128 ~ 127 / 부호 없음 0 ~ 255</li><li><code>10000000</code> → 부호 있음 -128 / 부호 없음 128 · <code>11111111</code> → 부호 있음 -1 / 부호 없음 255</li><li><span class="wk-tag fix">✍️ 필기 정정</span> — <code>unsigned char (1)~(256)</code> ❌ → <b>0 ~ 255</b> ✅ · signed char 는 -128 ~ -1 음수, 0 ~ 127 양수</li></ul>
+</section>
+<section class="card">
+<h2>3. 서식 지정자 (% 형식 연산자)</h2>
+<table class="ref">
+<tbody>
+<tr><th>서식</th><th>의미</th><th>예시 → 결과</th></tr>
+<tr><td><code>%d</code></td><td>10진 정수</td><td><code>printf("%d", 100);</code> → 100</td></tr>
+<tr><td><code>%o</code></td><td>8진수</td><td><code>printf("%o", 100);</code> → 144</td></tr>
+<tr><td><code>%x</code> / <code>%X</code></td><td>16진수 (소문자 / 대문자)</td><td><code>printf("%x", 100);</code> → 64</td></tr>
+<tr><td><code>%c</code></td><td>문자 1개</td><td><code>printf("%c", 65);</code> → A</td></tr>
+<tr><td><code>%s</code></td><td>문자열 (여러 글자)</td><td><code>printf("%s", "안녕하세요");</code></td></tr>
+<tr><td><code>%f</code> / <code>%lf</code></td><td>실수 (float / double)</td><td><code>printf("%f", 3.14);</code> → 3.140000</td></tr>
+<tr><td><code>%p</code></td><td>주소</td><td><code>printf("%p", &amp;age);</code></td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag fix">✍️ 필기 정정</span> — <code>0진법 → %d</code> ❌ → <b>10진법</b> <code>%d</code> ✅</li><li><span class="wk-tag star">⭐ 강조</span> — <code>'A'</code> 는 문자 1개(<code>%c</code>), <code>"A"</code> 는 문자열(<code>%s</code>, 끝에 널 문자 포함) → <code>printf("%c", "A");</code> ❌ · <code>char a1 = "c";</code> ❌ → <code>'c'</code> ✅</li><li>출력 칸수 조정: <code>printf("[%5d] [%05d] [%-5d]", 7, 7, 7);</code> → <code>[    7] [00007] [7    ]</code></li></ul>
+</section>
+<section class="card">
+<h2>4. ASCII 코드와 2진수</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 문자는 1byte · <code>'A'</code> = 65(10진수) = <code>01000001</code>(2진수) · <code>'a'</code> = 97</li></ul>
+<table class="ref">
+<tbody style="min-width:345px;">
+<tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+</tbody></table>
+<ul><li>64 + 1 = <b>65</b> → <code>printf("%c", 65);</code> 는 <code>A</code> 를 출력한다</li></ul>
+</section>
+<section class="card">
+<h2>5. 상수: const 와 #define</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>const</code> 상수는 <b>선언과 동시에 초기화</b>해야 하고, 값을 다시 대입하면 컴파일 오류</li><li><span class="wk-tag star">⭐ 강조</span> — 매크로 상수 <code>#define</code>: <code>#</code> 으로 시작하는 구문은 컴파일 전에 <b>전처리기</b>가 해석·치환 (끝에 <code>;</code> 안 붙임)</li></ul>
+<pre><code class="language-c">// ex01_04-const.c: 상수
+#include &lt;stdio.h&gt;
+int main() {
+    const int a1 = 1000;    // 상수는 선언과 동시에 초기화해야
+    printf("a1: %d \n", a1);
+    // a1 = 2000;           // error: 상수는 재할당 불가능
+    printf("a1: %d \n", a1);
+    return 0;
+}</code></pre>
+<pre><code class="language-c">// #define 매크로 상수 + const 상수
+#define DATA1 100
+#include &lt;stdio.h&gt;
+int main() {
+    const int a1 = 1000;
+    printf("a1 %d DATA: %d\n", a1, DATA1);    // a1 1000 DATA: 100
+    return 0;
+}</code></pre>
+</section>
+<section class="card">
+<h2>6. scanf() 와 &amp; 주소 연산자</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>scanf("%d", &amp;age);</code> : <code>&amp;</code> 로 변수의 <b>시작 주소</b>를 넘겨야 입력값이 그 기억장소에 저장된다</li><li><code>printf("%p, %d\n", &amp;age, age);</code> → 주소와 값을 출력 (예: <code>0x16f3eb3d8, 21</code>)</li><li>VS 에서 scanf 를 쓰려면 맨 위에 <code>#define _CRT_SECURE_NO_WARNINGS</code> · 앞의 밑줄이나 철자가 틀리면 C4996 오류</li></ul>
+<pre><code class="language-c">// Prj06/06scanf.c  printf(), scanf()
+#define _CRT_SECURE_NO_WARNINGS
+#include &lt;stdio.h&gt;
+int main(void) {
+    int month = 0;
+    printf("1년은 몇 달? ");
+    scanf("%d", &amp;month);
+    printf("1년은 %d달\n\n", month);
+
+    int snum, credit;
+    printf("당신의 학번과 신청 학점은? ");
+    scanf("%d %d", &amp;snum, &amp;credit);
+    printf("학번:  %d 신청학점: %d\n", snum, credit);
+    return 0;
+}</code></pre>
+</section>
+<section class="card">
+<h2>7. 실습 코드 (w03)</h2>
+<ul><li>1-00 <code>ex01_00-var.c</code> 리터럴: 정수 <code>100</code>(<code>%d</code>) · 실수 <code>3.14</code>(<code>%f</code>) · 문자 <code>'A'</code>(<code>%c</code>) · 문자열 <code>"안녕하세요"</code>(<code>%s</code>)</li><li>1-01 <code>ex01_01-var.c</code> 초기화하지 않은 변수 출력 → 쓰레기값 (VS 에서는 <b>C4700 오류</b>)</li><li>1-02 <code>ex01_02-var.c</code> 변수 초기화 → <code>a1: c</code> · <code>a2: 100</code> · <code>a3: 11.110000</code></li><li>1-03 <code>ex01_03-var.c</code> 선언과 초기화 (<code>int a7, a8, a9;</code> 한 줄 선언 → 300 · 400 · 500)</li><li>1-04 <code>ex01_04-const.c</code> const 상수(→ 5장) · 1-05 <code>ex01_05-sizeof.c</code> sizeof(→ 8장) · 2-01 <code>06scanf.c</code> scanf(→ 6장)</li></ul>
+<pre><code class="language-c">// ex01_02-var.c: 변수 초기화
+#include &lt;stdio.h&gt;
+int main() {
+    char  a1;
+    int   a2;
+    float a3;
+
+    a1 = 'c';
+    a2 = 100;
+    a3 = 11.11;
+
+    printf("a1: %c \n", a1);    // a1: c
+    printf("a2: %d \n", a2);    // a2: 100
+    printf("a3: %f \n", a3);    // a3: 11.110000
+    return 0;
+}</code></pre>
+</section>
+<section class="card">
+<h2>8. ★ 시험문제 정리</h2>
+<h3>① 강의자료 23p — [실습 1-05] ex01_05-sizeof.c 실행결과 쓰기</h3>
+<pre><code class="language-c">// ex01_05-sizeof.c
+#include &lt;stdio.h&gt;
+int main() {
+    char gender;
+    int age;
+    float weight;
+    double height;
+
+    printf("변수의 할당크기\n");
+    printf("gender: %d, age: %d, weight: %d, height: %d\n\n",
+        sizeof(gender), sizeof(age), sizeof(weight), sizeof(height));
+
+    printf("자료형 크기\n");
+    printf("char: %d, int: %d, float: %d, double: %d\n\n",
+        sizeof(char), sizeof(int), sizeof(float), sizeof(double));
+
+    printf("정수형상수: %d, 실수형상수: %d\n",
+        sizeof(10), sizeof(3.14159));
+    return 0;
+}</code></pre>
+<pre><code class="language-text">변수의 할당크기
+gender: 1, age: 4, weight: 4, height: 8
+
+자료형 크기
+char: 1, int: 4, float: 4, double: 8
+
+정수형상수: 4, 실수형상수: 8</code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>sizeof</code> 는 크기(바이트 수)를 <b>정수</b>로 돌려준다 → <code>%d</code> 로 출력</li><li><span class="wk-tag star">⭐ 강조</span> — <code>sizeof(10)</code> → 정수 상수는 int → <b>4</b> / <code>sizeof(3.14159)</code> → 실수 상수는 double → <b>8</b> (<code>3.14f</code> 처럼 f 를 붙이면 float → 4)</li><li><span class="wk-tag note">✍️ 필기</span> — (수업 중 "시험문제!") <code>sizeof(float)</code> 을 <code>%f</code>, <code>sizeof(double)</code> 을 <code>%lf</code>, <code>sizeof(char)</code> 를 <code>%c</code> 로 찍으면 ❌ → <b>전부 <code>%d</code></b> → <code>int: 4</code> · <code>float: 4</code> · <code>double: 8</code> · <code>char: 1</code></li></ul>
+<h3>② 강의자료 27p — [quiz 1-01] 빈칸채우기 · 출력결과가 나오도록 프로그램 작성</h3>
+<ul><li>[출력] <code>성별: w, 나이: 21, 신장: 165.700000</code></li><li>✏️ 자료에서 printf 의 서식 문자열이 가려져 있다(빈칸 ①) · 코드 안에 <b>오류가 있는 줄</b>도 하나 숨어 있다</li></ul>
+<pre><code class="language-c">// quiz01-01_ex01.c (문제)
+#include &lt;stdio.h&gt;
+int main() {
+    char gender;
+    int age;
+    double height;
+
+    gender = 'w';
+    age = 21;
+    height = 165.7
+
+    printf("______①______%lf\n", gender, age, height);
+    return 0;
+}</code></pre>
+<ol><li>빈칸 ①에 들어갈 서식 문자열은?</li><li><code>double</code> 변수 <code>height</code> 를 printf 로 출력하는 서식 지정자는?</li><li>오류가 있는 줄을 찾아 바르게 고쳐 쓰면?</li></ol>
+<details class="wk-details">
+<summary>💡 빈칸채우기 정답 보기</summary>
+<ol><li><code>성별: %c, 나이: %d, 신장: </code> → char 는 <code>%c</code>, int 는 <code>%d</code> (뒤의 <code>%lf\n</code> 은 자료에 보이는 부분)</li><li><code>%lf</code> — printf 에서는 <code>%f</code> 도 OK, scanf 로 입력받을 때는 반드시 <code>%lf</code></li><li><code>height = 165.7;</code> — 세미콜론(;)이 빠져 있으면 컴파일 오류</li></ol>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 실수는 소수점 아래 <b>6자리</b>까지 출력 → <code>165.700000</code></li></ul>
+<pre><code class="language-c">// quiz01-01_ex01.c (정답)
+#include &lt;stdio.h&gt;
+int main() {
+    char gender;
+    int age;
+    double height;
+
+    gender = 'w';
+    age = 21;
+    height = 165.7;     // 오류 수정: ; 가 빠지면 컴파일 오류
+
+    printf("성별: %c, 나이: %d, 신장: %lf\n", gender, age, height);   // 빈칸 ①
+    return 0;
+}</code></pre>
+</details>
+</section>
+<section class="card">
+<h2>9. 오류 수정 모음 ★빈칸채우기·오류수정 대비</h2>
+<ul><li><code>printf("문자 리터럴 %c\n", "A");</code> ❌ → <code>'A'</code> ✅</li><li><code>a1 = "c";</code> ❌ → <code>a1 = 'c';</code> ✅</li><li>서식표 빈칸: <code>short → %s</code> ❌ → <code>%d</code> ✅ · <code>long → %</code> ❌ → <code>%ld</code> ✅ · <code>0진법</code> ❌ → <code>10진법 %d</code> ✅</li><li><code>unsigned char (1)~(256)</code> ❌ → <code>0 ~ 255</code> ✅</li><li><code>#define CRT_SECUE_NO_WARNINGS</code> ❌ → <code>#define _CRT_SECURE_NO_WARNINGS</code> ✅</li><li><code>printf("float: %f \n", sizeof(float));</code> ❌ → <code>%d</code> ✅ (sizeof 결과는 정수)</li></ul>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (정리 전 메모)</summary>
+<pre><code class="language-text">변수(variable): 기억장소 · 상수(constant): const · 기억장소 할당: 주소(address). 번지 · int n; n=10; n=20;
+char a1; 1byte (-128)~(+127) · int a2; 4byte · float a3; 4byte · double a4; 8byte
+signed char (-128)~(+127) · unsigned char (1)~(256) · -128~-1:음수 · 0~255:양수
+자료형(data types): 부호가 있는 문자형 signed int n;(default 값) · 부호가 없는 문자형 unsigned int n;
+0진법 → %d · 8진법 → %o · 16진법 → %x
+문자형 char → 1바이트 → %c · 숫자형 short → 2바이트 → %d · int → 4바이트 → %d · long → 8바이트 → %ld · 실수형 float → 4바이트 → %f · double → 8바이트 → %lf
+ASCII code · 문자 1byte · A 65 10진수 → 2진수 (128 64 32 16 8 4 2 1 / 0 1 0 0 0 0 0 1) · a97
+소스 → 컴파일 → 링크 → 실행 (.c .obj .exe) · 컴파일 타임: 변수 → 기억장치 주소 (n → 100번지) · 컴파일 타임 / 런 타임 · 100 101 102 103 104
+% 형식 연산자: %d:10진수 · %f:실수 · %c:한글자 문자 · %s:여러개 문자</code></pre>
+</details>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-2주차.html">‹ 이전 · <b>2주차</b><br><small>C 기본 실습 (ch02)</small></a><a class="next" href="프로그래밍언어실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~3주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「프로그래밍언어실습 · 3주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

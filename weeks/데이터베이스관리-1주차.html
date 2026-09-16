@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 1주차 · 강의소개 / DB 개념</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 1주차</h1>
+        <p>강의소개 / DB 개념</p>
+    </header>
+
+    <nav class="wk-pager"><span></span><a class="next" href="데이터베이스관리-2주차.html">다음 · <b>2주차</b> ›<br><small>DB 정의·특징 / MySQL 실습</small></a></nav>
+
+<div class="tip">자료: DB-Lect01-강의소개.pdf · TalkMedia(강의소개 화면)</div>
+<section class="card">
+<h2>1. 강의 안내</h2>
+<ul><li>담당: 김희숙 교수 · 카카오 오픈채팅(본인 한글이름으로 변경)</li><li><span class="wk-tag star">⭐ 강조</span> — 교재: 'SQL과 NoSQL 기반의 데이터베이스 입문', 박성진 저, 생능출판사, 2023.2</li><li><span class="wk-tag star">⭐ 강조</span> — 평가: 출석 20% + 중간 30% + 기말 30% + 과제 20% (결석 4회 F, 지각 3회=결석 1회)</li><li><span class="wk-tag note">✍️ 필기</span> — 프로그램: MySQL 8.0, MongoDB — 설치 시 사용자 계정은 반드시 영문(한글 금지)</li></ul>
+</section>
+<section class="card">
+<h2>2. 데이터베이스 개념 ★핵심</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 데이터베이스: 한 조직의 여러 응용시스템이 데이터를 공유할 수 있도록 통합·저장한 운영 데이터의 집합체</li><li>테이블(릴레이션): 행과 열로 구성된 2차원 표 형태 (예: 학생(번호,이름,학년,분반,학과번호))</li></ul>
+</section>
+<section class="card">
+<h2>3. 첫 SQL 실습</h2>
+<pre><code class="language-sql">-- 데이터 조회
+select * from 학생;
+select 이름, 성적 from 학생;
+select * from 학생 where 이름='kim';</code></pre>
+<ul><li>윈도우 화면 캡처 단축키: 윈도우 + Shift + S</li><li>예제 DB: testdb (Charset: utf8mb4)</li></ul>
+</section>
+
+    <nav class="wk-pager"><span></span><a class="next" href="데이터베이스관리-2주차.html">다음 · <b>2주차</b> ›<br><small>DB 정의·특징 / MySQL 실습</small></a></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리 · 1주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 8주차 · 중간고사 시험문제 정리 (1~4주차 반영)</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 8주차 · 중간고사</h1>
+        <p>중간고사 시험문제 정리 (1~4주차 반영)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-4주차.html">‹ 이전 · <b>4주차</b><br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a><span></span></nav>
+
+<div class="tip">📅 <b>중간고사 — 10월 21일(수) 10:00</b> · 평가 비율: 출석 20% + <b>중간 30%</b> + 기말 30% + 과제 20% · 지금까지 배운 <b>1~4주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
+<div class="tip">🎯 <b>교수님이 시험에 낸다고 한 것</b> (4주차 필기 원문) — ① <b>스키마 표기법을 작성하시오</b> ② <b>FOREIGN KEY 는 참조하는 열과 데이터 형식이 같아야 한다</b> ③ 시험범위 = 강의자료4의 <b>3 · 4 · 5+25 · 7 · 21 · 24 · 32 · 34 · 41 · 42p</b></div>
+<section class="card">
+<h2>🔴 빨간 글씨 = 암기 (강의자료에 빨간색으로 표시된 곳)</h2>
+<table class="ref">
+<tbody>
+<tr><th>강의자료</th><th>페이지</th><th>빨간 글씨</th></tr>
+<tr><td>3주차</td><td>5 · 14 · 17p</td><td>데이터베이스 정의 — <b>공유 · 통합 · 저장 · 운영</b></td></tr>
+<tr><td>3주차</td><td>5 · 15 · 17p</td><td>파일시스템 단점 — <b>중복성 · 종속성</b></td></tr>
+<tr><td>3주차</td><td>5 · 16 · 17p</td><td>DBMS 장점 — <b>독립성</b></td></tr>
+<tr><td>3주차</td><td>7 · 20p</td><td><b>데이터베이스 시스템</b></td></tr>
+<tr><td>3주차</td><td>21p</td><td><b>데이터베이스 관리 시스템(DBMS)</b></td></tr>
+<tr><td>3주차</td><td>9 · 24p</td><td><b>CREATE · INSERT · SELECT</b></td></tr>
+<tr><td>3주차</td><td>28p</td><td><b>Primary Key · 중복불가 · 필수입력</b></td></tr>
+<tr><td>3주차</td><td>32p</td><td><b>기본키</b> (기본키 찾기 퀴즈)</td></tr>
+<tr><td>4주차</td><td>10 · 39p</td><td>기본키 — <b>Primary Key · 중복불가 · 필수입력</b></td></tr>
+<tr><td>4주차</td><td>11 · 40p</td><td>외래키 — <b>Foreign Key · 기본키를 참조하는 키 · 참조무결성 제약조건</b></td></tr>
+<tr><td>4주차</td><td>18 · 21p</td><td>SQL 의 <b>PRIMARY KEY</b></td></tr>
+<tr><td>4주차</td><td>37p</td><td>관계형 데이터베이스 — 데이터 사이에 <b>관계</b>를 부여함으로 데이터를 조직화</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>4주차 — 강의자료 시험범위 페이지 ★ (<a href="데이터베이스관리-4주차.html">4주차 자세히</a>)</h2>
+<table class="ref">
+<tbody>
+<tr><th>페이지</th><th>외울 내용</th></tr>
+<tr><td><b>3p</b></td><td>정의 4: 공유 · 통합(중복 최소화) · 저장 · 운영 / 특징 4: 실시간 접근 · 계속 변화 · 동시 공유 · 내용 기반 참조</td></tr>
+<tr><td><b>4p</b></td><td>파일시스템 단점: 중복성 · 종속성 ↔ DBMS 장점: 중복 최소화 · 독립성 증진 / DBMS 단점: 고비용 · 회복 기법 복잡 / 발전: 1세대 네트워크·계층 → 2세대 관계 → 3세대 객체지향·객체관계 → 4세대 NoSQL·NewSQL</td></tr>
+<tr><td><b>5p + 25p</b></td><td>외부 스키마 → 개념 스키마 → 내부 스키마 (ANSI/SPARC)</td></tr>
+<tr><td><b>7p</b></td><td>빈칸: <code>CREATE TABLE</code> · <code>NOT NULL</code> · <code>PRIMARY KEY(학과번호)</code></td></tr>
+<tr><td><b>21p</b></td><td>빈칸: <code>int</code> · <code>varchar(50)</code> · <code>char(2)</code> · <code>NOT NULL</code> · <code>PRIMARY KEY(번호)</code> · <code>FOREIGN KEY(학과번호) REFERENCES 학과(학과번호)</code></td></tr>
+<tr><td><b>24p</b></td><td>스키마 = 구조와 제약조건에 대한 명세 · 표기법 학생(학번, 이름, 학년, 성별) · 인스턴스 = 실제 저장된 값</td></tr>
+<tr><td><b>32p</b></td><td>메타데이터 = 데이터에 관한 데이터 · 데이터 사전 = 시스템 카탈로그 · 데이터 디렉토리</td></tr>
+<tr><td><b>34p</b></td><td>데이터 모델 3요소 = 구조 · 연산 · 제약조건</td></tr>
+<tr><td><b>41p</b></td><td>차수 = 애트리뷰트(열) 수 · 카디널리티 = 투플(행) 수 · 도메인 = 값들의 집합</td></tr>
+<tr><td><b>42p</b></td><td>신입생(학번, 주민등록번호, 이름, 주소, 학과명) · 차수 5 · 카디널리티 4 · 기본키 학번</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 외래키: 참조되는 기본키 값에 반드시 존재(<b>참조 무결성</b>) · <b>NULL 허용</b> · 데이터 형식 동일</li><li><span class="wk-tag star">⭐ 강조</span> — 테이블 2개: 생성·입력은 <b>부모 → 자식</b>, 삭제는 <b>자식 → 부모</b></li><li><span class="wk-tag star">⭐ 강조</span> — 논리적 독립성: 개념 스키마가 변해도 외부 스키마 영향 없음 / 물리적 독립성: 내부 스키마가 변해도 개념·외부 영향 없음</li><li><span class="wk-tag fix">⚠️ 정정</span> — 필기의 "차수 = 행 수 / 카디널리티 = 열 수"는 <b>반대</b>입니다</li></ul>
+</section>
+<section class="card">
+<h2>3주차 — DBMS · 데이터언어 · 기본키 (<a href="데이터베이스관리-3주차.html">3주차 자세히</a>)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 파일시스템 단점: 데이터 <b>중복성 · 종속성</b> / DBMS 장점: <b>중복 최소화 · 데이터 독립성</b> / DBMS 단점: 비용 · 교육</li><li><span class="wk-tag star">⭐ 강조</span> — DB 특성 4가지: 실시간 접근 · 계속 변화 · 동시 공유 · <b>내용으로 참조</b></li><li><span class="wk-tag star">⭐ 강조</span> — 구성요소: 데이터 · 하드웨어 · DBMS · 사용자 (+데이터언어) / 사용자 3종: DBA · 응용프로그래머 · 일반사용자</li><li><span class="wk-tag star">⭐ 강조</span> — DDL <code>CREATE ALTER DROP</code>(DBA) · DML <code>INSERT SELECT UPDATE DELETE</code>(일반사용자) · DCL <code>GRANT REVOKE</code>(DBA)</li><li><span class="wk-tag star">⭐ 강조</span> — 기본키 = 각 투플을 유일하게 구별 · 중복 불가 · 필수 입력 / 복합키 예: 수강 = {학번, 과목번호}</li><li>32p 기본키 찾기: 인사기록 = 사원번호 / 가족관계 = {사원번호, 이름} / 거래처 = {사원명, 거래처}</li><li>Workbench: 한 줄 Ctrl+Enter / 여러 줄 Ctrl+Shift+Enter</li></ul>
+</section>
+<section class="card">
+<h2>1~2주차 — DB 개념 · MySQL 기본 실습</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 데이터베이스 = 한 조직의 여러 응용시스템이 공유할 수 있도록 <b>통합 · 저장</b>한 <b>운영 데이터</b>의 집합체</li><li><span class="wk-tag star">⭐ 강조</span> — 실습 4단계: 데이터베이스(스키마) 생성 → 테이블 생성 → 데이터 입력 → 데이터 조회</li><li>자료형: 1byte = 8bit · 문자형 1byte · 정수형 int 4byte · <code>char(n)</code> 고정 길이(주민번호) / <code>varchar(n)</code> 가변 길이(주소)</li></ul>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../데이터베이스관리.html#quiz">데이터베이스관리 과목 페이지 — 퀴즈(객관식 15 · 주관식 15)</a></li><li><a href="../데이터베이스관리.html#s18">4주차 빈칸 문제 — 7p · 42p 신입생 · 외래키 선언문</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-4주차.html">‹ 이전 · <b>4주차</b><br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a><span></span></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍언어실습 2주차 · C 기본 실습 (ch02)</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../프로그래밍언어실습.html">← 프로그래밍언어실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>💾 프로그래밍언어실습 · 2주차</h1>
+        <p>C 기본 실습 (ch02)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-1주차.html">‹ 이전 · <b>1주차</b><br><small>강의소개 / C 개요</small></a><a class="next" href="프로그래밍언어실습-3주차.html">다음 · <b>3주차</b> ›<br><small>변수·상수·자료형 (ch03)</small></a></nav>
+
+<div class="tip">자료: C-Lect02-ch02-기본실습.pdf · 필기(260907).txt · workC 실습 코드</div>
+<section class="card">
+<h2>1. C 프로그램 빌드 과정 ★핵심</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 소스 작성 → 전처리(preprocessor) → 빌드(컴파일+링크) → 실행</li><li><span class="wk-tag star">⭐ 강조</span> — 소스파일(.c) → [컴파일] → 목적파일(.obj) → [링크] → 실행파일(.exe)</li><li><span class="wk-tag note">✍️ 필기</span> — 1.소스작성 2.컴파일 3.링크 4.실행결과 확인</li></ul>
+</section>
+<section class="card">
+<h2>2. 출력 함수</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>printf("...")</code> : 서식 출력 (자동 줄바꿈 없음, <code>\n</code> 필요)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>puts("...")</code> : 문자열을 출력하고 자동으로 줄바꿈</li><li><code>putc()</code> : 문자 하나 출력</li></ul>
+<pre><code class="language-c">// P02-PutString/02put.c
+#include &lt;stdio.h&gt;
+int main() {
+    printf("hello world!\n");
+    puts("C 언어, 재미있다!");
+    return 0;
+}</code></pre>
+</section>
+<section class="card">
+<h2>3. 함수와 프로그램 구조 ★핵심</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — C언어는 함수들로 구성된다</li><li><span class="wk-tag note">✍️ 필기</span> — C언어는 main() 함수로 시작된다 (자동 실행), 다른 함수는 호출해야 실행됨</li><li>표준 라이브러리 함수 vs 사용자 정의 함수</li></ul>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+void func1(void);
+int main(void) {
+    printf("main() start!!!\n");
+    func1();            // 호출해야 실행
+    printf("main() end!!!\n");
+    return 0;
+}
+void func1(void) {
+    printf("func1() start!!!\n");
+    printf("func1() end!!!\n");
+}</code></pre>
+</section>
+<section class="card">
+<h2>4. 디버깅 &amp; 퀴즈</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 오류 예: <code>printf("...")</code> 뒤 세미콜론(;) 누락, 닫는 따옴표 누락 → 컴파일 오류</li><li>Quiz: printf 한 번으로 여러 줄 출력 / 함수(func1,func2)를 사용해 출력 순서 맞추기</li></ul>
+<pre><code class="language-c">// 마지막 퀴즈 정답
+int main(void){
+    printf("안녕하세요\n");
+    func2();   // "제 이름은"
+    func1();   // "gdhong 입니다."
+    return 0;
+}</code></pre>
+<ul><li>여러 프로젝트 중 실행할 것은 [시작 프로젝트로 설정] (굵은 글씨로 표시)</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-1주차.html">‹ 이전 · <b>1주차</b><br><small>강의소개 / C 개요</small></a><a class="next" href="프로그래밍언어실습-3주차.html">다음 · <b>3주차</b> ›<br><small>변수·상수·자료형 (ch03)</small></a></nav>
+
+    <p class="wk-src">노션 「프로그래밍언어실습 · 2주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

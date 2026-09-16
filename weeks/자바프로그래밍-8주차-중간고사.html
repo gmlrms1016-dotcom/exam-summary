@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바프로그래밍 8주차 · 중간고사 시험문제 정리 (1~4주차 반영)</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../자바프로그래밍.html">← 자바프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>☕ 자바프로그래밍 · 8주차 · 중간고사</h1>
+        <p>중간고사 시험문제 정리 (1~4주차 반영)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-4주차.html">‹ 이전 · <b>4주차</b><br><small>2장 실습 + 3장 반복문·배열·예외처리</small></a><span></span></nav>
+
+<div class="tip">📅 <b>중간고사 — 10월 20일(화) 14:00</b> · 평가: 필기평가1 30점 + 직무수행능력평가2 15점 + 직무수행능력평가3 등 (실습 중심) · 지금까지 배운 <b>1~4주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
+<div class="tip">🎯 <b>강의자료에 ★시험단골로 표시된 것</b> — ① <b>타입 변환</b>(자동 / 강제 캐스팅) ② <b>예외 처리</b>(try-catch-finally, 예외 클래스) ③ WORA · JVM ④ 반복문 for / while / do-while 차이 ⑤ 배열 선언과 생성</div>
+<section class="card">
+<h2>4주차 — 연산자·조건문 실습 + 반복문 · 배열 · 예외처리 (<a href="자바프로그래밍-4주차.html">4주차 자세히</a>)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>/</code> 몫 · <code>%</code> 나머지 → 5000초: <code>time % 60</code> = 20초 · <code>(time / 60) % 60</code> = 23분 · <code>(time / 60) / 60</code> = 1시간</li><li><span class="wk-tag star">⭐ 강조</span> — <code>a = d++</code> 대입 먼저·증가 나중(d=3 → a=3, d=4) / <code>a = ++d</code> 증가 먼저·대입 나중</li><li>삼항 <code>(a &gt; b) ? (a - b) : (b - a)</code> → 3, 8 이면 5</li><li>switch: <code>case 10: case 9:</code> 처럼 이어 쓰면 같은 코드(fall-through) · 문자열 case 가능(<code>"카페라떼"</code>) · 없는 값은 default</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>while</th><th>do-while</th></tr>
+<tr><td>조건 검사</td><td>먼저 검사 후 실행</td><td>실행 후 검사</td></tr>
+<tr><td>최소 실행</td><td>0번일 수 있음</td><td><b>무조건 1번</b></td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>for(초기작업; 반복조건; 반복후작업)</code> · for 안에서 선언한 변수는 밖에서 못 씀 · 조건이 비면 무한 반복 · 1~10 합 = <b>55</b></li><li><span class="wk-tag star">⭐ 강조</span> — <code>continue</code> 다음 반복으로 / <code>break</code> 반복문 하나 탈출(중첩이면 안쪽만) · 문자열 비교는 <code>equals()</code></li><li>배열: 인덱스 0부터 · <code>int intArray[] = new int[10];</code> · <code>int a[10];</code> 은 <b>컴파일 오류</b> · <code>배열.length</code> = 크기 · for-each <code>for (int k : num)</code></li><li><span class="wk-tag star">⭐ 강조</span> — <code>public static void main(String[] args)</code> : public · static · void · 문자열 배열</li><li>컴파일 오류 = 문법 오류 / <b>예외</b> = 실행 중 오류 → 처리 안 하면 강제 종료 · <code>finally</code> 는 예외 여부와 상관없이 실행</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>예외 클래스</th><th>발생 상황</th></tr>
+<tr><td><code>ArithmeticException</code></td><td>정수를 0으로 나눌 때</td></tr>
+<tr><td><code>ArrayIndexOutOfBoundsException</code></td><td>배열 인덱스 범위를 벗어날 때</td></tr>
+<tr><td><code>InputMismatchException</code></td><td>Scanner 가 정수를 기다리는데 문자 입력</td></tr>
+<tr><td><code>NumberFormatException</code></td><td>정수가 아닌 문자열을 <code>Integer.parseInt()</code></td></tr>
+<tr><td><code>NullPointerException</code></td><td>null 레퍼런스로 객체 사용</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>3주차 — 2장 자료형 · 연산자 · 조건문 (<a href="자바프로그래밍-3주차.html">3주차 자세히</a>)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 식별자: 특수문자·공백 불가(<code>_</code> <code>$</code> 가능) · 숫자로 시작 불가 · 키워드 불가 · 대소문자 구별</li><li><span class="wk-tag star">⭐ 강조</span> — 카멜 표기: 클래스 첫 글자 대문자 · 변수·메서드 첫 글자 소문자 · 상수 모두 대문자</li><li><span class="wk-tag star">⭐ 강조</span> — 기본타입 8개: boolean char byte short int long float double / <b>String 은 클래스</b>(기본타입 아님)</li><li><span class="wk-tag star">⭐ 강조</span> — 자동 형변환: 작은 → 큰 / 강제 형변환: 큰 → 작은, <code>(int)2.9</code> → 2<ul><li><code>(int)2.9 + 1.8</code> → 3.8 · <code>(int)(2.9 + 1.8)</code> → 4 · <code>(int)2.9 + (int)1.8</code> → 3</li></ul></li><li><span class="wk-tag star">⭐ 강조</span> — Scanner: <code>import java.util.Scanner;</code> → <code>new Scanner(System.in)</code> · <code>next()</code> <code>nextInt()</code> <code>nextDouble()</code> <code>nextBoolean()</code></li><li><code>69 / 10</code> = 6 · <code>69 % 10</code> = 9</li><li><span class="wk-tag note">✍️ 필기</span> — switch 의 case 값은 <b>문자 · 정수 · 문자열 리터럴</b>만 (실수·변수·수식 불가)</li></ul>
+</section>
+<section class="card">
+<h2>1~2주차 — 자바 개요 (<a href="자바프로그래밍-2주차.html">2주차 자세히</a>)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 자바 개발 목적 = <b>플랫폼 독립성</b> · WORA(Write Once Run Anywhere)</li><li><span class="wk-tag star">⭐ 강조</span> — 바이트코드 = CPU 중립적 목적코드(.class) / JVM = 바이트코드를 인터프리터 방식으로 실행</li><li><span class="wk-tag note">✍️ 필기</span> — <b>JVM 자체는 플랫폼 종속</b>(OS마다 별도), 바이트코드는 플랫폼 독립</li><li><span class="wk-tag star">⭐ 강조</span> — 자바는 <b>링크 과정이 없다</b>(실행 중 동적 로딩) · 느린 실행은 JIT 컴파일러로 개선</li><li><span class="wk-tag star">⭐ 강조</span> — JDK = 개발도구 + JRE / JRE = JVM + 표준 라이브러리</li><li><span class="wk-tag star">⭐ 강조</span> — 특성: 플랫폼 독립 · 객체지향 · 멀티스레드 · <b>가비지 컬렉션</b> · 포인터 없음</li><li><span class="wk-tag note">✍️ 필기</span> — public 클래스는 소스당 1개, 파일명 = public 클래스명 · 실행은 <code>main()</code> 에서 시작</li></ul>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../자바프로그래밍.html#quiz">자바프로그래밍 과목 페이지 — 퀴즈(객관식 10 · 주관식 10)</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-4주차.html">‹ 이전 · <b>4주차</b><br><small>2장 실습 + 3장 반복문·배열·예외처리</small></a><span></span></nav>
+
+    <p class="wk-src">노션 「자바프로그래밍」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

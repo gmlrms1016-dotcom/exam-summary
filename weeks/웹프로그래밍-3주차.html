@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹프로그래밍 3주차 · &lt;9월 8일&gt; 변수·자료형·형변환·객체</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../웹프로그래밍.html">← 웹프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🕸️ 웹프로그래밍 · 3주차</h1>
+        <p>&lt;9월 8일&gt; 변수·자료형·형변환·객체</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-2주차.html">‹ 이전 · <b>2주차</b><br><small>&lt;9월 1일&gt; 실행단계·이벤트·함수·객체</small></a><a class="next" href="웹프로그래밍-4주차.html">다음 · <b>4주차</b> ›<br><small>&lt;9월 15일&gt; 연산자·truthy/falsy·단락 평가</small></a></nav>
+
+<div class="tip">자료: 필기.png · 명시적 형변환.txt · 02_변수와 자료형.pdf(교재) · eClass 강의노트(9/8)</div>
+<section class="card">
+<h2>1. 변수(Variable)와 선언 키워드 ★필수암기</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 변수 = 메모리상의 값을 담는 그릇</li><li><span class="wk-tag star">⭐ 강조</span> — 변수 선언 키워드 3가지: <code>var</code> / <code>let</code> / <code>const</code></li><li><span class="wk-tag note">✍️ 필기</span> — <code>let</code>: 변수의 중복 정의(재선언) 불가능</li><li><span class="wk-tag note">✍️ 필기</span> — <code>var</code>: 중복 정의 가능 (구버전 방식)</li><li><span class="wk-tag note">✍️ 필기</span> — <code>const</code>: 상수 — 값 변경 불가</li><li><span class="wk-tag star">⭐ 강조</span> — ES6부터 JS를 어디서든 쓸 수 있게 되면서 <code>let</code> 이 등장</li></ul>
+</section>
+<section class="card">
+<h2>2. JS 자료형(Data Type) ★필수암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 원시형(Primitive): String / Number / Boolean (+ null, undefined)</li><li><span class="wk-tag star">⭐ 강조</span> — 참조형(Reference): 객체(Object)</li><li><span class="wk-tag note">✍️ 필기</span> — 기본 데이터타입 5종: 문자열, 숫자, 부울린(Boolean), undefined, null<ul><li>숫자형: 정수와 실수 구분 없이 하나의 number로 처리 (int/double 구분 없음)</li><li>계산 오류·부정확한 연산 시 NaN(Not a Number) 반환</li><li>null = 의도적으로 비운 값 / undefined = 값이 할당되지 않은 상태(초기화 안 함)</li></ul></li></ul>
+</section>
+<section class="card">
+<h2>3. 객체(Object)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 객체 = 사용자정의 객체 + 내장 객체</li><li><span class="wk-tag note">✍️ 필기</span> — 객체의 구성요소 = 속성(변수) + 메서드(함수)<ul><li>속성 접근은 프로퍼티, 동작 호출은 메서드</li></ul></li></ul>
+<pre><code class="language-javascript">class Person {
+    String name;
+    void eat(){ ... }
+}
+P1 = new Person();
+P2 = new Person();
+P2.eat();          // "쩝쩝"
+P2.name = "쭈굴";   // P2 객체에 대입
+P1.name = "한주";   // P1 객체에 대입</code></pre>
+</section>
+<section class="card">
+<h2>4. Node.js ★필수암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — Node.js = 자바스크립트 코드가 단독으로 실행될 수 있는 런타임 실행 플랫폼</li><li><span class="wk-tag note">✍️ 필기</span> — JS가 브라우저 밖에서도 단독 실행되게 해주는 소프트웨어 (자바의 JVM과 유사한 역할 비교)</li></ul>
+</section>
+<section class="card">
+<h2>5. 형변환(Type Conversion) ★필수암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 명시적 형변환: <code>String()</code> / <code>Number()</code> / <code>Boolean()</code> 함수를 직접 사용</li><li><span class="wk-tag note">✍️ 필기</span> — 묵시적(암묵적) 형변환: 연산 과정에서 자동으로 타입이 변환됨</li></ul>
+<pre><code class="language-javascript">"10" + 5  ===&gt;  "105"          // 묵시적 형변환(문자열 연결)
+Number("10") + 5  ===&gt;  15     // 명시적 형변환(숫자로 변환)</code></pre>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 형변환 = 캐스팅(Casting). 피연산자의 type이 다르면 type을 통일한 뒤 연산한다<ul><li>비교 연산자: <code>==</code> 는 값만 비교 / <code>===</code> 는 값과 타입을 모두 비교</li></ul></li></ul>
+</section>
+<section class="card">
+<h2>6. 템플릿 문자열 ★암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 템플릿 문자열: 백틱( <code>`</code> )으로 감싸고, <code>${ }</code> 안에 표현식을 넣으면 문자열 안에서 계산됨</li></ul>
+<pre><code class="language-javascript">console.log(`273 + 52의 값은 ${273 + 52}입니다`)  // 273 + 52의 값은 325입니다</code></pre>
+</section>
+<section class="card">
+<h2>7. [참고] 연산자 (교재 02장)</h2>
+<ul><li>복합 대입 연산자: <code>+=</code> , <code>-=</code> , <code>*=</code> , <code>/=</code> , <code>%=</code> (예: <code>a += 1</code> 은 <code>a = a+1</code>)</li><li>증감 연산자: <code>변수++</code> / <code>++변수</code> (후위·전위), <code>변수--</code> / <code>--변수</code></li><li>typeof 연산자: string·number·boolean·undefined·function·object·symbol·bigint 중 하나 반환</li><li>입력 함수: <code>prompt(메시지, 기본값)</code> 문자열 입력 / <code>confirm()</code> 확인·취소(true/false) 반환</li></ul>
+</section>
+<section class="card">
+<h2>8. 메모리 구조 (스택 vs 힙)</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 스택(Stack): 작고 빠르며 정리된 저장 공간 — 원시형 값 저장</li><li><span class="wk-tag note">✍️ 필기</span> — 힙(Heap): 크고 유동적인 저장 공간 — 참조형(객체) 저장</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-2주차.html">‹ 이전 · <b>2주차</b><br><small>&lt;9월 1일&gt; 실행단계·이벤트·함수·객체</small></a><a class="next" href="웹프로그래밍-4주차.html">다음 · <b>4주차</b> ›<br><small>&lt;9월 15일&gt; 연산자·truthy/falsy·단락 평가</small></a></nav>
+
+    <p class="wk-src">노션 「웹프로그래밍 · 3주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

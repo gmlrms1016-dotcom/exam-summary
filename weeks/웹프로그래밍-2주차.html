@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹프로그래밍 2주차 · &lt;9월 1일&gt; 실행단계·이벤트·함수·객체</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../웹프로그래밍.html">← 웹프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🕸️ 웹프로그래밍 · 2주차</h1>
+        <p>&lt;9월 1일&gt; 실행단계·이벤트·함수·객체</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-1주차.html">‹ 이전 · <b>1주차</b><br><small>강좌 OT / 웹 개요</small></a><a class="next" href="웹프로그래밍-3주차.html">다음 · <b>3주차</b> ›<br><small>&lt;9월 8일&gt; 변수·자료형·형변환·객체</small></a></nav>
+
+<div class="tip">자료: 필기.png · first.html · eClass 강의노트(9/1)</div>
+<section class="card">
+<h2>1. 웹문서를 웹브라우저로 실행하는 단계 ★필수암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — DOM 트리 → 렌더 트리 → 페인팅(Painting) → 결과 화면<ul><li>브라우저는 HTML을 파싱해 DOM 트리를 만들고, CSS와 결합해 렌더 트리를 구성한 뒤 페인팅하여 화면에 출력</li></ul></li><li><span class="wk-tag note">✍️ 필기</span> — 리플로우(Reflow): 요소의 넓이·크기·배치를 다시 계산·조정하는 과정</li><li><span class="wk-tag note">✍️ 필기</span> — 리페인트(Repaint): 요소의 색상·모양을 다시 그리는 과정</li></ul>
+</section>
+<section class="card">
+<h2>2. 이벤트(Event) 4요소 ★필수암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 이벤트 · 이벤트 소스 · 이벤트 핸들러(=이벤트 리스너) · 이벤트 객체<ul><li>이벤트: 웹에서 발생하는 사건(클릭 등)</li><li>이벤트 소스: 이벤트가 발생한 근원지 (예: button)</li><li>이벤트 핸들러(리스너): 이벤트 처리 방법을 담은 코드를 등록</li><li>이벤트 객체: 발생한 이벤트의 정보를 담은 객체</li></ul></li></ul>
+</section>
+<section class="card">
+<h2>3. 함수 선언 방법 3가지 ★필수암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — ① 선언적 함수 — <code>function btnClick(){ ... }</code> 로 선언, <code>btnClick();</code> 로 호출</li></ul>
+<pre><code class="language-javascript">function btnClick(){
+    ...
+}
+btnClick();  // 호출</code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — ② 표현적 함수(익명 함수) — 변수에 함수를 대입</li></ul>
+<pre><code class="language-javascript">let btnClick = function(){
+    ...
+};
+btnClick();  // 호출</code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — ③ 화살표 함수 — function 키워드를 화살표 <code>=&gt;</code> 로 축약</li></ul>
+<pre><code class="language-javascript">let btnClick = () =&gt; {
+    ...
+};
+btnClick();  // 호출</code></pre>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 함수도 데이터(값)처럼 변수에 담아 넘겨줄 수 있다 (일급 객체)</li></ul>
+</section>
+<section class="card">
+<h2>4. 객체(Object)의 구성요소 ★필수암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 객체의 구성요소 = 속성(변수) + 메서드(함수)</li><li><span class="wk-tag note">✍️ 필기</span> — 속성(Property) = 객체가 가진 값(변수), 메서드(Method) = 객체가 하는 동작(함수)</li><li><span class="wk-tag star">⭐ 강조</span> — 비유: 붕어빵틀 = 클래스(Class) / 붕어빵 = 객체(Object)<ul><li>즉 클래스는 설계도(틀), 객체는 그 틀로 찍어낸 실체(인스턴스)</li></ul></li></ul>
+</section>
+<section class="card">
+<h2>5. HTML 태그 중첩</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 태그 안에 태그를 설정하는 것을 '중첩'이라고 한다 (예: <code>&lt;div&gt;&lt;h1&gt;&lt;/h1&gt;&lt;/div&gt;</code>)</li><li>파싱(Parsing) = 분석 / 크롤링(Crawling) = 콘텐츠를 긁어오는 것</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-1주차.html">‹ 이전 · <b>1주차</b><br><small>강좌 OT / 웹 개요</small></a><a class="next" href="웹프로그래밍-3주차.html">다음 · <b>3주차</b> ›<br><small>&lt;9월 8일&gt; 변수·자료형·형변환·객체</small></a></nav>
+
+    <p class="wk-src">노션 「웹프로그래밍 · 2주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

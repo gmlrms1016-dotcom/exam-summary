@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바프로그래밍 2주차 · 1장 자바 개요</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../자바프로그래밍.html">← 자바프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>☕ 자바프로그래밍 · 2주차</h1>
+        <p>1장 자바 개요</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-1주차.html">‹ 이전 · <b>1주차</b><br><small>강의소개 / 첫 프로그램</small></a><a class="next" href="자바프로그래밍-3주차.html">다음 · <b>3주차</b> ›<br><small>2장 자료형·연산자·조건문</small></a></nav>
+
+<div class="tip">자료: 1장.pdf · 2장.pdf(도입) · 필기.png</div>
+<section class="card">
+<h2>1. 프로그래밍 언어와 자바의 태동</h2>
+<ul><li>기계어(0·1) → 어셈블리어(니모닉) → 고급언어(C/C++, Java, C#)</li><li>자바: 1991년 선마이크로시스템즈 제임스 고슬링의 그린 프로젝트, 1995년 발표 (초기명 오크 OAK)</li><li><span class="wk-tag star">⭐ 강조</span> — 자바 개발 목적 = 플랫폼 독립성 (기존 언어의 플랫폼 종속성 문제 해결)</li><li>2009년 오라클이 선마이크로시스템즈 인수</li></ul>
+</section>
+<section class="card">
+<h2>2. WORA와 JVM ★핵심</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — WORA(Write Once Run Anywhere): 한 번 작성한 코드가 모든 플랫폼에서 실행</li><li><span class="wk-tag star">⭐ 강조</span> — 바이트코드(byte code): 자바 소스를 컴파일한 CPU 중립적 목적코드 (.class에 저장)</li><li><span class="wk-tag star">⭐ 강조</span> — JVM(Java Virtual Machine): 바이트코드를 인터프리터 방식으로 해석·실행하는 가상기계</li><li><span class="wk-tag note">✍️ 필기</span> — JVM 자체는 플랫폼에 종속적(OS마다 별도) 이지만, 바이트코드는 플랫폼 독립적<ul><li>컴파일: 자바 .java → .class / C : .c → .obj → .exe</li></ul></li></ul>
+</section>
+<section class="card">
+<h2>3. 자바 vs C/C++ 실행 환경</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 자바는 링크 과정이 없다 — 필요한 클래스를 실행 중 동적 로딩(클래스로더)</li><li>C/C++: 컴파일→링크로 하나의 실행파일(.exe) 생성, 플랫폼마다 다시 컴파일 필요</li><li>느린 실행 개선: JIT(Just In Time) 컴파일러가 바이트코드를 해당 CPU 기계어로 변환</li></ul>
+</section>
+<section class="card">
+<h2>4. JDK / JRE / API</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — JDK(개발 키트) = 개발도구 + JRE / JRE(실행 환경) = JVM + 표준 라이브러리</li><li>주요 도구: javac(컴파일러), java(실행기), javadoc, jar, javap(디어셈블러), jdb(디버거)</li><li>자바 API = JDK에 포함된 클래스 라이브러리, 패키지(package) 단위로 제공 (import하여 사용)</li><li>Java 9부터 모듈(module) 프로그래밍 도입 (플랫폼 모듈화, jmods)</li></ul>
+</section>
+<section class="card">
+<h2>5. 자바의 특성 ★암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 플랫폼 독립성 · 객체지향(상속·다형성·캡슐화) · 멀티스레드 자체 지원</li><li><span class="wk-tag star">⭐ 강조</span> — 가비지 컬렉션: 메모리 반환 기능 없이 new(할당)만 있고 JVM이 자동 회수 (실시간 시스템엔 부적합)</li><li>포인터 개념 없음 → 안전하고 작성이 쉬움, 타입 체크 엄격</li><li><span class="wk-tag note">✍️ 필기</span> — 소스(.java)당 public 클래스는 1개만 가능하고, 파일명 = public 클래스명이어야 한다</li><li>IDE: 이클립스(Eclipse), IntelliJ IDEA</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-1주차.html">‹ 이전 · <b>1주차</b><br><small>강의소개 / 첫 프로그램</small></a><a class="next" href="자바프로그래밍-3주차.html">다음 · <b>3주차</b> ›<br><small>2장 자료형·연산자·조건문</small></a></nav>
+
+    <p class="wk-src">노션 「자바프로그래밍 · 2주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

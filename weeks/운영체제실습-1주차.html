@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운영체제실습 1주차 · 리눅스 환경 / 기본 명령어</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../운영체제실습.html">← 운영체제실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🐧 운영체제실습 · 1주차</h1>
+        <p>리눅스 환경 / 기본 명령어</p>
+    </header>
+
+    <nav class="wk-pager"><span></span><a class="next" href="운영체제실습-2주차.html">다음 · <b>2주차</b> ›<br><small>리눅스 명령어 실습</small></a></nav>
+
+<div class="tip">자료: 스크린샷.png · 자료링크.txt</div>
+<section class="card">
+<h2>0. 참고 자료</h2>
+<ul><li>리눅스 학습 카페: cafe.naver.com/thisislinux</li><li>실습 환경: VMware 가상머신 위에 Rocky Linux</li></ul>
+</section>
+<section class="card">
+<h2>1. 네트워크 설정 분석 (ipconfig /all)</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 두 번의 ipconfig /all 결과를 비교하여 변경된 네트워크 어댑터 설정을 분석<ul><li>VMnet1: 임대 만료 시간이 갱신됨</li><li>VMnet8: DHCP가 비활성화되면서 수동 IP(192.168.111.1)로 변경, 기존 임대·DHCP 서버 정보가 사라짐</li></ul></li></ul>
+</section>
+<section class="card">
+<h2>2. 파일 목록 확인 (ls) ★암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>ls -l</code> : 상세 정보(권한·크기·수정일 등) 표시, 숨김 파일 제외</li><li><span class="wk-tag star">⭐ 강조</span> — <code>ls -al</code> : 상세 정보 + 마침표(.)로 시작하는 숨김 파일까지 모두 표시</li></ul>
+</section>
+<section class="card">
+<h2>3. 터미널 프롬프트 기호 ★암기</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>$</code> (일반 사용자): 시스템 권한이 제한된 일반 계정</li><li><span class="wk-tag star">⭐ 강조</span> — <code>#</code> (관리자/Root): 시스템의 모든 권한을 가진 최고 관리자 계정</li></ul>
+</section>
+<section class="card">
+<h2>4. 기본 시스템 명령어</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>whoami</code> : 현재 로그인한 사용자 계정 이름 확인</li><li><span class="wk-tag star">⭐ 강조</span> — <code>pwd</code> : 현재 작업 중인 폴더의 절대 경로 확인</li></ul>
+</section>
+
+    <nav class="wk-pager"><span></span><a class="next" href="운영체제실습-2주차.html">다음 · <b>2주차</b> ›<br><small>리눅스 명령어 실습</small></a></nav>
+
+    <p class="wk-src">노션 「운영체제실습 · 1주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

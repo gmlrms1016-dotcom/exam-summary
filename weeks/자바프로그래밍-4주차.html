@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바프로그래밍 4주차 · 2장 실습 + 3장 반복문·배열·예외처리</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../자바프로그래밍.html">← 자바프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>☕ 자바프로그래밍 · 4주차</h1>
+        <p>2장 실습 + 3장 반복문·배열·예외처리</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-3주차.html">‹ 이전 · <b>3주차</b><br><small>2장 자료형·연산자·조건문</small></a><a class="next" href="자바프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~4주차 반영)</small></a></nav>
+
+<div class="tip">자료: 3장.pdf · 실습 java 파일 10개 (ArithmeticOperator · AssignmentIncDecOperator · TernaryOperator · SuccessOrFail · MultipleOfThree · Grading · GradingSwitch · CoffeePrice · ForEx1 · ForSample)</div>
+<div class="tip">📌 9/15 실습은 <b>2장 연산자·조건문 예제</b>와 <b>3장 for 문</b>(ForSample · ForEx1)까지 진행 · 3장 나머지(while ~ 예외처리)는 강의자료 기준으로 함께 정리</div>
+<section class="card">
+<h2>1. 2장 연산자 실습</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>/</code> 는 <b>몫</b>, <code>%</code> 는 <b>나머지</b> → 초 단위를 시·분·초로 바꿀 때 활용</li></ul>
+<pre><code class="language-java">// ArithmeticOperator.java — 5000 입력 → 5000초는 1시간 23분 20초입니다.
+int second = time % 60;          // 5000 % 60 = 20
+int minute = (time / 60) % 60;   // 83 % 60  = 23
+int hour   = (time / 60) / 60;   // 83 / 60  = 1</code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 증감 연산자: <code>a = d++</code> 는 <b>대입 먼저, 증가 나중</b> / <code>a = ++d</code> 는 <b>증가 먼저, 대입 나중</b></li></ul>
+<pre><code class="language-java">// AssignmentIncDecOperator.java — 실행 결과를 주석으로
+int a = 3, b = 3, c = 3;
+a += 3;  b *= 3;  c %= 2;      // a=6 b=9 c=1
+int d = 3;
+a = d++;    // a=3 d=4
+a = ++d;    // a=5 d=5
+a = d--;    // a=5 d=4
+a = --d;    // a=3 d=3</code></pre>
+<ul><li>삼항 연산자로 두 수의 차(항상 양수): <code>(a &gt; b) ? (a - b) : (b - a)</code> → 3, 8 입력 시 <code>두 수의 차는 5</code> (TernaryOperator.java)</li></ul>
+</section>
+<section class="card">
+<h2>2. 2장 조건문 실습</h2>
+<table class="ref">
+<tbody>
+<tr><th>파일</th><th>조건문</th><th>핵심 · 실행 결과</th></tr>
+<tr><td>SuccessOrFail</td><td>if-else</td><td>80점 이상 합격(85 → 축하합니다! 합격입니다.) · 마지막 else("error")는 실행될 일이 없는 분기</td></tr>
+<tr><td>MultipleOfThree</td><td>if-else</td><td><code>number % 3 == 0</code> 이면 3의 배수 (9 → 3의 배수입니다.)</td></tr>
+<tr><td>Grading</td><td>다중 if-else</td><td>위에서부터 차례로 검사: 90 이상 A · 80 이상 B · 70 이상 C · 60 이상 D · 그 외 F (85 → B)</td></tr>
+<tr><td>GradingSwitch</td><td>switch</td><td><code>switch(score/10)</code> · <code>case 10: case 9:</code> 는 A (73 → C)</td></tr>
+<tr><td>CoffeePrice</td><td>switch (문자열)</td><td>카페라떼 → 3500원 · 녹차 → 메뉴가 없습니다! (default)</td></tr>
+</tbody></table>
+<pre><code class="language-java">// CoffeePrice.java — case 를 여러 개 이어 쓰면(fall-through) 같은 코드를 실행
+switch (order) {
+case "에스프레소":
+case "카푸치노":
+case "카페라떼":
+    price = 3500;
+    break;
+case "아메리카노":
+    price = 2000;
+    break;
+default:
+    System.out.println("메뉴가 없습니다!");
+}</code></pre>
+</section>
+<section class="card">
+<h2>3. 반복문 for ★핵심</h2>
+<ul><li>자바 반복문 3가지: <b>for</b> · <b>while</b> · <b>do-while</b></li><li><span class="wk-tag star">⭐ 강조</span> — <code>for(초기작업; 반복조건; 반복후작업) { 작업문 }</code> : 반복조건이 true 인 동안 반복</li><li>for 문 안에서 선언한 변수(<code>for(int i=0; i&lt;10; i++)</code> 의 i)는 <b>for 문 밖에서 사용할 수 없다</b></li><li>반복조건이 <code>true</code> 이거나 <b>비어 있으면 무한 반복</b> · 초기작업·반복후작업은 <code>,</code> 로 여러 문장 나열 가능</li></ul>
+<pre><code class="language-java">// ForSample.java (예제 3-1) → 1+2+3+4+5+6+7+8+9+10=55
+int sum = 0;
+for (int i = 1; i &lt;= 10; i++) {
+    sum += i;
+    System.out.print(i);
+    if (i &lt; 10) System.out.print("+");
+    else {
+        System.out.print("=");
+        System.out.print(sum);
+    }
+}</code></pre>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — (실습 결과) ForEx1: print 로 <code>0123456789</code> → println 으로 0~9 한 줄씩 → <code>i=1sum=1</code> … <code>i=5sum=15</code> → <code>합계 = 15</code></li></ul>
+</section>
+<section class="card">
+<h2>4. while · do-while ★차이 암기</h2>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>while</th><th>do-while</th></tr>
+<tr><td>조건 검사</td><td><b>먼저 검사</b> 후 실행</td><td><b>실행 후</b> 검사</td></tr>
+<tr><td>최소 실행 횟수</td><td>0번일 수 있음</td><td><b>무조건 최소 1번</b></td></tr>
+<tr><td>반복조건 생략</td><td>컴파일 오류</td><td>컴파일 오류</td></tr>
+</tbody></table>
+<pre><code class="language-java">// 예제 3-2 while — -1 이 입력될 때까지 평균 구하기
+while (n != -1) {
+    sum += n;
+    count++;
+    n = scanner.nextInt();
+}
+// 10 30 -20 40 -1 → 정수의 개수는 4개이며 평균은 15.0입니다.
+
+// 예제 3-3 do-while — a~z 출력 → abcdefghijklmnopqrstuvwxyz
+char c = 'a';
+do {
+    System.out.print(c);
+    c = (char)(c + 1);
+} while (c &lt;= 'z');</code></pre>
+</section>
+<section class="card">
+<h2>5. 중첩 반복 · continue · break</h2>
+<ul><li>중첩 반복: 반복문 안에 반복문 — <b>2중·3중</b> 정도가 적당 (예제 3-4 구구단: <code>for i</code>(1~9단) 안에 <code>for j</code>(1~9))</li><li><span class="wk-tag star">⭐ 강조</span> — <code>continue</code> : 반복문을 빠져나가지 않고 <b>다음 반복으로</b> 진행 (예제 3-5: 5 -2 6 10 -4 입력 → 양수의 합은 21)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>break</code> : 반복문 <b>하나를 완전히 빠져나감</b> · 중첩 반복이면 <b>안쪽 반복문만</b> 벗어남 (예제 3-6: "exit" 입력 시 while 종료)</li><li>문자열 비교는 <code>==</code> 가 아니라 <code>text.equals("exit")</code></li></ul>
+</section>
+<section class="card">
+<h2>6. 배열 ★핵심</h2>
+<ul><li>배열 = 인덱스와 그에 대응하는 <b>같은 타입</b> 데이터들의 모음 · 인덱스는 <b>0부터</b>, 마지막은 <b>크기-1</b> · 자바에서 배열은 <b>객체</b></li></ul>
+<pre><code class="language-java">int intArray[];                  // ① 배열 선언 (레퍼런스 변수)
+intArray = new int[10];          // ② 배열 생성
+int intArray2[] = new int[10];   // 선언 + 생성
+int intArray3[] = {0,1,2,3,4,5,6,7,8,9};   // 선언 + 초기화 (개수만큼 생성)
+// int intArray4[10];            // 컴파일 오류! 선언할 때 크기 지정 불가</code></pre>
+<ul><li>생성 전에는 원소 접근 불가 · 음수나 범위 밖 인덱스는 <b>실행 오류</b> · <code>배열.length</code> = 배열 크기</li><li>하나의 배열을 여러 레퍼런스 변수가 <b>공유</b>할 수 있다</li></ul>
+<pre><code class="language-java">// for-each 문 — 배열 원소를 차례로 꺼내 쓰기
+int[] num = {1, 2, 3, 4, 5};
+int sum = 0;
+for (int k : num)      // k 는 num[0] ~ num[4] 로 차례대로
+    sum += k;
+System.out.println("합은" + sum);   // 합은15</code></pre>
+<ul><li>2차원 배열 <code>new int[2][5]</code> · <code>i.length</code> = <b>행</b> 개수 · <code>i[n].length</code> = n번째 행의 <b>열</b> 개수</li><li>비정방형 배열: 행마다 열 개수가 다름 → <code>new int[4][]</code> 후 <code>intArray[0] = new int[3];</code> 처럼 행별로 생성</li><li>메소드가 배열을 리턴: <code>static int[] makeArray()</code> — 리턴 타입에 <b>크기를 쓰지 않음</b></li><li>예제 결과: 3-7 제일 큰 수 100 · 3-8 평균 4.6 · 3-10 4년 평점 평균 3.725 · 3-11 비정방형 <code>10 11 12 / 20 21 / 30 31 32 / 40 41</code> · 3-12 <code>0 1 2 3</code></li></ul>
+</section>
+<section class="card">
+<h2>7. main() 메소드와 명령행 인자</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>public static void main(String[] args)</code> : 반드시 <b>public · static · void</b>, 매개변수는 <b>문자열 배열</b></li><li>명령행 인자는 <code>args</code> 로 전달 (이클립스: Run → Run Configurations) · <code>Double.parseDouble("20.5")</code> → 20.5 (예제 3-13: 2 20.5 88.1 → 합계:110.6)</li></ul>
+</section>
+<section class="card">
+<h2>8. 예외 처리 ★시험단골</h2>
+<ul><li><b>컴파일 오류</b> = 문법 오류(컴파일할 때 발견) / <b>예외(Exception)</b> = <b>실행 중</b> 발생한 오류 → 처리하지 않으면 프로그램 <b>강제 종료</b></li></ul>
+<pre><code class="language-java">try {
+    // 예외가 발생할 가능성이 있는 실행문
+}
+catch (처리할예외타입 e) {
+    // 예외 처리문
+}
+finally {
+    // 예외 발생 여부와 상관없이 무조건 실행 (생략 가능)
+}</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>예외 클래스</th><th>발생 상황</th><th>예제</th></tr>
+<tr><td><code>ArithmeticException</code></td><td>정수를 <b>0으로 나눌</b> 때</td><td>3-14 · 3-15</td></tr>
+<tr><td><code>ArrayIndexOutOfBoundsException</code></td><td>배열 인덱스가 <b>범위를 벗어날</b> 때</td><td>3-16</td></tr>
+<tr><td><code>InputMismatchException</code></td><td>Scanner 가 정수를 기다리는데 <b>문자</b>가 입력될 때</td><td>3-17</td></tr>
+<tr><td><code>NumberFormatException</code></td><td>"3.141592" 처럼 <b>정수가 아닌 문자열</b>을 <code>Integer.parseInt()</code> 할 때</td><td>3-18</td></tr>
+<tr><td><code>NullPointerException</code></td><td><b>null</b> 레퍼런스로 객체를 사용할 때</td><td>—</td></tr>
+</tbody></table>
+<ul><li>예제 3-15: <code>catch(ArithmeticException e)</code> 로 "0으로 나눌 수 없습니다! 다시 입력하세요" 출력 후 다시 입력 → 100 ÷ 5 → 몫은 20</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-3주차.html">‹ 이전 · <b>3주차</b><br><small>2장 자료형·연산자·조건문</small></a><a class="next" href="자바프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~4주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「자바프로그래밍 · 4주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

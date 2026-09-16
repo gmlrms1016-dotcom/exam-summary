@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~3주차 반영)</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../운영체제실습.html">← 운영체제실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🐧 운영체제실습 · 8주차 · 중간고사</h1>
+        <p>중간고사 시험문제 정리 (1~3주차 반영)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>마운트 · 링크 · 권한 · 사용자관리</small></a><span></span></nav>
+
+<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~3주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
+<div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종</div>
+<section class="card">
+<h2>3주차 — 마운트 · 링크 · 권한 · 사용자관리 (<a href="운영체제실습-3주차.html">3주차 자세히</a>)</h2>
+<h3>마운트</h3>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>mount</code> = 저장장치를 디렉터리 트리에 연결 / 해제는 <b><code>umount /dev/cdrom</code></b></li><li>DVD 를 넣으면 <code>/dev/sr0 on /run/media/root/... type iso9660 (ro, ...)</code> 한 줄 추가 · <code>ro</code> = 읽기 전용</li><li>USB 포맷: <b>FAT O</b> / <b>NTFS X</b></li></ul>
+<h3>inode와 링크 ★</h3>
+<table class="ref">
+<tbody style="min-width:569px;">
+<tr><th>구분</th><th>명령</th><th>inode</th><th>원본 삭제 시</th></tr>
+<tr><td>하드 링크</td><td><code>ln 원본 링크</code></td><td>원본과 <b>같음</b></td><td>내용 <b>유지</b></td></tr>
+<tr><td>심볼릭 링크</td><td><code>ln -s 원본 링크</code></td><td><b>새 번호</b></td><td><b>깨짐</b> (다시 만들면 복구)</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — inode = 파일 정보(크기·소유자·권한·데이터 위치) 번호표, 파일 1개당 1개 · <b>이름이 달라도 inode 가 같으면 같은 파일</b> · <code>ls -i</code> 로 확인</li></ul>
+<h3>접근 권한 chmod ★</h3>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 기호 모드: 대상 <code>u</code> 소유자 · <code>g</code> 그룹 · <code>o</code> 기타 · <code>a</code> 전체 / 연산 <code>+</code> <code>-</code> <code>=</code> / 권한 <code>r</code> <code>w</code> <code>x</code> → <code>chmod u+x,go+w story.txt</code></li><li><span class="wk-tag star">⭐ 강조</span> — 8진수 모드: r=4 · w=2 · x=1 → <code>755</code> = rwxr-xr-x · <code>644</code> = rw-r--r-- · <code>775</code> = rwxrwxr-x</li><li><code>rm -i 파일</code> = 삭제 전 확인 · 기본 권한 <code>rw-r--r--</code>(644) 에서 실습 시작</li></ul>
+<h3>사용자와 그룹 관리 ★</h3>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>useradd user100</code></td><td>사용자 생성</td></tr>
+<tr><td><code>useradd -g YHG user100</code></td><td>그룹을 지정해서 생성</td></tr>
+<tr><td><code>userdel -r user100</code></td><td>사용자 삭제(<code>-r</code> 홈 디렉터리까지)</td></tr>
+<tr><td><code>groupadd YHG</code></td><td>그룹 생성</td></tr>
+<tr><td><code>passwd user100</code></td><td>비밀번호 설정 (8자 미만 경고)</td></tr>
+<tr><td><code>head</code> / <code>tail -5</code></td><td>파일 앞 · 뒤 확인</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>파일</th><th>필드 구조</th></tr>
+<tr><td><code>/etc/passwd</code></td><td>이름 : x : <b>UID</b> : <b>GID</b> : 설명 : 홈 : 셸</td></tr>
+<tr><td><code>/etc/group</code></td><td>그룹명 : x : <b>GID</b> : 소속 사용자</td></tr>
+<tr><td><code>/etc/shadow</code></td><td>이름 : <b>암호화 해시</b> : 최종변경일 : … (<code>!</code> <code>*</code> 로 시작 = <b>로그인 불가</b>)</td></tr>
+</tbody></table>
+<ul><li>실습 결과 <code>user100:x:1001:1001</code> / <code>user200:x:1002:1001</code> → <b>UID 는 다르고 GID 는 같다</b> = 같은 그룹</li></ul>
+</section>
+<section class="card">
+<h2>2주차 — 리눅스 명령어 실습 (<a href="운영체제실습-2주차.html">2주차 자세히</a>)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>tree / -L 4</code> 깊이 제한 · <code>ls -i</code> inode 번호</li><li><span class="wk-tag star">⭐ 강조</span> — <code>cd ..</code> 상위 · <code>cd /home</code> 절대경로 · <code>cd rocky</code> 상대경로 · <code>cd ~</code> 홈</li><li><span class="wk-tag star">⭐ 강조</span> — <code>mkdir a b c</code> 여러 개 · <code>mkdir -p a/b/c</code> 중간 디렉터리까지</li><li><span class="wk-tag star">⭐ 강조</span> — <code>rmdir</code> = <b>빈</b> 디렉터리만 삭제 · <code>rmdir -p a/b/c</code> / ✍️ <code>rm -rf</code> = 비어 있지 않아도 강제 삭제</li><li><span class="wk-tag star">⭐ 강조</span> — <code>poweroff</code> 시스템 종료</li></ul>
+</section>
+<section class="card">
+<h2>1주차 — 리눅스 환경 · 기본 명령어 (<a href="운영체제실습-1주차.html">1주차 자세히</a>)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>ls -l</code> 상세 정보(숨김 제외) / <code>ls -al</code> 상세 + <b>숨김 파일(.)</b> 까지</li><li><span class="wk-tag star">⭐ 강조</span> — 프롬프트 <code>$</code> 일반 사용자 / <code>#</code> 관리자(root)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>whoami</code> 현재 사용자 이름 · <code>pwd</code> 현재 위치의 절대 경로</li></ul>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../운영체제실습.html#quiz">운영체제실습 과목 페이지 — 퀴즈(객관식 10 · 주관식 10)</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>마운트 · 링크 · 권한 · 사용자관리</small></a><span></span></nav>
+
+    <p class="wk-src">노션 「운영체제실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍언어실습 8주차 · 중간고사 시험문제 정리 (1~3주차 반영)</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../프로그래밍언어실습.html">← 프로그래밍언어실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>💾 프로그래밍언어실습 · 8주차 · 중간고사</h1>
+        <p>중간고사 시험문제 정리 (1~3주차 반영)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>변수·상수·자료형 (ch03)</small></a><span></span></nav>
+
+<div class="tip">📅 <b>중간고사 — 10월 19일(월) 14:00</b> · 평가 비율: 출석 20% + <b>중간 40%</b> + 기말 40% (과제·실습은 가산점) · 지금까지 배운 <b>1~3주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
+<div class="tip">🎯 <b>교수님이 시험문제라고 한 것</b> (3주차) — ① 강의자료 <b>23p</b> [실습 1-05] <code>sizeof</code> <b>실행결과 쓰기</b> ② 강의자료 <b>27p</b> [quiz 1-01] <b>빈칸채우기</b>(printf 서식) + <b>오류 수정</b> ③ 수업 중 "시험문제!" — <code>sizeof</code> 결과를 <code>%f</code> <code>%lf</code> <code>%c</code> 로 찍은 코드 고치기 → <b>전부 <code>%d</code></b></div>
+<section class="card">
+<h2>★ 3주차 시험문제 (<a href="프로그래밍언어실습-3주차.html">3주차 자세히</a>)</h2>
+<h3>① 23p — ex01_05-sizeof.c 실행결과</h3>
+<pre><code class="language-text">변수의 할당크기
+gender: 1, age: 4, weight: 4, height: 8
+
+자료형 크기
+char: 1, int: 4, float: 4, double: 8
+
+정수형상수: 4, 실수형상수: 8</code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>sizeof</code> 결과는 <b>정수</b> → <code>%d</code> · <code>sizeof(10)</code> = 4 (int) · <code>sizeof(3.14159)</code> = <b>8</b> (double) · <code>3.14f</code> 는 float → 4</li></ul>
+<h3>② 27p — quiz 1-01 빈칸채우기 · 오류 수정</h3>
+<ul><li>출력 <code>성별: w, 나이: 21, 신장: 165.700000</code></li><li>빈칸 ① = <code>성별: %c, 나이: %d, 신장: </code> · double 출력 = <code>%lf</code> (printf 는 <code>%f</code> 도 가능, scanf 는 반드시 <code>%lf</code>)</li><li>오류 줄 = <code>height = 165.7</code> → <b><code>height = 165.7;</code></b> (세미콜론 누락 → 컴파일 오류)</li><li>실수는 소수점 아래 <b>6자리</b> → <code>165.700000</code></li></ul>
+<h3>③ 오류 수정 모음</h3>
+<ul><li><code>printf("%c", "A");</code> ❌ → <code>'A'</code> ✅ · <code>char a1 = "c";</code> ❌ → <code>'c'</code> ✅</li><li><code>short → %s</code> ❌ → <code>%d</code> · <code>long</code> → <code>%ld</code> · <code>0진법</code> ❌ → <code>10진법 %d</code></li><li><code>unsigned char (1)~(256)</code> ❌ → <code>0 ~ 255</code></li><li><code>#define CRT_SECUE_NO_WARNINGS</code> ❌ → <code>#define _CRT_SECURE_NO_WARNINGS</code></li></ul>
+</section>
+<section class="card">
+<h2>3주차 — 변수 · 상수 · 자료형</h2>
+<table class="ref">
+<tbody style="min-width:699px;">
+<tr><th>자료형</th><th>크기</th><th>서식</th><th>범위</th></tr>
+<tr><td><code>char</code></td><td>1byte</td><td><code>%c</code></td><td>-128 ~ 127 (unsigned 0 ~ 255)</td></tr>
+<tr><td><code>short</code></td><td>2byte</td><td><code>%d</code></td><td>-32,768 ~ 32,767</td></tr>
+<tr><td><code>int</code></td><td>4byte</td><td><code>%d</code></td><td>약 ±21억</td></tr>
+<tr><td><code>long</code></td><td>4byte(VS)</td><td><code>%ld</code></td><td>int 와 같음</td></tr>
+<tr><td><code>float</code></td><td>4byte</td><td><code>%f</code></td><td>소수점 6자리 출력</td></tr>
+<tr><td><code>double</code></td><td>8byte</td><td><code>%lf</code></td><td>scanf 는 반드시 <code>%lf</code></td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 변수 = 값이 바뀌는 <b>기억장소</b> / 상수 = 바뀌지 않음(<code>const</code>)</li><li><span class="wk-tag star">⭐ 강조</span> — 서식: <code>%d</code> 10진 · <code>%o</code> 8진 · <code>%x</code> 16진 · <code>%c</code> 문자 · <code>%s</code> 문자열 · <code>%f</code> 실수 · <code>%p</code> 주소</li><li><span class="wk-tag star">⭐ 강조</span> — <code>'A'</code> = 문자 1개 / <code>"A"</code> = 문자열 · <code>'A'</code> = 65 = <code>01000001</code> · <code>'a'</code> = 97</li><li><span class="wk-tag star">⭐ 강조</span> — <code>const</code> 는 선언과 동시에 초기화, 재대입하면 컴파일 오류 / <code>#define</code> 은 <b>전처리기</b>가 컴파일 전에 치환(끝에 <code>;</code> 없음)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>scanf("%d", &amp;age);</code> — <code>&amp;</code> 로 <b>주소</b>를 넘겨야 저장됨 · VS 는 <code>#define _CRT_SECURE_NO_WARNINGS</code></li><li>변수 이름 규칙: 숫자로 시작 X · 공백 X · 대·소문자 구별 · 예약어 X · 초기화 안 한 변수 출력은 VS 에서 C4700 오류</li></ul>
+</section>
+<section class="card">
+<h2>2주차 — C 기본 실습 (<a href="프로그래밍언어실습-2주차.html">2주차 자세히</a>)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 소스 작성 → 전처리 → 빌드(컴파일 + 링크) → 실행 · <code>.c</code> → [컴파일] → <code>.obj</code> → [링크] → <code>.exe</code></li><li><span class="wk-tag star">⭐ 강조</span> — <code>printf</code> 는 자동 줄바꿈 없음(<code>\n</code> 필요) / <code>puts</code> 는 출력 후 자동 줄바꿈</li><li><span class="wk-tag note">✍️ 필기</span> — C 는 함수들로 구성 · <code>main()</code> 에서 시작 · 다른 함수는 <b>호출해야</b> 실행</li><li><span class="wk-tag note">✍️ 필기</span> — 세미콜론 · 닫는 따옴표 누락 → 컴파일 오류</li></ul>
+</section>
+<section class="card">
+<h2>1주차 — C 개요 (<a href="프로그래밍언어실습-1주차.html">1주차 자세히</a>)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — C 언어 = <b>절차지향</b> 언어(함수 중심 구조적 프로그래밍) · 간결·효율 · 이식성</li><li><span class="wk-tag star">⭐ 강조</span> — 실행 과정: 소스(.c) → 컴파일(.obj) → 링킹(.exe) → 실행</li><li>VS 실행 단축키 <b>Ctrl+F5</b> · ✍️ 파일명에 <code>.c</code> 를 생략하면 <code>.cpp</code> 로 저장됨</li></ul>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../프로그래밍언어실습.html#quiz">프로그래밍언어실습 과목 페이지 — 퀴즈(객관식 10 · 주관식 10)</a></li><li><a href="../프로그래밍언어실습.html#s7">23p · 27p 빈칸채우기 직접 풀기</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>변수·상수·자료형 (ch03)</small></a><span></span></nav>
+
+    <p class="wk-src">노션 「프로그래밍언어실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

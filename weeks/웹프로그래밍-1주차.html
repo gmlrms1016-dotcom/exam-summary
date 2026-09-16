@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹프로그래밍 1주차 · 강좌 OT / 웹 개요</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../웹프로그래밍.html">← 웹프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🕸️ 웹프로그래밍 · 1주차</h1>
+        <p>강좌 OT / 웹 개요</p>
+    </header>
+
+    <nav class="wk-pager"><span></span><a class="next" href="웹프로그래밍-2주차.html">다음 · <b>2주차</b> ›<br><small>&lt;9월 1일&gt; 실행단계·이벤트·함수·객체</small></a></nav>
+
+<div class="tip">자료: 01_개요.pdf · 02_데이터의 재료·변수와 자료형.pdf · eClass 강의노트</div>
+<section class="card">
+<h2>0. 강의 안내</h2>
+<ul><li>담당: 장용미 교수 · 2026년 2학기 · 연구실 1호관 607호 · 연락은 eClass 쪽지</li><li><span class="wk-tag star">⭐ 강조</span> — 평가 비율: 출석 20% + 중간고사 30%(필기) + 기말고사 30%(추후협의) + 과제·기타 20%</li><li><span class="wk-tag note">✍️ 필기</span> — 시험 안내(강조): 교수님이 '강의시간에 말한 내용을 전부 시험(100문제)으로 낸다'고 하셨음 → 강의노트 전 항목 암기 필요</li></ul>
+</section>
+<section class="card">
+<h2>1. 웹프로그래밍이란 / 프런트엔드 vs 백엔드</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 프런트엔드(Front-end): 클라이언트(웹브라우저)에서 실행되는 기술</li><li><span class="wk-tag note">✍️ 필기</span> — 백엔드(Back-end): 서버에서 실행되는 기술</li><li>웹서비스 프로세스: 클라이언트(브라우저)가 URL로 요청(Request) → 서버가 처리 → 결과를 응답(Response)<ul><li>요청 예: http://naver.com/news.html → 해당 서버 IP로 접속하여 문서를 받아옴</li></ul></li><li>웹서버는 웹 애플리케이션을 실행하여 브라우저가 요청한 기능을 수행한 뒤 결과를 브라우저에 응답한다</li></ul>
+</section>
+<section class="card">
+<h2>2. 정적 페이지 vs 동적 페이지</h2>
+<ul><li>정적(Static) 콘텐츠: 변하지 않는 콘텐츠 (예: news.html 파일을 그대로 전달)</li><li>동적(Dynamic) 콘텐츠: 서버에서 동적으로 만들어진 변화 있는 콘텐츠 (예: login.jsp → '홍길동, 안녕!')<ul><li>동적 처리 흐름: 요청 → 컨테이너(Container)에서 실행코드 실행 → DB 연동 → 결과(html 또는 data 형식) 응답 → 브라우저가 렌더링</li></ul></li><li><span class="wk-tag star">⭐ 강조</span> — MPA vs SPA: Multi Page Application(여러 페이지) vs Single Page Application(단일 페이지)<ul><li>결과 형식: html 형식(jsp) 또는 data 형식(JSON, 예 {"name":"Kelly",...})</li></ul></li></ul>
+</section>
+<section class="card">
+<h2>3. 웹페이지 구성 3요소</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — HTML = 웹페이지의 구조와 내용 (Hyper Text Markup Language)</li><li><span class="wk-tag star">⭐ 강조</span> — CSS = 웹페이지의 모양 (Cascading Style Sheet)</li><li><span class="wk-tag star">⭐ 강조</span> — JS = 웹페이지의 행동/동작 (JavaScript)</li></ul>
+</section>
+<section class="card">
+<h2>4. 웹브라우저의 기본 구조</h2>
+<ul><li>사용자 인터페이스: 주소표시줄·이전/다음·북마크 등 (페이지 표시 창 제외 부분)</li><li>브라우저 엔진: UI와 렌더링 엔진 사이의 동작을 제어</li><li><span class="wk-tag star">⭐ 강조</span> — 렌더링 엔진: 요청한 콘텐츠 표시 — HTML·CSS를 파싱하여 화면에 표시</li><li>통신: HTTP 요청 등 네트워크 호출에 사용 (플랫폼 독립적 인터페이스)</li><li>UI 백엔드: 콤보박스·창 등 기본 장치를 그림 (OS UI 체계 사용)</li><li><span class="wk-tag star">⭐ 강조</span> — 자바스크립트 해석기: 자바스크립트 코드를 해석하고 실행</li><li>자료 저장소: 쿠키 등 자원을 저장 (HTML5의 웹 데이터베이스 포함)</li></ul>
+</section>
+<section class="card">
+<h2>5. 자바스크립트로 할 수 있는 일</h2>
+<ul><li>웹 클라이언트 애플리케이션 개발 — 브라우저에서 실행할 수 있는 유일한 프로그래밍 언어</li><li><span class="wk-tag star">⭐ 강조</span> — 웹 서버 개발 — Node.js 등장으로 서버도 JS로 개발 가능 (페이팔 결제시스템에도 활용, 빠름)</li><li>모바일 앱 개발 — React Native(페이스북): JS로 네이티브 앱 개발</li><li>데스크톱 앱 개발 — Electron 모듈 (VS Code 등)</li><li>게임 개발 — Unity 게임엔진(JS 기반)</li><li>데이터베이스 관리 — MongoDB(JS 활용하는 NoSQL)</li></ul>
+</section>
+<section class="card">
+<h2>6. 실습 환경 설정</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 설치 3종: Chrome(브라우저) / Visual Studio Code(에디터) / Node.js(런타임)</li><li>실습 폴더(예: ch3) 생성 → VS Code에서 〔File〕→〔Open Folder〕로 열기 → 이후 파일은 폴더 내부에 생성</li><li>JS 파일 실행: 〔Terminal〕→〔New Terminal〕 → 프롬프트에 <code>node 파일명.js</code> 입력</li></ul>
+</section>
+
+    <nav class="wk-pager"><span></span><a class="next" href="웹프로그래밍-2주차.html">다음 · <b>2주차</b> ›<br><small>&lt;9월 1일&gt; 실행단계·이벤트·함수·객체</small></a></nav>
+
+    <p class="wk-src">노션 「웹프로그래밍 · 1주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

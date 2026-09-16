@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 3주차 · DBMS·데이터언어·기본키</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 3주차</h1>
+        <p>DBMS·데이터언어·기본키</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-2주차.html">‹ 이전 · <b>2주차</b><br><small>DB 정의·특징 / MySQL 실습</small></a><a class="next" href="데이터베이스관리-4주차.html">다음 · <b>4주차</b> ›<br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a></nav>
+
+<div class="tip">자료: DB-Lect03-DBMS·기본키.pdf · 강의필기.txt(원본 대조) · SQL실습코드.txt</div>
+<section class="card">
+<h2>🔴 빨간 글씨 = 암기 (강의자료 DB-Lect03)</h2>
+<p>강의자료에서 교수님이 <b>빨간 글씨</b>로 표시한 부분입니다. 그대로 외우세요.</p>
+<table class="ref">
+<tbody>
+<tr><th>페이지</th><th>빨간 글씨</th></tr>
+<tr><td><b>5 · 14 · 17p</b></td><td>데이터베이스 정의 — <b>공유 · 통합 · 저장 · 운영</b></td></tr>
+<tr><td><b>5 · 15 · 17p</b></td><td>파일시스템 단점 — <b>중복성 · 종속성</b></td></tr>
+<tr><td><b>5 · 16 · 17p</b></td><td>DBMS 장점 — <b>독립성</b></td></tr>
+<tr><td><b>7 · 20p</b></td><td><b>데이터베이스 시스템</b></td></tr>
+<tr><td><b>21p</b></td><td><b>데이터베이스 관리 시스템(DBMS)</b></td></tr>
+<tr><td><b>9 · 24p</b></td><td><b>CREATE · INSERT · SELECT</b></td></tr>
+<tr><td><b>28p</b></td><td><b>Primary Key</b> · <b>중복불가</b> · <b>필수입력</b></td></tr>
+<tr><td><b>32p</b></td><td><b>기본키</b> (기본키 찾기 퀴즈)</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>0. 원본 대조 — 내가 직접 필기한 부분</h2>
+<p>교수님이 준 '강의필기 원본.txt'는 소제목만 있는 빈 골격이었고, '강의필기.txt'에서 아래 내용을 직접 채워 넣었습니다.</p>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 데이터베이스 정의 4가지: 공유(shared)·통합(integrated, 중복 최소화)·저장(stored)·운영(operational)</li><li><span class="wk-tag note">✍️ 필기</span> — 파일시스템 단점: ① 중복성 ② 종속성(프로그램이 변경되면 데이터도 변경)</li><li><span class="wk-tag note">✍️ 필기</span> — DBMS 장점: 데이터 독립성(프로그램이 변경돼도 데이터는 안 변함) → 논리적/물리적</li><li><span class="wk-tag note">✍️ 필기</span> — DBMS 단점: 비용, 교육</li><li><span class="wk-tag note">✍️ 필기</span> — 데이터언어 담당자: DDL=DBA, DML=일반사용자, DCL=DBA / DCL에 DENY까지 적음</li><li><span class="wk-tag note">✍️ 필기</span> — 키: 기본키(중복불가·필수입력)=PRIMARY KEY, 외래키=FOREIGN KEY</li><li><span class="wk-tag note">✍️ 필기</span> — 제품 테이블 CREATE문 + [실습 3-2] 검색 문제 + 32페이지 '기본키 찾기' 정답 직접 작성</li></ul>
+</section>
+<section class="card">
+<h2>1. 파일시스템 vs DBMS</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — DBMS = 데이터베이스를 관리하는 시스템 소프트웨어. 사용자·응용프로그램과 DB 사이의 인터페이스 역할</li><li>파일시스템 단점: ① 데이터 중복성 ② 데이터 종속성(프로그램 변경 시 데이터도 변경)</li><li><span class="wk-tag star">⭐ 강조</span> — DBMS 장점: ① 중복 최소화 ② 데이터 독립성</li><li><span class="wk-tag note">✍️ 필기</span> — DBMS 단점: 비용, 교육</li><li>대표 DBMS: MySQL, Oracle, MS SQL, DB2, MariaDB, CUBRID, PostgreSQL</li></ul>
+</section>
+<section class="card">
+<h2>2. 데이터베이스 개념 — 정의와 특성</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — DB 정의 4가지: 공유(shared) · 통합(integrated) · 저장(stored) · 운영(operational)</li><li><span class="wk-tag star">⭐ 강조</span> — DB 특성 4가지: 실시간 접근 · 계속 변화 · 동시 공유 · 내용으로 참조<ul><li>한 조직의 여러 응용시스템이 데이터를 공유할 수 있도록 통합·저장한 운영 데이터의 집합체</li></ul></li></ul>
+</section>
+<section class="card">
+<h2>3. 데이터베이스 시스템 구성요소 · 사용자</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 구성요소: 데이터(데이터베이스) · 하드웨어(HW) · DBMS · 사용자 · (데이터언어)</li><li><span class="wk-tag star">⭐ 강조</span> — 사용자 3종: 데이터베이스 관리자(DBA) · 응용프로그래머 · 일반사용자(end user)</li><li>DBA = 슈퍼유저: DB를 구축하고 시스템을 자체적으로 운영·통제<ul><li>DBA 역할: 구조 정의, 무결성 제약조건, 보안·접근권한, 백업·회복, 성능 감시·재구성</li></ul></li></ul>
+</section>
+<section class="card">
+<h2>4. 데이터 언어 (SQL) ★핵심</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — DDL(데이터 정의어): CREATE · ALTER · DROP [담당: DBA]</li><li><span class="wk-tag star">⭐ 강조</span> — DML(데이터 조작어): INSERT · SELECT · UPDATE · DELETE [담당: 일반사용자]</li><li><span class="wk-tag star">⭐ 강조</span> — DCL(데이터 제어어): GRANT · REVOKE (+DENY) [담당: DBA]</li></ul>
+</section>
+<section class="card">
+<h2>5. 키(Key) ★핵심</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 기본키(Primary Key): 각 투플을 유일하게 구별하는 하나 이상의 속성 집합 — 중복 불가 · 필수 입력</li><li>외래키(Foreign Key): 다른 테이블을 참조하는 키</li><li><span class="wk-tag star">⭐ 강조</span> — 복합키 예 — 수강 테이블 기본키 = {학번, 과목번호}</li></ul>
+<pre><code class="language-sql">CREATE TABLE 수강(
+  학번 char(5),
+  과목번호 char(5),
+  성적 int,
+  PRIMARY KEY(학번, 과목번호)   -- 복합키
+);</code></pre>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — [Quiz 32p 기본키 찾기 — 내 답] 인사기록: 사원번호 / 가족관계: {사원번호, 이름} / 거래처: {사원명, 거래처}</li></ul>
+</section>
+<section class="card">
+<h2>6. MySQL 실습 (제품 · customer)</h2>
+<pre><code class="language-sql">USE testdb;
+DROP TABLE if exists 제품;
+CREATE TABLE 제품(
+  제품번호 char(3) NOT NULL,
+  제품명 varchar(20),
+  재고량 int,
+  단가 int,
+  제조업체 varchar(20),
+  PRIMARY KEY(제품번호)
+);
+INSERT INTO 제품 VALUES('P01','그냥만두',5000,4500,'대한식품');
+-- 제품명, 재고량 검색
+SELECT 제품명, 재고량 FROM 제품;
+-- 제조업체가 '대한식품'인 제품명·단가·제조업체 검색
+SELECT 제품명, 단가, 제조업체 FROM 제품 WHERE 제조업체='대한식품';</code></pre>
+<pre><code class="language-sql">-- customer 테이블
+CREATE TABLE customer(
+  cno char(4) NOT NULL PRIMARY KEY,
+  cname varchar(10) NOT NULL,
+  city varchar(20),
+  point int
+);
+insert into customer values('c101','홍길동','서울',500);
+select * from customer;</code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — MySQL Workbench 실행: 한 줄 SQL = Ctrl+Enter / 여러 줄 SQL = Ctrl+Shift+Enter</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-2주차.html">‹ 이전 · <b>2주차</b><br><small>DB 정의·특징 / MySQL 실습</small></a><a class="next" href="데이터베이스관리-4주차.html">다음 · <b>4주차</b> ›<br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리 · 3주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

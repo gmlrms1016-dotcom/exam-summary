@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운영체제실습 2주차 · 리눅스 명령어 실습</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../운영체제실습.html">← 운영체제실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🐧 운영체제실습 · 2주차</h1>
+        <p>리눅스 명령어 실습</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-1주차.html">‹ 이전 · <b>1주차</b><br><small>리눅스 환경 / 기본 명령어</small></a><a class="next" href="운영체제실습-3주차.html">다음 · <b>3주차</b> ›<br><small>마운트 · 링크 · 권한 · 사용자관리</small></a></nav>
+
+<div class="tip">자료: 명령어 정리 스크립트(txt)</div>
+<section class="card">
+<h2>1. 기본 정보 및 시스템 탐색</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>whoami</code>(사용자명) · <code>pwd</code>(절대경로) · <code>tree</code>(디렉토리 트리, <code>tree / -L 4</code> 로 깊이 제한)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>ls</code>(목록) · <code>ls -l</code>(상세) · <code>ls -al</code>(숨김 포함) · <code>ls -i</code>(inode 번호)</li></ul>
+</section>
+<section class="card">
+<h2>2. 디렉토리 이동 (cd)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>cd ..</code> (상위) · <code>cd /home</code> (절대경로) · <code>cd rocky</code> (상대경로) · <code>cd ~</code> (홈 디렉토리)</li></ul>
+</section>
+<section class="card">
+<h2>3. 디렉토리 생성·삭제</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>mkdir 이름</code> (생성) · <code>mkdir a b c</code> (여러 개) · <code>mkdir -p a/b/c</code> (상위까지 계층 생성)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>rmdir 이름</code> (빈 디렉토리 삭제) · <code>rmdir -p a/b/c</code> (계층적 빈 디렉토리 삭제)</li><li><span class="wk-tag note">✍️ 필기</span> — <code>rm -rf 이름</code> : 비어있지 않은 디렉토리도 강제 삭제 (주의! 되돌릴 수 없음)</li></ul>
+</section>
+<section class="card">
+<h2>4. 시스템 종료</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>poweroff</code> : 시스템 종료 및 전원 차단</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-1주차.html">‹ 이전 · <b>1주차</b><br><small>리눅스 환경 / 기본 명령어</small></a><a class="next" href="운영체제실습-3주차.html">다음 · <b>3주차</b> ›<br><small>마운트 · 링크 · 권한 · 사용자관리</small></a></nav>
+
+    <p class="wk-src">노션 「운영체제실습 · 2주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>
