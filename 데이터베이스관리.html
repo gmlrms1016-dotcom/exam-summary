@@ -14,7 +14,7 @@
 
     <header class="page-head">
         <h1>데이터베이스관리 · 완전 정리</h1>
-        <p>1주차 ~ 3주차 · DB 개념 + DBMS + 데이터언어 + 기본키 + MySQL 실습</p>
+        <p>1주차 ~ 4주차 · DB 개념 + DBMS + 데이터언어 + 키 + 관계형 데이터 모델 + MySQL 실습</p>
     </header>
 
     <div class="tip">
@@ -29,6 +29,17 @@
         <a href="#s5">5.데이터언어</a>
         <a href="#s6">6.키(Key)</a>
         <a href="#s7">7.MySQL실습</a>
+        <a href="#s8">8.★4주차시험범위</a>
+        <a href="#s9">9.기본키·외래키</a>
+        <a href="#s10">10.테이블순서</a>
+        <a href="#s11">11.스키마</a>
+        <a href="#s12">12.3단계구조</a>
+        <a href="#s13">13.데이터사전</a>
+        <a href="#s14">14.데이터모델</a>
+        <a href="#s15">15.관계형용어</a>
+        <a href="#s16">16.실습SQL</a>
+        <a href="#s17">17.과제01</a>
+        <a href="#s18">18.★빈칸풀기</a>
         <a href="#quiz">✏️퀴즈</a>
     </nav>
 
@@ -164,8 +175,263 @@ SELECT 제품명, 단가, 제조업체 FROM 제품 WHERE 제조업체='대한식
         <div class="tip">⚠️ <b>들여쓰기는 Tab 말고 Spacebar 4번</b> · MySQL Workbench 실행: 한 줄 <b>Ctrl+Enter</b> / 여러 줄 <b>Ctrl+Shift+Enter</b><br>GUI로 입력했다면 오른쪽 하단 <b>Apply</b> 를 눌러야 저장됩니다.</div>
     </section>
 
+    <section class="card" id="s8">
+        <h2>8. ★ 4주차 시험범위 — 강의자료 페이지별<span class="week">4주차</span></h2>
+        <div class="tip">📌 교수님이 <b>강의자료(DB-Lect04-RDB_외래키-stu-pdf.pdf)</b>에서 직접 짚어준 페이지입니다. 아래 <b>외울 내용</b>이 그대로 답이 됩니다.</div>
+        <table class="ref">
+            <tr><th>페이지 · 슬라이드</th><th>외울 내용 ★</th></tr>
+            <tr><td><b>3p</b> (1장)<br><span style="color:#777;font-size:12.5px;">데이터베이스 정의와 특징</span></td><td>정의 4 = <b>공유 · 통합 · 저장 · 운영</b> 데이터<br>특징 4 = <b>실시간 접근 · 계속 변화 · 동시 공유 · 내용 기반 참조</b></td></tr>
+            <tr><td><b>4p</b> (2장)<br><span style="color:#777;font-size:12.5px;">데이터베이스 관리 시스템(DBMS)</span></td><td>파일시스템 단점 = 데이터 <b>중복성 · 종속성</b> ↔ DBMS 장점 = <b>중복의 최소화 · 데이터 독립성 증진</b><br>DBMS 단점 = <b>고비용 · 회복 기법이 복잡</b><br>발전 과정 = 1세대 네트워크·계층 → 2세대 관계 → 3세대 객체지향·객체관계 → 4세대 NoSQL·NewSQL</td></tr>
+            <tr><td><b>5p + 25p</b><br><span style="color:#777;font-size:12.5px;">데이터베이스 시스템 · [요약] 3단계 구조</span></td><td><b>외부 스키마 → 개념 스키마 → 내부 스키마</b> (ANSI/SPARC 아키텍처)<br>→ 자세한 내용은 <a href="#s12">12번</a></td></tr>
+            <tr><td><b>7p</b><br><span style="color:#777;font-size:12.5px;">[Quiz] 테이블 생성 <b>빈칸</b></span></td><td><code>CREATE TABLE</code> / <code>NOT NULL</code> / <code>PRIMARY</code> KEY(학과번호)<br>→ <a href="#s18">18번에서 직접 풀기</a></td></tr>
+            <tr><td><b>21p</b><br><span style="color:#777;font-size:12.5px;">[실습 4-2] 테이블 생성 <b>빈칸</b></span></td><td>자료형 <code>int</code> · <code>varchar(50)</code> · <code>char(2)</code><br>제약 <code>NOT NULL</code> · <code>PRIMARY KEY(번호)</code> · <code>FOREIGN KEY(학과번호) REFERENCES 학과(학과번호)</code></td></tr>
+            <tr><td><b>24p</b><br><span style="color:#777;font-size:12.5px;">스키마</span></td><td>스키마 = 데이터베이스를 구성하는 <b>구조와 제약조건</b>에 대한 명세<br>표기법 <b>학생(학번, 이름, 학년, 성별)</b> · 인스턴스 = 실제 저장된 값</td></tr>
+            <tr><td><b>32p</b><br><span style="color:#777;font-size:12.5px;">데이터 사전</span></td><td><b>메타데이터</b> = 데이터에 관한 데이터 · 데이터 사전(= <b>시스템 카탈로그</b>) · 데이터 디렉토리</td></tr>
+            <tr><td><b>34p</b><br><span style="color:#777;font-size:12.5px;">데이터 모델</span></td><td>데이터 모델 <b>3가지 요소 = 구조(structure) · 연산(operation) · 제약조건(constraint)</b></td></tr>
+            <tr><td><b>41p</b><br><span style="color:#777;font-size:12.5px;">용어</span></td><td>릴레이션 · 투플 · 도메인 · <b>차수(Degree) = 애트리뷰트(열) 수</b> · <b>카디널리티(Cardinality) = 투플(행) 수</b></td></tr>
+            <tr><td><b>42p</b><br><span style="color:#777;font-size:12.5px;">[Quiz] 신입생</span></td><td>스키마 표기법 · 차수 <b>5</b> · 카디널리티 <b>4</b> · 기본키 <b>학번</b><br>→ <a href="#s18">18번에서 직접 풀기</a></td></tr>
+        </table>
+        <div class="tip">✍️ <b>필기에 적어둔 시험 포인트 2가지</b> — ① <b>스키마 표기법을 작성하시오</b> ② <b>외래키는 참조하는 쪽과 참조되는 쪽의 데이터 형식이 같아야 한다</b></div>
+    </section>
+
+    <section class="card" id="s9">
+        <h2>9. 기본키 · 외래키 ★시험<span class="week">4주차</span></h2>
+        <table class="ref">
+            <tr><th>구분</th><th>내용 (10p · 11p · 39p · 40p)</th></tr>
+            <tr><td><b>기본키</b><br>PRIMARY KEY</td><td>각 투플을 <b>유일하게 구별</b>할 수 있는 하나 이상의 속성 집합<br><b>중복 불가 · 필수 입력(NOT NULL)</b></td></tr>
+            <tr><td><b>외래키</b><br>FOREIGN KEY</td><td>다른 릴레이션의 <b>기본키를 참조</b>하는 키<br>참조되는 릴레이션의 기본키 값에 <b>반드시 존재</b>해야 한다 → <b>참조 무결성 제약조건</b><br>외래키는 <b>널(NULL) 값 입력을 허용</b>한다</td></tr>
+        </table>
+        <div class="tip">⭐ <b>시험문제 (필기)</b> — <b>외래키는 참조하는 열과 참조되는 열의 데이터 형식이 같아야 한다.</b> 예) 학생.학과번호 <code>int</code> ↔ 학과.학과번호 <code>int</code></div>
+        <div class="tip">🔑 <b>부모 · 자식 테이블</b> — 기본키를 <b>주는</b> 쪽이 부모(학과), 외래키로 <b>참조하는</b> 쪽이 자식(학생)입니다.</div>
+    </section>
+
+    <section class="card" id="s10">
+        <h2>10. 테이블 2개일 때 순서 ★시험단골<span class="week">4주차</span></h2>
+        <table class="ref">
+            <tr><th>작업</th><th>순서와 이유</th></tr>
+            <tr><td>테이블 <b>생성</b></td><td><b>부모(학과) → 자식(학생)</b><br><span style="color:#777;font-size:12.5px;">참조할 기본키가 먼저 있어야 외래키를 걸 수 있다</span></td></tr>
+            <tr><td>데이터 <b>입력</b></td><td><b>부모(학과) → 자식(학생)</b><br><span style="color:#777;font-size:12.5px;">학과번호가 없으면 학생 입력이 거부된다 (참조 무결성)</span></td></tr>
+            <tr><td>테이블 <b>삭제</b></td><td><b>자식(학생) → 부모(학과)</b><br><span style="color:#777;font-size:12.5px;">자식이 참조 중이면 부모를 지울 수 없다</span></td></tr>
+        </table>
+        <pre><code>-- 삭제는 자식(학생)부터
+DROP TABLE IF EXISTS 학생;
+DROP TABLE IF EXISTS 학과;</code></pre>
+    </section>
+
+    <section class="card" id="s11">
+        <h2>11. 스키마와 인스턴스 (24p) ★시험<span class="week">4주차</span></h2>
+        <div class="tip"><b>스키마(Schema)</b> = 데이터베이스를 구성하는 <b>구조</b>와 <b>제약조건</b>에 대한 명세를 기술한 것</div>
+        <table class="ref">
+            <tr><th>구분</th><th>설명 · 예 (학생 스키마)</th></tr>
+            <tr><td>데이터 구조 <b>(정적)</b></td><td>어떤 속성으로 이루어지는가<br><span style="color:#777;font-size:12.5px;">예) 학생(학번, 이름, 학년, 성별)</span></td></tr>
+            <tr><td>제약 조건 <b>(동적)</b></td><td>각 속성에 어떤 값이 올 수 있는가<br><span style="color:#777;font-size:12.5px;">예) 학번 = 문자 4자리 · 이름 = 문자 최대 10자리<br>학년 = 정수 1~4 · 성별 = '남' 또는 '여'</span></td></tr>
+            <tr><td><b>인스턴스</b></td><td>데이터베이스에 <b>실제 저장된 값</b><br><span style="color:#777;font-size:12.5px;">예) (1292001, 김광식, 1, 남)</span></td></tr>
+        </table>
+        <div class="tip">⭐ <b>스키마 표기법 쓰는 법</b> — <b>테이블명(속성1, 속성2, …)</b> 으로 쓰고 <b>기본키에 밑줄</b>을 긋습니다.<br>예) 학생(<u>번호</u>, 이름, 학년, 분반, 학과번호) · 학과(<u>학과번호</u>, 학과명)</div>
+    </section>
+
+    <section class="card" id="s12">
+        <h2>12. 3단계 스키마 구조 · 데이터 독립성 (5p · 25~27p) ★시험<span class="week">4주차</span></h2>
+        <table class="ref">
+            <tr><th>스키마 (단계)</th><th>누가 보는 구조인가</th></tr>
+            <tr><td><b>외부 스키마</b> (외부 뷰 A · B · N)<br><span style="color:#777;font-size:12.5px;">외부 단계</span></td><td>사용자 · 응용 프로그램이 보는 <b>부분 구조 = 뷰(view)</b> · 여러 개</td></tr>
+            <tr><td><b>개념 스키마</b><br><span style="color:#777;font-size:12.5px;">개념 단계</span></td><td>조직 전체의 <b>논리적 구조</b> (테이블 전체) · 데이터베이스마다 <b>1개</b></td></tr>
+            <tr><td><b>내부 스키마</b><br><span style="color:#777;font-size:12.5px;">내부 단계</span></td><td>디스크에 <b>실제로 저장되는 구조</b> (저장 방식 · 인덱스)</td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>데이터 독립성</th><th>뜻</th></tr>
+            <tr><td><b>논리적</b> 데이터 독립성</td><td><b>개념 스키마</b>가 변해도 <b>외부 스키마</b>는 영향받지 않는다</td></tr>
+            <tr><td><b>물리적</b> 데이터 독립성</td><td><b>내부 스키마</b>가 변해도 <b>개념 · 외부 스키마</b>는 영향받지 않는다</td></tr>
+        </table>
+        <div class="tip">🔗 단계와 단계를 이어주는 것을 <b>사상(mapping)</b>이라고 합니다 — <b>외부/개념 사상</b>, <b>개념/내부 사상</b>. 위(외부)로 갈수록 <b>추상화 수준</b>이 높습니다.</div>
+    </section>
+
+    <section class="card" id="s13">
+        <h2>13. 데이터 사전 · 메타데이터 (32p) ★시험<span class="week">4주차</span></h2>
+        <table class="ref">
+            <tr><th>용어</th><th>설명</th></tr>
+            <tr><td><b>메타데이터</b> (metadata)</td><td><b>데이터에 관한 데이터</b> — 테이블 이름, 열 이름, 자료형, 제약조건 같은 정보</td></tr>
+            <tr><td><b>데이터 사전</b> (data dictionary)</td><td>메타데이터를 모아 둔 곳 = <b>시스템 카탈로그</b></td></tr>
+            <tr><td><b>데이터 디렉토리</b> (data directory)</td><td>데이터 사전 안의 데이터가 <b>어디에 있는지</b> 알려주는 정보</td></tr>
+        </table>
+        <div class="tip">💾 저장 위치 — <b>사용자 데이터베이스</b>(내가 만든 학과 · 학생 테이블) + <b>시스템 데이터베이스</b>(데이터 사전 · 데이터 디렉토리)</div>
+    </section>
+
+    <section class="card" id="s14">
+        <h2>14. 데이터 모델 (29~31p · 34p) ★시험<span class="week">4주차</span></h2>
+        <div class="tip"><b>데이터 모델(Data Model)</b> = 데이터베이스 <b>구조를 명세</b>하기 위한 개념. 종류에 따라 저장 구조가 달라집니다.</div>
+        <table class="ref">
+            <tr><th>3가지 요소 ★</th><th>설명</th></tr>
+            <tr><td><b>① 구조 (structure)</b></td><td>데이터를 어떤 형태로 저장하는지를 표현하는 추상적 표현</td></tr>
+            <tr><td><b>② 연산 (operation)</b></td><td>데이터 구조 안의 데이터를 어떤 방식으로 처리하는지를 표현</td></tr>
+            <tr><td><b>③ 제약조건 (constraint)</b></td><td>저장할 때의 <b>구조적</b> 제약 + 연산할 때의 <b>행위적</b> 제약</td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>데이터 모델 종류</th><th>DBMS</th></tr>
+            <tr><td>계층형 (트리 구조)</td><td>HDBMS</td></tr>
+            <tr><td>네트워크형 (그래프 구조)</td><td>NDBMS</td></tr>
+            <tr><td><b>관계형 (2차원 테이블) ★지금 배우는 것</b></td><td><b>RDBMS</b> — MySQL, Oracle 등</td></tr>
+            <tr><td>객체지향형 / 객체관계형</td><td>OODBMS / ORDBMS</td></tr>
+        </table>
+        <div class="tip">⭐ <b>관계형 데이터베이스</b> (37~38p) — 연관된 데이터를 한 테이블에 모두 넣지 않고, <b>여러 테이블로 나눈 뒤 관계(외래키)로 연결</b>해 데이터를 조직화합니다.</div>
+    </section>
+
+    <section class="card" id="s15">
+        <h2>15. 관계형 용어 (41p) ★필수암기<span class="week">4주차</span></h2>
+        <table class="ref">
+            <tr><th>강의 용어</th><th>뜻 · 같은 말</th></tr>
+            <tr><td><b>릴레이션</b><br><span style="color:#777;font-size:12.5px;">(Relation)</span></td><td>행과 열로 구성된 <b>2차원 테이블</b><br><span style="color:#777;font-size:12.5px;">= 테이블</span></td></tr>
+            <tr><td><b>투플</b><br><span style="color:#777;font-size:12.5px;">(Tuple)</span></td><td>특정 인스턴스에 관한 사실(값)들의 모임<br><span style="color:#777;font-size:12.5px;">= 행(row) · 레코드</span></td></tr>
+            <tr><td><b>애트리뷰트</b><br><span style="color:#777;font-size:12.5px;">(Attribute)</span></td><td>릴레이션을 이루는 각 항목<br><span style="color:#777;font-size:12.5px;">= 열(column) · 필드 · 속성</span></td></tr>
+            <tr><td><b>도메인</b><br><span style="color:#777;font-size:12.5px;">(Domain)</span></td><td>한 애트리뷰트에 나타날 수 있는 <b>값들의 집합</b></td></tr>
+            <tr><td><b>차수</b><br><span style="color:#777;font-size:12.5px;">(Degree)</span></td><td><b>애트리뷰트(열)의 수</b></td></tr>
+            <tr><td><b>카디널리티</b><br><span style="color:#777;font-size:12.5px;">(Cardinality)</span></td><td><b>투플(행)의 수</b></td></tr>
+        </table>
+        <div class="tip">⚠️ <b>필기 정정</b> — 4주차 필기에는 "차수 = 행의 수 / 카디널리티 = 열의 수"로 적혀 있는데 <b>둘이 서로 바뀐 것</b>입니다. 강의자료 41p 기준으로 <b>차수 = 열(애트리뷰트) 수</b>, <b>카디널리티 = 행(투플) 수</b>가 맞습니다.<br>외우는 법 — 표의 <b>맨 윗줄 제목 칸 수 = 차수</b>, <b>그 아래 쌓인 줄 수 = 카디널리티</b></div>
+    </section>
+
+    <section class="card" id="s16">
+        <h2>16. 실습 4-1 · 4-2 — 학과 · 학생 테이블<span class="week">4주차</span></h2>
+        <div class="tip">🧭 <b>실습 순서</b> — ① 데이터베이스(스키마) 생성 → ② 테이블 생성 → ③ 데이터 입력 → ④ 데이터 조회</div>
+        <h3>① 데이터베이스 만들기 (15p)</h3>
+        <pre><code>-- 1단계: 스키마(데이터베이스) 생성
+CREATE SCHEMA `studydb` DEFAULT CHARACTER SET utf8mb4;
+-- CREATE DATABASE `studydb` DEFAULT CHARACTER SET utf8mb4;  -- 같은 뜻
+
+-- 사용할 데이터베이스 선택
+USE studydb;
+
+-- 데이터베이스 삭제
+DROP DATABASE studydb;</code></pre>
+        <h3>② 테이블 명세서 (16p · 20p)</h3>
+        <div class="tip" style="font-size:13px;">↔️ 칸이 많은 표입니다. 폰에서는 표를 <b>옆으로 밀어서</b> 보세요.</div>
+        <table class="ref"><tbody style="min-width:620px;">
+            <tr><th>테이블명</th><th>열 이름</th><th>데이터 형식</th><th>NULL 유무</th><th>기본키</th><th>외래키</th><th>FK 테이블</th><th>FK 열</th></tr>
+            <tr><td rowspan="2">학과</td><td>학과번호</td><td>int</td><td>NOT NULL</td><td><b>PK</b></td><td></td><td></td><td></td></tr>
+            <tr><td>학과명</td><td>varchar(50)</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td rowspan="5">학생</td><td>번호</td><td>int</td><td>NOT NULL</td><td><b>PK</b></td><td></td><td></td><td></td></tr>
+            <tr><td>이름</td><td>varchar(12)</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>학년</td><td>int</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>분반</td><td>char(2)</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>학과번호</td><td>int</td><td></td><td></td><td><b>FK</b></td><td>학과</td><td>학과번호</td></tr>
+        </tbody></table>
+        <h3>③ 내가 실습한 SQL (4주차 폴더 · [강의요약] 4주차.txt)</h3>
+        <pre><code>use testdb;
+
+DROP TABLE IF EXISTS 학생;     -- 자식부터 삭제
+DROP TABLE IF EXISTS 학과;
+
+CREATE TABLE 학과(
+    학과번호  int          NOT NULL,
+    학과명    varchar(30),
+    PRIMARY KEY(학과번호)
+);
+INSERT INTO 학과 VALUES(1,'컴퓨터소프트웨어공학과');
+INSERT INTO 학과 VALUES(2,'컴퓨터정보공학과');
+INSERT INTO 학과 VALUES(3,'인공지능소프트웨어학과');
+
+CREATE TABLE 학생(
+    번호      int,
+    이름      varchar(30),
+    학년      int,
+    분반      char(2),
+    학과번호  int,
+    PRIMARY KEY(번호),
+    FOREIGN KEY(학과번호) REFERENCES 학과(학과번호)
+);
+INSERT INTO 학생 VALUES(1,'한지혜',1,'YB',1);
+INSERT INTO 학생 VALUES(2,'이정우',1,'YA',1);
+INSERT INTO 학생 VALUES(3,'오지영',2,'J1',2);
+INSERT INTO 학생 VALUES(4,'강재미',1,'YB',1);
+INSERT INTO 학생 VALUES(5,'박철호',2,'J1',2);
+SELECT * FROM 학생;
+SELECT * FROM 학과;</code></pre>
+        <div class="tip">⚠️ <b>강의자료와 다른 점</b> (시험에서는 강의자료 기준으로 쓰세요)<br>· 데이터베이스: 내 실습 <code>testdb</code> ↔ 강의노트 <code>studydb</code><br>· 글자 길이: 내 실습 <code>varchar(30)</code> ↔ 명세서 학과명 <code>varchar(50)</code> · 이름 <code>varchar(12)</code><br>· 학과명 3번: 내 실습 '인공지능소프트웨어<b>학</b>과' ↔ 강의자료 '인공지능소프트웨어과'</div>
+        <div class="tip">✍️ <b>필기에서 챙길 것</b> — INSERT 문법: <b>문자와 날짜는 인용부호로 감싼다</b> (MySQL은 작은따옴표 <code>' '</code> 사용을 권장) · <code>char</code> = 1 byte · <code>int</code> = 4 byte</div>
+    </section>
+
+    <section class="card" id="s17">
+        <h2>17. 과제 01 — 환자 · 의사 · 사원 테이블<span class="week">4주차</span></h2>
+        <div class="tip">📤 제출 — eClass [과제] 첨부파일 · 파일명 <b>과제01-분반_이름_학번-작성날짜.doc</b> · SQL 파일은 따로 보관해 둘 것</div>
+        <table class="ref">
+            <tr><th>문제</th><th>할 일</th></tr>
+            <tr><td><b>과제 1-1</b></td><td>테이블 2개(<b>환자 · 의사</b>) 생성 — <b>기본키 · 외래키</b> 작성하고 데이터 입력<br>SQL 문법과 실행 결과를 <b>화면 캡처</b>해서 워드에 작성</td></tr>
+            <tr><td><b>과제 1-2</b></td><td>테이블 1개(<b>사원</b>) 생성 후 문제 풀이 — 문제와 답을 모두 작성<br>1-1) 테이블 생성 SQL (기본키 설정) · 1-2) <b>본인 이름</b>을 넣은 레코드 입력 · 1-3) 조회 결과 캡처<br>1-4) <b>차수(degree)</b>는? · 1-5) <b>카디널리티(cardinality)</b>는?<br>1-6) <b>사원이름은 왜 기본키로 부적합한가?</b> · 1-7) 기본키로 적합한 속성은?</td></tr>
+        </table>
+        <div class="tip">⭐ <b>1-6 답의 방향</b> — 이름은 <b>동명이인이 있을 수 있어 유일하게 구별되지 않기</b> 때문입니다. (기본키 조건: 중복 불가 · 필수 입력) → 그래서 <b>사원번호</b> 같은 속성이 기본키로 적합합니다.</div>
+    </section>
+
+    <section class="card" id="s18">
+        <h2>18. ★ 시험문제 풀어보기 — 7p 빈칸 · 42p 신입생<span class="week">4주차</span></h2>
+        <div class="tip">✏️ 답을 입력하고 <b>확인</b>을 누르면 바로 채점됩니다. (대소문자 · 띄어쓰기는 달라도 정답으로 처리)</div>
+        <h3>[Quiz] 7p — 테이블 생성 SQL 빈칸</h3>
+        <pre><code>-- 학과(학과번호, 학과명)
+①______ 학과 (
+    학과번호  int   ②______ ,
+    학과명    varchar(50) ,
+    ③______ KEY(학과번호)
+);</code></pre>
+        <div class="quiz-item" data-answers="CREATE TABLE" data-full="CREATE TABLE" data-explain="테이블을 만드는 명령은 CREATE TABLE 입니다. 데이터베이스(스키마)를 만들 때는 CREATE SCHEMA / CREATE DATABASE 입니다.">
+            <p class="quiz-q"><span class="quiz-cat">빈칸 ①</span>테이블을 만드는 <b>SQL 명령</b>을 쓰시오.</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="NOT NULL" data-full="NOT NULL" data-explain="기본키는 필수 입력이라 NOT NULL 을 함께 씁니다. (중복 불가 + 필수 입력)">
+            <p class="quiz-q"><span class="quiz-cat">빈칸 ②</span>학과번호에 <b>빈 값을 넣지 못하게</b> 하는 제약조건은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="PRIMARY|PRIMARY KEY|PRIMARY KEY(학과번호)" data-full="PRIMARY" data-explain="PRIMARY KEY(학과번호) — 각 투플을 유일하게 구별하는 기본키 지정입니다.">
+            <p class="quiz-q"><span class="quiz-cat">빈칸 ③</span><code>______ KEY(학과번호)</code> 의 빈칸에 들어갈 말은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <h3>[Quiz] 42p — 신입생 테이블</h3>
+        <table class="ref">
+            <tr><th>학번</th><th>주민등록번호</th><th>이름</th><th>주소</th><th>학과명</th></tr>
+            <tr><td>1292001</td><td>900424-1825409</td><td>김광식</td><td>서울</td><td>컴퓨터공학과</td></tr>
+            <tr><td>1292002</td><td>900305-1730021</td><td>김정현</td><td>서울</td><td>컴퓨터공학과</td></tr>
+            <tr><td>1292003</td><td>891021-2308302</td><td>김현정</td><td>대전</td><td>컴퓨터공학과</td></tr>
+            <tr><td>1292301</td><td>890902-2704012</td><td>김현정</td><td>대구</td><td>산업공학과</td></tr>
+        </table>
+        <div class="quiz-item" data-answers="신입생(학번, 주민등록번호, 이름, 주소, 학과명)" data-full="신입생(학번, 주민등록번호, 이름, 주소, 학과명)" data-explain="스키마 표기법은 테이블명(속성1, 속성2, …) 이고 기본키(학번)에는 밑줄을 긋습니다.">
+            <p class="quiz-q"><span class="quiz-cat">1번</span>신입생 테이블의 <b>스키마 표기법</b>을 적으시오.</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="5" data-full="5" data-explain="차수(Degree) = 애트리뷰트(열)의 수 → 학번·주민등록번호·이름·주소·학과명 = 5">
+            <p class="quiz-q"><span class="quiz-cat">2번</span><b>차수(degree)</b> 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="4" data-full="4" data-explain="카디널리티(Cardinality) = 투플(행)의 수 → 학생 4명이므로 4">
+            <p class="quiz-q"><span class="quiz-cat">3번</span><b>카디널리티(cardinality)</b> 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="학번" data-full="학번" data-explain="이름은 동명이인(김현정)이 있어 부적합합니다. 주민등록번호도 유일하지만 강의 모범답안은 학번입니다.">
+            <p class="quiz-q"><span class="quiz-cat">4번</span><b>기본키(Primary key)</b> 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <h3>[실습 4-2] 21p — 외래키 선언</h3>
+        <div class="quiz-item" data-answers="FOREIGN KEY(학과번호) REFERENCES 학과(학과번호)" data-full="FOREIGN KEY(학과번호) REFERENCES 학과(학과번호)" data-explain="FOREIGN KEY(자식 열) REFERENCES 부모테이블(부모 기본키) — 두 열의 데이터 형식(int)도 같아야 합니다.">
+            <p class="quiz-q"><span class="quiz-cat">5번</span>학생 테이블에서 <b>학과번호</b>가 학과 테이블의 학과번호를 참조하도록 하는 <b>외래키 선언문</b>을 쓰시오.</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 10 · 주관식 10<span class="week">1~3주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 15 · 주관식 15<span class="week">1~4주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -249,6 +515,46 @@ SELECT 제품명, 단가, 제조업체 FROM 제품 WHERE 제조업체='대한식
             <button class="opt" type="button" data-opt="D"><b>D.</b> Alt+Enter</button>
             <div class="mcq-exp"><b>정답 B</b> — 한 줄 실행 Ctrl+Enter / <b>여러 줄 실행 Ctrl+Shift+Enter</b></div>
         </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">11</span><b>차수(degree)</b> 의 뜻으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 투플(행)의 수</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 애트리뷰트(열)의 수</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 도메인의 수</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 테이블의 수</button>
+            <div class="mcq-exp"><b>정답 B</b> — 차수 = <b>애트리뷰트(열)의 수</b> · 카디널리티 = <b>투플(행)의 수</b> (강의자료 41p)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">12</span>신입생(학번, 주민등록번호, 이름, 주소, 학과명) 테이블에 학생 <b>4명</b>이 저장되어 있다. <b>카디널리티</b>는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 5</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 4</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 9</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 20</button>
+            <div class="mcq-exp"><b>정답 B</b> — 카디널리티 = 투플(행)의 수 = <b>4</b> · 차수는 열 5개이므로 5 (42p)</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">13</span><b>외래키</b>에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 다른 릴레이션의 기본키를 참조하는 키다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 참조되는 릴레이션의 기본키 값에 반드시 존재해야 한다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 널(NULL) 값은 입력할 수 없다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 참조 무결성 제약조건과 관련이 있다</button>
+            <div class="mcq-exp"><b>정답 C</b> — <b>외래키는 널 값 입력을 허용</b>합니다. 널을 못 넣는 것은 기본키(필수 입력)입니다. (11p · 40p)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">14</span>학생 테이블이 학과 테이블을 외래키로 참조할 때 <b>테이블 삭제 순서</b>로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 학과 → 학생</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 학생 → 학과</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 순서는 상관없다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 두 테이블을 동시에 삭제해야 한다</button>
+            <div class="mcq-exp"><b>정답 B</b> — 삭제는 <b>자식(학생) → 부모(학과)</b> 순서. 생성과 입력은 반대로 부모 → 자식입니다.</div>
+        </div>
+        <div class="mcq" data-correct="A">
+            <p class="mcq-q"><span class="mcq-no">15</span>사용자와 응용 프로그램이 보는 <b>부분 구조(뷰)</b>에 해당하는 스키마는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 외부 스키마</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 개념 스키마</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 내부 스키마</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 물리 스키마</button>
+            <div class="mcq-exp"><b>정답 A</b> — <b>외부 스키마</b> = 사용자가 보는 뷰 / 개념 = 조직 전체 논리 구조 / 내부 = 실제 저장 구조 (25p)</div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers="DBA" data-explain="DBA = 데이터베이스 관리자 (DDL·DCL 담당)">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>DB 를 구축하고 시스템을 운영·통제하는 <b>슈퍼유저</b>를 영문 약자로 쓰면?</p>
@@ -307,6 +613,36 @@ SELECT 제품명, 단가, 제조업체 FROM 제품 WHERE 제조업체='대한식
         <div class="quiz-item" data-answers="학번,과목번호|{학번,과목번호}|PRIMARY KEY(학번,과목번호)|과목번호,학번|{과목번호,학번}|PRIMARY KEY(과목번호,학번)" data-full="{학번, 과목번호}" data-explain="한 학생이 여러 과목을 들으므로 학번만으로는 구별이 안 되어 복합키를 씁니다. (쓰는 순서는 상관없음)">
             <p class="quiz-q"><span class="quiz-cat">주관식 10</span><code>수강(학번, 과목번호, 성적)</code> 테이블의 <b>기본키</b>는? (쉼표로 구분)</p>
             <input type="text" placeholder="SQL 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="신입생(학번, 주민등록번호, 이름, 주소, 학과명)" data-full="신입생(학번, 주민등록번호, 이름, 주소, 학과명)" data-explain="테이블명(속성1, 속성2, …) 형태로 쓰고 기본키(학번)에는 밑줄을 긋습니다.">
+            <p class="quiz-q"><span class="quiz-cat">주관식 11</span>신입생(학번, 주민등록번호, 이름, 주소, 학과명) 테이블의 <b>스키마 표기법</b>을 적으시오.</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="데이터 사전|데이터사전|data dictionary" data-full="데이터 사전" data-explain="데이터 사전(data dictionary) = 시스템 카탈로그 · 메타데이터 = 데이터에 관한 데이터 (32p)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 12</span>메타데이터를 모아 둔 곳으로, <b>시스템 카탈로그</b>라고도 부르는 것은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="구조, 연산|연산, 구조|structure, operation" data-full="구조, 연산" data-explain="데이터 모델 3요소 = 구조(structure) · 연산(operation) · 제약조건(constraint) (34p)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 13</span>데이터 모델의 3가지 요소 중 <b>제약조건</b>을 뺀 나머지 두 가지는? (쉼표로 구분)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="논리적 데이터 독립성|논리적 독립성|논리적데이터독립성" data-full="논리적 데이터 독립성" data-explain="내부 스키마가 변해도 개념·외부 스키마가 영향받지 않는 것은 물리적 데이터 독립성입니다. (27p)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 14</span><b>개념 스키마가 변해도 외부 스키마는 영향받지 않는</b> 성질을 무엇이라 하는가?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="도메인|domain" data-full="도메인" data-explain="예) 학년의 도메인 = 1~4 · 성별의 도메인 = &#x27;남&#x27;, &#x27;여&#x27; (41p)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 15</span>한 애트리뷰트에 나타날 수 있는 <b>값들의 집합</b>을 무엇이라 하는가?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
