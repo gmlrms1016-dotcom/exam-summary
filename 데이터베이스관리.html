@@ -390,12 +390,23 @@ SELECT * FROM 학과;</code></pre>
             <div class="quiz-feedback"></div>
         </div>
         <h3>[Quiz] 42p — 신입생 테이블</h3>
+        <div class="tip" style="margin-bottom:8px;">🟩 <b>릴레이션(Relation)</b> = 이 표 전체 = <b>테이블</b> = 신입생 &nbsp;·&nbsp; 표를 보면서 <b>가로줄 이름</b>과 <b>세로줄 이름</b>을 같이 외우세요. (칸이 많으면 표를 옆으로 밀어서 보세요)</div>
+        <table class="ref"><tbody style="min-width:600px;">
+            <tr><th style="background:#fdf3e7;">↓ 투플 ＼ 애트리뷰트 →</th><th>학번<br><span style="color:#777;font-size:12px;">기본키</span></th><th>주민등록번호</th><th>이름</th><th>주소</th><th>학과명</th></tr>
+            <tr><td><b>투플 1</b><br><span style="color:#777;font-size:12px;">행 · 레코드</span></td><td>1292001</td><td>900424-1825409</td><td>김광식</td><td>서울</td><td>컴퓨터공학과</td></tr>
+            <tr><td><b>투플 2</b><br><span style="color:#777;font-size:12px;">행 · 레코드</span></td><td>1292002</td><td>900305-1730021</td><td>김정현</td><td>서울</td><td>컴퓨터공학과</td></tr>
+            <tr><td><b>투플 3</b><br><span style="color:#777;font-size:12px;">행 · 레코드</span></td><td>1292003</td><td>891021-2308302</td><td>김현정</td><td>대전</td><td>컴퓨터공학과</td></tr>
+            <tr><td><b>투플 4</b><br><span style="color:#777;font-size:12px;">행 · 레코드</span></td><td>1292301</td><td>890902-2704012</td><td>김현정</td><td>대구</td><td>산업공학과</td></tr>
+            <tr><td colspan="6" style="text-align:left;background:#f7f9f7;">가로줄(투플) <b>4개</b> → <b>카디널리티 = 4</b> &nbsp;·&nbsp; 세로줄(애트리뷰트) <b>5개</b> → <b>차수 = 5</b></td></tr>
+        </tbody></table>
         <table class="ref">
-            <tr><th>학번</th><th>주민등록번호</th><th>이름</th><th>주소</th><th>학과명</th></tr>
-            <tr><td>1292001</td><td>900424-1825409</td><td>김광식</td><td>서울</td><td>컴퓨터공학과</td></tr>
-            <tr><td>1292002</td><td>900305-1730021</td><td>김정현</td><td>서울</td><td>컴퓨터공학과</td></tr>
-            <tr><td>1292003</td><td>891021-2308302</td><td>김현정</td><td>대전</td><td>컴퓨터공학과</td></tr>
-            <tr><td>1292301</td><td>890902-2704012</td><td>김현정</td><td>대구</td><td>산업공학과</td></tr>
+            <tr><th>이 표에서</th><th>용어 (41p)</th></tr>
+            <tr><td>표 전체</td><td><b>릴레이션</b>(Relation) = 테이블</td></tr>
+            <tr><td>가로 한 줄<br><span style="color:#777;font-size:12px;">(1292001, 김광식, 서울 …)</span></td><td><b>투플</b>(Tuple) = <b>행</b>(row) = <b>레코드</b> → 4개이므로 <b>카디널리티 4</b></td></tr>
+            <tr><td>세로 한 칸<br><span style="color:#777;font-size:12px;">(이름 칸 전체)</span></td><td><b>애트리뷰트</b>(Attribute) = <b>열</b>(column) = <b>필드</b> = <b>속성</b> → 5개이므로 <b>차수 5</b></td></tr>
+            <tr><td>학과명에 올 수 있는 값들<br><span style="color:#777;font-size:12px;">{컴퓨터공학과, 산업공학과}</span></td><td><b>도메인</b>(Domain) — 한 애트리뷰트에 나타날 수 있는 값들의 집합</td></tr>
+            <tr><td>표에 실제로 들어 있는 값</td><td><b>인스턴스</b> — 데이터베이스에 실제 저장된 값</td></tr>
+            <tr><td>학번</td><td><b>기본키</b>(Primary Key) — 중복 불가 · 필수 입력 (이름은 동명이인 김현정이 있어 부적합)</td></tr>
         </table>
         <div class="quiz-item" data-answers="신입생(학번, 주민등록번호, 이름, 주소, 학과명)" data-full="신입생(학번, 주민등록번호, 이름, 주소, 학과명)" data-explain="스키마 표기법은 테이블명(속성1, 속성2, …) 이고 기본키(학번)에는 밑줄을 긋습니다.">
             <p class="quiz-q"><span class="quiz-cat">1번</span>신입생 테이블의 <b>스키마 표기법</b>을 적으시오.</p>
