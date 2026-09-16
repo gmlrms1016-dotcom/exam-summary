@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <script src="theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로그래밍언어실습 · 완전 정리</title>
     <link rel="stylesheet" href="style.css">
@@ -28,6 +29,8 @@
         <h1>프로그래밍언어실습 · 완전 정리</h1>
         <p>1주차 ~ 2주차 C 언어 · 개념 + 실행과정 + 소스코드 · 3주차 ★시험문제(sizeof · printf 빈칸채우기)</p>
     </header>
+
+    <div id="week-nav" data-subject="프로그래밍언어실습"></div>
 
     <div class="tip">
         📖 <b>이 페이지 보는 법</b> : 각 칸은 ① 개념 → ② 표 정리 → ③ <b>&lt;/&gt; 코드</b>(주석 포함) 순서입니다. 주차 배지로 진도를 확인하세요.
@@ -302,22 +305,21 @@ int main() {
             <button class="opt" type="button" data-opt="D"><b>D.</b> 8</button>
             <div class="mcq-exp"><b>정답 D</b> — 실수 상수는 기본이 <b>double</b> 이라 8바이트입니다. (<code>sizeof(10)</code> 은 int → 4)</div>
         </div>
-        <div class="mcq" data-correct="C">
-            <p class="mcq-q"><span class="mcq-no">6</span>C 언어 <b>변수 이름(식별자)</b> 규칙으로 <b>옳지 않은</b> 것은?</p>
-            <button class="opt" type="button" data-opt="A"><b>A.</b> 숫자로 시작할 수 없다</button>
-            <button class="opt" type="button" data-opt="B"><b>B.</b> 공백을 포함할 수 없다</button>
-            <button class="opt" type="button" data-opt="C"><b>C.</b> 대·소문자를 구별하지 않는다</button>
-            <button class="opt" type="button" data-opt="D"><b>D.</b> 예약어(키워드)는 변수 이름으로 쓸 수 없다</button>
-            <div class="mcq-exp"><b>정답 C</b> — 변수 이름은 <b>대·소문자를 구별</b>합니다 — <code>age</code> 와 <code>Age</code> 는 서로 다른 변수 (3주차 강의자료)</div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">6</span>부호 있는 <code>char</code>(1byte)가 표현할 수 있는 값의 범위는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 0 ~ 255</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> -128 ~ 127</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> -127 ~ 128</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> -32,768 ~ 32,767</button>
+            <div class="mcq-exp"><b>정답 B</b> — 맨 앞 1비트가 부호 비트 → <b>-128 ~ 127</b>. unsigned char 는 0 ~ 255.</div>
         </div>
         <div class="mcq" data-correct="C">
-            <p class="mcq-q"><span class="mcq-no">7</span>변수의 <b>메모리 주소</b>를 출력하는 printf 서식 지정자는?
-</p>
+            <p class="mcq-q"><span class="mcq-no">7</span>정수를 <b>16진수</b>로 출력하는 printf 서식 지정자는?</p>
             <button class="opt" type="button" data-opt="A"><b>A.</b> %d</button>
-            <button class="opt" type="button" data-opt="B"><b>B.</b> %s</button>
-            <button class="opt" type="button" data-opt="C"><b>C.</b> %p</button>
-            <button class="opt" type="button" data-opt="D"><b>D.</b> %f</button>
-            <div class="mcq-exp"><b>정답 C</b> — <code>printf("%p, %d\n", &amp;age, age);</code> 처럼 <b>%p</b> 가 주소를 출력합니다. (3주차 강의자료 · scanf 의 &amp; 와 함께 기억)</div>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> %o</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> %x</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> %c</button>
+            <div class="mcq-exp"><b>정답 C</b> — %d 10진수 · %o 8진수 · <b>%x 16진수</b> · %c 문자 → <code>printf("%x", 100)</code> 은 64</div>
         </div>
         <div class="mcq" data-correct="B">
             <p class="mcq-q"><span class="mcq-no">8</span><code>const</code> 상수에 대한 설명으로 옳은 것은?</p>
@@ -413,5 +415,6 @@ int main() {
 </div>
 <script src="quiz.js"></script>
 <script src="review.js"></script>
+<script src="weeks.js"></script>
 </body>
 </html>

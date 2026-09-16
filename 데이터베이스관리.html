@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <script src="theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>데이터베이스관리 · 완전 정리</title>
     <link rel="stylesheet" href="style.css">
@@ -17,11 +18,14 @@
         <p>1주차 ~ 4주차 · DB 개념 + DBMS + 데이터언어 + 키 + 관계형 데이터 모델 + MySQL 실습</p>
     </header>
 
+    <div id="week-nav" data-subject="데이터베이스관리"></div>
+
     <div class="tip">
         📖 <b>이 페이지 보는 법</b> : 각 칸은 ① 개념 → ② 표 정리 → ③ <b>&lt;/&gt; SQL 코드</b> 순서입니다. ★표시는 시험 단골입니다.
     </div>
 
     <nav class="toc">
+        <a href="#red">🔴빨간글씨암기</a>
         <a href="#s1">1.강의개요</a>
         <a href="#s2">2.정의·특성</a>
         <a href="#s3">3.파일시스템vs DBMS</a>
@@ -42,6 +46,26 @@
         <a href="#s18">18.★빈칸풀기</a>
         <a href="#quiz">✏️퀴즈</a>
     </nav>
+
+    <section class="card" id="red">
+        <h2>🔴 강의자료 빨간 글씨 = 암기<span class="week">3~4주차</span></h2>
+        <div class="tip">📌 강의자료 PDF 에서 <b>빨간색 글씨</b>로 표시된 부분은 <b>그대로 외워야 하는 내용</b>입니다. (1·2주차 자료에는 빨간 글씨가 없어요 · 페이지는 강의자료 쪽번호)</div>
+        <table class="ref"><tbody style="min-width:520px;">
+            <tr><th>주차</th><th>쪽</th><th>빨간 글씨 (암기)</th></tr>
+            <tr><td>3주차</td><td>5 · 14 · 17</td><td>DB 정의 — 한 조직의 여러 응용시스템들이 데이터를 <b style="color:#d62828;">공유</b>할 수 있도록 <b style="color:#d62828;">통합</b>, <b style="color:#d62828;">저장</b>된 <b style="color:#d62828;">운영</b> 데이터의 집합체</td></tr>
+            <tr><td>3주차</td><td>5 · 15 · 17</td><td>파일시스템 단점 — 데이터 <b style="color:#d62828;">중복성</b> · 데이터 <b style="color:#d62828;">종속성</b></td></tr>
+            <tr><td>3주차</td><td>5 · 16 · 17</td><td>DBMS 장점 — 데이터 <b style="color:#d62828;">독립성</b></td></tr>
+            <tr><td>3주차</td><td>7 · 20</td><td><b style="color:#d62828;">데이터베이스 시스템</b></td></tr>
+            <tr><td>3주차</td><td>21</td><td><b style="color:#d62828;">데이터베이스 관리 시스템(DBMS)</b></td></tr>
+            <tr><td>3주차</td><td>9 · 24</td><td>데이터 언어 — <b style="color:#d62828;">CREATE</b> · <b style="color:#d62828;">INSERT</b> · <b style="color:#d62828;">SELECT</b></td></tr>
+            <tr><td>3주차</td><td>28</td><td>기본키(<b style="color:#d62828;">Primary Key</b>) — <b style="color:#d62828;">중복불가</b> · <b style="color:#d62828;">필수입력</b></td></tr>
+            <tr><td>3주차</td><td>32</td><td>[Quiz] <b style="color:#d62828;">기본키</b>를 찾으시오</td></tr>
+            <tr><td>4주차</td><td>10 · 39</td><td>기본키(<b style="color:#d62828;">Primary Key</b>) — <b style="color:#d62828;">중복불가</b> · <b style="color:#d62828;">필수입력</b></td></tr>
+            <tr><td>4주차</td><td>11 · 40</td><td>외래키(<b style="color:#d62828;">Foreign Key</b>) — 한 릴레이션의 <b style="color:#d62828;">기본키를 참조하는 키</b> · <b style="color:#d62828;">참조 무결성 제약조건</b></td></tr>
+            <tr><td>4주차</td><td>18 · 21</td><td>SQL — <b style="color:#d62828;">PRIMARY KEY</b>(학과번호) · <b style="color:#d62828;">PRIMARY KEY</b>(번호)</td></tr>
+            <tr><td>4주차</td><td>37</td><td>관계형 데이터베이스 — 데이터 사이에 <b style="color:#d62828;">관계</b>를 부여함으로 데이터를 조직화</td></tr>
+        </tbody></table>
+    </section>
 
     <section class="card" id="s1">
         <h2>1. 강의 개요<span class="week">1주차</span></h2>
@@ -666,5 +690,6 @@ SELECT * FROM 학과;</code></pre>
 </div>
 <script src="quiz.js"></script>
 <script src="review.js"></script>
+<script src="weeks.js"></script>
 </body>
 </html>
