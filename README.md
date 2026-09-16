@@ -40,6 +40,7 @@ schedule.js         ★ 시험 일정 단일 소스 + "시험 +3h 자동 복습 
 style.css           과목 페이지 공용 테마(초록) — 화이트모드 기준
 theme.js            ★ 전 페이지 공용 — 다크모드(기본) / 화이트모드 전환 (오른쪽 위 ☀️/🌙 버튼)
 codecolor.js        전 페이지 공용 — 소스코드 색칠(VS Code 고대비 색) · theme.js 가 자동으로 불러옴
+scripts/bump_assets.py  ★ 공용 파일(theme.js·style.css·quiz.js…)을 고친 뒤 실행 — 모든 페이지 주소의 ?v= 버전을 올려 브라우저 캐시를 끊음
 review.js           과목 페이지 공용 — 틀린 문제 모아 복사 + 코드블록 복사 버튼
 quiz.js             2학기 과목 페이지 공용 퀴즈 — 객관식(.mcq)·주관식(.quiz-item) 채점 + 복습 모드
 weeks.js            2학기 과목 페이지의 1~15주차 버튼 — 진도 나간 주차만 열림, 8주차 중간고사 · 15주차 기말고사, 새 탭으로 열기
@@ -106,6 +107,7 @@ window.isExamFinished("X.html")                      // → true/false
 - 동작: ① 공용 부품(헤더·카드·목차·표·팁·퀴즈·주차 버튼·첫 화면)은 `theme.js` 의 `DARK_CSS` 에서 색을 직접 지정 ② 그 밖에 페이지에 직접 쓴 색(인라인 `style`·SVG)은 무채색·파랑으로 **자동 변환**(빨강만 유지).
 - **새 페이지**: `<head>` 의 `<meta charset>` 바로 다음 줄에 `<script src="theme.js"></script>` (weeks/ 안은 `../theme.js`). 다크 전용 CSS 는 페이지에 따로 쓰지 말고 화이트 기준으로만 작성하세요. 새 공용 부품의 다크 색을 정확히 맞추고 싶으면 `DARK_CSS` 에 `html[data-theme=dark] .클래스{…}` 한 줄을 추가합니다.
 - 오른쪽 위(`top:14px; right:14px`, 44px)는 전환 버튼 자리라 고정 UI 를 두지 않습니다. 변환에서 빼고 싶은 요소는 `data-theme-skip` 속성.
+- ⚠️ **캐시 주의**: GitHub Pages 는 JS·CSS 를 10분 캐시하고 크롬은 새로고침해도 HTML 만 새로 받습니다. `theme.js`·`codecolor.js`·`style.css`·`quiz.js`·`review.js`·`weeks.js`·`schedule.js` 를 고쳤으면 커밋 전에 **`python3 scripts/bump_assets.py`** 를 실행하세요(모든 페이지의 `?v=` 를 갱신, codecolor.js 는 theme.js 의 버전을 이어받음).
 
 ### 🎨 소스코드 색 — `codecolor.js` (VS Code Dark High Contrast)
 - 모든 `<pre><code>` 를 highlight.js(cdnjs)로 분석해 VS Code 고대비 색으로 칠합니다. 화이트·다크 모드 모두 같은 색(검은 바탕)입니다. theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다.

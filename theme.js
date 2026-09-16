@@ -23,7 +23,7 @@
     if (selfSrc && !document.getElementById("codecolor-js")) {
         var cc = document.createElement("script");
         cc.id = "codecolor-js";
-        cc.src = selfSrc.replace(/theme\.js(\?.*)?$/, "codecolor.js");
+        cc.src = selfSrc.replace(/theme\.js(\?[^#]*)?(#.*)?$/, "codecolor.js$1");   // ?v= 버전도 그대로 넘김(캐시 끊기)
         (document.head || root).appendChild(cc);
     }
 

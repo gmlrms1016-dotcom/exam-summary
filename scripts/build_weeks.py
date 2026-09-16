@@ -219,10 +219,10 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js"></script>
+    <script src="../theme.js?v=202609162304"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style.css?v=202609162304">
     <style>{css}</style>
 </head>
 <body>

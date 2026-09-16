@@ -9,7 +9,12 @@
 (function () {
     "use strict";
 
-    var HLJS_URL = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js";
+    // 구문 분석기 — 첫 CDN 이 막혀 있으면 다음 CDN 으로 다시 시도
+    var HLJS_URLS = [
+        "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js",
+        "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js",
+        "https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"
+    ];
 
     // VS Code Dark High Contrast 토큰 색
     var CSS = [
@@ -230,10 +235,14 @@
         st.textContent = CSS;
         document.head.appendChild(st);
         if (window.hljs) { run(); return; }
-        var s = document.createElement("script");
-        s.src = HLJS_URL;
-        s.onload = run;
-        document.head.appendChild(s);
+        (function load(i) {
+            if (i >= HLJS_URLS.length) return;                 // 모두 실패하면 색칠 없이 원래 모습
+            var s = document.createElement("script");
+            s.src = HLJS_URLS[i];
+            s.onload = function () { if (window.hljs) run(); else load(i + 1); };
+            s.onerror = function () { load(i + 1); };
+            document.head.appendChild(s);
+        })(0);
     }
 
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
