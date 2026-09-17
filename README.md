@@ -46,7 +46,9 @@ quiz.js             2학기 과목 페이지 공용 퀴즈 — 객관식(.mcq)·
 weeks.js            2학기 과목 페이지의 1~15주차 버튼 — 진도 나간 주차만 열림, 8주차 중간고사 · 15주차 기말고사, 새 탭으로 열기
 weeks/             주차 페이지(<과목>-N주차.html · <과목>-8주차-중간고사.html) — scripts/build_weeks.py 가 생성
 weeks/src/         주차 페이지 원고(노션 주차 페이지 내용을 옮긴 .md) — 이것만 고치고 빌드
-scripts/build_weeks.py  weeks/src/*.md → weeks/*.html + weeks.js 버튼 데이터 갱신 (python3 scripts/build_weeks.py)
+scripts/build_weeks.py  weeks/src/*.md → weeks/*.html + weeks.js 버튼 데이터 갱신 (python3 scripts/build_weeks.py · 교양은 뒤에 liberal-arts-courses)
+scripts/build_liberal_arts.py  전공 index.html 을 복사해 교양 첫 화면(liberal-arts-courses/index.html) 생성
+liberal-arts-courses/   📚 교양 사이트 — 전공과 같은 구조(index · 과목 페이지 · weeks.js · weeks/) · 전공 사이트에서 링크하지 않음
 pyrun.js            Pyodide 인앱 파이썬 실행기   grader.py / grader_pm.py  채점 로직
 <과목>.html         과목별 정리 페이지 5개
 pm-img/ · sw-img/   과목 이미지
@@ -286,6 +288,24 @@ window.EXAM_SCHEDULE = {
 - [ ] 시험일 지난 과목 직접 접속 → 자동 `?done=1` + 정답 공개
 - [ ] 퀴즈 정답/오답 채점 정확(`cnorm`·`norm` 규칙)
 - [ ] 모바일(≤640px)에서 카드가 1열로 정렬
+
+---
+
+## 📚 교양 사이트 — `liberal-arts-courses/`
+
+➡️ **주소:** https://gmlrms1016-dotcom.github.io/exam-summary/liberal-arts-courses/ (혼자 공부용 · 즐겨찾기로 들어감)
+
+- **전공 사이트에는 교양으로 가는 링크를 절대 만들지 않습니다.** (a 태그 · 버튼 모두 금지)
+- 첫 화면은 전공 `index.html` 을 **그대로 복사**해 과목 선택 내용물만 교양으로 바꾼 것입니다. 직접 고치지 말고, 전공 첫 화면을 고친 뒤 `python3 scripts/build_liberal_arts.py` 를 실행하면 교양도 똑같이 따라갑니다.
+- **1학년 1학기**: 버튼만 두고 잠금(내용 없음) · **1학년 2학기**: 공동체와배려의실천 · 기업가정신과창업 · 인공지능과뇌인지과학
+- 시험 시각: 과목별 공지가 없어 시험 주간의 **수업 시간**으로 잡았습니다 (`schedule.js` · `scripts/build_liberal_arts.py` 의 `SUBJECTS`). 공지가 나오면 두 곳을 고치고 build_liberal_arts.py 실행.
+  | 과목 | 수업 | 중간고사 | 기말고사 |
+  |------|------|------|------|
+  | 기업가정신과창업 | 월 12:00 | 10/19 12:00 | 12/07 12:00 |
+  | 공동체와배려의실천 | 목 09:00 | 10/22 09:00 | 12/10 09:00 |
+  | 인공지능과뇌인지과학 | 목 11:00 | 10/22 11:00 | 12/10 11:00 |
+- 과목 페이지(`liberal-arts-courses/<과목>.html`)는 전공 과목 페이지와 같은 틀입니다: 1~15주차 버튼(`liberal-arts-courses/weeks.js`) · 정리 섹션 · `#quiz`. 공용 파일은 `../theme.js` · `../style.css` · `../quiz.js` · `../review.js` · `../schedule.js` 를 씁니다.
+- **교양 N주차 정리**도 아래 "주차 정리" 절차와 같습니다. 원고는 `liberal-arts-courses/weeks/src/<과목>-N주차.md`, 빌드는 **`python3 scripts/build_weeks.py liberal-arts-courses`**.
 
 ---
 

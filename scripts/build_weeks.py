@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """weeks/src/*.md (노션 주차 정리 원고) → weeks/*.html 주차 페이지 + weeks.js 버튼 데이터 갱신.
 
-사용: python3 scripts/build_weeks.py   (표준 라이브러리만 사용)
+사용: python3 scripts/build_weeks.py                        전공 사이트 (weeks/)
+      python3 scripts/build_weeks.py liberal-arts-courses   교양 사이트 (liberal-arts-courses/weeks/)
+      (표준 라이브러리만 사용)
 
 원고 규칙
 - 파일 이름: <과목>-<N>주차.md · 8주차 중간고사는 <과목>-8주차-중간고사.md · 15주차 기말고사는 <과목>-15주차-기말고사.md
@@ -16,17 +18,22 @@ import os
 import re
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
-SRC = os.path.join(ROOT, "weeks", "src")
-OUT = os.path.join(ROOT, "weeks")
-WEEKS_JS = os.path.join(ROOT, "weeks.js")
 
-SUBJECTS = [
-    ("프로그래밍언어실습", "💾"),
-    ("운영체제실습", "🐧"),
-    ("웹프로그래밍", "🕸️"),
-    ("데이터베이스관리", "🗄️"),
-    ("자바프로그래밍", "☕"),
-]
+# 사이트별 설정 — dir: 사이트 폴더(저장소 기준) · asset: 주차 페이지에서 공용 파일(theme.js·style.css)까지의 경로
+SITES = {
+    "": {"dir": "", "asset": "../", "subjects": [
+        ("프로그래밍언어실습", "💾"),
+        ("운영체제실습", "🐧"),
+        ("웹프로그래밍", "🕸️"),
+        ("데이터베이스관리", "🗄️"),
+        ("자바프로그래밍", "☕"),
+    ]},
+    "liberal-arts-courses": {"dir": "liberal-arts-courses", "asset": "../../", "subjects": [
+        ("공동체와배려의실천", "🤝"),
+        ("기업가정신과창업", "🚀"),
+        ("인공지능과뇌인지과학", "🧠"),
+    ]},
+}
 EXAMS = {8: "중간고사", 15: "기말고사"}
 
 TAGS = [
@@ -219,10 +226,10 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202609162304"></script>
+    <script src="{asset}theme.js?v=202609171007"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="../style.css?v=202609162304">
+    <link rel="stylesheet" href="{asset}style.css?v=202609171007">
     <style>{css}</style>
 </head>
 <body>
@@ -261,7 +268,13 @@ def page_name(subject, week):
     return "%s-%d주차" % (subject, week)
 
 
-def main():
+def main(site_key=""):
+    site = SITES[site_key]
+    base = os.path.join(ROOT, site["dir"])
+    SRC = os.path.join(base, "weeks", "src")
+    OUT = os.path.join(base, "weeks")
+    WEEKS_JS = os.path.join(base, "weeks.js")
+    SUBJECTS = site["subjects"]
     data = {}
     written = []
     for subject, emoji in SUBJECTS:
@@ -289,7 +302,7 @@ def main():
             pager = '    <nav class="wk-pager">%s%s</nav>' % (link(prev_w, "prev", "prev"), link(next_w, "next", "next"))
             source = ("노션 「%s」 주차 페이지들의 시험 포인트를 모은 정리입니다." % subject if week in EXAMS
                       else "노션 「%s · %d주차」 페이지를 정리한 내용입니다." % (subject, week))
-            out = PAGE.format(subject=subject, emoji=emoji, label=label, week_label="%d주차" % week, title=html.escape(title),
+            out = PAGE.format(asset=site["asset"], subject=subject, emoji=emoji, label=label, week_label="%d주차" % week, title=html.escape(title),
                               title_html=html.escape(title), css=PAGE_CSS, pager=pager, body=body, source=source)
             path = os.path.join(OUT, page_name(subject, week) + ".html")
             open(path, "w", encoding="utf-8").write(out)
@@ -314,4 +327,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    main(sys.argv[1].strip("/") if len(sys.argv) > 1 else "")

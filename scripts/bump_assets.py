@@ -7,7 +7,7 @@ GitHub Pages 는 JS·CSS 를 10분(max-age=600) 캐시하고, 크롬은 일반 �
     python3 scripts/bump_assets.py          # 지금 시각으로 버전 갱신
     python3 scripts/bump_assets.py 20261019 # 버전 직접 지정
 
-바꾸는 곳: 루트 *.html · weeks/*.html · scripts/build_weeks.py(주차 페이지 틀)
+바꾸는 곳: 루트 *.html · weeks/*.html · liberal-arts-courses/(*.html · weeks/*.html) · scripts/build_weeks.py(주차 페이지 틀)
 """
 import glob
 import os
@@ -17,12 +17,14 @@ from datetime import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ASSETS = r"style\.css|theme\.js|quiz\.js|review\.js|weeks\.js|schedule\.js|pyrun\.js"
-PATTERN = re.compile(r'((?:src|href)=["\'])((?:\.\./)?(?:' + ASSETS + r'))(?:\?v=[\w.-]*)?(["\'])')
+PATTERN = re.compile(r'((?:src|href)=["\'])((?:\.\./|\{asset\})*(?:' + ASSETS + r'))(?:\?v=[\w.-]*)?(["\'])')
 
 
 def main():
     version = sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime("%Y%m%d%H%M")
-    files = sorted(glob.glob(os.path.join(ROOT, "*.html")) + glob.glob(os.path.join(ROOT, "weeks", "*.html")))
+    files = sorted(glob.glob(os.path.join(ROOT, "*.html")) + glob.glob(os.path.join(ROOT, "weeks", "*.html"))
+                   + glob.glob(os.path.join(ROOT, "liberal-arts-courses", "*.html"))
+                   + glob.glob(os.path.join(ROOT, "liberal-arts-courses", "weeks", "*.html")))
     files.append(os.path.join(ROOT, "scripts", "build_weeks.py"))
     total = 0
     for path in files:
