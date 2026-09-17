@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202609171854"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운영체제실습 4주차 · 사용자·그룹 관리 · rpm·dnf 패키지 설치</title>
+    <link rel="stylesheet" href="../style.css?v=202609171854">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../운영체제실습.html">← 운영체제실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🐧 운영체제실습 · 4주차</h1>
+        <p>사용자·그룹 관리 · rpm·dnf 패키지 설치</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>마운트 · 링크 · 권한 · 사용자관리</small></a><a class="next" href="운영체제실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~4주차 반영)</small></a></nav>
+
+<div class="tip">🐧 <b>운영체제실습 4주차</b> — 사용자 생성·수정·삭제 / 그룹 관리 / 사용자 전환·소유권 / rpm·dnf 패키지 설치<br>실습 터미널 기록에서 <b>오타로 실패한 명령과 똑같이 반복한 명령은 빼고</b> 주제별로 정리했습니다. 출력이 긴 명령은 <b>접어 두었어요</b>(눌러서 펼치기).<br>📌 교수님이 강의자료는 <b>중간고사 전주</b>에 올려주심 · ★ <b>시험문제는 7번 DNF 작동 흐름도</b></div>
+<section class="card">
+<h2>1. 사용자 만들기 — useradd · passwd</h2>
+<div class="tip">💡 <b>useradd</b> 로 계정을 만들면 <code>/etc/passwd</code>(계정) · <code>/etc/shadow</code>(암호) · <code>/etc/group</code>(같은 이름의 그룹)에 <b>한 줄씩 추가</b>되고 홈 디렉터리 <code>/home/사용자명</code> 이 생깁니다.<br>암호는 <b>passwd</b> 로 따로 정합니다.</div>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>useradd 사용자</code></td><td>사용자 생성 (홈 <code>/home/사용자</code> + 같은 이름 그룹 자동 생성)</td></tr>
+<tr><td><code>useradd -d 디렉터리 사용자</code></td><td>홈 디렉터리를 <b>직접 지정</b>해서 생성</td></tr>
+<tr><td><code>passwd 사용자</code></td><td>암호 설정·변경</td></tr>
+<tr><td><code>tail -3 파일</code></td><td>파일의 <b>마지막 3줄</b> 보기</td></tr>
+<tr><td><code>grep 단어 파일</code></td><td>파일에서 <b>그 단어가 들어간 줄만</b> 보기</td></tr>
+</tbody></table>
+<h3>1-1. 계정 파일 열어 보기</h3>
+<pre><code class="language-bash">gnome-text-editor /etc/passwd      # 편집기로 계정 파일 열기</code></pre>
+<details class="wk-details">
+<summary>📄 /etc/passwd 내용 (39줄)</summary>
+<pre><code class="language-output">root:x:0:0:Super User:/root:/bin/bash
+bin:x:1:1:bin:/bin:/usr/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/usr/sbin/nologin
+adm:x:3:4:adm:/var/adm:/usr/sbin/nologin
+lp:x:4:7:lp:/var/spool/lpd:/usr/sbin/nologin
+sync:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spool/mail:/usr/sbin/nologin
+operator:x:11:0:operator:/root:/usr/sbin/nologin
+games:x:12:100:games:/usr/games:/usr/sbin/nologin
+ftp:x:14:50:FTP User:/var/ftp:/usr/sbin/nologin
+nobody:x:65534:65534:Kernel Overflow User:/:/usr/sbin/nologin
+dbus:x:81:81:System Message Bus:/:/usr/sbin/nologin
+tss:x:59:59:Account used for TPM access:/:/usr/sbin/nologin
+avahi:x:70:70:Avahi mDNS/DNS-SD Stack:/var/run/avahi-daemon:/sbin/nologin
+systemd-oom:x:999:999:systemd Userspace OOM Killer:/:/sbin/nologin
+polkitd:x:114:114:User for polkitd:/:/sbin/nologin
+geoclue:x:998:997:User for geoclue:/var/lib/geoclue:/sbin/nologin
+rtkit:x:172:172:RealtimeKit:/:/sbin/nologin
+pipewire:x:997:996:PipeWire System Daemon:/run/pipewire:/usr/sbin/nologin
+rpc:x:32:32:Rpcbind Daemon:/var/lib/rpcbind:/sbin/nologin
+clevis:x:996:995:Clevis Decryption Framework unprivileged user:/var/cache/clevis:/usr/sbin/nologin
+sssd:x:995:994:User for sssd:/run/sssd/:/sbin/nologin
+gnome-remote-desktop:x:993:993:GNOME Remote Desktop:/var/lib/gnome-remote-desktop:/usr/sbin/nologin
+libstoragemgmt:x:992:992:daemon account for libstoragemgmt:/:/usr/sbin/nologin
+systemd-coredump:x:991:991:systemd Core Dumper:/:/usr/sbin/nologin
+wsdd:x:990:989:Web Services Dynamic Discovery host daemon:/:/sbin/nologin
+colord:x:989:988:User for colord:/var/lib/colord:/sbin/nologin
+setroubleshoot:x:988:987:SELinux troubleshoot server:/var/lib/setroubleshoot:/usr/sbin/nologin
+flatpak:x:987:986:Flatpak system helper:/:/usr/sbin/nologin
+gdm:x:42:42:GNOME Display Manager:/var/lib/gdm:/usr/sbin/nologin
+gnome-initial-setup:x:986:985::/run/gnome-initial-setup/:/sbin/nologin
+rpcuser:x:29:29:RPC Service User:/var/lib/nfs:/sbin/nologin
+sshd:x:74:74:Privilege-separated SSH:/usr/share/empty.sshd:/usr/sbin/nologin
+chrony:x:985:983:chrony system user:/var/lib/chrony:/sbin/nologin
+dnsmasq:x:984:982:Dnsmasq DHCP and DNS server:/var/lib/dnsmasq:/usr/sbin/nologin
+tcpdump:x:72:72:tcpdump:/:/usr/sbin/nologin
+rocky:x:1000:1000:rocky:/home/rocky:/bin/bash</code></pre>
+</details>
+<div class="tip">🔎 맨 위 <code>root:x:0:0</code> 은 관리자(UID <b>0</b>), 맨 아래 <code>rocky:x:1000:1000</code> 은 설치 때 만든 일반 사용자입니다.<br>그 사이 <code>bin</code> <code>daemon</code> … 은 셸이 <code>nologin</code> 인 <b>시스템 계정</b>(로그인 불가)입니다.</div>
+<h3>1-2. user_001 만들고 암호 정하기</h3>
+<pre><code class="language-bash">ls /home                 # 만들기 전</code></pre>
+<pre><code class="language-output">rocky</code></pre>
+<pre><code class="language-bash">useradd user_001
+ls /home                 # 만든 후 → user_001 홈 생김</code></pre>
+<pre><code class="language-output">rocky  user_001</code></pre>
+<pre><code class="language-bash">passwd user_001</code></pre>
+<pre><code class="language-output">신규 비밀번호:
+잘못된 비밀번호: 암호에 사용자 이름이 있습니다
+신규 비밀번호 재입력:
+passwd: 암호를 성공적으로 업데이트했습니다</code></pre>
+<div class="tip">⚠️ <code>잘못된 비밀번호: 암호에 사용자 이름이 있습니다</code> 는 <b>경고</b>일 뿐 — root 가 한 번 더 입력하면 마지막 줄처럼 <b>성공</b>합니다.<br>암호가 <b>8자보다 짧을 때</b>도 같은 경고가 뜹니다 (아래 master 실습).</div>
+<h3>1-3. 파일 3곳에 추가된 줄 확인</h3>
+<pre><code class="language-bash">tail -3 /etc/passwd</code></pre>
+<pre><code class="language-output">tcpdump:x:72:72:tcpdump:/:/usr/sbin/nologin
+rocky:x:1000:1000:rocky:/home/rocky:/bin/bash
+user_001:x:1001:1001::/home/user_001:/bin/bash</code></pre>
+<pre><code class="language-bash">tail -3 /etc/shadow</code></pre>
+<pre><code class="language-output">tcpdump:!:20331::::::
+rocky:$y$j9T$M8A1sR/WsThokEyS.IkL8eEO$fQ2zEQqIbof4/iIib6f4jfwR6l0evnBlvH0XFBkJ9i5::0:99999:7:::
+user_001:$y$j9T$UzI4AmLxJ6dFPdYHvXadt.$3wU9rpzglE4MNOPo/nO7tWHfDImwS9TvyHeIG5ZSrr7:20713:0:99999:7:::</code></pre>
+<pre><code class="language-bash">tail -3 /etc/group</code></pre>
+<pre><code class="language-output">plocate:x:981:
+rocky:x:1000:
+user_001:x:1001:</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>파일</th><th>user_001 줄 읽기</th></tr>
+<tr><td><code>/etc/passwd</code></td><td>이름 <code>user_001</code> : x : UID <b>1001</b> : GID <b>1001</b> : 설명(빈칸) : 홈 <code>/home/user_001</code> : 셸 <code>/bin/bash</code></td></tr>
+<tr><td><code>/etc/shadow</code></td><td><code>$y$</code>(yescrypt) 암호 해시 : 최종변경일 <b>20713</b>(1970-01-01부터 날 수 = 2026-09-17) : 최소 0 : 최대 99999 : 경고 7</td></tr>
+<tr><td><code>/etc/group</code></td><td>같은 이름의 그룹 <code>user_001:x:1001:</code> 이 <b>자동 생성</b></td></tr>
+</tbody></table>
+<h3>1-4. 홈 디렉터리 직접 지정 (-d)</h3>
+<pre><code class="language-bash">useradd -d /work_06 use_002     # 홈을 /work_06 으로
+ls -l /</code></pre>
+<details class="wk-details">
+<summary>📄 ls -l / 출력 (22줄)</summary>
+<pre><code class="language-output">합계 28
+dr-xr-xr-x.   2 root    root       6 2024년 10월 29일 afs
+lrwxrwxrwx.   1 root    root       7 2024년 10월 29일 bin -&gt; usr/bin
+dr-xr-xr-x.   5 root    root    4096 2025년  8월 31일 boot
+drwxr-xr-x   18 root    root    3240  9월 17일  14:05 dev
+drwxr-xr-x. 135 root    root    8192  9월 17일  14:14 etc
+drwxr-xr-x.   4 root    root      35  9월 17일  14:10 home
+lrwxrwxrwx.   1 root    root       7 2024년 10월 29일 lib -&gt; usr/lib
+lrwxrwxrwx.   1 root    root       9 2024년 10월 29일 lib64 -&gt; usr/lib64
+drwxr-xr-x.   2 root    root       6 2024년 10월 29일 media
+drwxr-xr-x.   3 root    root      18 2025년  8월 31일 mnt
+drwxr-xr-x.   2 root    root       6 2024년 10월 29일 opt
+dr-xr-xr-x  311 root    root       0  9월 17일  14:05 proc
+dr-xr-x---.  15 root    root    4096 2025년  8월 31일 root
+drwxr-xr-x   49 root    root    1360  9월 17일  14:05 run
+lrwxrwxrwx.   1 root    root       8 2024년 10월 29일 sbin -&gt; usr/sbin
+drwxr-xr-x.   2 root    root       6 2024년 10월 29일 srv
+dr-xr-xr-x   13 root    root       0  9월 17일  14:05 sys
+drwxrwxrwt.  25 root    root    4096  9월 17일  14:05 tmp
+drwxr-xr-x.  12 root    root     144 2025년  8월 31일 usr
+drwxr-xr-x.  20 root    root    4096 2025년  8월 31일 var
+drwx------    3 use_002 use_002   78  9월 17일  14:14 work_06</code></pre>
+</details>
+<div class="tip">🔎 맨 아래 줄 <code>drwx------ 3 use_002 use_002 78 9월 17일 14:14 work_06</code> → 루트(/) 바로 아래에 <b>use_002 소유의 홈 디렉터리</b>가 생겼습니다.</div>
+<h3>1-5. user_002 · master 만들기</h3>
+<pre><code class="language-bash">useradd user_002
+passwd user_002</code></pre>
+<pre><code class="language-output">신규 비밀번호:
+잘못된 비밀번호: 암호에 사용자 이름이 있습니다
+신규 비밀번호 재입력:
+passwd: 암호를 성공적으로 업데이트했습니다</code></pre>
+<div class="tip">💡 <code>useradd</code> 전에 <code>passwd user_002</code> 부터 하면 <code>passwd: 'user_002' 사용자가 없습니다</code> — <b>계정을 먼저</b> 만들어야 합니다.</div>
+<pre><code class="language-bash">useradd master
+passwd master</code></pre>
+<pre><code class="language-output">신규 비밀번호:
+잘못된 비밀번호: 암호는 8 개의 문자 보다 짧습니다
+신규 비밀번호 재입력:
+passwd: 암호를 성공적으로 업데이트했습니다</code></pre>
+<pre><code class="language-bash">ls -l                    # root 홈(~) 목록</code></pre>
+<pre><code class="language-output">합계 4
+-rw-------. 1 root root 1021 2025년  8월 31일 anaconda-ks.cfg
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 공개
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 다운로드
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 문서
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 바탕화면
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 비디오
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 사진
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 서식
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 음악</code></pre>
+<pre><code class="language-bash">tail -3 /etc/passwd</code></pre>
+<pre><code class="language-output">use_002:x:1002:1002::/work_06:/bin/bash
+user_002:x:1003:1003::/home/user_002:/bin/bash
+master:x:1004:1004::/home/master:/bin/bash</code></pre>
+<div class="tip">🔎 새 계정의 UID 는 <b>1002 → 1003 → 1004</b> 로 만든 순서대로 1씩 커집니다.</div>
+</section>
+<section class="card">
+<h2>2. 사용자 수정 — usermod · chage</h2>
+<div class="tip">💡 <b>usermod</b> = 이미 있는 계정의 정보(UID · 홈 · 이름)를 수정<br><b>chage</b> = 암호를 쓸 수 있는 기간 · 계정 만료일을 관리 (change age)</div>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>usermod -u UID 사용자</code></td><td><b>UID</b> 변경</td></tr>
+<tr><td><code>usermod -d 디렉터리 사용자</code></td><td><b>홈 디렉터리</b> 변경</td></tr>
+<tr><td><code>usermod -l 새이름 기존이름</code></td><td><b>로그인 이름</b> 변경 (새 이름이 <b>앞</b>)</td></tr>
+<tr><td><code>usermod -d 디렉터리 -l 새이름 기존이름</code></td><td>옵션 여러 개를 한 번에</td></tr>
+</tbody></table>
+<h3>2-1. UID 바꾸기 (-u)</h3>
+<pre><code class="language-bash">usermod -u 2001 user_002
+tail -3 /etc/passwd</code></pre>
+<pre><code class="language-output">use_002:x:1002:1002::/work_06:/bin/bash
+user_002:x:2001:1003::/home/user_002:/bin/bash
+master:x:1004:1004::/home/master:/bin/bash</code></pre>
+<div class="tip">🔎 <code>user_002</code> 의 UID 가 1003 → <b>2001</b> (세 번째 칸만 바뀌고 GID 1003 은 그대로)</div>
+<h3>2-2. 홈 + 이름 한 번에 (-d · -l)</h3>
+<pre><code class="language-bash">usermod -d /home/workpasce_06 -l guest_001 user_002
+tail -3 /etc/passwd</code></pre>
+<pre><code class="language-output">use_002:x:1002:1002::/work_06:/bin/bash
+master:x:1004:1004::/home/master:/bin/bash
+guest_001:x:2001:1003::/home/workpasce_06:/bin/bash</code></pre>
+<div class="tip">🔎 <code>user_002</code> → <b>guest_001</b> 로 이름이 바뀌고 홈이 <code>/home/workpasce_06</code> 으로 바뀜 (UID 2001 유지). 수정된 줄은 파일 <b>맨 아래</b>로 갑니다.<br><code>workpasce_06</code> 은 실습 때 입력한 이름 그대로입니다.</div>
+<h3>2-3. master → manager</h3>
+<pre><code class="language-bash">usermod -u 2003 master
+tail -3 /etc/passwd</code></pre>
+<pre><code class="language-output">use_002:x:1002:1002::/work_06:/bin/bash
+master:x:2003:1004::/home/master:/bin/bash
+guest_001:x:2001:1003::/home/workpasce_06:/bin/bash</code></pre>
+<pre><code class="language-bash">usermod -d /home/workspace_06 master
+grep master /etc/passwd</code></pre>
+<pre><code class="language-output">master:x:2003:1004::/home/workspace_06:/bin/bash</code></pre>
+<pre><code class="language-bash">usermod -l manager master          # 새 이름(manager)이 앞, 기존 이름(master)이 뒤
+grep manager /etc/passwd</code></pre>
+<pre><code class="language-output">manager:x:2003:1004::/home/workspace_06:/bin/bash</code></pre>
+<div class="tip">⚠️ <code>grep master</code> 처럼 <b>파일 이름을 빼면</b> 키보드 입력을 기다리며 멈춥니다 → <b>Ctrl+C</b> 로 빠져나오기</div>
+<h3>2-4. chage — 암호 기간 · 계정 만료</h3>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>chage -l 사용자</code></td><td>암호·계정 기간 정보 <b>보기</b> (list)</td></tr>
+<tr><td><code>chage -m 일수 사용자</code></td><td>암호를 바꿀 수 있는 <b>최소</b> 날 수</td></tr>
+<tr><td><code>chage -M 일수 사용자</code></td><td>암호를 바꿔야 하는 <b>최대</b> 날 수 → 암호 만료일이 생김</td></tr>
+<tr><td><code>chage -E 날짜 사용자</code></td><td><b>계정 만료일</b> 지정 (<code>YYYY/MM/DD</code>)</td></tr>
+</tbody></table>
+<pre><code class="language-bash">chage -l user_001</code></pre>
+<pre><code class="language-output">마지막으로 암호를 바꾼 날       : 9월 17, 2026
+암호 만료                       : 안함
+암호가 비활성화 기간            : 안함
+계정 만료                       : 안함
+암호를 바꿀 수 있는 최소 날 수  : 0
+암호를 바꿔야 하는 최대 날 수   : 99999
+암호 만료 예고를 하는 날 수     : 7</code></pre>
+<pre><code class="language-bash">chage -m 20 user_001               # 암호를 바꾼 뒤 20일이 지나야 다시 바꿀 수 있음</code></pre>
+<pre><code class="language-bash">chage -E 2030/05/05 manager        # 계정 만료일 지정
+chage -l manager</code></pre>
+<pre><code class="language-output">마지막으로 암호를 바꾼 날       : 9월 17, 2026
+암호 만료                       : 안함
+암호가 비활성화 기간            : 안함
+계정 만료                       : 5월 04, 2030
+암호를 바꿀 수 있는 최소 날 수  : 0
+암호를 바꿔야 하는 최대 날 수   : 99999
+암호 만료 예고를 하는 날 수     : 7</code></pre>
+<div class="tip">🔎 <code>계정 만료 : 안함</code> → <b>5월 04, 2030</b> 으로 바뀜 (입력은 2030/05/05, 화면 표시는 실습 결과 그대로)</div>
+<pre><code class="language-bash">chage -M 30 manager                # 암호 최대 사용 30일
+chage -l manager</code></pre>
+<pre><code class="language-output">마지막으로 암호를 바꾼 날       : 9월 17, 2026
+암호 만료                       : 10월 17, 2026
+암호가 비활성화 기간            : 안함
+계정 만료                       : 5월 04, 2030
+암호를 바꿀 수 있는 최소 날 수  : 0
+암호를 바꿔야 하는 최대 날 수   : 30
+암호 만료 예고를 하는 날 수     : 7</code></pre>
+<div class="tip">🔎 최대 날 수 99999 → <b>30</b> 이 되면서 <code>암호 만료 : 안함</code> → <b>10월 17, 2026</b> (마지막 변경 9월 17일 + 30일)</div>
+</section>
+<section class="card">
+<h2>3. 사용자 삭제 — userdel · find</h2>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>userdel 사용자</code></td><td>계정만 삭제 (홈 디렉터리는 남음)</td></tr>
+<tr><td><code>userdel -r 사용자</code></td><td>계정 + <b>홈 디렉터리까지</b> 삭제</td></tr>
+<tr><td><code>find -user UID -exec rm -r {} \;</code></td><td>그 UID 가 소유한 파일을 <b>찾아서 삭제</b></td></tr>
+</tbody></table>
+<pre><code class="language-bash">userdel -r user_001
+ls /home</code></pre>
+<pre><code class="language-output">master  rocky  user_002</code></pre>
+<div class="tip">🔎 <code>user_001</code> 홈이 사라졌습니다. <code>user_002</code> 폴더가 남아 있는 건 2-2 에서 이름만 guest_001 로 바꿨기 때문 — <code>usermod -d</code> 는 홈 <b>주소만</b> 바꾸고 폴더를 옮기지는 않습니다.</div>
+<pre><code class="language-bash">find -user 1001 -exec rm -r {} \;   # UID 1001(지운 user_001)이 소유한 파일 찾아 삭제
+grep user_001 /etc/passwd</code></pre>
+<pre><code class="language-output">(출력 없음)</code></pre>
+<div class="tip">💡 <code>find</code> 는 경로를 생략하면 <b>현재 디렉터리 아래</b>에서 찾고, <code>{}</code> 자리에 찾은 파일이 하나씩 들어가며 <code>\;</code> 가 -exec 명령의 끝입니다.<br><code>grep</code> 결과가 <b>아무것도 없다</b> = /etc/passwd 에서 user_001 이 완전히 지워짐</div>
+</section>
+<section class="card">
+<h2>4. 그룹 관리 — groupadd · gpasswd</h2>
+<div class="tip">💡 그룹 정보 <code>/etc/group</code> = 그룹명 : x : <b>GID</b> : 소속 사용자<br>그룹 암호 <code>/etc/gshadow</code> = 그룹명 : <b>암호</b> : 관리자 : 소속 사용자</div>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>groupadd 그룹</code></td><td>그룹 생성 (GID 자동)</td></tr>
+<tr><td><code>groupadd -g GID 그룹</code></td><td><b>GID 를 지정</b>해서 생성</td></tr>
+<tr><td><code>groupadd -g GID -o 그룹</code></td><td><b>이미 쓰는 GID</b> 로도 생성 허용 (<code>-o</code> = non-unique)</td></tr>
+<tr><td><code>gpasswd -a 사용자 그룹</code></td><td>그룹에 사용자 <b>추가</b> (add)</td></tr>
+<tr><td><code>gpasswd -d 사용자 그룹</code></td><td>그룹에서 사용자 <b>제거</b> (delete)</td></tr>
+<tr><td><code>gpasswd 그룹</code></td><td>그룹 <b>암호 설정</b></td></tr>
+<tr><td><code>gpasswd -r 그룹</code></td><td>그룹 암호 <b>제거</b> (remove)</td></tr>
+</tbody></table>
+<h3>4-1. 그룹 만들기 (-g · -o)</h3>
+<pre><code class="language-bash">groupadd professor
+tail -3 /etc/group</code></pre>
+<pre><code class="language-output">nt-zone:x:2030:
+gp_zone:x:2030:
+professor:x:2031:</code></pre>
+<div class="tip">🔎 <code>nt-zone</code> · <code>gp_zone</code> 은 기록 전에 만들어 둔 그룹(GID 2030), 새로 만든 <code>professor</code> 는 그다음 번호 <b>2031</b></div>
+<pre><code class="language-bash">groupadd -g 2018 student
+grep student /etc/group</code></pre>
+<pre><code class="language-output">student:x:2018:</code></pre>
+<pre><code class="language-bash">groupadd -g 2018 -o db_space
+grep db_space /etc/group</code></pre>
+<pre><code class="language-output">db_space:x:2018:</code></pre>
+<div class="tip">🔎 <code>-o</code> 를 붙였기 때문에 student 와 <b>같은 GID 2018</b> 로 db_space 가 만들어졌습니다 (<code>-o</code> 가 없으면 GID 중복이라 생성 불가)</div>
+<h3>4-2. 그룹에 사용자 추가 (-a)</h3>
+<pre><code class="language-bash">useradd sno_2023001
+useradd sno_2023002
+ls /home</code></pre>
+<pre><code class="language-output">master  rocky  sno_2023001  sno_2023002  user_002</code></pre>
+<pre><code class="language-bash">gpasswd -a sno_2023001 db_zone
+grep sno_2023001 /etc/group</code></pre>
+<pre><code class="language-output">사용자 sno_2023001을(를) db_zone 그룹에 등록 중
+db_zone:x:1005:sno_2023001
+sno_2023001:x:2004:</code></pre>
+<div class="tip">🔎 <code>db_zone:x:1005:sno_2023001</code> → 네 번째 칸(<b>소속 사용자</b>)에 추가됨<br><code>sno_2023001:x:2004:</code> 는 useradd 가 자동으로 만든 <b>같은 이름의 개인 그룹</b></div>
+<pre><code class="language-bash">gpasswd -a sno_2023002 nt-zone
+grep sno_2023002 /etc/group</code></pre>
+<pre><code class="language-output">사용자 sno_2023002을(를) nt-zone 그룹에 등록 중
+nt-zone:x:2030:sno_2023002
+sno_2023002:x:2005:</code></pre>
+<pre><code class="language-bash">useradd pro_001
+useradd pro_002
+ls /home</code></pre>
+<pre><code class="language-output">master   pro_002  sno_2023001  user_002
+pro_001  rocky    sno_2023002</code></pre>
+<pre><code class="language-bash">gpasswd -a pro_001 professor
+gpasswd -a pro_002 professor
+grep pro_001 /etc/group</code></pre>
+<pre><code class="language-output">사용자 pro_001을(를) professor 그룹에 등록 중
+사용자 pro_002을(를) professor 그룹에 등록 중
+professor:x:2031:pro_001,pro_002
+pro_001:x:2006:</code></pre>
+<div class="tip">🔎 한 그룹에 여러 명이면 <b>쉼표</b>로 이어집니다 → <code>professor:x:2031:pro_001,pro_002</code></div>
+<h3>4-3. 그룹에서 사용자 제거 (-d)</h3>
+<pre><code class="language-bash">gpasswd -d sno_2023002 nt-zone
+grep sno_2023002 /etc/group</code></pre>
+<pre><code class="language-output">사용자 sno_2023002을(를) 그룹 nt-zone에서 제거하는 중
+sno_2023002:x:2005:</code></pre>
+<div class="tip">🔎 <code>nt-zone</code> 줄이 더 이상 검색되지 않음 = 소속에서 빠짐 (개인 그룹 줄만 남음)</div>
+<pre><code class="language-bash">gpasswd -d pro_001 professor
+grep pro_001 /etc/group</code></pre>
+<pre><code class="language-output">사용자 pro_001을(를) 그룹 professor에서 제거하는 중
+pro_001:x:2006:</code></pre>
+<h3>4-4. 그룹 암호 — /etc/gshadow</h3>
+<pre><code class="language-bash">gpasswd gp_zone
+grep gp_zone /etc/gshadow</code></pre>
+<pre><code class="language-output">gp_zone 그룹의 암호를 바꾸는 중
+새 암호:
+새 암호를 다시 입력하십시오:
+gp_zone:$y$j9T$ya61X8zabGm.0MXw3vKbH0$EUay0JoNRbKgCD2aL3cPHO6AHtLPC5huuFz9TCeUgY/::</code></pre>
+<pre><code class="language-bash">gpasswd -r gp_zone                 # 그룹 암호 제거
+grep gp_zone /etc/gshadow</code></pre>
+<pre><code class="language-output">gp_zone:::</code></pre>
+<div class="tip">🔎 암호가 있으면 두 번째 칸에 <code>$y$…</code> 해시, <code>-r</code> 로 지우면 <code>gp_zone:::</code> 처럼 <b>빈칸</b></div>
+<pre><code class="language-bash">gpasswd professor
+gpasswd student</code></pre>
+<pre><code class="language-output">professor 그룹의 암호를 바꾸는 중
+새 암호:
+새 암호를 다시 입력하십시오:
+student 그룹의 암호를 바꾸는 중
+새 암호:
+새 암호를 다시 입력하십시오:</code></pre>
+<pre><code class="language-bash">grep professor /etc/gshadow
+grep student /etc/gshadow</code></pre>
+<pre><code class="language-output">professor:$y$j9T$zkHwBtNukwrLyF2ctdqak0$TIZmz73gA4m7il4RWn6uKT6bQEbUNhjEK4PYS5/dWu2::pro_002
+student:$y$j9T$1xXkJ2.0Tv98rV1bFpXCD1$UughqWS16xhMM.F/KkD./Ms0auYvJqE1rYm2NUxjqN/::</code></pre>
+<div class="tip">🔎 <code>professor:$y$…::pro_002</code> → 암호 : 관리자(빈칸) : <b>소속 사용자 pro_002</b> (pro_001 은 4-3 에서 제거됨)</div>
+<pre><code class="language-bash">gpasswd -r student
+grep student /etc/gshadow</code></pre>
+<pre><code class="language-output">student:::</code></pre>
+</section>
+<section class="card">
+<h2>5. 사용자 전환과 소유권 — su · id · newgrp · chown</h2>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>su - 사용자</code></td><td>그 사용자로 <b>전환</b> (<code>-</code> = 그 사용자의 홈·환경으로) · 프롬프트 <code>#</code> → <code>$</code></td></tr>
+<tr><td><code>exit</code></td><td>전환하기 전 사용자로 <b>돌아가기</b> (로그아웃)</td></tr>
+<tr><td><code>id</code></td><td>현재 사용자의 <b>UID · GID · 소속 그룹</b></td></tr>
+<tr><td><code>newgrp 그룹</code></td><td>현재 <b>주 그룹</b>을 다른 그룹으로 바꾸기</td></tr>
+<tr><td><code>chown 소유자 파일</code></td><td>파일 <b>소유자</b> 변경</td></tr>
+<tr><td><code>chown 소유자:그룹 파일</code></td><td>소유자와 <b>그룹을 한 번에</b> 변경</td></tr>
+</tbody></table>
+<h3>5-1. su · id · newgrp</h3>
+<pre><code class="language-bash">su - sno_2023001                   # root → sno_2023001
+id</code></pre>
+<pre><code class="language-output">uid=2004(sno_2023001) gid=2004(sno_2023001) groups=2004(sno_2023001),1005(db_zone)</code></pre>
+<div class="tip">🔎 주 그룹 <code>gid=2004(sno_2023001)</code>, 소속 그룹에 4-2 에서 넣은 <b><code>1005(db_zone)</code></b> 이 보입니다.</div>
+<pre><code class="language-bash">newgrp nt-zone                     # 주 그룹을 nt-zone 으로 바꾸기</code></pre>
+<pre><code class="language-output">암호:
+newgrp: failed to crypt password with previous salt: 부적절한 인수</code></pre>
+<div class="tip">⚠️ sno_2023001 은 nt-zone 소속이 아니라서 <b>그룹 암호</b>를 묻고, 실습에서는 <code>failed to crypt password</code> 오류로 <b>바뀌지 않았습니다</b> (다시 <code>id</code> 해도 결과 같음).</div>
+<pre><code class="language-bash">su - root                          # 다시 root 로 (root 암호 입력)</code></pre>
+<pre><code class="language-output">비밀번호:
+최근 로그인: 목  9월 17 14:05:36 KST 2026 tty2에
+최근 실패한 로그인: 목  9월 17 15:21:48 KST 2026 pts/0에
+최근 로그인 후 로그인 시도를 2번 실패했습니다.</code></pre>
+<div class="tip">💡 암호를 틀리면 <code>su: 인증 실패</code>, 성공하면 <b>최근 실패 횟수</b>를 알려 줍니다.</div>
+<h3>5-2. chown — 소유자 바꾸기</h3>
+<pre><code class="language-bash">su - sno_2023002
+mkdir work
+touch juso.txt
+ls -l</code></pre>
+<pre><code class="language-output">합계 0
+-rw-r--r-- 1 sno_2023002 sno_2023002 0  9월 17일  15:23 juso.txt
+drwxr-xr-x 2 sno_2023002 sno_2023002 6  9월 17일  15:23 work</code></pre>
+<pre><code class="language-bash">exit</code></pre>
+<pre><code class="language-output">로그아웃</code></pre>
+<pre><code class="language-bash">chown rocky /home/sno_2023002/work
+ls -l /home/sno_2023002</code></pre>
+<pre><code class="language-output">합계 0
+-rw-r--r-- 1 sno_2023002 sno_2023002 0  9월 17일  15:23 juso.txt
+drwxr-xr-x 2 rocky       sno_2023002 6  9월 17일  15:23 work</code></pre>
+<div class="tip">🔎 <code>work</code> 의 <b>소유자만</b> sno_2023002 → rocky (그룹 칸은 sno_2023002 그대로)</div>
+<pre><code class="language-bash">chown rocky:rocky /home/sno_2023002/juso.txt
+ls -l /home/sno_2023002</code></pre>
+<pre><code class="language-output">합계 0
+-rw-r--r-- 1 rocky rocky       0  9월 17일  15:23 juso.txt
+drwxr-xr-x 2 rocky sno_2023002 6  9월 17일  15:23 work</code></pre>
+<div class="tip">🔎 <code>소유자:그룹</code> 형식이라 <code>juso.txt</code> 는 <b>소유자 · 그룹 모두 rocky</b></div>
+<h3>5-3. 일반 사용자로 파일 만들기</h3>
+<pre><code class="language-bash">su - sno_2023001</code></pre>
+<pre><code class="language-output">최근 로그인: 목  9월 17 15:16:56 KST 2026 pts/0에</code></pre>
+<pre><code class="language-bash">mkdir -p workspace/test/ex_dir     # 중간 디렉터리까지 한 번에
+touch scale.txt
+ls -l</code></pre>
+<pre><code class="language-output">합계 0
+-rw-r--r-- 1 sno_2023001 sno_2023001  0  9월 17일  15:30 scale.txt
+drwxr-xr-x 3 sno_2023001 sno_2023001 18  9월 17일  15:29 workspace</code></pre>
+</section>
+<section class="card">
+<h2>6. 패키지 설치 — rpm · dnf</h2>
+<div class="tip">💡 <b>rpm</b> = <code>.rpm</code> 파일 하나를 직접 설치 → 필요한 다른 패키지(<b>의존성</b>)는 <b>직접</b> 해결해야 함<br><b>dnf</b> = 저장소(repository)에서 찾아 설치 → <b>의존성까지 자동</b>으로 내려받아 설치</div>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>rpm -Uvh 파일.rpm</code></td><td>설치 (없으면 설치 · 있으면 업그레이드) — <code>U</code> 업그레이드 · <code>v</code> 자세히 · <code>h</code> 진행 막대(#)</td></tr>
+<tr><td><code>rpm -qi 패키지</code></td><td>설치된 패키지 <b>정보 조회</b> (<code>q</code> 질의 · <code>i</code> 정보)</td></tr>
+<tr><td><code>rpm -e 패키지</code></td><td>패키지 <b>삭제</b> (erase)</td></tr>
+<tr><td><code>dnf -y install 패키지</code></td><td>저장소에서 <b>의존성까지</b> 설치 (<code>-y</code> = 묻지 않고 yes)</td></tr>
+</tbody></table>
+<h3>6-1. DVD 안의 패키지 폴더</h3>
+<pre><code class="language-bash">cd /run/media/root/Rocky-10-0-x86_64-dvd/
+ls -l</code></pre>
+<details class="wk-details">
+<summary>📄 DVD 최상위 ls -l (13줄)</summary>
+<pre><code class="language-output">합계 25
+drwxr-xr-x 1 root root 2048 2025년  6월  1일 AppStream
+drwxr-xr-x 1 root root 2048 2025년  6월  1일 BaseOS
+-r--r--r-- 1 root root 5504 2025년  6월  1일 COMMUNITY-CHARTER
+drwxr-xr-x 1 root root 2048 2025년  6월  1일 EFI
+-r--r--r-- 1 root root  372 2025년  6월  1일 EULA
+-r--r--r-- 1 root root 2204 2025년  6월  1일 LICENSE
+-r--r--r-- 1 root root 1688 2025년  6월  1일 RPM-GPG-KEY-Rocky-10
+-r--r--r-- 1 root root 1700 2025년  6월  1일 RPM-GPG-KEY-Rocky-10-Testing
+drwxr-xr-x 1 root root 2048 2025년  6월  1일 boot
+-r--r--r-- 1 root root 1595 2025년  6월  1일 extra_files.json
+drwxr-xr-x 1 root root 2048 2025년  6월  1일 images
+-r--r--r-- 1 root root   89 2025년  6월  1일 media.repo</code></pre>
+</details>
+<pre><code class="language-bash">cd BaseOS
+ls</code></pre>
+<pre><code class="language-output">Packages  repodata</code></pre>
+<div class="tip">🔎 패키지는 <b>BaseOS</b>(기본 OS) 와 <b>AppStream</b>(응용 프로그램) 두 곳에 나뉘어 있고, <code>Packages/</code> 안은 <b>첫 글자별 폴더</b>(g · m …)로 정리됩니다. <code>repodata</code> = 패키지 목록 정보</div>
+<pre><code class="language-bash">cd Packages/
+cd g
+ls -l</code></pre>
+<details class="wk-details">
+<summary>📄 BaseOS/Packages/g 목록 (248줄)</summary>
+<pre><code class="language-output">합계 164041
+-r--r--r-- 1 root root  1126672 2025년  5월 23일 gawk-5.3.0-6.el10.x86_64.rpm
+-r--r--r-- 1 root root   157042 2025년  5월 21일 gdbm-1.23-12.el10_0.x86_64.rpm
+-r--r--r-- 1 root root    57817 2025년  5월 21일 gdbm-libs-1.23-12.el10_0.x86_64.rpm
+-r--r--r-- 1 root root  1142229 2025년  5월 23일 gettext-0.22.5-6.el10.x86_64.rpm
+-r--r--r-- 1 root root    38037 2025년  5월 23일 gettext-envsubst-0.22.5-6.el10.x86_64.rpm
+-r--r--r-- 1 root root   683602 2025년  5월 23일 gettext-libs-0.22.5-6.el10.x86_64.rpm
+-r--r--r-- 1 root root   127530 2025년  5월 23일 gettext-runtime-0.22.5-6.el10.x86_64.rpm
+-r--r--r-- 1 root root   209988 2025년  5월 23일 glib-networking-2.80.0-3.el10.x86_64.rpm
+-r--r--r-- 1 root root  3193296 2025년  5월 23일 glib2-2.80.4-4.el10.x86_64.rpm
+-r--r--r-- 1 root root  2232252 2025년  5월 23일 glibc-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root 19210767 2025년  5월 23일 glibc-all-langpacks-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   382364 2025년  5월 23일 glibc-common-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root  1716149 2025년  5월 23일 glibc-gconv-extra-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   567572 2025년  5월 23일 glibc-langpack-aa-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558215 2025년  5월 23일 glibc-langpack-af-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509948 2025년  5월 23일 glibc-langpack-agr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510185 2025년  5월 23일 glibc-langpack-ak-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   557029 2025년  5월 23일 glibc-langpack-am-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   526307 2025년  5월 23일 glibc-langpack-an-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554453 2025년  5월 23일 glibc-langpack-anp-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   713460 2025년  5월 23일 glibc-langpack-ar-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   555122 2025년  5월 23일 glibc-langpack-as-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   527349 2025년  5월 23일 glibc-langpack-ast-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510373 2025년  5월 23일 glibc-langpack-ayc-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   800055 2025년  5월 23일 glibc-langpack-az-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   786185 2025년  5월 23일 glibc-langpack-be-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509944 2025년  5월 23일 glibc-langpack-bem-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   781348 2025년  5월 23일 glibc-langpack-ber-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   599686 2025년  5월 23일 glibc-langpack-bg-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509946 2025년  5월 23일 glibc-langpack-bhb-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   562854 2025년  5월 23일 glibc-langpack-bho-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510208 2025년  5월 23일 glibc-langpack-bi-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   534620 2025년  5월 23일 glibc-langpack-bn-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   527889 2025년  5월 23일 glibc-langpack-bo-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   543110 2025년  5월 23일 glibc-langpack-br-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   555370 2025년  5월 23일 glibc-langpack-brx-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   560204 2025년  5월 23일 glibc-langpack-bs-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   557104 2025년  5월 23일 glibc-langpack-byn-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   655401 2025년  5월 23일 glibc-langpack-ca-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510384 2025년  5월 23일 glibc-langpack-ce-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510153 2025년  5월 23일 glibc-langpack-chr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   548424 2025년  5월 23일 glibc-langpack-ckb-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root  1118237 2025년  5월 23일 glibc-langpack-cmn-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   782343 2025년  5월 23일 glibc-langpack-crh-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   575752 2025년  5월 23일 glibc-langpack-cs-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510796 2025년  5월 23일 glibc-langpack-csb-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   500485 2025년  5월 23일 glibc-langpack-cv-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   561420 2025년  5월 23일 glibc-langpack-cy-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   609524 2025년  5월 23일 glibc-langpack-da-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   688010 2025년  5월 23일 glibc-langpack-de-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   555057 2025년  5월 23일 glibc-langpack-doi-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   542131 2025년  5월 23일 glibc-langpack-dsb-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510292 2025년  5월 23일 glibc-langpack-dv-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   520721 2025년  5월 23일 glibc-langpack-dz-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   594641 2025년  5월 23일 glibc-langpack-el-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   721385 2025년  5월 23일 glibc-langpack-en-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   545083 2025년  5월 23일 glibc-langpack-eo-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   783355 2025년  5월 23일 glibc-langpack-es-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   565769 2025년  5월 23일 glibc-langpack-et-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   569501 2025년  5월 23일 glibc-langpack-eu-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   556051 2025년  5월 23일 glibc-langpack-fa-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510423 2025년  5월 23일 glibc-langpack-ff-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   608205 2025년  5월 23일 glibc-langpack-fi-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510294 2025년  5월 23일 glibc-langpack-fil-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   564152 2025년  5월 23일 glibc-langpack-fo-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   678227 2025년  5월 23일 glibc-langpack-fr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510347 2025년  5월 23일 glibc-langpack-fur-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509709 2025년  5월 23일 glibc-langpack-fy-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   569705 2025년  5월 23일 glibc-langpack-ga-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554401 2025년  5월 23일 glibc-langpack-gbm-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   559434 2025년  5월 23일 glibc-langpack-gd-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   658645 2025년  5월 23일 glibc-langpack-gez-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   566258 2025년  5월 23일 glibc-langpack-gl-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   555087 2025년  5월 23일 glibc-langpack-gu-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558397 2025년  5월 23일 glibc-langpack-gv-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   511208 2025년  5월 23일 glibc-langpack-ha-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   548763 2025년  5월 23일 glibc-langpack-hak-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558839 2025년  5월 23일 glibc-langpack-he-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   555468 2025년  5월 23일 glibc-langpack-hi-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509993 2025년  5월 23일 glibc-langpack-hif-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554812 2025년  5월 23일 glibc-langpack-hne-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   619553 2025년  5월 23일 glibc-langpack-hr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   571503 2025년  5월 23일 glibc-langpack-hsb-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510249 2025년  5월 23일 glibc-langpack-ht-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   585840 2025년  5월 23일 glibc-langpack-hu-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   568339 2025년  5월 23일 glibc-langpack-hy-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   527537 2025년  5월 23일 glibc-langpack-ia-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   592255 2025년  5월 23일 glibc-langpack-id-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   485210 2025년  5월 23일 glibc-langpack-ig-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   511117 2025년  5월 23일 glibc-langpack-ik-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   559132 2025년  5월 23일 glibc-langpack-is-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   620733 2025년  5월 23일 glibc-langpack-it-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   501662 2025년  5월 23일 glibc-langpack-iu-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   408615 2025년  5월 23일 glibc-langpack-ja-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   584223 2025년  5월 23일 glibc-langpack-ka-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509405 2025년  5월 23일 glibc-langpack-kab-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   528337 2025년  5월 23일 glibc-langpack-kk-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   565187 2025년  5월 23일 glibc-langpack-kl-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root    94652 2025년  5월 23일 glibc-langpack-km-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554476 2025년  5월 23일 glibc-langpack-kn-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   434178 2025년  5월 23일 glibc-langpack-ko-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554459 2025년  5월 23일 glibc-langpack-kok-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   511586 2025년  5월 23일 glibc-langpack-ks-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   541165 2025년  5월 23일 glibc-langpack-ku-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510100 2025년  5월 23일 glibc-langpack-kv-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558336 2025년  5월 23일 glibc-langpack-kw-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   482953 2025년  5월 23일 glibc-langpack-ky-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554483 2025년  5월 23일 glibc-langpack-lb-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558339 2025년  5월 23일 glibc-langpack-lg-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   517102 2025년  5월 23일 glibc-langpack-li-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510233 2025년  5월 23일 glibc-langpack-lij-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   503350 2025년  5월 23일 glibc-langpack-ln-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root    95202 2025년  5월 23일 glibc-langpack-lo-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   570692 2025년  5월 23일 glibc-langpack-lt-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   533496 2025년  5월 23일 glibc-langpack-lv-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   548903 2025년  5월 23일 glibc-langpack-lzh-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   555247 2025년  5월 23일 glibc-langpack-mag-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   535924 2025년  5월 23일 glibc-langpack-mai-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   548574 2025년  5월 23일 glibc-langpack-mfe-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558859 2025년  5월 23일 glibc-langpack-mg-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510472 2025년  5월 23일 glibc-langpack-mhr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   529330 2025년  5월 23일 glibc-langpack-mi-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510319 2025년  5월 23일 glibc-langpack-miq-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510248 2025년  5월 23일 glibc-langpack-mjw-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   557959 2025년  5월 23일 glibc-langpack-mk-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   552974 2025년  5월 23일 glibc-langpack-ml-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   555721 2025년  5월 23일 glibc-langpack-mn-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554492 2025년  5월 23일 glibc-langpack-mni-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   548216 2025년  5월 23일 glibc-langpack-mnw-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   549809 2025년  5월 23일 glibc-langpack-mr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558315 2025년  5월 23일 glibc-langpack-ms-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   551508 2025년  5월 23일 glibc-langpack-mt-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   548070 2025년  5월 23일 glibc-langpack-my-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   785989 2025년  5월 23일 glibc-langpack-nan-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   580184 2025년  5월 23일 glibc-langpack-nb-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   508859 2025년  5월 23일 glibc-langpack-nds-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510039 2025년  5월 23일 glibc-langpack-ne-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510340 2025년  5월 23일 glibc-langpack-nhn-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   491324 2025년  5월 23일 glibc-langpack-niu-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   615118 2025년  5월 23일 glibc-langpack-nl-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   562181 2025년  5월 23일 glibc-langpack-nn-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510370 2025년  5월 23일 glibc-langpack-nr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   548675 2025년  5월 23일 glibc-langpack-nso-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   526906 2025년  5월 23일 glibc-langpack-oc-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   576350 2025년  5월 23일 glibc-langpack-om-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   531440 2025년  5월 23일 glibc-langpack-or-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   502299 2025년  5월 23일 glibc-langpack-os-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   543122 2025년  5월 23일 glibc-langpack-pa-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   518309 2025년  5월 23일 glibc-langpack-pap-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   605111 2025년  5월 23일 glibc-langpack-pl-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   519829 2025년  5월 23일 glibc-langpack-ps-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   638361 2025년  5월 23일 glibc-langpack-pt-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510395 2025년  5월 23일 glibc-langpack-quz-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554503 2025년  5월 23일 glibc-langpack-raj-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509864 2025년  5월 23일 glibc-langpack-rif-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   610698 2025년  5월 23일 glibc-langpack-ro-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   643494 2025년  5월 23일 glibc-langpack-ru-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   511116 2025년  5월 23일 glibc-langpack-rw-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510453 2025년  5월 23일 glibc-langpack-sa-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   511429 2025년  5월 23일 glibc-langpack-sah-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554484 2025년  5월 23일 glibc-langpack-sat-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509803 2025년  5월 23일 glibc-langpack-sc-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509611 2025년  5월 23일 glibc-langpack-sd-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   483072 2025년  5월 23일 glibc-langpack-se-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510356 2025년  5월 23일 glibc-langpack-sgs-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554868 2025년  5월 23일 glibc-langpack-shn-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510577 2025년  5월 23일 glibc-langpack-shs-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510804 2025년  5월 23일 glibc-langpack-si-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   556952 2025년  5월 23일 glibc-langpack-sid-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   556617 2025년  5월 23일 glibc-langpack-sk-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   171544 2025년  5월 23일 glibc-langpack-sl-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510273 2025년  5월 23일 glibc-langpack-sm-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   594787 2025년  5월 23일 glibc-langpack-so-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   545200 2025년  5월 23일 glibc-langpack-sq-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   626069 2025년  5월 23일 glibc-langpack-sr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510470 2025년  5월 23일 glibc-langpack-ss-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   556981 2025년  5월 23일 glibc-langpack-ssy-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558354 2025년  5월 23일 glibc-langpack-st-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510245 2025년  5월 23일 glibc-langpack-su-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   644855 2025년  5월 23일 glibc-langpack-sv-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   508973 2025년  5월 23일 glibc-langpack-sw-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510499 2025년  5월 23일 glibc-langpack-syr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510811 2025년  5월 23일 glibc-langpack-szl-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554542 2025년  5월 23일 glibc-langpack-ta-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554593 2025년  5월 23일 glibc-langpack-tcy-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   557088 2025년  5월 23일 glibc-langpack-te-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   562972 2025년  5월 23일 glibc-langpack-tg-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   563403 2025년  5월 23일 glibc-langpack-th-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510003 2025년  5월 23일 glibc-langpack-the-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   555288 2025년  5월 23일 glibc-langpack-ti-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   557049 2025년  5월 23일 glibc-langpack-tig-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   556101 2025년  5월 23일 glibc-langpack-tk-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558270 2025년  5월 23일 glibc-langpack-tl-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510488 2025년  5월 23일 glibc-langpack-tn-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510307 2025년  5월 23일 glibc-langpack-to-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   548128 2025년  5월 23일 glibc-langpack-tok-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510307 2025년  5월 23일 glibc-langpack-tpi-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   594804 2025년  5월 23일 glibc-langpack-tr-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510569 2025년  5월 23일 glibc-langpack-ts-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   731674 2025년  5월 23일 glibc-langpack-tt-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   548380 2025년  5월 23일 glibc-langpack-ug-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   607889 2025년  5월 23일 glibc-langpack-uk-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510404 2025년  5월 23일 glibc-langpack-unm-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   560680 2025년  5월 23일 glibc-langpack-ur-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   578859 2025년  5월 23일 glibc-langpack-uz-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510389 2025년  5월 23일 glibc-langpack-ve-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   600967 2025년  5월 23일 glibc-langpack-vi-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   582471 2025년  5월 23일 glibc-langpack-wa-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   555027 2025년  5월 23일 glibc-langpack-wae-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   556641 2025년  5월 23일 glibc-langpack-wal-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   509738 2025년  5월 23일 glibc-langpack-wo-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558334 2025년  5월 23일 glibc-langpack-xh-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   573581 2025년  5월 23일 glibc-langpack-yi-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   511633 2025년  5월 23일 glibc-langpack-yo-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   554520 2025년  5월 23일 glibc-langpack-yue-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510264 2025년  5월 23일 glibc-langpack-yuw-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   510470 2025년  5월 23일 glibc-langpack-zgh-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root  2364047 2025년  5월 23일 glibc-langpack-zh-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   558366 2025년  5월 23일 glibc-langpack-zu-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root    86117 2025년  5월 23일 glibc-minimal-langpack-2.39-37.el10.x86_64.rpm
+-r--r--r-- 1 root root   323343 2025년  5월 23일 gmp-6.2.1-10.el10.x86_64.rpm
+-r--r--r-- 1 root root  2825848 2025년  5월 23일 gnupg2-2.4.5-2.el10.x86_64.rpm
+-r--r--r-- 1 root root  1453224 2025년  5월 23일 gnutls-3.8.9-9.el10.x86_64.rpm
+-r--r--r-- 1 root root   114055 2025년  5월 23일 gobject-introspection-1.79.1-6.el10.x86_64.rpm
+-r--r--r-- 1 root root    17526 2025년  5월 23일 google-noto-fonts-common-20240401-5.el10.noarch.rpm
+-r--r--r-- 1 root root   286277 2025년  5월 23일 google-noto-sans-mono-vf-fonts-20240401-5.el10.noarch.rpm
+-r--r--r-- 1 root root   607550 2025년  5월 23일 google-noto-sans-vf-fonts-20240401-5.el10.noarch.rpm
+-r--r--r-- 1 root root   661104 2025년  5월 23일 google-noto-serif-vf-fonts-20240401-5.el10.noarch.rpm
+-r--r--r-- 1 root root   223216 2025년  5월 23일 gpgme-1.23.2-6.el10.x86_64.rpm
+-r--r--r-- 1 root root    97314 2025년  5월 23일 graphite2-1.3.14-17.el10.x86_64.rpm
+-r--r--r-- 1 root root   310561 2025년  5월 23일 grep-3.11-10.el10.x86_64.rpm
+-r--r--r-- 1 root root  1169250 2025년  5월 23일 groff-base-1.23.0-10.el10.x86_64.rpm
+-r--r--r-- 1 root root  1052208 2025년  5월 25일 grub2-common-2.12-14.el10_0.noarch.rpm
+-r--r--r-- 1 root root  1127468 2025년  5월 25일 grub2-efi-aa64-modules-2.12-14.el10_0.noarch.rpm
+-r--r--r-- 1 root root  2214031 2025년  5월 25일 grub2-efi-x64-2.12-14.el10_0.x86_64.rpm
+-r--r--r-- 1 root root  2213470 2025년  5월 25일 grub2-efi-x64-cdboot-2.12-14.el10_0.x86_64.rpm
+-r--r--r-- 1 root root  1178085 2025년  5월 25일 grub2-efi-x64-modules-2.12-14.el10_0.noarch.rpm
+-r--r--r-- 1 root root    15462 2025년  5월 25일 grub2-pc-2.12-14.el10_0.x86_64.rpm
+-r--r--r-- 1 root root  1163328 2025년  5월 25일 grub2-pc-modules-2.12-14.el10_0.noarch.rpm
+-r--r--r-- 1 root root  1929001 2025년  5월 25일 grub2-tools-2.12-14.el10_0.x86_64.rpm
+-r--r--r-- 1 root root   556162 2025년  5월 25일 grub2-tools-efi-2.12-14.el10_0.x86_64.rpm
+-r--r--r-- 1 root root   858192 2025년  5월 25일 grub2-tools-extra-2.12-14.el10_0.x86_64.rpm
+-r--r--r-- 1 root root   625505 2025년  5월 25일 grub2-tools-minimal-2.12-14.el10_0.x86_64.rpm
+-r--r--r-- 1 root root    25216 2025년  5월 23일 grubby-8.40-77.el10.x86_64.rpm
+-r--r--r-- 1 root root   806691 2025년  5월 23일 gsettings-desktop-schemas-47.1-1.el10.x86_64.rpm
+-r--r--r-- 1 root root   114124 2025년  5월 23일 gssproxy-0.9.2-10.el10.x86_64.rpm
+-r--r--r-- 1 root root 176784 2025년  5월 23일 gzip-1.13-3.el10.x86_64.rpm</code></pre>
+</details>
+<pre><code class="language-bash">cd ../m
+ls -l</code></pre>
+<details class="wk-details">
+<summary>📄 BaseOS/Packages/m 목록 (25줄)</summary>
+<pre><code class="language-output">합계 190921
+-r--r--r-- 1 root root  1309849 2025년  5월 23일 ModemManager-1.22.0-7.el10.x86_64.rpm
+-r--r--r-- 1 root root   331343 2025년  5월 23일 ModemManager-glib-1.22.0-7.el10.x86_64.rpm
+-r--r--r-- 1 root root    35075 2025년  5월 23일 mailcap-2.1.54-8.el10.noarch.rpm
+-r--r--r-- 1 root root   604409 2025년  5월 23일 make-4.4.1-9.el10.x86_64.rpm
+-r--r--r-- 1 root root   308471 2025년  5월 23일 makedumpfile-1.7.6-4.el10.x86_64.rpm
+-r--r--r-- 1 root root  1378325 2025년  5월 23일 man-db-2.12.0-8.el10.x86_64.rpm
+-r--r--r-- 1 root root  3879443 2025년  5월 23일 man-pages-6.06-3.el10.noarch.rpm
+-r--r--r-- 1 root root   210475 2025년  5월 23일 mariadb-connector-c-3.4.4-1.el10.x86_64.rpm
+-r--r--r-- 1 root root     9116 2025년  5월 23일 mariadb-connector-c-config-3.4.4-1.el10.noarch.rpm
+-r--r--r-- 1 root root    74243 2025년  5월 23일 mcelog-202-1.el10.x86_64.rpm
+-r--r--r-- 1 root root   156956 2025년  5월 23일 mcstrans-3.8-1.el10.x86_64.rpm
+-r--r--r-- 1 root root   453577 2025년  5월 23일 mdadm-4.3-5.el10.x86_64.rpm
+-r--r--r-- 1 root root  8978429 2025년  5월 21일 microcode_ctl-20250211-1.el10_0.noarch.rpm
+-r--r--r-- 1 root root    50179 2025년  5월 23일 microdnf-3.10.1-1.el10.x86_64.rpm
+-r--r--r-- 1 root root   347072 2025년  5월 23일 minicom-2.9-4.el10.x86_64.rpm
+-r--r--r-- 1 root root   300079 2025년  5월 23일 mksh-59c-12.el10.x86_64.rpm
+-r--r--r-- 1 root root 81156447 2025년  5월 23일 mlxsw_spectrum-firmware-20250314-15.el10.noarch.rpm
+-r--r--r-- 1 root root    48385 2025년  5월 23일 mokutil-0.6.0-11.el10.x86_64.rpm
+-r--r--r-- 1 root root    91317 2025년  5월 23일 mpdecimal-2.5.1-12.el10.x86_64.rpm
+-r--r--r-- 1 root root   353589 2025년  5월 23일 mpfr-4.2.1-5.el10.x86_64.rpm
+-r--r--r-- 1 root root 74742201 2025년  5월 23일 mrvlprestera-firmware-20250314-15.el10.noarch.rpm
+-r--r--r-- 1 root root 20360345 2025년  5월 23일 mt7xxx-firmware-20250314-15.el10.noarch.rpm
+-r--r--r-- 1 root root   226306 2025년  5월 23일 mtools-4.0.43-7.el10.x86_64.rpm
+-r--r--r-- 1 root root    90467 2025년  5월 23일 mtr-0.95-11.el10.x86_64.rpm</code></pre>
+</details>
+<h3>6-2. rpm 으로 mc 설치 · 조회 · 삭제</h3>
+<pre><code class="language-bash">cd ../../../AppStream/Packages/m     # BaseOS/Packages/m → AppStream/Packages/m
+rpm -Uvh mc-4.8.31-3.el10.x86_64.rpm   # 파일 이름은 끝까지 정확히 (Tab 자동완성)</code></pre>
+<pre><code class="language-output">경고: mc-4.8.31-3.el10.x86_64.rpm: 헤더 V4 RSA/SHA256 Signature, 키 ID 6fedfc85: NOKEY
+확인...                             ################################# [100%]
+준비 중...                         ################################# [100%]
+최신화 / 설치하기...
+1:mc-1:4.8.31-3.el10               ################################# [100%]</code></pre>
+<div class="tip">🔎 <code>경고: … NOKEY</code> 는 서명 키를 등록하지 않아서 뜨는 <b>경고</b>일 뿐 — <code>[100%]</code> 로 설치 완료</div>
+<pre><code class="language-bash">mc                                 # Midnight Commander(텍스트 화면 파일 관리자) 실행 · F10 종료</code></pre>
+<pre><code class="language-bash">rpm -qi mc</code></pre>
+<details class="wk-details">
+<summary>📄 rpm -qi mc 출력 (23줄)</summary>
+<pre><code class="language-output">Name        : mc
+Epoch       : 1
+Version     : 4.8.31
+Release     : 3.el10
+Architecture: x86_64
+Install Date: 2026년 09월 17일 (목) 오후 03시 57분 35초
+Group       : Unspecified
+Size        : 7395928
+License     : GPL-3.0-or-later
+Signature   : RSA/SHA256, 2025년 05월 23일 (금) 오전 06시 02분 18초, Key ID 5b106c736fedfc85
+Source RPM  : mc-4.8.31-3.el10.src.rpm
+Build Date  : 2024년 11월 01일 (금) 오후 11시 42분 57초
+Build Host  : pb-bc024305-c7ba-48be-b1e8-649c0912eb3e-b-x86-64
+Packager    : Rocky Linux Build System (Peridot) releng@rockylinux.org
+Vendor      : Rocky Enterprise Software Foundation
+VCS         : https://github.com/MidnightCommander/mc/
+URL         : https://midnight-commander.org/
+Summary     : User-friendly text console file manager and visual shell
+Description :
+Midnight Commander is a visual shell much like a file manager, only with
+many more features. It is a text mode application, but it also includes
+mouse support. Midnight Commander's best features are its ability to FTP,
+view tar and zip files, and to poke into RPMs for specific files.</code></pre>
+</details>
+<pre><code class="language-bash">rpm -e mc                          # 삭제
+rpm -qi mc</code></pre>
+<pre><code class="language-output">mc 꾸러미(package)가 설치되어 있지 않습니다</code></pre>
+<div class="tip">🔎 삭제 후 조회하면 <code>mc 꾸러미(package)가 설치되어 있지 않습니다</code> (꾸러미 = package 의 한글 번역)</div>
+<h3>6-3. rpm 의 한계(의존성) → dnf 로 해결 ★</h3>
+<pre><code class="language-bash">rpm -Uvh mysql8.4-*                # mysql8.4 로 시작하는 rpm 파일 전부</code></pre>
+<pre><code class="language-output">경고: mysql8.4-8.4.4-2.el10.x86_64.rpm: 헤더 V4 RSA/SHA256 Signature, 키 ID 6fedfc85: NOKEY
+오류: 실패한 의존성:
+/etc/my.cnf는 mysql8.4-common-8.4.4-2.el10.noarch에서 필요합니다
+(mysql-selinux if selinux-policy-targeted)는 mysql8.4-server-8.4.4-2.el10.x86_64에서 필요합니다
+/etc/my.cnf는 mysql8.4-server-8.4.4-2.el10.x86_64에서 필요합니다
+/etc/my.cnf.d는 mysql8.4-server-8.4.4-2.el10.x86_64에서 필요합니다
+libmecab.so.2()(64bit)는 mysql8.4-server-8.4.4-2.el10.x86_64에서 필요합니다
+libprotobuf-lite.so.30()(64bit)는 mysql8.4-server-8.4.4-2.el10.x86_64에서 필요합니다</code></pre>
+<div class="tip">❌ <b>실패한 의존성</b> — mysql8.4 에 필요한 <code>/etc/my.cnf</code> · <code>mysql-selinux</code> · <code>libmecab</code> · <code>libprotobuf-lite</code> 가 없어서 <b>설치되지 않았습니다</b>.<br>rpm 은 의존성을 <b>스스로 해결하지 못합니다</b>.</div>
+<pre><code class="language-bash">dnf -y install mysql8.4-*</code></pre>
+<details class="wk-details">
+<summary>📄 dnf -y install 출력 (67줄)</summary>
+<pre><code class="language-output">Rocky Linux 10 - BaseOS 3.3 kB/s | 4.3 kB 00:01
+Rocky Linux 10 - BaseOS 2.7 MB/s | 23 MB 00:08
+Rocky Linux 10 - AppStream 3.2 kB/s | 4.3 kB 00:01
+Rocky Linux 10 - AppStream 659 kB/s | 2.2 MB 00:03
+Rocky Linux 10 - Extras 2.3 kB/s | 3.1 kB 00:01
+Rocky Linux 10 - Extras 2.0 kB/s | 5.5 kB 00:02
+Rocky Linux 10 - Plus 2.5 kB/s | 3.1 kB 00:01
+Rocky Linux 10 - Plus 396 B/s | 1.1 kB 00:02
+Rocky Linux 10 - CRB 3.3 kB/s | 4.3 kB 00:01
+Rocky Linux 10 - CRB 173 kB/s | 536 kB 00:03
+종속성이 해결되었습니다.
+꾸러미                                 구조               버전                          저장소                    크기
+설치 중:
+mysql8.4                               x86_64             8.4.4-2.el10                  @commandline             2.4 M
+mysql8.4-common                        noarch             8.4.4-2.el10                  @commandline              77 k
+mysql8.4-errmsg                        noarch             8.4.4-2.el10                  @commandline             525 k
+mysql8.4-libs                          x86_64             8.4.4-2.el10                  @commandline             1.2 M
+mysql8.4-server                        x86_64             8.4.4-2.el10                  @commandline              18 M
+종속 꾸러미 설치 중:
+mariadb-connector-c-config             noarch             3.4.4-1.el10                  baseos                   8.9 k
+mecab                                  x86_64             0.996-9.el10                  appstream                361 k
+mysql-selinux                          noarch             1.0.14-1.el10_0               appstream                 37 k
+protobuf-lite                          x86_64             3.19.6-11.el10                appstream                261 k
+연결 요약
+설치  9 꾸러미
+전체 크기: 23 M
+전체 내려받기 크기: 669 k
+설치된 크기 : 171 M
+꾸러미 내려받기 중:
+[MIRROR] mysql-selinux-1.0.14-1.el10_0.noarch.rpm: Status code: 404 for https://download.rockylinux.org/pub/rocky/10.0/AppStream/x86_64/os/Packages/m/mysql-selinux-1.0.14-1.el10_0.noarch.rpm (IP: 146.75.42.132)
+[MIRROR] mariadb-connector-c-config-3.4.4-1.el10.noarch.rpm: Status code: 404 for https://download.rockylinux.org/pub/rocky/10.0/BaseOS/x86_64/os/Packages/m/mariadb-connector-c-config-3.4.4-1.el10.noarch.rpm (IP: 146.75.42.132)
+[MIRROR] mecab-0.996-9.el10.x86_64.rpm: Status code: 404 for https://download.rockylinux.org/pub/rocky/10.0/AppStream/x86_64/os/Packages/m/mecab-0.996-9.el10.x86_64.rpm (IP: 146.75.42.132)
+(1/4): mysql-selinux-1.0.14-1.el10_0.noarch.rpm 29 kB/s | 37 kB 00:01
+(2/4): mariadb-connector-c-config-3.4.4-1.el10.noarch.rpm 6.6 kB/s | 8.9 kB 00:01
+[MIRROR] protobuf-lite-3.19.6-11.el10.x86_64.rpm: Status code: 404 for https://download.rockylinux.org/pub/rocky/10.0/AppStream/x86_64/os/Packages/p/protobuf-lite-3.19.6-11.el10.x86_64.rpm (IP: 146.75.42.132)
+(3/4): mecab-0.996-9.el10.x86_64.rpm 203 kB/s | 361 kB 00:01
+(4/4): protobuf-lite-3.19.6-11.el10.x86_64.rpm 335 kB/s | 261 kB 00:00
+합계                                                                                    324 kB/s | 669 kB     00:02
+연결 확인 실행 중
+연결 확인에 성공했습니다.
+연결 시험 실행 중
+연결 시험에 성공했습니다.
+연결 실행 중
+준비 중     :                                                                                                     1/1
+설치 중     : mariadb-connector-c-config-3.4.4-1.el10.noarch                                                      1/9
+설치 중     : mysql8.4-common-8.4.4-2.el10.noarch                                                                 2/9
+설치 중     : mysql8.4-8.4.4-2.el10.x86_64                                                                        3/9
+설치 중     : mysql8.4-errmsg-8.4.4-2.el10.noarch                                                                 4/9
+설치 중     : protobuf-lite-3.19.6-11.el10.x86_64                                                                 5/9
+구현 중     : mysql-selinux-1.0.14-1.el10_0.noarch                                                                6/9
+설치 중     : mysql-selinux-1.0.14-1.el10_0.noarch                                                                6/9
+구현 중     : mysql-selinux-1.0.14-1.el10_0.noarch                                                                6/9
+libsemanage.semanage_direct_install_info: Overriding mysql module at lower priority 100 with module at priority 200.
+설치 중     : mecab-0.996-9.el10.x86_64                                                                           7/9
+구현 중     : mysql8.4-server-8.4.4-2.el10.x86_64                                                                 8/9
+설치 중     : mysql8.4-server-8.4.4-2.el10.x86_64                                                                 8/9
+구현 중     : mysql8.4-server-8.4.4-2.el10.x86_64                                                                 8/9
+설치 중     : mysql8.4-libs-8.4.4-2.el10.x86_64                                                                   9/9
+구현 중     : mysql-selinux-1.0.14-1.el10_0.noarch                                                                9/9
+구현 중     : mysql8.4-libs-8.4.4-2.el10.x86_64                                                                   9/9
+설치되었습니다:
+mariadb-connector-c-config-3.4.4-1.el10.noarch                   mecab-0.996-9.el10.x86_64
+mysql-selinux-1.0.14-1.el10_0.noarch                             mysql8.4-8.4.4-2.el10.x86_64
+mysql8.4-common-8.4.4-2.el10.noarch                              mysql8.4-errmsg-8.4.4-2.el10.noarch
+mysql8.4-libs-8.4.4-2.el10.x86_64                                mysql8.4-server-8.4.4-2.el10.x86_64
+protobuf-lite-3.19.6-11.el10.x86_64
+완료되었습니다!</code></pre>
+</details>
+<div class="tip">✅ <code>설치 중:</code> mysql8.4 5개는 <code>@commandline</code>(명령에 적은 rpm 파일), <code>종속 꾸러미 설치 중:</code> 4개(<b>mariadb-connector-c-config · mecab · mysql-selinux · protobuf-lite</b>)는 dnf 가 <b>저장소(baseos · appstream)에서 알아서 내려받음</b><br>→ <code>설치 9 꾸러미</code> · <code>완료되었습니다!</code></div>
+<h3>6-4. 저장소 설정 파일 — /etc/yum.repos.d</h3>
+<pre><code class="language-bash">cd /etc/yum.repos.d/
+ls -l</code></pre>
+<pre><code class="language-output">합계 4
+-rw-r--r--  1 root root 963 2025년  8월 31일 This10.repo
+drwxr-xr-x. 2 root root  98 2025년  8월 31일 backup</code></pre>
+<pre><code class="language-bash">cd backup/
+ls -l</code></pre>
+<pre><code class="language-output">합계 20
+-rw-r--r--. 1 root root 5490 2025년  5월 25일 rocky-addons.repo
+-rw-r--r--. 1 root root 1168 2025년  5월 25일 rocky-devel.repo
+-rw-r--r--. 1 root root 2393 2025년  5월 25일 rocky-extras.repo
+-rw-r--r--. 1 root root 3426 2025년  5월 25일 rocky.repo</code></pre>
+<div class="tip">🔎 dnf 는 <code>/etc/yum.repos.d/</code> 의 <b>.repo 파일</b>을 읽어 저장소 <b>URL 주소</b>를 확인합니다 (7번 흐름도 ②).<br>실습 PC 는 <code>This10.repo</code> 를 쓰고, <code>rocky.repo</code> · <code>rocky-extras.repo</code> 등 기본 repo 파일은 <code>backup/</code> 폴더에 들어 있습니다.</div>
+</section>
+<section class="card">
+<h2>7. ★ 시험문제 — DNF 작동 흐름도 (그림 4-111)</h2>
+<div class="tip">📝 <b>시험문제</b> — <code>dnf install 패키지이름</code> 명령이 <b>내부적으로 작동하는 순서</b> (교재 그림 4-111 · 수업 화면 사진 <code>4주차/시험문제.jpeg</code>)</div>
+<table class="ref">
+<tbody>
+<tr><th>순서</th><th>하는 일</th></tr>
+<tr><td>①</td><td><b>dnf install</b> 입력</td></tr>
+<tr><td>②</td><td><code>/etc/yum.repos.d/</code> 디렉터리의 <b>repo 파일</b>을 열어서 <b>URL 주소</b> 확인</td></tr>
+<tr><td>③</td><td><b>전체 패키지 목록 파일</b> 요청 (내 컴퓨터 → 저장소)</td></tr>
+<tr><td>④</td><td><b>전체 패키지 목록 파일만</b> 다운로드 (저장소 → 내 컴퓨터)</td></tr>
+<tr><td>⑤</td><td>설치할 패키지와 <b>관련된 패키지의 이름</b>을 화면에 출력</td></tr>
+<tr><td>⑥</td><td><b>'y'</b> 를 입력하면 설치에 필요한 <b>패키지 파일</b> 요청 (내 컴퓨터 → 저장소)</td></tr>
+<tr><td>⑦</td><td>설치할 <b>패키지 파일을 다운로드</b>해서 <b>자동 설치</b> (저장소 → 내 컴퓨터)</td></tr>
+</tbody></table>
+<div class="tip">🗄️ <b>Rocky Linux 10 패키지 저장소</b> 안에는 <b>baseos 패키지 · appstream 패키지 · 기타 패키지 · 패키지 목록</b> 이 있고, 내 컴퓨터와는 <b>인터넷</b>으로 연결됩니다.<br>교재 예시: 앞서 <b>실습 11</b> 에서 설치한 <b>mysql8.4-errmsg</b> 로 흐름을 따라가면 ① <code>dnf install mysql8.4-errmsg</code> 입력 → ② 자동으로 <code>/etc/yum.repos.d/</code> 의 repo 파일 확인 (핵심 파일은 <b>rocky.repo</b> 와 rocky-… — 사진에서 잘림)</div>
+<div class="tip">🎯 <b>외우는 요령</b> — 입력 → <b>repo 확인</b> → <b>목록 요청</b> → <b>목록만 다운</b> → <b>이름 출력</b> → <b>y 입력 · 파일 요청</b> → <b>파일 다운 · 자동 설치</b><br>요청(③⑥)은 내 컴퓨터 → 저장소, 다운로드(④⑦)는 저장소 → 내 컴퓨터. <b>목록</b>(③④)을 먼저 받고 <b>파일</b>(⑥⑦)은 y 를 누른 뒤에 받습니다.<br>실습 연결: 6-3 dnf 출력의 <code>Rocky Linux 10 - BaseOS … 23 MB</code> = ④ 목록 다운로드, <code>종속 꾸러미 설치 중:</code> 표 = ⑤, <code>꾸러미 내려받기 중:</code> → <code>설치 중</code> = ⑦<br>⑥ 은 사진에서 끝부분이 가려져 있어 <b>'요청'</b> 은 흐름(③ 요청 ↔ ④ 다운로드)에 맞춘 추정입니다.</div>
+</section>
+<section class="card">
+<h2>8. 이번 주 명령어 총정리</h2>
+<table class="ref">
+<tbody>
+<tr><th>분류</th><th>명령</th><th>설명</th></tr>
+<tr><td>사용자</td><td><code>useradd</code> / <code>useradd -d 디렉터리</code></td><td>사용자 생성 / 홈 지정 생성</td></tr>
+<tr><td>사용자</td><td><code>passwd 사용자</code></td><td>암호 설정</td></tr>
+<tr><td>사용자</td><td><code>usermod -u</code> / <code>-d</code> / <code>-l 새이름 기존이름</code></td><td>UID / 홈 / 이름 변경</td></tr>
+<tr><td>사용자</td><td><code>chage -l</code> / <code>-m</code> / <code>-M</code> / <code>-E</code></td><td>기간 보기 / 최소 / 최대 / 계정 만료일</td></tr>
+<tr><td>사용자</td><td><code>userdel -r 사용자</code></td><td>홈 디렉터리까지 삭제</td></tr>
+<tr><td>사용자</td><td><code>find -user UID -exec rm -r {} \;</code></td><td>UID 소유 파일 찾아 삭제</td></tr>
+<tr><td>그룹</td><td><code>groupadd -g GID</code> / <code>-o</code></td><td>GID 지정 / GID 중복 허용</td></tr>
+<tr><td>그룹</td><td><code>gpasswd -a</code> / <code>-d 사용자 그룹</code></td><td>그룹에 추가 / 제거</td></tr>
+<tr><td>그룹</td><td><code>gpasswd 그룹</code> / <code>gpasswd -r 그룹</code></td><td>그룹 암호 설정 / 제거</td></tr>
+<tr><td>전환</td><td><code>su - 사용자</code> / <code>exit</code> / <code>id</code></td><td>전환 / 돌아가기 / UID·GID 확인</td></tr>
+<tr><td>전환</td><td><code>newgrp 그룹</code></td><td>주 그룹 바꾸기</td></tr>
+<tr><td>소유권</td><td><code>chown 소유자</code> / <code>chown 소유자:그룹</code></td><td>소유자 / 소유자+그룹 변경</td></tr>
+<tr><td>확인</td><td><code>tail -3 파일</code> / <code>grep 단어 파일</code></td><td>마지막 3줄 / 단어 들어간 줄</td></tr>
+<tr><td>패키지</td><td><code>rpm -Uvh</code> / <code>-qi</code> / <code>-e</code></td><td>설치 / 정보 조회 / 삭제</td></tr>
+<tr><td>패키지</td><td><code>dnf -y install 패키지</code></td><td>저장소에서 의존성까지 설치</td></tr>
+<tr><td>패키지</td><td><code>/etc/yum.repos.d/*.repo</code></td><td>저장소 주소(URL) 설정 파일</td></tr>
+</tbody></table>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>마운트 · 링크 · 권한 · 사용자관리</small></a><a class="next" href="운영체제실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~4주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「운영체제실습 · 4주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

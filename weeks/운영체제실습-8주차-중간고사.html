@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202609171007"></script>
+    <script src="../theme.js?v=202609171854"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~3주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202609171007">
+    <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~4주차 반영)</title>
+    <link rel="stylesheet" href="../style.css?v=202609171854">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -40,13 +40,63 @@
 
     <header class="page-head">
         <h1>🐧 운영체제실습 · 8주차 · 중간고사</h1>
-        <p>중간고사 시험문제 정리 (1~3주차 반영)</p>
+        <p>중간고사 시험문제 정리 (1~4주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>마운트 · 링크 · 권한 · 사용자관리</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-4주차.html">‹ 이전 · <b>4주차</b><br><small>사용자·그룹 관리 · rpm·dnf 패키지 설치</small></a><span></span></nav>
 
-<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~3주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
-<div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종</div>
+<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~4주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
+<div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종 ⑥ <b>DNF 작동 흐름도(그림 4-111) — 4주차 수업 화면에 나온 시험문제</b></div>
+<section class="card">
+<h2>4주차 — 사용자·그룹 관리 · rpm·dnf (<a href="운영체제실습-4주차.html">4주차 자세히</a>)</h2>
+<h3>★ 시험문제 — DNF 작동 흐름도 (그림 4-111)</h3>
+<table class="ref">
+<tbody>
+<tr><th>순서</th><th>하는 일</th></tr>
+<tr><td>①</td><td><b>dnf install</b> 입력</td></tr>
+<tr><td>②</td><td><code>/etc/yum.repos.d/</code> 디렉터리의 <b>repo 파일</b>을 열어서 <b>URL 주소</b> 확인</td></tr>
+<tr><td>③</td><td><b>전체 패키지 목록 파일</b> 요청 (내 컴퓨터 → 저장소)</td></tr>
+<tr><td>④</td><td><b>전체 패키지 목록 파일만</b> 다운로드 (저장소 → 내 컴퓨터)</td></tr>
+<tr><td>⑤</td><td>설치할 패키지와 <b>관련된 패키지의 이름</b>을 화면에 출력</td></tr>
+<tr><td>⑥</td><td><b>'y'</b> 를 입력하면 설치에 필요한 <b>패키지 파일</b> 요청 (내 컴퓨터 → 저장소)</td></tr>
+<tr><td>⑦</td><td>설치할 <b>패키지 파일을 다운로드</b>해서 <b>자동 설치</b> (저장소 → 내 컴퓨터)</td></tr>
+</tbody></table>
+<ul><li>⭐ <b>시험</b> — 요청(③⑥)은 내 컴퓨터 → 저장소, 다운로드(④⑦)는 저장소 → 내 컴퓨터 · <b>목록</b>(③④)을 먼저, <b>파일</b>(⑥⑦)은 y 를 누른 뒤</li><li>저장소 = <b>baseos · appstream · 기타 패키지 · 패키지 목록</b> · 교재 예시는 실습 11 의 <b>mysql8.4-errmsg</b> · 핵심 repo 파일 <b>rocky.repo</b></li><li>⑥ 의 끝 단어는 사진에서 가려져 '요청' 으로 추정</li></ul>
+<h3>사용자 만들기 · 수정 · 삭제</h3>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>useradd -d /work_06 use_002</code></td><td>홈 디렉터리 <b>직접 지정</b></td></tr>
+<tr><td><code>usermod -u 2001 user_002</code></td><td><b>UID</b> 변경</td></tr>
+<tr><td><code>usermod -d 디렉터리 -l 새이름 기존이름</code></td><td>홈 · <b>로그인 이름</b> 변경 (새 이름이 <b>앞</b>)</td></tr>
+<tr><td><code>chage -l</code> / <code>-m</code> / <code>-M</code> / <code>-E</code></td><td>기간 보기 / 최소 날 수 / <b>최대 날 수</b> / <b>계정 만료일</b></td></tr>
+<tr><td><code>userdel -r user_001</code></td><td>홈 디렉터리까지 삭제</td></tr>
+<tr><td><code>find -user 1001 -exec rm -r {} \;</code></td><td>그 UID 소유 파일 찾아 삭제</td></tr>
+</tbody></table>
+<ul><li><code>chage -M 30 manager</code> → <code>암호 만료 : 안함</code> 이 <b>마지막 변경일 + 30일</b> 로 바뀜 · <code>chage -E 2030/05/05 manager</code> → 계정 만료일</li><li>새 계정 UID 는 만든 순서대로 1씩 증가 · useradd 는 <b>같은 이름의 개인 그룹</b>도 자동 생성</li></ul>
+<h3>그룹 관리 ★</h3>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>groupadd -g 2018 student</code></td><td>GID 지정</td></tr>
+<tr><td><code>groupadd -g 2018 -o db_space</code></td><td><b>이미 쓰는 GID 중복 허용</b> (<code>-o</code>)</td></tr>
+<tr><td><code>gpasswd -a 사용자 그룹</code> / <code>-d</code></td><td>그룹에 <b>추가</b> / <b>제거</b></td></tr>
+<tr><td><code>gpasswd 그룹</code> / <code>gpasswd -r 그룹</code></td><td>그룹 <b>암호 설정</b> / <b>제거</b></td></tr>
+</tbody></table>
+<ul><li><code>/etc/group</code> = 그룹명 : x : GID : <b>소속 사용자</b>(여러 명이면 쉼표) · <code>/etc/gshadow</code> = 그룹명 : <b>암호</b> : 관리자 : 소속 사용자</li><li>암호를 지우면 <code>gp_zone:::</code> 처럼 <b>빈칸</b></li></ul>
+<h3>전환 · 소유권</h3>
+<ul><li><code>su - 사용자</code> 전환(프롬프트 <code>#</code> → <code>$</code>) · <code>exit</code> 돌아가기 · <code>id</code> = UID · GID · 소속 그룹 · <code>newgrp 그룹</code> = 주 그룹 바꾸기</li><li><code>chown rocky 파일</code> = <b>소유자만</b> · <code>chown rocky:rocky 파일</code> = 소유자 + <b>그룹까지</b></li></ul>
+<h3>패키지 rpm · dnf ★</h3>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>rpm -Uvh 파일.rpm</code></td><td>설치 (U 업그레이드 · v 자세히 · h 진행 막대)</td></tr>
+<tr><td><code>rpm -qi 패키지</code></td><td>설치된 패키지 <b>정보</b></td></tr>
+<tr><td><code>rpm -e 패키지</code></td><td><b>삭제</b></td></tr>
+<tr><td><code>dnf -y install 패키지</code></td><td>저장소에서 <b>의존성까지 자동</b> 설치</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>rpm -Uvh mysql8.4-*</code> 는 <b>실패한 의존성</b>으로 설치 안 됨 → <code>dnf -y install mysql8.4-*</code> 는 mariadb-connector-c-config · mecab · mysql-selinux · protobuf-lite 를 <b>알아서 받아</b> 9개 설치</li><li>DVD 패키지 위치: <b>BaseOS</b> · <b>AppStream</b> 의 <code>Packages/첫글자/</code> · 저장소 설정은 <code>/etc/yum.repos.d/*.repo</code></li></ul>
+</section>
 <section class="card">
 <h2>3주차 — 마운트 · 링크 · 권한 · 사용자관리 (<a href="운영체제실습-3주차.html">3주차 자세히</a>)</h2>
 <h3>마운트</h3>
@@ -91,10 +141,10 @@
 </section>
 <section class="card">
 <h2>✏️ 문제로 확인하기</h2>
-<ul><li><a href="../운영체제실습.html#quiz">운영체제실습 과목 페이지 — 퀴즈(객관식 10 · 주관식 10)</a></li></ul>
+<ul><li><a href="../운영체제실습.html#quiz">운영체제실습 과목 페이지 — 퀴즈(객관식 15 · 주관식 15)</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>마운트 · 링크 · 권한 · 사용자관리</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-4주차.html">‹ 이전 · <b>4주차</b><br><small>사용자·그룹 관리 · rpm·dnf 패키지 설치</small></a><span></span></nav>
 
     <p class="wk-src">노션 「운영체제실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 
