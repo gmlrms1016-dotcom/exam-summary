@@ -15,7 +15,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202609171854"></script>
+    <script src="theme.js?v=202609180158"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1b4d39">
     <meta name="description" content="동양미래대학교 컴퓨터정보공학과 전공 시험 정리 — 과목별 남은 시간 실시간 카운트다운">
@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-    <script src="schedule.js?v=202609171854"></script>
+    <script src="schedule.js?v=202609180158"></script>
     <style>
         :root {
             --main:#2d6a4f; --main-d:#1b4d39; --point:#d9772b;
@@ -759,26 +759,38 @@
                 if (finished) {
                     a.dataset.fin = "1"; a.classList.add("fin");
                     a.setAttribute("href", file + "?done=1");
-                    st.innerHTML = '<span class="pill fin">' + IC.check + ' 복습</span>';
+                    setPill(st, "pill fin", IC.check + ' 복습');
                 } else {
                     a.dataset.fin = "0"; a.classList.remove("fin");
                     a.setAttribute("href", file);
                     if (diff > 0) {
-                        st.innerHTML = '<span class="pill ' + (diff < NEAR ? "soon" : "wk") + '">' + IC.clock + ' ' + chipHTML(diff) + '</span>';
+                        setPill(st, "pill " + (diff < NEAR ? "soon" : "wk"), IC.clock + ' ' + chipHTML(diff));
                     } else {
-                        st.innerHTML = '<span class="pill live">' + IC.cap + ' 시험 중</span>';
+                        setPill(st, "pill live", IC.cap + ' 시험 중');
                     }
                 }
             });
-            // 정렬: 미완료(임박순) → 완료(최근순)
+            // 정렬: 미완료(임박순) → 완료(최근순) · 순서가 바뀔 때만 다시 끼움(카드 애니메이션이 1초마다 끊기지 않게)
+            var before = cards.slice();
             cards.sort(function (x, y) {
                 var fx = x.dataset.fin === "1", fy = y.dataset.fin === "1";
                 if (fx !== fy) return fx ? 1 : -1;
                 var tx = new Date(x.dataset.exam).getTime(), ty = new Date(y.dataset.exam).getTime();
                 return fx ? (ty - tx) : (tx - ty);
             });
-            cards.forEach(function (c) { listEl.appendChild(c); });
+            if (cards.some(function (c, i) { return c !== before[i]; })) {
+                cards.forEach(function (c) { listEl.appendChild(c); });
+            }
         });
+    }
+    /* 상태 칩은 같은 종류면 요소를 그대로 두고 안쪽만 바꿈 → 칩의 맥박 애니메이션이 1초마다 처음부터 다시 시작하지 않음 */
+    function setPill(st, cls, inner) {
+        var p = st.firstElementChild;
+        if (!p || p.className !== cls) {
+            st.innerHTML = '<span class="' + cls + '"></span>';
+            p = st.firstElementChild;
+        }
+        p.innerHTML = inner;
     }
 
     /* ───── 개강 히어로 + 방학 진행바 ───── */

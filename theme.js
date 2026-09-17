@@ -11,6 +11,8 @@
        ② 그 밖에 페이지마다 직접 쓴 색(인라인 style·SVG 등)은 무채색·파랑으로 자동 변환
    - 오른쪽 위 ☀️/🌙 버튼으로 전환 · 주소 뒤 ?theme=light / ?theme=dark 로도 지정 가능
    - 소스코드 색칠 codecolor.js 도 여기서 함께 불러옴 (VS Code 고대비 색)
+   - 애니메이션 · 인터랙션 motion.js 도 여기서 함께 불러옴 (자세한 건 motion.js 맨 위 설명)
+   - 전환 버튼을 누르면 버튼 자리에서 원이 퍼지며 모드가 바뀜 (View Transitions 지원 브라우저)
    ===================================================================== */
 (function () {
     "use strict";
@@ -18,14 +20,17 @@
     var KEY = "exam-summary-theme";
     var root = document.documentElement;
 
-    // 소스코드 색칠(codecolor.js)도 모든 페이지에서 함께 불러옴 — theme.js 와 같은 폴더
+    // 소스코드 색칠(codecolor.js) · 애니메이션(motion.js)도 모든 페이지에서 함께 불러옴 — theme.js 와 같은 폴더
     var selfSrc = document.currentScript && document.currentScript.src;
-    if (selfSrc && !document.getElementById("codecolor-js")) {
-        var cc = document.createElement("script");
-        cc.id = "codecolor-js";
-        cc.src = selfSrc.replace(/theme\.js(\?[^#]*)?(#.*)?$/, "codecolor.js$1");   // ?v= 버전도 그대로 넘김(캐시 끊기)
-        (document.head || root).appendChild(cc);
+    function loadSibling(id, name) {
+        if (!selfSrc || document.getElementById(id)) return;
+        var s = document.createElement("script");
+        s.id = id;
+        s.src = selfSrc.replace(/theme\.js(\?[^#]*)?(#.*)?$/, name + "$1");   // ?v= 버전도 그대로 넘김(캐시 끊기)
+        (document.head || root).appendChild(s);
     }
+    loadSibling("codecolor-js", "codecolor.js");
+    loadSibling("motion-js", "motion.js");
 
     function load() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
     function store(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
@@ -41,9 +46,20 @@
     pre.textContent =
         'html[data-theme="dark"]{background:#0c1014;color-scheme:dark}' +
         'html.theme-pending body{visibility:hidden}' +
-        'html.theme-switching *,html.theme-switching *::before,html.theme-switching *::after{transition:none!important}';
+        'html.theme-switching *,html.theme-switching *::before,html.theme-switching *::after{transition:none!important}' +
+        'html.mo-boot .wrap{opacity:0}' +
+        'html.theme-vt::view-transition-old(root),html.theme-vt::view-transition-new(root){animation:none;mix-blend-mode:normal}';
     (document.head || root).appendChild(pre);
     if (theme === "dark") root.classList.add("theme-pending");
+
+    // ---- motion.js 가 준비될 때까지 본문을 잠깐 투명하게 (카드가 한 번 보였다가 다시 떠오르는 깜빡임 방지) ----
+    var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (selfSrc && !calm) {
+        root.classList.add("mo-boot");
+        var unboot = function () { root.classList.remove("mo-boot"); };
+        document.addEventListener("DOMContentLoaded", function () { setTimeout(unboot, 900); });
+        setTimeout(unboot, 3000);                                   // motion.js 가 늦거나 실패해도 본문은 반드시 보이게
+    }
 
     // ================= 인스타그램 다크 팔레트 =================
     var IG = {
@@ -500,7 +516,22 @@
         btn.type = "button";
         btn.className = "theme-toggle";
         btn.setAttribute("data-theme-skip", "");
-        btn.addEventListener("click", function () { setTheme(theme === "dark" ? "light" : "dark"); });
+        btn.addEventListener("click", function () {
+            var next = theme === "dark" ? "light" : "dark";
+            var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (!document.startViewTransition || still) { setTheme(next); return; }
+            // 버튼 자리에서 원이 퍼지며 새 모드가 화면을 덮음 (View Transitions 를 지원하는 브라우저만)
+            var r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+            var radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+            var done = function () { root.classList.remove("theme-vt"); };
+            root.classList.add("theme-vt");
+            var vt = document.startViewTransition(function () { setTheme(next); });
+            vt.ready.then(function () {
+                root.animate({ clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + radius + "px at " + x + "px " + y + "px)"] },
+                             { duration: 650, easing: "cubic-bezier(.22,1,.36,1)", pseudoElement: "::view-transition-new(root)" });
+            }, done);
+            vt.finished.then(done, done);
+        });
         document.body.appendChild(btn);
         updateBtn();
 
