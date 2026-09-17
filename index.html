@@ -64,6 +64,9 @@
                padding:11px 10px 8px; min-width:70px; backdrop-filter:blur(2px); }
         .seg-n { display:block; font-size:30px; font-weight:800; line-height:1; font-variant-numeric:tabular-nums; letter-spacing:.5px; }
         .seg-l { display:block; font-size:11px; margin-top:6px; color:#d3ecde; font-weight:600; }
+        /* 카운트다운 카드는 눌러도 아무 표시가 없게 — 손가락 커서·글자 선택·탭 하이라이트·두 번 탭 확대·길게 누르기 메뉴 없음 */
+        .hero-clock, .hero-clock * { cursor:default; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;
+                                     -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
         .hero-date { font-size:12.5px; color:#bfe0cd; font-weight:600; }
         .hero-bar { height:5px; max-width:300px; margin:14px auto 0; border-radius:var(--r-pill);
                     background:rgba(255,255,255,.16); overflow:hidden; }
@@ -814,6 +817,36 @@
         pct.innerHTML = barLabel + " <b>" + ratio.toFixed(5) + "%</b> 진행";
         dateEl.textContent = kdate(targetIso);
     }
+
+    /* ───── (숨김) 카운트다운 카드를 일 → 시간 → 분 → 초 순서대로 누르면 전공 ↔ 교양 이동 ─────
+       눌러도 화면에는 아무 변화가 없음. 카드는 1초마다 다시 그려지므로 카드 묶음에서 '손을 뗀 위치'로 몇 번째 카드인지 판단
+       끌어서 움직였거나(10px 넘게) 4초 넘게 쉬면 처음부터. 교양 쪽은 build_liberal_arts.py 가 목적지를 "../" 로 바꿈 */
+    (function () {
+        var clock = document.getElementById("dday-clock");
+        if (!clock) return;
+        var SWITCH_TO = "liberal-arts-courses/";
+        var step = 0, last = 0, down = null;
+        clock.addEventListener("pointerdown", function (e) {
+            down = (e.isPrimary && e.button === 0) ? { x: e.clientX, y: e.clientY } : null;
+        });
+        clock.addEventListener("pointerup", function (e) {
+            if (!down) return;
+            var moved = Math.abs(e.clientX - down.x) > 10 || Math.abs(e.clientY - down.y) > 10;
+            down = null;
+            var segs = clock.querySelectorAll(".seg");
+            if (moved || segs.length !== 4) { step = 0; return; }
+            var idx = -1;
+            for (var i = 0; i < segs.length; i++) {
+                var r = segs[i].getBoundingClientRect();
+                if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) { idx = i; break; }
+            }
+            var now = Date.now();
+            if (now - last > 4000) step = 0;
+            last = now;
+            step = (idx === step) ? step + 1 : (idx === 0 ? 1 : 0);
+            if (step === 4) { step = 0; location.href = SWITCH_TO; }
+        });
+    })();
 
     /* ───── 앞 시험이 끝나기 전 다음 시험 버튼 잠금 ─────
        data-unlock-after 에 적은 과목들의 시험이 모두 끝나야(schedule.js: 시작 +3시간) 열림

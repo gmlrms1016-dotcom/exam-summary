@@ -9,6 +9,7 @@
 - 1학년 1학기: 버튼만 남기고 잠금 (1학기 화면 · 과목 허브는 만들지 않음)
 - 1학년 2학기: 중간·기말 과목 카드를 교양 과목으로 교체, 시험 시각·기말 잠금 기준도 교양 과목으로
 - 전공 사이트에는 교양으로 가는 링크를 만들지 않는다 (즐겨찾기로만 들어옴)
+- (숨김) 첫 화면 카운트다운 카드를 일→시간→분→초 순서로 누르면 전공 ↔ 교양 이동 — 교양 쪽 목적지는 "../"
 """
 import os
 import re
@@ -105,7 +106,10 @@ def main():
         assert pat.search(s), list_id
         s = pat.sub(lambda mm: mm.group(1) + cards(kind) + mm.group(3), s, count=1)
 
-    # ⑤ 2학기 중간 · 기말 카운트다운 기준 시각
+    # ⑤ (숨김) 카운트다운 일→시간→분→초 이스터에그: 교양에서는 전공 첫 화면으로
+    s = sub(s, 'var SWITCH_TO = "liberal-arts-courses/";', 'var SWITCH_TO = "../";')
+
+    # ⑥ 2학기 중간 · 기말 카운트다운 기준 시각
     s = re.sub(r'(mid:\s*")[^"]*(")', lambda mm: mm.group(1) + first_mid + mm.group(2), s, count=1)
     s = re.sub(r'(final:\s*")[^"]*(")', lambda mm: mm.group(1) + first_final + mm.group(2), s, count=1)
 
