@@ -153,6 +153,7 @@
         "html[data-theme=dark] #rv-fab{background:#0095f6;color:#fff}",
         "html[data-theme=dark] #rv-overlay{background:rgba(0,0,0,.65)}",
         "html[data-theme=dark] #rv-modal{background:#1c1f23;color:#f5f5f5}",
+        "html[data-theme=dark] #rv-grab i{background:#3a3e43}",
         "html[data-theme=dark] #rv-head{background:#25292e;color:#f5f5f5}",
         "html[data-theme=dark] #rv-head p{color:#a8a8a8}",
         "html[data-theme=dark] #rv-text{background:#0c1014;border-color:#262a2f;color:#f5f5f5}",

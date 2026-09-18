@@ -92,8 +92,14 @@
         + "#rv-fab{position:fixed;right:18px;bottom:18px;z-index:9998;background:#d9772b;color:#fff;border:none;"
         + "border-radius:50px;padding:13px 18px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25);font-family:inherit;}"
         + "#rv-fab:hover{filter:brightness(1.05);}"
-        + "#rv-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:18px;}"
-        + "#rv-modal{background:#fff;color:#1d241e;max-width:760px;width:100%;max-height:86vh;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;font-family:inherit;}"
+        // 폰에서는 아래에서 올라오는 시트(손잡이를 아래로 끌어 닫기), PC 에서는 가운데 카드
+        + "#rv-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;padding:0;"
+        + "-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}"
+        + "#rv-modal{background:#fff;color:#1d241e;max-width:760px;width:100%;max-height:88vh;border-radius:22px 22px 0 0;overflow:hidden;display:flex;flex-direction:column;font-family:inherit;}"
+        + "#rv-grab{flex:none;display:flex;justify-content:center;padding:9px 0 3px;cursor:grab;touch-action:none;}"
+        + "#rv-grab i{display:block;width:44px;height:5px;border-radius:99px;background:#d7ddd7;}"
+        + "#rv-foot{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));}"
+        + "@media (min-width:641px){#rv-overlay{align-items:center;padding:18px;}#rv-modal{border-radius:18px;max-height:86vh;}#rv-grab{display:none;}}"
         + "#rv-head{background:#2d6a4f;color:#fff;padding:16px 20px;}"
         + "#rv-head h3{margin:0;font-size:18px;}"
         + "#rv-head p{margin:4px 0 0;font-size:13px;color:#d8efe2;}"
@@ -114,6 +120,7 @@
     var overlay = document.createElement("div"); overlay.id = "rv-overlay";
     overlay.innerHTML =
         '<div id="rv-modal" role="dialog" aria-modal="true">'
+        + '<div id="rv-grab" aria-hidden="true"><i></i></div>'
         + '<div id="rv-head"><h3>📋 내가 틀린 문제 모음 <span id="rv-count"></span></h3>'
         + '<p>아래 내용을 복사해 AI에게 붙여넣고 “비슷한 문제 내줘”라고 하세요. (복습용)</p></div>'
         + '<div id="rv-body"><div id="rv-empty" style="display:none;">아직 틀린 문제가 없어요! 문제를 풀어본 뒤 다시 눌러주세요. 🙂</div>'
@@ -144,13 +151,69 @@
             elText.value = buildText(list);
         }
         overlay.style.display = "flex";
+        sheetIn();
         if (list.length) { elText.focus(); elText.select(); }
     }
-    function closeModal() { overlay.style.display = "none"; }
+    function closeModal() { sheetOut(function () { overlay.style.display = "none"; }); }
+
+    /* ---- 시트 열고 닫기 · 손잡이를 아래로 끌어 닫기 (동작 줄이기면 그냥 나타나고 사라짐) ---- */
+    var modal = overlay.querySelector("#rv-modal");
+    var grab = overlay.querySelector("#rv-grab");
+    var SPRING = "cubic-bezier(.34,1.56,.64,1)";
+    function calm() { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) || !modal.animate; }
+    function sheet() { return !(window.matchMedia && window.matchMedia("(min-width:641px)").matches); }
+    function sheetIn() {
+        if (calm()) return;
+        overlay.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: "ease-out" });
+        modal.animate(sheet() ? [{ transform: "translateY(100%)" }, { transform: "none" }]
+                              : [{ transform: "scale(.94)", opacity: 0 }, { transform: "none", opacity: 1 }],
+                      { duration: sheet() ? 420 : 260, easing: sheet() ? SPRING : "cubic-bezier(.22,1,.36,1)" });
+    }
+    function sheetOut(after) {
+        if (calm()) { after(); return; }
+        overlay.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: "ease-in" });
+        var a = modal.animate(sheet() ? [{ transform: "none" }, { transform: "translateY(100%)" }]
+                                      : [{ transform: "none", opacity: 1 }, { transform: "scale(.96)", opacity: 0 }],
+                              { duration: 240, easing: "cubic-bezier(.4,0,1,1)" });
+        var done = false;
+        var end = function () { if (done) return; done = true; after(); };
+        a.onfinish = a.oncancel = end;
+        setTimeout(end, 400);                                        // 화면이 가려진 탭처럼 애니메이션이 멈춰도 반드시 닫히게
+    }
+    (function dragToClose() {
+        var startY = 0, dy = 0, dragging = false, t0 = 0;
+        function down(e) {
+            if (!sheet() || calm()) return;
+            dragging = true; startY = e.clientY; dy = 0; t0 = Date.now();
+            modal.style.transition = "none";
+            grab.setPointerCapture && grab.setPointerCapture(e.pointerId);
+        }
+        function move(e) {
+            if (!dragging) return;
+            dy = Math.max(0, e.clientY - startY);
+            modal.style.transform = "translateY(" + dy + "px)";
+        }
+        function up() {
+            if (!dragging) return;
+            dragging = false;
+            var fast = dy > 30 && Date.now() - t0 < 260;
+            modal.style.transform = "";
+            if (dy > 90 || fast) { closeModal(); return; }
+            modal.animate([{ transform: "translateY(" + dy + "px)" }, { transform: "none" }], { duration: 320, easing: SPRING });
+        }
+        grab.addEventListener("pointerdown", down);
+        grab.addEventListener("pointermove", move);
+        grab.addEventListener("pointerup", up);
+        grab.addEventListener("pointercancel", up);
+    })();
 
     function doCopy() {
         var text = elText.value;
-        function done() { elCopy.textContent = "복사됨 ✓"; setTimeout(function () { elCopy.textContent = "📋 클립보드에 복사"; }, 1800); }
+        function done() {
+            elCopy.textContent = "복사됨 ✓";
+            if (window.moToast) window.moToast("틀린 문제를 복사했어요");
+            setTimeout(function () { elCopy.textContent = "📋 클립보드에 복사"; }, 1800);
+        }
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(done, function () { elText.focus(); elText.select(); document.execCommand("copy"); done(); });
         } else { elText.focus(); elText.select(); document.execCommand("copy"); done(); }
@@ -218,6 +281,7 @@
             var text = code.textContent;
             function done() {
                 btn.textContent = "복사됨 ✓"; btn.classList.add("done");
+                if (window.moToast) window.moToast("코드를 복사했어요");
                 setTimeout(function () { btn.textContent = "⧉ 복사"; btn.classList.remove("done"); }, 1600);
             }
             if (navigator.clipboard && navigator.clipboard.writeText) {

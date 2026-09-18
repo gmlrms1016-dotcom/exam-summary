@@ -1,25 +1,27 @@
 /* =====================================================================
-   motion.js  ·  애니메이션 · 인터랙션 — 전 페이지 공용
+   motion.js  ·  애니메이션 · 인터랙션 — 전 페이지 공용 (토스 앱 느낌)
    - 페이지에 따로 넣지 않습니다. theme.js 가 codecolor.js 와 함께 같은 ?v= 로 불러옵니다.
    - 색: 화이트모드는 원래 초록·주황 토큰, 다크모드는 파랑·무채색만 (녹색 없음)
    - 기기에서 '동작 줄이기(prefers-reduced-motion)'를 켜면 움직임은 모두 빼고
-     읽기 진행 막대 · 맨 위로 버튼 · 키보드 포커스 테두리만 남김
+     읽기 진행 막대 · 상단 바 · 맨 위로 버튼 · 키보드 포커스 테두리만 남김
    하는 일
+     토스식 기본기
+       ① 누르면 쏙 들어갔다가 튕겨 나오는 반응(모든 버튼·카드) · 모바일 회색 탭 하이라이트 제거
+       ② 화면 전환은 밀어내기 — 새 화면이 들어오는 동안 이전 화면이 반대로 밀려 나감
+       ③ 숫자는 자리별로 굴러감(카운트다운) · 불러오는 중에는 뼈대(스켈레톤)가 반짝임
+       ④ 복사처럼 결과만 알리면 되는 일은 아래에서 올라오는 토스트로
      첫 화면(index)
-       ① 화면 전환 — 앞으로 가면 오른쪽에서, 뒤로 가면 왼쪽에서 들어오고 카드가 차례로 떠오름
-       ② 카운트다운 숫자가 바뀔 때 위에서 굴러 내려옴 · 히어로 배경 오로라 · 진행바 반짝임
-       ③ 시험 임박·시험 중 칩이 맥박처럼 퍼짐 · 학사일정 달을 넘기면 옆에서 밀려옴
+       ⑤ 카드가 차례로 떠오름 · 히어로 오로라 · 진행바 반짝임 · 임박/시험 중 칩 맥박
+       ⑥ 학사일정은 달을 넘기면 옆에서 밀려옴 · 불러오는 동안 스켈레톤
        ⚠️ 카운트다운 카드(.hero-clock)는 숨은 이동(일→시간→분→초) 자리 —
-          마우스·터치에 반응하는 효과(빛·물결·눌림·흔들림)를 절대 넣지 않음. 숫자 굴림은 시간에만 반응
+          마우스·터치에 반응하는 효과(빛·눌림·흔들림)를 절대 넣지 않음. 숫자 굴림은 시간에만 반응
      과목 · 주차 페이지
-       ④ 스크롤하면 카드·문제가 차례로 떠오름 · 머리말에 빛이 지나감 · 제목이 단어별로 나타남
-       ⑤ 맨 위 읽기 진행 막대 + 오른쪽 아래 '맨 위로' 버튼(진행 원)
-       ⑥ 목차를 누르면 부드럽게 이동하고, 도착한 카드 테두리가 한 번 반짝
+       ⑦ 스크롤하면 카드·문제가 차례로 떠오름 · 머리말에 빛이 지나감 · 제목이 단어별로 등장
+       ⑧ 스크롤하면 위에 반투명 상단 바(뒤로 + 과목명)가 내려옴 — 큰 제목이 접히는 느낌
+       ⑨ 맨 위 읽기 진행 막대 + 오른쪽 아래 '맨 위로' 버튼(진행 원)
+       ⑩ 목차를 누르면 부드럽게 이동하고, 도착한 카드 테두리가 한 번 반짝
      퀴즈
-       ⑦ 정답: 보기가 톡 튀고 색종이 · 오답: 좌우로 흔들림 · 점수판·틀린 문제 버튼 톡
-     공통
-       ⑧ 카드에 마우스를 따라다니는 빛(PC) · 버튼 누르면 물결 · 눌림 · 아이콘 스프링
-       ⑨ 잠긴 버튼(종료된 시험·진도 전 주차)을 누르면 살짝 흔들려 '잠김'을 알림
+       ⑪ 정답: 보기가 톡 튀고 색종이 · 오답: 좌우로 흔들림 · 점수판 톡 · 입력칸 포커스 링
    ===================================================================== */
 (function () {
     "use strict";
@@ -31,57 +33,96 @@
     var REDUCE = mq("(prefers-reduced-motion: reduce)");
     var FINE = mq("(hover: hover) and (pointer: fine)");
     var MOVE = !REDUCE && typeof Element !== "undefined" && typeof Element.prototype.animate === "function";
-    var EASE = "cubic-bezier(.22,1,.36,1)";
-    var SPRING = "cubic-bezier(.34,1.56,.64,1)";
+    var EASE = "cubic-bezier(.22,1,.36,1)";          // 들어올 때
+    var OUT = "cubic-bezier(.4,0,.2,1)";             // 나갈 때
+    var SPRING = "cubic-bezier(.34,1.56,.64,1)";     // 톡 튀는 느낌
 
     function dark() { return root.getAttribute("data-theme") === "dark"; }
     function accentRGB() { return dark() ? "0,149,246" : "45,106,79"; }   // 다크 #0095f6 · 화이트 #2d6a4f(--main)
 
+    // 누르는 반응을 붙일 것 — 카드(살짝)와 버튼(확실히)
+    var CARDS = ".bigbtn:not(.soon), .subject, a.wk-btn, .wk-pager a";
+    var BTNS = ".opt, .quiz-btn, .cmdq-btn, .quiz-filter button, .quiz-mode button, .toc a, .haksa-arrow, .haksa-more, "
+             + ".haksa-open, .back-link, .backbtn, #rv-fab, .rv-btn, .cc-btn, #mo-top, .theme-toggle, .mo-bar-back, "
+             + ".quiz-item .check, .quiz-item .show";
+
+    function each(sel, fn) { [].forEach.call(document.querySelectorAll(sel), fn); }
+    function sel(list, extra) { return list.split(", ").map(function (s) { return s + (extra || ""); }).join(","); }
+
     // ================= CSS =================
     var H = "html.mo-on ";   // 애니메이션이 켜진 페이지에서만
     var css = [
-        // ---- 움직임과 상관없이: 읽기 진행 막대 · 맨 위로 버튼 · 포커스 테두리 ----
+        ":root{--mo-spring:" + SPRING + ";--mo-out:" + OUT + "}",
+
+        // ---- 움직임과 상관없이: 상단 바 · 읽기 진행 막대 · 맨 위로 버튼 · 토스트 · 포커스 ----
         "#mo-progress{position:fixed;left:0;right:0;top:0;height:3px;z-index:9996;pointer-events:none;transform-origin:0 50%;transform:scaleX(0);",
         "background:linear-gradient(90deg,var(--main,#2d6a4f),var(--point,#d9772b))}",
         "html[data-theme=dark] #mo-progress{background:linear-gradient(90deg,#1877f2,#0095f6 55%,#4cb5f9)}",
-        "#mo-top{position:fixed;right:18px;bottom:18px;z-index:9997;width:46px;height:46px;padding:0;border-radius:50%;cursor:pointer;",
-        "display:grid;place-items:center;background:var(--card,#fff);color:var(--main,#2d6a4f);border:1px solid var(--line,#e6ebe6);",
-        "box-shadow:0 8px 22px rgba(16,40,28,.16);opacity:0;visibility:hidden;transform:translateY(14px) scale(.8);",
-        "transition:opacity .3s ease,visibility .3s,transform .5s " + SPRING + "}",
+
+        "#mo-bar{position:fixed;left:0;right:0;top:0;z-index:9990;height:56px;display:flex;align-items:center;gap:6px;",
+        "padding:0 66px 0 8px;background:rgba(255,255,255,.82);border-bottom:1px solid var(--line,#e6ebe6);",
+        "-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);",
+        "transform:translateY(-100%);opacity:0;pointer-events:none;transition:transform .34s var(--mo-out),opacity .22s ease}",
+        "#mo-bar.on{transform:none;opacity:1;pointer-events:auto}",
+        "html[data-theme=dark] #mo-bar{background:rgba(12,16,20,.82);border-bottom-color:#262a2f}",
+        ".mo-bar-back{width:40px;height:40px;flex:none;display:grid;place-items:center;border:0;background:none;cursor:pointer;",
+        "color:var(--main,#2d6a4f);padding:0;border-radius:50%}",
+        ".mo-bar-back svg{width:22px;height:22px}",
+        "html[data-theme=dark] .mo-bar-back{color:#f5f5f5}",
+        ".mo-bar-t{flex:1;min-width:0;font-size:15.5px;font-weight:800;color:var(--ink,#1b241e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}",
+        "html[data-theme=dark] .mo-bar-t{color:#f5f5f5}",
+        "html.mo-hasbar .card[id]{scroll-margin-top:70px}",
+
+        "#mo-top{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:9997;width:46px;height:46px;padding:0;",
+        "border-radius:50%;cursor:pointer;display:grid;place-items:center;background:var(--card,#fff);color:var(--main,#2d6a4f);",
+        "border:1px solid var(--line,#e6ebe6);box-shadow:0 8px 22px rgba(16,40,28,.16);opacity:0;visibility:hidden;",
+        "transform:translateY(14px) scale(.8);transition:opacity .3s ease,visibility .3s,transform .5s var(--mo-spring)}",
         "#mo-top.on{opacity:1;visibility:visible;transform:none}",
-        "#mo-top:hover{transform:translateY(-3px)}",
-        "#mo-top:active{transform:scale(.92)}",
         "#mo-top .ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none}",
         "#mo-top .ring circle{fill:none;stroke:currentColor;stroke-width:2.6}",
         "#mo-top .ring .t{opacity:.14}",
         "#mo-top .ring .p{stroke-linecap:round}",
         "#mo-top .ar{width:20px;height:20px;position:relative}",
         "html[data-theme=dark] #mo-top{background:#25292e;color:#f5f5f5;border-color:#3a3e43;box-shadow:0 10px 26px rgba(0,0,0,.55)}",
-        "#mo-top:focus-visible,.toc a:focus-visible,.opt:focus-visible,a.wk-btn:focus-visible,.wk-pager a:focus-visible,",
-        ".quiz-btn:focus-visible,.cmdq-btn:focus-visible,.haksa-arrow:focus-visible,.haksa-more:focus-visible,.haksa-open:focus-visible",
-        "{outline:2.5px solid var(--main,#2d6a4f);outline-offset:2px}",
-        "@media print{#mo-top,#mo-progress,.mo-confetti{display:none!important}.mo-rv{opacity:1!important;animation:none!important}}",
+
+        "#mo-toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:10001;",
+        "transform:translate(-50%,16px);opacity:0;pointer-events:none;background:rgba(25,31,40,.94);color:#fff;",
+        "border-radius:14px;padding:12px 18px;font-size:14px;font-weight:700;line-height:1.4;max-width:86vw;text-align:center;",
+        "box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .32s var(--mo-spring),opacity .22s ease}",
+        "#mo-toast.on{transform:translate(-50%,0);opacity:1}",
+
+        sel(BTNS, ":focus-visible") + "{outline:2.5px solid var(--main,#2d6a4f);outline-offset:2px}",
+        "@media print{#mo-top,#mo-progress,#mo-bar,#mo-toast,.mo-confetti{display:none!important}.mo-rv{opacity:1!important;animation:none!important}}",
+
+        // ---- ① 누르는 반응 (토스식) ----
+        sel(BTNS) + "{-webkit-tap-highlight-color:transparent;transition:transform .24s var(--mo-spring),background-color .2s ease,color .2s ease,border-color .2s ease,opacity .2s ease,box-shadow .2s ease}",
+        sel(CARDS) + "{-webkit-tap-highlight-color:transparent}",
+        "html " + sel(BTNS, ":active:not(:disabled)") + "{transform:scale(.94);transition-duration:.07s}",
+        "html " + sel(CARDS, ":active") + "{transform:scale(.975);transition-duration:.07s}",
+        "html .mcq.answered .opt:active{transform:none}",
 
         "@media (prefers-reduced-motion:no-preference){",
         "html.mo-smooth{scroll-behavior:smooth}",
         ".card[id]{scroll-margin-top:18px}",
 
-        // ---- ④ 스크롤 등장 ----
+        // ---- ⑦ 스크롤 등장 (짧고 빠르게) ----
         H + ".mo-rv:not(.mo-in){opacity:0}",
-        H + ".mo-rv.mo-in{animation:mo-rise .8s " + EASE + " backwards;animation-delay:var(--mo-d,0ms)}",
+        H + ".mo-rv.mo-in{animation:mo-rise .5s " + EASE + " backwards;animation-delay:var(--mo-d,0ms)}",
         H + ".mo-rv.mo-lite.mo-in{animation-name:mo-rise-lite}",
-        "@keyframes mo-rise{from{opacity:0;transform:translateY(26px) scale(.985);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}",
-        "@keyframes mo-rise-lite{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}",
-        "@keyframes mo-pop{from{opacity:0;transform:translateY(10px) scale(.88)}to{opacity:1;transform:none}}",
+        "@keyframes mo-rise{from{opacity:0;transform:translateY(16px) scale(.99)}to{opacity:1;transform:none}}",
+        "@keyframes mo-rise-lite{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}",
+        "@keyframes mo-pop{from{opacity:0;transform:translateY(8px) scale(.9)}to{opacity:1;transform:none}}",
         "@keyframes mo-drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}",
 
-        // ---- ① 첫 화면 전환 ----
-        H + ".screen{animation:mo-screen .55s " + EASE + " both}",
+        // ---- ② 화면 전환: 새 화면은 들어오고, 이전 화면은 밀려 나감 ----
+        ".wrap{position:relative}",
+        H + ".screen{animation:mo-screen .42s " + EASE + " both}",
         "html.mo-on[data-mo-nav=back] .screen{animation-name:mo-screen-back}",
-        "@keyframes mo-screen{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}",
-        "@keyframes mo-screen-back{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}",
+        H + ".screen.mo-leaving{position:absolute;top:0;left:0;right:0;pointer-events:none;z-index:2}",
+        "@keyframes mo-screen{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}",
+        "@keyframes mo-screen-back{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}",
 
-        // ---- ② 히어로: 오로라 · 숫자 굴림 · 진행바 반짝임 (포인터 반응 없음) ----
+        // ---- ⑤ 히어로: 오로라 · 자리별 숫자 굴림 · 진행바 반짝임 (포인터 반응 없음) ----
         ".hero::before{content:'';position:absolute;inset:-35%;pointer-events:none;",
         "background:radial-gradient(32% 42% at 28% 38%,rgba(138,217,176,.30),transparent 70%),radial-gradient(28% 36% at 72% 64%,rgba(255,255,255,.14),transparent 70%);",
         "animation:mo-aurora 16s ease-in-out infinite alternate}",
@@ -89,8 +130,9 @@
         "radial-gradient(28% 36% at 72% 64%,rgba(76,181,249,.08),transparent 70%)}",
         "@keyframes mo-aurora{0%{transform:translate3d(-5%,-3%,0) rotate(0deg)}50%{transform:translate3d(4%,3%,0) rotate(6deg)}100%{transform:translate3d(-2%,4%,0) rotate(-5deg)}}",
         ".hero-clock .seg{overflow:hidden}",
-        ".seg-n.mo-tick{animation:mo-roll .6s " + EASE + "}",
-        "@keyframes mo-roll{from{transform:translateY(-80%);opacity:0;filter:blur(4px)}to{transform:none;opacity:1;filter:none}}",
+        ".mo-d{display:inline-block}",
+        ".mo-d.mo-tick{animation:mo-roll .55s " + SPRING + "}",
+        "@keyframes mo-roll{from{transform:translateY(-95%);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}",
         ".hero-bar i{position:relative;overflow:hidden}",
         ".hero-bar i::after{content:'';position:absolute;top:0;bottom:0;left:0;width:60%;",
         "background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);transform:translateX(-120%);",
@@ -98,29 +140,25 @@
         "@keyframes mo-sweep{0%{transform:translateX(-120%)}55%,100%{transform:translateX(220%)}}",
 
         // ---- 첫 화면 카드 · 버튼 ----
-        "html .bigbtn,html .subject{transition:transform .45s " + SPRING + ",box-shadow .3s ease,border-color .2s ease,background-color .2s ease}",
+        "html .bigbtn,html .subject{transition:transform .28s var(--mo-spring),box-shadow .3s ease,border-color .2s ease,background-color .2s ease}",
         "html .bigbtn:not(.soon):hover{transform:translateY(-4px)}",
         "html .subject:hover{transform:translateY(-3px)}",
-        "html .bigbtn:not(.soon):active,html .subject:active{transform:translateY(-1px) scale(.985);transition-duration:.12s}",
         "html[data-theme=dark] body .bigbtn:not(.soon):hover,html[data-theme=dark] body .subject:hover{box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 1px rgba(0,149,246,.3)}",
-        ".bb-ic,.subj-ic{transition:transform .5s " + SPRING + ",background-color .2s ease}",
+        ".bb-ic,.subj-ic{transition:transform .5s var(--mo-spring),background-color .2s ease}",
         ".bigbtn:not(.soon):hover .bb-ic{transform:scale(1.1) rotate(-7deg)}",
         ".subject:hover .subj-ic{transform:scale(1.08) rotate(-6deg)}",
         ".bigbtn:not(.soon):hover .bb-go{animation:mo-nudge 1s ease-in-out infinite}",
         "@keyframes mo-nudge{0%,100%{transform:translateX(3px)}50%{transform:translateX(8px)}}",
-        "html .backbtn{transition:color .2s ease,transform .35s " + SPRING + "}",
         "html .backbtn:hover{transform:translateX(-3px)}",
 
-        // ---- ③ 상태 칩 맥박 · 학사일정 ----
+        // ---- 상태 칩 맥박 · 학사일정 ----
         ".pill.soon,.cd:not(.wk):not(.live),.haksa-now{animation:mo-ring-point 2.4s ease-out infinite}",
         "html[data-theme=dark] .pill.soon,html[data-theme=dark] .cd:not(.wk):not(.live),html[data-theme=dark] .haksa-now{animation-name:mo-ring-blue}",
         ".pill.live,.cd.live{animation:mo-ring-red 1.6s ease-out infinite}",
         "@keyframes mo-ring-point{0%{box-shadow:0 0 0 0 rgba(217,119,43,.4)}80%,100%{box-shadow:0 0 0 9px rgba(217,119,43,0)}}",
         "@keyframes mo-ring-blue{0%{box-shadow:0 0 0 0 rgba(0,149,246,.5)}80%,100%{box-shadow:0 0 0 9px rgba(0,149,246,0)}}",
         "@keyframes mo-ring-red{0%{box-shadow:0 0 0 0 rgba(237,73,86,.5)}80%,100%{box-shadow:0 0 0 10px rgba(237,73,86,0)}}",
-        "html .haksa-arrow{transition:background-color .2s ease,transform .4s " + SPRING + "}",
         "html .haksa-arrow:hover:not(:disabled){transform:scale(1.14)}",
-        "html .haksa-arrow:active:not(:disabled){transform:scale(.9)}",
         ".haksa-list li{transition:background-color .2s ease}",
         ".haksa-list li:not(.haksa-empty):hover{background:rgba(45,106,79,.05)}",
         "html[data-theme=dark] .haksa-list li:not(.haksa-empty):hover{background:rgba(255,255,255,.035)}",
@@ -130,7 +168,13 @@
         ".cheer-in svg{animation:mo-beat 2.6s ease-in-out infinite;transform-origin:50% 55%}",
         "@keyframes mo-beat{0%,50%,100%{transform:scale(1)}10%{transform:scale(1.22)}20%{transform:scale(.95)}30%{transform:scale(1.12)}40%{transform:scale(1)}}",
 
-        // ---- ⑧ 마우스를 따라다니는 빛 (PC) ----
+        // ---- ③ 스켈레톤(불러오는 중) ----
+        ".mo-sk{display:block;border-radius:8px;background:rgba(0,0,0,.06);background-image:linear-gradient(90deg,rgba(0,0,0,0) 20%,rgba(0,0,0,.05) 50%,rgba(0,0,0,0) 80%);",
+        "background-size:220% 100%;animation:mo-sk 1.4s ease-in-out infinite}",
+        "html[data-theme=dark] .mo-sk{background-color:rgba(255,255,255,.06);background-image:linear-gradient(90deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.06) 50%,rgba(255,255,255,0) 80%)}",
+        "@keyframes mo-sk{0%{background-position:120% 0}100%{background-position:-120% 0}}",
+
+        // ---- 마우스를 따라다니는 빛 (PC) ----
         "@media (hover:hover) and (pointer:fine){",
         ".mo-spot{position:relative;isolation:isolate}",
         ".mo-spot::after{content:'';position:absolute;inset:0;border-radius:inherit;z-index:-1;pointer-events:none;opacity:0;transition:opacity .4s ease;",
@@ -140,58 +184,44 @@
         ".mo-spot.soon::after,.mo-spot.locked::after{display:none}",
         "}",
 
-        // ---- 물결 ----
-        ".mo-rel{position:relative}",
-        ".mo-clip{overflow:hidden}",
-        ".mo-ripple{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.26;transform:scale(0);",
-        "animation:mo-ripple .65s " + EASE + " forwards}",
-        "@keyframes mo-ripple{to{transform:scale(1);opacity:0}}",
-
-        // ---- ④ 과목 · 주차 페이지 ----
+        // ---- ⑦ 과목 · 주차 페이지 ----
         ".page-head{position:relative;overflow:hidden;isolation:isolate}",
         ".page-head::after{content:'';position:absolute;top:-20%;bottom:-20%;left:-45%;width:38%;z-index:-1;pointer-events:none;",
         "background:linear-gradient(100deg,transparent,rgba(255,255,255,.2),transparent);transform:skewX(-18deg);",
         "animation:mo-sheen 7.5s " + EASE + " 1s infinite}",
         "html[data-theme=dark] .page-head::after{background:linear-gradient(100deg,transparent,rgba(255,255,255,.06),transparent)}",
         "@keyframes mo-sheen{0%{transform:translateX(0) skewX(-18deg)}30%,100%{transform:translateX(430%) skewX(-18deg)}}",
-        ".mo-w{display:inline-block;animation:mo-word .75s " + EASE + " backwards;animation-delay:calc(var(--i,0) * 55ms + 150ms)}",
-        "@keyframes mo-word{from{opacity:0;transform:translateY(.5em);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}",
-        "html .toc a{transition:background-color .2s ease,color .2s ease,transform .4s " + SPRING + "}",
+        ".mo-w{display:inline-block;animation:mo-word .6s " + EASE + " backwards;animation-delay:calc(var(--i,0) * 45ms + 120ms)}",
+        "@keyframes mo-word{from{opacity:0;transform:translateY(.4em)}to{opacity:1;transform:none}}",
         "html .toc a:hover{transform:translateY(-2px)}",
-        "html .toc a:active{transform:scale(.94)}",
-        H + ".toc.mo-in a{animation:mo-pop .55s " + SPRING + " backwards}",
-        "html a.wk-btn{transition:transform .45s " + SPRING + ",border-color .2s ease,box-shadow .3s ease,background-color .2s ease}",
+        H + ".toc.mo-in a{animation:mo-pop .45s " + SPRING + " backwards}",
+        "html a.wk-btn{transition:transform .28s var(--mo-spring),border-color .2s ease,box-shadow .3s ease,background-color .2s ease}",
         "html a.wk-btn:hover{transform:translateY(-4px)}",
-        "html a.wk-btn:active{transform:translateY(-1px) scale(.97)}",
-        H + ".wk-card.mo-in .wk-btn{animation:mo-pop .55s " + SPRING + " backwards}",
-        "html .wk-pager a{transition:transform .4s " + SPRING + ",background-color .2s ease,border-color .2s ease}",
+        H + ".wk-card.mo-in .wk-btn{animation:mo-pop .45s " + SPRING + " backwards}",
+        "html .wk-pager a{transition:transform .28s var(--mo-spring),background-color .2s ease,border-color .2s ease}",
         "html .wk-pager a.prev:hover{transform:translateX(-4px)}",
         "html .wk-pager a.next:hover{transform:translateX(4px)}",
         "details[open]>:not(summary){animation:mo-drop .4s " + EASE + " backwards}",
-        "html #rv-fab{transition:transform .4s " + SPRING + ",filter .2s ease}",
         "html #rv-fab:hover{transform:translateY(-3px)}",
-        "html #rv-fab:active{transform:scale(.95)}",
 
-        // ---- ⑦ 퀴즈 ----
-        "html .opt{transition:background-color .15s ease,border-color .15s ease,color .15s ease,transform .35s " + SPRING + "}",
+        // ---- ⑪ 퀴즈 ----
+        "html .opt{transition:background-color .15s ease,border-color .15s ease,color .15s ease,transform .28s var(--mo-spring)}",
         ".mcq:not(.answered) .opt:hover{transform:translateX(4px)}",
-        ".mcq:not(.answered) .opt:active{transform:scale(.985)}",
-        ".mcq-exp{animation:mo-drop .5s " + EASE + " backwards}",
+        ".mcq-exp{animation:mo-drop .45s " + EASE + " backwards}",
         ".quiz-feedback.ok,.quiz-feedback.no,.cmdq-fb.ok,.cmdq-fb.no{animation:mo-drop .4s " + EASE + " backwards}",
-        "html .quiz-btn,html .cmdq-btn{transition:transform .35s " + SPRING + ",opacity .2s ease,background-color .2s ease}",
-        "html .quiz-btn:active,html .cmdq-btn:active{transform:scale(.94)}",
+        ".quiz-item input[type=text]:focus,.quiz-item textarea:focus,.cmdq textarea:focus{outline:none;border-color:var(--main,#2d6a4f);",
+        "box-shadow:0 0 0 3px rgba(45,106,79,.16)}",
+        "html[data-theme=dark] .quiz-item input[type=text]:focus,html[data-theme=dark] .quiz-item textarea:focus,html[data-theme=dark] .cmdq textarea:focus",
+        "{border-color:#0095f6;box-shadow:0 0 0 3px rgba(0,149,246,.28)}",
         ".mo-confetti{position:fixed;left:0;top:0;z-index:10000;pointer-events:none;border-radius:2px;will-change:transform,opacity}",
-        "html .theme-toggle{transition:transform .45s " + SPRING + ",background-color .2s ease}",
         "html .theme-toggle:hover{transform:scale(1.1) rotate(14deg)}",
-        "html .theme-toggle:active{transform:scale(.9)}",
         "}"
     ];
-    // 목차 알약 · 주차 버튼이 차례로 톡톡 나오도록 순서별 지연
-    for (var n = 1; n <= 40; n++) css.push("@media (prefers-reduced-motion:no-preference){" + H + ".toc.mo-in a:nth-child(" + n + "){animation-delay:" + (120 + n * 22) + "ms}}");
-    for (var w = 1; w <= 15; w++) css.push("@media (prefers-reduced-motion:no-preference){" + H + ".wk-card.mo-in .wk-btn:nth-child(" + w + "){animation-delay:" + (140 + w * 32) + "ms}}");
+    for (var n = 1; n <= 40; n++) css.push("@media (prefers-reduced-motion:no-preference){" + H + ".toc.mo-in a:nth-child(" + n + "){animation-delay:" + (110 + n * 20) + "ms}}");
+    for (var w = 1; w <= 15; w++) css.push("@media (prefers-reduced-motion:no-preference){" + H + ".wk-card.mo-in .wk-btn:nth-child(" + w + "){animation-delay:" + (120 + w * 28) + "ms}}");
 
     // ================= 공용 동작 =================
-    var lastInput = 0, lastX = 0, lastY = 0;
+    var lastInput = 0;
     function recent(ms) { return Date.now() - lastInput < (ms || 1200); }
 
     function shake(el, px) {
@@ -235,68 +265,161 @@
         }
     }
     function centerOf(el) { var r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+    /* 정답일 때 아주 짧은 진동
+       - 안드로이드 크롬 등: 진동 API(navigator.vibrate)
+       - 아이폰 사파리: 진동 API 가 없어서, iOS 17.4+ 의 스위치 토글에 붙는 햅틱을 빌려 씀
+         (숨겨 둔 <input type="checkbox" switch> 를 눌러 주는 방식 · 안 되는 기기에서는 조용히 넘어감)
+       - PC 등 아무것도 없으면 그냥 넘어감 */
+    var hapticSwitch = null;
+    function haptic(ms) {
+        try {
+            if (navigator.vibrate) { navigator.vibrate(ms || 12); return; }
+            if (!("switch" in document.createElement("input")) || !document.body) return;
+            if (!hapticSwitch) {
+                hapticSwitch = document.createElement("input");
+                hapticSwitch.type = "checkbox";
+                hapticSwitch.setAttribute("switch", "");
+                hapticSwitch.setAttribute("aria-hidden", "true");
+                hapticSwitch.setAttribute("data-theme-skip", "");
+                hapticSwitch.tabIndex = -1;
+                hapticSwitch.style.cssText = "position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none";
+                document.body.appendChild(hapticSwitch);
+            }
+            hapticSwitch.click();
+        } catch (e) {}
+    }
 
-    // ================= ① ② ③ 첫 화면 =================
+    // ---- ④ 토스트: 결과만 알리면 되는 일(복사 등)은 아래에서 올라오는 알림으로 ----
+    var toastEl = null, toastTimer = 0;
+    window.moToast = function (msg) {
+        if (!document.body) return;
+        if (!toastEl) {
+            toastEl = document.createElement("div");
+            toastEl.id = "mo-toast";
+            toastEl.setAttribute("role", "status");
+            toastEl.setAttribute("data-theme-skip", "");
+            document.body.appendChild(toastEl);
+        }
+        toastEl.textContent = msg;
+        clearTimeout(toastTimer);
+        var show = function () { toastEl.classList.add("on"); };
+        requestAnimationFrame(show);
+        setTimeout(show, 60);                                        // 화면이 가려진 탭에서는 rAF 가 멈추므로 대비
+        toastTimer = setTimeout(function () { toastEl.classList.remove("on"); }, 1900);
+    };
+
+    // ---- ③ 스켈레톤 ----
+    function skeleton(list) {
+        var only = list.children.length === 1 && list.firstElementChild.classList.contains("haksa-empty");
+        if (!only || !/불러오는/.test(list.firstElementChild.textContent)) return;
+        var html = "";
+        for (var i = 0; i < 4; i++) {
+            html += '<li aria-hidden="true"><span class="haksa-d"><i class="mo-sk" style="height:12px;width:' + (108 + i % 3 * 16) + 'px"></i></span>'
+                  + '<span class="haksa-n"><i class="mo-sk" style="height:13px;width:' + (46 + i % 4 * 12) + '%"></i></span></li>';
+        }
+        list.innerHTML = '<li class="haksa-empty" style="display:none">불러오는 중</li>' + html;
+    }
+
+    // ================= 첫 화면 =================
     var HUB_ITEMS = ".head, .hero, .haksa, .biggrid > .bigbtn:not([hidden]), .subjects > .subject, .subj-name-card, .ph, .cheer, .foot";
     function depth(id) { return !id || id === "home" ? 0 : (/-(mid|final)$/.test(id) ? 2 : 1); }
 
-    function staggerScreen() {
-        if (!MOVE) return;
-        var scr = document.querySelector(".screen:not([hidden])");
-        if (!scr) return;
+    function staggerScreen(scr) {
+        if (!MOVE || !scr) return;
         [].slice.call(scr.querySelectorAll(HUB_ITEMS)).forEach(function (el, i) {
-            el.animate([{ opacity: 0, transform: "translateY(18px) scale(.98)" }, { opacity: 1, transform: "none" }],
-                       { duration: 650, delay: 60 + Math.min(i, 10) * 60, easing: EASE, fill: "backwards" });
+            el.animate([{ opacity: 0, transform: "translateY(14px) scale(.985)" }, { opacity: 1, transform: "none" }],
+                       { duration: 500, delay: 40 + Math.min(i, 10) * 45, easing: EASE, fill: "backwards" });
         });
     }
 
     function setupHub() {
         var cur = (location.hash || "#home").slice(1);
+        var curScreen = document.querySelector(".screen:not([hidden])");
+        var leaveAnim = null;
         root.setAttribute("data-mo-nav", "fwd");
+
+        // ② 이전 화면을 반대 방향으로 밀어냄 (index 는 화면을 곧바로 hidden 처리하므로 잠깐 다시 띄워서 내보냄)
+        function leave(el, back) {
+            if (!MOVE || !el) return;
+            if (leaveAnim) leaveAnim.cancel();
+            el.hidden = false;
+            el.classList.add("mo-leaving");
+            leaveAnim = el.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateX(" + (back ? 26 : -26) + "px) scale(.985)" }],
+                                   { duration: 320, easing: OUT });
+            var done = false;
+            var end = function () {
+                if (done) return;
+                done = true;
+                el.classList.remove("mo-leaving");
+                if (el !== curScreen) el.hidden = true;
+                leaveAnim = null;
+            };
+            leaveAnim.onfinish = leaveAnim.oncancel = end;
+            setTimeout(end, 500);                                   // 화면이 가려진 탭처럼 애니메이션이 멈춰도 뒤에 남지 않게
+        }
+
         window.addEventListener("hashchange", function () {
             var id = (location.hash || "#home").slice(1);
-            root.setAttribute("data-mo-nav", depth(id) < depth(cur) ? "back" : "fwd");
+            var back = depth(id) < depth(cur);
+            var old = curScreen;
+            root.setAttribute("data-mo-nav", back ? "back" : "fwd");
             cur = id;
-            requestAnimationFrame(staggerScreen);
+            requestAnimationFrame(function () {
+                var now = document.querySelector(".screen:not([hidden])");
+                curScreen = now || curScreen;
+                if (old && old !== curScreen) leave(old, back);
+                staggerScreen(curScreen);
+            });
         });
-        staggerScreen();
+        staggerScreen(curScreen);
 
-        // 카운트다운 숫자: 바뀐 칸만 굴러 내려옴 (1초마다 다시 그려지는 카드를 보고 판단 · 포인터와는 무관)
+        // ③ 카운트다운: 바뀐 자리의 숫자만 굴러 내려옴 (포인터와는 무관 · 숨은 이동을 방해하지 않음)
         var clock = document.getElementById("dday-clock");
         if (clock && MOVE) {
             var prev = [];
-            var read = function () { return [].map.call(clock.querySelectorAll(".seg-n"), function (x) { return x.textContent; }); };
-            prev = read();
-            new MutationObserver(function () {
-                var nodes = clock.querySelectorAll(".seg-n");
-                [].forEach.call(nodes, function (node, i) {
-                    if (prev.length === nodes.length && prev[i] !== node.textContent) node.classList.add("mo-tick");
+            var split = function () {
+                [].forEach.call(clock.querySelectorAll(".seg-n"), function (node, i) {
+                    var text = node.textContent, before = prev[i] || "";
+                    if (node.firstElementChild) return;                 // 이미 자리별로 나눠 둔 경우
+                    var frag = document.createDocumentFragment();
+                    for (var k = 0; k < text.length; k++) {
+                        var d = document.createElement("span");
+                        d.className = "mo-d";
+                        d.textContent = text.charAt(k);
+                        if (before && (before.length !== text.length || before.charAt(k) !== text.charAt(k))) d.classList.add("mo-tick");
+                        frag.appendChild(d);
+                    }
+                    node.textContent = "";
+                    node.appendChild(frag);
+                    prev[i] = text;
                 });
-                prev = read();
-            }).observe(clock, { childList: true });
+            };
+            split();
+            new MutationObserver(split).observe(clock, { childList: true });
         }
 
-        // 학사일정: 다음 달은 오른쪽에서, 이전 달은 왼쪽에서
+        // ⑥ 학사일정: 스켈레톤 → 달 넘길 때 옆에서 밀려옴
         var list = document.getElementById("haksa-list"), month = document.getElementById("haksa-month");
-        if (list && MOVE) {
+        if (list) {
+            if (MOVE) skeleton(list);
             var dir = 0;
             document.addEventListener("click", function (e) {
                 var b = e.target.closest && e.target.closest("#haksa-prev, #haksa-next");
                 if (b && !b.disabled) dir = b.id === "haksa-next" ? 1 : -1;
             }, true);
-            new MutationObserver(function () {
+            if (MOVE) new MutationObserver(function () {
                 [].forEach.call(list.children, function (li, i) {
                     li.animate([{ opacity: 0, transform: dir ? "translateX(" + dir * 26 + "px)" : "translateY(8px)" }, { opacity: 1, transform: "none" }],
-                               { duration: 460, delay: Math.min(i, 8) * 35, easing: EASE, fill: "backwards" });
+                               { duration: 440, delay: Math.min(i, 8) * 32, easing: EASE, fill: "backwards" });
                 });
                 if (month && dir) month.animate([{ opacity: 0, transform: "translateY(" + (dir > 0 ? 8 : -8) + "px)" }, { opacity: 1, transform: "none" }],
-                                                { duration: 380, easing: EASE });
+                                                { duration: 360, easing: EASE });
                 dir = 0;
             }).observe(list, { childList: true });
         }
     }
 
-    // ================= ④ ⑤ ⑥ 과목 · 주차 페이지 =================
+    // ================= 과목 · 주차 페이지 =================
     var REVEAL = ".page-head, .toc, .card, .wrap > .tip, #done-banner, .wk-bar, .wk-pager, .mcq, .quiz-item, .cmdq, .wk-src";
 
     function setupReveal() {
@@ -305,20 +428,20 @@
             var shown = entries.filter(function (en) { return en.isIntersecting; }).map(function (en) { return en.target; });
             shown.sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
             shown.forEach(function (el, k) {
-                el.style.setProperty("--mo-d", Math.min(k, 6) * 70 + "ms");
+                el.style.setProperty("--mo-d", Math.min(k, 6) * 55 + "ms");
                 el.classList.add("mo-in");
                 io.unobserve(el);
             });
         }, { rootMargin: "0px 0px -6% 0px", threshold: 0 });
-        [].forEach.call(document.querySelectorAll(REVEAL), function (el) {
+        each(REVEAL, function (el) {
             if (el.classList.contains("mo-rv") || el.closest(".screen, [data-mo-skip]")) return;
-            if (el.offsetHeight > 900) el.classList.add("mo-lite");   // 아주 긴 카드는 흐림 효과 없이 가볍게
+            if (el.offsetHeight > 900) el.classList.add("mo-lite");
             el.classList.add("mo-rv");
             io.observe(el);
         });
         // 뒤에 열린 탭처럼 관찰 알림이 늦게 오는 경우에도, 화면 안의 카드는 3초 뒤 반드시 보이게
         setTimeout(function () {
-            [].forEach.call(document.querySelectorAll(".mo-rv:not(.mo-in)"), function (el) {
+            each(".mo-rv:not(.mo-in)", function (el) {
                 var r = el.getBoundingClientRect();
                 if (r.top < window.innerHeight && r.bottom > 0) { el.classList.add("mo-in"); io.unobserve(el); }
             });
@@ -345,12 +468,38 @@
         });
     }
 
-    function setupProgress() {
+    // ⑧ 스크롤하면 내려오는 상단 바 + ⑨ 읽기 진행 막대 · 맨 위로 버튼
+    function setupChrome() {
         var body = document.body;
-        var bar = document.createElement("div");
-        bar.id = "mo-progress";
-        bar.setAttribute("data-theme-skip", "");
-        bar.setAttribute("aria-hidden", "true");
+        var head = document.querySelector(".page-head");
+        var title = head && head.querySelector("h1");
+        var bar = null, barTitle = null;
+
+        var progress = document.createElement("div");
+        progress.id = "mo-progress";
+        progress.setAttribute("data-theme-skip", "");
+        progress.setAttribute("aria-hidden", "true");
+        body.appendChild(progress);
+
+        if (title) {
+            var backLink = document.querySelector(".back-link, .wk-bar a[href]");
+            bar = document.createElement("div");
+            bar.id = "mo-bar";
+            bar.setAttribute("data-theme-skip", "");
+            bar.innerHTML = '<button class="mo-bar-back" type="button" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true">'
+                + '<path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+                + '<span class="mo-bar-t"></span>';
+            barTitle = bar.querySelector(".mo-bar-t");
+            barTitle.textContent = (title.getAttribute("aria-label") || title.textContent).replace(/\s+/g, " ").trim();
+            body.appendChild(bar);
+            root.classList.add("mo-hasbar");
+            bar.querySelector(".mo-bar-back").addEventListener("click", function () {
+                if (backLink) location.href = backLink.getAttribute("href");
+                else history.back();
+            });
+            barTitle.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: REDUCE ? "auto" : "smooth" }); });
+        }
+
         var top = document.createElement("button");
         top.id = "mo-top";
         top.type = "button";
@@ -359,10 +508,9 @@
         top.setAttribute("data-theme-skip", "");
         top.innerHTML = '<svg class="ring" viewBox="0 0 46 46" aria-hidden="true"><circle class="t" cx="23" cy="23" r="20.5"/><circle class="p" cx="23" cy="23" r="20.5"/></svg>'
             + '<svg class="ar" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5.5M5.8 11.5 12 5.3l6.2 6.2" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        body.appendChild(bar);
         body.appendChild(top);
         var fab = document.getElementById("rv-fab");                    // '틀린 문제 복사' 버튼이 있으면 그 위에
-        if (fab && fab.offsetHeight) top.style.bottom = (18 + fab.offsetHeight + 12) + "px";
+        if (fab && fab.offsetHeight) top.style.bottom = "calc(" + (18 + fab.offsetHeight + 12) + "px + env(safe-area-inset-bottom,0px))";
 
         var C = 2 * Math.PI * 20.5, arc = top.querySelector(".p"), queued = false;
         arc.style.strokeDasharray = C.toFixed(2);
@@ -371,11 +519,16 @@
             queued = false;
             var max = document.documentElement.scrollHeight - window.innerHeight;
             var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-            bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
+            progress.style.transform = "scaleX(" + p.toFixed(4) + ")";
             arc.style.strokeDashoffset = (C * (1 - p)).toFixed(2);
             top.classList.toggle("on", window.scrollY > 480);
+            if (bar) {
+                var hide = head.getBoundingClientRect().bottom;
+                bar.classList.toggle("on", hide < 8);
+            }
         }
-        function queue() { if (!queued) { queued = true; requestAnimationFrame(update); } }
+        // 화면이 가려진 탭에서는 requestAnimationFrame 이 멈추므로 타이머로도 한 번 더 확인
+        function queue() { if (queued) return; queued = true; requestAnimationFrame(update); setTimeout(update, 150); }
         window.addEventListener("scroll", queue, { passive: true });
         window.addEventListener("resize", queue);
         window.addEventListener("load", queue);
@@ -383,7 +536,7 @@
         update();
     }
 
-    // 목차 · 같은 페이지 링크: 도착한 카드 테두리가 한 번 반짝
+    // ⑩ 목차 · 같은 페이지 링크: 도착한 카드 테두리가 한 번 반짝
     function setupAnchors() {
         document.addEventListener("click", function (e) {
             var a = e.target.closest && e.target.closest('a[href^="#"]');
@@ -398,7 +551,7 @@
         });
     }
 
-    // ================= ⑦ 퀴즈 반응 =================
+    // ================= ⑪ 퀴즈 반응 =================
     function judgeOption(opt, q, x, y) {
         if (opt.classList.contains("wrong")) {
             shake(opt);
@@ -407,6 +560,7 @@
             pop(opt, 1.035);
             ring(q, 14);
             confetti(x, y, 18);
+            haptic(12);
         }
     }
     function feedbackOf(box) { return box.querySelector(".quiz-feedback, .cmdq-fb"); }
@@ -418,6 +572,7 @@
             pop(fb, 1.03);
             var c = centerOf(from);
             confetti(c[0], c[1], 12);
+            haptic(12);
         } else if (/(^|\s)no(\s|$)/.test(fb.className)) {
             shake(box.querySelector("input, textarea") || fb);
         }
@@ -449,47 +604,27 @@
             setTimeout(function () { judgeBox(box, from, before, false); }, 0);
         }, true);
 
-        // 점수판 · '틀린 문제 복사' 버튼 숫자가 바뀌면 톡
-        [].forEach.call(document.querySelectorAll("#quiz-score, .quiz-score, #rv-fab"), function (el) {
+        each("#quiz-score, .quiz-score, #rv-fab", function (el) {
             new MutationObserver(function () { if (recent(1500)) pop(el, 1.08); })
                 .observe(el, { childList: true, characterData: true, subtree: true });
         });
     }
 
-    // ================= ⑧ ⑨ 빛 · 물결 · 잠김 =================
+    // ================= 포인터 =================
     var SPOT = ".bigbtn, .subject, a.wk-btn, .wk-pager a";
-    var RIPPLE = ".opt, .quiz-btn, .cmdq-btn, .quiz-item .check, .quiz-item .show, .haksa-arrow, .haksa-more, .haksa-open, .toc a, "
-               + "#rv-fab, .rv-btn, .quiz-filter button, .quiz-mode button, a.wk-btn, .wk-pager a, .cc-btn, #mo-top";
 
     function setupPointer() {
-        document.addEventListener("pointerdown", function (e) {
-            lastInput = Date.now(); lastX = e.clientX; lastY = e.clientY;
-            if (!MOVE || e.button > 0 || !e.target.closest) return;
-            var el = e.target.closest(RIPPLE);
-            if (!el || el.disabled || el.closest(".hero-clock")) return;
-            if (window.getComputedStyle(el).position === "static") el.classList.add("mo-rel");
-            el.classList.add("mo-clip");
-            var r = el.getBoundingClientRect(), size = Math.max(r.width, r.height) * 2.2;
-            var s = document.createElement("span");
-            s.className = "mo-ripple";
-            s.setAttribute("aria-hidden", "true");
-            s.setAttribute("data-theme-skip", "");
-            s.style.width = s.style.height = size + "px";
-            s.style.left = (e.clientX - r.left - size / 2) + "px";
-            s.style.top = (e.clientY - r.top - size / 2) + "px";
-            el.appendChild(s);
-            setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 700);
-        }, true);
+        document.addEventListener("pointerdown", function () { lastInput = Date.now(); }, true);
         document.addEventListener("keydown", function () { lastInput = Date.now(); }, true);
 
-        // 잠긴 버튼은 살짝 흔들어 '아직 안 열림'을 알림
+        // 잠긴 버튼(끝난 시험·진도 전 주차)은 누르면 살짝 흔들려 '잠김'을 알림
         document.addEventListener("pointerup", function (e) {
             var el = e.target.closest && e.target.closest(".bigbtn.soon, .wk-btn.locked");
             if (el && !el.closest(".hero-clock")) shake(el, 5);
         }, true);
 
         if (!MOVE || !FINE) return;
-        [].forEach.call(document.querySelectorAll(SPOT), function (el) { el.classList.add("mo-spot"); });
+        each(SPOT, function (el) { el.classList.add("mo-spot"); });
         document.addEventListener("pointerover", function (e) {
             var el = e.target.closest && e.target.closest(SPOT);
             if (el) el.classList.add("mo-spot");
@@ -529,7 +664,7 @@
             if (MOVE) root.classList.add("mo-smooth");
             splitTitle();
             setupReveal();
-            setupProgress();
+            setupChrome();
             setupAnchors();
             setupQuiz();
             var fab = document.getElementById("rv-fab");
