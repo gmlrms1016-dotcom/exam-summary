@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202609181500"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍언어실습 4주차 · 연산자 (ch05)</title>
+    <link rel="stylesheet" href="../style.css?v=202609181500">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../프로그래밍언어실습.html">← 프로그래밍언어실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>💾 프로그래밍언어실습 · 4주차</h1>
+        <p>연산자 (ch05)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>변수·상수·자료형 (ch03)</small></a><a class="next" href="프로그래밍언어실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~4주차 반영)</small></a></nav>
+
+<div class="tip">자료: 메모장 필기 [이론] 연산자(operator).txt · WorkC w04/E00-op/ex01_00-op1.c · 수업 화면 사진(ex01_00-op2.c) · 강의자료 C-Lect04-ch05-연산자(쪽 번호 참고)</div>
+<div class="tip">🎯 <b>시험 포인트</b> — 필기 <b>“증감연산자(시험에 많이 나옴(중요!))”</b> · <b>#연산자 우선순위(시험문제)</b> · 수업 중 <b>“시험문제!”</b> ① <code>z = -x++ + ++y;</code> ② <code>++x, y++;</code> + <code>printf(..., x++, --y, z--)</code> ③ 비트 연산자 <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code> (a=60, b=13) → 7번</div>
+<section class="card">
+<h2>1. 연산자 한눈에 · 우선순위 ★시험</h2>
+<div class="tip">📂 <b>4주차 자료</b> — 메모장 필기 <b>[이론] 연산자(operator).txt</b> · WorkC <b>w04/E00-op/ex01_00-op1.c</b> · 수업 화면 사진(<b>ex01_00-op2.c</b>)을 바탕으로 정리했고, 강의자료 <b>C-Lect04-ch05-연산자</b>는 쪽 번호 참고용입니다. 아래 코드의 주석과 <b>▶ 출력 결과</b>는 전부 직접 컴파일·실행한 값입니다.</div>
+<h3>연산식 = 피연산자(operand) + 연산자(operator) + 피연산자</h3>
+<pre><code class="language-c">2 + 3      // 2, 3 = 피연산자(operand) · + = 연산자(operator)
+-x         // 단항 연산자 : 피연산자 1개  (- ++ -- ! ~ sizeof (자료형))
+a * b      // 이항 연산자 : 피연산자 2개  (+ - * / % == &amp;&amp; &amp; &lt;&lt; = ...)
+(a &gt; b) ? a : b   // 삼항 연산자 : 피연산자 3개  (? : 하나뿐)</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>종류</th><th>연산자</th><th>강의자료</th></tr>
+<tr><td>산술</td><td><code>+ - * / %</code></td><td>7~8p</td></tr>
+<tr><td>증감 ★시험</td><td><code>++ --</code></td><td>9~10p</td></tr>
+<tr><td>관계</td><td><code>&gt; &lt; &gt;= &lt;= == !=</code></td><td>11p</td></tr>
+<tr><td>논리</td><td><code>! &amp;&amp; ||</code></td><td>12~14p</td></tr>
+<tr><td>비트 · 시프트 ★시험</td><td><code>&amp; | ^ ~</code> · <code>&lt;&lt; &gt;&gt;</code></td><td>15~16p</td></tr>
+<tr><td>대입</td><td><code>= += -= *= /= %=</code></td><td>17~18p</td></tr>
+<tr><td>조건(삼항)</td><td><code>? :</code></td><td>19~20p</td></tr>
+<tr><td>그 밖</td><td>형변환 <code>(자료형)</code> · <code>sizeof</code> · 콤마 <code>,</code></td><td>4p</td></tr>
+</tbody></table>
+<h3>연산자 우선순위 (필기 = 강의자료 4p · 21p)</h3>
+<div class="tip">🎯 <b>괄호 → 단항 → 산술 → 관계 → 논리 → 조건(삼항) → 대입 → 콤마</b> (높은 것부터) · 우선순위가 같으면 보통 <b>왼쪽 → 오른쪽</b> (단항·대입은 오른쪽 → 왼쪽) · 시프트 <code>&lt;&lt; &gt;&gt;</code> 는 <b>산술보다 낮고 관계보다 높다</b></div>
+<h3>예제 — 우선순위 (필기 <code>3&lt;&lt;2+5&lt;&lt;3</code>)</h3>
+<pre><code class="language-c">// 연산자 우선순위 — 괄호 &gt; 단항 &gt; 산술 &gt; (시프트) &gt; 관계 &gt; 논리 &gt; 조건 &gt; 대입 &gt; 콤마
+#include &lt;stdio.h&gt;
+int main() {
+    printf("%d\n", 3 &lt;&lt; 2 + 5 &lt;&lt; 3);        // + 가 &lt;&lt; 보다 먼저 → 3 &lt;&lt; 7 &lt;&lt; 3 = 3072
+    printf("%d\n", (3 &lt;&lt; 2) + (5 &lt;&lt; 3));    // 괄호 먼저 → 12 + 40 = 52
+    printf("%d\n", 2 + 3 * 4);              // * 가 먼저 → 14
+    printf("%d\n", (2 + 3) * 4);            // 괄호 먼저 → 20
+    printf("%d\n", 5 &gt; 3 &amp;&amp; 2 &gt; 4);         // 관계(&gt;) 먼저 → 1 &amp;&amp; 0 → 0
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">3072
+52
+14
+20
+0</code></pre>
+<div class="tip"><b>필기 확인</b> — <code>3&lt;&lt;2+5&lt;&lt;3</code> 은 <b>+ 가 &lt;&lt; 보다 먼저</b>라 실제로 <code>3&lt;&lt;7&lt;&lt;3</code> = <b>3072</b> 로 계산됩니다 (컴파일러도 “+ 가 먼저 계산된다” 경고). 필기의 <b>12+40</b> 처럼 <b>52</b> 를 얻으려면 <code>(3&lt;&lt;2)+(5&lt;&lt;3)</code> 처럼 <b>괄호</b>를 쳐야 해요 → 헷갈리면 괄호!</div>
+</section>
+<section class="card">
+<h2>2. 산술 · 대입(복합 대입) 연산자</h2>
+<div class="tip">📌 <b>정수 ÷ 정수 = 몫</b>(소수점 버림) · <code>%</code> = <b>나머지</b> (정수끼리만) · printf 에서 글자 <b>%</b> 를 찍으려면 <code>%%</code> · <code>c = c + a;</code> == <code>c += a;</code> (필기)</div>
+<h3>예제 ① ex01_00-op1.c — 산술 연산자 (a=21, b=10)</h3>
+<pre><code class="language-c">// ex01_00-op1.c ① 산술 연산자 + - * / %  (a=21, b=10)
+#include &lt;stdio.h&gt;
+int main() {
+    int a = 21;
+    int b = 10;
+    int c;
+
+    c = a + b;
+    printf("a+b= %d \n", c);     // 31
+    c = a - b;
+    printf("a-b= %d \n", c);     // 11
+    c = a * b;
+    printf("a*b= %d \n", c);     // 210
+    c = a / b;
+    printf("a/b= %d \n", c);     // 2   ← 정수 ÷ 정수 = 몫만 (소수점 버림)
+    c = a % b;
+    printf("a%%b= %d \n", c);    // 1   ← % 는 나머지 / 글자 % 를 찍으려면 %% 로 써야 한다
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">a+b= 31 
+a-b= 11 
+a*b= 210 
+a/b= 2 
+a%b= 1 </code></pre>
+<div class="tip"><b>필기 정정</b> — 수업 파일처럼 <code>printf("a%b= %d \n", c);</code> 로 쓰면 <code>%b</code> 를 서식으로 읽어서 원하는 글자가 안 나옵니다 → 글자 % 는 <code>%%</code></div>
+<h3>예제 ② ex01_00-op2.c (수업 화면) — 복합 대입 연산자</h3>
+<pre><code class="language-c">// ex01_00-op2.c (수업 화면) — 복합 대입 연산자  c += a 는 c = c + a
+#include &lt;stdio.h&gt;
+int main() {
+    int a = 21;
+    int c;
+
+    c = a;
+    printf("c: %d \n", c);          // 21
+    c += a;                         // c = c + a → 42
+    printf("c+=a: %d \n", c);
+    c -= a;                         // c = c - a → 21
+    printf("c-=a: %d \n", c);
+    c *= a;                         // c = c * a → 441
+    printf("c*=a: %d \n", c);
+    c /= a;                         // c = c / a → 21
+    printf("c/=a: %d \n", c);
+    c %= a;                         // c = c % a → 0
+    printf("c%%=a: %d \n", c);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">c: 21 
+c+=a: 42 
+c-=a: 21 
+c*=a: 441 
+c/=a: 21 
+c%=a: 0 </code></pre>
+<table class="ref">
+<tbody>
+<tr><th>복합 대입</th><th>같은 뜻</th><th>a=21 일 때 c 의 변화</th></tr>
+<tr><td><code>c += a;</code></td><td><code>c = c + a;</code></td><td>21 → 42</td></tr>
+<tr><td><code>c -= a;</code></td><td><code>c = c - a;</code></td><td>42 → 21</td></tr>
+<tr><td><code>c *= a;</code></td><td><code>c = c * a;</code></td><td>21 → 441</td></tr>
+<tr><td><code>c /= a;</code></td><td><code>c = c / a;</code></td><td>441 → 21</td></tr>
+<tr><td><code>c %= a;</code></td><td><code>c = c % a;</code></td><td>21 → 0</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>3. 증감 연산자 ++ -- ★시험에 많이 나옴</h2>
+<div class="tip">🔴 필기 — <b>“시험에 많이 나옴(중요!)”</b> · 변수 <b>뒤</b>에 붙으면(후위) <b>지금 값을 먼저 쓰고</b> 나중에 증감 / <b>앞</b>에 붙으면(전위) <b>먼저 증감하고</b> 그 값을 씀 (강의자료 9p)</div>
+<table class="ref">
+<tbody>
+<tr><th>식</th><th>연산 결과(쓰이는 값)</th><th>n=10 일 때 c = 식; 후</th></tr>
+<tr><td><code>n++</code> (후위 증가)</td><td>1 증가되기 <b>전</b> 값</td><td>c=10, n=11</td></tr>
+<tr><td><code>++n</code> (전위 증가)</td><td>1 증가된 값</td><td>c=11, n=11</td></tr>
+<tr><td><code>n--</code> (후위 감소)</td><td>1 감소되기 <b>전</b> 값</td><td>c=10, n=9</td></tr>
+<tr><td><code>--n</code> (전위 감소)</td><td>1 감소된 값</td><td>c=9, n=9</td></tr>
+</tbody></table>
+<h3>예제 — ex01_00-op1.c 증감 연산자</h3>
+<pre><code class="language-c">// ex01_00-op1.c ② 증감 연산자 ++ --  ★시험에 많이 나옴
+#include &lt;stdio.h&gt;
+int main() {
+    int c;
+    int d = 10, e = 10, f = 10, g = 10;
+
+    c = d;          // c=10
+    d = d + 1;      // d=11  (d++ 와 같은 뜻)
+    printf("c,d: %d, %d \n", c, d);
+
+    d = 10;
+    c = d++;        // 후위: c 에 먼저 대입(10) → 그다음 d 증가(11)
+    printf("c,d: %d, %d \n", c, d);
+
+    c = ++e;        // 전위: e 먼저 증가(11) → 그 값을 c 에 대입(11)
+    printf("c,e: %d, %d \n", c, e);
+
+    c = f--;        // 후위: c=10, f=9
+    printf("c,f: %d, %d \n", c, f);
+
+    c = --g;        // 전위: g=9, c=9
+    printf("c,g: %d, %d \n", c, g);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">c,d: 10, 11 
+c,d: 10, 11 
+c,e: 11, 11 
+c,f: 10, 9 
+c,g: 9, 9 </code></pre>
+<div class="tip">⚠️ 필기의 <code>d = d++;</code> · <code>d = ++d;</code> 처럼 <b>한 식에서 같은 변수를 두 번 바꾸면</b> 컴파일러마다 결과가 달라질 수 있어요. 연습은 위처럼 <code>c = d++;</code> (다른 변수에 받기) 로 하세요. → 시험 코드는 7. 시험문제</div>
+</section>
+<section class="card">
+<h2>4. 관계 · 논리 · 조건(삼항) · sizeof 연산자</h2>
+<div class="tip">📌 관계·논리 연산 결과는 <b>참 1 / 거짓 0</b> · 조건식에서는 <b>0 이 아니면 모두 참</b> · 문자도 코드값으로 비교 (<code>'a'</code> = 97)</div>
+<h3>예제 ① ex01_00-op1.c — 관계 연산자</h3>
+<pre><code class="language-c">// ex01_00-op1.c ③ 관계 연산자 — 참이면 1, 거짓이면 0
+#include &lt;stdio.h&gt;
+int main() {
+    int a = 21;
+    int b = 10;
+    int c;
+
+    c = a == b;     // 21 == 10 → 거짓 → 0
+    printf("a==b: %d \n", c);
+    c = a != b;     // 21 != 10 → 참 → 1
+    printf("a!=b: %d \n", c);
+    c = a &lt; b;      // 0
+    printf("a&lt;b: %d \n", c);
+    c = a &gt; b;      // 1
+    printf("a&gt;b: %d \n", c);
+    c = a &gt;= 21;    // 같아도 참 → 1
+    printf("a&gt;=21: %d \n", c);
+    c = a &lt;= 20;    // 0
+    printf("a&lt;=20: %d \n", c);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">a==b: 0 
+a!=b: 1 
+a&lt;b: 0 
+a&gt;b: 1 
+a&gt;=21: 1 
+a&lt;=20: 0 </code></pre>
+<div class="tip"><b>강의자료 오타 주의</b> — 강의자료 11p 에 “참이면 0, 거짓이면 1” 로 적혀 있지만 위 실행 결과처럼 <b>참이면 1, 거짓이면 0</b> 이 맞습니다 (필기가 맞음, 13p 도 참 1).</div>
+<h3>논리 연산자 진리표 (필기)</h3>
+<table class="ref">
+<tbody style="min-width:522px;">
+<tr><th>x</th><th>y</th><th>!x</th><th>x &amp;&amp; y</th><th>x || y</th><th>x ^ y (비트 XOR)</th></tr>
+<tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+</tbody></table>
+<h3>예제 ② 논리 연산자 — 모든 경우</h3>
+<pre><code class="language-c">// 논리 연산자 ! &amp;&amp; || — 결과는 참 1 / 거짓 0 (0 이 아니면 모두 참)
+#include &lt;stdio.h&gt;
+int main() {
+    printf("!0 = %d, !1 = %d\n", !0, !1);                       // NOT
+    printf("0&amp;&amp;0=%d 0&amp;&amp;1=%d 1&amp;&amp;0=%d 1&amp;&amp;1=%d\n", 0&amp;&amp;0, 0&amp;&amp;1, 1&amp;&amp;0, 1&amp;&amp;1);   // AND : 둘 다 참일 때만 1
+    printf("0||0=%d 0||1=%d 1||0=%d 1||1=%d\n", 0||0, 0||1, 1||0, 1||1);   // OR  : 하나라도 참이면 1
+    printf("0^0=%d 0^1=%d 1^0=%d 1^1=%d\n", 0^0, 0^1, 1^0, 1^1);           // ^ 는 비트 XOR : 서로 다르면 1
+    printf("3 &amp;&amp; -1 = %d\n", 3 &amp;&amp; -1);                          // 0 이 아닌 수는 모두 참 → 1
+    printf("!5 = %d\n", !5);                                    // 5 는 참 → NOT → 0
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">!0 = 1, !1 = 0
+0&amp;&amp;0=0 0&amp;&amp;1=0 1&amp;&amp;0=0 1&amp;&amp;1=1
+0||0=0 0||1=1 1||0=1 1||1=1
+0^0=0 0^1=1 1^0=1 1^1=0
+3 &amp;&amp; -1 = 1
+!5 = 0</code></pre>
+<div class="tip"><b>필기 정정</b> — 필기에 <code>^</code> 가 논리 연산자로 적혀 있지만 C 의 <b>논리 연산자는 <code>! &amp;&amp; ||</code> 3개</b>(강의자료 13p)이고 <code>^</code> 는 <b>비트 연산자(XOR)</b>입니다. 0 과 1 만 넣으면 표 값은 같아요 — 서로 다르면 1.</div>
+<h3>예제 ③ 단축 평가 (강의자료 14p · 실습 07shorteval.c)</h3>
+<pre><code class="language-c">// 단축 평가 — 왼쪽만 보고 결과가 정해지면 오른쪽은 계산하지 않는다 (강의자료 14p)
+#include &lt;stdio.h&gt;
+int main() {
+    int n = 5;
+    int r;
+
+    r = (n &gt; 10) &amp;&amp; (++n &gt; 0);   // 왼쪽 거짓(0) → &amp;&amp; 결과는 무조건 0 → ++n 실행 안 됨
+    printf("r=%d, n=%d\n", r, n);
+
+    r = (n &gt; 1) || (++n &gt; 0);    // 왼쪽 참(1) → || 결과는 무조건 1 → ++n 실행 안 됨
+    printf("r=%d, n=%d\n", r, n);
+
+    r = (n &gt; 1) &amp;&amp; (++n &gt; 0);    // 왼쪽 참 → 오른쪽까지 봐야 함 → ++n 실행 (n=6)
+    printf("r=%d, n=%d\n", r, n);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">r=0, n=5
+r=1, n=5
+r=1, n=6</code></pre>
+<h3>예제 ④ ex01_00-op2.c (수업 화면) — sizeof · 조건(삼항) 연산자</h3>
+<pre><code class="language-c">// ex01_00-op2.c (수업 화면) — sizeof 연산자 · 조건(삼항) 연산자
+#include &lt;stdio.h&gt;
+int main() {
+    int a = sizeof(int);            // sizeof 도 연산자 → int 크기 4
+    printf("int: %d \n", a);
+
+    int b = 100;
+    int c = sizeof(b);              // 변수 b 의 크기 → 4
+    printf("b: %d, sizeof(b): %d \n", b, c);
+
+    a = 10;
+    b = (a == 1) ? 20 : 30;         // 조건이 거짓(0) → 콜론 뒤 30
+    printf("b: %d \n", b);
+
+    b = (a == 10) ? 20 : 30;        // 조건이 참(1) → 콜론 앞 20
+    printf("b: %d \n", b);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">int: 4 
+b: 100, sizeof(b): 4 
+b: 30 
+b: 20 </code></pre>
+<div class="tip">📌 <code>조건 ? 참일 때 값 : 거짓일 때 값</code> — 피연산자가 3개라 <b>삼항</b> 연산자 · <code>sizeof</code> 는 함수가 아니라 <b>연산자</b> (필기 “ziseof” → <b>sizeof</b>)</div>
+<h3>예제 ⑤ 삼항 연산자로 최대값 · 최소값 (강의자료 19~20p)</h3>
+<pre><code class="language-c">// 조건(삼항) 연산자로 최대값 · 최소값 (강의자료 19~20p)
+#include &lt;stdio.h&gt;
+int main() {
+    int x = 7, y = 3;
+    int max = (x &gt; y) ? x : y;     // 조건 참 → x
+    int min = (x &lt; y) ? x : y;     // 조건 거짓 → y
+    printf("max=%d, min=%d\n", max, min);
+    printf("'a'=%d, 'a' &gt; 'A' : %d\n", 'a', 'a' &gt; 'A');   // 문자도 코드값으로 비교 97 &gt; 65 → 1
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">max=7, min=3
+'a'=97, 'a' &gt; 'A' : 1</code></pre>
+</section>
+<section class="card">
+<h2>5. 비트 · 시프트 연산자 · 보수 ★시험</h2>
+<div class="tip">💡 <b>왜 비트 연산?</b> (필기) — 강의실 전등 <b>80개</b>의 켜기/끄기를 저장할 때 1바이트 변수 80개면 <b>80바이트</b>, 켜짐 1 · 꺼짐 0 을 <b>비트</b>로 저장하면 80비트 = <b>10바이트</b>면 충분</div>
+<table class="ref">
+<tbody>
+<tr><th>연산자</th><th>이름</th><th>규칙</th></tr>
+<tr><td><code>&amp;</code></td><td>AND</td><td>둘 다 1 이면 1</td></tr>
+<tr><td><code>|</code></td><td>OR</td><td>하나라도 1 이면 1</td></tr>
+<tr><td><code>^</code></td><td>XOR</td><td>서로 다르면 1</td></tr>
+<tr><td><code>~</code></td><td>NOT (1의 보수)</td><td>0 ↔ 1 뒤집기</td></tr>
+<tr><td><code>&lt;&lt;</code></td><td>왼쪽 시프트</td><td>왼쪽으로 n칸, 빈자리 0 · 1칸마다 ×2</td></tr>
+<tr><td><code>&gt;&gt;</code></td><td>오른쪽 시프트</td><td>오른쪽으로 n칸 · 1칸마다 ÷2</td></tr>
+</tbody></table>
+<h3>예제 ① ex01_00-op2.c (수업 화면) — a=60, b=13 ★시험문제 ③</h3>
+<pre><code class="language-c">// ex01_00-op2.c (수업 화면) — 비트 연산자 &amp; | ^ ~ 와 시프트 &lt;&lt; &gt;&gt;   ★시험문제 ③
+#include &lt;stdio.h&gt;
+int main() {
+    int a = 60;          // 0011 1100
+    int b = 13;          // 0000 1101
+    int c;
+
+    c = a &amp; b;           // 0000 1100 = 12  (둘 다 1 인 자리만 1)
+    printf("a &amp; b: %d \n", c);
+    c = a | b;           // 0011 1101 = 61  (하나라도 1 이면 1)
+    printf("a | b: %d \n", c);
+    c = a ^ b;           // 0011 0001 = 49  (서로 다르면 1)
+    printf("a ^ b: %d \n", c);
+    c = ~a;              // 1100 0011 = -61 (0 ↔ 1 뒤집기 = 1의 보수)
+    printf("~a: %d \n", c);
+
+    c = a &lt;&lt; 2;          // 1111 0000 = 240 (왼쪽으로 2칸 = ×4)
+    printf("a &lt;&lt; 2: %d \n", c);
+    c = a &gt;&gt; 2;          // 0000 1111 = 15  (오른쪽으로 2칸 = ÷4)
+    printf("a &gt;&gt; 2: %d \n", c);
+    c &lt;&lt;= 2;             // c = c &lt;&lt; 2 → 15 → 60
+    printf("c &lt;&lt;= 2: %d \n", c);
+    c &gt;&gt;= 2;             // c = c &gt;&gt; 2 → 60 → 15
+    printf("c &gt;&gt;= 2: %d \n", c);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">a &amp; b: 12 
+a | b: 61 
+a ^ b: 49 
+~a: -61 
+a &lt;&lt; 2: 240 
+a &gt;&gt; 2: 15 
+c &lt;&lt;= 2: 60 
+c &gt;&gt;= 2: 15 </code></pre>
+<h3>2진수로 풀어 보기</h3>
+<table class="ref">
+<tbody>
+<tr><th>식</th><th>2진수</th><th>10진수</th></tr>
+<tr><td>a</td><td>0011 1100</td><td>60</td></tr>
+<tr><td>b</td><td>0000 1101</td><td>13</td></tr>
+<tr><td>a &amp; b</td><td>0000 1100</td><td><b>12</b></td></tr>
+<tr><td>a | b</td><td>0011 1101</td><td><b>61</b></td></tr>
+<tr><td>a ^ b</td><td>0011 0001</td><td><b>49</b></td></tr>
+<tr><td>~a</td><td>1100 0011</td><td><b>-61</b></td></tr>
+<tr><td>a &lt;&lt; 2</td><td>1111 0000</td><td><b>240</b></td></tr>
+<tr><td>a &gt;&gt; 2</td><td>0000 1111</td><td><b>15</b></td></tr>
+</tbody></table>
+<h3>예제 ② 시프트 — unsigned char data = 0x1A (필기 예제)</h3>
+<pre><code class="language-c">// 시프트 연산자 — unsigned char data = 0x1A (필기 예제)
+#include &lt;stdio.h&gt;
+int main() {
+    unsigned char data = 0x1A;         // 0001 1010 = 26
+    unsigned char left, right;
+
+    left = data &lt;&lt; 2;                  // 왼쪽으로 2칸 → 0110 1000 = 104
+    right = data &gt;&gt; 2;                 // 오른쪽으로 2칸 → 0000 0110 = 6
+    printf("data=%d, data&lt;&lt;2=%d, data&gt;&gt;2=%d\n", data, left, right);
+
+    data = data &lt;&lt; 2;                  // data 자체를 바꾸면 104
+    data = data &gt;&gt; 2;                  // 104 를 다시 오른쪽 2칸 → 0001 1010 = 26 (원래 값)
+    printf("&lt;&lt;2 한 뒤 &gt;&gt;2 : %d\n", data);
+
+    unsigned char x = 0xFF;            // 1111 1111 = 255
+    x &lt;&lt;= 2;                           // x = x &lt;&lt; 2 → 1111 1100 = 252 (넘친 비트는 버려짐)
+    printf("0xFF &lt;&lt;= 2 : %d\n", x);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">data=26, data&lt;&lt;2=104, data&gt;&gt;2=6
+&lt;&lt;2 한 뒤 &gt;&gt;2 : 26
+0xFF &lt;&lt;= 2 : 252</code></pre>
+<div class="tip"><b>필기 정정</b> — ① <code>&lt;&lt;</code> 는 <b>왼쪽</b>, <code>&gt;&gt;</code> 는 <b>오른쪽</b>으로 이동 (필기의 “x=&lt;&lt;2 //오른쪽” 은 반대) · 쓰는 법은 <code>x &lt;&lt;= 2;</code> (= <code>x = x &lt;&lt; 2;</code>, 필기 <code>c=c&gt;&gt;2</code> == <code>c&gt;&gt;=2</code>) ② <code>unsigned chr</code> → <code>unsigned char</code> ③ 필기의 <code>0000 0110</code> 은 <b>원래 값 0x1A 를 &gt;&gt;2</b> 한 결과 — &lt;&lt;2 한 뒤에 다시 &gt;&gt;2 하면 0001 1010 = 26 으로 돌아옵니다.</div>
+<table class="ref">
+<tbody>
+<tr><th>자료형</th><th>범위 (필기)</th></tr>
+<tr><td><code>signed char</code></td><td>-128 ~ +127</td></tr>
+<tr><td><code>unsigned char</code></td><td>0 ~ 255 (넘친 비트는 버려짐 → 0xFF &lt;&lt;= 2 = 252)</td></tr>
+</tbody></table>
+<h3>예제 ③ 보수 — 0011 1100 (필기)</h3>
+<pre><code class="language-c">// 보수 — 0011 1100 (60)
+#include &lt;stdio.h&gt;
+int main() {
+    int n = 60;                    // 0011 1100
+    printf("1의 보수 ~n     = %d\n", ~n);        // 1100 0011 → -61  (0 과 1 을 뒤집기)
+    printf("2의 보수 ~n + 1 = %d\n", ~n + 1);    // 1100 0100 → -60  (1의 보수 + 1 = 음수 표현)
+    printf("-n              = %d\n", -n);        // 컴퓨터는 음수를 2의 보수로 저장 → -60
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">1의 보수 ~n     = -61
+2의 보수 ~n + 1 = -60
+-n              = -60</code></pre>
+<table class="ref">
+<tbody>
+<tr><th></th><th>2진수</th><th>방법</th></tr>
+<tr><td>원래 값</td><td>0011 1100</td><td>60</td></tr>
+<tr><td>1의 보수</td><td>1100 0011</td><td>0 ↔ 1 뒤집기 = <code>~n</code> → -61</td></tr>
+<tr><td>2의 보수</td><td>1100 0100</td><td>1의 보수 <b>+ 1</b> → -60 (컴퓨터가 음수를 저장하는 방법)</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>6. 진법 · 형변환 · 콤마 연산자</h2>
+<div class="tip">📌 C 코드에서 <b>0 으로 시작하면 8진수</b>(<code>017</code>), <b>0x 로 시작하면 16진수</b>(<code>0x1A</code>) · 16진수 A=10 B=11 C=12 D=13 E=14 F=15 · 16진수 한 자리 = 2진수 4자리</div>
+<h3>예제 ① 진법 표기</h3>
+<pre><code class="language-c">// 진법 표기 — 0 으로 시작 = 8진수, 0x 로 시작 = 16진수
+#include &lt;stdio.h&gt;
+int main() {
+    printf("017  = %d\n", 017);      // 8진수 17 = 1×8 + 7 = 15
+    printf("0x1A = %d\n", 0x1A);     // 16진수 1A = 1×16 + 10 = 26
+    printf("0x5A = %d\n", 0x5A);     // 0101 1010 = 90
+    printf("0xDF = %d\n", 0xDF);     // D=13=1101, F=15=1111 → 1101 1111 = 223
+    printf("26 → 8진수 %o, 16진수 %X\n", 26, 26);   // 32, 1A
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">017  = 15
+0x1A = 26
+0x5A = 90
+0xDF = 223
+26 → 8진수 32, 16진수 1A</code></pre>
+<div class="tip"><b>필기 정정</b> — <code>0xDF</code> 의 D=13 은 <b>1101</b> 이라 <code>1101 1111</code> = 223 입니다 (필기의 1110 은 14).</div>
+<h3>예제 ② 형변환 <code>(자료형)</code> · 콤마 <code>,</code> 연산자</h3>
+<pre><code class="language-c">// 형변환 연산자 (자료형) · 콤마 연산자 ,
+#include &lt;stdio.h&gt;
+int main() {
+    printf("(int)'A'   = %d\n", (int)'A');       // 문자 A 의 코드값 65
+    printf("(int)3.14  = %d\n", (int)3.14);      // 소수점 버림 → 3
+    printf("(int)3.46  = %d\n", (int)3.46);      // 반올림 아님 → 3
+    printf("(double)9  = %f\n", (double)9);      // 9.000000
+    printf("(double)3.45 = %f\n", (double)3.45);  // 원래 실수 → 그대로 3.450000 (반올림 X)
+    printf("7 / 2         = %d\n", 7 / 2);       // 정수 ÷ 정수 → 3
+    printf("(double)7 / 2 = %f\n", (double)7 / 2);  // 7.0 / 2 → 3.500000
+
+    int x, y;
+    x = 3 + 4, 5 - 10;          // 대입(=)이 콤마보다 먼저 → x = 7 (5-10 은 계산만 하고 버림)
+    y = (3 + 4, 5 - 10);        // 괄호 안은 콤마의 "맨 뒤" 값 → -5
+    printf("x = %d, y = %d\n", x, y);
+    y = (3 + 4, 5 - 10, 2 * 3); // 맨 뒤 2*3 → 6
+    printf("y = %d\n", y);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">(int)'A'   = 65
+(int)3.14  = 3
+(int)3.46  = 3
+(double)9  = 9.000000
+(double)3.45 = 3.450000
+7 / 2         = 3
+(double)7 / 2 = 3.500000
+x = 7, y = -5
+y = 6</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>필기</th><th>실제 결과</th><th>설명</th></tr>
+<tr><td><code>int 'A' = 65</code></td><td><code>(int)'A'</code> → 65</td><td>문자의 코드값</td></tr>
+<tr><td><code>int 3.14 = 3</code></td><td><code>(int)3.14</code> → 3</td><td>소수점 <b>버림</b> (3.46 도 3)</td></tr>
+<tr><td><code>double 9 = 9.0</code></td><td><code>(double)9</code> → 9.000000</td><td>정수 → 실수</td></tr>
+<tr><td><code>double 3.45=3.5</code> ❌</td><td><code>(double)3.45</code> → <b>3.450000</b></td><td>이미 실수라 그대로 · 반올림 안 함</td></tr>
+<tr><td><code>double 7/2=7.0/2</code></td><td><code>(double)7 / 2</code> → 3.500000</td><td>7 을 먼저 실수로 → 실수 나눗셈 (7/2 는 3)</td></tr>
+<tr><td><code>x=3+4,5-10 //-5</code> ❌</td><td><code>x = 3 + 4, 5 - 10;</code> → x=<b>7</b></td><td>대입이 콤마보다 먼저 · -5 가 되려면 <code>x = (3+4, 5-10);</code></td></tr>
+<tr><td><code>y=3+4,5-10,2*3 //6</code></td><td><code>y = (3+4, 5-10, 2*3);</code> → 6</td><td>괄호 안 콤마는 <b>맨 뒤</b> 값 (필기 “뒤에 있는걸로 저장됨”)</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>7. ★ 4주차 시험문제 ① ② ③</h2>
+<div class="tip">🔥 <b>수업 중 “시험문제!”</b> — ① 메모장·C 파일의 <b>1)시험문제</b> (증감 + 우선순위) ② <b>2)시험문제</b> (콤마 + printf 안의 증감) ③ C 파일의 <b>3)시험문제</b> (비트 연산자, 수업 화면 ex01_00-op2.c) · 과목 페이지 💻 코딩테스트의 <b>🔥 시험문제</b>로 직접 코드를 짜서 채점도 할 수 있어요.</div>
+<h3>문제 ① 실행결과를 쓰시오 — 1)시험문제!</h3>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int x = 10;
+    int y = 10;
+    int z;
+    z = -x++ + ++y;
+    printf("x=%d\ty=%d\tz=%d\n",x,y,z);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">x=11	y=11	z=1</code></pre>
+<div class="tip"><b>풀이</b> — ① <code>x++</code> 는 후위라 <b>지금 값 10</b> 을 쓰고 나중에 x=11 ② 단항 <code>-</code> → -10 ③ <code>++y</code> 는 전위라 <b>먼저 11</b> 로 올리고 11 을 씀 ④ z = -10 + 11 = <b>1</b> → <b>x=11 y=11 z=1</b> (printf 안의 \t 는 탭)</div>
+<h3>문제 ② 실행결과를 쓰시오 — 2)시험문제!</h3>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int x = 1, y = 1, z = 1;
+    ++x, y++;
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">x:2		y:2		z:1 
+x:2		y:1		z:1 </code></pre>
+<div class="tip"><b>풀이</b> — <code>++x, y++;</code> 콤마로 두 식 모두 실행 → x=2, y=2 (z=1) → 첫 줄 <b>2 2 1</b> · 두 번째 printf 는 <b>찍히는 값</b>이 중요: <code>x++</code> → 2 를 찍고 3 이 됨 / <code>--y</code> → 먼저 1 로 내리고 1 / <code>z--</code> → 1 을 찍고 0 이 됨 → <b>2 1 1</b> (끝난 뒤 실제 값은 x=3 y=1 z=0)</div>
+<h3>확인용 — printf 한 줄을 더 넣어 끝난 뒤 값까지 보기</h3>
+<pre><code class="language-c">// ★시험문제 ② — 콤마 연산자와 printf 안의 증감 연산자
+#include &lt;stdio.h&gt;
+int main() {
+    int x = 1, y = 1, z = 1;
+    ++x, y++;                                            // 콤마로 두 식 실행 → x=2, y=2
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // 2 2 1
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);    // x++ → 2 를 찍고 3 / --y → 1 로 내리고 1 / z-- → 1 을 찍고 0
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // 끝난 뒤 실제 값 3 1 0
+    return 0;
+}</code></pre>
+<pre class="io"><code class="language-text">x:2		y:2		z:1 
+x:2		y:1		z:1 
+x:3		y:1		z:0 </code></pre>
+<h3>문제 ③ 실행결과를 쓰시오 — 3)시험문제! 비트 연산자 (a=60, b=13)</h3>
+<div class="tip">C 파일(ex01_00-op1.c)에는 <code>c = a &amp; b;</code> … 식만 있고 printf 가 빠져 있어서, 수업 화면(ex01_00-op2.c)의 전체 코드로 정리했습니다 → 코드·출력·2진수 풀이는 5. 비트 · 시프트 예제 ①</div>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (메모장 그대로)</summary>
+<pre><code class="language-text">[이론] 연산자(operator)
+단항 연산자
+이항 연산자
+우선순위:
+괄호 -&gt; 단항 -&gt; 산술 -&gt; 관계 -&gt; 논리 -&gt; 조건(삼항) -&gt; 대입 -&gt; 콤마
+피연산자	피연산자
+2	+	3
+	연산자
+피연산자(operand) + 연산자(operator)   + 피연산자(operand)
+1. 산술 연산자:+,-,*,/,%
+2. 증감연산자(시험에 많이나옴(중요!)) ++,--
+	1)증가 연산자: ++
+		d=d+1;
+		d=d++;
+		d=++d;
+	2)감소 연산자: --
+3. 관계연산자: &gt;,&lt;,&gt;=,&lt;=,==,!=
+	참이면 1,거짓이면 0
+	최대값
+	최소값
+	결과값
+문자'a' 코드값97
+4. 연산자
+sizeof(int):ziseof 연산자
+int 3.46: 자료형 변환 연산자
+#연산자 우선순위(시험문제)
+// 1)시험문제!
+#include&lt;stdio.h&gt;
+int main() {
+	int x = 10;
+	int y = 10;
+	int z;
+	z = -x++ + ++y;
+	printf("x=%d	y=%d	z=%d\n",x,y,z);
+	return 0;
+}
+
+
+
+
+
+// 2)시험문제!
+#include&lt;stdio.h&gt;
+int main() {
+	int x = 1, y = 1, z = 1;
+	++x, y++;
+	printf("x:%d		y:%d		z:%d \n", x, y, z);
+	printf("x:%d		y:%d		z:%d \n", x++, --y, z--);
+	return 0;
+}
+
+#논리연산자 !,&amp;&amp;,||,^
+x	!x
+0	1
+1	0
+xy	x&amp;&amp;y
+00	  0
+01	  0
+10	  0
+11	  1
+
+xy	x||y
+00	 0
+01	 1
+10	 1
+11	 1
+
+xy	x^y
+00	 0
+01	 1
+10	 1
+11	 0
+
+
+
+#비트연산자 &amp;(and),|(or).^(xor),~(not)
+80개 강의실 전등 켜기/끄기 를 저장하려면
+	80byte==80*8bit
+강의실 전등 80개
+1바이트 변수가 80개 -&gt; 80바이트 기억장소 필요
+
+전등 켜기/끄기 1,0
+80개 비트로저장가능 -&gt; 80비트 -&gt;10바이트 기억장소 필요
+
+#쉬프트 연산자: &lt;&lt; &gt;&gt;
+	x=1111 1111
+	x=&lt;&lt;2; //오른쪽으로 땡긴다
+	x=&gt;&gt;2; //왼쪽으로 땡긴다
+	
+signed char x; (-128)~(+127)
+unsigned char x; (0)~(255)
+unsigned char data=0x5A;
+	data = 0101 1010
+
+unsigned chr data=0x1A; //0001 1010
+data=data &lt;&lt;2; //왼쪽으로 2칸 이동 0110 1000
+data=data &gt;&gt;2; //오른쪽으로 2칸 이동 0000 0110
+"c=c&gt;&gt;2"==="c&gt;&gt;=2;"
+10진법
+2진법
+8진법:   0  17  15
+16진법: 0x 1A  
+ex)DX
+A 10
+B 11
+C 12 
+D 13
+E 14
+F 15
+13  15
+1110 1111
+
+ex 뒤에 있는걸로 저장됨)
+x=3+4,5-10 //5-10=-5
+y=3+4,5-10,2*3 // 2*3=6
+
+#형변환 연산자
+int 'A' = 65
+int 3.14 = 3
+double 9 = 9.0
+double 3.45=3.5
+double 7/2=7.0/2
+
+#대입연산자
+"c=c+a;"=="c+=a;"
+
+#연산자 우선순위
+3&lt;&lt;2+5&lt;&lt;3
+3&lt;&lt;7&lt;&lt;3 (X)
+(3&lt;&lt;2)+(5&lt;&lt;3)
+12+40
+
+#보수 0011 1100
+1의 보수
+	1100 0011
+2의 보수
+	1100 0011+1=
+	1100 0100</code></pre>
+</details>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../프로그래밍언어실습.html#quiz">프로그래밍언어실습 과목 페이지 — 퀴즈(객관식 15 · 주관식 15)</a></li><li><a href="../프로그래밍언어실습.html#code">💻 코딩테스트 — 🔥 시험문제 ① ② ③ 직접 짜서 채점</a></li><li><a href="../프로그래밍언어실습.html#s22">시험문제 ① ② ③ 실행결과 직접 풀기</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>변수·상수·자료형 (ch03)</small></a><a class="next" href="프로그래밍언어실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~4주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「프로그래밍언어실습 · 4주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

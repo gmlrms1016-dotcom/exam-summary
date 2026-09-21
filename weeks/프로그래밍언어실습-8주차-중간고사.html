@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202609181500"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로그래밍언어실습 8주차 · 중간고사 시험문제 정리 (1~3주차 반영)</title>
+    <title>프로그래밍언어실습 8주차 · 중간고사 시험문제 정리 (1~4주차 반영)</title>
     <link rel="stylesheet" href="../style.css?v=202609181500">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
@@ -44,13 +44,46 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>💾 프로그래밍언어실습 · 8주차 · 중간고사</h1>
-        <p>중간고사 시험문제 정리 (1~3주차 반영)</p>
+        <p>중간고사 시험문제 정리 (1~4주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>변수·상수·자료형 (ch03)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-4주차.html">‹ 이전 · <b>4주차</b><br><small>연산자 (ch05)</small></a><span></span></nav>
 
-<div class="tip">📅 <b>중간고사 — 10월 19일(월) 14:00</b> · 평가 비율: 출석 20% + <b>중간 40%</b> + 기말 40% (과제·실습은 가산점) · 지금까지 배운 <b>1~3주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
+<div class="tip">📅 <b>중간고사 — 10월 19일(월) 14:00</b> · 평가 비율: 출석 20% + <b>중간 40%</b> + 기말 40% (과제·실습은 가산점) · 지금까지 배운 <b>1~4주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
+<div class="tip">🔥 <b>교수님이 시험문제라고 한 것</b> (4주차) — ① <code>z = -x++ + ++y;</code> 실행 후 x·y·z ② <code>++x, y++;</code> 와 <code>printf("...", x++, --y, z--);</code> 에 찍히는 값 ③ 비트 연산자 <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code> (a=60, b=13) · 필기 <b>“증감연산자 시험에 많이 나옴”</b> · <b>연산자 우선순위(시험문제)</b></div>
 <div class="tip">🎯 <b>교수님이 시험문제라고 한 것</b> (3주차) — ① 강의자료 <b>23p</b> [실습 1-05] <code>sizeof</code> <b>실행결과 쓰기</b> ② 강의자료 <b>27p</b> [quiz 1-01] <b>빈칸채우기</b>(printf 서식) + <b>오류 수정</b> ③ 수업 중 "시험문제!" — <code>sizeof</code> 결과를 <code>%f</code> <code>%lf</code> <code>%c</code> 로 찍은 코드 고치기 → <b>전부 <code>%d</code></b></div>
+<section class="card">
+<h2>★ 4주차 시험문제 (<a href="프로그래밍언어실습-4주차.html">4주차 자세히</a>)</h2>
+<h3>① 1)시험문제! — 증감 + 우선순위</h3>
+<pre><code class="language-c">int x = 10;
+int y = 10;
+int z;
+z = -x++ + ++y;
+printf("x=%d\ty=%d\tz=%d\n", x, y, z);</code></pre>
+<pre class="io"><code class="language-text">x=11	y=11	z=1</code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <code>x++</code> 후위: <b>지금 값 10</b> 을 쓰고 나중에 11 · <code>++y</code> 전위: <b>먼저 11</b> → z = -10 + 11 = <b>1</b></li></ul>
+<h3>② 2)시험문제! — 콤마 + printf 안의 증감</h3>
+<pre><code class="language-c">int x = 1, y = 1, z = 1;
+++x, y++;
+printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);
+printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);</code></pre>
+<pre class="io"><code class="language-text">x:2		y:2		z:1 
+x:2		y:1		z:1 </code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 두 번째 줄은 <b>찍히는 값</b>: <code>x++</code> → 2 (그 뒤 3) · <code>--y</code> → 1 · <code>z--</code> → 1 (그 뒤 0)</li></ul>
+<h3>③ 3)시험문제! — 비트 연산자 (a=60 <code>0011 1100</code>, b=13 <code>0000 1101</code>)</h3>
+<table class="ref">
+<tbody>
+<tr><th>식</th><th>2진수</th><th>결과</th></tr>
+<tr><td><code>a &amp; b</code></td><td>0000 1100</td><td><b>12</b></td></tr>
+<tr><td><code>a | b</code></td><td>0011 1101</td><td><b>61</b></td></tr>
+<tr><td><code>a ^ b</code></td><td>0011 0001</td><td><b>49</b></td></tr>
+<tr><td><code>~a</code></td><td>1100 0011</td><td><b>-61</b></td></tr>
+<tr><td><code>a &lt;&lt; 2</code></td><td>1111 0000</td><td><b>240</b></td></tr>
+<tr><td><code>a &gt;&gt; 2</code></td><td>0000 1111</td><td><b>15</b></td></tr>
+</tbody></table>
+<h3>④ 우선순위 · 필기 정정</h3>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 괄호 → 단항 → 산술 → 관계 → 논리 → 조건(삼항) → 대입 → 콤마 · <code>3&lt;&lt;2+5&lt;&lt;3</code> = <code>3&lt;&lt;7&lt;&lt;3</code> = <b>3072</b> (+ 가 먼저) · 52 를 원하면 <code>(3&lt;&lt;2)+(5&lt;&lt;3)</code></li><li><code>x = 3+4, 5-10;</code> → x = <b>7</b> (대입이 콤마보다 먼저) · <code>y = (3+4, 5-10, 2*3);</code> → <b>6</b> (괄호 안 콤마는 맨 뒤 값)</li><li>관계 연산 결과는 <b>참 1 / 거짓 0</b> (강의자료 11p 의 “참이면 0” 은 오타) · <code>^</code> 는 논리가 아니라 <b>비트 XOR</b></li><li><code>&lt;&lt;</code> 왼쪽 · <code>&gt;&gt;</code> 오른쪽 · <code>(double)3.45</code> → 3.450000 (반올림 X) · <code>0xDF</code> = 1101 1111 = 223</li></ul>
+</section>
 <section class="card">
 <h2>★ 3주차 시험문제 (<a href="프로그래밍언어실습-3주차.html">3주차 자세히</a>)</h2>
 <h3>① 23p — ex01_05-sizeof.c 실행결과</h3>
@@ -66,6 +99,10 @@ char: 1, int: 4, float: 4, double: 8
 <ul><li>출력 <code>성별: w, 나이: 21, 신장: 165.700000</code></li><li>빈칸 ① = <code>성별: %c, 나이: %d, 신장: </code> · double 출력 = <code>%lf</code> (printf 는 <code>%f</code> 도 가능, scanf 는 반드시 <code>%lf</code>)</li><li>오류 줄 = <code>height = 165.7</code> → <b><code>height = 165.7;</code></b> (세미콜론 누락 → 컴파일 오류)</li><li>실수는 소수점 아래 <b>6자리</b> → <code>165.700000</code></li></ul>
 <h3>③ 오류 수정 모음</h3>
 <ul><li><code>printf("%c", "A");</code> ❌ → <code>'A'</code> ✅ · <code>char a1 = "c";</code> ❌ → <code>'c'</code> ✅</li><li><code>short → %s</code> ❌ → <code>%d</code> · <code>long</code> → <code>%ld</code> · <code>0진법</code> ❌ → <code>10진법 %d</code></li><li><code>unsigned char (1)~(256)</code> ❌ → <code>0 ~ 255</code></li><li><code>#define CRT_SECUE_NO_WARNINGS</code> ❌ → <code>#define _CRT_SECURE_NO_WARNINGS</code></li></ul>
+</section>
+<section class="card">
+<h2>4주차 — 연산자 (<a href="프로그래밍언어실습-4주차.html">4주차 자세히</a>)</h2>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 산술 <code>+ - * / %</code> (정수÷정수 = 몫, <code>%</code> 나머지, 글자 % 는 <code>%%</code>) · 복합 대입 <code>c += a;</code> == <code>c = c + a;</code></li><li><span class="wk-tag star">⭐ 강조</span> — 증감: <code>n++</code>/<code>n--</code> 는 <b>바뀌기 전 값</b>, <code>++n</code>/<code>--n</code> 는 <b>바뀐 값</b>이 연산 결과</li><li><span class="wk-tag star">⭐ 강조</span> — 논리 <code>! &amp;&amp; ||</code> (0 이 아니면 참) · 단축 평가: <code>&amp;&amp;</code> 왼쪽 거짓 / <code>||</code> 왼쪽 참이면 오른쪽 계산 안 함</li><li><span class="wk-tag star">⭐ 강조</span> — 비트 <code>&amp; | ^ ~</code> · 시프트 <code>&lt;&lt; &gt;&gt;</code> (1칸 = ×2 / ÷2) · 1의 보수 = 뒤집기, 2의 보수 = 1의 보수 + 1</li><li><span class="wk-tag note">✍️ 필기</span> — 전등 80개: 1바이트 변수 80개 = 80바이트 / 비트로 = 80비트 = <b>10바이트</b></li><li>진법: <code>017</code> 8진수 = 15 · <code>0x1A</code> 16진수 = 26 · 형변환 <code>(int)3.14</code> = 3 · <code>(double)7/2</code> = 3.5 · 삼항 <code>(a &gt; b) ? a : b</code></li></ul>
 </section>
 <section class="card">
 <h2>3주차 — 변수 · 상수 · 자료형</h2>
@@ -91,10 +128,10 @@ char: 1, int: 4, float: 4, double: 8
 </section>
 <section class="card">
 <h2>✏️ 문제로 확인하기</h2>
-<ul><li><a href="../프로그래밍언어실습.html#quiz">프로그래밍언어실습 과목 페이지 — 퀴즈(객관식 10 · 주관식 10)</a></li><li><a href="../프로그래밍언어실습.html#s7">23p · 27p 빈칸채우기 직접 풀기</a></li></ul>
+<ul><li><a href="../프로그래밍언어실습.html#quiz">프로그래밍언어실습 과목 페이지 — 퀴즈(객관식 15 · 주관식 15)</a></li><li><a href="../프로그래밍언어실습.html#code">💻 코딩테스트 — 🔥 시험문제 5개 직접 짜서 채점</a></li><li><a href="../프로그래밍언어실습.html#s22">4주차 시험문제 ① ② ③ 직접 풀기</a></li><li><a href="../프로그래밍언어실습.html#s7">23p · 27p 빈칸채우기 직접 풀기</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>변수·상수·자료형 (ch03)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-4주차.html">‹ 이전 · <b>4주차</b><br><small>연산자 (ch05)</small></a><span></span></nav>
 
     <p class="wk-src">노션 「프로그래밍언어실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

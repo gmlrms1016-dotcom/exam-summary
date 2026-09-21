@@ -264,7 +264,7 @@ Number("10") + 5   ===&gt;  15      // 명시적 형변환 (숫자로 변환)</c
 
     <section class="card" id="s17">
         <h2>17. ★ 시험 포인트 — Node.js 주관식 · 주석 차이<span class="week">4주차</span></h2>
-        <div class="tip">🔴 <b>9/15 수업에서 시험 언급</b> — ① Node.js 가 무엇인지 <b>주관식</b> ② HTML·CSS·JS <b>주석 차이</b> ③ <b>++ 전위·후위</b> 차이 ④ <b>|| 와 &amp;&amp;</b> 차이 설명 ⑤ <b>== 와 ===</b> 차이</div>
+        <div class="tip">🔴 <b>9/15 수업에서 시험 언급</b> — ① Node.js 가 무엇인지 <b>주관식</b> ② HTML·CSS·JS <b>주석 차이</b> ③ <b>++ 전위·후위</b> 차이 ④ <b>|| 와 &amp;&amp;</b> 차이 설명 ⑤ <b>== 와 ===</b> 차이<br>💻 ③ ④ ⑤ 는 <a href="#code">코딩테스트의 🔥 시험문제</a>로 직접 코드를 짜서 채점할 수 있어요.</div>
         <h3>Node.js (주관식 예상 답안)</h3>
         <div class="tip"><b>Node.js</b> = 자바스크립트를 <b>브라우저 밖에서도 단독으로 실행</b>할 수 있게 해 주는 <b>런타임(실행 환경)</b>. 덕분에 JS 로 서버·데스크톱 앱 등 할 수 있는 일이 많아졌습니다.</div>
         <h3>언어별 주석</h3>
@@ -679,9 +679,70 @@ printName();                     // 인수 없음 → person의 값이 없음</c
     <section class="card" id="code">
         <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~4주차</span></h2>
         <div class="tip">📝 문제를 읽고 <b>전체 소스코드</b>를 붙여넣은 뒤 <b>▶ 채점하기</b>를 누르세요. 입력 예 말고도 <b>숨은 테스트</b> 여러 개로 실제로 실행해서 출력이 모두 같아야 통과예요. JavaScript 는 이 브라우저 안에서 실행돼요. 입력은 <code>prompt()</code> (또는 <code>window.prompt()</code>) 가 테스트 입력을 한 줄씩 돌려주고, 출력은 <code>console.log()</code> 로 합니다.</div>
+        <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드를 채점 문제로 만든 것 (빨간 테두리) · 4주차 시험 포인트 ③ ++ 전위·후위 · ④ || 와 && · ⑤ == 와 ===</div>
         <div id="ct-score"></div>
+        <h3 class="ct-group">🔥 시험문제 — 수업 중 “시험문제”라고 한 코드</h3>
+        <div class="ct" id="ct-w6" data-lang="js" data-must="[&quot;\\w+\\s*\\+\\+&quot;, &quot;\\+\\+\\s*\\w+&quot;]" data-must-msg="num8++ 와 ++num8 을 모두 써야 해요." data-exam="4주차 시험 포인트 ③ — console.log(num8++) 와 console.log(++num8) 의 차이">
+            <p class="ct-q"><span class="ct-no">1</span>++ 전위 · 후위<span class="ct-tag">4주차 · 증감 연산자</span></p>
+            <p class="ct-desc"><code>prompt()</code> 로 정수를 받아 <code>num8</code> 에 넣고(Number 로 변환), 수업 코드처럼 <code>console.log(num8++);</code> → <code>console.log(++num8);</code> → 마지막으로 <code>console.log(num8);</code> 을 출력하세요. <small>(입력은 prompt 에 차례로 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>10</code></pre><pre class="io ct-out"><code>10
+12
+12</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="++ 전위 · 후위 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "10", "expect": "10\n12\n12"}, {"stdin": "0", "expect": "0\n2\n2"}, {"stdin": "-5", "expect": "-5\n-3\n-3"}]</script>
+            <script type="text/plain" class="ct-answer">
+let num8 = Number(window.prompt("정수 입력!"));
+console.log(num8++);   // 후위: 지금 값을 찍고 → 1 증가
+console.log(++num8);   // 전위: 먼저 1 증가 → 그 값을 찍음
+console.log(num8);     // 최종 값
+</script>
+        </div>
+        <div class="ct" id="ct-w7" data-lang="js" data-must="[&quot;\\|\\|&quot;, &quot;&amp;&amp;&quot;]" data-must-msg="|| 와 &amp;&amp; 를 모두 써야 해요." data-exam="4주차 시험 포인트 ④ — || 와 &amp;&amp; 차이 설명 (0915_04.html changeVar)">
+            <p class="ct-q"><span class="ct-no">2</span>|| 와 &amp;&amp; 의 차이 (changeVar)<span class="ct-tag">4주차 · 단락 평가</span></p>
+            <p class="ct-desc"><code>prompt()</code> 로 값을 받아 <code>changeVar</code> 에 넣고, 첫 줄에 <code>changeVar || "입력없음"</code>, 둘째 줄에 <code>changeVar && "입력없음"</code> 의 결과를 출력하세요.</p>
+            <div class="ct-ex"><pre class="io ct-out"><code>입력없음</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="|| 와 &amp;&amp; 의 차이 (changeVar) 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "", "expect": "입력없음\n"}, {"stdin": "안녕", "expect": "안녕\n입력없음"}, {"stdin": "0", "expect": "0\n입력없음"}]</script>
+            <script type="text/plain" class="ct-answer">
+let changeVar = window.prompt("추가할 제목 입력!");
+console.log(changeVar || "입력없음");   // 왼쪽이 falsy 면 오른쪽, truthy 면 왼쪽
+console.log(changeVar && "입력없음");   // 왼쪽이 truthy 면 오른쪽, falsy 면 왼쪽
+</script>
+        </div>
+        <div class="ct" id="ct-w2" data-lang="js" data-exam="4주차 시험 포인트 ④ — || 와 &amp;&amp; 의 차이 (단락 평가)" data-must="[&quot;\\|\\|&quot;]" data-must-msg="|| 연산자를 써야 해요.">
+            <p class="ct-q"><span class="ct-no">3</span>입력이 없으면 "입력없음"<span class="ct-tag">4주차 · || 단락 평가</span></p>
+            <p class="ct-desc"><code>prompt()</code> 로 제목을 입력받아, <b>빈칸이면</b> <code>입력없음</code>, 아니면 입력한 값을 그대로 출력하세요. <b>||</b> 를 써서 한 줄로 처리합니다 (0915_04.html).</p>
+            <div class="ct-ex"><pre class="io ct-out"><code>입력없음</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="입력이 없으면 "입력없음" 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "", "expect": "입력없음"}, {"stdin": "안녕", "expect": "안녕"}, {"stdin": "0", "expect": "0"}]</script>
+            <script type="text/plain" class="ct-answer">
+let changeVar = window.prompt("추가할 제목 입력!");
+changeVar = changeVar || "입력없음";     // 왼쪽이 falsy("") 면 오른쪽
+console.log(changeVar);
+</script>
+        </div>
+        <div class="ct" id="ct-w4" data-lang="js" data-exam="4주차 시험 포인트 ⑤ — == 와 === 의 차이" data-must="[&quot;===&quot;]" data-must-msg="=== 를 써야 해요.">
+            <p class="ct-q"><span class="ct-no">4</span>== 와 === 비교 결과<span class="ct-tag">4주차 · == vs ===</span></p>
+            <p class="ct-desc"><code>prompt()</code> 로 값을 입력받아(문자열) 숫자 <b>10</b> 과 <code>==</code> · <code>===</code> 로 비교한 결과를 <code>== : true, === : false</code> 형식으로 출력하세요. <small>(입력은 prompt 에 차례로 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>10</code></pre><pre class="io ct-out"><code>== : true, === : false</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="== 와 === 비교 결과 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "10", "expect": "== : true, === : false"}, {"stdin": "5", "expect": "== : false, === : false"}, {"stdin": "10.0", "expect": "== : true, === : false"}]</script>
+            <script type="text/plain" class="ct-answer">
+let x = window.prompt("값 입력!");   // prompt 값은 항상 문자열
+console.log(`== : ${x == 10}, === : ${x === 10}`);   // == 는 형변환 후 비교, === 는 타입까지
+</script>
+        </div>
+        <h3 class="ct-group">✍️ 연습 문제 — 배운 범위 코드 짜기</h3>
         <div class="ct" id="ct-w1" data-lang="js" data-must="[&quot;Number\\s*\\(|parseInt\\s*\\(|parseFloat\\s*\\(&quot;]" data-must-msg="Number() 등으로 숫자로 바꿔야 해요.">
-            <p class="ct-q"><span class="ct-no">1</span>두 수 더하기 (prompt)<span class="ct-tag">4주차 · 형변환 · 템플릿 문자열</span></p>
+            <p class="ct-q"><span class="ct-no">5</span>두 수 더하기 (prompt)<span class="ct-tag">4주차 · 형변환 · 템플릿 문자열</span></p>
             <p class="ct-desc"><code>prompt()</code> 로 두 수를 입력받아 <code>결과값은 7</code> 처럼 출력하세요. prompt 값은 <b>문자열</b>이라 그냥 더하면 34 가 됩니다 → <code>Number()</code> 로 바꾸고 <b>템플릿 문자열</b>로 출력. <small>(입력은 prompt 에 차례로 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>3
 4</code></pre><pre class="io ct-out"><code>결과값은 7</code></pre></div>
@@ -695,22 +756,8 @@ let num2 = window.prompt("두번째 피연산자 입력!");
 console.log(`결과값은 ${Number(num1) + Number(num2)}`);   // 명시적 형변환 후 덧셈
 </script>
         </div>
-        <div class="ct" id="ct-w2" data-lang="js" data-must="[&quot;\\|\\|&quot;]" data-must-msg="|| 연산자를 써야 해요.">
-            <p class="ct-q"><span class="ct-no">2</span>입력이 없으면 "입력없음"<span class="ct-tag">4주차 · || 단락 평가</span></p>
-            <p class="ct-desc"><code>prompt()</code> 로 제목을 입력받아, <b>빈칸이면</b> <code>입력없음</code>, 아니면 입력한 값을 그대로 출력하세요. <b>||</b> 를 써서 한 줄로 처리합니다 (0915_04.html).</p>
-            <div class="ct-ex"><pre class="io ct-out"><code>입력없음</code></pre></div>
-            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="입력이 없으면 "입력없음" 소스코드"></textarea>
-            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
-            <div class="ct-result"></div>
-            <script type="application/json" class="ct-tests">[{"stdin": "", "expect": "입력없음"}, {"stdin": "안녕", "expect": "안녕"}, {"stdin": "0", "expect": "0"}]</script>
-            <script type="text/plain" class="ct-answer">
-let changeVar = window.prompt("추가할 제목 입력!");
-changeVar = changeVar || "입력없음";     // 왼쪽이 falsy("") 면 오른쪽
-console.log(changeVar);
-</script>
-        </div>
         <div class="ct" id="ct-w3" data-lang="js" data-must="[&quot;\\?[^:]*:&quot;]" data-must-msg="삼항 연산자(조건 ? A : B)를 써야 해요.">
-            <p class="ct-q"><span class="ct-no">3</span>짝수 · 홀수<span class="ct-tag">4주차 · 삼항 연산자</span></p>
+            <p class="ct-q"><span class="ct-no">6</span>짝수 · 홀수<span class="ct-tag">4주차 · 삼항 연산자</span></p>
             <p class="ct-desc"><code>prompt()</code> 로 정수를 입력받아 <b>삼항 연산자</b>로 <code>짝수</code> / <code>홀수</code> 를 출력하세요 (0915_03.js). <small>(입력은 prompt 에 차례로 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>10</code></pre><pre class="io ct-out"><code>짝수</code></pre></div>
             <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="짝수 · 홀수 소스코드"></textarea>
@@ -723,21 +770,8 @@ let res = var8 % 2 === 0 ? "짝수" : "홀수";   // 조건 ? 참 : 거짓
 console.log(res);
 </script>
         </div>
-        <div class="ct" id="ct-w4" data-lang="js" data-must="[&quot;===&quot;]" data-must-msg="=== 를 써야 해요.">
-            <p class="ct-q"><span class="ct-no">4</span>== 와 === 비교 결과<span class="ct-tag">4주차 · == vs ===</span></p>
-            <p class="ct-desc"><code>prompt()</code> 로 값을 입력받아(문자열) 숫자 <b>10</b> 과 <code>==</code> · <code>===</code> 로 비교한 결과를 <code>== : true, === : false</code> 형식으로 출력하세요. <small>(입력은 prompt 에 차례로 입력)</small></p>
-            <div class="ct-ex"><pre class="io ct-in"><code>10</code></pre><pre class="io ct-out"><code>== : true, === : false</code></pre></div>
-            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="== 와 === 비교 결과 소스코드"></textarea>
-            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
-            <div class="ct-result"></div>
-            <script type="application/json" class="ct-tests">[{"stdin": "10", "expect": "== : true, === : false"}, {"stdin": "5", "expect": "== : false, === : false"}, {"stdin": "10.0", "expect": "== : true, === : false"}]</script>
-            <script type="text/plain" class="ct-answer">
-let x = window.prompt("값 입력!");   // prompt 값은 항상 문자열
-console.log(`== : ${x == 10}, === : ${x === 10}`);   // == 는 형변환 후 비교, === 는 타입까지
-</script>
-        </div>
         <div class="ct" id="ct-w5" data-lang="js" data-must="[&quot;function\\s+greet|greet\\s*=&quot;]" data-must-msg="greet 함수를 만들어야 해요.">
-            <p class="ct-q"><span class="ct-no">5</span>이름 인사 함수 (방어 코드)<span class="ct-tag">4주차 · 함수 · truthy/falsy</span></p>
+            <p class="ct-q"><span class="ct-no">7</span>이름 인사 함수 (방어 코드)<span class="ct-tag">4주차 · 함수 · truthy/falsy</span></p>
             <p class="ct-desc">함수 <code>greet(name)</code> 를 만들어, name 이 <b>falsy</b>(빈칸)면 <code>이름이 없음</code>, 아니면 <code>안녕하세요, 홍길동님</code> 을 출력하세요. 이름은 <code>prompt()</code> 로 받아 함수에 <b>인수</b>로 넘깁니다. <small>(입력은 prompt 에 차례로 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>홍길동</code></pre><pre class="io ct-out"><code>안녕하세요, 홍길동님</code></pre></div>
             <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="이름 인사 함수 (방어 코드) 소스코드"></textarea>
@@ -765,6 +799,6 @@ greet(window.prompt("이름 입력!"));       // 입력값 = 인수
 <script src="quiz.js?v=202609181500"></script>
 <script src="review.js?v=202609181500"></script>
 <script src="weeks.js?v=202609181500"></script>
-<script src="codetest.js?v=202609211400"></script>
+<script src="codetest.js?v=202609212000"></script>
 </body>
 </html>

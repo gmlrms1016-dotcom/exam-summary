@@ -27,7 +27,7 @@
 
     <header class="page-head">
         <h1>프로그래밍언어실습 · 완전 정리</h1>
-        <p>1주차 ~ 3주차 C 언어 · 실행과정 · 출력 · 함수 · 변수 · 자료형 · 서식 · 상수 · scanf — <b>예제 코드 + 실제 출력 결과</b> 중심</p>
+        <p>1주차 ~ 4주차 C 언어 · 실행과정 · 출력 · 함수 · 변수 · 자료형 · 서식 · 상수 · scanf · 연산자 — <b>예제 코드 + 실제 출력 결과</b> 중심</p>
     </header>
 
     <div id="week-nav" data-subject="프로그래밍언어실습"></div>
@@ -52,6 +52,13 @@
         <a href="#s13">13.ASCII</a>
         <a href="#s14">14.const·#define</a>
         <a href="#s15">15.★scanf·&amp;</a>
+        <a href="#s16">16.★연산자·우선순위</a>
+        <a href="#s17">17.산술·대입</a>
+        <a href="#s18">18.★증감</a>
+        <a href="#s19">19.관계·논리·삼항</a>
+        <a href="#s20">20.★비트·시프트</a>
+        <a href="#s21">21.진법·형변환·콤마</a>
+        <a href="#s22">22.★시험문제</a>
         <a href="#quiz">✏️퀴즈</a>
         <a href="#code">💻코딩테스트</a>
     </nav>
@@ -288,7 +295,7 @@ void func2(void) { printf("제 이름은"); }</code></pre>
 
     <section class="card" id="s7">
         <h2>7. ★ 시험문제 — sizeof · printf 서식<span class="week">3주차</span></h2>
-        <div class="tip">🎯 <b>시험 포인트</b> — 강의자료 <b>23p [실습 1-05]</b> sizeof 실행결과 쓰기 · <b>27p [quiz 1-01]</b> <b>빈칸채우기</b>(printf 서식) + 오류 수정. 먼저 직접 풀어 보고 <b>💡 정답</b>을 펼쳐 확인하세요.</div>
+        <div class="tip">🎯 <b>시험 포인트</b> — 강의자료 <b>23p [실습 1-05]</b> sizeof 실행결과 쓰기 · <b>27p [quiz 1-01]</b> <b>빈칸채우기</b>(printf 서식) + 오류 수정. 먼저 직접 풀어 보고 <b>💡 정답</b>을 펼쳐 확인하세요. 두 문제 모두 <a href="#code">💻 코딩테스트</a>의 <b>🔥 시험문제</b>로도 직접 짜서 채점할 수 있어요.</div>
 
         <h3>먼저 암기 — 자료형 크기와 printf 서식</h3>
         <table class="ref">
@@ -732,8 +739,530 @@ b 의 주소 0x16dda6930</code></pre>
         <div class="tip">주소 값은 실행할 때마다 · 컴퓨터마다 다릅니다(위는 Mac 에서 실행한 값). 중요한 건 <b>&amp;변수 = 그 변수가 있는 메모리 번지</b> 라는 것.</div>
     </section>
 
+    <section class="card" id="s16">
+        <h2>16. 연산자 한눈에 · 우선순위 ★시험<span class="week">4주차</span></h2>
+        <div class="tip">📂 <b>4주차 자료</b> — 메모장 필기 <b>[이론] 연산자(operator).txt</b> · WorkC <b>w04/E00-op/ex01_00-op1.c</b> · 수업 화면 사진(<b>ex01_00-op2.c</b>)을 바탕으로 정리했고, 강의자료 <b>C-Lect04-ch05-연산자</b>는 쪽 번호 참고용입니다. 아래 코드의 주석과 <b>▶ 출력 결과</b>는 전부 직접 컴파일·실행한 값입니다.</div>
+        <h3>연산식 = 피연산자(operand) + 연산자(operator) + 피연산자</h3>
+        <pre><code class="language-c">2 + 3      // 2, 3 = 피연산자(operand) · + = 연산자(operator)
+-x         // 단항 연산자 : 피연산자 1개  (- ++ -- ! ~ sizeof (자료형))
+a * b      // 이항 연산자 : 피연산자 2개  (+ - * / % == &amp;&amp; &amp; &lt;&lt; = ...)
+(a &gt; b) ? a : b   // 삼항 연산자 : 피연산자 3개  (? : 하나뿐)</code></pre>
+        <table class="ref">
+            <tr><th>종류</th><th>연산자</th><th>강의자료</th></tr>
+            <tr><td>산술</td><td><code>+ - * / %</code></td><td>7~8p</td></tr>
+            <tr><td>증감 ★시험</td><td><code>++ --</code></td><td>9~10p</td></tr>
+            <tr><td>관계</td><td><code>&gt; &lt; &gt;= &lt;= == !=</code></td><td>11p</td></tr>
+            <tr><td>논리</td><td><code>! &amp;&amp; ||</code></td><td>12~14p</td></tr>
+            <tr><td>비트 · 시프트 ★시험</td><td><code>&amp; | ^ ~</code> · <code>&lt;&lt; &gt;&gt;</code></td><td>15~16p</td></tr>
+            <tr><td>대입</td><td><code>= += -= *= /= %=</code></td><td>17~18p</td></tr>
+            <tr><td>조건(삼항)</td><td><code>? :</code></td><td>19~20p</td></tr>
+            <tr><td>그 밖</td><td>형변환 <code>(자료형)</code> · <code>sizeof</code> · 콤마 <code>,</code></td><td>4p</td></tr>
+        </table>
+        <h3>연산자 우선순위 (필기 = 강의자료 4p · 21p)</h3>
+        <div class="tip">🎯 <b>괄호 → 단항 → 산술 → 관계 → 논리 → 조건(삼항) → 대입 → 콤마</b> (높은 것부터) · 우선순위가 같으면 보통 <b>왼쪽 → 오른쪽</b> (단항·대입은 오른쪽 → 왼쪽) · 시프트 <code>&lt;&lt; &gt;&gt;</code> 는 <b>산술보다 낮고 관계보다 높다</b></div>
+        <h3>예제 — 우선순위 (필기 <code>3&lt;&lt;2+5&lt;&lt;3</code>)</h3>
+        <pre><code class="language-c">// 연산자 우선순위 — 괄호 &gt; 단항 &gt; 산술 &gt; (시프트) &gt; 관계 &gt; 논리 &gt; 조건 &gt; 대입 &gt; 콤마
+#include &lt;stdio.h&gt;
+int main() {
+    printf("%d\n", 3 &lt;&lt; 2 + 5 &lt;&lt; 3);        // + 가 &lt;&lt; 보다 먼저 → 3 &lt;&lt; 7 &lt;&lt; 3 = 3072
+    printf("%d\n", (3 &lt;&lt; 2) + (5 &lt;&lt; 3));    // 괄호 먼저 → 12 + 40 = 52
+    printf("%d\n", 2 + 3 * 4);              // * 가 먼저 → 14
+    printf("%d\n", (2 + 3) * 4);            // 괄호 먼저 → 20
+    printf("%d\n", 5 &gt; 3 &amp;&amp; 2 &gt; 4);         // 관계(&gt;) 먼저 → 1 &amp;&amp; 0 → 0
+    return 0;
+}</code></pre>
+        <pre class="io"><code>3072
+52
+14
+20
+0</code></pre>
+        <div class="tip"><b>필기 확인</b> — <code>3&lt;&lt;2+5&lt;&lt;3</code> 은 <b>+ 가 &lt;&lt; 보다 먼저</b>라 실제로 <code>3&lt;&lt;7&lt;&lt;3</code> = <b>3072</b> 로 계산됩니다 (컴파일러도 “+ 가 먼저 계산된다” 경고). 필기의 <b>12+40</b> 처럼 <b>52</b> 를 얻으려면 <code>(3&lt;&lt;2)+(5&lt;&lt;3)</code> 처럼 <b>괄호</b>를 쳐야 해요 → 헷갈리면 괄호!</div>
+    </section>
+
+    <section class="card" id="s17">
+        <h2>17. 산술 · 대입(복합 대입) 연산자<span class="week">4주차</span></h2>
+        <div class="tip">📌 <b>정수 ÷ 정수 = 몫</b>(소수점 버림) · <code>%</code> = <b>나머지</b> (정수끼리만) · printf 에서 글자 <b>%</b> 를 찍으려면 <code>%%</code> · <code>c = c + a;</code> == <code>c += a;</code> (필기)</div>
+        <h3>예제 ① ex01_00-op1.c — 산술 연산자 (a=21, b=10)</h3>
+        <pre><code class="language-c">// ex01_00-op1.c ① 산술 연산자 + - * / %  (a=21, b=10)
+#include &lt;stdio.h&gt;
+int main() {
+    int a = 21;
+    int b = 10;
+    int c;
+
+    c = a + b;
+    printf("a+b= %d \n", c);     // 31
+    c = a - b;
+    printf("a-b= %d \n", c);     // 11
+    c = a * b;
+    printf("a*b= %d \n", c);     // 210
+    c = a / b;
+    printf("a/b= %d \n", c);     // 2   ← 정수 ÷ 정수 = 몫만 (소수점 버림)
+    c = a % b;
+    printf("a%%b= %d \n", c);    // 1   ← % 는 나머지 / 글자 % 를 찍으려면 %% 로 써야 한다
+    return 0;
+}</code></pre>
+        <pre class="io"><code>a+b= 31 
+a-b= 11 
+a*b= 210 
+a/b= 2 
+a%b= 1 </code></pre>
+        <div class="tip"><b>필기 정정</b> — 수업 파일처럼 <code>printf("a%b= %d \n", c);</code> 로 쓰면 <code>%b</code> 를 서식으로 읽어서 원하는 글자가 안 나옵니다 → 글자 % 는 <code>%%</code></div>
+        <h3>예제 ② ex01_00-op2.c (수업 화면) — 복합 대입 연산자</h3>
+        <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — 복합 대입 연산자  c += a 는 c = c + a
+#include &lt;stdio.h&gt;
+int main() {
+    int a = 21;
+    int c;
+
+    c = a;
+    printf("c: %d \n", c);          // 21
+    c += a;                         // c = c + a → 42
+    printf("c+=a: %d \n", c);
+    c -= a;                         // c = c - a → 21
+    printf("c-=a: %d \n", c);
+    c *= a;                         // c = c * a → 441
+    printf("c*=a: %d \n", c);
+    c /= a;                         // c = c / a → 21
+    printf("c/=a: %d \n", c);
+    c %= a;                         // c = c % a → 0
+    printf("c%%=a: %d \n", c);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>c: 21 
+c+=a: 42 
+c-=a: 21 
+c*=a: 441 
+c/=a: 21 
+c%=a: 0 </code></pre>
+        <table class="ref">
+            <tr><th>복합 대입</th><th>같은 뜻</th><th>a=21 일 때 c 의 변화</th></tr>
+            <tr><td><code>c += a;</code></td><td><code>c = c + a;</code></td><td>21 → 42</td></tr>
+            <tr><td><code>c -= a;</code></td><td><code>c = c - a;</code></td><td>42 → 21</td></tr>
+            <tr><td><code>c *= a;</code></td><td><code>c = c * a;</code></td><td>21 → 441</td></tr>
+            <tr><td><code>c /= a;</code></td><td><code>c = c / a;</code></td><td>441 → 21</td></tr>
+            <tr><td><code>c %= a;</code></td><td><code>c = c % a;</code></td><td>21 → 0</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s18">
+        <h2>18. 증감 연산자 ++ -- ★시험에 많이 나옴<span class="week">4주차</span></h2>
+        <div class="tip">🔴 필기 — <b>“시험에 많이 나옴(중요!)”</b> · 변수 <b>뒤</b>에 붙으면(후위) <b>지금 값을 먼저 쓰고</b> 나중에 증감 / <b>앞</b>에 붙으면(전위) <b>먼저 증감하고</b> 그 값을 씀 (강의자료 9p)</div>
+        <table class="ref">
+            <tr><th>식</th><th>연산 결과(쓰이는 값)</th><th>n=10 일 때 c = 식; 후</th></tr>
+            <tr><td><code>n++</code> (후위 증가)</td><td>1 증가되기 <b>전</b> 값</td><td>c=10, n=11</td></tr>
+            <tr><td><code>++n</code> (전위 증가)</td><td>1 증가된 값</td><td>c=11, n=11</td></tr>
+            <tr><td><code>n--</code> (후위 감소)</td><td>1 감소되기 <b>전</b> 값</td><td>c=10, n=9</td></tr>
+            <tr><td><code>--n</code> (전위 감소)</td><td>1 감소된 값</td><td>c=9, n=9</td></tr>
+        </table>
+        <h3>예제 — ex01_00-op1.c 증감 연산자</h3>
+        <pre><code class="language-c">// ex01_00-op1.c ② 증감 연산자 ++ --  ★시험에 많이 나옴
+#include &lt;stdio.h&gt;
+int main() {
+    int c;
+    int d = 10, e = 10, f = 10, g = 10;
+
+    c = d;          // c=10
+    d = d + 1;      // d=11  (d++ 와 같은 뜻)
+    printf("c,d: %d, %d \n", c, d);
+
+    d = 10;
+    c = d++;        // 후위: c 에 먼저 대입(10) → 그다음 d 증가(11)
+    printf("c,d: %d, %d \n", c, d);
+
+    c = ++e;        // 전위: e 먼저 증가(11) → 그 값을 c 에 대입(11)
+    printf("c,e: %d, %d \n", c, e);
+
+    c = f--;        // 후위: c=10, f=9
+    printf("c,f: %d, %d \n", c, f);
+
+    c = --g;        // 전위: g=9, c=9
+    printf("c,g: %d, %d \n", c, g);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>c,d: 10, 11 
+c,d: 10, 11 
+c,e: 11, 11 
+c,f: 10, 9 
+c,g: 9, 9 </code></pre>
+        <div class="tip">⚠️ 필기의 <code>d = d++;</code> · <code>d = ++d;</code> 처럼 <b>한 식에서 같은 변수를 두 번 바꾸면</b> 컴파일러마다 결과가 달라질 수 있어요. 연습은 위처럼 <code>c = d++;</code> (다른 변수에 받기) 로 하세요. → 시험 코드는 <a href="#s22">22. 시험문제</a></div>
+    </section>
+
+    <section class="card" id="s19">
+        <h2>19. 관계 · 논리 · 조건(삼항) · sizeof 연산자<span class="week">4주차</span></h2>
+        <div class="tip">📌 관계·논리 연산 결과는 <b>참 1 / 거짓 0</b> · 조건식에서는 <b>0 이 아니면 모두 참</b> · 문자도 코드값으로 비교 (<code>'a'</code> = 97)</div>
+        <h3>예제 ① ex01_00-op1.c — 관계 연산자</h3>
+        <pre><code class="language-c">// ex01_00-op1.c ③ 관계 연산자 — 참이면 1, 거짓이면 0
+#include &lt;stdio.h&gt;
+int main() {
+    int a = 21;
+    int b = 10;
+    int c;
+
+    c = a == b;     // 21 == 10 → 거짓 → 0
+    printf("a==b: %d \n", c);
+    c = a != b;     // 21 != 10 → 참 → 1
+    printf("a!=b: %d \n", c);
+    c = a &lt; b;      // 0
+    printf("a&lt;b: %d \n", c);
+    c = a &gt; b;      // 1
+    printf("a&gt;b: %d \n", c);
+    c = a &gt;= 21;    // 같아도 참 → 1
+    printf("a&gt;=21: %d \n", c);
+    c = a &lt;= 20;    // 0
+    printf("a&lt;=20: %d \n", c);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>a==b: 0 
+a!=b: 1 
+a&lt;b: 0 
+a&gt;b: 1 
+a&gt;=21: 1 
+a&lt;=20: 0 </code></pre>
+        <div class="tip"><b>강의자료 오타 주의</b> — 강의자료 11p 에 “참이면 0, 거짓이면 1” 로 적혀 있지만 위 실행 결과처럼 <b>참이면 1, 거짓이면 0</b> 이 맞습니다 (필기가 맞음, 13p 도 참 1).</div>
+        <h3>논리 연산자 진리표 (필기)</h3>
+        <table class="ref">
+            <tr><th>x</th><th>y</th><th>!x</th><th>x &amp;&amp; y</th><th>x || y</th><th>x ^ y (비트 XOR)</th></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+        </table>
+        <h3>예제 ② 논리 연산자 — 모든 경우</h3>
+        <pre><code class="language-c">// 논리 연산자 ! &amp;&amp; || — 결과는 참 1 / 거짓 0 (0 이 아니면 모두 참)
+#include &lt;stdio.h&gt;
+int main() {
+    printf("!0 = %d, !1 = %d\n", !0, !1);                       // NOT
+    printf("0&amp;&amp;0=%d 0&amp;&amp;1=%d 1&amp;&amp;0=%d 1&amp;&amp;1=%d\n", 0&amp;&amp;0, 0&amp;&amp;1, 1&amp;&amp;0, 1&amp;&amp;1);   // AND : 둘 다 참일 때만 1
+    printf("0||0=%d 0||1=%d 1||0=%d 1||1=%d\n", 0||0, 0||1, 1||0, 1||1);   // OR  : 하나라도 참이면 1
+    printf("0^0=%d 0^1=%d 1^0=%d 1^1=%d\n", 0^0, 0^1, 1^0, 1^1);           // ^ 는 비트 XOR : 서로 다르면 1
+    printf("3 &amp;&amp; -1 = %d\n", 3 &amp;&amp; -1);                          // 0 이 아닌 수는 모두 참 → 1
+    printf("!5 = %d\n", !5);                                    // 5 는 참 → NOT → 0
+    return 0;
+}</code></pre>
+        <pre class="io"><code>!0 = 1, !1 = 0
+0&amp;&amp;0=0 0&amp;&amp;1=0 1&amp;&amp;0=0 1&amp;&amp;1=1
+0||0=0 0||1=1 1||0=1 1||1=1
+0^0=0 0^1=1 1^0=1 1^1=0
+3 &amp;&amp; -1 = 1
+!5 = 0</code></pre>
+        <div class="tip"><b>필기 정정</b> — 필기에 <code>^</code> 가 논리 연산자로 적혀 있지만 C 의 <b>논리 연산자는 <code>! &amp;&amp; ||</code> 3개</b>(강의자료 13p)이고 <code>^</code> 는 <b>비트 연산자(XOR)</b>입니다. 0 과 1 만 넣으면 표 값은 같아요 — 서로 다르면 1.</div>
+        <h3>예제 ③ 단축 평가 (강의자료 14p · 실습 07shorteval.c)</h3>
+        <pre><code class="language-c">// 단축 평가 — 왼쪽만 보고 결과가 정해지면 오른쪽은 계산하지 않는다 (강의자료 14p)
+#include &lt;stdio.h&gt;
+int main() {
+    int n = 5;
+    int r;
+
+    r = (n &gt; 10) &amp;&amp; (++n &gt; 0);   // 왼쪽 거짓(0) → &amp;&amp; 결과는 무조건 0 → ++n 실행 안 됨
+    printf("r=%d, n=%d\n", r, n);
+
+    r = (n &gt; 1) || (++n &gt; 0);    // 왼쪽 참(1) → || 결과는 무조건 1 → ++n 실행 안 됨
+    printf("r=%d, n=%d\n", r, n);
+
+    r = (n &gt; 1) &amp;&amp; (++n &gt; 0);    // 왼쪽 참 → 오른쪽까지 봐야 함 → ++n 실행 (n=6)
+    printf("r=%d, n=%d\n", r, n);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>r=0, n=5
+r=1, n=5
+r=1, n=6</code></pre>
+        <h3>예제 ④ ex01_00-op2.c (수업 화면) — sizeof · 조건(삼항) 연산자</h3>
+        <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — sizeof 연산자 · 조건(삼항) 연산자
+#include &lt;stdio.h&gt;
+int main() {
+    int a = sizeof(int);            // sizeof 도 연산자 → int 크기 4
+    printf("int: %d \n", a);
+
+    int b = 100;
+    int c = sizeof(b);              // 변수 b 의 크기 → 4
+    printf("b: %d, sizeof(b): %d \n", b, c);
+
+    a = 10;
+    b = (a == 1) ? 20 : 30;         // 조건이 거짓(0) → 콜론 뒤 30
+    printf("b: %d \n", b);
+
+    b = (a == 10) ? 20 : 30;        // 조건이 참(1) → 콜론 앞 20
+    printf("b: %d \n", b);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>int: 4 
+b: 100, sizeof(b): 4 
+b: 30 
+b: 20 </code></pre>
+        <div class="tip">📌 <code>조건 ? 참일 때 값 : 거짓일 때 값</code> — 피연산자가 3개라 <b>삼항</b> 연산자 · <code>sizeof</code> 는 함수가 아니라 <b>연산자</b> (필기 “ziseof” → <b>sizeof</b>)</div>
+        <h3>예제 ⑤ 삼항 연산자로 최대값 · 최소값 (강의자료 19~20p)</h3>
+        <pre><code class="language-c">// 조건(삼항) 연산자로 최대값 · 최소값 (강의자료 19~20p)
+#include &lt;stdio.h&gt;
+int main() {
+    int x = 7, y = 3;
+    int max = (x &gt; y) ? x : y;     // 조건 참 → x
+    int min = (x &lt; y) ? x : y;     // 조건 거짓 → y
+    printf("max=%d, min=%d\n", max, min);
+    printf("'a'=%d, 'a' &gt; 'A' : %d\n", 'a', 'a' &gt; 'A');   // 문자도 코드값으로 비교 97 &gt; 65 → 1
+    return 0;
+}</code></pre>
+        <pre class="io"><code>max=7, min=3
+'a'=97, 'a' &gt; 'A' : 1</code></pre>
+    </section>
+
+    <section class="card" id="s20">
+        <h2>20. 비트 · 시프트 연산자 · 보수 ★시험<span class="week">4주차</span></h2>
+        <div class="tip">💡 <b>왜 비트 연산?</b> (필기) — 강의실 전등 <b>80개</b>의 켜기/끄기를 저장할 때 1바이트 변수 80개면 <b>80바이트</b>, 켜짐 1 · 꺼짐 0 을 <b>비트</b>로 저장하면 80비트 = <b>10바이트</b>면 충분</div>
+        <table class="ref">
+            <tr><th>연산자</th><th>이름</th><th>규칙</th></tr>
+            <tr><td><code>&amp;</code></td><td>AND</td><td>둘 다 1 이면 1</td></tr>
+            <tr><td><code>|</code></td><td>OR</td><td>하나라도 1 이면 1</td></tr>
+            <tr><td><code>^</code></td><td>XOR</td><td>서로 다르면 1</td></tr>
+            <tr><td><code>~</code></td><td>NOT (1의 보수)</td><td>0 ↔ 1 뒤집기</td></tr>
+            <tr><td><code>&lt;&lt;</code></td><td>왼쪽 시프트</td><td>왼쪽으로 n칸, 빈자리 0 · 1칸마다 ×2</td></tr>
+            <tr><td><code>&gt;&gt;</code></td><td>오른쪽 시프트</td><td>오른쪽으로 n칸 · 1칸마다 ÷2</td></tr>
+        </table>
+        <h3>예제 ① ex01_00-op2.c (수업 화면) — a=60, b=13 ★시험문제 ③</h3>
+        <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — 비트 연산자 &amp; | ^ ~ 와 시프트 &lt;&lt; &gt;&gt;   ★시험문제 ③
+#include &lt;stdio.h&gt;
+int main() {
+    int a = 60;          // 0011 1100
+    int b = 13;          // 0000 1101
+    int c;
+
+    c = a &amp; b;           // 0000 1100 = 12  (둘 다 1 인 자리만 1)
+    printf("a &amp; b: %d \n", c);
+    c = a | b;           // 0011 1101 = 61  (하나라도 1 이면 1)
+    printf("a | b: %d \n", c);
+    c = a ^ b;           // 0011 0001 = 49  (서로 다르면 1)
+    printf("a ^ b: %d \n", c);
+    c = ~a;              // 1100 0011 = -61 (0 ↔ 1 뒤집기 = 1의 보수)
+    printf("~a: %d \n", c);
+
+    c = a &lt;&lt; 2;          // 1111 0000 = 240 (왼쪽으로 2칸 = ×4)
+    printf("a &lt;&lt; 2: %d \n", c);
+    c = a &gt;&gt; 2;          // 0000 1111 = 15  (오른쪽으로 2칸 = ÷4)
+    printf("a &gt;&gt; 2: %d \n", c);
+    c &lt;&lt;= 2;             // c = c &lt;&lt; 2 → 15 → 60
+    printf("c &lt;&lt;= 2: %d \n", c);
+    c &gt;&gt;= 2;             // c = c &gt;&gt; 2 → 60 → 15
+    printf("c &gt;&gt;= 2: %d \n", c);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>a &amp; b: 12 
+a | b: 61 
+a ^ b: 49 
+~a: -61 
+a &lt;&lt; 2: 240 
+a &gt;&gt; 2: 15 
+c &lt;&lt;= 2: 60 
+c &gt;&gt;= 2: 15 </code></pre>
+        <h3>2진수로 풀어 보기</h3>
+        <table class="ref">
+            <tr><th>식</th><th>2진수</th><th>10진수</th></tr>
+            <tr><td>a</td><td>0011 1100</td><td>60</td></tr>
+            <tr><td>b</td><td>0000 1101</td><td>13</td></tr>
+            <tr><td>a &amp; b</td><td>0000 1100</td><td><b>12</b></td></tr>
+            <tr><td>a | b</td><td>0011 1101</td><td><b>61</b></td></tr>
+            <tr><td>a ^ b</td><td>0011 0001</td><td><b>49</b></td></tr>
+            <tr><td>~a</td><td>1100 0011</td><td><b>-61</b></td></tr>
+            <tr><td>a &lt;&lt; 2</td><td>1111 0000</td><td><b>240</b></td></tr>
+            <tr><td>a &gt;&gt; 2</td><td>0000 1111</td><td><b>15</b></td></tr>
+        </table>
+        <h3>예제 ② 시프트 — unsigned char data = 0x1A (필기 예제)</h3>
+        <pre><code class="language-c">// 시프트 연산자 — unsigned char data = 0x1A (필기 예제)
+#include &lt;stdio.h&gt;
+int main() {
+    unsigned char data = 0x1A;         // 0001 1010 = 26
+    unsigned char left, right;
+
+    left = data &lt;&lt; 2;                  // 왼쪽으로 2칸 → 0110 1000 = 104
+    right = data &gt;&gt; 2;                 // 오른쪽으로 2칸 → 0000 0110 = 6
+    printf("data=%d, data&lt;&lt;2=%d, data&gt;&gt;2=%d\n", data, left, right);
+
+    data = data &lt;&lt; 2;                  // data 자체를 바꾸면 104
+    data = data &gt;&gt; 2;                  // 104 를 다시 오른쪽 2칸 → 0001 1010 = 26 (원래 값)
+    printf("&lt;&lt;2 한 뒤 &gt;&gt;2 : %d\n", data);
+
+    unsigned char x = 0xFF;            // 1111 1111 = 255
+    x &lt;&lt;= 2;                           // x = x &lt;&lt; 2 → 1111 1100 = 252 (넘친 비트는 버려짐)
+    printf("0xFF &lt;&lt;= 2 : %d\n", x);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>data=26, data&lt;&lt;2=104, data&gt;&gt;2=6
+&lt;&lt;2 한 뒤 &gt;&gt;2 : 26
+0xFF &lt;&lt;= 2 : 252</code></pre>
+        <div class="tip"><b>필기 정정</b> — ① <code>&lt;&lt;</code> 는 <b>왼쪽</b>, <code>&gt;&gt;</code> 는 <b>오른쪽</b>으로 이동 (필기의 “x=&lt;&lt;2 //오른쪽” 은 반대) · 쓰는 법은 <code>x &lt;&lt;= 2;</code> (= <code>x = x &lt;&lt; 2;</code>, 필기 <code>c=c&gt;&gt;2</code> == <code>c&gt;&gt;=2</code>) ② <code>unsigned chr</code> → <code>unsigned <b>char</b></code> ③ 필기의 <code>0000 0110</code> 은 <b>원래 값 0x1A 를 &gt;&gt;2</b> 한 결과 — &lt;&lt;2 한 뒤에 다시 &gt;&gt;2 하면 0001 1010 = 26 으로 돌아옵니다.</div>
+        <table class="ref">
+            <tr><th>자료형</th><th>범위 (필기)</th></tr>
+            <tr><td><code>signed char</code></td><td>-128 ~ +127</td></tr>
+            <tr><td><code>unsigned char</code></td><td>0 ~ 255 (넘친 비트는 버려짐 → 0xFF &lt;&lt;= 2 = 252)</td></tr>
+        </table>
+        <h3>예제 ③ 보수 — 0011 1100 (필기)</h3>
+        <pre><code class="language-c">// 보수 — 0011 1100 (60)
+#include &lt;stdio.h&gt;
+int main() {
+    int n = 60;                    // 0011 1100
+    printf("1의 보수 ~n     = %d\n", ~n);        // 1100 0011 → -61  (0 과 1 을 뒤집기)
+    printf("2의 보수 ~n + 1 = %d\n", ~n + 1);    // 1100 0100 → -60  (1의 보수 + 1 = 음수 표현)
+    printf("-n              = %d\n", -n);        // 컴퓨터는 음수를 2의 보수로 저장 → -60
+    return 0;
+}</code></pre>
+        <pre class="io"><code>1의 보수 ~n     = -61
+2의 보수 ~n + 1 = -60
+-n              = -60</code></pre>
+        <table class="ref">
+            <tr><th></th><th>2진수</th><th>방법</th></tr>
+            <tr><td>원래 값</td><td>0011 1100</td><td>60</td></tr>
+            <tr><td>1의 보수</td><td>1100 0011</td><td>0 ↔ 1 뒤집기 = <code>~n</code> → -61</td></tr>
+            <tr><td>2의 보수</td><td>1100 0100</td><td>1의 보수 <b>+ 1</b> → -60 (컴퓨터가 음수를 저장하는 방법)</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s21">
+        <h2>21. 진법 · 형변환 · 콤마 연산자<span class="week">4주차</span></h2>
+        <div class="tip">📌 C 코드에서 <b>0 으로 시작하면 8진수</b>(<code>017</code>), <b>0x 로 시작하면 16진수</b>(<code>0x1A</code>) · 16진수 A=10 B=11 C=12 D=13 E=14 F=15 · 16진수 한 자리 = 2진수 4자리</div>
+        <h3>예제 ① 진법 표기</h3>
+        <pre><code class="language-c">// 진법 표기 — 0 으로 시작 = 8진수, 0x 로 시작 = 16진수
+#include &lt;stdio.h&gt;
+int main() {
+    printf("017  = %d\n", 017);      // 8진수 17 = 1×8 + 7 = 15
+    printf("0x1A = %d\n", 0x1A);     // 16진수 1A = 1×16 + 10 = 26
+    printf("0x5A = %d\n", 0x5A);     // 0101 1010 = 90
+    printf("0xDF = %d\n", 0xDF);     // D=13=1101, F=15=1111 → 1101 1111 = 223
+    printf("26 → 8진수 %o, 16진수 %X\n", 26, 26);   // 32, 1A
+    return 0;
+}</code></pre>
+        <pre class="io"><code>017  = 15
+0x1A = 26
+0x5A = 90
+0xDF = 223
+26 → 8진수 32, 16진수 1A</code></pre>
+        <div class="tip"><b>필기 정정</b> — <code>0xDF</code> 의 D=13 은 <b>1101</b> 이라 <code>1101 1111</code> = 223 입니다 (필기의 1110 은 14).</div>
+        <h3>예제 ② 형변환 <code>(자료형)</code> · 콤마 <code>,</code> 연산자</h3>
+        <pre><code class="language-c">// 형변환 연산자 (자료형) · 콤마 연산자 ,
+#include &lt;stdio.h&gt;
+int main() {
+    printf("(int)'A'   = %d\n", (int)'A');       // 문자 A 의 코드값 65
+    printf("(int)3.14  = %d\n", (int)3.14);      // 소수점 버림 → 3
+    printf("(int)3.46  = %d\n", (int)3.46);      // 반올림 아님 → 3
+    printf("(double)9  = %f\n", (double)9);      // 9.000000
+    printf("(double)3.45 = %f\n", (double)3.45);  // 원래 실수 → 그대로 3.450000 (반올림 X)
+    printf("7 / 2         = %d\n", 7 / 2);       // 정수 ÷ 정수 → 3
+    printf("(double)7 / 2 = %f\n", (double)7 / 2);  // 7.0 / 2 → 3.500000
+
+    int x, y;
+    x = 3 + 4, 5 - 10;          // 대입(=)이 콤마보다 먼저 → x = 7 (5-10 은 계산만 하고 버림)
+    y = (3 + 4, 5 - 10);        // 괄호 안은 콤마의 "맨 뒤" 값 → -5
+    printf("x = %d, y = %d\n", x, y);
+    y = (3 + 4, 5 - 10, 2 * 3); // 맨 뒤 2*3 → 6
+    printf("y = %d\n", y);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>(int)'A'   = 65
+(int)3.14  = 3
+(int)3.46  = 3
+(double)9  = 9.000000
+(double)3.45 = 3.450000
+7 / 2         = 3
+(double)7 / 2 = 3.500000
+x = 7, y = -5
+y = 6</code></pre>
+        <table class="ref">
+            <tr><th>필기</th><th>실제 결과</th><th>설명</th></tr>
+            <tr><td><code>int 'A' = 65</code></td><td><code>(int)'A'</code> → 65</td><td>문자의 코드값</td></tr>
+            <tr><td><code>int 3.14 = 3</code></td><td><code>(int)3.14</code> → 3</td><td>소수점 <b>버림</b> (3.46 도 3)</td></tr>
+            <tr><td><code>double 9 = 9.0</code></td><td><code>(double)9</code> → 9.000000</td><td>정수 → 실수</td></tr>
+            <tr><td><code>double 3.45=3.5</code> ❌</td><td><code>(double)3.45</code> → <b>3.450000</b></td><td>이미 실수라 그대로 · 반올림 안 함</td></tr>
+            <tr><td><code>double 7/2=7.0/2</code></td><td><code>(double)7 / 2</code> → 3.500000</td><td>7 을 먼저 실수로 → 실수 나눗셈 (7/2 는 3)</td></tr>
+            <tr><td><code>x=3+4,5-10 //-5</code> ❌</td><td><code>x = 3 + 4, 5 - 10;</code> → x=<b>7</b></td><td>대입이 콤마보다 먼저 · -5 가 되려면 <code>x = (3+4, 5-10);</code></td></tr>
+            <tr><td><code>y=3+4,5-10,2*3 //6</code></td><td><code>y = (3+4, 5-10, 2*3);</code> → 6</td><td>괄호 안 콤마는 <b>맨 뒤</b> 값 (필기 “뒤에 있는걸로 저장됨”)</td></tr>
+        </table>
+    </section>
+
+    <section class="card" id="s22">
+        <h2>22. ★ 4주차 시험문제 ① ② ③<span class="week">4주차</span></h2>
+        <div class="tip">🔥 <b>수업 중 “시험문제!”</b> — ① 메모장·C 파일의 <b>1)시험문제</b> (증감 + 우선순위) ② <b>2)시험문제</b> (콤마 + printf 안의 증감) ③ C 파일의 <b>3)시험문제</b> (비트 연산자, 수업 화면 ex01_00-op2.c) · 먼저 직접 풀고 <b>💡 정답</b>을 펼치세요. 아래 <a href="#code">💻 코딩테스트</a>의 <b>🔥 시험문제</b>로 직접 코드를 짜서 채점도 할 수 있어요.</div>
+        <h3>문제 ① 실행결과를 쓰시오 — 1)시험문제!</h3>
+        <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int x = 10;
+    int y = 10;
+    int z;
+    z = -x++ + ++y;
+    printf("x=%d\ty=%d\tz=%d\n",x,y,z);
+    return 0;
+}</code></pre>
+        <details class="akey"><summary>💡 정답(실행결과) 보기</summary>
+            <pre class="io"><code>x=11	y=11	z=1</code></pre>
+            <div class="tip"><b>풀이</b> — ① <code>x++</code> 는 후위라 <b>지금 값 10</b> 을 쓰고 나중에 x=11 ② 단항 <code>-</code> → -10 ③ <code>++y</code> 는 전위라 <b>먼저 11</b> 로 올리고 11 을 씀 ④ z = -10 + 11 = <b>1</b> → <b>x=11 y=11 z=1</b> (printf 안의 \t 는 탭)</div>
+        </details>
+        <div class="quiz-item" data-answers="1" data-explain="-x++ → -10 (x 는 나중에 11) · ++y → 11 · z = -10 + 11 = 1">
+            <p class="quiz-q"><span class="quiz-cat">①</span>실행 후 <b>z</b> 의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <h3>문제 ② 실행결과를 쓰시오 — 2)시험문제!</h3>
+        <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int x = 1, y = 1, z = 1;
+    ++x, y++;
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);
+    return 0;
+}</code></pre>
+        <details class="akey"><summary>💡 정답(실행결과) 보기</summary>
+            <pre class="io"><code>x:2		y:2		z:1 
+x:2		y:1		z:1 </code></pre>
+            <div class="tip"><b>풀이</b> — <code>++x, y++;</code> 콤마로 두 식 모두 실행 → x=2, y=2 (z=1) → 첫 줄 <b>2 2 1</b> · 두 번째 printf 는 <b>찍히는 값</b>이 중요: <code>x++</code> → 2 를 찍고 3 이 됨 / <code>--y</code> → 먼저 1 로 내리고 1 / <code>z--</code> → 1 을 찍고 0 이 됨 → <b>2 1 1</b> (끝난 뒤 실제 값은 x=3 y=1 z=0)</div>
+        </details>
+        <h3>확인용 — printf 한 줄을 더 넣어 끝난 뒤 값까지 보기</h3>
+        <pre><code class="language-c">// ★시험문제 ② — 콤마 연산자와 printf 안의 증감 연산자
+#include &lt;stdio.h&gt;
+int main() {
+    int x = 1, y = 1, z = 1;
+    ++x, y++;                                            // 콤마로 두 식 실행 → x=2, y=2
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // 2 2 1
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);    // x++ → 2 를 찍고 3 / --y → 1 로 내리고 1 / z-- → 1 을 찍고 0
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // 끝난 뒤 실제 값 3 1 0
+    return 0;
+}</code></pre>
+        <pre class="io"><code>x:2		y:2		z:1 
+x:2		y:1		z:1 
+x:3		y:1		z:0 </code></pre>
+        <div class="quiz-item" data-answers="2 1 1|211|2,1,1" data-explain="x++ 는 2 를 찍고 3 · --y 는 1 로 내리고 1 · z-- 는 1 을 찍고 0">
+            <p class="quiz-q"><span class="quiz-cat">②</span>두 번째 printf 에 찍히는 <b>x y z</b> 세 값은? (띄어서 쓰기)</p>
+            <input type="text" placeholder="예: 1 2 3" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <h3>문제 ③ 실행결과를 쓰시오 — 3)시험문제! 비트 연산자 (a=60, b=13)</h3>
+        <div class="tip">C 파일(ex01_00-op1.c)에는 <code>c = a &amp; b;</code> … 식만 있고 printf 가 빠져 있어서, 수업 화면(ex01_00-op2.c)의 전체 코드로 정리했습니다 → 코드·출력·2진수 풀이는 <a href="#s20">20. 비트 · 시프트</a> 예제 ①</div>
+        <div class="quiz-item" data-answers="12" data-explain="0011 1100 &amp; 0000 1101 = 0000 1100 = 12">
+            <p class="quiz-q"><span class="quiz-cat">③</span><code>a &amp; b</code> 의 값은? (a=60, b=13)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="49" data-explain="0011 1100 ^ 0000 1101 = 0011 0001 = 49 (서로 다르면 1)">
+            <p class="quiz-q"><span class="quiz-cat">③</span><code>a ^ b</code> 의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="-61" data-explain="~0011 1100 = 1100 0011 = -61 (1의 보수)">
+            <p class="quiz-q"><span class="quiz-cat">③</span><code>~a</code> 의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="240" data-explain="0011 1100 &lt;&lt; 2 = 1111 0000 = 240 (×4)">
+            <p class="quiz-q"><span class="quiz-cat">③</span><code>a &lt;&lt; 2</code> 의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 10 · 주관식 10<span class="week">1~3주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 15 · 주관식 15<span class="week">1~4주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -817,6 +1346,46 @@ b 의 주소 0x16dda6930</code></pre>
             <button class="opt" type="button" data-opt="D"><b>D.</b> <code>a1 = (c);</code></button>
             <div class="mcq-exp"><b>정답 B</b> — 작은따옴표 <code>'c'</code> 는 <b>문자 1개</b>(char), 큰따옴표 <code>"c"</code> 는 <b>문자열</b>이라 char 에 넣을 수 없습니다.</div>
         </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">11</span>필기한 <b>연산자 우선순위</b>(높은 것 → 낮은 것)로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 괄호 → 산술 → 단항 → 논리 → 관계 → 대입 → 조건(삼항) → 콤마</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 괄호 → 단항 → 관계 → 산술 → 논리 → 대입 → 조건(삼항) → 콤마</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 괄호 → 단항 → 산술 → 관계 → 논리 → 조건(삼항) → 대입 → 콤마</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 단항 → 괄호 → 산술 → 논리 → 관계 → 조건(삼항) → 콤마 → 대입</button>
+            <div class="mcq-exp"><b>정답 C</b> — 괄호 &gt; 단항 &gt; 산술 &gt; 관계 &gt; 논리 &gt; 조건(삼항) &gt; 대입 &gt; 콤마 (강의자료 4p · 21p)</div>
+        </div>
+        <div class="mcq" data-correct="A">
+            <p class="mcq-q"><span class="mcq-no">12</span><code>int x = 10, y = 10, z; z = -x++ + ++y;</code> 실행 후 x, y, z 는? ★시험문제</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> x=11, y=11, z=1</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> x=10, y=11, z=1</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> x=11, y=11, z=-1</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> x=11, y=10, z=0</button>
+            <div class="mcq-exp"><b>정답 A</b> — <code>x++</code> 는 10 을 쓰고 나중에 11 · <code>++y</code> 는 먼저 11 → z = -10 + 11 = 1</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">13</span><code>int a = 60, b = 13;</code> 일 때 <code>a &amp; b</code> 의 값은? ★시험문제</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 61</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 12</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 49</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> -61</button>
+            <div class="mcq-exp"><b>정답 B</b> — 0011 1100 &amp; 0000 1101 = 0000 1100 = 12 · <code>a | b</code> = 61 · <code>a ^ b</code> = 49 · <code>~a</code> = -61</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">14</span>강의실 전등 <b>80개</b>의 켜기/끄기(1·0)를 <b>비트</b>로 저장할 때 필요한 기억장소는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 80바이트</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 8바이트</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 1바이트</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 10바이트</button>
+            <div class="mcq-exp"><b>정답 D</b> — 80개 × 1비트 = 80비트 = 10바이트 (1바이트 변수 80개로 저장하면 80바이트)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">15</span><code>int x; x = 3 + 4, 5 - 10;</code> 실행 후 x 의 값은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> -5</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 7</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 6</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 2</button>
+            <div class="mcq-exp"><b>정답 B</b> — 대입(=)이 콤마보다 우선순위가 높아 x = 7 이 먼저 실행됩니다. <code>x = (3 + 4, 5 - 10);</code> 처럼 괄호가 있어야 맨 뒤 값 -5</div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers="main|main()|main함수" data-explain="C언어는 main() 함수에서 시작하고, 다른 함수는 호출해야 실행됩니다.">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>C 프로그램이 <b>실행을 시작</b>하는 함수 이름은?</p>
@@ -878,14 +1447,180 @@ b 의 주소 0x16dda6930</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
+        <div class="quiz-item" data-answers="1" data-explain="관계·논리 연산 결과는 참 1, 거짓 0 (강의자료 11p 의 ‘참이면 0’ 은 오타)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 11</span>관계 연산자 <code>21 &gt; 10</code> 처럼 결과가 <b>참</b>일 때의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="104" data-explain="0001 1010(26) 을 왼쪽으로 2칸 → 0110 1000 = 104">
+            <p class="quiz-q"><span class="quiz-cat">주관식 12</span><code>unsigned char data = 0x1A; data = data &lt;&lt; 2;</code> 실행 후 data 의 값(10진수)은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="c+=a;|c+=a" data-explain="c = c + a; == c += a; (필기)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 13</span><code>c = c + a;</code> 를 <b>복합 대입 연산자</b>로 줄여 쓰면?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="26" data-explain="1×16 + A(10) = 26">
+            <p class="quiz-q"><span class="quiz-cat">주관식 14</span>16진수 <code>0x1A</code> 를 10진수로 바꾸면?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="11000011" data-explain="0 과 1 을 뒤집으면 1100 0011 · 2의 보수는 여기에 +1 → 1100 0100">
+            <p class="quiz-q"><span class="quiz-cat">주관식 15</span><code>0011 1100</code> 의 <b>1의 보수</b>는? (8자리 2진수)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
     </section>
 
     <section class="card" id="code">
-        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">1~3주차</span></h2>
+        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">1~4주차</span></h2>
         <div class="tip">📝 문제를 읽고 <b>전체 소스코드</b>를 붙여넣은 뒤 <b>▶ 채점하기</b>를 누르세요. 입력 예 말고도 <b>숨은 테스트</b> 여러 개로 실제로 실행해서 출력이 모두 같아야 통과예요. C · Java 는 인터넷의 채점 서버(Wandbox · gcc)에서 실행돼요. VS 전용 <code>scanf_s</code> 대신 <code>scanf</code> 를 쓰세요 (<code>#define _CRT_SECURE_NO_WARNINGS</code> 는 있어도 괜찮아요).</div>
+        <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드를 채점 문제로 만든 것 (빨간 테두리) · 3주차 23p · 27p, 4주차 ① ② ③</div>
         <div id="ct-score"></div>
+        <h3 class="ct-group">🔥 시험문제 — 수업 중 “시험문제”라고 한 코드</h3>
+        <div class="ct" id="ct-ce1" data-lang="c" data-must="[&quot;sizeof\\s*\\(\\s*gender&quot;, &quot;sizeof\\s*\\(\\s*3\\.14159\\s*\\)&quot;]" data-must-msg="sizeof(gender) · sizeof(3.14159) 를 써야 해요." data-exam="3주차 강의자료 23p [실습 1-05] · 수업 중 &quot;시험문제!&quot; (sizeof 를 %f · %lf · %c 로 찍으면 틀림)">
+            <p class="ct-q"><span class="ct-no">1</span>sizeof 실행결과 (ex01_05-sizeof.c)<span class="ct-tag">3주차 · sizeof</span></p>
+            <p class="ct-desc">강의자료 23p [실습 1-05] 코드를 작성해 아래처럼 출력하세요. <b>sizeof 결과는 정수 → 전부 %d</b> 로 찍습니다.</p>
+            <div class="ct-ex"><pre class="io ct-out"><code>변수의 할당크기
+gender: 1, age: 4, weight: 4, height: 8
+
+자료형 크기
+char: 1, int: 4, float: 4, double: 8
+
+정수형상수: 4, 실수형상수: 8</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="sizeof 실행결과 (ex01_05-sizeof.c) 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "", "expect": "변수의 할당크기\ngender: 1, age: 4, weight: 4, height: 8\n\n자료형 크기\nchar: 1, int: 4, float: 4, double: 8\n\n정수형상수: 4, 실수형상수: 8\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+// ex01_05-sizeof.c
+#include <stdio.h>
+int main() {
+    char gender;
+    int age;
+    float weight;
+    double height;
+
+    printf("변수의 할당크기\n");
+    printf("gender: %d, age: %d, weight: %d, height: %d\n\n",
+        sizeof(gender), sizeof(age), sizeof(weight), sizeof(height));
+
+    printf("자료형 크기\n");
+    printf("char: %d, int: %d, float: %d, double: %d\n\n",
+        sizeof(char), sizeof(int), sizeof(float), sizeof(double));
+
+    printf("정수형상수: %d, 실수형상수: %d\n",
+        sizeof(10), sizeof(3.14159));
+    return 0;
+}
+</script>
+        </div>
+        <div class="ct" id="ct-ce2" data-lang="c" data-must="[&quot;%c&quot;, &quot;%lf|%f&quot;, &quot;double&quot;]" data-must-msg="char 는 %c, double 변수에는 %lf 를 써야 해요." data-exam="3주차 강의자료 27p [quiz 1-01] 빈칸채우기 · 오류 수정">
+            <p class="ct-q"><span class="ct-no">2</span>quiz 1-01 — 성별·나이·신장 출력<span class="ct-tag">3주차 · printf 서식</span></p>
+            <p class="ct-desc">강의자료 27p [quiz 1-01] 을 완성하세요. char <b>gender='w'</b>, int <b>age=21</b>, double <b>height=165.7</b> 을 변수에 넣고 printf <b>한 번</b>으로 출력합니다. (자료의 오류 줄도 고쳐야 컴파일돼요)</p>
+            <div class="ct-ex"><pre class="io ct-out"><code>성별: w, 나이: 21, 신장: 165.700000</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="quiz 1-01 — 성별·나이·신장 출력 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "", "expect": "성별: w, 나이: 21, 신장: 165.700000\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+// quiz01-01_ex01.c (정답)
+#include <stdio.h>
+int main() {
+    char gender;
+    int age;
+    double height;
+
+    gender = 'w';
+    age = 21;
+    height = 165.7;     // 자료에는 ; 가 빠져 있음 → 컴파일 오류
+
+    printf("성별: %c, 나이: %d, 신장: %lf\n", gender, age, height);
+    return 0;
+}
+</script>
+        </div>
+        <div class="ct" id="ct-ce3" data-lang="c" data-must="[&quot;-\\s*x\\s*\\+\\+\\s*\\+\\s*\\+\\+\\s*y&quot;]" data-must-msg="z = -x++ + ++y; 식을 그대로 써야 해요." data-exam="4주차 수업 · 메모장과 ex01_00-op1.c 의 &quot;1)시험문제!&quot;">
+            <p class="ct-q"><span class="ct-no">3</span>시험문제 ① — z = -x++ + ++y<span class="ct-tag">4주차 · 증감 · 우선순위</span></p>
+            <p class="ct-desc">정수 <b>x y</b> 를 입력받아 <code>z = -x++ + ++y;</code> 를 실행한 뒤 x, y, z 를 시험 코드와 같은 형식(<code>x=%d\ty=%d\tz=%d\n</code>, 사이는 탭)으로 출력하세요. 시험 원본은 x=10, y=10 입니다. <small>(입력은 키보드 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>10 10</code></pre><pre class="io ct-out"><code>x=11	y=11	z=1</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="시험문제 ① — z = -x++ + ++y 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "10 10\n", "expect": "x=11\ty=11\tz=1\n"}, {"stdin": "3 7\n", "expect": "x=4\ty=8\tz=5\n"}, {"stdin": "-2 0\n", "expect": "x=-1\ty=1\tz=3\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+int main() {
+    int x, y, z;
+    scanf("%d %d", &x, &y);
+    z = -x++ + ++y;      // x++ : 지금 값을 쓰고 나중에 증가 / ++y : 먼저 증가하고 그 값을 씀
+    printf("x=%d\ty=%d\tz=%d\n", x, y, z);
+    return 0;
+}
+</script>
+        </div>
+        <div class="ct" id="ct-ce4" data-lang="c" data-must="[&quot;\\+\\+\\s*x\\s*,\\s*y\\s*\\+\\+&quot;, &quot;x\\s*\\+\\+\\s*,\\s*--\\s*y\\s*,\\s*z\\s*--&quot;]" data-must-msg="++x, y++; 와 printf 안의 x++, --y, z-- 를 그대로 써야 해요." data-exam="4주차 수업 · 메모장과 ex01_00-op1.c 의 &quot;2)시험문제!&quot;">
+            <p class="ct-q"><span class="ct-no">4</span>시험문제 ② — ++x, y++ 와 printf 안의 증감<span class="ct-tag">4주차 · 콤마 · 증감</span></p>
+            <p class="ct-desc">정수 <b>x y z</b> 를 입력받아 <code>++x, y++;</code> 를 실행하고, 시험 코드처럼 <b>두 번</b> 출력하세요. 두 번째 printf 에는 <code>x++, --y, z--</code> 를 넣습니다. 형식: <code>x:%d\t\ty:%d\t\tz:%d \n</code> (시험 원본은 1 1 1). <small>(입력은 키보드 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>1 1 1</code></pre><pre class="io ct-out"><code>x:2		y:2		z:1 
+x:2		y:1		z:1 </code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="시험문제 ② — ++x, y++ 와 printf 안의 증감 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "1 1 1\n", "expect": "x:2\t\ty:2\t\tz:1 \nx:2\t\ty:1\t\tz:1 \n"}, {"stdin": "5 0 -3\n", "expect": "x:6\t\ty:1\t\tz:-3 \nx:6\t\ty:0\t\tz:-3 \n"}, {"stdin": "10 20 30\n", "expect": "x:11\t\ty:21\t\tz:30 \nx:11\t\ty:20\t\tz:30 \n"}]</script>
+            <script type="text/plain" class="ct-answer">
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+int main() {
+    int x, y, z;
+    scanf("%d %d %d", &x, &y, &z);
+    ++x, y++;                                            // 콤마 연산자 → 두 식 모두 실행
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);    // 후위는 증가 전 값, 전위는 감소 후 값이 찍힌다
+    return 0;
+}
+</script>
+        </div>
+        <div class="ct" id="ct-ce5" data-lang="c" data-must="[&quot;&amp;&quot;, &quot;\\|&quot;, &quot;\\^&quot;, &quot;~&quot;, &quot;&lt;&lt;&quot;, &quot;&gt;&gt;&quot;]" data-must-msg="&amp; | ^ ~ &lt;&lt; &gt;&gt; 를 모두 써야 해요." data-exam="4주차 수업 · ex01_00-op1.c 의 &quot;3)시험문제!&quot; (수업 화면 ex01_00-op2.c)">
+            <p class="ct-q"><span class="ct-no">5</span>시험문제 ③ — 비트 연산 &amp; | ^ ~ &lt;&lt; &gt;&gt;<span class="ct-tag">4주차 · 비트 연산자</span></p>
+            <p class="ct-desc">정수 <b>a b</b> 를 입력받아 <code>a & b</code>, <code>a | b</code>, <code>a ^ b</code>, <code>~a</code>, <code>a << 2</code>, <code>a >> 2</code> 를 수업 코드 형식으로 한 줄씩 출력하세요 (시험 원본은 a=60, b=13). <small>(입력은 키보드 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>60 13</code></pre><pre class="io ct-out"><code>a &amp; b: 12 
+a | b: 61 
+a ^ b: 49 
+~a: -61 
+a &lt;&lt; 2: 240 
+a &gt;&gt; 2: 15 </code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="시험문제 ③ — 비트 연산 &amp; | ^ ~ &lt;&lt; &gt;&gt; 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "60 13\n", "expect": "a & b: 12 \na | b: 61 \na ^ b: 49 \n~a: -61 \na << 2: 240 \na >> 2: 15 \n"}, {"stdin": "5 3\n", "expect": "a & b: 1 \na | b: 7 \na ^ b: 6 \n~a: -6 \na << 2: 20 \na >> 2: 1 \n"}, {"stdin": "255 15\n", "expect": "a & b: 15 \na | b: 255 \na ^ b: 240 \n~a: -256 \na << 2: 1020 \na >> 2: 63 \n"}]</script>
+            <script type="text/plain" class="ct-answer">
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+int main() {
+    int a, b, c;
+    scanf("%d %d", &a, &b);
+    c = a & b;      printf("a & b: %d \n", c);    // 둘 다 1 인 비트만 1
+    c = a | b;      printf("a | b: %d \n", c);    // 하나라도 1 이면 1
+    c = a ^ b;      printf("a ^ b: %d \n", c);    // 서로 다르면 1
+    c = ~a;         printf("~a: %d \n", c);       // 0 ↔ 1 뒤집기 (1의 보수)
+    c = a << 2;     printf("a << 2: %d \n", c);   // 왼쪽으로 2칸 (×4)
+    c = a >> 2;     printf("a >> 2: %d \n", c);   // 오른쪽으로 2칸 (÷4)
+    return 0;
+}
+</script>
+        </div>
+        <h3 class="ct-group">✍️ 연습 문제 — 배운 범위 코드 짜기</h3>
         <div class="ct" id="ct-c1" data-lang="c" data-must="[&quot;puts\\s*\\(&quot;]" data-must-msg="puts() 를 한 번 이상 써야 해요.">
-            <p class="ct-q"><span class="ct-no">1</span>세 줄 출력하기<span class="ct-tag">2주차 · 출력</span></p>
+            <p class="ct-q"><span class="ct-no">6</span>세 줄 출력하기<span class="ct-tag">2주차 · 출력</span></p>
             <p class="ct-desc">다음처럼 세 줄을 출력하세요. <b>printf</b> 와 <b>puts</b> 를 모두 써 보세요 (puts 는 자동 줄바꿈).</p>
             <div class="ct-ex"><pre class="io ct-out"><code>프로그래밍언어실습
 C 언어, 재미있다!
@@ -905,7 +1640,7 @@ int main(void) {
 </script>
         </div>
         <div class="ct" id="ct-c2" data-lang="c" data-must="[&quot;func1\\s*\\(\\s*\\)\\s*;&quot;, &quot;func2\\s*\\(\\s*\\)\\s*;&quot;]" data-must-msg="func1(); 과 func2(); 를 호출해야 해요.">
-            <p class="ct-q"><span class="ct-no">2</span>함수 호출 순서<span class="ct-tag">2주차 · 함수</span></p>
+            <p class="ct-q"><span class="ct-no">7</span>함수 호출 순서<span class="ct-tag">2주차 · 함수</span></p>
             <p class="ct-desc"><code>func1()</code> 은 <code>홍길동입니다.</code> 를, <code>func2()</code> 는 <code>제 이름은 </code> 을 출력합니다. main() 에서 <b>안녕하세요</b> 를 먼저 찍고 <b>func2 → func1</b> 순서로 호출해 아래처럼 출력하세요.</p>
             <div class="ct-ex"><pre class="io ct-out"><code>안녕하세요
 제 이름은 홍길동입니다.</code></pre></div>
@@ -928,7 +1663,7 @@ void func2(void) { printf("제 이름은 "); }
 </script>
         </div>
         <div class="ct" id="ct-c3" data-lang="c">
-            <p class="ct-q"><span class="ct-no">3</span>나이와 키 입력받아 출력<span class="ct-tag">3주차 · 변수 · scanf</span></p>
+            <p class="ct-q"><span class="ct-no">8</span>나이와 키 입력받아 출력<span class="ct-tag">3주차 · 변수 · scanf</span></p>
             <p class="ct-desc">정수 <b>나이</b>와 실수(double) <b>키</b>를 입력받아 아래 형식으로 출력하세요. 실수는 <code>%lf</code> 로 입력받고 출력은 소수점 6자리(기본)로 합니다. <small>(입력은 키보드 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>21 165.7</code></pre><pre class="io ct-out"><code>나이: 21살, 키: 165.700000cm</code></pre></div>
             <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="나이와 키 입력받아 출력 소스코드"></textarea>
@@ -948,7 +1683,7 @@ int main(void) {
 </script>
         </div>
         <div class="ct" id="ct-c4" data-lang="c">
-            <p class="ct-q"><span class="ct-no">4</span>숫자를 문자로 (ASCII)<span class="ct-tag">3주차 · ASCII</span></p>
+            <p class="ct-q"><span class="ct-no">9</span>숫자를 문자로 (ASCII)<span class="ct-tag">3주차 · ASCII</span></p>
             <p class="ct-desc">정수 하나를 입력받아 <b>그 숫자</b>와 <b>ASCII 코드에 해당하는 문자</b>를 <code>65 = A</code> 처럼 출력하세요. <small>(입력은 키보드 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>65</code></pre><pre class="io ct-out"><code>65 = A</code></pre></div>
             <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="숫자를 문자로 (ASCII) 소스코드"></textarea>
@@ -967,7 +1702,7 @@ int main(void) {
 </script>
         </div>
         <div class="ct" id="ct-c5" data-lang="c">
-            <p class="ct-q"><span class="ct-no">5</span>칸 맞춰 출력하기<span class="ct-tag">3주차 · 출력 칸수</span></p>
+            <p class="ct-q"><span class="ct-no">10</span>칸 맞춰 출력하기<span class="ct-tag">3주차 · 출력 칸수</span></p>
             <p class="ct-desc">정수 하나를 입력받아 <b>5칸 오른쪽 맞춤</b>, <b>5칸 0 채움</b>, <b>5칸 왼쪽 맞춤</b> 으로 한 줄에 출력하세요. 칸은 <code>[ ]</code> 로 감쌉니다. <small>(입력은 키보드 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>7</code></pre><pre class="io ct-out"><code>[    7] [00007] [7    ]</code></pre></div>
             <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="칸 맞춰 출력하기 소스코드"></textarea>
@@ -986,7 +1721,7 @@ int main(void) {
 </script>
         </div>
         <div class="ct" id="ct-c6" data-lang="c" data-must="[&quot;#define\\s+SCHOOL&quot;, &quot;const\\s+int\\s+YEAR&quot;]" data-must-msg="#define SCHOOL 과 const int YEAR 를 써야 해요.">
-            <p class="ct-q"><span class="ct-no">6</span>상수로 학교·연도 출력<span class="ct-tag">3주차 · const · #define</span></p>
+            <p class="ct-q"><span class="ct-no">11</span>상수로 학교·연도 출력<span class="ct-tag">3주차 · const · #define</span></p>
             <p class="ct-desc"><code>#define</code> 으로 <b>SCHOOL</b> 을 "동양미래대학교" 로, <code>const int</code> 로 <b>YEAR</b> 를 2026 으로 정의하세요. 학번(정수)을 입력받아 아래처럼 출력합니다. <small>(입력은 키보드 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>20232629</code></pre><pre class="io ct-out"><code>동양미래대학교 2026년 / 학번: 20232629</code></pre></div>
             <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="상수로 학교·연도 출력 소스코드"></textarea>
@@ -1006,6 +1741,53 @@ int main(void) {
 }
 </script>
         </div>
+        <div class="ct" id="ct-c7" data-lang="c">
+            <p class="ct-q"><span class="ct-no">12</span>사칙연산과 나머지<span class="ct-tag">4주차 · 산술 연산자</span></p>
+            <p class="ct-desc">정수 <b>a b</b> 를 입력받아 <code>+ - * / %</code> 결과를 아래 형식으로 출력하세요. 글자 <b>%</b> 를 찍으려면 printf 안에 <code>%%</code> 로 씁니다. <small>(입력은 키보드 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>21 10</code></pre><pre class="io ct-out"><code>a+b= 31 
+a-b= 11 
+a*b= 210 
+a/b= 2 
+a%b= 1 </code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="사칙연산과 나머지 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "21 10\n", "expect": "a+b= 31 \na-b= 11 \na*b= 210 \na/b= 2 \na%b= 1 \n"}, {"stdin": "7 2\n", "expect": "a+b= 9 \na-b= 5 \na*b= 14 \na/b= 3 \na%b= 1 \n"}, {"stdin": "100 7\n", "expect": "a+b= 107 \na-b= 93 \na*b= 700 \na/b= 14 \na%b= 2 \n"}]</script>
+            <script type="text/plain" class="ct-answer">
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+int main() {
+    int a, b;
+    scanf("%d %d", &a, &b);
+    printf("a+b= %d \n", a + b);
+    printf("a-b= %d \n", a - b);
+    printf("a*b= %d \n", a * b);
+    printf("a/b= %d \n", a / b);     // 정수 ÷ 정수 = 몫
+    printf("a%%b= %d \n", a % b);    // 나머지 · 글자 % 는 %%
+    return 0;
+}
+</script>
+        </div>
+        <div class="ct" id="ct-c8" data-lang="c" data-must="[&quot;\\?[^:;]*:&quot;]" data-must-msg="삼항 연산자(조건 ? A : B)를 써야 해요.">
+            <p class="ct-q"><span class="ct-no">13</span>두 수 중 큰 수<span class="ct-tag">4주차 · 조건(삼항) 연산자</span></p>
+            <p class="ct-desc">정수 <b>a b</b> 를 입력받아 <b>삼항 연산자</b>로 더 큰 수를 골라 <code>큰 수: 7</code> 처럼 출력하세요. <small>(입력은 키보드 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>3 7</code></pre><pre class="io ct-out"><code>큰 수: 7</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="두 수 중 큰 수 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "3 7\n", "expect": "큰 수: 7\n"}, {"stdin": "10 2\n", "expect": "큰 수: 10\n"}, {"stdin": "5 5\n", "expect": "큰 수: 5\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+int main() {
+    int a, b, max;
+    scanf("%d %d", &a, &b);
+    max = (a > b) ? a : b;    // 조건이 참이면 a, 거짓이면 b
+    printf("큰 수: %d\n", max);
+    return 0;
+}
+</script>
+        </div>
     </section>
 
 
@@ -1016,6 +1798,6 @@ int main(void) {
 <script src="quiz.js?v=202609181500"></script>
 <script src="review.js?v=202609181500"></script>
 <script src="weeks.js?v=202609181500"></script>
-<script src="codetest.js?v=202609211400"></script>
+<script src="codetest.js?v=202609212000"></script>
 </body>
 </html>

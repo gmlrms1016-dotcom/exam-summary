@@ -4,6 +4,7 @@
        <script type="application/json" class="ct-tests">[{"stdin":"…","expect":"…"}, …]</script>  테스트 케이스
        <script type="text/plain" class="ct-answer">…</script>                                     정답 코드(정답 보기)
        data-must='["정규식", …]'  data-must-msg="…"  (선택) 코드에 꼭 들어가야 하는 것 — 목록의 정규식이 모두 맞아야 함
+       data-exam="출처 설명"  (선택) 교수님이 "시험문제" 라고 한 코드 → 🔥 시험문제 배지와 빨간 테두리
    - 실행: C · Java = Wandbox 온라인 컴파일러(gcc · OpenJDK) / JS = 브라우저 Web Worker (prompt() 는 입력 줄을 차례로 돌려줌)
    - 채점: 줄 끝 공백 · 마지막 빈 줄만 무시하고 출력이 기대값과 같아야 통과
    - #ct-score 에 통과 개수 표시 · 시험 종료(?done=1) 면 정답 코드 모두 공개
@@ -22,6 +23,10 @@
         + ".ct-no{display:inline-block;min-width:26px;height:24px;line-height:24px;text-align:center;background:var(--main);color:#fff;border-radius:6px;font-size:13px;margin-right:8px;}"
         + ".ct-tag{display:inline-block;font-size:12px;font-weight:800;padding:1px 8px;border-radius:999px;background:#eaf2ec;color:var(--main);margin-left:6px;vertical-align:1px;}"
         + ".ct-desc{margin:4px 0 10px;line-height:1.7;}"
+        + ".ct.ct-exam{border:2px solid #d9534f;box-shadow:0 0 0 3px rgba(217,83,79,.12);}"
+        + ".ct-examtag{display:inline-block;font-size:12px;font-weight:900;padding:2px 9px;border-radius:999px;background:#d9534f;color:#fff;margin-right:8px;vertical-align:1px;}"
+        + ".ct-examsrc{display:block;font-size:12.5px;font-weight:700;color:#b34727;margin:2px 0 0;}"
+        + ".ct-group{margin:22px 0 4px;}"
         + ".ct-ex{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:8px 0 12px;}"
         + ".ct-ex pre{margin:0;}"
         + ".ct-ex pre.ct-in::before{content:\"⌨️ 입력 예\";}"
@@ -136,7 +141,9 @@
         var el = document.getElementById("ct-score");
         if (!el) return;
         var passed = probs.filter(function (p) { return p.dataset.passed === "1"; }).length;
-        el.textContent = "💻 통과한 문제 — " + passed + " / " + probs.length;
+        var exams = probs.filter(function (p) { return p.dataset.exam; });
+        var examPassed = exams.filter(function (p) { return p.dataset.passed === "1"; }).length;
+        el.textContent = "💻 통과한 문제 — " + passed + " / " + probs.length + (exams.length ? " · 🔥 시험문제 " + examPassed + " / " + exams.length : "");
     }
 
     function showView(res, tests, lang) {
@@ -163,6 +170,12 @@
 
     probs.forEach(function (p) {
         var lang = p.dataset.lang;
+        if (p.dataset.exam) {                                    // 시험문제 강조
+            p.classList.add("ct-exam");
+            var q = p.querySelector(".ct-q");
+            q.insertAdjacentHTML("afterbegin", '<span class="ct-examtag">🔥 시험문제</span>');
+            q.insertAdjacentHTML("beforeend", '<span class="ct-examsrc">📌 ' + esc(p.dataset.exam) + "</span>");
+        }
         var tests = JSON.parse(p.querySelector(".ct-tests").textContent);
         var answerEl = p.querySelector(".ct-answer");
         var answer = answerEl ? answerEl.textContent.replace(/^\n/, "") : "";
@@ -188,7 +201,8 @@
             var must = []; try { must = JSON.parse(p.dataset.must || "[]"); } catch (e) { }
             var missing = must.filter(function (m) { return !new RegExp(m).test(code); });
             btnRun.disabled = true;
-                        var res = [];
+            box.innerHTML = '<p class="ct-sum">⏳ 채점 중…</p>';
+            var res = [];
             var chain = Promise.resolve();
             tests.forEach(function (t, i) {
                 chain = chain.then(function () {
@@ -204,6 +218,7 @@
                 var v = showView(res, tests, lang);
                 var passed = v.all && !missing.length;
                 var warn = missing.length ? '<p class="ct-sum no">⚠️ 조건 미충족 — ' + esc(p.dataset.mustMsg || "문제에서 쓰라고 한 문법을 사용하세요.") + "</p>" : "";
+                if (missing.length && v.all) v.html = v.html.replace('<p class="ct-sum ok">🎉 통과! 테스트 ', '<p class="ct-sum no">출력은 맞았지만 아직 미통과 — 테스트 ');
                 box.innerHTML = warn + v.html;
                 p.dataset.passed = passed ? "1" : "";
                 if (passed) p.dataset.wrong = ""; else p.dataset.wrong = "1";
