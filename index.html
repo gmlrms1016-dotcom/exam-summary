@@ -15,7 +15,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202609181500"></script>
+    <script src="theme.js?v=202609212300"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1b4d39">
     <meta name="description" content="동양미래대학교 컴퓨터정보공학과 전공 시험 정리 — 과목별 남은 시간 실시간 카운트다운">
@@ -216,6 +216,51 @@
             .haksa-frame { height:360px; }
         }
 
+        /* ───── 학사일정 → 캘린더에 추가 (일정을 누르면 "캘린더에 추가할까요?") ───── */
+        .haksa-list li.haksa-item { cursor:pointer; border-radius:10px; transition:background .15s var(--ease); }
+        .haksa-list li.haksa-item:hover, .haksa-list li.haksa-item:focus-visible { background:var(--brand-bg); outline:none; }
+        .haksa-add { flex:0 0 auto; align-self:center; margin-left:auto; font-size:11.5px; font-weight:800; color:var(--main);
+                     opacity:.55; white-space:nowrap; }
+        .haksa-item:hover .haksa-add, .haksa-item:focus-visible .haksa-add { opacity:1; }
+        .haksa-add.rec { opacity:1; padding:1px 8px; border-radius:var(--r-pill); background:var(--accent-bg); color:var(--point); }
+        .haksa-add.done { opacity:1; color:var(--ink-2); }
+        .haksa-hint { padding:6px 16px 0; font-size:11.5px; color:var(--muted); }
+        .hcal { position:fixed; inset:0; z-index:10000; display:flex; align-items:center; justify-content:center; padding:16px; }
+        .hcal[hidden] { display:none; }
+        .hcal-dim { position:absolute; inset:0; background:rgba(10,20,15,.45); animation:hcalFade .18s ease both; }
+        .hcal-box { position:relative; width:100%; max-width:380px; background:var(--card); border:1px solid var(--line);
+                    border-radius:var(--r); box-shadow:0 18px 50px rgba(0,0,0,.25); padding:20px 18px 16px;
+                    animation:hcalUp .22s var(--ease) both; }
+        .hcal-q { margin:0 0 12px; font-size:17px; font-weight:800; color:var(--ink); }
+        .hcal-ev { padding:12px 14px; border-radius:var(--r-2); background:var(--brand-bg); }
+        .hcal-ev b { display:block; font-size:15px; color:var(--ink); line-height:1.45; }
+        .hcal-when { display:block; margin-top:3px; font-size:13px; font-weight:600; color:var(--ink-2); font-variant-numeric:tabular-nums; }
+        .hcal-dday { display:inline-block; margin-left:6px; padding:0 7px; border-radius:var(--r-pill); background:var(--card);
+                     color:var(--main); font-size:11.5px; font-weight:800; }
+        .hcal-msg { margin:10px 2px 0; font-size:13px; line-height:1.55; color:var(--ink-2); }
+        .hcal-msg.warn { color:var(--point); font-weight:700; }
+        .hcal-alarm { display:flex; align-items:center; gap:7px; margin:12px 2px 0; font-size:13px; color:var(--ink-2); cursor:pointer; }
+        .hcal-alarm input { width:16px; height:16px; accent-color:var(--main); }
+        .hcal-btns { display:grid; gap:8px; margin-top:14px; }
+        .hcal-btns button { position:relative; font:inherit; font-size:14.5px; font-weight:800; border:0; border-radius:var(--r-2);
+                            padding:12px 14px; cursor:pointer; text-align:left; background:var(--brand-bg); color:var(--main); }
+        .hcal-btns button.pri { background:var(--main); color:#fff; }
+        .hcal-btns button small { display:block; margin-top:1px; font-size:11.5px; font-weight:600; opacity:.8; }
+        .hcal-btns .hcal-rec { position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:11px; font-weight:800;
+                               padding:1px 8px; border-radius:var(--r-pill); background:rgba(255,255,255,.25); }
+        .hcal-btns button.hcal-no { text-align:center; background:none; color:var(--ink-2); padding:8px; }
+        .hcal-toast { position:fixed; left:50%; bottom:calc(28px + env(safe-area-inset-bottom,0px)); z-index:10001; max-width:calc(100% - 32px);
+                      transform:translate(-50%,20px); opacity:0; padding:11px 18px; border-radius:var(--r-pill); background:#1f2a24; color:#fff;
+                      font-size:13.5px; font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,.25); transition:all .25s var(--ease); pointer-events:none; }
+        .hcal-toast.on { transform:translate(-50%,0); opacity:1; }
+        @keyframes hcalFade { from { opacity:0; } }
+        @keyframes hcalUp { from { opacity:0; transform:translateY(18px); } }
+        @media (max-width:480px){
+            .hcal { align-items:flex-end; padding:0; }
+            .hcal-box { max-width:none; border-radius:var(--r) var(--r) 0 0; padding-bottom:calc(16px + env(safe-area-inset-bottom,0px)); }
+            .haksa-add { align-self:flex-start; margin-left:0; }
+        }
+
         @media (max-width:640px){ .biggrid { grid-template-columns:minmax(0,1fr); } .head h1{ font-size:21px; } }
         @media (prefers-reduced-motion:reduce){ * { animation:none !important; transition:none !important; } }
     </style>
@@ -244,6 +289,7 @@
                     <button class="haksa-arrow" type="button" id="haksa-next" aria-label="다음 달">›</button>
                 </div>
             </div>
+            <p class="haksa-hint">일정을 누르면 캘린더에 추가할 수 있어요</p>
             <ul class="haksa-list" id="haksa-list"><li class="haksa-empty">학사일정을 불러오는 중…</li></ul>
             <div class="haksa-foot">
                 <button class="haksa-more" type="button" id="haksa-cal-btn" aria-expanded="false">전체 달력 보기</button>
@@ -933,6 +979,139 @@
     function esc(t) { var x = document.createElement("span"); x.textContent = t; return x.innerHTML; }
 
     var groups = [], byGroup = {}, idx = 0, today = ymd(new Date());
+    var shown = [];
+
+    /* ───── 캘린더에 추가 — 일정을 누르면 "캘린더에 추가할까요?" ─────
+       · Google 캘린더 : 일정 만들기 화면을 새 탭으로 (저장만 누르면 됨)
+       · iPhone · Mac · 기타 : .ics 파일 (iPhone Safari 는 바로 "캘린더에 추가" 화면)
+       · 제안 로직 : 이미 추가한 일정 / 지난 일정 / 곧 다가오는 중요 일정(추가 추천)을 구분해서 묻고,
+                    기기와 마지막 선택으로 추천 캘린더를 먼저 보여 줌 · 추가 기록은 이 브라우저(localStorage)에만 저장 */
+    var CAL_KEY = "haksa-cal:", PREF_KEY = "haksa-cal-pref";
+    var IMPORTANT = /시험|고사|수강신청|수강정정|등록|납부|개강|종강|방학|휴업|보강|강의평가|신청|마감|졸업/;
+    function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (x) { return null; } }
+    function evKey(e) { return CAL_KEY + e.start + "|" + e.end + "|" + e.title; }
+    function isAdded(e) { return !!store(evKey(e)); }
+    function daysTo(d) { return Math.round((new Date(d + "T00:00:00") - new Date(today + "T00:00:00")) / 864e5); }
+    function recommend(e) { var d = daysTo(e.start); return e.end >= today && d <= 21 && IMPORTANT.test(e.title); }
+    function addMark(e) {
+        if (isAdded(e)) return '<span class="haksa-add done">✓ 추가함</span>';
+        if (recommend(e)) return '<span class="haksa-add rec">📅 추가 추천</span>';
+        return '<span class="haksa-add" aria-hidden="true">＋ 캘린더</span>';
+    }
+    function compact(d) { return d.replace(/-/g, ""); }
+    function nextDay(d) { var x = new Date(d + "T00:00:00"); x.setDate(x.getDate() + 1); return ymd(x); }
+    var isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+    var isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+
+    function googleUrl(e) {
+        return "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+            "&text=" + encodeURIComponent(e.title) +
+            "&dates=" + compact(e.start) + "/" + compact(nextDay(e.end)) +
+            "&details=" + encodeURIComponent("동양미래대학교 학사일정 · " + e.label + "\n" + SRC) +
+            "&location=" + encodeURIComponent("동양미래대학교");
+    }
+    function icsText(t) { return String(t).replace(/\\/g, "\\\\").replace(/;/g, "\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n"); }
+    function fold(line) {                          /* iCalendar 는 한 줄 75바이트 — 넘으면 다음 줄 앞에 공백 하나 */
+        var out = "", n = 0, chars = Array.from(line);
+        for (var i = 0; i < chars.length; i++) {
+            var ch = chars[i], b = unescape(encodeURIComponent(ch)).length;
+            if (n + b > 73) { out += "\r\n "; n = 1; }
+            out += ch; n += b;
+        }
+        return out;
+    }
+    function makeIcs(e, alarm) {
+        var stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
+        var uid = compact(e.start) + "-" + Math.abs(Array.prototype.reduce.call(e.title, function (h, c) { return (h * 31 + c.charCodeAt(0)) | 0; }, 7)) + "@exam-summary";
+        var L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//exam-summary//haksa//KO", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+                 "BEGIN:VEVENT", "UID:" + uid, "DTSTAMP:" + stamp,
+                 "DTSTART;VALUE=DATE:" + compact(e.start), "DTEND;VALUE=DATE:" + compact(nextDay(e.end)),
+                 "SUMMARY:" + icsText(e.title),
+                 "DESCRIPTION:" + icsText("동양미래대학교 학사일정 · " + e.label + "\n" + SRC),
+                 "LOCATION:" + icsText("동양미래대학교"), "TRANSP:TRANSPARENT"];
+        if (alarm) L.push("BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:" + icsText(e.title), "TRIGGER:-PT15H", "END:VALARM");  /* 하루 전 오전 9시 */
+        L.push("END:VEVENT", "END:VCALENDAR");
+        return L.map(fold).join("\r\n") + "\r\n";
+    }
+    function downloadIcs(e, alarm) {
+        var ics = makeIcs(e, alarm);
+        if (isIOS) { location.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics); return; }
+        var url = URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" }));
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "학사일정-" + e.start + "-" + e.title.replace(/[\\/:*?"<>|\[\]]/g, "").slice(0, 40) + ".ics";
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    }
+
+    var toastEl = null, toastT = 0;
+    function toast(msg) {
+        if (!toastEl) { toastEl = document.createElement("div"); toastEl.className = "hcal-toast"; toastEl.setAttribute("role", "status"); document.body.appendChild(toastEl); }
+        toastEl.textContent = msg;
+        requestAnimationFrame(function () { toastEl.classList.add("on"); });
+        clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("on"); }, 2600);
+    }
+
+    var dlg = document.createElement("div");
+    dlg.className = "hcal"; dlg.hidden = true;
+    dlg.innerHTML = '<div class="hcal-dim"></div><div class="hcal-box" role="dialog" aria-modal="true" aria-labelledby="hcal-q">' +
+        '<p class="hcal-q" id="hcal-q"></p><div class="hcal-ev"><b id="hcal-title"></b><span class="hcal-when" id="hcal-when"></span></div>' +
+        '<p class="hcal-msg" id="hcal-msg"></p>' +
+        '<label class="hcal-alarm"><input type="checkbox" id="hcal-alarm" checked> 하루 전 오전 9시에 알림 받기 <small>(.ics)</small></label>' +
+        '<div class="hcal-btns" id="hcal-btns"></div></div>';
+    document.body.appendChild(dlg);
+    var cur = null, lastFocus = null;
+    var OPTS = {
+        google: { label: "Google 캘린더에 추가", sub: "새 탭에서 일정 만들기 화면이 열려요 → 저장" },
+        ics:    { label: "iPhone · Mac · 기타 캘린더", sub: isIOS ? "“캘린더에 추가” 화면이 열려요" : ".ics 파일을 받아 열면 캘린더에 들어가요" }
+    };
+    function openAsk(e) {
+        cur = e; lastFocus = document.activeElement;
+        var d = daysTo(e.start), past = e.end < today, added = isAdded(e);
+        var dd = past ? "지난 일정" : (e.start <= today ? (e.start === e.end ? "오늘" : "진행 중") : "D-" + d);
+        document.getElementById("hcal-q").textContent = added ? "✓ 이미 추가한 일정이에요" : (past ? "지난 일정이에요" : "📅 캘린더에 추가할까요?");
+        document.getElementById("hcal-title").textContent = e.title;
+        document.getElementById("hcal-when").innerHTML = esc(e.label) + ' <span class="hcal-dday">' + dd + "</span>";
+        var msg = document.getElementById("hcal-msg");
+        msg.className = "hcal-msg" + (added || past ? " warn" : "");
+        msg.textContent = added ? "이 브라우저에서 이미 캘린더에 추가했어요. 다시 추가하면 캘린더에 두 번 들어갈 수 있어요. 그래도 추가할까요?"
+                        : past ? "이미 끝난 일정이에요. 기록용으로 그래도 캘린더에 추가할까요?"
+                        : recommend(e) ? "놓치면 안 되는 일정이에요 — 캘린더에 넣어 두고 알림을 받아 보세요."
+                        : "하루 종일 일정으로 추가돼요.";
+        var alarmBox = document.getElementById("hcal-alarm");
+        alarmBox.checked = !past;
+        var pref = store(PREF_KEY) || (isApple ? "ics" : "google");
+        var order = pref === "ics" ? ["ics", "google"] : ["google", "ics"];
+        document.getElementById("hcal-btns").innerHTML = order.map(function (k, i) {
+            return '<button type="button" data-cal="' + k + '"' + (i === 0 ? ' class="pri"' : "") + ">" + OPTS[k].label +
+                   "<small>" + OPTS[k].sub + "</small>" + (i === 0 ? '<span class="hcal-rec">추천</span>' : "") + "</button>";
+        }).join("") + '<button type="button" class="hcal-no">' + (added || past ? "추가 안 함" : "나중에 할게요") + "</button>";
+        dlg.hidden = false;
+        dlg.querySelector("[data-cal]").focus();
+    }
+    function closeAsk() { dlg.hidden = true; cur = null; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+    dlg.addEventListener("click", function (ev) {
+        if (ev.target.classList.contains("hcal-dim") || ev.target.closest(".hcal-no")) { closeAsk(); return; }
+        var b = ev.target.closest("[data-cal]");
+        if (!b || !cur) return;
+        var e = cur, how = b.getAttribute("data-cal");
+        if (how === "google") window.open(googleUrl(e), "_blank", "noopener");
+        else downloadIcs(e, document.getElementById("hcal-alarm").checked);
+        store(PREF_KEY, how);
+        store(evKey(e), new Date().toISOString());
+        closeAsk();
+        render();
+        toast(how === "google" ? "Google 캘린더가 열렸어요 — 저장을 누르면 추가돼요" : (isIOS ? "“추가”를 누르면 캘린더에 들어가요" : "받은 .ics 파일을 열면 캘린더에 추가돼요"));
+    });
+    document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && !dlg.hidden) closeAsk(); });
+    list.addEventListener("click", function (ev) {
+        var li = ev.target.closest(".haksa-item");
+        if (li) openAsk(shown[+li.getAttribute("data-i")]);
+    });
+    list.addEventListener("keydown", function (ev) {
+        var li = ev.target.closest && ev.target.closest(".haksa-item");
+        if (li && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); openAsk(shown[+li.getAttribute("data-i")]); }
+    });
 
     function render() {
         var g = groups[idx];
@@ -940,13 +1119,14 @@
         prevBtn.disabled = idx === 0;
         nextBtn.disabled = idx === groups.length - 1;
         var first = -1;
-        list.innerHTML = byGroup[g].map(function (e, i) {
+        shown = byGroup[g];
+        list.innerHTML = shown.map(function (e, i) {
             var past = e.end < today;
             var now  = !past && e.start <= today;
             if (!past && first < 0) first = i;
             var tag = now ? '<span class="haksa-now">' + (e.start === e.end ? "오늘" : "진행 중") + "</span>" : "";
-            return "<li" + (past ? ' class="is-past"' : "") + '><span class="haksa-d">' + esc(e.label) +
-                   '</span><span class="haksa-n">' + esc(e.title) + tag + "</span></li>";
+            return '<li class="haksa-item' + (past ? " is-past" : "") + '" data-i="' + i + '" role="button" tabindex="0" title="눌러서 캘린더에 추가">' +
+                   '<span class="haksa-d">' + esc(e.label) + '</span><span class="haksa-n">' + esc(e.title) + tag + "</span>" + addMark(e) + "</li>";
         }).join("");
         /* 끝난 일정은 위로 넘기고, 진행 중·다가오는 일정부터 보이도록 목록을 자동 스크롤 */
         list.scrollTop = first > 0 ? list.children[first].offsetTop - list.children[0].offsetTop : 0;

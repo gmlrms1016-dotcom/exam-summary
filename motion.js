@@ -125,10 +125,15 @@
         // ---- ⑤ 히어로: 오로라 · 자리별 숫자 굴림 · 진행바 반짝임 (포인터 반응 없음) ----
         ".hero::before{content:'';position:absolute;inset:-35%;pointer-events:none;",
         "background:radial-gradient(32% 42% at 28% 38%,rgba(138,217,176,.30),transparent 70%),radial-gradient(28% 36% at 72% 64%,rgba(255,255,255,.14),transparent 70%);",
-        "animation:mo-aurora 16s ease-in-out infinite alternate}",
+        "animation:mo-aurora-move 9s ease-in-out infinite alternate,mo-aurora-sway 13s ease-in-out infinite alternate;will-change:translate,rotate,scale}",
         "html[data-theme=dark] .hero::before{background:radial-gradient(32% 42% at 28% 38%,rgba(0,149,246,.18),transparent 70%),",
         "radial-gradient(28% 36% at 72% 64%,rgba(76,181,249,.08),transparent 70%)}",
-        "@keyframes mo-aurora{0%{transform:translate3d(-5%,-3%,0) rotate(0deg)}50%{transform:translate3d(4%,3%,0) rotate(6deg)}100%{transform:translate3d(-2%,4%,0) rotate(-5deg)}}",
+        // 색은 그대로 두고 빛 덩어리가 카드 위를 좌우·위아래로 흐르게 — 이동(9초)과 기울기·크기(13초)를 따로 돌려 매번 다른 모양
+        "@keyframes mo-aurora-move{from{translate:-14% -7%}to{translate:14% 8%}}",
+        "@keyframes mo-aurora-sway{from{rotate:-10deg;scale:1}to{rotate:12deg;scale:1.15}}",
+        // 밝은 모드: 오른쪽 위 하이라이트(.hero::after)는 은은하게 밝아졌다 흐려졌다
+        ".hero::after{animation:mo-glow 6s ease-in-out infinite alternate}",
+        "@keyframes mo-glow{from{opacity:1}to{opacity:.45}}",
         ".hero-clock .seg{overflow:hidden}",
         ".mo-d{display:inline-block}",
         ".mo-d.mo-tick{animation:mo-roll .55s " + SPRING + "}",
