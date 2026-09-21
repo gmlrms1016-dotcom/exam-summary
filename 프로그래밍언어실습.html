@@ -60,6 +60,7 @@
         <a href="#s21">21.진법·형변환·콤마</a>
         <a href="#s22">22.★시험문제</a>
         <a href="#quiz">✏️퀴즈</a>
+        <a href="#output">🖥️출력맞히기</a>
         <a href="#code">💻코딩테스트</a>
     </nav>
 
@@ -295,7 +296,7 @@ void func2(void) { printf("제 이름은"); }</code></pre>
 
     <section class="card" id="s7">
         <h2>7. ★ 시험문제 — sizeof · printf 서식<span class="week">3주차</span></h2>
-        <div class="tip">🎯 <b>시험 포인트</b> — 강의자료 <b>23p [실습 1-05]</b> sizeof 실행결과 쓰기 · <b>27p [quiz 1-01]</b> <b>빈칸채우기</b>(printf 서식) + 오류 수정. 먼저 직접 풀어 보고 <b>💡 정답</b>을 펼쳐 확인하세요. 두 문제 모두 <a href="#code">💻 코딩테스트</a>의 <b>🔥 시험문제</b>로도 직접 짜서 채점할 수 있어요.</div>
+        <div class="tip">🎯 <b>시험 포인트</b> — 강의자료 <b>23p [실습 1-05]</b> sizeof 실행결과 쓰기 · <b>27p [quiz 1-01]</b> <b>빈칸채우기</b>(printf 서식) + 오류 수정. 먼저 직접 풀어 보고 <b>💡 정답</b>을 펼쳐 확인하세요. 두 문제 모두 <a href="#code">💻 코딩테스트</a>의 <b>🔥 시험문제</b>로도 직접 짜서 채점할 수 있고, <a href="#output">🖥️ 출력 결과 맞히기</a>에서 실행결과 쓰기도 채점돼요.</div>
 
         <h3>먼저 암기 — 자료형 크기와 printf 서식</h3>
         <table class="ref">
@@ -1178,7 +1179,7 @@ y = 6</code></pre>
 
     <section class="card" id="s22">
         <h2>22. ★ 4주차 시험문제 ① ② ③<span class="week">4주차</span></h2>
-        <div class="tip">🔥 <b>수업 중 “시험문제!”</b> — ① 메모장·C 파일의 <b>1)시험문제</b> (증감 + 우선순위) ② <b>2)시험문제</b> (콤마 + printf 안의 증감) ③ C 파일의 <b>3)시험문제</b> (비트 연산자, 수업 화면 ex01_00-op2.c) · 먼저 직접 풀고 <b>💡 정답</b>을 펼치세요. 아래 <a href="#code">💻 코딩테스트</a>의 <b>🔥 시험문제</b>로 직접 코드를 짜서 채점도 할 수 있어요.</div>
+        <div class="tip">🔥 <b>수업 중 “시험문제!”</b> — ① 메모장·C 파일의 <b>1)시험문제</b> (증감 + 우선순위) ② <b>2)시험문제</b> (콤마 + printf 안의 증감) ③ C 파일의 <b>3)시험문제</b> (비트 연산자, 수업 화면 ex01_00-op2.c) · 먼저 직접 풀고 <b>💡 정답</b>을 펼치세요. 아래 <a href="#output">🖥️ 출력 결과 맞히기</a>에서 실행결과를 적어 채점하고, <a href="#code">💻 코딩테스트</a>의 <b>🔥 시험문제</b>로 직접 코드를 짜서 채점도 할 수 있어요.</div>
         <h3>문제 ① 실행결과를 쓰시오 — 1)시험문제!</h3>
         <pre><code class="language-c">#include &lt;stdio.h&gt;
 int main() {
@@ -1476,6 +1477,365 @@ x:3		y:1		z:0 </code></pre>
             <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
+    <section class="card" id="output">
+        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">1~4주차</span></h2>
+        <div class="tip">📝 시험의 <b>“실행결과를 쓰시오”</b> 대비 — 코드를 눈으로 따라가며 화면에 찍힐 결과를 적고 <b>확인</b>을 누르세요. 줄마다 <b>Enter</b>, 띄어쓰기 개수·빈 줄은 채점에서 무시하고 <b>글자·숫자·기호</b>는 정확히 봐요 (칸수 문제만 띄어쓰기까지). <code>\t</code>(탭)은 띄어쓰기로 적어도 돼요. 정답은 모두 <b>실제로 실행한 결과</b>예요.</div>
+        <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드 (빨간 테두리) · 3주차 23p · 27p, 4주차 ① ② ③</div>
+        <div id="oq-score"></div>
+        <h3 class="oq-group">🔥 시험문제 — 수업 중 “시험문제”라고 한 코드</h3>
+        <div class="oq" id="oq-oc1" data-exam="3주차 강의자료 23p [실습 1-05] 실행결과 쓰기">
+            <p class="oq-q"><span class="oq-no">1</span>ex01_05-sizeof.c 실행결과<span class="oq-tag">3주차 · sizeof</span></p>
+            <pre><code class="language-c">// ex01_05-sizeof.c
+#include &lt;stdio.h&gt;
+int main() {
+    char gender;
+    int age;
+    float weight;
+    double height;
+
+    printf("변수의 할당크기\n");
+    printf("gender: %d, age: %d, weight: %d, height: %d\n\n",
+        sizeof(gender), sizeof(age), sizeof(weight), sizeof(height));
+
+    printf("자료형 크기\n");
+    printf("char: %d, int: %d, float: %d, double: %d\n\n",
+        sizeof(char), sizeof(int), sizeof(float), sizeof(double));
+
+    printf("정수형상수: %d, 실수형상수: %d\n",
+        sizeof(10), sizeof(3.14159));
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+변수의 할당크기
+gender: 1, age: 4, weight: 4, height: 8
+
+자료형 크기
+char: 1, int: 4, float: 4, double: 8
+
+정수형상수: 4, 실수형상수: 8
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — sizeof 는 크기(바이트)를 <b>정수</b>로 돌려줘요 · 변수 크기 = 자료형 크기 (char 1 · int 4 · float 4 · double 8) · <code>10</code> 은 정수 상수라 int → 4, <code>3.14159</code> 는 실수 상수라 double → 8</div>
+        </div>
+        <div class="oq" id="oq-oc2" data-exam="3주차 강의자료 27p [quiz 1-01]">
+            <p class="oq-q"><span class="oq-no">2</span>quiz 1-01 실행결과<span class="oq-tag">3주차 · printf 서식</span></p>
+            <pre><code class="language-c">// quiz01-01_ex01.c
+#include &lt;stdio.h&gt;
+int main() {
+    char gender;
+    int age;
+    double height;
+
+    gender = 'w';
+    age = 21;
+    height = 165.7;
+
+    printf("성별: %c, 나이: %d, 신장: %lf\n", gender, age, height);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+성별: w, 나이: 21, 신장: 165.700000
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>%c</code> 는 문자 1개, <code>%d</code> 는 정수, <code>%lf</code>(<code>%f</code>) 는 실수를 <b>소수점 아래 6자리</b>까지 → 165.700000</div>
+        </div>
+        <div class="oq" id="oq-oc3" data-exam="4주차 메모장·ex01_00-op1.c 의 &quot;1)시험문제!&quot;">
+            <p class="oq-q"><span class="oq-no">3</span>1)시험문제! z = -x++ + ++y<span class="oq-tag">4주차 · 증감 · 우선순위</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int x = 10;
+    int y = 10;
+    int z;
+    z = -x++ + ++y;
+    printf("x=%d\ty=%d\tz=%d\n", x, y, z);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+x=11	y=11	z=1
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>x++</code> 는 후위 → <b>지금 값 10</b> 을 쓰고 나중에 x=11 · 단항 <code>-</code> → -10 · <code>++y</code> 는 전위 → <b>먼저 11</b> · z = -10 + 11 = 1 (\t 는 탭 — 띄어쓰기로 적어도 돼요)</div>
+        </div>
+        <div class="oq" id="oq-oc4" data-exam="4주차 메모장·ex01_00-op1.c 의 &quot;2)시험문제!&quot;">
+            <p class="oq-q"><span class="oq-no">4</span>2)시험문제! printf 안의 x++, --y, z--<span class="oq-tag">4주차 · 콤마 · 증감</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int x = 1, y = 1, z = 1;
+    ++x, y++;
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+x:2		y:2		z:1 
+x:2		y:1		z:1 
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>++x, y++;</code> 콤마로 두 식 모두 실행 → x=2 y=2 · 두 번째 printf 는 <b>찍히는 값</b>: <code>x++</code> → 2 (그 뒤 3) · <code>--y</code> → 1 · <code>z--</code> → 1 (그 뒤 0)</div>
+        </div>
+        <div class="oq" id="oq-oc5" data-exam="4주차 ex01_00-op1.c 의 &quot;3)시험문제!&quot; (수업 화면 ex01_00-op2.c)">
+            <p class="oq-q"><span class="oq-no">5</span>3)시험문제! 비트 연산 (a=60, b=13)<span class="oq-tag">4주차 · 비트 연산자</span></p>
+            <pre><code class="language-c">// ex01_00-op2.c
+#include &lt;stdio.h&gt;
+int main() {
+    int a = 60;          // 0011 1100
+    int b = 13;          // 0000 1101
+    int c;
+
+    c = a &amp; b;
+    printf("a &amp; b: %d \n", c);
+    c = a | b;
+    printf("a | b: %d \n", c);
+    c = a ^ b;
+    printf("a ^ b: %d \n", c);
+    c = ~a;
+    printf("~a: %d \n", c);
+    c = a &lt;&lt; 2;
+    printf("a &lt;&lt; 2: %d \n", c);
+    c = a &gt;&gt; 2;
+    printf("a &gt;&gt; 2: %d \n", c);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+a & b: 12 
+a | b: 61 
+a ^ b: 49 
+~a: -61 
+a << 2: 240 
+a >> 2: 15 
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — & 0000 1100 = 12 · | 0011 1101 = 61 · ^ 0011 0001 = 49 · ~ 1100 0011 = -61 · &lt;&lt;2 1111 0000 = 240 · &gt;&gt;2 0000 1111 = 15</div>
+        </div>
+        <h3 class="oq-group">✍️ 배운 코드 — 실행 결과 예측하기</h3>
+        <div class="oq" id="oq-oc6">
+            <p class="oq-q"><span class="oq-no">6</span>printf 와 puts 의 줄바꿈<span class="oq-tag">2주차 · printf · puts</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    printf("hello");
+    printf("world\n");
+    printf("C 언어\n");
+    printf("첫째 줄\n둘째 줄\n");
+    puts("puts 는");
+    puts("자동 줄바꿈");
+    printf("끝\n");
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+helloworld
+C 언어
+첫째 줄
+둘째 줄
+puts 는
+자동 줄바꿈
+끝
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — printf 는 <b>\n 을 넣어야</b> 줄이 바뀌어서 hello 뒤에 world 가 붙어요 · puts 는 출력한 뒤 <b>자동으로 줄바꿈</b></div>
+        </div>
+        <div class="oq" id="oq-oc7">
+            <p class="oq-q"><span class="oq-no">7</span>함수 호출 순서<span class="oq-tag">2주차 · 함수 호출</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+void func1(void);
+void func2(void);
+int main(void) {
+    printf("안녕하세요\n");
+    func2();
+    func1();
+    func1();
+    return 0;
+}
+void func1(void) { printf("gdhong 입니다. \n"); }
+void func2(void) { printf("제 이름은 "); }</code></pre>
+            <script type="text/plain" class="oq-expect">
+안녕하세요
+제 이름은 gdhong 입니다. 
+gdhong 입니다. 
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 실행 순서는 <b>main 에서 부른 순서</b> · func2 에는 \n 이 없어서 다음 func1 출력이 같은 줄에 붙어요 · 같은 함수를 두 번 부르면 두 번 실행</div>
+        </div>
+        <div class="oq" id="oq-oc8">
+            <p class="oq-q"><span class="oq-no">8</span>%d %o %x %X %c %f<span class="oq-tag">3주차 · 서식 지정자</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int data = 100;
+    printf("%d %o %x\n", data, data, data);
+    printf("%X %x\n", 255, 255);
+    printf("%c %d\n", 'A', 'a');
+    printf("%c\n", 66);
+    printf("%f\n", 3.14);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+100 144 64
+FF ff
+A 97
+B
+3.140000
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 100 = 8진수 144 (1×64+4×8+4) = 16진수 64 · 255 = FF(%X 대문자) / ff(%x 소문자) · 'a' = 97 · 66 을 %c 로 → B · %f 는 소수점 6자리</div>
+        </div>
+        <div class="oq" id="oq-oc9" data-space="exact">
+            <p class="oq-q"><span class="oq-no">9</span>[%5d] [%05d] [%-5d]<span class="oq-tag">3주차 · 출력 칸수</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    printf("[%5d]\n", 7);
+    printf("[%05d]\n", 7);
+    printf("[%-5d]\n", 7);
+    printf("[%5d]\n", 777);
+    printf("[%2d]\n", 12345);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+[    7]
+[00007]
+[7    ]
+[  777]
+[12345]
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — %5d = 5칸 <b>오른쪽</b> 맞춤(앞을 빈칸으로) · %05d = 빈칸 대신 0 · %-5d = <b>왼쪽</b> 맞춤(뒤를 빈칸으로) · 숫자가 칸보다 길면 그냥 다 찍음</div>
+        </div>
+        <div class="oq" id="oq-oc10">
+            <p class="oq-q"><span class="oq-no">10</span>signed · unsigned char<span class="oq-tag">3주차 · 부호 비트</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    unsigned char u1 = 255;
+    signed char   s1 = 255;
+    unsigned char u2 = 128;
+    signed char   s2 = 128;
+    printf("%d %d\n", u1, s1);
+    printf("%d %d\n", u2, s2);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+255 -1
+128 -128
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 255 = 1111 1111 → unsigned 는 255, signed 는 맨 앞 비트 1 = 음수 → -1 · 128 = 1000 0000 → unsigned 128, signed -128</div>
+        </div>
+        <div class="oq" id="oq-oc11">
+            <p class="oq-q"><span class="oq-no">11</span>c = d++ 와 c = ++e<span class="oq-tag">4주차 · 증감</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int c;
+    int d = 10, e = 10, f = 10, g = 10;
+
+    c = d++;
+    printf("c,d: %d, %d \n", c, d);
+    c = ++e;
+    printf("c,e: %d, %d \n", c, e);
+    c = f--;
+    printf("c,f: %d, %d \n", c, f);
+    c = --g;
+    printf("c,g: %d, %d \n", c, g);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+c,d: 10, 11 
+c,e: 11, 11 
+c,f: 10, 9 
+c,g: 9, 9 
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 후위(d++ · f--) 는 <b>바뀌기 전 값</b>이 c 에 · 전위(++e · --g) 는 <b>바뀐 값</b>이 c 에 들어가요</div>
+        </div>
+        <div class="oq" id="oq-oc12">
+            <p class="oq-q"><span class="oq-no">12</span>몫 · 나머지 · 복합 대입<span class="oq-tag">4주차 · 산술 · 대입</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int a = 21, b = 10, c;
+    printf("%d %d %d\n", a / b, a % b, a * b);
+    printf("a%%b=%d\n", a % b);
+    c = a;
+    c += a;
+    printf("%d\n", c);
+    c %= a;
+    printf("%d\n", c);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+2 1 210
+a%b=1
+42
+0
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 정수 ÷ 정수 = <b>몫</b> 2 · % = 나머지 1 · printf 의 <code>%%</code> 는 글자 % · c += a → 42 · 42 % 21 → 0</div>
+        </div>
+        <div class="oq" id="oq-oc13">
+            <p class="oq-q"><span class="oq-no">13</span>참 1 · 거짓 0<span class="oq-tag">4주차 · 관계 · 논리 · 삼항</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int a = 21, b = 10;
+    printf("%d %d %d\n", a == b, a != b, a &gt;= 21);
+    printf("%d %d %d\n", !0, 3 &amp;&amp; 0, 0 || 5);
+    printf("%d\n", (a &gt; b) ? a : b);
+    printf("%d\n", 'a' &gt; 'A');
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+0 1 1
+1 0 1
+21
+1
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 관계·논리 연산 결과는 <b>참 1 / 거짓 0</b> · 0 이 아닌 수는 참 (5 는 참) · 삼항은 조건이 참이면 콜론 앞 → 21 · 'a'(97) &gt; 'A'(65) → 1</div>
+        </div>
+        <div class="oq" id="oq-oc14">
+            <p class="oq-q"><span class="oq-no">14</span>0x1A 를 &lt;&lt; 와 &gt;&gt;<span class="oq-tag">4주차 · 시프트 · 진법</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    unsigned char data = 0x1A;
+    printf("%d\n", data);
+    printf("%d\n", data &lt;&lt; 2);
+    printf("%d\n", data &gt;&gt; 2);
+    printf("%d %d\n", 017, 0x5A);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+26
+104
+6
+15 90
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 0x1A = 0001 1010 = 26 · &lt;&lt;2 → 0110 1000 = 104 · &gt;&gt;2 → 0000 0110 = 6 · 017 은 8진수 = 15 · 0x5A = 0101 1010 = 90</div>
+        </div>
+        <div class="oq" id="oq-oc15">
+            <p class="oq-q"><span class="oq-no">15</span>x = 3 + 4, 5 - 10<span class="oq-tag">4주차 · 콤마 · 형변환 · 우선순위</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int x, y;
+    x = 3 + 4, 5 - 10;
+    y = (3 + 4, 5 - 10);
+    printf("%d %d\n", x, y);
+    printf("%d %d\n", (int)3.46, (int)'A');
+    printf("%f\n", (double)7 / 2);
+    printf("%d\n", 3 &lt;&lt; 2 + 5 &lt;&lt; 3);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+7 -5
+3 65
+3.500000
+3072
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 대입이 콤마보다 먼저 → x = 7 · 괄호 안 콤마는 <b>맨 뒤 값</b> → y = -5 · (int) 는 소수점 <b>버림</b> → 3 · 'A' = 65 · 7.0 / 2 = 3.500000 · + 가 &lt;&lt; 보다 먼저 → 3&lt;&lt;7&lt;&lt;3 = 3072</div>
+        </div>
+        <div class="oq" id="oq-oc16">
+            <p class="oq-q"><span class="oq-no">16</span>&amp;&amp; · || 오른쪽이 실행될까?<span class="oq-tag">4주차 · 단축 평가</span></p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int n = 5;
+    int r;
+    r = (n &gt; 10) &amp;&amp; (++n &gt; 0);
+    printf("r=%d, n=%d\n", r, n);
+    r = (n &gt; 1) || (++n &gt; 0);
+    printf("r=%d, n=%d\n", r, n);
+    r = (n &gt; 1) &amp;&amp; (++n &gt; 0);
+    printf("r=%d, n=%d\n", r, n);
+    return 0;
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+r=0, n=5
+r=1, n=5
+r=1, n=6
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — && 는 왼쪽이 거짓이면, || 는 왼쪽이 참이면 결과가 정해져서 <b>오른쪽(++n)을 실행하지 않아요</b> · 세 번째만 오른쪽까지 계산 → n = 6</div>
         </div>
     </section>
 
@@ -1799,5 +2159,6 @@ int main() {
 <script src="review.js?v=202609181500"></script>
 <script src="weeks.js?v=202609181500"></script>
 <script src="codetest.js?v=202609212000"></script>
+<script src="outquiz.js?v=202609212100"></script>
 </body>
 </html>
