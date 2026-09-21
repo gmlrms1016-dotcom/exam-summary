@@ -27,7 +27,7 @@
 
     <header class="page-head">
         <h1>프로그래밍언어실습 · 완전 정리</h1>
-        <p>1주차 ~ 2주차 C 언어 · 개념 + 실행과정 + 소스코드 · 3주차 ★시험문제(sizeof · printf 빈칸채우기)</p>
+        <p>1주차 ~ 3주차 C 언어 · 실행과정 · 출력 · 함수 · 변수 · 자료형 · 서식 · 상수 · scanf — <b>예제 코드 + 실제 출력 결과</b> 중심</p>
     </header>
 
     <div id="week-nav" data-subject="프로그래밍언어실습"></div>
@@ -44,6 +44,14 @@
         <a href="#s5">5.함수구조</a>
         <a href="#s6">6.실습·퀴즈</a>
         <a href="#s7">7.★시험문제</a>
+        <a href="#s8">8.변수·초기화</a>
+        <a href="#s9">9.이름규칙</a>
+        <a href="#s10">10.★sizeof</a>
+        <a href="#s11">11.부호비트</a>
+        <a href="#s12">12.★서식·칸수</a>
+        <a href="#s13">13.ASCII</a>
+        <a href="#s14">14.const·#define</a>
+        <a href="#s15">15.★scanf·&amp;</a>
         <a href="#quiz">✏️퀴즈</a>
     </nav>
 
@@ -76,13 +84,15 @@
             <tr><td>③ 링킹(Linking)</td><td>여러 오브젝트 파일 + 라이브러리를 연결 → <b>.exe</b> (또는 a.out)</td></tr>
             <tr><td>④ 실행(Execution)</td><td>컴파일된 프로그램을 실행해 결과 확인</td></tr>
         </table>
-        <h3>첫 프로그램 (hello.c)</h3>
-        <pre><code>// hello.c
-#include &lt;stdio.h&gt;          // 표준 입출력 헤더 포함
-int main(void) {            // main(): 프로그램 시작 지점
-    printf("hello world!"); // 화면 출력
-    return 0;               // 프로그램 정상 종료
-}</code></pre>
+        <h3>첫 프로그램 (hello.c) — 한 줄씩 주석</h3>
+        <pre><code class="language-c">// hello.c — ① 소스코드 작성 (.c 파일)
+#include &lt;stdio.h&gt;            // 전처리기: printf 가 들어 있는 stdio.h 를 가져온다
+int main(void) {              // 프로그램은 main() 에서 자동으로 시작
+    printf("hello world!");   // 화면에 출력 (\n 이 없어서 줄은 안 바뀜)
+    return 0;                 // 0 을 돌려주며 프로그램 정상 종료
+}
+// ② 컴파일 Ctrl+Shift+B → hello.obj   ③ 링크 → hello.exe   ④ 실행 Ctrl+F5</code></pre>
+        <pre class="io"><code>hello world!</code></pre>
         <div class="tip"><b>Visual Studio 단축키</b> — 모두 저장 <b>Ctrl+Shift+S</b> · 빌드 <b>Ctrl+Shift+B</b> · 실행 <b>Ctrl+F5</b><br>⚠️ 새 항목 추가 시 파일명에 확장자 <b>.c</b> 를 생략하면 <b>.cpp</b> 로 저장됩니다.</div>
     </section>
 
@@ -114,6 +124,53 @@ int main() {
     puts("C 언어, 재미있다!");   // puts 는 자동 줄바꿈
     return 0;
 }</code></pre>
+
+        <h3>예제 — printf 와 puts 의 줄바꿈 (모든 경우)</h3>
+        <pre><code class="language-c">// printf 는 자동 줄바꿈이 없다 → \n 을 직접 넣어야 한다
+#include &lt;stdio.h&gt;
+int main() {
+    printf("hello");             // 줄바꿈 없음 → 다음 출력이 바로 뒤에 붙는다
+    printf("world\n");           // 여기서 \n → 줄이 바뀜   =&gt; helloworld
+    printf("C 언어\n");           // 한 줄 출력
+    printf("첫째 줄\n둘째 줄\n");   // printf 한 번으로 두 줄 (\n 이 두 번)
+    puts("puts 는");              // puts 는 출력한 뒤 자동으로 줄을 바꾼다
+    puts("자동 줄바꿈");            // \n 을 안 넣어도 다음 출력은 새 줄에서 시작
+    printf("끝\n");
+    return 0;
+}</code></pre>
+        <pre class="io"><code>helloworld
+C 언어
+첫째 줄
+둘째 줄
+puts 는
+자동 줄바꿈
+끝</code></pre>
+        <div class="tip">printf 는 <b>\n 을 만날 때만</b> 줄이 바뀌고, puts 는 <b>출력할 때마다</b> 줄이 바뀝니다. 첫 두 줄이 <b>helloworld</b> 로 붙은 이유가 이것이에요.</div>
+        <h3>예제 — 2주차 연습문제 Quiz-01 · 02 · 05 (printf 한 번으로)</h3>
+        <pre><code class="language-c">// [Quiz-01 · 02 · 05] printf 한 번으로 출력하기 (2주차 연습문제)
+#include &lt;stdio.h&gt;
+int main() {
+    // Quiz-01 : 한 줄에 공백 두 칸씩
+    printf("C  Pascal  Java  Python  kotlin\n");
+
+    // Quiz-02 : printf 는 한 번만 — 줄마다 \n
+    printf("C\nPascal\nJava\nPython\nkotlin\n");
+
+    // Quiz-05 : 여러 줄 문장도 \n 으로 이어서 한 번에
+    printf("프로그램 개발과정\n1. 프로젝트 작성\n2. 소스 작성\n3. 빌드\n4. 실행\n");
+    return 0;
+}</code></pre>
+        <pre class="io"><code>C  Pascal  Java  Python  kotlin
+C
+Pascal
+Java
+Python
+kotlin
+프로그램 개발과정
+1. 프로젝트 작성
+2. 소스 작성
+3. 빌드
+4. 실행</code></pre>
     </section>
 
     <section class="card" id="s5">
@@ -133,6 +190,58 @@ void func1(void) {           // 함수 정의
     printf("func1() start!!!\n");
     printf("func1() end!!!\n");
 }</code></pre>
+
+        <h3>예제 ① 함수를 만들기만 하고 호출하지 않으면</h3>
+        <pre><code class="language-c">// ex-function-01.c — func1() 을 만들기만 하고 호출하지 않은 경우
+#include &lt;stdio.h&gt;
+void func1();                       // 함수 원형(선언): main 보다 아래에 정의할 거라 미리 알려 줌
+int main(void) {                    // C 프로그램은 main() 부터 자동 실행
+    printf("main() start!!! \n");
+    printf("main() end!!! \n");     // func1() 을 부르지 않았다
+    return 0;
+}
+void func1(void) {                  // 정의는 있지만 호출이 없으니 실행되지 않는다
+    printf("func1() start!!! \n");
+    printf("func1() end!!! \n");
+}</code></pre>
+        <pre class="io"><code>main() start!!! 
+main() end!!! </code></pre>
+        <div class="tip">func1() 안의 printf 는 <b>한 줄도 출력되지 않습니다</b> — 호출하지 않았기 때문.</div>
+        <h3>예제 ② main() 안에서 호출하면</h3>
+        <pre><code class="language-c">// ex-function-02.c — main() 안에서 func1() 을 호출한 경우
+#include &lt;stdio.h&gt;
+void func1();
+int main(void) {
+    printf("main() start!!! \n");   // ① 먼저 실행
+    func1();                        // ② func1 로 이동 → 안의 두 줄을 실행하고 돌아온다
+    printf("main() end!!! \n");     // ③ 돌아와서 나머지 실행
+    return 0;
+}
+void func1(void) {
+    printf("func1() start!!! \n");
+    printf("func1() end!!! \n");
+}</code></pre>
+        <pre class="io"><code>main() start!!! 
+func1() start!!! 
+func1() end!!! 
+main() end!!! </code></pre>
+        <h3>예제 ③ 실행 순서는 "정의한 순서"가 아니라 "부른 순서"</h3>
+        <pre><code class="language-c">// 함수 호출 순서 = 출력 순서 (정의한 순서가 아니라 "부른 순서")
+#include &lt;stdio.h&gt;
+void func1(void);
+void func2(void);
+int main(void) {
+    printf("안녕하세요\n");
+    func2();          // func2 를 먼저 부른다 → "제 이름은" (\n 없음 → 다음 글자가 붙는다)
+    func1();          // 그다음 func1         → "gdhong 입니다."
+    func1();          // 같은 함수를 여러 번 부르면 여러 번 실행된다
+    return 0;
+}
+void func1(void) { printf("gdhong 입니다. \n"); }   // 정의는 func1 이 먼저여도
+void func2(void) { printf("제 이름은 "); }         // 실행 순서는 main 이 정한다</code></pre>
+        <pre class="io"><code>안녕하세요
+제 이름은 gdhong 입니다. 
+gdhong 입니다. </code></pre>
     </section>
 
     <section class="card" id="s6">
@@ -144,6 +253,18 @@ void func1(void) {           // 함수 정의
             <tr><td>닫는 따옴표 누락</td><td>문자열의 " 를 닫지 않으면 오류</td></tr>
             <tr><td>시작 프로젝트</td><td>여러 프로젝트 중 실행할 것을 <b>[시작 프로젝트로 설정]</b> (굵은 글씨로 표시됨)</td></tr>
         </table>
+                <h3>예제 — 03debug.c 의 오류 2개 고치기</h3>
+        <pre><code class="language-c">// P03-Debugging/03debug.c — 강의자료 원본에는 오류가 2군데 숨어 있다
+#include &lt;stdio.h&gt;
+int main() {
+    // ❌ printf("컴퓨터공학과학생이며\n")    ← 세미콜론(;) 누락 → 컴파일 오류
+    // ❌ printf("C 언어를수강합니다\n);     ← 닫는 따옴표(") 누락 → 컴파일 오류
+    printf("컴퓨터공학과학생이며\n");      // ✅ 문장 끝에는 항상 ;
+    printf("C 언어를수강합니다\n");        // ✅ 문자열은 " 로 열고 " 로 닫는다
+    return 0;
+}</code></pre>
+        <pre class="io"><code>컴퓨터공학과학생이며
+C 언어를수강합니다</code></pre>
         <h3>연습문제 정답 — 함수 호출 순서</h3>
         <pre><code>// quiz-01-02-function.c
 #include &lt;stdio.h&gt;
@@ -158,6 +279,10 @@ int main(void) {
 }
 void func1(void) { printf("gdhong 입니다. \n"); }
 void func2(void) { printf("제 이름은"); }</code></pre>
+
+        <pre class="io"><code>안녕하세요
+제 이름은gdhong 입니다. </code></pre>
+        <div class="tip">func2() 의 "제 이름은" 에는 <b>\n 이 없어서</b> 다음에 부른 func1() 의 글자가 <b>같은 줄에 바로 붙습니다</b>.</div>
     </section>
 
     <section class="card" id="s7">
@@ -258,6 +383,352 @@ int main() {
 }</code></pre>
             <div class="tip"><b>풀이</b> — char → <b>%c</b> · int → <b>%d</b> · double → <b>%lf</b> (printf 에서는 %f 도 OK). 실수는 소수점 아래 <b>6자리</b>까지 출력되므로 165.7 → <b>165.700000</b>. 자료 속 <b>height = 165.7</b> 뒤에 세미콜론이 빠져 있어 그대로 두면 컴파일 오류가 납니다.</div>
         </details>
+    </section>
+
+    <section class="card" id="s8">
+        <h2>8. 변수 선언 · 대입 · 초기화<span class="week">3주차</span></h2>
+        <div class="tip">📌 변수 = 값이 바뀌는 <b>기억장소</b> · 선언 = 공간 할당 · 초기화 = 선언하면서 값 넣기</div>
+        <h3>예제 ① sample03_01.c — 선언 → 대입 → 값 바꾸기</h3>
+        <pre><code class="language-c">// sample03_01.c — 변수에 값을 저장하고 출력
+#include &lt;stdio.h&gt;
+int main() {
+    int money;                              // 선언: int(4byte) 저장 공간을 할당
+    money = 3000;                           // 대입: 공간에 3000 을 저장
+    printf("money에 저장된 값 %d \n", money);
+
+    money = 5000;                           // 변수는 값이 바뀔 수 있다
+    printf("money에 저장된 값 %d \n", money);
+
+    int value = 0;                          // 선언 + 초기화를 한 줄에
+    int data1, data2, data3;                // 같은 자료형은 쉼표로 여러 개 선언
+    data1 = 10; data2 = 20; data3 = 30;
+    printf("value=%d data1=%d data2=%d data3=%d\n", value, data1, data2, data3);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>money에 저장된 값 3000 
+money에 저장된 값 5000 
+value=0 data1=10 data2=20 data3=30</code></pre>
+        <h3>예제 ② 실습 1-02 · 1-03 — char · int · float 초기화</h3>
+        <pre><code class="language-c">// ex01_03-var.c — char · int · float 변수 초기화 (실습 1-02 · 1-03)
+#include &lt;stdio.h&gt;
+int main() {
+    char  a1;          // 문자 1개 (1byte)
+    int   a2;          // 정수 (4byte)
+    float a3;          // 실수 (4byte)
+    // ⚠️ 여기서 바로 a1~a3 을 출력하면 쓰레기값 → VS 에서는 C4700 오류 (실습 1-01)
+
+    a1 = 'c';          // 문자는 작은따옴표
+    a2 = 100;
+    a3 = 11.11;        // 11.11 은 double 상수 → float 에 들어가며 11.11 에 가장 가까운 값으로 저장
+
+    printf("a1: %c \n", a1);    // %c 문자
+    printf("a2: %d \n", a2);    // %d 정수
+    printf("a3: %f \n", a3);    // %f 실수 → 소수점 아래 6자리
+
+    int a7, a8, a9;             // 한 줄에 여러 변수 선언
+    a7 = 300;
+    a8 = 400;
+    a9 = 500;
+    printf("a7: %d \n", a7);
+    printf("a8: %d \n", a8);
+    printf("a9: %d \n", a9);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>a1: c 
+a2: 100 
+a3: 11.110000 
+a7: 300 
+a8: 400 
+a9: 500 </code></pre>
+    </section>
+
+    <section class="card" id="s9">
+        <h2>9. 변수 이름 규칙<span class="week">3주차</span></h2>
+        <div class="tip">📌 영문자 · 숫자 · 밑줄(_)만 · 숫자로 시작 X · 공백 X · 대·소문자 구별 · 예약어 X</div>
+        <h3>예제 — 되는 이름 ✅ / 안 되는 이름 ❌</h3>
+        <pre><code class="language-c">// 변수 이름 규칙 — 영문자 a~z A~Z · 숫자 0~9 · 밑줄 _ 만 사용
+#include &lt;stdio.h&gt;
+int main() {
+    int age = 21;        // ✅ 영문자
+    int Age = 30;        // ✅ age 와 Age 는 다른 변수 (대·소문자 구별)
+    int my_age = 22;     // ✅ 밑줄 사용 가능
+    int age2 = 23;       // ✅ 숫자는 첫 글자만 아니면 OK
+    int _count = 1;      // ✅ 밑줄로 시작해도 OK
+    int myName = 0;      // ✅ 카멜 표기법 (단어가 바뀔 때 대문자)
+    int c_name = 0;      // ✅ 헝가리언 표기법 (자료형 표시 c_ + 이름)
+
+    // int 2age = 1;     // ❌ 숫자로 시작
+    // int 123 = 1;      // ❌ 모두 숫자
+    // int my age = 1;   // ❌ 공백 포함
+    // int my-age = 1;   // ❌ - 같은 기호는 안 됨
+    // int int = 1;      // ❌ 예약어(키워드) 사용
+
+    printf("age=%d Age=%d my_age=%d age2=%d _count=%d\n", age, Age, my_age, age2, _count);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>age=21 Age=30 my_age=22 age2=23 _count=1</code></pre>
+    </section>
+
+    <section class="card" id="s10">
+        <h2>10. 자료형 크기 — sizeof ★시험<span class="week">3주차</span></h2>
+        <div class="tip">📌 sizeof 결과는 <b>정수</b> → 항상 <b>%d</b> 로 출력 · 정수 상수는 int(4) · 실수 상수는 double(8)</div>
+        <h3>예제 — 자료형 · 변수 · 상수의 크기</h3>
+        <pre><code class="language-c">// 자료형 크기 — sizeof 결과는 정수라 %d 로 출력
+#include &lt;stdio.h&gt;
+int main() {
+    printf("char   : %d byte\n", sizeof(char));     // 문자형
+    printf("short  : %d byte\n", sizeof(short));    // 정수형
+    printf("int    : %d byte\n", sizeof(int));      // 정수형
+    printf("float  : %d byte\n", sizeof(float));    // 실수형
+    printf("double : %d byte\n", sizeof(double));   // 실수형
+    // long 은 VS(윈도우) 4byte · Mac·Linux 8byte → 강의자료(VS) 기준 4byte
+
+    int n = 10;
+    double d = 3.14;
+    printf("변수 n : %d byte\n", sizeof(n));        // 변수 이름을 넣어도 된다 → int 크기
+    printf("변수 d : %d byte\n", sizeof(d));        // double 크기
+    printf("10     : %d byte\n", sizeof(10));       // 정수 상수 = int
+    printf("3.14   : %d byte\n", sizeof(3.14));     // 실수 상수 = double
+    printf("3.14f  : %d byte\n", sizeof(3.14f));    // f 를 붙이면 float
+    char name = 'a';
+    printf("변수 name : %d byte\n", sizeof(name));  // char 변수 = 1byte
+    return 0;
+}</code></pre>
+        <pre class="io"><code>char   : 1 byte
+short  : 2 byte
+int    : 4 byte
+float  : 4 byte
+double : 8 byte
+변수 n : 4 byte
+변수 d : 8 byte
+10     : 4 byte
+3.14   : 8 byte
+3.14f  : 4 byte
+변수 name : 1 byte</code></pre>
+        <div class="tip">⚠️ <b>long</b> 은 VS(윈도우) 에서 <b>4byte</b>, Mac·Linux 에서 8byte 입니다 — 시험은 강의자료(VS) 기준 <b>4byte</b>.</div>
+    </section>
+
+    <section class="card" id="s11">
+        <h2>11. 부호 비트 — signed · unsigned<span class="week">3주차</span></h2>
+        <div class="tip">📌 1byte = 8bit · 맨 앞 비트가 <b>0 이면 양수, 1 이면 음수</b>(signed) · unsigned 는 0 이상만</div>
+        <h3>예제 — 같은 비트, 다른 값</h3>
+        <pre><code class="language-c">// 부호 비트 — 1byte = 8bit, 맨 앞 비트가 0 이면 양수 · 1 이면 음수 (signed)
+#include &lt;stdio.h&gt;
+int main() {
+    signed char   s1 = 127;    // 0111 1111 → signed 최댓값
+    signed char   s2 = -128;   // 1000 0000 → signed 최솟값
+    unsigned char u1 = 0;      // 0000 0000 → unsigned 최솟값
+    unsigned char u2 = 255;    // 1111 1111 → unsigned 최댓값
+    printf("signed char   : %d ~ %d\n", s2, s1);
+    printf("unsigned char : %d ~ %d\n", u1, u2);
+
+    // 같은 비트라도 signed / unsigned 에 따라 값이 달라진다
+    unsigned char u3 = 128;    // 1000 0000 → 부호 없음 : 128
+    signed char   s3 = 128;    // 1000 0000 → 부호 있음 : 맨 앞 1 = 음수 → -128
+    unsigned char u4 = 255;    // 1111 1111 → 부호 없음 : 255
+    signed char   s4 = 255;    // 1111 1111 → 부호 있음 : -1
+    printf("1000 0000 → unsigned %d / signed %d\n", u3, s3);
+    printf("1111 1111 → unsigned %d / signed %d\n", u4, s4);
+
+    // int n;          ← 기본이 signed (signed int n; 과 같다) : 음수·양수 모두
+    // unsigned int n; ← 부호 없는 int : 0 이상만 저장
+    return 0;
+}</code></pre>
+        <pre class="io"><code>signed char   : -128 ~ 127
+unsigned char : 0 ~ 255
+1000 0000 → unsigned 128 / signed -128
+1111 1111 → unsigned 255 / signed -1</code></pre>
+    </section>
+
+    <section class="card" id="s12">
+        <h2>12. printf 서식 지정자 · 출력 칸수 ★시험<span class="week">3주차</span></h2>
+        <div class="tip">📌 % 뒤 글자가 출력 모양을 정한다 · 숫자를 넣으면 칸수 조정</div>
+        <h3>예제 ① 서식 지정자 전부 (%d %o %x %X %c %s %f %lf %ld)</h3>
+        <pre><code class="language-c">// printf 서식 지정자 — % 뒤의 글자가 "어떤 모양으로 찍을지"를 정한다
+#include &lt;stdio.h&gt;
+int main() {
+    int data = 100;
+    printf("10진수 : %d\n", data);        // %d  → 100
+    printf("8진수  : %o\n", data);        // %o  → 144   (100 = 1×64 + 4×8 + 4)
+    printf("16진수 : %x\n", data);        // %x  → 64    (100 = 6×16 + 4)
+    printf("16진수 : %X\n", 255);         // %X  → FF    (대문자 16진수, 소문자 %x 는 ff)
+    printf("문자   : %c\n", 'A');         // %c  → 문자 1개
+    printf("문자열 : %s\n", "안녕하세요");  // %s  → 여러 글자
+    printf("실수   : %f\n", 3.14);        // %f  → 소수점 아래 6자리
+    printf("double : %lf\n", 165.7);     // %lf → double 도 6자리
+    printf("long   : %ld\n", 123456L);   // %ld → long 정수
+
+    float value = 2.1f;                  // 강의자료 10p
+    printf("float  : %f\n", value);      // 2.100000 (6자리)
+    return 0;
+}</code></pre>
+        <pre class="io"><code>10진수 : 100
+8진수  : 144
+16진수 : 64
+16진수 : FF
+문자   : A
+문자열 : 안녕하세요
+실수   : 3.140000
+double : 165.700000
+long   : 123456
+float  : 2.100000</code></pre>
+        <h3>예제 ② 출력 칸수 [%5d] [%05d] [%-5d] (강의자료 11p)</h3>
+        <pre><code class="language-c">// 출력 칸수 조정 — [ ] 로 칸을 눈으로 확인 (강의자료 11p)
+#include &lt;stdio.h&gt;
+int main() {
+    int data = 7;
+    printf("[%d] [%5d]\n", data, data);                   // %5d : 5칸 오른쪽 맞춤
+    printf("[%5d] [%05d] [%-5d]\n", data, data, data);    // %05d 빈칸을 0 으로 · %-5d 왼쪽 맞춤
+    printf("[%5d] [%5d] [%5d]\n", 7, 77, 777);             // 자릿수가 달라도 오른쪽 끝이 맞는다
+    printf("[%-5d] [%-5d] [%-5d]\n", 7, 77, 777);          // 왼쪽 끝이 맞는다
+    printf("[%2d]\n", 12345);                               // 칸보다 숫자가 길면 그냥 다 찍는다
+    return 0;
+}</code></pre>
+        <pre class="io"><code>[7] [    7]
+[    7] [00007] [7    ]
+[    7] [   77] [  777]
+[7    ] [77   ] [777  ]
+[12345]</code></pre>
+    </section>
+
+    <section class="card" id="s13">
+        <h2>13. 문자와 ASCII 코드<span class="week">3주차</span></h2>
+        <div class="tip">📌 문자는 1byte 정수(ASCII 코드)로 저장 · <b>'A' = 65</b> · <b>'a' = 97</b> · 작은따옴표 = 문자, 큰따옴표 = 문자열</div>
+        <h3>예제 — %c 와 %d 로 같은 값을 찍어 보기</h3>
+        <pre><code class="language-c">// 문자와 ASCII 코드 — 문자는 1byte 정수(ASCII 코드)로 저장된다
+#include &lt;stdio.h&gt;
+int main() {
+    char name = 'a';                        // 'a' 의 ASCII 코드 97 이 저장된다
+    printf("%c %d\n", name, name);          // %c → 문자 a · %d → 숫자 97
+
+    printf("65의 ASCII 값은 %c입니다.\n", 65); // 강의자료 10p : %c 는 숫자를 문자로 → A
+    printf("'A' 는 %d\n", 'A');              // 65 = 0100 0001
+    printf("'a' 는 %d\n", 'a');              // 97
+
+    char c1 = 'A';                          // 작은따옴표 = 문자 1개
+    char c2 = 65;                           // 숫자 65 를 넣어도 같은 문자 A
+    printf("c1=%c c2=%c\n", c1, c2);
+
+    printf("%s\n", "A");                    // 큰따옴표 = 문자열 → %s
+    // ❌ printf("%c", "A");  "A" 는 문자열이라 %c 로 찍으면 안 된다
+    // ❌ char a1 = "c";      문자열을 char 에 넣을 수 없다 → 'c' 로
+    return 0;
+}</code></pre>
+        <pre class="io"><code>a 97
+65의 ASCII 값은 A입니다.
+'A' 는 65
+'a' 는 97
+c1=A c2=A
+A</code></pre>
+    </section>
+
+    <section class="card" id="s14">
+        <h2>14. 상수 — const · #define<span class="week">3주차</span></h2>
+        <div class="tip">📌 <b>const</b> = 선언과 동시에 초기화, 재대입하면 컴파일 오류 · <b>#define</b> = 전처리기가 컴파일 전에 값으로 바꿔 놓음 (끝에 ; 없음)</div>
+        <h3>예제 ① const 없이 — 값이 바뀐다</h3>
+        <pre><code class="language-c">// ex01_04-const.c ① const 없이 — 변수는 다시 대입할 수 있다
+#include &lt;stdio.h&gt;
+int main() {
+    int a1 = 1000;
+    printf("a1: %d \n", a1);    // 1000
+    a1 = 2000;                  // 변수라서 값이 바뀐다
+    printf("a1: %d \n", a1);    // 2000
+    return 0;
+}</code></pre>
+        <pre class="io"><code>a1: 1000 
+a1: 2000 </code></pre>
+        <h3>예제 ② const 를 붙이면 — 바꿀 수 없다</h3>
+        <pre><code class="language-c">// ex01_04-const.c ② const 를 붙이면 상수 → 다시 대입하면 컴파일 오류
+#include &lt;stdio.h&gt;
+int main() {
+    const int a1 = 1000;        // 상수는 선언과 동시에 초기화해야 한다
+    printf("a1: %d \n", a1);
+    // a1 = 2000;               // ❌ error: 상수에 값 재할당 → 컴파일되지 않는다
+    printf("a1: %d \n", a1);    // 그대로 1000
+    return 0;
+}</code></pre>
+        <pre class="io"><code>a1: 1000 
+a1: 1000 </code></pre>
+        <h3>예제 ③ #define 매크로 상수 (강의자료 13p)</h3>
+        <pre><code class="language-c">// 매크로 상수 #define — 컴파일 전에 전처리기가 이름을 값으로 바꿔 놓는다 (강의자료 13p)
+#include &lt;stdio.h&gt;
+#define Even 2                        // 끝에 ; 를 붙이지 않는다
+#define MSG "==================="     // 문자열도 정의할 수 있다
+#define DATA1 100
+int main() {
+    // ⚠️ 강의자료 13p 는 printf("Even: %d\n, Even"); → 따옴표 위치가 틀려 값이 안 찍힌다
+    printf("Even: %d\n", Even);         // ✅ Even 이 2 로 바뀌어 컴파일된다
+    printf("Message: %s\n", MSG);       // MSG → "===================" 로 바뀐다
+
+    const int a1 = 1000;                // const 상수와 같이 쓰기
+    printf("a1 %d DATA: %d\n", a1, DATA1);
+    printf("Even * DATA1 = %d\n", Even * DATA1);   // 2 * 100 으로 바뀌어 계산된다
+    return 0;
+}</code></pre>
+        <pre class="io"><code>Even: 2
+Message: ===================
+a1 1000 DATA: 100
+Even * DATA1 = 200</code></pre>
+    </section>
+
+    <section class="card" id="s15">
+        <h2>15. scanf() 와 &amp; 주소 연산자 ★시험<span class="week">3주차</span></h2>
+        <div class="tip">📌 <b>&amp;</b> = 변수의 시작 주소 → scanf 는 주소를 받아야 그 공간에 입력값을 저장 · VS 는 맨 위에 <code>#define _CRT_SECURE_NO_WARNINGS</code></div>
+        <h3>예제 ① Prj06/06scanf.c (실습 2-01) — 입력: 12 / 20232629 18</h3>
+        <pre><code class="language-c">// Prj06/06scanf.c — scanf 로 키보드 입력 받기 (실습 2-01)
+#define _CRT_SECURE_NO_WARNINGS    // VS 에서 scanf 를 쓰려면 맨 위에 (없으면 C4996 오류)
+#include &lt;stdio.h&gt;
+int main(void) {
+    int month = 0;
+    printf("1년은 몇 달? ");
+    scanf("%d", &amp;month);           // &amp; = 변수의 주소 → 입력값을 month 공간에 저장
+    printf("1년은 %d달\n\n", month);
+
+    int snum, credit;
+    printf("당신의 학번과 신청 학점은? ");
+    scanf("%d %d", &amp;snum, &amp;credit);  // 공백(스페이스·엔터)으로 구분해서 두 개 입력
+    printf("학번:  %d 신청학점: %d\n", snum, credit);
+    return 0;
+}</code></pre>
+        <pre class="io"><code>1년은 몇 달? 12
+1년은 12달
+
+당신의 학번과 신청 학점은? 20232629 18
+학번:  20232629 신청학점: 18</code></pre>
+        <h3>예제 ② 자료형에 맞는 scanf 서식 — 입력: 21 165.7</h3>
+        <pre><code class="language-c">// scanf 서식 — 받을 변수의 자료형에 맞춘다 (double 은 반드시 %lf)
+#define _CRT_SECURE_NO_WARNINGS
+#include &lt;stdio.h&gt;
+int main(void) {
+    char gender = 'w';
+    int age;
+    double height;
+    printf("나이와 신장은? ");
+    scanf("%d %lf", &amp;age, &amp;height);      // int → %d · double → %lf
+    printf("성별: %c, 나이: %d, 신장: %lf\n", gender, age, height);
+    // ⚠️ printf 는 double 에 %f 도 되지만, scanf 는 %lf 가 아니면 값이 제대로 안 들어간다
+    return 0;
+}</code></pre>
+        <pre class="io"><code>나이와 신장은? 21 165.7
+성별: w, 나이: 21, 신장: 165.700000</code></pre>
+        <h3>예제 ③ %p 로 주소 찍어 보기</h3>
+        <pre><code class="language-c">// &amp; 주소 연산자 — 변수가 메모리 몇 번지에 있는지 (%p = 주소 출력)
+#include &lt;stdio.h&gt;
+int main(void) {
+    int age = 25;
+    printf("%p, %d\n", &amp;age, age);     // 주소, 값 (강의자료 12p)
+
+    int a = 1, b = 2;
+    printf("a 의 주소 %p\n", &amp;a);        // 변수마다 주소가 다르다
+    printf("b 의 주소 %p\n", &amp;b);
+    // 주소 값은 실행할 때마다 · 컴퓨터마다 다르다 (VS 는 00000012345ABCDE 모양)
+    // scanf("%d", age);  ❌ &amp; 를 빠뜨리면 저장할 주소를 모른다 → 실행 중 오류
+    return 0;
+}</code></pre>
+        <pre class="io"><code>0x16dda6938, 25
+a 의 주소 0x16dda6934
+b 의 주소 0x16dda6930</code></pre>
+        <div class="tip">주소 값은 실행할 때마다 · 컴퓨터마다 다릅니다(위는 Mac 에서 실행한 값). 중요한 건 <b>&amp;변수 = 그 변수가 있는 메모리 번지</b> 라는 것.</div>
     </section>
 
     <section class="card" id="quiz">
