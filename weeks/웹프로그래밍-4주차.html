@@ -28,6 +28,10 @@
 .wk-pager .next{text-align:right;}
 .wk-pager span{visibility:hidden;}
 .wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </style>
 </head>
 <body>
@@ -131,6 +135,194 @@ console.log(++num8);   // 12 출력 (11 → 12 로 먼저 증가)</code></pre>
 <tr><td><code>changeVar = changeVar &amp;&amp; "입력없음";</code></td><td>"" (그대로)</td><td>"입력없음" (덮어씀)</td></tr>
 </tbody></table>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — truthy/falsy + 단락 평가를 쓰면 값이 없을 때 생길 오류를 <b>미리 막고</b>(방어 코드) if 문을 <b>짧게</b> 쓸 수 있다</li></ul>
+<div class="tip">🎯 <b>시험 포인트</b> — <b>&amp;</b> 와 <b>&amp;&amp;</b>, <b>|</b> 와 <b>||</b> 가 어떻게 다른지 · <b>Truthy와 Falsy</b> (교수님 메모) — 참·거짓(boolean)이 아닌 값도 <b>조건문 안에서는 참 또는 거짓으로 판단</b>되는 것 · <b>단락평가</b> : &amp;&amp; || · 아래 코드의 <code>// 결과</code> 주석과 <b>▶ 출력 결과</b>는 전부 node 로 직접 실행해서 나온 값입니다.</div>
+<h3>① 네 연산자 한눈에</h3>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>연산자</th><th>이름</th><th>양쪽을 다 계산?</th><th>결과로 나오는 것</th></tr>
+<tr><td><b>&amp;</b></td><td>비트 AND</td><td><b>항상 둘 다</b> 계산</td><td><b>숫자</b> — 두 값을 32비트 정수로 바꿔 비트마다 AND</td></tr>
+<tr><td><b>|</b></td><td>비트 OR</td><td><b>항상 둘 다</b> 계산</td><td><b>숫자</b> — 두 값을 32비트 정수로 바꿔 비트마다 OR</td></tr>
+<tr><td><b>&amp;&amp;</b></td><td>논리 AND</td><td>왼쪽이 <b>falsy 면 멈춤</b> (단락 평가)</td><td>왼쪽이 falsy → <b>왼쪽 값</b> / truthy → <b>오른쪽 값</b></td></tr>
+<tr><td><b>||</b></td><td>논리 OR</td><td>왼쪽이 <b>truthy 면 멈춤</b> (단락 평가)</td><td>왼쪽이 truthy → <b>왼쪽 값</b> / falsy → <b>오른쪽 값</b></td></tr>
+</tbody></table>
+<h3>② true · false 로 모든 경우 (진리표)</h3>
+<pre><code class="language-javascript">// &amp; (비트 AND) : 둘 다 1(true) 일 때만 1 · 결과는 숫자
+console.log(true &amp; true);     // 1
+console.log(true &amp; false);    // 0
+console.log(false &amp; true);    // 0
+console.log(false &amp; false);   // 0
+
+// | (비트 OR) : 하나라도 1(true) 이면 1 · 결과는 숫자
+console.log(true | true);     // 1
+console.log(true | false);    // 1
+console.log(false | true);    // 1
+console.log(false | false);   // 0
+
+// &amp;&amp; (논리 AND) : 둘 다 true 일 때만 true
+console.log(true &amp;&amp; true);    // true
+console.log(true &amp;&amp; false);   // false
+console.log(false &amp;&amp; true);   // false
+console.log(false &amp;&amp; false);  // false
+
+// || (논리 OR) : 하나라도 true 면 true
+console.log(true || true);    // true
+console.log(true || false);   // true
+console.log(false || true);   // true
+console.log(false || false);  // false</code></pre>
+<table class="ref">
+<tbody style="min-width:548px;">
+<tr><th>A</th><th>B</th><th>A <b>&amp;</b> B</th><th>A <b>|</b> B</th><th>A <b>&amp;&amp;</b> B</th><th>A <b>||</b> B</th></tr>
+<tr><td><code>true</code></td><td><code>true</code></td><td><code>1</code></td><td><code>1</code></td><td><code>true</code></td><td><code>true</code></td></tr>
+<tr><td><code>true</code></td><td><code>false</code></td><td><code>0</code></td><td><code>1</code></td><td><code>false</code></td><td><code>true</code></td></tr>
+<tr><td><code>false</code></td><td><code>true</code></td><td><code>0</code></td><td><code>1</code></td><td><code>false</code></td><td><code>true</code></td></tr>
+<tr><td><code>false</code></td><td><code>false</code></td><td><code>0</code></td><td><code>0</code></td><td><code>false</code></td><td><code>false</code></td></tr>
+</tbody></table>
+<div class="tip">같은 판단이지만 <b>&amp; |</b> 는 <b>1 · 0 (숫자)</b>, <b>&amp;&amp; ||</b> 는 <b>true · false</b> 가 나옵니다.</div>
+<h3>③ 단락 평가 — 오른쪽이 실행되는지 직접 확인</h3>
+<pre><code class="language-javascript">function right() {
+    console.log("   └ 오른쪽 right() 실행됨!");
+    return true;
+}
+
+console.log("① true &amp; right()");   console.log("   결과 =", true &amp; right());
+console.log("② false &amp; right()");  console.log("   결과 =", false &amp; right());
+console.log("③ true | right()");   console.log("   결과 =", true | right());
+console.log("④ false | right()");  console.log("   결과 =", false | right());
+console.log("⑤ true &amp;&amp; right()");  console.log("   결과 =", true &amp;&amp; right());
+console.log("⑥ false &amp;&amp; right()"); console.log("   결과 =", false &amp;&amp; right());   // 왼쪽 false → 오른쪽 안 봄
+console.log("⑦ true || right()");  console.log("   결과 =", true || right());    // 왼쪽 true  → 오른쪽 안 봄
+console.log("⑧ false || right()"); console.log("   결과 =", false || right());</code></pre>
+<pre class="io"><code class="language-text">① true &amp; right()
+   └ 오른쪽 right() 실행됨!
+   결과 = 1
+② false &amp; right()
+   └ 오른쪽 right() 실행됨!
+   결과 = 0
+③ true | right()
+   └ 오른쪽 right() 실행됨!
+   결과 = 1
+④ false | right()
+   └ 오른쪽 right() 실행됨!
+   결과 = 1
+⑤ true &amp;&amp; right()
+   └ 오른쪽 right() 실행됨!
+   결과 = true
+⑥ false &amp;&amp; right()
+   결과 = false
+⑦ true || right()
+   결과 = true
+⑧ false || right()
+   └ 오른쪽 right() 실행됨!
+   결과 = true</code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>식</th><th>오른쪽 right()</th><th>결과</th><th>이유</th></tr>
+<tr><td><code>true &amp; right()</code></td><td>✅ 실행</td><td><code>1</code></td><td>비트 연산은 항상 양쪽 계산</td></tr>
+<tr><td><code>false &amp; right()</code></td><td>✅ 실행</td><td><code>0</code></td><td>비트 연산은 항상 양쪽 계산</td></tr>
+<tr><td><code>true | right()</code></td><td>✅ 실행</td><td><code>1</code></td><td>비트 연산은 항상 양쪽 계산</td></tr>
+<tr><td><code>false | right()</code></td><td>✅ 실행</td><td><code>1</code></td><td>비트 연산은 항상 양쪽 계산</td></tr>
+<tr><td><code>true &amp;&amp; right()</code></td><td>✅ 실행</td><td><code>true</code></td><td>왼쪽이 true → 오른쪽까지 봐야 결과를 앎</td></tr>
+<tr><td><code>false &amp;&amp; right()</code></td><td>❌ <b>실행 안 함</b></td><td><code>false</code></td><td>왼쪽이 false → 결과는 무조건 false, <b>멈춤</b></td></tr>
+<tr><td><code>true || right()</code></td><td>❌ <b>실행 안 함</b></td><td><code>true</code></td><td>왼쪽이 true → 결과는 무조건 true, <b>멈춤</b></td></tr>
+<tr><td><code>false || right()</code></td><td>✅ 실행</td><td><code>true</code></td><td>왼쪽이 false → 오른쪽까지 봐야 결과를 앎</td></tr>
+</tbody></table>
+<div class="tip">✍️ 필기 — <b>&amp;</b> 는 첫번째와 두번째를 <b>모두 보고</b> 판단하고, <b>&amp;&amp;</b> 는 첫번째 결과로 false 가 확정되면 <b>뒤를 안 보고</b> 바로 결과를 냅니다. <b>||</b> 는 반대로 첫번째가 true 면 뒤를 안 봅니다.</div>
+<h3>④ 숫자를 넣으면 — &amp; | 는 2진수 비트 계산, &amp;&amp; || 는 값 고르기</h3>
+<pre><code class="language-javascript">console.log(5 &amp; 3);     // 1
+console.log(5 | 3);     // 7
+console.log(5 &amp;&amp; 3);    // 3
+console.log(5 || 3);    // 5
+
+console.log(0 &amp; 3);     // 0
+console.log(0 | 3);     // 3
+console.log(0 &amp;&amp; 3);    // 0
+console.log(0 || 3);    // 3
+
+console.log(12 &amp; 10);   // 8
+console.log(12 | 10);   // 14</code></pre>
+<pre class="io bits"><code class="language-text">   5 = 0101         5 = 0101
+   3 = 0011         3 = 0011
+&amp; ---------      | ---------
+   1 = 0001         7 = 0111
+
+  12 = 1100        12 = 1100
+  10 = 1010        10 = 1010
+&amp; ---------      | ---------
+   8 = 1000        14 = 1110</code></pre>
+<div class="tip"><b>5 &amp;&amp; 3</b> 은 5 가 truthy 라서 <b>오른쪽 값 3</b> 을, <b>5 || 3</b> 은 5 가 truthy 라서 <b>왼쪽 값 5</b> 를 그대로 돌려줍니다. <b>0</b> 은 falsy 라서 <b>0 &amp;&amp; 3</b> → 0, <b>0 || 3</b> → 3.</div>
+<h3>⑤ truthy · falsy 값을 넣으면 — 모든 경우</h3>
+<div class="tip"><b>falsy</b>(거짓으로 취급) 8가지 — <b>false · 0 · -0 · 0n · "" · null · undefined · NaN</b> · 이것들을 뺀 나머지는 모두 <b>truthy</b> — <code>"0"</code>, <code>"false"</code>, <code>" "</code>(공백), <code>[]</code>, <code>{}</code> 도 truthy!</div>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>A (왼쪽 값)</th><th>조건문에서</th><th>A <b>||</b> "기본값"</th><th>A <b>&amp;&amp;</b> "뒤값"</th><th>A <b>&amp;</b> 1</th><th>A <b>|</b> 0</th></tr>
+<tr><td><code>false</code></td><td>🔴 falsy</td><td><code>"기본값"</code></td><td><code>false</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>0</code></td><td>🔴 falsy</td><td><code>"기본값"</code></td><td><code>0</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>-0</code></td><td>🔴 falsy</td><td><code>"기본값"</code></td><td><code>-0</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>0n</code></td><td>🔴 falsy</td><td><code>"기본값"</code></td><td><code>0n</code></td><td><code>TypeError</code></td><td><code>TypeError</code></td></tr>
+<tr><td><code>""</code></td><td>🔴 falsy</td><td><code>"기본값"</code></td><td><code>""</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>null</code></td><td>🔴 falsy</td><td><code>"기본값"</code></td><td><code>null</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>undefined</code></td><td>🔴 falsy</td><td><code>"기본값"</code></td><td><code>undefined</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>NaN</code></td><td>🔴 falsy</td><td><code>"기본값"</code></td><td><code>NaN</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>true</code></td><td>🟢 truthy</td><td><code>true</code></td><td><code>"뒤값"</code></td><td><code>1</code></td><td><code>1</code></td></tr>
+<tr><td><code>1</code></td><td>🟢 truthy</td><td><code>1</code></td><td><code>"뒤값"</code></td><td><code>1</code></td><td><code>1</code></td></tr>
+<tr><td><code>7</code></td><td>🟢 truthy</td><td><code>7</code></td><td><code>"뒤값"</code></td><td><code>1</code></td><td><code>7</code></td></tr>
+<tr><td><code>"0"</code></td><td>🟢 truthy</td><td><code>"0"</code></td><td><code>"뒤값"</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>"false"</code></td><td>🟢 truthy</td><td><code>"false"</code></td><td><code>"뒤값"</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>" "</code></td><td>🟢 truthy</td><td><code>" "</code></td><td><code>"뒤값"</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>"안녕"</code></td><td>🟢 truthy</td><td><code>"안녕"</code></td><td><code>"뒤값"</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>"10"</code></td><td>🟢 truthy</td><td><code>"10"</code></td><td><code>"뒤값"</code></td><td><code>0</code></td><td><code>10</code></td></tr>
+<tr><td><code>[]</code></td><td>🟢 truthy</td><td><code>[]</code></td><td><code>"뒤값"</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td><code>{}</code></td><td>🟢 truthy</td><td><code>{}</code></td><td><code>"뒤값"</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+</tbody></table>
+<pre><code class="language-javascript">let v = "";               // falsy
+console.log(v || "기본값");   // "기본값"
+console.log(v &amp;&amp; "뒤값");     // ""
+console.log(v &amp; 1);          // 0
+console.log(v | 0);          // 0
+
+v = "안녕";                  // truthy
+console.log(v || "기본값");   // "안녕"
+console.log(v &amp;&amp; "뒤값");     // "뒤값"
+console.log(v &amp; 1);          // 0   ← truthy 인데도 0 ! (&amp; 는 숫자로 바꿔서 계산)
+console.log(v | 0);          // 0
+
+v = "10";                    // 숫자로 바뀌는 문자열
+console.log(v &amp; 1);          // 0
+console.log(v | 0);          // 10</code></pre>
+<div class="tip">⚠️ <b>&amp; | 는 truthy/falsy 를 보지 않습니다.</b> 값을 <b>숫자로 바꾼 뒤</b> 비트 계산을 해요. 그래서 truthy 인 <code>"안녕"</code> 도 숫자로 못 바꿔 <b>0</b> 이 되고, <code>0n</code>(BigInt) 은 <b>TypeError</b> 가 납니다.</div>
+<h3>⑥ 문자열 · null · true 를 &amp; | 에 넣으면 — 숫자로 바뀐다</h3>
+<table class="ref">
+<tbody>
+<tr><th>식</th><th>결과</th><th>이유</th></tr>
+<tr><td><code>"10" &amp; 6</code></td><td><code>2</code></td><td>"10" → 10 → 1010 &amp; 0110 = 0010</td></tr>
+<tr><td><code>"10" | 6</code></td><td><code>14</code></td><td>1010 | 0110 = 1110</td></tr>
+<tr><td><code>"3" | "4"</code></td><td><code>7</code></td><td>둘 다 숫자로 → 0011 | 0100 = 0111</td></tr>
+<tr><td><code>"안녕" | 0</code></td><td><code>0</code></td><td>숫자로 못 바꾸면 NaN → 0</td></tr>
+<tr><td><code>"안녕" &amp; 1</code></td><td><code>0</code></td><td>NaN → 0 → 0 &amp; 1</td></tr>
+<tr><td><code>null | 5</code></td><td><code>5</code></td><td>null → 0</td></tr>
+<tr><td><code>undefined &amp; 1</code></td><td><code>0</code></td><td>undefined → NaN → 0</td></tr>
+<tr><td><code>true | 2</code></td><td><code>3</code></td><td>true → 1 → 01 | 10 = 11</td></tr>
+<tr><td><code>true &amp; 3</code></td><td><code>1</code></td><td>01 &amp; 11 = 01</td></tr>
+<tr><td><code>3.7 | 0</code></td><td><code>3</code></td><td>정수 부분만 남음(소수점 버림)</td></tr>
+<tr><td><code>0n | 1</code></td><td><code>TypeError</code></td><td>BigInt 와 일반 숫자는 섞어서 비트 연산 불가</td></tr>
+</tbody></table>
+<h3>⑦ 수업 예제 changeVar (0915_04.html) — 입력별 모든 경우</h3>
+<pre><code class="language-javascript">// 0915_04.html — prompt 에서 받은 값 (빈칸 확인 "", 글자 입력 "안녕", 취소 null)
+let changeVar = window.prompt("추가할 제목 입력!");
+
+changeVar = changeVar == "" ? "입력없음" : changeVar;   // 수업 코드: "" 만 거르고 null 은 못 거름
+changeVar = changeVar || "입력없음";                    // falsy("", null) 를 한 번에 "입력없음" 으로
+changeVar = changeVar &amp;&amp; "입력없음";                    // 값이 있을 때만 "입력없음" 으로 덮어씀 (반대 동작)
+changeVar = changeVar | "입력없음";                     // ❌ 숫자 비트 연산 → 항상 0
+changeVar = changeVar &amp; "입력없음";                     // ❌ 숫자 비트 연산 → 항상 0</code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>prompt 입력</th><th>== "" ? : (수업 코드)</th><th><b>||</b> "입력없음"</th><th><b>&amp;&amp;</b> "입력없음"</th><th><b>|</b> "입력없음"</th><th><b>&amp;</b> "입력없음"</th></tr>
+<tr><td>"" (아무것도 안 쓰고 확인)</td><td><code>"입력없음"</code></td><td><code>"입력없음"</code></td><td><code>""</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td>"안녕"</td><td><code>"안녕"</code></td><td><code>"안녕"</code></td><td><code>"입력없음"</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+<tr><td>null (취소 버튼)</td><td><code>null</code></td><td><code>"입력없음"</code></td><td><code>null</code></td><td><code>0</code></td><td><code>0</code></td></tr>
+</tbody></table>
+<div class="tip"><b>정리</b> — <b>||</b> 는 값이 없을 때(falsy) 대신 쓸 <b>기본값</b>을 넣을 때, <b>&amp;&amp;</b> 는 앞의 값이 있을 때(truthy)만 뒤를 쓸 때. <b>&amp; |</b> 는 숫자 비트 계산이라 이런 데 쓰면 항상 0 이 됩니다. truthy/falsy + 단락 평가를 쓰면 값이 없을 때 날 오류를 <b>미리 막고</b> if 문을 <b>짧게</b> 쓸 수 있어요 (prompt 에서 취소한 <code>null</code> 까지 한 번에 처리).</div>
 </section>
 <section class="card">
 <h2>11. null 병합 · typeof · 삼항 연산자</h2>

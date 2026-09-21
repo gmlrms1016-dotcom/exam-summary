@@ -9,7 +9,7 @@
 - 파일 이름: <과목>-<N>주차.md · 8주차 중간고사는 <과목>-8주차-중간고사.md · 15주차 기말고사는 <과목>-15주차-기말고사.md
 - 첫 줄 `# 제목` = 버튼과 페이지에 보이는 주차 제목
 - `## ` 마다 카드 1개 · `### ` 소제목 · `> ` 안내 상자 · `- ` / `1. ` 목록(2칸 들여쓰기 = 하위 목록)
-- ``` 코드 블록 · `| a | b |` 표(첫 줄 머리글, 칸 안의 | 는 \\|) · <details> / <summary> 접기
+- ``` 코드 블록 (```output = ▶ 출력 결과 상자 · ```bits = 2진수 풀이 상자) · `| a | b |` 표(첫 줄 머리글, 칸 안의 | 는 \\|) · <details> / <summary> 접기
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
 원고 파일이 있는 주차만 과목 페이지에서 버튼이 열리고, 나머지는 잠깁니다.
 """
@@ -146,8 +146,12 @@ def render_md(md):
             while i < len(lines) and not lines[i].startswith("```"):
                 code.append(lines[i])
                 i += 1
-            cls = ' class="language-%s"' % lang if lang else ""
-            parts.append("<pre><code%s>%s</code></pre>" % (cls, html.escape("\n".join(code), quote=False)))
+            body = html.escape("\n".join(code), quote=False)
+            if lang in ("output", "bits"):   # 실행 결과 · 2진수 풀이 상자 (코드 색칠 안 함)
+                parts.append('<pre class="io%s"><code class="language-text">%s</code></pre>' % (" bits" if lang == "bits" else "", body))
+            else:
+                cls = ' class="language-%s"' % lang if lang else ""
+                parts.append("<pre><code%s>%s</code></pre>" % (cls, body))
         elif line.startswith("# ") and not title:
             flush()
             title = line[2:].strip()
@@ -220,6 +224,10 @@ PAGE_CSS = """
 .wk-pager .next{text-align:right;}
 .wk-pager span{visibility:hidden;}
 .wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 """
 
 PAGE = """<!DOCTYPE html>
