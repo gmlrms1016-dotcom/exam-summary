@@ -8,8 +8,8 @@
 (function () {
     "use strict";
 
-    // 빈칸채우기 채점과 동일한 정규화(띄어쓰기·괄호·대소문자 무시)
-    function norm(s) { return (s || "").trim().toLowerCase().replace(/\s+/g, "").replace(/[()]/g, ""); }
+    // 빈칸채우기 채점(quiz.js)과 동일한 정규화(띄어쓰기·괄호·따옴표·대소문자 무시)
+    function norm(s) { return (s || "").trim().toLowerCase().replace(/\s+/g, "").replace(/[()]/g, "").replace(/["'“”‘’]/g, ""); }
 
     // ---- 빈칸채우기: 오답/정답보기 여부를 data 속성으로 기록 (기존 스크립트와 별개로 동작) ----
     document.querySelectorAll(".quiz-item").forEach(function (item) {
