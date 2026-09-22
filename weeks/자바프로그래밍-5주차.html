@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202609181500"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바프로그래밍 5주차 · 3장 반복문·배열 실습 (while · 중첩 for · continue · break · 배열)</title>
+    <link rel="stylesheet" href="../style.css?v=202609181500">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../자바프로그래밍.html">← 자바프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>☕ 자바프로그래밍 · 5주차</h1>
+        <p>3장 반복문·배열 실습 (while · 중첩 for · continue · break · 배열)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-4주차.html">‹ 이전 · <b>4주차</b><br><small>2장 실습 + 3장 반복문·배열·예외처리</small></a><a class="next" href="자바프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~5주차 반영)</small></a></nav>
+
+<div class="tip">자료: 3장.pdf(4주차 자료) · 수업 소스 WhileSample · NestedLoop · ContinueExample · BreakExample · ArrayAccess · ForEx1~3 · 노션 필기(중요 슬라이드 캡처: 3장 p21)</div>
+<div class="tip">⭐ <b>수업 중 중요 표시</b> — 3장 p21 <b>자바 배열의 필요성과 모양</b>: 변수 10개 대신 <code>int i[] = new int[10];</code> 하나로 만들고 for 문에서 <code>sum += i[n];</code> 으로 한 번에 처리</div>
+<section class="card">
+<h2>1. while 실습 — -1 이 나올 때까지 평균 (예제 3-2)</h2>
+<div class="tip">📂 <b>5주차 (9/22)</b> — 수업은 4주차 강의자료 <b>3장</b>을 이어서 진행했고, 수업 중 작성한 소스 <b>WhileSample · NestedLoop · ContinueExample · BreakExample · ArrayAccess · ForEx1~3</b> 로 정리했어요 (노션 필기: “5주차 수업이지만 4주차 강의자료인 3장을 진도 나갔음”). 코드 주석과 ▶ 출력 결과은 전부 직접 컴파일·실행한 결과예요.</div>
+<pre><code class="language-java">// WhileSample.java (예제 3-2) — -1 이 입력될 때까지 정수를 받아 평균 구하기
+import java.util.Scanner;
+
+public class WhileSample {
+    public static void main(String[] args) {
+        int count = 0;                  // 입력된 정수의 개수
+        int sum = 0;                    // 합
+        Scanner sc = new Scanner(System.in);
+        System.out.println("정수를 입력하고 마지막에 -1을 입력하세요.");
+
+        int n = sc.nextInt();           // 첫 번째 수는 반복 전에 먼저 받는다
+        while (n != -1) {               // -1 이 아니면 계속 반복
+            sum += n;
+            count++;
+            n = sc.nextInt();           // 다음 수 → 다시 조건 검사
+        }
+
+        if (count == 0) {               // 처음부터 -1 이면 0 으로 나누게 되므로 따로 처리
+            System.out.println("입력된 수가 없습니다.");
+        } else {
+            System.out.print("정수의 개수는 " + count + "개이며 ");
+            System.out.println("평균은 " + (double) sum / count + "입니다.");   // 실수 나눗셈
+        }
+        sc.close();
+    }
+}</code></pre>
+<h3>실행 화면 ① 10 30 -20 40 -1 입력 (강의자료 p10)</h3>
+<pre class="io"><code class="language-text">정수를 입력하고 마지막에 -1을 입력하세요.
+10 30 -20 40 -1
+정수의 개수는 4개이며 평균은 15.0입니다.</code></pre>
+<h3>실행 화면 ② 처음부터 -1 입력</h3>
+<pre class="io"><code class="language-text">정수를 입력하고 마지막에 -1을 입력하세요.
+-1
+입력된 수가 없습니다.</code></pre>
+<div class="tip">📌 <b>첫 번째 수는 while 전에</b> 한 번 받고, 반복문 끝에서 다음 수를 받아 다시 조건을 검사해요 · 평균은 <code>(double) sum / count</code> — 정수끼리 나누면 소수점이 버려지므로 실수로 바꿔서 나눈다 (→ 3주차 타입 변환 ★시험단골) · 처음부터 -1 이면 count 가 0 이라 <b>0 으로 나누지 않도록</b> if 로 따로 처리</div>
+</section>
+<section class="card">
+<h2>2. 중첩 for — 구구단 (예제 3-4)</h2>
+<div class="tip">📌 강의자료 p15 문제 — <b>2중 중첩 for 문을 사용하여 구구단을 출력</b>하는 프로그램을 작성하시오. <b>한 줄에 한 단씩</b> 출력한다.</div>
+<pre><code class="language-java">// NestedLoop.java (예제 3-4) — 2중 for 로 구구단 (한 줄에 한 단씩)
+public class NestedLoop {
+    public static void main(String[] args) {
+        for (int i = 1; i &lt; 10; i++) {          // 바깥: 1단 ~ 9단
+            for (int j = 1; j &lt; 10; j++) {      // 안쪽: 곱하는 수 1 ~ 9
+                System.out.print(i + "*" + j + "=" + i * j);
+                System.out.print("\t");         // 탭으로 칸 띄우기
+            }
+            System.out.println();               // 한 단이 끝나면 줄바꿈
+        }
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">1*1=1	1*2=2	1*3=3	1*4=4	1*5=5	1*6=6	1*7=7	1*8=8	1*9=9	
+2*1=2	2*2=4	2*3=6	2*4=8	2*5=10	2*6=12	2*7=14	2*8=16	2*9=18	
+3*1=3	3*2=6	3*3=9	3*4=12	3*5=15	3*6=18	3*7=21	3*8=24	3*9=27	
+4*1=4	4*2=8	4*3=12	4*4=16	4*5=20	4*6=24	4*7=28	4*8=32	4*9=36	
+5*1=5	5*2=10	5*3=15	5*4=20	5*5=25	5*6=30	5*7=35	5*8=40	5*9=45	
+6*1=6	6*2=12	6*3=18	6*4=24	6*5=30	6*6=36	6*7=42	6*8=48	6*9=54	
+7*1=7	7*2=14	7*3=21	7*4=28	7*5=35	7*6=42	7*7=49	7*8=56	7*9=63	
+8*1=8	8*2=16	8*3=24	8*4=32	8*5=40	8*6=48	8*7=56	8*8=64	8*9=72	
+9*1=9	9*2=18	9*3=27	9*4=36	9*5=45	9*6=54	9*7=63	9*8=72	9*9=81	</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>반복문</th><th>도는 횟수</th><th>하는 일</th></tr>
+<tr><td>바깥 <code>i</code></td><td>9번 (1 ~ 9단)</td><td>한 단이 끝나면 <code>println()</code> 으로 줄바꿈</td></tr>
+<tr><td>안쪽 <code>j</code></td><td>바깥 1번당 9번 → 총 81번</td><td><code>i*j</code> 를 <code>print</code> + 탭으로 옆으로 이어 찍기</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>3. continue · break 실습 (예제 3-5 · 3-6)</h2>
+<table class="ref">
+<tbody>
+<tr><th>키워드</th><th>하는 일 (강의자료 p16 · p18)</th></tr>
+<tr><td><code>continue</code></td><td>반복문을 빠져나가지 <b>않고 다음 반복</b>으로 진행 (아래 문장 건너뜀)</td></tr>
+<tr><td><code>break</code></td><td>반복문 <b>하나</b>를 완전히 빠져나감 · 중첩이면 <b>안쪽 반복문만</b> 벗어남</td></tr>
+</tbody></table>
+<h3>예제 3-5 ContinueExample — 양수만 더하기</h3>
+<pre><code class="language-java">// ContinueExample.java (예제 3-5) — continue 로 양수만 더하기
+import java.util.Scanner;
+
+public class ContinueExample {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("정수를 5개 입력하세요.");
+        int sum = 0;
+        for (int i = 0; i &lt; 5; i++) {
+            int n = sc.nextInt();
+            if (n &lt;= 0) {
+                continue;               // 0 이하면 아래를 건너뛰고 다음 반복으로
+            } else {
+                sum += n;               // 양수만 더한다
+            }
+        }
+        System.out.println("양수의 합은 " + sum);
+        sc.close();
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">정수를 5개 입력하세요.
+5 -2 6 10 -4
+양수의 합은 21</code></pre>
+<div class="tip">-2 와 -4 는 <code>continue</code> 로 건너뛰어서 5 + 6 + 10 = <b>21</b></div>
+<h3>예제 3-6 BreakExample — exit 입력 시 종료</h3>
+<pre><code class="language-java">// BreakExample.java (예제 3-6) — "exit" 이 입력되면 break 로 while 을 빠져나간다
+import java.util.Scanner;
+
+public class BreakExample {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("exit을 입력하면 종료합니다.");
+        while (true) {                  // 조건이 항상 true → break 로만 빠져나올 수 있다
+            System.out.print("&gt;&gt;");
+            String text = sc.nextLine();
+            if (text.equals("exit")) {  // 문자열 비교는 == 가 아니라 equals()
+                break;                  // while 문 하나를 완전히 벗어남
+            }
+        }
+        System.out.println("종료합니다...");
+        sc.close();
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">exit을 입력하면 종료합니다.
+&gt;&gt;hello
+&gt;&gt;java
+&gt;&gt;exit
+종료합니다...</code></pre>
+<div class="tip">⚠️ <code>while (true)</code> 는 조건이 항상 참이라 <b>break 가 없으면 무한 반복</b> · 문자열 비교는 <code>text.equals("exit")</code> (<code>==</code> 아님)</div>
+</section>
+<section class="card">
+<h2>4. 배열 — 필요성과 접근 ★중요</h2>
+<div class="tip">📸 <b>수업 중 “중요한 강의자료” 로 캡처한 슬라이드 — 3장 p21 자바 배열의 필요성과 모양</b></div>
+<table class="ref">
+<tbody>
+<tr><th>방법</th><th>만들기 → 합 구하기</th></tr>
+<tr><td>변수 10개</td><td><code>int i0, i1, …, i9;</code> · → <code>sum = i0+i1+…+i9;</code> 변수마다 따로 써야 함 ❌</td></tr>
+<tr><td><b>배열 1개</b></td><td><code>int i[] = new int[10];</code> · → for 문에서 <code>sum += i[n];</code> 인덱스 n 만 바꿔 반복 ✅</td></tr>
+</tbody></table>
+<div class="tip">📌 배열 = 인덱스와 그에 대응하는 <b>같은 타입</b> 데이터들의 모음 · 한 번에 많은 메모리 공간 할당 · 인덱스는 <b>0 부터</b>, 마지막은 <b>크기 − 1</b> · <b>반복문으로 처리하기에 적합</b> (강의자료 p20 · p25) — 선언·생성 문법은 4주차 배열</div>
+<h3>ArrayAccess — 인덱스로 넣고 꺼내기, for 로 전체 출력</h3>
+<pre><code class="language-java">// ArrayAccess.java — 배열 생성 · 인덱스로 접근 · for 로 전체 출력
+public class ArrayAccess {
+    public static void main(String[] args) {
+        int[] numbers = new int[5];     // 정수 5개짜리 배열 생성 → 인덱스 0 ~ 4
+        numbers[0] = 10;
+        numbers[1] = 20;
+        numbers[2] = 30;
+        numbers[3] = 40;
+        numbers[4] = 50;                // 마지막 인덱스 = 크기 - 1
+        System.out.println("첫번째 요소 : " + numbers[0]);
+        System.out.println("세번째 요소 : " + numbers[2]);   // 세 번째 = 인덱스 2
+
+        int[] score = {90, 85, 78, 100, 95};    // 선언과 동시에 초기화
+        for (int i = 0; i &lt; 5; i++) {
+            System.out.println(i + 1 + "번학생 점수 = " + score[i] + "점");
+            // i + 1 이 먼저 더해진 뒤(숫자) 문자열과 붙는다 → 1번, 2번 …
+        }
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">첫번째 요소 : 10
+세번째 요소 : 30
+1번학생 점수 = 90점
+2번학생 점수 = 85점
+3번학생 점수 = 78점
+4번학생 점수 = 100점
+5번학생 점수 = 95점</code></pre>
+<div class="tip">⚠️ <code>i + 1 + "번학생"</code> — <code>+</code> 는 왼쪽부터 계산해서 <b>i + 1 이 먼저 숫자로 더해진 뒤</b> 문자열과 붙어요 → 1번, 2번 … · 수업 파일 이름은 교재 <b>예제 3-7</b>(배열에서 제일 큰 수 찾기, p27)과 같지만 내용은 배열 접근 기본 연습이에요.</div>
+</section>
+<section class="card">
+<h2>5. 수업 실습 문제 — ForEx1 · ForEx2 · ForEx3</h2>
+<h3>ForEx1 — 5! 구하는 프로그램을 작성하시오</h3>
+<pre><code class="language-java">// ForEx1.java — 5! (5 팩토리얼) 구하기
+public class ForEx1 {
+    public static void main(String[] args) {
+        int result = 1;                 // 곱하기는 1 부터 시작 (0 이면 계속 0)
+        for (int i = 1; i &lt;= 5; i++) {
+            result *= i;                // 1 × 2 × 3 × 4 × 5
+        }
+        System.out.println(result);
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">120</code></pre>
+<h3>ForEx2 — 1~10 사이의 숫자 중 짝수만 골라 출력하시오</h3>
+<pre><code class="language-java">// ForEx2.java — 1 ~ 10 사이의 숫자 중 짝수만 출력
+public class ForEx2 {
+    public static void main(String[] args) {
+        for (int i = 1; i &lt;= 10; i++) {
+            if (i % 2 == 0) {           // 2 로 나눈 나머지가 0 → 짝수
+                System.out.println(i);
+            }
+        }
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">2
+4
+6
+8
+10</code></pre>
+<h3>ForEx3 — while 문으로 0~9 사이의 숫자를 출력하시오</h3>
+<pre><code class="language-java">// ForEx3.java — while 문으로 0 ~ 9 출력
+public class ForEx3 {
+    public static void main(String[] args) {
+        int i = 0;                      // 초기화는 while 밖에서
+        while (i &lt; 10) {                // 조건
+            System.out.print(i);        // print → 줄을 안 바꾸고 이어서 출력
+            i++;                        // 증감을 빼먹으면 무한 반복
+        }
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">0123456789</code></pre>
+<div class="tip">📌 for 의 세 부분(초기화 · 조건 · 증감)을 while 로 바꾸면 <b>초기화는 while 앞</b>, <b>증감은 while 안 마지막</b>으로 간다 · ForEx3 는 <code>print</code> 라서 한 줄에 붙어 나와요</div>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
+<pre><code class="language-text">5주차수업이지만 4주차강의자료인 3장을 진도를 나갔음
+java소스코드 참고
+중요한 강의자료 캡처함 (→ 3장 p21 자바 배열의 필요성과 모양)</code></pre>
+</details>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../자바프로그래밍.html#quiz">자바프로그래밍 과목 페이지 — 퀴즈(객관식 15 · 주관식 15)</a></li><li><a href="../자바프로그래밍.html#output">🖥️ 출력 결과 맞히기 — 중첩 for · 배열 · while · continue</a></li><li><a href="../자바프로그래밍.html#code">💻 코딩테스트 — n! · 구구단 n단</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-4주차.html">‹ 이전 · <b>4주차</b><br><small>2장 실습 + 3장 반복문·배열·예외처리</small></a><a class="next" href="자바프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~5주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「자바프로그래밍 · 5주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>
