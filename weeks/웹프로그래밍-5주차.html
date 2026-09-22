@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202609181500"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹프로그래밍 5주차 · &lt;9월 22일&gt; 함수·콜백·객체·배열</title>
+    <link rel="stylesheet" href="../style.css?v=202609181500">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../웹프로그래밍.html">← 웹프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🕸️ 웹프로그래밍 · 5주차</h1>
+        <p>&lt;9월 22일&gt; 함수·콜백·객체·배열</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-4주차.html">‹ 이전 · <b>4주차</b><br><small>&lt;9월 15일&gt; 연산자·truthy/falsy·단락 평가</small></a><a class="next" href="웹프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~5주차 반영)</small></a></nav>
+
+<div class="tip">자료: 수업 필기(노션) · 0922_01.js · 0922_02.js · 0922_03.js (강의자료 없음)</div>
+<div class="tip">🎯 <b>시험 포인트</b> — 🔥 <b>"문제가 생기는 코드 라인을 찍어주시오"</b> (0922_01.js 선언적 함수·호이스팅) → <code>let imsi</code> 보다 먼저 쓴 <code>console.log(imsi);</code> 가 오류 줄, <code>console.log(getArea(5,5))</code> 는 호이스팅이라 정상 · <b>콜백 함수 뜻</b> (필기)</div>
+<section class="card">
+<h2>1. 호이스팅 · 선언적 함수 ★시험</h2>
+<div class="tip">📂 <b>5주차 (9/22)</b> — 강의자료 없이 노션 필기와 수업 파일 <b>0922_01.js · 0922_02.js · 0922_03.js</b> 로 정리했어요. 오늘 주제: <b>함수 · 콜백 함수 · 객체 · 배열</b> · ✍️ 수업 시작 복습 — <b>Node.js</b> 는 JS 를 단독으로 실행하는 것만이 아니라 <b>서버 기능도 간단하게 넣은 것</b> · <b>내장 객체</b> = 시스템 안에서 제공되는 객체 (예: <code>JSON</code>)</div>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>선언보다 먼저 쓰면?</th></tr>
+<tr><td><b>선언적 함수</b></td><td><code>function f(){}</code> → ✅ 실행된다 — <b>호이스팅</b>: 선언이 코드 맨 위로 끌어올려진 것처럼 동작</td></tr>
+<tr><td><b>let 변수</b></td><td><code>let a;</code> → ❌ <b>ReferenceError</b> — 선언한 줄보다 먼저 쓸 수 없다</td></tr>
+<tr><td><b>익명 함수</b></td><td><code>let f = function(){}</code> → ❌ <b>ReferenceError</b> — 결국 let 변수에 담긴 함수라서</td></tr>
+</tbody></table>
+<h3>예제 ① 0922_01.js — 선언보다 먼저 부른 getArea</h3>
+<pre><code class="language-javascript">// 0922_01.js 1-1. 선언적 함수 — 선언보다 먼저 호출해도 실행된다 (호이스팅)
+console.log(getArea(5, 5));   // 아직 아래에 선언하기 전인데 호출 → 25
+function getArea(width, height) {
+    let area = width * height;
+    return area;
+}
+console.log(getArea(10, 5));  // 50</code></pre>
+<pre class="io"><code class="language-text">25
+50</code></pre>
+<h3>🔥 시험문제 — “문제가 생기는 코드 라인을 찍어주시오”</h3>
+<pre><code class="language-javascript">// ★시험문제 — "문제가 생기는 코드 라인을 찍어주시오" (0922_01.js 에서 주석 처리한 두 줄)
+console.log(imsi);            // ← 여기서 오류! let 변수는 선언한 줄보다 먼저 쓸 수 없다
+let imsi;
+console.log(getArea(5, 5));   // 이 줄은 문제없다 (선언적 함수는 호이스팅)
+function getArea(width, height) {
+    let area = width * height;
+    return area;
+}</code></pre>
+<pre class="io"><code class="language-text">ReferenceError: Cannot access 'imsi' before initialization</code></pre>
+<div class="tip">🔥 <b>정답: <code>console.log(imsi);</code> 줄</b> — <code>let imsi</code> 가 아래에 있어서 선언 전에 쓴 것이 오류 (<code>ReferenceError</code>). 그 줄에서 멈추기 때문에 아래는 실행되지 않지만, <code>console.log(getArea(5, 5));</code> 자체는 호이스팅 덕분에 <b>문제없는 줄</b>이에요. (수업 파일에서는 이 두 줄을 주석으로 막아 둠)</div>
+<h3>비교 — 익명 함수는 선언 전에 부르면 오류</h3>
+<pre><code class="language-javascript">// 비교 — 익명 함수(함수 표현식)는 선언 전에 부르면 오류
+console.log(sum(7, 5));       // ← 오류: sum 은 let 변수라 아직 쓸 수 없다
+let sum = function (n1, n2) {
+    return n1 + n2;
+}</code></pre>
+<pre class="io"><code class="language-text">ReferenceError: Cannot access 'sum' before initialization</code></pre>
+</section>
+<section class="card">
+<h2>2. 익명 함수 · 화살표 함수</h2>
+<div class="tip">📌 함수 만드는 3가지(→ 2주차) 중 <b>익명 함수</b>는 이름 없는 함수를 변수에 담고, <b>화살표 함수</b>는 <code>function</code> 대신 <code>=&gt;</code> 를 쓴다</div>
+<h3>예제 0922_01.js 1-2 · 1-3</h3>
+<pre><code class="language-javascript">// 0922_01.js 1-2. 익명 함수 · 1-3. 화살표 함수
+let sum = function (n1, n2) {     // 이름 없는 함수를 변수 sum 에 담는다
+    return n1 + n2;
+}
+sum(7, 5);                        // 수업 코드: 계산만 하고 출력은 안 함 → 화면엔 아무것도 없다
+console.log(sum(7, 5));           // 12 ← 결과를 보려면 console.log 로 감싼다
+
+let sum1 = (n1, n2) =&gt; {          // function 대신 =&gt; (화살표)
+    return n1 + n2;
+}
+console.log(sum1(3, 4));          // 7</code></pre>
+<pre class="io"><code class="language-text">12
+7</code></pre>
+<div class="tip">⚠️ 수업 코드의 <code>sum(7,5);</code> 는 값을 <b>돌려주기만</b> 하고 출력하지 않아서 콘솔에 아무것도 안 나와요 → 결과를 보려면 <code>console.log(sum(7, 5))</code></div>
+</section>
+<section class="card">
+<h2>3. 콜백 함수 ★</h2>
+<div class="tip">✍️ 필기 — <b>콜백 함수 : 다른 함수에 인자로 전달되어서, 나중에 실행되는 함수</b></div>
+<h3>예제 ① 0922_01.js 1-4 — call1 을 call2 에 넘기기</h3>
+<pre><code class="language-javascript">// 0922_01.js 1-4. 콜백 함수 — 다른 함수에 인자로 전달되어 나중에 실행되는 함수
+let call1 = function () {
+    console.log(`나는 콜되어진 함수`);
+}
+function call2(funcVar) {         // funcVar 로 함수를 받아서
+    funcVar();                    // 여기서 실행 (= 콜백)
+}
+call2(call1);                     // 괄호 없이 call1 을 넘긴다 → 나는 콜되어진 함수
+
+console.log(call1());             // 괄호 O = 실행 → 나는 콜되어진 함수, 그리고 반환값이 없어서 undefined</code></pre>
+<pre class="io"><code class="language-text">나는 콜되어진 함수
+나는 콜되어진 함수
+undefined</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>쓰는 법</th><th>뜻 · console.log 하면</th></tr>
+<tr><td><code>call1</code> · (괄호 X)</td><td>함수 <b>그 자체</b>(값) — 콜백으로 넘기거나 변수에 담을 때 · 찍으면 함수 모양이 나온다 (node: <code>[Function: call1]</code>)</td></tr>
+<tr><td><code>call1()</code> · (괄호 O)</td><td>함수를 <b>실행</b>한 결과 — 실행되고, 반환값이 없으면 <code>undefined</code></td></tr>
+</tbody></table>
+<div class="tip">✍️ 필기 — 괄호가 있는 것과 없는 것은 다르다: <code>console.log(call1)</code> ≠ <code>console.log(call1())</code> · 콜백으로 넘길 때는 <b>괄호 없이</b> 이름만</div>
+<h3>예제 ② 0922_01.js — 반복은 repeat, 할 일은 콜백</h3>
+<pre><code class="language-javascript">// 0922_01.js 콜백함수 예제 — 반복은 repeat 가, 할 일은 콜백이 정한다
+function repeat(count, callback) {
+    for (let idx = 1; idx &lt;= count; idx++) {
+        callback(idx);            // 넘겨받은 함수에 idx 를 넣어 실행
+    }
+}
+repeat(5, (idx) =&gt; { console.log(idx); });       // 1 2 3 4 5
+repeat(5, (idx) =&gt; { console.log(idx * 2); });   // 2 4 6 8 10
+repeat(5, (idx) =&gt; { console.log(idx * 3); });   // 3 6 9 12 15</code></pre>
+<pre class="io"><code class="language-text">1
+2
+3
+4
+5
+2
+4
+6
+8
+10
+3
+6
+9
+12
+15</code></pre>
+<h3>주의 — 같은 이름의 선언적 함수를 여러 번 만들면</h3>
+<pre><code class="language-javascript">// 수업 파일처럼 같은 이름의 선언적 함수를 여러 번 만들면 → 마지막 것만 남는다
+function repeat(count) {
+    for (let i = 0; i &lt;= count; i++) console.log(i);
+}
+function repeat(count, callback) {   // 이 선언이 위의 repeat 를 덮어쓴다
+    for (let idx = 1; idx &lt;= count; idx++) callback(idx);
+}
+repeat(3, (idx) =&gt; { console.log(idx * 10); });  // 10 20 30
+repeat(3);                                       // ← 오류: 첫 번째 repeat 가 아니라 콜백 버전이 불려서 callback 이 없다</code></pre>
+<pre class="io"><code class="language-text">10
+20
+30
+TypeError: callback is not a function</code></pre>
+<div class="tip">⚠️ 수업 파일 0922_01.js 에도 <code>function repeat</code> 가 <b>3번</b> 선언돼 있어요. 선언적 함수는 호이스팅되면서 <b>마지막 선언이 앞의 것을 덮어써서</b>, 파일의 모든 호출은 마지막 <code>repeat(count, callback)</code> 을 씁니다.</div>
+</section>
+<section class="card">
+<h2>4. 객체 — 생성 · 프로퍼티 · 메서드</h2>
+<table class="ref">
+<tbody>
+<tr><th>만드는 법</th><th>코드</th></tr>
+<tr><td>생성자</td><td><code>let obj1 = new Object();</code></td></tr>
+<tr><td><b>리터럴</b></td><td><code>let obj2 = {};</code> — <b>대부분 이걸 쓴다</b></td></tr>
+<tr><td>내장 객체</td><td><code>let obj3 = new Date();</code> — 날짜·시간 (값이 실행할 때마다 다름)</td></tr>
+<tr><td>용어</td><td>뜻</td></tr>
+<tr><td>---</td><td>---</td></tr>
+<tr><td><b>프로퍼티</b>(속성)</td><td><code>key: value</code> 한 쌍</td></tr>
+<tr><td><b>메서드</b></td><td>객체 안에 들어 있는 함수</td></tr>
+</tbody></table>
+<h3>예제 ① 0922_02.js — 점 표기법 · 대괄호 표기법</h3>
+<pre><code class="language-javascript">// 0922_02.js 2. 객체 — 생성 · 프로퍼티(속성) · 메서드
+let obj1 = new Object();          // 객체 생성자
+let obj2 = {};                    // 객체 리터럴 (대부분 이걸 쓴다)
+
+let person = {
+    name: "윤희근",                // 속성(프로퍼티)  key: value
+    age: 23,
+    eat: () =&gt; { console.log("먹는다"); }   // 메서드 (객체 안의 함수)
+}
+console.log(person.name);         // 점 표기법 → 윤희근
+console.log(person["age"]);       // 대괄호 표기법 → 23 (key 를 문자열로)
+person.eat();                     // 메서드 호출 → 먹는다
+
+let test = "name";
+console.log(person[test]);        // 따옴표 없이 쓰면 변수 → test 안의 "name" → 윤희근</code></pre>
+<pre class="io"><code class="language-text">윤희근
+23
+먹는다
+윤희근</code></pre>
+<div class="tip"><b>필기 정정</b> — 필기의 “꼭!! 쌍따옴표로 key명” → 대괄호 안에는 key 를 <b>문자열</b>로 쓰면 되므로 <code>person["age"]</code> · <code>person['age']</code> 둘 다 돼요. 따옴표 없이 <code>person[test]</code> 처럼 쓰면 <b>변수</b>로 보고 그 안의 값("name")을 key 로 씁니다.</div>
+<h3>예제 ② 0922_02.js 2-3 — 속성 추가 · 삭제</h3>
+<pre><code class="language-javascript">// 0922_02.js 2-3. 프로퍼티 추가 · 삭제
+let person = { name: "윤희근", age: 23 };
+
+person.job = "developer";         // 없던 key 에 대입 → 속성 추가
+console.log(person.job);          // developer
+
+delete person.job;                // 속성 삭제
+delete person["age"];             // 대괄호로도 삭제 가능
+console.log(person.job);          // undefined (없는 속성)
+console.log(person.age);          // undefined
+console.log(person.name);         // 윤희근 (남아 있음)</code></pre>
+<pre class="io"><code class="language-text">developer
+undefined
+undefined
+윤희근</code></pre>
+<div class="tip">✍️ 필기 — 속성을 추가하는 건 <b>append 같은 개념</b>(없던 key 에 대입) · 수업 코드의 <code>person.jop</code> 은 <b>job</b>(직업)의 오타예요.</div>
+<h3>예제 ③ 0922_02.js — const 객체</h3>
+<pre><code class="language-javascript">// 0922_02.js const 객체 — 통째로 바꾸기는 X, 속성 추가·수정은 O
+const animal = {
+    type: "고양이",
+    name: "나비",
+    color: "black"
+}
+animal.age = 2;                   // 속성 추가는 된다
+animal.color = "white";           // 속성 수정도 된다
+console.log(animal.age, animal.color);   // 2 white
+
+animal = { age: 1 };              // ← 오류: const 변수에 새 객체를 다시 대입</code></pre>
+<pre class="io"><code class="language-text">2 white
+TypeError: Assignment to constant variable.</code></pre>
+</section>
+<section class="card">
+<h2>5. 배열 — 생성 · 요소 접근 · 반복</h2>
+<table class="ref">
+<tbody>
+<tr><th>만드는 법</th><th>코드</th></tr>
+<tr><td>생성자</td><td><code>let arrA = new Array();</code></td></tr>
+<tr><td><b>리터럴</b></td><td><code>let arrB = [];</code> — <b>대부분 이걸 쓴다</b></td></tr>
+</tbody></table>
+<h3>예제 0922_03.js — 번지는 0 부터, length 는 개수</h3>
+<pre><code class="language-javascript">// 0922_03.js 3. 배열 — 생성 · 요소 접근 · 수정 · 반복
+let arrA = new Array();           // 배열 생성자
+let arrB = [];                    // 배열 리터럴 (대부분 이걸 쓴다)
+
+let arrC = [1, 2, 3, true, "hello", null, undefined];   // 여러 자료형을 한 배열에
+console.log(arrC.length);         // 7 (요소 개수)
+console.log(arrC[0], arrC[1]);    // 1 2 (번지는 0 부터)
+
+arrC[0] = "hello";                // 0번지 값 1 → "hello" 로 바꾸기
+for (let i = 0; i &lt; arrC.length; i++) {
+    console.log(arrC[i]);
+}</code></pre>
+<pre class="io"><code class="language-text">7
+1 2
+hello
+2
+3
+true
+hello
+null
+undefined</code></pre>
+<div class="tip">📌 배열에는 숫자·문자열·true·null·undefined 는 물론 수업 코드처럼 <b>함수 <code>()=&gt;{}</code>, 객체 <code>{}</code>, 배열 <code>[]</code></b> 도 넣을 수 있어요 (이 셋은 콘솔에 찍히는 모양이 실행 환경마다 달라서 위 예제에서는 뺐어요). · ⚠️ 수업 파일 10번째 줄 주석(“0번지에 있는 정수 1을 문자 hello로 치환”)은 13번째 줄 주석을 복사한 것 — <code>let item1 = arrC[0];</code> 시점의 item1 은 그냥 <b>1</b> 이에요.</div>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
+<pre><code class="language-text">node.js는 단순히 단독적으로 실행하는게 아니라, 서버의 기능은 간다하게 넣은거임
+내장객체:시스템안에서 제공되는 객체{
+JSON
+}
+
+오늘 이야기 할것:object,콜백함수
+호이스팅 뜻?
+// 1.함수
+// 1-1. 선언적 함수(//시험문제 문제가 생기는 코드 라인을 찍어주시오)
+console.log(imsi);
+let imsi;
+console.log(getArea(5,5)); //호이스팅
+function getArea(width , height){
+    let area = width * height;
+    return area;
+}
+console.log(getArea(10,5));
+
+콜백 함수:다른 함수에 인자로 전달되어서, 나중에 실행되는 함수</code></pre>
+</details>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../웹프로그래밍.html#quiz">웹프로그래밍 과목 페이지 — 퀴즈(객관식 15 · 주관식 15)</a></li><li><a href="../웹프로그래밍.html#output">🖥️ 출력 결과 맞히기 — 🔥 호이스팅 포함</a></li><li><a href="../웹프로그래밍.html#code">💻 코딩테스트 — 🔥 선언보다 먼저 호출하는 getArea · 콜백 repeat · 객체</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-4주차.html">‹ 이전 · <b>4주차</b><br><small>&lt;9월 15일&gt; 연산자·truthy/falsy·단락 평가</small></a><a class="next" href="웹프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~5주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「웹프로그래밍 · 5주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

@@ -22,7 +22,7 @@
 
     <header class="page-head">
         <h1>웹프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 4주차 (강좌 OT · 9/1 · 9/8 · 9/15) · 강의시간에 나온 내용 전부 정리</p>
+        <p>1주차 ~ 5주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22) · 강의시간에 나온 내용 전부 정리</p>
     </header>
 
     <div id="week-nav" data-subject="웹프로그래밍"></div>
@@ -55,6 +55,11 @@
         <a href="#s21">21.단락평가</a>
         <a href="#s22">22.??·typeof·삼항</a>
         <a href="#s23">23.매개변수</a>
+        <a href="#s24">24.★호이스팅</a>
+        <a href="#s25">25.익명·화살표</a>
+        <a href="#s26">26.★콜백</a>
+        <a href="#s27">27.객체</a>
+        <a href="#s28">28.배열</a>
         <a href="#quiz">✏️퀴즈</a>
         <a href="#output">🖥️출력맞히기</a>
         <a href="#code">💻코딩테스트</a>
@@ -529,8 +534,231 @@ printName();                     // 인수 없음 → person의 값이 없음</c
         <div class="tip"><b>복습 — 함수 선언 3가지</b>: 선언적 함수 · 표현적(익명) 함수 · 화살표 함수 (→ 8번 참고)</div>
     </section>
 
+    <section class="card" id="s24">
+        <h2>24. 호이스팅 · 선언적 함수 ★시험<span class="week">5주차</span></h2>
+        <div class="tip">📂 <b>5주차 (9/22)</b> — 강의자료 없이 노션 필기와 수업 파일 <b>0922_01.js · 0922_02.js · 0922_03.js</b> 로 정리했어요. 오늘 주제: <b>함수 · 콜백 함수 · 객체 · 배열</b><br>✍️ 수업 시작 복습 — <b>Node.js</b> 는 JS 를 단독으로 실행하는 것만이 아니라 <b>서버 기능도 간단하게 넣은 것</b> · <b>내장 객체</b> = 시스템 안에서 제공되는 객체 (예: <code>JSON</code>)</div>
+        <table class="ref">
+            <tr><th>구분</th><th>선언보다 먼저 쓰면?</th></tr>
+            <tr><td><b>선언적 함수</b></td><td><code>function f(){}</code> → ✅ 실행된다 — <b>호이스팅</b>: 선언이 코드 맨 위로 끌어올려진 것처럼 동작</td></tr>
+            <tr><td><b>let 변수</b></td><td><code>let a;</code> → ❌ <b>ReferenceError</b> — 선언한 줄보다 먼저 쓸 수 없다</td></tr>
+            <tr><td><b>익명 함수</b></td><td><code>let f = function(){}</code> → ❌ <b>ReferenceError</b> — 결국 let 변수에 담긴 함수라서</td></tr>
+        </table>
+        <h3>예제 ① 0922_01.js — 선언보다 먼저 부른 getArea</h3>
+        <pre><code class="language-javascript">// 0922_01.js 1-1. 선언적 함수 — 선언보다 먼저 호출해도 실행된다 (호이스팅)
+console.log(getArea(5, 5));   // 아직 아래에 선언하기 전인데 호출 → 25
+function getArea(width, height) {
+    let area = width * height;
+    return area;
+}
+console.log(getArea(10, 5));  // 50</code></pre>
+        <pre class="io"><code>25
+50</code></pre>
+        <h3>🔥 시험문제 — “문제가 생기는 코드 라인을 찍어주시오”</h3>
+        <pre><code class="language-javascript">// ★시험문제 — "문제가 생기는 코드 라인을 찍어주시오" (0922_01.js 에서 주석 처리한 두 줄)
+console.log(imsi);            // ← 여기서 오류! let 변수는 선언한 줄보다 먼저 쓸 수 없다
+let imsi;
+console.log(getArea(5, 5));   // 이 줄은 문제없다 (선언적 함수는 호이스팅)
+function getArea(width, height) {
+    let area = width * height;
+    return area;
+}</code></pre>
+        <pre class="io"><code>ReferenceError: Cannot access 'imsi' before initialization</code></pre>
+        <div class="tip">🔥 <b>정답: <code>console.log(imsi);</code> 줄</b> — <code>let imsi</code> 가 아래에 있어서 선언 전에 쓴 것이 오류 (<code>ReferenceError</code>). 그 줄에서 멈추기 때문에 아래는 실행되지 않지만, <code>console.log(getArea(5, 5));</code> 자체는 호이스팅 덕분에 <b>문제없는 줄</b>이에요. (수업 파일에서는 이 두 줄을 주석으로 막아 둠)</div>
+        <h3>비교 — 익명 함수는 선언 전에 부르면 오류</h3>
+        <pre><code class="language-javascript">// 비교 — 익명 함수(함수 표현식)는 선언 전에 부르면 오류
+console.log(sum(7, 5));       // ← 오류: sum 은 let 변수라 아직 쓸 수 없다
+let sum = function (n1, n2) {
+    return n1 + n2;
+}</code></pre>
+        <pre class="io"><code>ReferenceError: Cannot access 'sum' before initialization</code></pre>
+    </section>
+
+    <section class="card" id="s25">
+        <h2>25. 익명 함수 · 화살표 함수<span class="week">5주차</span></h2>
+        <div class="tip">📌 함수 만드는 3가지(→ <a href="#s8">8번</a>) 중 <b>익명 함수</b>는 이름 없는 함수를 변수에 담고, <b>화살표 함수</b>는 <code>function</code> 대신 <code>=&gt;</code> 를 쓴다</div>
+        <h3>예제 0922_01.js 1-2 · 1-3</h3>
+        <pre><code class="language-javascript">// 0922_01.js 1-2. 익명 함수 · 1-3. 화살표 함수
+let sum = function (n1, n2) {     // 이름 없는 함수를 변수 sum 에 담는다
+    return n1 + n2;
+}
+sum(7, 5);                        // 수업 코드: 계산만 하고 출력은 안 함 → 화면엔 아무것도 없다
+console.log(sum(7, 5));           // 12 ← 결과를 보려면 console.log 로 감싼다
+
+let sum1 = (n1, n2) =&gt; {          // function 대신 =&gt; (화살표)
+    return n1 + n2;
+}
+console.log(sum1(3, 4));          // 7</code></pre>
+        <pre class="io"><code>12
+7</code></pre>
+        <div class="tip">⚠️ 수업 코드의 <code>sum(7,5);</code> 는 값을 <b>돌려주기만</b> 하고 출력하지 않아서 콘솔에 아무것도 안 나와요 → 결과를 보려면 <code>console.log(sum(7, 5))</code></div>
+    </section>
+
+    <section class="card" id="s26">
+        <h2>26. 콜백 함수 ★<span class="week">5주차</span></h2>
+        <div class="tip">✍️ 필기 — <b>콜백 함수 : 다른 함수에 인자로 전달되어서, 나중에 실행되는 함수</b></div>
+        <h3>예제 ① 0922_01.js 1-4 — call1 을 call2 에 넘기기</h3>
+        <pre><code class="language-javascript">// 0922_01.js 1-4. 콜백 함수 — 다른 함수에 인자로 전달되어 나중에 실행되는 함수
+let call1 = function () {
+    console.log(`나는 콜되어진 함수`);
+}
+function call2(funcVar) {         // funcVar 로 함수를 받아서
+    funcVar();                    // 여기서 실행 (= 콜백)
+}
+call2(call1);                     // 괄호 없이 call1 을 넘긴다 → 나는 콜되어진 함수
+
+console.log(call1());             // 괄호 O = 실행 → 나는 콜되어진 함수, 그리고 반환값이 없어서 undefined</code></pre>
+        <pre class="io"><code>나는 콜되어진 함수
+나는 콜되어진 함수
+undefined</code></pre>
+        <table class="ref">
+            <tr><th>쓰는 법</th><th>뜻 · console.log 하면</th></tr>
+            <tr><td><code>call1</code><br>(괄호 X)</td><td>함수 <b>그 자체</b>(값) — 콜백으로 넘기거나 변수에 담을 때 · 찍으면 함수 모양이 나온다 (node: <code>[Function: call1]</code>)</td></tr>
+            <tr><td><code>call1()</code><br>(괄호 O)</td><td>함수를 <b>실행</b>한 결과 — 실행되고, 반환값이 없으면 <code>undefined</code></td></tr>
+        </table>
+        <div class="tip">✍️ 필기 — 괄호가 있는 것과 없는 것은 다르다: <code>console.log(call1)</code> ≠ <code>console.log(call1())</code> · 콜백으로 넘길 때는 <b>괄호 없이</b> 이름만</div>
+        <h3>예제 ② 0922_01.js — 반복은 repeat, 할 일은 콜백</h3>
+        <pre><code class="language-javascript">// 0922_01.js 콜백함수 예제 — 반복은 repeat 가, 할 일은 콜백이 정한다
+function repeat(count, callback) {
+    for (let idx = 1; idx &lt;= count; idx++) {
+        callback(idx);            // 넘겨받은 함수에 idx 를 넣어 실행
+    }
+}
+repeat(5, (idx) =&gt; { console.log(idx); });       // 1 2 3 4 5
+repeat(5, (idx) =&gt; { console.log(idx * 2); });   // 2 4 6 8 10
+repeat(5, (idx) =&gt; { console.log(idx * 3); });   // 3 6 9 12 15</code></pre>
+        <pre class="io"><code>1
+2
+3
+4
+5
+2
+4
+6
+8
+10
+3
+6
+9
+12
+15</code></pre>
+        <h3>주의 — 같은 이름의 선언적 함수를 여러 번 만들면</h3>
+        <pre><code class="language-javascript">// 수업 파일처럼 같은 이름의 선언적 함수를 여러 번 만들면 → 마지막 것만 남는다
+function repeat(count) {
+    for (let i = 0; i &lt;= count; i++) console.log(i);
+}
+function repeat(count, callback) {   // 이 선언이 위의 repeat 를 덮어쓴다
+    for (let idx = 1; idx &lt;= count; idx++) callback(idx);
+}
+repeat(3, (idx) =&gt; { console.log(idx * 10); });  // 10 20 30
+repeat(3);                                       // ← 오류: 첫 번째 repeat 가 아니라 콜백 버전이 불려서 callback 이 없다</code></pre>
+        <pre class="io"><code>10
+20
+30
+TypeError: callback is not a function</code></pre>
+        <div class="tip">⚠️ 수업 파일 0922_01.js 에도 <code>function repeat</code> 가 <b>3번</b> 선언돼 있어요. 선언적 함수는 호이스팅되면서 <b>마지막 선언이 앞의 것을 덮어써서</b>, 파일의 모든 호출은 마지막 <code>repeat(count, callback)</code> 을 씁니다.</div>
+    </section>
+
+    <section class="card" id="s27">
+        <h2>27. 객체 — 생성 · 프로퍼티 · 메서드<span class="week">5주차</span></h2>
+        <table class="ref">
+            <tr><th>만드는 법</th><th>코드</th></tr>
+            <tr><td>생성자</td><td><code>let obj1 = new Object();</code></td></tr>
+            <tr><td><b>리터럴</b></td><td><code>let obj2 = {};</code> — <b>대부분 이걸 쓴다</b></td></tr>
+            <tr><td>내장 객체</td><td><code>let obj3 = new Date();</code> — 날짜·시간 (값이 실행할 때마다 다름)</td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>용어</th><th>뜻</th><th>예</th></tr>
+            <tr><td><b>프로퍼티</b>(속성)</td><td><code>key: value</code> 한 쌍</td><td><code>name: "윤희근"</code></td></tr>
+            <tr><td><b>메서드</b></td><td>객체 안에 들어 있는 함수</td><td><code>eat: () =&gt; {…}</code></td></tr>
+        </table>
+        <h3>예제 ① 0922_02.js — 점 표기법 · 대괄호 표기법</h3>
+        <pre><code class="language-javascript">// 0922_02.js 2. 객체 — 생성 · 프로퍼티(속성) · 메서드
+let obj1 = new Object();          // 객체 생성자
+let obj2 = {};                    // 객체 리터럴 (대부분 이걸 쓴다)
+
+let person = {
+    name: "윤희근",                // 속성(프로퍼티)  key: value
+    age: 23,
+    eat: () =&gt; { console.log("먹는다"); }   // 메서드 (객체 안의 함수)
+}
+console.log(person.name);         // 점 표기법 → 윤희근
+console.log(person["age"]);       // 대괄호 표기법 → 23 (key 를 문자열로)
+person.eat();                     // 메서드 호출 → 먹는다
+
+let test = "name";
+console.log(person[test]);        // 따옴표 없이 쓰면 변수 → test 안의 "name" → 윤희근</code></pre>
+        <pre class="io"><code>윤희근
+23
+먹는다
+윤희근</code></pre>
+        <div class="tip"><b>필기 정정</b> — 필기의 “꼭!! 쌍따옴표로 key명” → 대괄호 안에는 key 를 <b>문자열</b>로 쓰면 되므로 <code>person["age"]</code> · <code>person['age']</code> 둘 다 돼요. 따옴표 없이 <code>person[test]</code> 처럼 쓰면 <b>변수</b>로 보고 그 안의 값("name")을 key 로 씁니다.</div>
+        <h3>예제 ② 0922_02.js 2-3 — 속성 추가 · 삭제</h3>
+        <pre><code class="language-javascript">// 0922_02.js 2-3. 프로퍼티 추가 · 삭제
+let person = { name: "윤희근", age: 23 };
+
+person.job = "developer";         // 없던 key 에 대입 → 속성 추가
+console.log(person.job);          // developer
+
+delete person.job;                // 속성 삭제
+delete person["age"];             // 대괄호로도 삭제 가능
+console.log(person.job);          // undefined (없는 속성)
+console.log(person.age);          // undefined
+console.log(person.name);         // 윤희근 (남아 있음)</code></pre>
+        <pre class="io"><code>developer
+undefined
+undefined
+윤희근</code></pre>
+        <div class="tip">✍️ 필기 — 속성을 추가하는 건 <b>append 같은 개념</b>(없던 key 에 대입) · 수업 코드의 <code>person.jop</code> 은 <b>job</b>(직업)의 오타예요.</div>
+        <h3>예제 ③ 0922_02.js — const 객체</h3>
+        <pre><code class="language-javascript">// 0922_02.js const 객체 — 통째로 바꾸기는 X, 속성 추가·수정은 O
+const animal = {
+    type: "고양이",
+    name: "나비",
+    color: "black"
+}
+animal.age = 2;                   // 속성 추가는 된다
+animal.color = "white";           // 속성 수정도 된다
+console.log(animal.age, animal.color);   // 2 white
+
+animal = { age: 1 };              // ← 오류: const 변수에 새 객체를 다시 대입</code></pre>
+        <pre class="io"><code>2 white
+TypeError: Assignment to constant variable.</code></pre>
+    </section>
+
+    <section class="card" id="s28">
+        <h2>28. 배열 — 생성 · 요소 접근 · 반복<span class="week">5주차</span></h2>
+        <table class="ref">
+            <tr><th>만드는 법</th><th>코드</th></tr>
+            <tr><td>생성자</td><td><code>let arrA = new Array();</code></td></tr>
+            <tr><td><b>리터럴</b></td><td><code>let arrB = [];</code> — <b>대부분 이걸 쓴다</b></td></tr>
+        </table>
+        <h3>예제 0922_03.js — 번지는 0 부터, length 는 개수</h3>
+        <pre><code class="language-javascript">// 0922_03.js 3. 배열 — 생성 · 요소 접근 · 수정 · 반복
+let arrA = new Array();           // 배열 생성자
+let arrB = [];                    // 배열 리터럴 (대부분 이걸 쓴다)
+
+let arrC = [1, 2, 3, true, "hello", null, undefined];   // 여러 자료형을 한 배열에
+console.log(arrC.length);         // 7 (요소 개수)
+console.log(arrC[0], arrC[1]);    // 1 2 (번지는 0 부터)
+
+arrC[0] = "hello";                // 0번지 값 1 → "hello" 로 바꾸기
+for (let i = 0; i &lt; arrC.length; i++) {
+    console.log(arrC[i]);
+}</code></pre>
+        <pre class="io"><code>7
+1 2
+hello
+2
+3
+true
+hello
+null
+undefined</code></pre>
+        <div class="tip">📌 배열에는 숫자·문자열·true·null·undefined 는 물론 수업 코드처럼 <b>함수 <code>()=&gt;{}</code>, 객체 <code>{}</code>, 배열 <code>[]</code></b> 도 넣을 수 있어요 (이 셋은 콘솔에 찍히는 모양이 실행 환경마다 달라서 위 예제에서는 뺐어요).<br>⚠️ 수업 파일 10번째 줄 주석(“0번지에 있는 정수 1을 문자 hello로 치환”)은 13번째 줄 주석을 복사한 것 — <code>let item1 = arrC[0];</code> 시점의 item1 은 그냥 <b>1</b> 이에요.</div>
+    </section>
+
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 10 · 주관식 10<span class="week">2~4주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 15 · 주관식 15<span class="week">2~5주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -614,6 +842,46 @@ printName();                     // 인수 없음 → person의 값이 없음</c
             <button class="opt" type="button" data-opt="D"><b>D.</b> 클래스 이름으로만 찾는다</button>
             <div class="mcq-exp"><b>정답 B</b> — querySelector 는 <b>CSS 선택자</b>로 <b>첫 번째</b> 요소를 찾습니다. (getElementById 는 # 없이 id 만)</div>
         </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">11</span><b>호이스팅</b>에 대한 설명으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>let</code> 변수는 선언보다 먼저 써도 undefined 가 나온다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 선언적 함수(<code>function 이름(){}</code>)는 선언보다 먼저 호출해도 실행된다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>let sum = function(){}</code> 처럼 만든 함수는 선언 전에 호출할 수 있다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 호이스팅은 배열에서만 일어난다</button>
+            <div class="mcq-exp"><b>정답 B</b> — 선언적 함수는 호이스팅되어 먼저 호출할 수 있어요. let 변수와 let 에 담은 익명 함수는 선언 전에 쓰면 ReferenceError.</div>
+        </div>
+        <div class="mcq" data-correct="A">
+            <p class="mcq-q"><span class="mcq-no">12</span>다음 코드에서 <b>문제가 생기는(오류가 나는) 줄</b>은? ★시험문제<br><code>① console.log(imsi);</code><br><code>② let imsi;</code><br><code>③ console.log(getArea(5, 5));</code><br><code>④ function getArea(w, h) { return w * h; }</code></p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> ①</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> ②</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> ③</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> ④</button>
+            <div class="mcq-exp"><b>정답 A</b> — let imsi 보다 먼저 imsi 를 써서 ① 에서 ReferenceError. ③ 은 선언적 함수라 호이스팅 덕분에 문제없어요.</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">13</span><b>콜백 함수</b>의 뜻으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 자기 자신을 다시 부르는 함수</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 이름이 없는 함수</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 객체 안에 들어 있는 함수</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 다른 함수에 인자로 전달되어 나중에 실행되는 함수</button>
+            <div class="mcq-exp"><b>정답 D</b> — 콜백 함수 = 다른 함수에 인자로 전달되어서, 나중에 실행되는 함수 (필기). 객체 안의 함수는 메서드, 이름 없는 함수는 익명 함수.</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">14</span><code>let person = { name: "윤희근", age: 23 };</code> 에서 <b>23</b> 을 꺼내는 코드를 모두 고른 것은?<br>(가) <code>person.age</code> &nbsp; (나) <code>person["age"]</code> &nbsp; (다) <code>person[age]</code></p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> (가)</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> (나)</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> (가), (나)</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> (가), (나), (다)</button>
+            <div class="mcq-exp"><b>정답 C</b> — 점 표기법과 대괄호 안에 문자열 key 를 쓴 방법 모두 돼요. (다)는 따옴표가 없어서 age 라는 변수를 찾아요.</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">15</span><code>const animal = { name: "나비" };</code> 다음 중 <b>오류가 나는</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>animal.age = 2;</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>animal = { age: 1 };</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>animal.name = "초코";</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>delete animal.name;</code></button>
+            <div class="mcq-exp"><b>정답 B</b> — const 는 변수에 다시 대입하는 것만 막아요 → 속성 추가·수정·삭제는 되고, 새 객체를 통째로 대입하면 TypeError.</div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers="Node.js|nodejs|노드js|노드.js" data-explain="Node.js = 자바스크립트 코드가 단독으로 실행될 수 있는 런타임 실행 플랫폼">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>자바스크립트 코드가 브라우저 밖에서도 <b>단독으로 실행</b>될 수 있게 해 주는 런타임 실행 플랫폼은? ★시험(주관식)</p>
@@ -675,12 +943,42 @@ printName();                     // 인수 없음 → person의 값이 없음</c
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
+        <div class="quiz-item" data-answers="호이스팅|hoisting" data-explain="호이스팅(hoisting) — 수업 0922_01.js 의 console.log(getArea(5,5))">
+            <p class="quiz-q"><span class="quiz-cat">주관식 11</span>선언적 함수가 코드 맨 위로 끌어올려진 것처럼 동작해서, <b>선언보다 먼저 호출해도 실행되는</b> 현상을 무엇이라 하나요?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="delete" data-explain="delete person.job; 또는 delete person[&quot;age&quot;];">
+            <p class="quiz-q"><span class="quiz-cat">주관식 12</span>객체의 속성(프로퍼티)을 <b>지우는</b> 키워드는? (예: <code>____ person.job;</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="length" data-explain="for 반복의 조건 i &lt; arrC.length">
+            <p class="quiz-q"><span class="quiz-cat">주관식 13</span>배열 요소의 <b>개수</b>를 알려 주는 속성 이름은? (<code>arrC.____</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="{}" data-explain="{} 객체 리터럴 · new Object() 는 객체 생성자">
+            <p class="quiz-q"><span class="quiz-cat">주관식 14</span>빈 객체를 만드는 <b>객체 리터럴</b> 기호는? (<code>let obj2 = __;</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="0" data-explain="배열 번지는 0 부터 시작 → arrC[0] 이 1">
+            <p class="quiz-q"><span class="quiz-cat">주관식 15</span><code>let arrC = [1, 2, 3];</code> 에서 값 <b>1</b> 이 들어 있는 번지(인덱스)는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
     </section>
 
     <section class="card" id="output">
-        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">2~4주차</span></h2>
+        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">2~5주차</span></h2>
         <div class="tip">📝 시험의 <b>“실행결과를 쓰시오”</b> 대비 — 코드를 눈으로 따라가며 화면에 찍힐 결과를 적고 <b>확인</b>을 누르세요. 줄마다 <b>Enter</b>, 띄어쓰기 개수·빈 줄은 채점에서 무시하고 <b>글자·숫자·기호</b>는 정확히 봐요 (칸수 문제만 띄어쓰기까지). <code>console.log</code> 는 문자열을 <b>따옴표 없이</b> 찍어요. 정답은 모두 <b>실제로 실행한 결과</b>예요.</div>
-        <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드 (빨간 테두리) · 4주차 시험 포인트 ③ ++ · ④ || && · ⑤ == === · 교수님 메모 & && · 단락평가</div>
+        <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드 (빨간 테두리) · 4주차 시험 포인트 ③ ++ · ④ || && · ⑤ == === · 교수님 메모 & && · 단락평가 · 5주차 호이스팅</div>
         <div id="oq-score"></div>
         <h3 class="oq-group">🔥 시험문제 — 수업 중 “시험문제”라고 한 코드</h3>
         <div class="oq" id="oq-ow1" data-exam="4주차 시험 포인트 ③ — ++ 전위·후위 차이">
@@ -768,9 +1066,23 @@ true
 </script>
             <div class="oq-why">💡 <b>풀이</b> — false && … · true || … 는 왼쪽만으로 결과가 정해져서 right() 를 <b>부르지 않아요</b> · 나머지 둘은 right() 가 먼저 한 줄 찍고 true 를 돌려줌</div>
         </div>
+        <div class="oq" id="oq-ow13" data-exam="5주차 수업 0922_01.js — 시험문제: 선언적 함수·호이스팅 (문제가 생기는 코드 라인)">
+            <p class="oq-q"><span class="oq-no">6</span>선언보다 먼저 부른 함수<span class="oq-tag">5주차 · 호이스팅</span></p>
+            <pre><code class="language-javascript">console.log(getArea(5, 5));
+function getArea(width, height) {
+    let area = width * height;
+    return area;
+}
+console.log(getArea(10, 5));</code></pre>
+            <script type="text/plain" class="oq-expect">
+25
+50
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 선언적 함수는 호이스팅되어 <b>선언보다 먼저 호출해도</b> 실행된다 → 25, 50</div>
+        </div>
         <h3 class="oq-group">✍️ 배운 코드 — 실행 결과 예측하기</h3>
         <div class="oq" id="oq-ow6">
-            <p class="oq-q"><span class="oq-no">6</span>문자열 + 숫자<span class="oq-tag">3~4주차 · 형변환</span></p>
+            <p class="oq-q"><span class="oq-no">7</span>문자열 + 숫자<span class="oq-tag">3~4주차 · 형변환</span></p>
             <pre><code class="language-javascript">console.log("10" + 5);
 console.log(Number("10") + 5);
 console.log(10 + "20");
@@ -786,7 +1098,7 @@ NaN
             <div class="oq-why">💡 <b>풀이</b> — 문자열이 끼면 + 는 <b>이어 붙이기</b> (105 · 1020) · Number() 로 바꾸면 덧셈 15 · parseInt 는 숫자로 시작하는 부분만 10 · 계산 불가면 NaN</div>
         </div>
         <div class="oq" id="oq-ow7">
-            <p class="oq-q"><span class="oq-no">7</span>${ } 안의 계산<span class="oq-tag">3주차 · 템플릿 문자열</span></p>
+            <p class="oq-q"><span class="oq-no">8</span>${ } 안의 계산<span class="oq-tag">3주차 · 템플릿 문자열</span></p>
             <pre><code class="language-javascript">console.log(`273 + 52의 값은 ${273 + 52}입니다`);
 let num1 = "3";
 let num2 = "4";
@@ -798,7 +1110,7 @@ console.log(`${num1 + num2} / ${Number(num1) + Number(num2)}`);</code></pre>
             <div class="oq-why">💡 <b>풀이</b> — ${ } 안은 계산한 결과가 들어감 → 325 · prompt 처럼 문자열 "3" + "4" 는 34, Number 로 바꾸면 7</div>
         </div>
         <div class="oq" id="oq-ow8">
-            <p class="oq-q"><span class="oq-no">8</span>나눗셈과 나머지<span class="oq-tag">4주차 · 산술 · 복합 대입</span></p>
+            <p class="oq-q"><span class="oq-no">9</span>나눗셈과 나머지<span class="oq-tag">4주차 · 산술 · 복합 대입</span></p>
             <pre><code class="language-javascript">console.log(3 / 2);
 console.log(3 % 2);
 let num7 = 10;
@@ -815,7 +1127,7 @@ console.log(num7);</code></pre>
             <div class="oq-why">💡 <b>풀이</b> — JS 는 정수끼리 나눠도 1.5 (C 와 다름!) · % 는 나머지 · num7 += 20 → 30 · 30 % 7 → 2</div>
         </div>
         <div class="oq" id="oq-ow9">
-            <p class="oq-q"><span class="oq-no">9</span>typeof 와 null 병합<span class="oq-tag">4주차 · typeof · ??</span></p>
+            <p class="oq-q"><span class="oq-no">10</span>typeof 와 null 병합<span class="oq-tag">4주차 · typeof · ??</span></p>
             <pre><code class="language-javascript">console.log(typeof true);
 console.log(typeof null);
 console.log(undefined ?? 10);
@@ -831,7 +1143,7 @@ object
             <div class="oq-why">💡 <b>풀이</b> — typeof 는 타입 이름을 문자열로 · typeof null 은 "object" · <code>??</code> 는 왼쪽이 null·undefined 일 때만 오른쪽 → 0 ?? 5 는 0 · 0 || 5 는 5</div>
         </div>
         <div class="oq" id="oq-ow10">
-            <p class="oq-q"><span class="oq-no">10</span>짝수 · 홀수<span class="oq-tag">4주차 · 삼항 연산자</span></p>
+            <p class="oq-q"><span class="oq-no">11</span>짝수 · 홀수<span class="oq-tag">4주차 · 삼항 연산자</span></p>
             <pre><code class="language-javascript">let var8 = 10;
 console.log(var8 % 2 === 0 ? "짝수" : "홀수");
 var8 = 7;
@@ -843,7 +1155,7 @@ console.log(var8 % 2 === 0 ? "짝수" : "홀수");</code></pre>
             <div class="oq-why">💡 <b>풀이</b> — 조건이 true 면 콜론 앞, false 면 콜론 뒤</div>
         </div>
         <div class="oq" id="oq-ow11">
-            <p class="oq-q"><span class="oq-no">11</span>인수를 안 넘기면?<span class="oq-tag">4주차 · 매개변수 · 인수</span></p>
+            <p class="oq-q"><span class="oq-no">12</span>인수를 안 넘기면?<span class="oq-tag">4주차 · 매개변수 · 인수</span></p>
             <pre><code class="language-javascript">function printName(person) {
     if (!person) {
         console.log("person의 값이 없음");
@@ -861,7 +1173,7 @@ person의 값이 없음
             <div class="oq-why">💡 <b>풀이</b> — 인수를 넘기면 person.name → 홍길동 · 안 넘기면 person 은 undefined(falsy) → !person 이 true</div>
         </div>
         <div class="oq" id="oq-ow12">
-            <p class="oq-q"><span class="oq-no">12</span>부른 순서대로<span class="oq-tag">2주차 · 함수 선언 3가지</span></p>
+            <p class="oq-q"><span class="oq-no">13</span>부른 순서대로<span class="oq-tag">2주차 · 함수 선언 3가지</span></p>
             <pre><code class="language-javascript">function hello() { console.log("안녕"); }
 let hi = function () { console.log("하이"); };
 let bye = () =&gt; { console.log("잘가"); };
@@ -875,12 +1187,78 @@ hi();</code></pre>
 </script>
             <div class="oq-why">💡 <b>풀이</b> — 함수 선언문 · 함수 표현식 · 화살표 함수 모두 <b>호출한 순서</b>대로 실행</div>
         </div>
+        <div class="oq" id="oq-ow14">
+            <p class="oq-q"><span class="oq-no">14</span>괄호가 있을 때와 없을 때<span class="oq-tag">5주차 · 콜백 함수</span></p>
+            <pre><code class="language-javascript">let call1 = function () {
+    console.log("나는 콜되어진 함수");
+}
+function call2(funcVar) {
+    funcVar();
+}
+call2(call1);
+console.log(call1());</code></pre>
+            <script type="text/plain" class="oq-expect">
+나는 콜되어진 함수
+나는 콜되어진 함수
+undefined
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>call2(call1)</code> 은 함수 자체를 넘겨 call2 안에서 실행 · <code>call1()</code> 은 바로 실행하고, 반환값이 없어서 <code>console.log</code> 는 <b>undefined</b></div>
+        </div>
+        <div class="oq" id="oq-ow15">
+            <p class="oq-q"><span class="oq-no">15</span>repeat 에 넘긴 콜백<span class="oq-tag">5주차 · 콜백 함수</span></p>
+            <pre><code class="language-javascript">function repeat(count, callback) {
+    for (let idx = 1; idx &lt;= count; idx++) {
+        callback(idx);
+    }
+}
+repeat(3, (idx) =&gt; { console.log(idx * 2); });
+repeat(2, (idx) =&gt; { console.log(idx + 10); });</code></pre>
+            <script type="text/plain" class="oq-expect">
+2
+4
+6
+11
+12
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 반복은 repeat 가 1 부터 count 까지 하고, 각 idx 로 무엇을 할지는 콜백이 정한다 → 2 4 6 / 11 12</div>
+        </div>
+        <div class="oq" id="oq-ow16">
+            <p class="oq-q"><span class="oq-no">16</span>속성 추가와 삭제<span class="oq-tag">5주차 · 객체</span></p>
+            <pre><code class="language-javascript">let person = { name: "윤희근", age: 23 };
+person.job = "developer";
+console.log(person.job);
+delete person.age;
+console.log(person["age"]);
+console.log(person.name);</code></pre>
+            <script type="text/plain" class="oq-expect">
+developer
+undefined
+윤희근
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 없던 key 에 대입하면 속성 추가 · <code>delete</code> 로 지운 속성은 <b>undefined</b> · 지우지 않은 name 은 그대로</div>
+        </div>
+        <div class="oq" id="oq-ow17">
+            <p class="oq-q"><span class="oq-no">17</span>요소 바꾸고 반복하기<span class="oq-tag">5주차 · 배열</span></p>
+            <pre><code class="language-javascript">let arr = [10, 20, 30];
+arr[1] = "hi";
+console.log(arr.length);
+for (let i = 0; i &lt; arr.length; i++) {
+    console.log(arr[i]);
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+3
+10
+hi
+30
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 번지는 0 부터 → arr[1] 은 두 번째 요소 20 을 "hi" 로 바꾼다 · length 는 요소 개수 3</div>
+        </div>
     </section>
 
     <section class="card" id="code">
-        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~4주차</span></h2>
+        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~5주차</span></h2>
         <div class="tip">📝 문제를 읽고 <b>전체 소스코드</b>를 붙여넣은 뒤 <b>▶ 채점하기</b>를 누르세요. 입력 예 말고도 <b>숨은 테스트</b> 여러 개로 실제로 실행해서 출력이 모두 같아야 통과예요. JavaScript 는 이 브라우저 안에서 실행돼요. 입력은 <code>prompt()</code> (또는 <code>window.prompt()</code>) 가 테스트 입력을 한 줄씩 돌려주고, 출력은 <code>console.log()</code> 로 합니다.</div>
-        <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드를 채점 문제로 만든 것 (빨간 테두리) · 4주차 시험 포인트 ③ ++ 전위·후위 · ④ || 와 && · ⑤ == 와 ===</div>
+        <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드를 채점 문제로 만든 것 (빨간 테두리) · 4주차 시험 포인트 ③ ++ 전위·후위 · ④ || 와 && · ⑤ == 와 === · 5주차 호이스팅</div>
         <div id="ct-score"></div>
         <h3 class="ct-group">🔥 시험문제 — 수업 중 “시험문제”라고 한 코드</h3>
         <div class="ct" id="ct-w6" data-lang="js" data-must="[&quot;\\w+\\s*\\+\\+&quot;, &quot;\\+\\+\\s*\\w+&quot;]" data-must-msg="num8++ 와 ++num8 을 모두 써야 해요." data-exam="4주차 시험 포인트 ③ — console.log(num8++) 와 console.log(++num8) 의 차이">
@@ -941,9 +1319,27 @@ let x = window.prompt("값 입력!");   // prompt 값은 항상 문자열
 console.log(`== : ${x == 10}, === : ${x === 10}`);   // == 는 형변환 후 비교, === 는 타입까지
 </script>
         </div>
+        <div class="ct" id="ct-w8" data-lang="js" data-must="[&quot;function\\s+getArea\\s*\\(&quot;, &quot;getArea\\s*\\([^)]*\\)[\\s\\S]*function\\s+getArea&quot;]" data-must-msg="function getArea 선언문을 쓰고, 선언보다 위에서 호출해야 해요." data-exam="5주차 수업 0922_01.js — 시험문제: 선언적 함수·호이스팅">
+            <p class="ct-q"><span class="ct-no">5</span>선언보다 먼저 호출하는 getArea<span class="ct-tag">5주차 · 호이스팅</span></p>
+            <p class="ct-desc"><code>prompt()</code> 로 가로·세로를 받아(Number 로 변환) 넓이를 출력하세요. 넓이는 <b>선언적 함수</b> <code>getArea(width, height)</code> 로 구하고, 수업 코드처럼 <b>함수 선언보다 위에서</b> 호출합니다(호이스팅). <small>(입력은 prompt 에 차례로 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>5 ⏎ 5</code></pre><pre class="io ct-out"><code>25</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="선언보다 먼저 호출하는 getArea 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "5\n5", "expect": "25"}, {"stdin": "10\n5", "expect": "50"}, {"stdin": "3\n7", "expect": "21"}]</script>
+            <script type="text/plain" class="ct-answer">
+let width = Number(window.prompt("가로 입력"));
+let height = Number(window.prompt("세로 입력"));
+console.log(getArea(width, height));   // 아직 선언 전이지만 호출 가능 (호이스팅)
+function getArea(width, height) {
+    let area = width * height;
+    return area;
+}
+</script>
+        </div>
         <h3 class="ct-group">✍️ 연습 문제 — 배운 범위 코드 짜기</h3>
         <div class="ct" id="ct-w1" data-lang="js" data-must="[&quot;Number\\s*\\(|parseInt\\s*\\(|parseFloat\\s*\\(&quot;]" data-must-msg="Number() 등으로 숫자로 바꿔야 해요.">
-            <p class="ct-q"><span class="ct-no">5</span>두 수 더하기 (prompt)<span class="ct-tag">4주차 · 형변환 · 템플릿 문자열</span></p>
+            <p class="ct-q"><span class="ct-no">6</span>두 수 더하기 (prompt)<span class="ct-tag">4주차 · 형변환 · 템플릿 문자열</span></p>
             <p class="ct-desc"><code>prompt()</code> 로 두 수를 입력받아 <code>결과값은 7</code> 처럼 출력하세요. prompt 값은 <b>문자열</b>이라 그냥 더하면 34 가 됩니다 → <code>Number()</code> 로 바꾸고 <b>템플릿 문자열</b>로 출력. <small>(입력은 prompt 에 차례로 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>3
 4</code></pre><pre class="io ct-out"><code>결과값은 7</code></pre></div>
@@ -958,7 +1354,7 @@ console.log(`결과값은 ${Number(num1) + Number(num2)}`);   // 명시적 형�
 </script>
         </div>
         <div class="ct" id="ct-w3" data-lang="js" data-must="[&quot;\\?[^:]*:&quot;]" data-must-msg="삼항 연산자(조건 ? A : B)를 써야 해요.">
-            <p class="ct-q"><span class="ct-no">6</span>짝수 · 홀수<span class="ct-tag">4주차 · 삼항 연산자</span></p>
+            <p class="ct-q"><span class="ct-no">7</span>짝수 · 홀수<span class="ct-tag">4주차 · 삼항 연산자</span></p>
             <p class="ct-desc"><code>prompt()</code> 로 정수를 입력받아 <b>삼항 연산자</b>로 <code>짝수</code> / <code>홀수</code> 를 출력하세요 (0915_03.js). <small>(입력은 prompt 에 차례로 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>10</code></pre><pre class="io ct-out"><code>짝수</code></pre></div>
             <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="짝수 · 홀수 소스코드"></textarea>
@@ -972,7 +1368,7 @@ console.log(res);
 </script>
         </div>
         <div class="ct" id="ct-w5" data-lang="js" data-must="[&quot;function\\s+greet|greet\\s*=&quot;]" data-must-msg="greet 함수를 만들어야 해요.">
-            <p class="ct-q"><span class="ct-no">7</span>이름 인사 함수 (방어 코드)<span class="ct-tag">4주차 · 함수 · truthy/falsy</span></p>
+            <p class="ct-q"><span class="ct-no">8</span>이름 인사 함수 (방어 코드)<span class="ct-tag">4주차 · 함수 · truthy/falsy</span></p>
             <p class="ct-desc">함수 <code>greet(name)</code> 를 만들어, name 이 <b>falsy</b>(빈칸)면 <code>이름이 없음</code>, 아니면 <code>안녕하세요, 홍길동님</code> 을 출력하세요. 이름은 <code>prompt()</code> 로 받아 함수에 <b>인수</b>로 넘깁니다. <small>(입력은 prompt 에 차례로 입력)</small></p>
             <div class="ct-ex"><pre class="io ct-in"><code>홍길동</code></pre><pre class="io ct-out"><code>안녕하세요, 홍길동님</code></pre></div>
             <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="이름 인사 함수 (방어 코드) 소스코드"></textarea>
@@ -990,6 +1386,47 @@ function greet(name) {                  // name = 매개변수
 greet(window.prompt("이름 입력!"));       // 입력값 = 인수
 </script>
         </div>
+        <div class="ct" id="ct-w9" data-lang="js" data-must="[&quot;function\\s+repeat\\s*\\(\\s*\\w+\\s*,\\s*\\w+\\s*\\)&quot;, &quot;repeat\\s*\\([^;]*=&gt;&quot;]" data-must-msg="repeat(count, callback) 를 만들고 화살표 함수를 콜백으로 넘겨야 해요.">
+            <p class="ct-q"><span class="ct-no">9</span>repeat(count, callback)<span class="ct-tag">5주차 · 콜백 함수</span></p>
+            <p class="ct-desc"><code>repeat(count, callback)</code> 을 선언적 함수로 만들어 1 부터 count 까지 <code>callback(idx)</code> 를 실행하게 하고, <code>prompt()</code> 로 받은 n 으로 <code>repeat(n, (idx) => { … })</code> 를 불러 <b>idx × 3</b> 을 한 줄씩 출력하세요. <small>(입력은 prompt 에 차례로 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>5</code></pre><pre class="io ct-out"><code>3
+6
+9
+12
+15</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="repeat(count, callback) 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "5", "expect": "3\n6\n9\n12\n15"}, {"stdin": "3", "expect": "3\n6\n9"}, {"stdin": "1", "expect": "3"}]</script>
+            <script type="text/plain" class="ct-answer">
+function repeat(count, callback) {
+    for (let idx = 1; idx <= count; idx++) {
+        callback(idx);                  // 넘겨받은 함수를 idx 와 함께 실행
+    }
+}
+let n = Number(window.prompt("반복 횟수"));
+repeat(n, (idx) => { console.log(idx * 3); });
+</script>
+        </div>
+        <div class="ct" id="ct-w10" data-lang="js" data-must="[&quot;\\{&quot;, &quot;delete\\s+person&quot;, &quot;person\\.job\\s*=&quot;]" data-must-msg="객체 리터럴 { } · person.job = … · delete person.job 을 써야 해요.">
+            <p class="ct-q"><span class="ct-no">10</span>객체 만들고 속성 추가·삭제<span class="ct-tag">5주차 · 객체</span></p>
+            <p class="ct-desc"><code>prompt()</code> 로 이름과 직업을 받아 <code>person</code> 객체(<code>name</code> 속성)를 만들고, <code>person.job</code> 속성을 <b>추가</b>해서 이름과 직업을 한 줄씩 출력하세요. 마지막으로 <code>delete</code> 로 job 을 지운 뒤 <code>person.job</code> 을 출력합니다. <small>(입력은 prompt 에 차례로 입력)</small></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>윤희근 ⏎ developer</code></pre><pre class="io ct-out"><code>윤희근
+developer
+undefined</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="객체 만들고 속성 추가·삭제 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "윤희근\ndeveloper", "expect": "윤희근\ndeveloper\nundefined"}, {"stdin": "홍길동\n학생", "expect": "홍길동\n학생\nundefined"}, {"stdin": "김동양\n디자이너", "expect": "김동양\n디자이너\nundefined"}]</script>
+            <script type="text/plain" class="ct-answer">
+let person = { name: window.prompt("이름 입력") };
+person.job = window.prompt("직업 입력");   // 없던 key 에 대입 → 속성 추가
+console.log(person.name);
+console.log(person.job);
+delete person.job;                         // 속성 삭제
+console.log(person.job);                   // undefined
+</script>
+        </div>
     </section>
 
 
@@ -1000,7 +1437,7 @@ greet(window.prompt("이름 입력!"));       // 입력값 = 인수
 <script src="quiz.js?v=202609181500"></script>
 <script src="review.js?v=202609212200"></script>
 <script src="weeks.js?v=202609181500"></script>
-<script src="codetest.js?v=202609212000"></script>
-<script src="outquiz.js?v=202609212100"></script>
+<script src="codetest.js?v=202609221300"></script>
+<script src="outquiz.js?v=202609221300"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202609181500"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>웹프로그래밍 8주차 · 중간고사 시험문제 정리 (1~4주차 반영)</title>
+    <title>웹프로그래밍 8주차 · 중간고사 시험문제 정리 (1~5주차 반영)</title>
     <link rel="stylesheet" href="../style.css?v=202609181500">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
@@ -44,13 +44,25 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🕸️ 웹프로그래밍 · 8주차 · 중간고사</h1>
-        <p>중간고사 시험문제 정리 (1~4주차 반영)</p>
+        <p>중간고사 시험문제 정리 (1~5주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-4주차.html">‹ 이전 · <b>4주차</b><br><small>&lt;9월 15일&gt; 연산자·truthy/falsy·단락 평가</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-5주차.html">‹ 이전 · <b>5주차</b><br><small>&lt;9월 22일&gt; 함수·콜백·객체·배열</small></a><span></span></nav>
 
-<div class="tip">📅 <b>중간고사 — 10월 20일(화) 10:00</b> · 평가 비율: 출석 20% + <b>중간고사 30%(필기)</b> + 기말고사 30% + 과제·기타 20% · 지금까지 배운 <b>1~4주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
+<div class="tip">📅 <b>중간고사 — 10월 20일(화) 10:00</b> · 평가 비율: 출석 20% + <b>중간고사 30%(필기)</b> + 기말고사 30% + 과제·기타 20% · 지금까지 배운 <b>1~5주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
 <div class="tip">🎯 <b>교수님 시험 안내</b> — "강의시간에 말한 내용을 <b>전부 시험(100문제)</b> 으로 낸다" (1주차) · 4주차 수업에서 직접 언급: ① <b>Node.js 가 무엇인지 주관식</b> ② HTML · CSS · JS <b>주석 차이</b> ③ <code>++</code> <b>전위 · 후위 차이</b> ④ <code>||</code> 와 <code>&amp;&amp;</code> <b>차이</b> ⑤ <code>==</code> 와 <code>===</code> 차이 ⑥ <b>연산자 9가지</b> (교수님 메모)</div>
+<section class="card">
+<h2>5주차 — 함수 · 콜백 · 객체 · 배열 (<a href="웹프로그래밍-5주차.html">5주차 자세히</a>)</h2>
+<ul><li>🔥 <b>시험문제</b> — "문제가 생기는 코드 라인을 찍어주시오" (0922_01.js)</li></ul>
+<pre><code class="language-javascript">console.log(imsi);            // ← 문제가 생기는 줄 (ReferenceError: let 선언 전에 사용)
+let imsi;
+console.log(getArea(5, 5));   // 문제없음 — 선언적 함수는 호이스팅
+function getArea(width, height) {
+    let area = width * height;
+    return area;
+}</code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — <b>호이스팅</b>: 선언적 함수는 선언이 맨 위로 끌어올려진 것처럼 동작 → 선언보다 먼저 호출 가능 · <code>let</code> 변수와 <code>let</code> 에 담은 익명 함수는 선언 전에 쓰면 ReferenceError</li><li><span class="wk-tag star">⭐ 강조</span> — <b>콜백 함수</b> = 다른 함수에 인자로 전달되어서, 나중에 실행되는 함수 · 넘길 때는 괄호 없이 <code>call2(call1)</code> (<code>call1()</code> 은 실행 결과)</li><li>객체: 리터럴 <code>{}</code> · 점 표기법 <code>person.name</code> / 대괄호 <code>person["age"]</code> · 속성 추가 <code>person.job = …</code> · 삭제 <code>delete</code> · <code>const</code> 객체는 통째로 재대입 X, 속성 추가·수정 O</li><li>배열: 리터럴 <code>[]</code> · 번지는 0 부터 · <code>arr.length</code> = 요소 개수</li></ul>
+</section>
 <section class="card">
 <h2>4주차 — 연산자 · truthy/falsy · 단락 평가 (<a href="웹프로그래밍-4주차.html">4주차 자세히</a>)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — Node.js = 자바스크립트를 <b>브라우저 밖에서도 단독으로 실행</b>할 수 있게 해 주는 런타임 실행 플랫폼 <b>(주관식)</b></li></ul>
@@ -77,10 +89,10 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </section>
 <section class="card">
 <h2>✏️ 문제로 확인하기</h2>
-<ul><li><a href="../웹프로그래밍.html#quiz">웹프로그래밍 과목 페이지 — 퀴즈(객관식 10 · 주관식 10)</a></li></ul>
+<ul><li><a href="../웹프로그래밍.html#quiz">웹프로그래밍 과목 페이지 — 퀴즈(객관식 15 · 주관식 15)</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-4주차.html">‹ 이전 · <b>4주차</b><br><small>&lt;9월 15일&gt; 연산자·truthy/falsy·단락 평가</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-5주차.html">‹ 이전 · <b>5주차</b><br><small>&lt;9월 22일&gt; 함수·콜백·객체·배열</small></a><span></span></nav>
 
     <p class="wk-src">노션 「웹프로그래밍」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 
