@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202609181500"></script>
+    <script src="../theme.js?v=202609231259"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>데이터베이스관리 8주차 · 중간고사 시험문제 정리 (1~4주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202609181500">
+    <title>데이터베이스관리 8주차 · 중간고사 시험문제 정리 (1~5주차 반영)</title>
+    <link rel="stylesheet" href="../style.css?v=202609231259">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -44,13 +44,13 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🗄️ 데이터베이스관리 · 8주차 · 중간고사</h1>
-        <p>중간고사 시험문제 정리 (1~4주차 반영)</p>
+        <p>중간고사 시험문제 정리 (1~5주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-4주차.html">‹ 이전 · <b>4주차</b><br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-5주차.html">‹ 이전 · <b>5주차</b><br><small>키 5종 · 뷰(view) · 널 값 · INSERT</small></a><span></span></nav>
 
-<div class="tip">📅 <b>중간고사 — 10월 21일(수) 10:00</b> · 평가 비율: 출석 20% + <b>중간 30%</b> + 기말 30% + 과제 20% · 지금까지 배운 <b>1~4주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
-<div class="tip">🎯 <b>교수님이 시험에 낸다고 한 것</b> (4주차 필기 원문) — ① <b>스키마 표기법을 작성하시오</b> ② <b>FOREIGN KEY 는 참조하는 열과 데이터 형식이 같아야 한다</b> ③ 시험범위 = 강의자료4의 <b>3 · 4 · 5+25 · 7 · 21 · 24 · 32 · 34 · 41 · 42p</b></div>
+<div class="tip">📅 <b>중간고사 — 10월 21일(수) 10:00</b> · 평가 비율: 출석 20% + <b>중간 30%</b> + 기말 30% + 과제 20% · 지금까지 배운 <b>1~5주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
+<div class="tip">🎯 <b>교수님이 시험에 낸다고 한 것</b> (4주차 필기 원문) — ① <b>스키마 표기법을 작성하시오</b> ② <b>FOREIGN KEY 는 참조하는 열과 데이터 형식이 같아야 한다</b> ③ 시험범위 = 강의자료4의 <b>3 · 4 · 5+25 · 7 · 21 · 24 · 32 · 34 · 41 · 42p</b> ④ (5주차 필기) <b>시험 범위 = 1장 · 2장 · 3장 · 5장 · 6장</b> ⑤ <b>차수 · 카디널리티 개수 구하기</b></div>
 <section class="card">
 <h2>🔴 빨간 글씨 = 암기 (강의자료에 빨간색으로 표시된 곳)</h2>
 <table class="ref">
@@ -69,6 +69,19 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>4주차</td><td>18 · 21p</td><td>SQL 의 <b>PRIMARY KEY</b></td></tr>
 <tr><td>4주차</td><td>37p</td><td>관계형 데이터베이스 — 데이터 사이에 <b>관계</b>를 부여함으로 데이터를 조직화</td></tr>
 </tbody></table>
+</section>
+<section class="card">
+<h2>5주차 — 키 5종 · 뷰 · 널 값 · INSERT (<a href="데이터베이스관리-5주차.html">5주차 자세히</a>)</h2>
+<table class="ref">
+<tbody>
+<tr><th>키</th><th>성질 ★</th></tr>
+<tr><td>수퍼키</td><td><b>유일성</b></td></tr>
+<tr><td>후보키</td><td><b>유일성 + 최소성</b></td></tr>
+<tr><td>기본키</td><td><b>중복불가 · 필수입력</b> (후보키 중 선택한 하나)</td></tr>
+<tr><td>대체키</td><td>후보키 중 <b>기본키로 뽑히지 않은</b> 키</td></tr>
+<tr><td>외래키</td><td><b>다른 릴레이션의 기본키를 참조</b></td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 신입생: 후보키 {학번}·{주민등록번호} / 기본키 {학번} / 대체키 {주민등록번호} · <code>(학번,주민등록번호)</code>·<code>(주민등록번호,이름)</code> 은 <b>최소성 위배 → 후보키 아님(수퍼키)</b></li><li><span class="wk-tag star">⭐ 강조</span> — <b>뷰(view) = 가상의 테이블</b> · 장점 <b>보안 · 사용의 편의성</b> · <code>CREATE VIEW 뷰이름 as SELECT … FROM …;</code> / <code>DROP VIEW 뷰이름;</code></li><li><span class="wk-tag star">⭐ 강조</span> — 뷰에 INSERT 하면 <b>기반 테이블에 저장</b>되고, 뷰에 없는 열은 NULL·기본값 · 뷰 이름 뒤 괄호로 <b>뷰의 열 이름 바꾸기</b> 가능</li><li><span class="wk-tag star">⭐ 강조</span> — <b>널 값(NULL)</b> = 알려지지 않은 값, <b>0도 공백도 아님</b> · 따옴표 붙인 <code>'NULL'</code> 은 글자</li><li><span class="wk-tag star">⭐ 강조</span> — INSERT 5가지: 열이름 생략 · NULL · <b>열 순서 변경</b> · 열 일부만 · <b>DEFAULT</b> (<code>TIMESTAMP DEFAULT NOW()</code> = 현재 시각 자동)</li><li><span class="wk-tag star">⭐ 강조</span> — 릴레이션 특성 4가지: 투플 <b>유일성 · 무순서성</b> / 속성 <b>무순서성 · 원자성</b></li><li><span class="wk-tag star">⭐ 강조</span> — 데이터 모델 3요소 <b>SOC</b>(구조 · 연산 · 제약조건) · 스키마 = <b>구조 + 제약조건</b> 명세</li><li><span class="wk-tag note">✍️ 필기</span> — 논리적 독립성(개념↔외부) · 물리적 독립성(내부↔개념·외부) · 파일시스템 단점 <b>중복성·종속성</b> ↔ DBMS 장점 <b>독립성</b></li></ul>
 </section>
 <section class="card">
 <h2>4주차 — 강의자료 시험범위 페이지 ★ (<a href="데이터베이스관리-4주차.html">4주차 자세히</a>)</h2>
@@ -98,10 +111,10 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </section>
 <section class="card">
 <h2>✏️ 문제로 확인하기</h2>
-<ul><li><a href="../데이터베이스관리.html#quiz">데이터베이스관리 과목 페이지 — 퀴즈(객관식 15 · 주관식 15)</a></li><li><a href="../데이터베이스관리.html#s18">4주차 빈칸 문제 — 7p · 42p 신입생 · 외래키 선언문</a></li></ul>
+<ul><li><a href="../데이터베이스관리.html#quiz">데이터베이스관리 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li><li><a href="../데이터베이스관리.html#s18">4주차 빈칸 문제 — 7p · 42p 신입생 · 외래키 선언문</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-4주차.html">‹ 이전 · <b>4주차</b><br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-5주차.html">‹ 이전 · <b>5주차</b><br><small>키 5종 · 뷰(view) · 널 값 · INSERT</small></a><span></span></nav>
 
     <p class="wk-src">노션 「데이터베이스관리」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

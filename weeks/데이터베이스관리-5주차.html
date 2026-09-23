@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202609231259"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 5주차 · 키 5종 · 뷰(view) · 널 값 · INSERT</title>
+    <link rel="stylesheet" href="../style.css?v=202609231259">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 5주차</h1>
+        <p>키 5종 · 뷰(view) · 널 값 · INSERT</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-4주차.html">‹ 이전 · <b>4주차</b><br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a><a class="next" href="데이터베이스관리-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~5주차 반영)</small></a></nav>
+
+<div class="tip">자료: DB-Lect05-키_view-insert-stu-pdf.pdf (55p) · 5주차 폴더 <code>[강의요약] 5주차.txt</code> · 실습 SQL · 과제(상품 · 도서)</div>
+<section class="card">
+<h2>🔴 빨간 글씨 = 암기 (강의자료 DB-Lect05)</h2>
+<p>강의자료에서 <b>빨간 글씨</b>로 표시된 부분입니다. 그대로 외우세요.</p>
+<table class="ref">
+<tbody>
+<tr><th>페이지</th><th>빨간 글씨</th></tr>
+<tr><td><b>11 · 29p</b></td><td>키 특성 — 수퍼키 <b>유일성</b> / 후보키 <b>유일성, 최소성</b> / <b>기본키</b></td></tr>
+<tr><td><b>28p</b></td><td>기본키(Primary Key) — <b>중복불가</b> · <b>필수입력</b> · <b>PK</b></td></tr>
+<tr><td><b>32p</b></td><td>[요약] 키 — <b>수퍼키 · 후보키 · 기본키 · 대체키 · 외래키</b></td></tr>
+<tr><td><b>19 · 24p</b></td><td>스키마 — <b>구조</b> · <b>제약조건</b> 명세</td></tr>
+<tr><td><b>35p</b></td><td>뷰(view) — <b>가상의 테이블</b></td></tr>
+<tr><td><b>37p</b></td><td><b>널값</b>(Null Value)</td></tr>
+<tr><td><b>3 · 49p</b></td><td>[실습 5-2] 데이터 입력 — <b>널 값</b></td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>0. 이번 주 공지 ★</h2>
+<ul><li>⭐ <b>중간고사 범위 = 1장 · 2장 · 3장 · 5장 · 6장</b> (5주차 노션 필기)</li><li>⭐ <b>차수 · 카디널리티 개수 구하기 = 시험문제</b> (강의요약 메모 <code>-- 차수,카디널리티 갯수 시험문제</code>)</li><li>수업 흐름: 키 5가지 → 관계 데이터 모델 복습 → 스키마 3단계 → <b>뷰(view)</b> → <b>널 값</b> → <b>INSERT 5가지</b></li><li>실습 데이터베이스는 <code>testdb</code>, 강의노트는 <code>studydb</code> 를 씁니다 (시험에서는 강의자료 기준으로)</li></ul>
+</section>
+<section class="card">
+<h2>1. 키(Key) 5가지 ★암기 (11 · 28 · 29 · 32p)</h2>
+<div class="tip">🔑 <b>키</b> = 각 투플을 고유하게 식별할 수 있는 <b>하나 이상의 애트리뷰트(속성)들의 모임</b></div>
+<table class="ref">
+<tbody>
+<tr><th>키</th><th>성질 ★</th><th>설명</th></tr>
+<tr><td><b>수퍼키</b> (Super Key)</td><td><b>유일성</b></td><td>각 투플을 유일하게 구별할 수 있는 속성들의 모임 (필요 없는 속성이 섞여 있어도 됨)</td></tr>
+<tr><td><b>후보키</b> (Candidate Key)</td><td><b>유일성 + 최소성</b></td><td>유일하게 식별하는 <b>최소한의</b> 속성들의 모임</td></tr>
+<tr><td><b>기본키</b> (Primary Key)</td><td><b>중복불가 · 필수입력</b></td><td>후보키 중에서 <b>선택한 하나</b>의 키</td></tr>
+<tr><td><b>대체키</b> (Alternate Key)</td><td>UNIQUE</td><td>후보키 중에서 <b>기본키로 선택되지 않은</b> 키</td></tr>
+<tr><td><b>외래키</b> (Foreign Key)</td><td>참조</td><td><b>다른 릴레이션의 기본키를 참조</b>하는 키 (개체와 개체를 연결)</td></tr>
+<tr><td>(참고) <b>대리키</b> (Surrogate Key)</td><td>인위적</td><td>식별자가 너무 길거나 여러 속성일 때 <b>새로 만들어 붙인</b> 식별자</td></tr>
+</tbody></table>
+<h3>신입생 예제 (12 · 30p) — 필기 그대로</h3>
+<pre><code class="language-text">-- 신입생(학번, 주민등록번호, 이름, 주소, 학과명)
+
+후보키 : {학번} , {주민등록번호}      ← 유일성 + 최소성
+기본키 : {학번}
+대체키 : {주민등록번호}
+수퍼키 : 학번 또는 주민등록번호를 포함한 모든 조합
+        (학번,이름) (학번,주소) (주민등록번호,이름) (학번,주민등록번호,이름) …</code></pre>
+<div class="tip">✍️ <b>필기 — "다음은 후보키인가? 이유를 쓰시오"</b> · <code>(학번, 주민등록번호)</code> <b>X</b> · <code>(주민등록번호, 이름)</code> <b>X</b>&lt;br&gt;→ 둘 다 유일성은 있지만 <b>필요 없는 속성이 붙어 있어 최소성을 만족하지 못하므로 후보키가 아니라 수퍼키</b>입니다.</div>
+<h3>수강 예제 (31p)</h3>
+<pre><code class="language-text">-- 수강(학번, 과목번호, …)
+후보키 : {학번, 과목번호}      ← 두 개를 합쳐야 유일 (복합키)
+기본키 : {학번, 과목번호}      ← 후보키가 하나뿐이라 그대로 기본키
+대체키 : 없음</code></pre>
+</section>
+<section class="card">
+<h2>2. 관계 데이터 모델 용어 복습 (7~9p)</h2>
+<table class="ref">
+<tbody>
+<tr><th>용어</th><th>뜻</th></tr>
+<tr><td><b>릴레이션</b>(Relation)</td><td>행과 열로 구성된 <b>2차원 테이블</b></td></tr>
+<tr><td><b>속성</b>(attribute)</td><td>열 · 컬럼 · 필드</td></tr>
+<tr><td><b>투플</b>(tuple)</td><td>행 · 레코드</td></tr>
+<tr><td><b>도메인</b>(domain)</td><td>한 속성에 나타날 수 있는 <b>값들의 집합</b> (유형 · 크기 · 범위)</td></tr>
+<tr><td><b>차수</b>(degree) ★</td><td>한 릴레이션의 <b>속성(열) 개수</b></td></tr>
+<tr><td><b>카디널리티</b>(cardinality) ★</td><td><b>투플(행) 개수</b></td></tr>
+</tbody></table>
+<div class="tip">⭐ <b>시험</b> — 표를 주고 <b>차수와 카디널리티 개수</b>를 묻습니다. 차수 = 세로줄(열), 카디널리티 = 가로줄(행)로 외우세요.<br>🧩 <b>도메인 예</b> — 나이 → 0 이상의 정수 · 성별 → {남, 여} · 학년 → {1, 2, 3, 4}</div>
+</section>
+<section class="card">
+<h2>3. 릴레이션의 특성 4가지 (26p)</h2>
+<table class="ref">
+<tbody>
+<tr><th>특성</th><th>내용</th></tr>
+<tr><td>투플의 <b>유일성</b></td><td>하나의 릴레이션에 <b>동일한 투플이 존재할 수 없다</b></td></tr>
+<tr><td>투플의 <b>무순서성</b></td><td>투플 사이의 <b>순서는 무의미</b>하다</td></tr>
+<tr><td>속성의 <b>무순서성</b></td><td>속성 사이의 <b>순서는 무의미</b>하다</td></tr>
+<tr><td>속성의 <b>원자성</b></td><td>속성 값으로 <b>원자값만</b> 사용할 수 있다</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>4. 데이터 모델 3요소 — SOC (16p)</h2>
+<ul><li><b>구조</b>(Structure) — 데이터를 어떤 형태로 저장하는지에 대한 추상적 표현</li><li><b>연산</b>(Operation) — 그 구조 안의 데이터를 어떤 방식으로 처리하는지</li><li><b>제약조건</b>(Constraint) — 저장할 때의 구조적 제약 + 연산할 때의 행위적 제약</li></ul>
+<div class="tip">💡 <b>데이터 모델</b> = 데이터베이스 <b>구조를 명세하기 위한 개념</b>. 외우는 순서는 <b>SOC</b>(구조 · 연산 · 제약조건)</div>
+</section>
+<section class="card">
+<h2>5. 스키마 3단계 구조와 데이터 독립성 (19 · 24 · 34p)</h2>
+<pre><code class="language-text">        ┌─────────────┐
+사용자 →│ 외부 스키마 │  외부 뷰(view) — 사용자·응용 프로그램이 보는 관점
+        ├─────────────┤   ↕ 논리적 데이터 독립성
+        │ 개념 스키마 │  조직 전체 관점 (테이블·관계·제약조건)
+        ├─────────────┤   ↕ 물리적 데이터 독립성
+        │ 내부 스키마 │  저장 장치에 실제로 저장되는 방법
+        └─────────────┘
+          database</code></pre>
+<ul><li><b>논리적 데이터 독립성</b> — <b>개념</b> 스키마가 바뀌어도 <b>외부</b> 스키마는 영향받지 않는다</li><li><b>물리적 데이터 독립성</b> — <b>내부</b> 스키마가 바뀌어도 <b>개념 · 외부</b> 스키마는 영향받지 않는다</li><li><b>스키마</b> = 데이터베이스를 구성하는 데이터의 <b>구조</b>와 <b>제약조건</b>에 대한 명세</li></ul>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 파일시스템 단점 = <b>중복성 · 종속성</b> ↔ DBMS 장점 = <b>데이터 독립성</b>(논리적 · 물리적)</div>
+</section>
+<section class="card">
+<h2>6. 뷰(view) ★핵심 (35 · 40~43p)</h2>
+<div class="tip">💡 <b>뷰</b> = 다른 테이블을 기반으로 만들어진 <b>가상의 테이블</b>. 실제 데이터는 원래 테이블에 있고, 뷰는 <b>보여 주는 창</b>입니다.<br>🎯 <b>뷰의 장점 2가지 ★</b> — ① <b>보안</b> (필요한 열만 보여 줌) ② <b>사용의 편의성</b> (복잡한 조회를 이름 하나로)</div>
+<pre><code class="language-sql">-- 뷰 정의(생성)
+CREATE VIEW 뷰이름
+as
+SELECT 열이름
+FROM   테이블이름;
+
+DROP VIEW 뷰이름;        -- 뷰 삭제
+DROP TABLE 테이블이름;   -- 테이블 삭제</code></pre>
+<h3>실습 5-1 — 직원 테이블 만들고 뷰 만들기 (41~43p)</h3>
+<pre><code class="language-sql">USE testdb;
+DROP TABLE if exists 직원;
+
+-- 직원(이름, 주소, 전화번호, 연봉)
+CREATE TABLE 직원(
+    이름      VARCHAR(20)   NOT NULL ,
+    주소      VARCHAR(100) ,
+    전화번호  CHAR(13)      NOT NULL ,
+    연봉      INT           DEFAULT 0 ,
+    PRIMARY KEY(이름)
+);
+
+INSERT INTO 직원 VALUES('우태하','서울시 서초구','010-1111-1111',1000);
+INSERT INTO 직원 VALUES('김선우','서울시 구로구','010-2222-2222',2000);
+INSERT INTO 직원 VALUES('이영지','서울시 마포구','010-3333-3333',3000);
+INSERT INTO 직원 VALUES('유희정','서울시 마포구','010-4444-4444',4000);
+INSERT INTO 직원 VALUES('오형준','부산시 연산구','010-5555-5555',5000);
+INSERT INTO 직원 VALUES('고진수','서울시 구로구','010-6666-6666',6000);
+
+SELECT * FROM 직원;
+SELECT 이름, 전화번호 FROM 직원;   -- 이름과 전화번호만 조회</code></pre>
+<p>입력한 직원 테이블 (차수 <b>4</b> · 카디널리티 <b>6</b>):</p>
+<table class="ref">
+<tbody style="min-width:439px;">
+<tr><th>이름</th><th>주소</th><th>전화번호</th><th>연봉</th></tr>
+<tr><td>우태하</td><td>서울시 서초구</td><td>010-1111-1111</td><td>1000</td></tr>
+<tr><td>김선우</td><td>서울시 구로구</td><td>010-2222-2222</td><td>2000</td></tr>
+<tr><td>이영지</td><td>서울시 마포구</td><td>010-3333-3333</td><td>3000</td></tr>
+<tr><td>유희정</td><td>서울시 마포구</td><td>010-4444-4444</td><td>4000</td></tr>
+<tr><td>오형준</td><td>부산시 연산구</td><td>010-5555-5555</td><td>5000</td></tr>
+<tr><td>고진수</td><td>서울시 구로구</td><td>010-6666-6666</td><td>6000</td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- 뷰 생성: 직원_뷰(이름, 전화번호)
+CREATE VIEW 직원_뷰
+as
+SELECT 이름, 전화번호
+FROM   직원;
+
+-- 뷰 조회
+SELECT * FROM 직원_뷰;
+
+-- 뷰에 데이터 입력
+INSERT INTO 직원_뷰(이름, 전화번호) VALUES('신재영','010-9999-9999');
+
+SELECT * FROM 직원_뷰;   -- 뷰 조회
+SELECT * FROM 직원;      -- 테이블 조회 → 신재영이 여기에도 들어가 있다</code></pre>
+<div class="tip">⭐ <b>핵심</b> — 뷰에 넣은 데이터는 <b>기반 테이블(직원)에 들어갑니다</b>. 뷰에 없는 열(주소 · 연봉)은 값을 주지 않았으므로 <b>주소는 NULL, 연봉은 기본값 0</b>이 됩니다.<br>⚠️ <b>내 실습과 다른 점</b> — 강의요약에 적은 CREATE TABLE 은 <code>NOT NULL</code> · <code>DEFAULT 0</code> 없이 만들어서 연봉이 <b>NULL</b>이 됩니다. 또 요약에 <code>CREATE TABLE 작원(</code> 이라고 <b>오타</b>가 있으니 시험 답안에는 <b>직원</b>으로 쓰세요.</div>
+<h3>실습 — 3단계 구조를 뷰로 만들어 보기 (44~47p)</h3>
+<pre><code class="language-sql">use studydb;
+drop table 가입고객;
+
+-- 가입고객(번호, 이름, 성별, 나이, 직업, 주소, 연락처)   ← 개념 스키마
+CREATE TABLE 가입고객(
+    번호    int       NOT NULL,
+    이름    char(10),
+    성별    char(2) ,
+    나이    int ,
+    직업    char(10),
+    주소    char(20) ,
+    연락처  char(20) ,
+    PRIMARY KEY(번호)
+);
+INSERT INTO 가입고객 VALUES (1, '홍길동', '남', 20, '학생', '서울', NULL) ,
+                            (2, '임꺽정', '남', 22, '학생', '인천', '010-1111-1111') ,
+                            (3, '신아로미', '여', 20, '학생', '서울', '010-2222-2222') ;
+select * from 가입고객;
+
+-- 외부 스키마 ① 고객분석팀(성별, 나이, 직업)
+CREATE VIEW 고객분석팀
+as
+SELECT 성별, 나이, 직업
+FROM   가입고객;
+select * from 고객분석팀;
+
+-- 외부 스키마 ② 상품배송팀(고객번호, 고객이름, 주소, 연락처)
+CREATE VIEW 상품배송팀(고객번호, 고객이름, 주소, 연락처)
+as
+SELECT 번호, 이름, 주소, 연락처
+FROM   가입고객;
+select * from 상품배송팀;</code></pre>
+<div class="tip">⭐ <b>핵심</b> — 뷰 이름 뒤 <b>괄호에 이름을 적으면 뷰의 열 이름을 새로 붙일 수 있습니다</b> (번호 → 고객번호, 이름 → 고객이름). 같은 테이블 하나로 팀마다 <b>다른 외부 스키마(뷰)</b> 를 주는 것이 3단계 구조의 핵심이고, 필요 없는 열을 감추니 <b>보안</b>도 됩니다.<br>💡 여러 줄을 한 번에 넣을 때는 <code>VALUES (…) , (…) , (…) ;</code> 처럼 <b>쉼표로 이어서</b> 씁니다.</div>
+</section>
+<section class="card">
+<h2>7. 널 값(NULL) ★ (37 · 38p)</h2>
+<div class="tip">🕳️ <b>널 값</b> = <b>알려지지 않은 값</b>(Unknown). 특정 투플의 속성 값을 <b>모르거나 적합한 값이 없을 때</b> 사용합니다. <b>숫자 0도 아니고 공백(' ')도 아닙니다.</b></div>
+<pre><code class="language-sql">-- 주소록(이름, 전화번호, 주소, 생일)
+CREATE TABLE 주소록(
+    이름      char(10)   NOT NULL ,
+    전화번호  char(13) ,
+    주소      varchar(10) ,
+    생일      varchar(11) ,
+    PRIMARY KEY(이름)
+);
+
+-- ① 값 자리에 NULL 을 그대로 쓰기
+INSERT INTO 주소록(이름, 전화번호, 주소, 생일)
+VALUES('이건우','010-2132-2345', NULL, NULL);
+
+-- ② 넣을 열만 쓰기 (나머지는 자동으로 NULL)
+INSERT INTO 주소록(이름, 전화번호)
+VALUES('이건우','010-2132-2345');
+
+-- ③ 열을 생략하고 전체 값 넣기
+INSERT INTO 주소록
+VALUES('홍길동','010-1234-5678','서울','3월15일');</code></pre>
+<div class="tip">⚠️ <b>따옴표 주의</b> — <code>'NULL'</code> 처럼 따옴표로 감싸면 <b>널 값이 아니라 "NULL"이라는 글자</b>가 들어갑니다. 널 값은 <b>따옴표 없이 NULL</b>.<br>⚠️ <b>필기 오타</b> — 요약의 <code>INSERT INTO VALUES('D002',…)</code> 는 <b>테이블 이름이 빠져서</b> 실행되지 않습니다. <code>INSERT INTO 사원 VALUES(…)</code> 가 맞습니다.</div>
+</section>
+<section class="card">
+<h2>8. [실습 5-2] 사원 테이블 — 널 값 넣어 보기 (49p)</h2>
+<pre><code class="language-sql">DROP TABLE 사원;
+
+-- 사원(사원번호, 사원명, 연락처, 생일)
+CREATE TABLE 사원(
+    사원번호  char(4) ,
+    사원명    varchar(20) ,
+    연락처    char(13) ,
+    생일      varchar(15) ,
+    PRIMARY KEY(사원번호)
+);
+
+INSERT INTO 사원 VALUES('D001','정지영', NULL, NULL);
+INSERT INTO 사원 VALUES('D002','김선주','010-1111-1111', NULL);
+INSERT INTO 사원 VALUES('D003','정성호', NULL, '10월4일');
+SELECT * FROM 사원;</code></pre>
+<div class="tip">⭐ <b>시험 연결</b> — 사원 테이블의 <b>차수 = 4</b>(사원번호 · 사원명 · 연락처 · 생일), 위처럼 3줄을 넣으면 <b>카디널리티 = 3</b>.</div>
+</section>
+<section class="card">
+<h2>9. INSERT 5가지 방법 ★ (50~52p · clubmember)</h2>
+<pre><code class="language-sql">-- clubmember(mno, mname, mbirth, mreg_date, mgpa)
+CREATE TABLE clubmember (
+    mno         int            NOT NULL ,              -- 회원번호
+    mname       varchar(20)    NOT NULL ,              -- 회원명
+    mbirth      date ,                                 -- 생일
+    mreg_date   TIMESTAMP      DEFAULT NOW()  ,        -- 등록일자 (MySQL)
+    mgpa        decimal(3, 1) ,                        -- 평점
+    PRIMARY KEY (mno)
+);</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>방법</th><th>SQL</th></tr>
+<tr><td><b>1-1</b> 열 개수와 값 개수가 같으면 <b>열 이름 생략 가능</b></td><td><code>INSERT INTO clubmember VALUES(121,'홍길동','19900315','140320',4.3);</code></td></tr>
+<tr><td><b>1-2</b> <b>NULL</b> 값 입력</td><td><code>INSERT INTO clubmember VALUES(123,'이정진', NULL, '140425', NULL);</code></td></tr>
+<tr><td><b>3</b> 열 <b>순서 변경 가능</b> (열 이름을 값 순서대로 적기)</td><td><code>INSERT INTO clubmember(mno,mbirth,mreg_date,mname,mgpa) VALUES(510,'19841210','140816','이정무',3.8);</code></td></tr>
+<tr><td><b>4</b> 넣을 <b>열 이름만</b> 적기</td><td><code>INSERT INTO clubmember(mno,mname,mbirth,mreg_date) VALUES(210,'김윤식','1994-05-08','140912');</code></td></tr>
+<tr><td><b>5</b> <b>DEFAULT</b> 값으로 두기</td><td><code>INSERT INTO clubmember(mno,mname,mbirth) VALUES(325,'홍진아','1994-12-14');</code></td></tr>
+</tbody></table>
+<div class="tip">⭐ <b>DEFAULT NOW()</b> — <code>mreg_date TIMESTAMP DEFAULT NOW()</code> 로 만들어 두면 <b>값을 넣지 않았을 때 현재 날짜·시간이 자동으로</b> 들어갑니다. (<code>datetime DEFAULT CURRENT_TIMESTAMP</code> 도 같은 뜻)<br>💡 값을 직접 <b>DEFAULT</b> 라고 써도 기본값이 들어갑니다 — 과제에서 쓴 <code>INSERT INTO 상품 VALUES (5, '필통', 5000, DEFAULT);</code></div>
+</section>
+<section class="card">
+<h2>10. 과제 — Quiz 6-1 · 6-2 (54 · 55p)</h2>
+<ul><li><b>Quiz 6-1 뷰(View)</b> — ① 직원 테이블 생성 ② 직원 테이블 기반으로 뷰 생성 ③ 뷰에 데이터 입력 ④ 테이블 조회 · 뷰 조회</li><li><b>Quiz 6-2 INSERT (생성형 AI 사용)</b> — ① 도서 테이블 생성 ② AI로 INSERT 예제 5가지 검색 ③ 도서 테이블에 적용해 입력 ④ 조회</li><li>제출: <b>생성형 AI 프롬프트 + 작성한 SQL + 실행 화면 캡처</b></li><li>내가 쓴 프롬프트: *"MySQL에서 테이블을 하나 만들고 데이터 입력에 쓰는 INSERT 문법을 유형별 예제 5가지로 설명해줘"*</li><li>도서 테이블에 적용한 5가지 = 전체 값 · <b>NULL</b> · 열 <b>순서 변경</b> · 열 <b>일부만</b> · <b>DEFAULT</b> (9번 표와 같은 5가지)</li></ul>
+<pre><code class="language-sql">-- 과제: 도서(도서번호, 도서명, 저자, 출판사, 출판연도, 분류)
+CREATE TABLE 도서 (
+    도서번호  INT,
+    도서명    VARCHAR(50),
+    저자      VARCHAR(30),
+    출판사    VARCHAR(20),
+    출판연도  INT DEFAULT 2026,
+    분류      VARCHAR(10),
+    PRIMARY KEY (도서번호)
+);
+INSERT INTO 도서 VALUES (1, '클로드 코드 제대로 시작하기', '주홍철, 황진성', '길벗', 2026, 'IT모바일');
+INSERT INTO 도서 VALUES (2, '뚝딱 바로 써먹는 AI 3대장', '코리아교육그룹 연구소', '안경다리BOOKS', NULL, 'IT모바일');
+INSERT INTO 도서 (도서명, 저자, 도서번호, 분류, 출판연도, 출판사) VALUES ('교사를 지키는 단단한 생활지도', '이종혁', 3, '사회 정치', 2026, '테크빌교육');
+INSERT INTO 도서 (도서번호, 도서명, 저자, 출판사, 분류) VALUES (4, '휴대폰과 독화살', '장준호', '시월', '여행');
+INSERT INTO 도서 VALUES (5, '아름다운 것들은 비밀을 품고 있다', '파묘', '모티브', DEFAULT, '예술');
+SELECT * FROM 도서;</code></pre>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../데이터베이스관리.html#quiz">데이터베이스관리 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-4주차.html">‹ 이전 · <b>4주차</b><br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a><a class="next" href="데이터베이스관리-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~5주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리 · 5주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>
