@@ -44,8 +44,8 @@ motion.js           전 페이지 공용 — 애니메이션·인터랙션(화�
 scripts/bump_assets.py  ★ 공용 파일(theme.js·style.css·quiz.js…)을 고친 뒤 실행 — 모든 페이지 주소의 ?v= 버전을 올려 브라우저 캐시를 끊음
 review.js           과목 페이지 공용 — 틀린 문제 모아 복사 + 코드블록 복사 버튼
 quiz.js             2학기 과목 페이지 공용 퀴즈 — 객관식(.mcq)·주관식(.quiz-item) 채점 + 복습 모드
-codetest.js         언어 과목(C·Java·JS) 코딩테스트 — 소스코드를 붙여넣으면 채점 (C·Java = Wandbox 온라인 컴파일러, JS = 브라우저 Web Worker)
-outquiz.js          언어 과목 출력 결과 맞히기 — 코드를 읽고 실행 결과를 적으면 줄 단위로 채점 (#output, 정답은 실제 실행 결과)
+codetest.js         언어 과목(C·Java·JS·SQL) 코딩테스트 — 소스코드를 붙여넣으면 채점 (C·Java = Wandbox 온라인 컴파일러, JS = 브라우저 Web Worker, SQL = 브라우저 안의 SQLite(sql.js)를 MySQL 처럼 맞춰 실행)
+outquiz.js          언어 과목 출력 결과 맞히기 — 코드를 읽고 실행 결과를 적으면 줄 단위로 채점 (#output, 정답은 실제 실행 결과 · SQL 은 data-table 로 결과 표 채점)
 weeks.js            2학기 과목 페이지의 1~15주차 버튼 — 진도 나간 주차만 열림, 8주차 중간고사 · 15주차 기말고사, 새 탭으로 열기
 weeks/             주차 페이지(<과목>-N주차.html · <과목>-8주차-중간고사.html) — scripts/build_weeks.py 가 생성
 weeks/src/         주차 페이지 원고(노션 주차 페이지 내용을 옮긴 .md) — 이것만 고치고 빌드
@@ -113,7 +113,7 @@ window.isExamFinished("X.html")                      // → true/false
 - **새 페이지**: `<head>` 의 `<meta charset>` 바로 다음 줄에 `<script src="theme.js"></script>` (weeks/ 안은 `../theme.js`). 다크 전용 CSS 는 페이지에 따로 쓰지 말고 화이트 기준으로만 작성하세요. 새 공용 부품의 다크 색을 정확히 맞추고 싶으면 `DARK_CSS` 에 `html[data-theme=dark] .클래스{…}` 한 줄을 추가합니다.
 - 오른쪽 위(`top:14px; right:14px`, 44px)는 전환 버튼 자리라 고정 UI 를 두지 않습니다. 변환에서 빼고 싶은 요소는 `data-theme-skip` 속성.
 - 전환 버튼을 누르면 버튼 자리에서 **원이 퍼지며** 모드가 바뀝니다(View Transitions 지원 브라우저, 나머지는 바로 전환).
-- ⚠️ **캐시 주의**: GitHub Pages 는 JS·CSS 를 10분 캐시하고 크롬은 새로고침해도 HTML 만 새로 받습니다. `theme.js`·`codecolor.js`·`motion.js`·`style.css`·`quiz.js`·`review.js`·`weeks.js`·`schedule.js` 를 고쳤으면 커밋 전에 **`python3 scripts/bump_assets.py`** 를 실행하세요(모든 페이지의 `?v=` 를 갱신, codecolor.js·motion.js 는 theme.js 의 버전을 이어받음).
+- ⚠️ **캐시 주의**: GitHub Pages 는 JS·CSS 를 10분 캐시하고 크롬은 새로고침해도 HTML 만 새로 받습니다. `theme.js`·`codecolor.js`·`motion.js`·`style.css`·`quiz.js`·`review.js`·`weeks.js`·`schedule.js`·`codetest.js`·`outquiz.js` 를 고쳤으면 커밋 전에 **`python3 scripts/bump_assets.py`** 를 실행하세요(모든 페이지의 `?v=` 를 갱신, codecolor.js·motion.js 는 theme.js 의 버전을 이어받음).
 
 ### ✨ 애니메이션 · 인터랙션 — `motion.js` (토스 앱 느낌)
 theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다. 색은 **화이트 = 원래 초록·주황 토큰, 다크 = 파랑·무채색**(녹색 없음)이고, 기기의 **동작 줄이기**를 켜면 움직임은 모두 빠집니다(진행 막대·상단 바·맨 위로 버튼·포커스 테두리만 남음).
@@ -359,15 +359,15 @@ window.EXAM_SCHEDULE = {
      - ① 소스코드 쓰기 · ③ 출력결과를 보고 소스코드 쓰기 → 💻 코딩테스트 `#code` (`.ct` — 문제 · 입력 예 · **출력 예**를 보여 주고, 붙여넣은 코드를 숨은 테스트로 실제 실행해 채점)
      - ② 소스코드를 보고 출력결과 쓰기 → 🖥️ 출력 결과 맞히기 `#output` (`.oq`)
      - ④ 빈칸채우기(괄호넣기) → 그 주차 섹션 안의 코드 빈칸 `.quiz-item` (코드의 `( ① )` 자리에 들어갈 것) + `#quiz` 주관식
-   - 언어 과목 = **C**(프로그래밍언어실습) · **Java**(자바프로그래밍) · **JS**(웹프로그래밍) · **SQL**(데이터베이스관리). ⚠️ 지금 `codetest.js` 채점기는 **C · Java · JS 만** 지원해서 데이터베이스관리에는 아직 코딩테스트 · 출력 맞히기가 없습니다 (객관식 · 빈칸만). SQL 채점기를 붙이면 SQL 도 같은 규칙으로 매 주차 추가합니다.
+   - 언어 과목 = **C**(프로그래밍언어실습) · **Java**(자바프로그래밍) · **JS**(웹프로그래밍) · **SQL**(데이터베이스관리). 넷 다 `codetest.js` · `outquiz.js` 로 채점하니 **매 주차 같은 규칙**으로 추가합니다 (SQL 은 아래 [🐬 SQL 코딩테스트](#-sql-코딩테스트--결과-맞히기-데이터베이스관리) 규칙).
    - 📝 **웹프로그래밍은 필기한 용어가 시험에 많이 나옵니다** — 퀴즈를 만들 때 노션 주차 페이지의 **원본 필기 토글에 적힌 용어**(수업 중 적은 말 그대로)를 우선 출제합니다 (용어 → 뜻 · 뜻 → 용어, 객관식 · 주관식 모두).
    - 번호는 기존 다음 번호로 이어서 (`.mcq-no` 와 `주관식 N`)
    - `<h2>` 의 "객관식 N · 주관식 N" 숫자와 `.week` 라벨(예: `1~4주차`)도 함께 수정
    - **배운 범위 안에서만 출제 ★** — 문항의 근거는 ① 그 주차까지의 **강의자료(PDF·실습 파일·교수님 메모)** ② **노션 주차 페이지(수업 중 원본 필기 토글 포함)** ③ **사이트 정리 본문** 중 하나에 반드시 있어야 합니다. 강의자료에 없어도 수업 필기에 있으면 배운 내용입니다(예: C 3주차 char 범위 · `%x` 는 필기에만 있음). 출제 전에 해당 용어를 자료에서 검색해 확인하고, **근거가 없으면 내지 않습니다**(일반 지식으로 지어내지 않기). 배우지 않은 내용은 시험 공부에 도움이 되지 않습니다.
    - **기존 문항과 중복 금지** · 교수님이 시험에 나온다고 한 내용 우선
    - 강의자료의 빈칸·퀴즈 슬라이드는 별도 섹션에 `.quiz-item` 으로 만들어도 좋습니다 (점수는 `#quiz` 안의 문항만 집계됨)
-   - **언어 과목(프로그래밍언어실습 · 자바프로그래밍 · 웹프로그래밍)은 코딩테스트(`#code`)도 그 주차 내용으로 1~2문제 추가** — 문제 · 입력 예 · 출력 예 + `ct-tests` (숨은 테스트 입력과 기대 출력) + `ct-answer` (정답 코드). 기대 출력은 **정답 코드를 직접 실행해서** 만들고(C = clang · Java = javac · JS = node), 정답 코드가 페이지에서 모든 테스트를 통과하는지 확인합니다. 쓰라고 한 문법은 `data-must='["정규식"]'` 로 검사. 출력 형식은 키보드로 치기 쉬운 글자만 (→ 같은 기호 금지).
-   - **언어 과목은 출력 결과 맞히기(`#output`)도 그 주차 코드로 2~3문제 추가** — `.oq` 안에 코드 + `<script type="text/plain" class="oq-expect">` (정답 = **직접 실행한 결과**) + `.oq-why` 풀이. 코드 주석에 결과를 적지 않습니다(답이 보이면 안 됨). 시험문제 코드는 `data-exam` 으로 🔥 묶음에, 칸수 문제는 `data-space="exact"`.
+   - **언어 과목(프로그래밍언어실습 · 자바프로그래밍 · 웹프로그래밍 · 데이터베이스관리)은 코딩테스트(`#code`)도 그 주차 내용으로 1~2문제 추가** — 문제 · 입력 예 · 출력 예 + `ct-tests` (숨은 테스트 입력과 기대 출력) + `ct-answer` (정답 코드). 기대 출력은 **정답 코드를 직접 실행해서** 만들고(C = clang · Java = javac · JS = node · SQL = sql.js 로 codetest.js 의 SQL 실행기를 그대로 돌림), 정답 코드가 페이지에서 모든 테스트를 통과하고 **틀린 답은 떨어지는지** 확인합니다. 쓰라고 한 문법은 `data-must='["정규식"]'` 로 검사. 출력 형식은 키보드로 치기 쉬운 글자만 (→ 같은 기호 금지).
+   - **언어 과목은 출력 결과 맞히기(`#output`)도 그 주차 코드로 2~3문제 추가** — `.oq` 안에 코드 + `<script type="text/plain" class="oq-expect">` (정답 = **직접 실행한 결과**) + `.oq-why` 풀이. 코드 주석에 결과를 적지 않습니다(답이 보이면 안 됨). 시험문제 코드는 `data-exam` 으로 🔥 묶음에, 칸수 문제는 `data-space="exact"`. SQL 은 **마지막 SELECT 의 결과 표**를 묻는 `data-table` 문제로 만듭니다.
      - ⚠️ **출력 결과는 복수정답이 없다** — 같은 코드를 실행하면 결과는 항상 **딱 하나**입니다. 정답을 여러 개 받아 주거나(`|` 로 나열 등) “이것도 맞음” 식으로 처리하지 않습니다. 채점에서 띄어쓰기 개수·빈 줄을 무시하는 건 입력 편의일 뿐, 정답이 여러 개라는 뜻이 아닙니다.
      - **예외** — 실행할 때마다 결과가 달라지는 코드만: `rand()` · `srand(time(NULL))` · `Math.random()` · `new Random()` · `time()` · `Date` · 현재 시각 · `%p` 주소값 등. 이런 코드는 출력 결과 맞히기 문제로 내지 않거나, 값이 정해지지 않는 줄은 빼고 결과가 확정되는 부분만 묻습니다.
    - **교수님이 “시험문제”라고 한 소스코드는 반드시 코딩테스트로도 만든다** — `data-exam="출처(주차 · 파일 · 쪽)"` 를 붙이면 🔥 시험문제 배지 · 빨간 테두리 · 📌 출처 줄이 붙고, `#code` 맨 위 `<h3 class="ct-group">🔥 시험문제 …</h3>` 묶음에 둡니다 (나머지는 `✍️ 연습 문제` 묶음). 시험 코드의 값은 입력으로 바꿔 받게 해서 숨은 테스트로 채점합니다. 정리할 때 **다른 과목도** 시험 표시(★시험·시험문제·시험단골)가 퀴즈·코딩테스트로 들어가 있는지 확인하고, 빠졌으면 채웁니다 (언어 과목 = 코딩테스트, 나머지 = 본문 빈칸 문제나 #quiz).
@@ -383,6 +383,45 @@ window.EXAM_SCHEDULE = {
 - 노션은 기존 N주차 페이지에 덮어쓰기
 - 사이트에 섹션 추가 + weeks/src 주차 원고·8주차 시험 포인트 추가 후 build_weeks.py + #quiz 에 그 주차 객관식 5 · 주관식 5 추가(README "주차 정리 요청 시 기본 작업" 규칙대로)
 ```
+
+### 🐬 SQL 코딩테스트 · 결과 맞히기 (데이터베이스관리)
+
+수업은 **MySQL 8.0**, 채점기는 브라우저 안의 **SQLite** — `sql.js` 1.13.0 을 **cdnjs**(안 되면 **jsDelivr**)에서 SQL 문제를 처음 채점할 때만 불러옵니다. `codetest.js` 가 MySQL 처럼 동작하도록 맞춰서 실행합니다.
+
+```html
+<div class="ct" id="ct-db1" data-lang="sql" data-must='["PRIMARY\\s+KEY"]' data-must-msg="…" data-exam="출처(주차 · 쪽)">
+  <p class="ct-q">…</p> <p class="ct-desc">…</p>
+  <pre class="ct-setup"><code class="language-sql">미리 준비된 표 (SELECT 만 쓰는 문제)</code></pre>
+  <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 결과 예 — …</div><div class="ct-tblwrap"><table class="ct-tbl">…</table></div></div></div>
+  <textarea class="ct-code" …></textarea> <!-- 버튼 · .ct-result 는 C 와 같음 -->
+  <script type="application/json" class="ct-tests">[
+    {"label":"7p 데이터", "setup":"(준비 SQL)", "check":"select * from 학과;", "expect":{"columns":["학과번호","학과명"], "rows":[[1,"컴퓨터소프트웨어공학과"]]}},
+    {"label":"기본키 = 중복 불가", "check":"INSERT INTO 학과 VALUES(1,'중복학과');", "error":"UNIQUE", "why":"거부돼야 하는 이유"}
+  ]</script>
+  <script type="text/plain" class="ct-answer">정답 SQL</script>
+</div>
+```
+- 테스트 한 개 = **빈 DB → `setup` → 붙여넣은 SQL → `check`**. `check` 의 마지막 SELECT 결과(`check` 가 없으면 붙여넣은 SQL 의 마지막 SELECT)를 `expect` 와 비교 — 열은 이름 · 순서까지, **행 순서는 무시**(투플의 무순서성 · ORDER BY 는 안 배움), 널 값과 `'NULL'` 글자 · 빈 문자열 `''` 은 서로 다르게 봅니다.
+- `error` 가 있으면 `check` 의 **마지막 문장이 그 글자가 든 오류로 거부돼야** 통과 — 기본키 중복 `UNIQUE` · 필수 입력 `NOT NULL` · 참조 무결성 `FOREIGN KEY` · 삭제 순서 `3730`. CREATE · INSERT 문제는 이 제약조건 테스트가 숨은 테스트 역할을 합니다.
+- SELECT 만 쓰는 문제는 `setup` 으로 표를 만들어 두고, **숨은 테스트는 데이터를 바꿔서** 결과를 외워 쓴 답을 떨어뜨립니다.
+- 결과 맞히기(`#output`)는 `.oq` 에 **`data-table`** — `oq-expect` 는 `열1 | 열2` 머리글 + 행마다 한 줄(널 값 `NULL`, 빈 문자열은 빈칸). 답은 띄어쓰기 · `|` 아무거나로 칸을 나누고, 머리글 다음 **행 순서는 채점하지 않습니다**.
+- **기대 결과 만들기** — 정답 SQL 을 `codetest.js` 의 SQL 실행기(브라우저와 같은 코드)로 Node 에서 실행합니다: `npm i sql.js@1.13.0` → codetest.js 의 `// ---- SQL 실행기` ~ `// ---- 점수 ----` 부분을 `new Function(… + "return { sqlRunTest, sqlExec, sqlSame }")` 로 불러 `sqlRunTest(SQL, 정답, 테스트)` · `sqlExec(db, 코드)`. **틀린 답도 넣어 보고 떨어지는지** 확인한 뒤, 페이지에서 정답 · 오답으로 한 번 더 채점합니다.
+
+**MySQL ↔ SQLite — 채점기가 맞춰 둔 것 / 못 맞춘 것**
+
+| 수업(MySQL) | 채점기 |
+|------|------|
+| `USE testdb;` · `CREATE/DROP DATABASE`(SCHEMA) · `desc 표;` · `SHOW` · `SET` · `COMMIT` | 건너뛰고 ℹ️ 알림 (빈 DB 하나에서 실행) |
+| 없는 표를 `DROP TABLE 표;` → Error 1051 | 건너뛰고 ℹ️ 알림 (강의 코드가 `drop table 사원;` 으로 시작해도 되게) |
+| 문자 비교는 대소문자 무시 (`'kim'` = `'Kim'`) | 문자 열에 `COLLATE NOCASE` |
+| InnoDB 는 기본키 순서로 저장 · 조회, 기본키는 자동으로 NOT NULL | 기본키가 있는 표는 `WITHOUT ROWID` |
+| `char(n)` · `varchar(n)` 보다 긴 값 → Error 1406 | 글자 수 `CHECK` 로 같은 오류 |
+| 외래키 검사 (Error 1452) | `PRAGMA foreign_keys = ON` |
+| 자식을 부모보다 먼저 CREATE → 1824 · 외래키 자료형이 다름 → 3780 · 부모를 먼저 DROP → 3730 | CREATE / DROP 때 직접 검사해서 같은 번호의 오류 |
+| `DEFAULT NOW()` · `VALUES(…, DEFAULT, …)` · `ENGINE=InnoDB …` 테이블 옵션 · `"큰따옴표 문자"` · `\'` | 바꿔서 실행하거나 무시 |
+| 뷰에 INSERT (한 테이블의 열을 그대로 고른 뷰) → 기반 테이블에 저장 | `INSTEAD OF INSERT` 트리거를 자동으로 붙임 |
+| ⚠️ `date` 표시(`'19900315'` → `1990-03-15`) · `decimal(3,1)` 의 `4` → `4.0` · `DEFAULT NOW()` 로 들어간 시각 | **못 맞춤 → 이런 열은 채점 · 결과 맞히기에 쓰지 않습니다** |
+| ⚠️ `AUTO_INCREMENT` · 배우지 않은 함수 | 지원 안 함 (오류로 알려 줌) |
 
 ---
 

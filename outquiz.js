@@ -7,6 +7,9 @@
        <div class="oq-why">…풀이…</div>          (선택) 정답 보기 때만 보임
        data-exam="출처 설명"   (선택) 교수님이 "시험문제" 라고 한 코드 → 🔥 배지와 빨간 테두리
        data-space="exact"     (선택) 칸수 문제 — 줄 안의 띄어쓰기 개수까지 채점
+       data-table             (선택) SQL 결과 표 문제 — oq-expect 는 "열1 | 열2" 머리글 줄 + 행마다 한 줄 (칸은 " | " 로 구분, 널 값은 NULL)
+                              답은 칸을 띄어쓰기 · | · 탭 아무거나로 구분 · +---+ 테두리 줄은 무시
+                              첫 줄(열 이름)은 그대로, 그다음 행들은 순서를 채점하지 않음 (투플의 무순서성 — ORDER BY 는 안 배움)
    - 답칸·버튼은 이 스크립트가 만든다
    - 채점: 줄 앞뒤 공백 · 빈 줄 무시, 줄 안의 공백·탭 여러 개는 하나로 (글자·숫자·기호·대소문자는 그대로)
    - #oq-score 에 맞힌 개수 · 틀렸거나 정답을 본 문제는 review.js "틀린 문제 복사"에 들어감 (window.__examWrong)
@@ -43,17 +46,33 @@
         + ".oq-key{margin-top:10px;}"
         + ".oq-key pre.io::before{content:\"✅ 실제 실행 결과\";}"
         + ".oq-why{margin:8px 0 0;line-height:1.7;}"
+        + ".oq-tblwrap{overflow-x:auto;max-width:100%;margin-top:4px;}"
+        + ".oq-key .oq-tblwrap::before{content:\"✅ 실제 실행 결과\";display:block;font-size:12.5px;font-weight:800;margin-bottom:4px;}"
+        + ".oq-tbl{border-collapse:collapse;width:auto;margin:0;font-size:13.5px;background:var(--card);}"
+        + ".oq-tbl th,.oq-tbl td{border:1px solid var(--line);padding:5px 10px;text-align:left;white-space:nowrap;}"
+        + ".oq-tbl th{background:#eaf2ec;}"
+        + ".oq-tbl .oq-null{color:#9aa69c;font-style:italic;font-size:12px;}"
         + "#oq-score{font-weight:800;margin:6px 0 2px;}";
     var st = document.createElement("style");
     st.textContent = css;
     document.head.appendChild(st);
 
     function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
-    function lines(s, exact) {
+    function lines(s, exact, table) {
         return String(s || "").replace(/\r/g, "").split("\n").map(function (l) {
+            if (table) return /^[\s+\-=|:]*$/.test(l) ? "" : l.replace(/[|\t]/g, " ").replace(/\s+/g, " ").trim();   // +---+ 테두리 줄은 빼고, 칸 구분은 띄어쓰기로
             l = l.replace(/\t/g, " ");
             return exact ? l.replace(/\s+$/, "") : l.replace(/\s+/g, " ").trim();
         }).filter(function (l) { return l.trim() !== ""; });
+    }
+    function tableHtml(raw) {          // "열1 | 열2" 줄들 → 표
+        var rows = raw.split("\n").filter(function (l) { return l.trim(); }).map(function (l) { return l.split("|").map(function (c) { return c.trim(); }); });
+        return '<div class="oq-tblwrap"><table class="oq-tbl">' + rows.map(function (r, i) {
+            return "<tr>" + r.map(function (c) {
+                var v = i && c === "NULL" ? '<span class="oq-null">NULL</span>' : esc(c);
+                return i ? "<td>" + v + "</td>" : "<th>" + v + "</th>";
+            }).join("") + "</tr>";
+        }).join("") + "</table></div>";
     }
 
     var scoreEl = document.getElementById("oq-score");
@@ -71,7 +90,8 @@
         if (!expEl) return;
         var raw = expEl.textContent.replace(/^\n/, "").replace(/\n$/, "");
         var exact = p.dataset.space === "exact";
-        var expect = lines(raw, exact);
+        var table = p.hasAttribute("data-table");
+        var expect = lines(raw, exact, table);
         var why = p.querySelector(".oq-why");
         if (why) why.remove();
         var q = p.querySelector(".oq-q");
@@ -92,7 +112,8 @@
         ta.setAttribute("autocomplete", "off");
         ta.setAttribute("autocapitalize", "off");
         ta.setAttribute("aria-label", title + " — 실행 결과 입력");
-        ta.placeholder = exact ? "실행 결과를 그대로 입력 — 줄마다 Enter · 이 문제는 띄어쓰기 개수까지 채점해요"
+        ta.placeholder = table ? "결과 표를 입력 — 첫 줄은 열 이름, 그다음 한 줄에 한 행 · 칸은 띄어쓰기나 | 로 구분 · 널 값은 NULL (행 순서는 채점 안 함)"
+                       : exact ? "실행 결과를 그대로 입력 — 줄마다 Enter · 이 문제는 띄어쓰기 개수까지 채점해요"
                                : "실행 결과를 그대로 입력 — 줄마다 Enter (띄어쓰기 개수·빈 줄은 채점에서 무시)";
         var btns = document.createElement("div");
         btns.className = "oq-btns";
@@ -115,17 +136,19 @@
         function keyBox() {
             var k = document.createElement("div");
             k.className = "oq-key";
-            k.innerHTML = '<pre class="io"><code>' + esc(raw) + "</code></pre>";
+            k.innerHTML = table ? tableHtml(raw) : '<pre class="io"><code>' + esc(raw) + "</code></pre>";
             if (why) k.appendChild(why);
             return k;
         }
 
         btns.querySelector(".oq-check").addEventListener("click", function () {
-            var mine = lines(ta.value, exact);
+            var mine = lines(ta.value, exact, table);
             if (!mine.length) { box.innerHTML = '<p class="oq-sum no">실행 결과를 적고 확인을 누르세요.</p>'; return; }
-            var good = 0, html = [];
+            var good = 0, html = [], pool = expect.slice(1);
             mine.forEach(function (l, i) {
-                var ok = l === expect[i];
+                var at = table && i ? pool.indexOf(l) : -1;          // 표: 머리글 다음 행은 순서 상관없이 남은 행과 비교
+                if (at >= 0) pool.splice(at, 1);
+                var ok = table && i ? at >= 0 : l === expect[i];
                 if (ok) good++;
                 html.push('<span class="' + (ok ? "l-ok" : "l-no") + '">' + (ok ? "✅ " : "❌ ") + esc(l) + "</span>");
             });

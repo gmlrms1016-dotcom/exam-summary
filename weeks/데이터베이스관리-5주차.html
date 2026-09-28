@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202609281801"></script>
+    <script src="../theme.js?v=202609290655"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>데이터베이스관리 5주차 · 키 5종 · 뷰(view) · 널 값 · INSERT</title>
-    <link rel="stylesheet" href="../style.css?v=202609281801">
+    <link rel="stylesheet" href="../style.css?v=202609290655">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -272,11 +272,15 @@ CREATE TABLE 사원(
     PRIMARY KEY(사원번호)
 );
 
-INSERT INTO 사원 VALUES('D001','정지영', NULL, NULL);
+INSERT INTO 사원 VALUES('D001','정지영', '', NULL);      -- '' = 빈 문자열 ≠ NULL
 INSERT INTO 사원 VALUES('D002','김선주','010-1111-1111', NULL);
 INSERT INTO 사원 VALUES('D003','정성호', NULL, '10월4일');
 SELECT * FROM 사원;</code></pre>
-<div class="tip">⭐ <b>시험 연결</b> — 사원 테이블의 <b>차수 = 4</b>(사원번호 · 사원명 · 연락처 · 생일), 위처럼 3줄을 넣으면 <b>카디널리티 = 3</b>.</div>
+<pre class="io"><code class="language-text">사원번호 | 사원명 | 연락처        | 생일
+D001     | 정지영 |               | NULL
+D002     | 김선주 | 010-1111-1111 | NULL
+D003     | 정성호 | NULL          | 10월4일</code></pre>
+<div class="tip">⭐ <b>시험 연결</b> — 사원 테이블의 <b>차수 = 4</b>(사원번호 · 사원명 · 연락처 · 생일), 위처럼 3줄을 넣으면 <b>카디널리티 = 3</b>.<br><span class="wk-tag fix">⚠️ 정정</span> — 강의자료 49p 는 D001 의 연락처를 <code>''</code>(빈 문자열)로 넣습니다. 결과 화면에서 <code>''</code> 은 <b>빈칸</b>, NULL 은 <b>NULL</b> 로 보여요. 필기의 "<code>''</code> 랑 NULL 이 같은 뜻?" 의 답 = <b>아니요</b> (널 값은 0도 공백도 아님).</div>
 </section>
 <section class="card">
 <h2>9. INSERT 5가지 방법 ★ (50~52p · clubmember)</h2>
@@ -322,7 +326,7 @@ SELECT * FROM 도서;</code></pre>
 </section>
 <section class="card">
 <h2>✏️ 문제로 확인하기</h2>
-<ul><li><a href="../데이터베이스관리.html#quiz">데이터베이스관리 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li></ul>
+<ul><li><a href="../데이터베이스관리.html#quiz">데이터베이스관리 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li><li><a href="../데이터베이스관리.html#output">🖥️ 결과 맞히기 — 🔥 사원(널 값) · 직원_뷰 입력 · 상품배송팀 뷰 · clubmember · 도서 DEFAULT</a></li><li><a href="../데이터베이스관리.html#code">💻 코딩테스트 — 🔥 49p 사원 · 직원_뷰 · 상품배송팀 · INSERT 5가지 직접 짜서 채점</a></li></ul>
 </section>
 
     <nav class="wk-pager"><a class="prev" href="데이터베이스관리-4주차.html">‹ 이전 · <b>4주차</b><br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a><a class="next" href="데이터베이스관리-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~5주차 반영)</small></a></nav>
