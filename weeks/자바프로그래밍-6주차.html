@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202609291405"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바프로그래밍 6주차 · 3장 배열·예외 실습 + 4장 클래스와 객체</title>
+    <link rel="stylesheet" href="../style.css?v=202609291405">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../자바프로그래밍.html">← 자바프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>☕ 자바프로그래밍 · 6주차</h1>
+        <p>3장 배열·예외 실습 + 4장 클래스와 객체</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-5주차.html">‹ 이전 · <b>5주차</b><br><small>3장 반복문·배열 실습 (while · 중첩 for · continue · break · 배열)</small></a><a class="next" href="자바프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+<div class="tip">자료: 3장.pdf(4주차 자료) 예제 3-7 ~ 3-11 · 3-15 · 4장.pdf p2 ~ 18 (예제 4-1 · 4-2) · 수업 소스 14개 (ArrayEx1 · ArrayAccess · ArrayLength · ArrayScore · foreachEx · foreachEx2 · ScoreAverrage · IrregularArray · DevideByZeroHandling · Circle · CircleMain · Rectangle · FishBread · Main) · 노션 필기</div>
+<div class="tip">⭐ <b>수업 중 중요 표시</b> — ✍️ "<b>클래스(중요!)</b> 객체를 만들어내기 위한 설계도 혹은 틀" · 4장 첫 시간 주제: <b>객체 · 캡슐화 · 상속</b></div>
+<section class="card">
+<h2>1. 배열 실습 — 생성 · 인덱스 · 최댓값 · length 로 평균</h2>
+<div class="tip">📂 <b>6주차 (9/29)</b> — 앞부분은 3장 배열 예제(3-7 ~ 3-11)와 예외 처리(3-15)를 실습하고, 뒤에서 <b>4장 클래스와 객체</b>(p2 ~ 18, 예제 4-1 · 4-2)를 시작했어요. 코드 주석과 ▶ 출력 결과는 전부 직접 컴파일·실행한 결과예요.</div>
+<h3>ArrayEx1 — new 로 만들고 인덱스로 넣기 (int · String 배열)</h3>
+<pre><code class="language-java">// ArrayEx1.java — 배열 생성 · 인덱스로 값 넣기 · 꺼내기
+public class ArrayEx1 {
+    public static void main(String[] args) {
+        int[] numbers = new int[5];          // 정수 5개짜리 배열 → 인덱스 0 ~ 4
+        numbers[0] = 10;
+        numbers[1] = 20;
+        numbers[2] = 30;
+        numbers[3] = 40;
+        numbers[4] = 50;                     // 마지막 인덱스 = 크기 - 1
+
+        System.out.println("첫번째 요소 " + numbers[0]);
+        System.out.println("세번째 요소 " + numbers[2]);   // 세 번째 = 인덱스 2
+
+        String names[] = new String[4];      // String 배열 · [] 는 이름 뒤에 써도 된다
+        names[0] = "동미래";
+        names[1] = "아이유";
+        names[2] = "정국";
+        names[3] = "리센느";
+        System.out.println("bts 멤버는 " + names[2]);
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">첫번째 요소 10
+세번째 요소 30
+bts 멤버는 정국</code></pre>
+<h3>ArrayAccess (예제 3-7) — 입력받은 수 중 제일 큰 수</h3>
+<pre><code class="language-java">// ArrayAccess.java (예제 3-7) — 양수 5개를 배열에 저장하고 제일 큰 수 출력
+import java.util.Scanner;
+
+public class ArrayAccess {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int intArray[] = new int[5];        // 배열 생성
+
+        int max = 0;                        // 지금까지 가장 큰 수
+        System.out.println("양수 5개를 입력하세요.");
+        for (int i = 0; i &lt; 5; i++) {
+            intArray[i] = sc.nextInt();     // 입력받은 정수를 배열에 저장
+            if (intArray[i] &gt; max)          // 더 크면
+                max = intArray[i];          // max 교체
+        }
+        System.out.print("가장 큰 수는 " + max + "입니다.");
+        sc.close();
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">양수 5개를 입력하세요.
+1
+39
+78
+100
+99
+가장 큰 수는 100입니다.</code></pre>
+<h3>ArrayLength (예제 3-8) — length 로 평균</h3>
+<pre><code class="language-java">// ArrayLength.java (예제 3-8) — 배열의 length 만큼 입력받아 평균 구하기
+import java.util.Scanner;
+
+public class ArrayLength {
+    public static void main(String[] args) {
+        int intArray[] = new int[5];
+        int sum = 0;
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print(intArray.length + "개의 정수를 입력하세요&gt;&gt;");   // length = 5
+        for (int i = 0; i &lt; intArray.length; i++)
+            intArray[i] = sc.nextInt();
+        for (int i = 0; i &lt; intArray.length; i++)
+            sum += intArray[i];
+
+        System.out.print("평균은 " + (double) sum / intArray.length);   // sum 을 먼저 double 로
+        sc.close();
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">5개의 정수를 입력하세요&gt;&gt;2 3 4 5 9
+평균은 4.6</code></pre>
+<div class="tip">📌 <code>(double) sum / intArray.length</code> — sum 을 <b>먼저</b> double 로 바꿔서 23.0 / 5 = <b>4.6</b> · <code>(double) (sum / intArray.length)</code> 로 쓰면 정수 나눗셈 23 / 5 = 4 가 먼저 돼서 <b>4.0</b> (타입 변환 ★시험단골 → 3주차)</div>
+<h3>ArrayScore — 초기화 목록 { } 와 length</h3>
+<pre><code class="language-java">// ArrayScore.java — 선언과 동시에 초기화 · length 로 반복
+public class ArrayScore {
+    public static void main(String[] args) {
+        int[] scores = {90, 85, 78, 100, 95};      // 개수만큼 자동 생성 (크기 5)
+        for (int i = 0; i &lt; scores.length; i++) {
+            System.out.println((i + 1) + "번 학생의 점수는 " + scores[i] + "점 입니다.");
+        }
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">1번 학생의 점수는 90점 입니다.
+2번 학생의 점수는 85점 입니다.
+3번 학생의 점수는 78점 입니다.
+4번 학생의 점수는 100점 입니다.
+5번 학생의 점수는 95점 입니다.</code></pre>
+</section>
+<section class="card">
+<h2>2. for-each 문 (예제 3-9)</h2>
+<div class="tip">📌 <b>for-each 문</b> = 배열이나 나열(enumeration)의 원소를 <b>처음부터 끝까지 차례로</b> 꺼내 쓰는 for 문 · <code>for (int k : n)</code> → 반복할 때마다 k 는 n[0], n[1], … n[4] (인덱스가 아니라 <b>원소 값</b>)</div>
+<table class="ref">
+<tbody>
+<tr><th>쓰는 법</th><th>반복할 때마다 변수에 들어가는 것</th></tr>
+<tr><td><code>for (int k : n)</code></td><td>int 배열 n 의 원소 n[0] ~ n[4]</td></tr>
+<tr><td><code>for (String s : names)</code></td><td>String 배열 names 의 원소 names[0] ~ names[5]</td></tr>
+<tr><td><code>for (Week day : Week.values())</code></td><td>enum Week 의 값 월, 화, … 일</td></tr>
+</tbody></table>
+<h3>foreachEx (예제 3-9)</h3>
+<pre><code class="language-java">// foreachEx.java (예제 3-9) — for-each 로 int 배열 · String 배열 · enum 돌기
+public class foreachEx {
+    enum Week { 월, 화, 수, 목, 금, 토, 일 }     // 나열(enum) 타입
+
+    public static void main(String[] args) {
+        int[] n = {1, 2, 3, 4, 5};
+        String names[] = {"사과", "배", "바나나", "체리", "딸기", "포도"};
+
+        int sum = 0;
+        for (int k : n) {                        // k = 1, 2, 3, 4, 5
+            System.out.print(k + " ");
+            sum += k;
+        }
+        System.out.println("합은 " + sum);
+        for (String s : names) {                 // s = "사과", "배", …
+            System.out.print(s + " ");
+        }
+        System.out.println();
+        for (Week day : Week.values()) {         // day = 월, 화, … 일
+            System.out.print(day + "요일 ");
+        }
+        System.out.println();
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">1 2 3 4 5 합은 15
+사과 배 바나나 체리 딸기 포도 
+월요일 화요일 수요일 목요일 금요일 토요일 일요일 </code></pre>
+<h3>foreachEx2 — 80점 이상만 골라 출력</h3>
+<pre><code class="language-java">// foreachEx2.java — 배열에서 조건에 맞는 원소만 출력 (for + if)
+public class foreachEx2 {
+    public static void main(String[] args) {
+        int[] points = {65, 82, 95, 78, 40, 88};
+
+        System.out.println("---합격자 점수 목록 (80점 이상)---");
+        for (int i = 0; i &lt; points.length; i++) {
+            if (points[i] &gt;= 80) {
+                System.out.println(points[i] + "점");
+            }
+        }
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">---합격자 점수 목록 (80점 이상)---
+82점
+95점
+88점</code></pre>
+<div class="tip">💡 파일 이름은 foreachEx2 지만 수업 코드는 <b>일반 for</b> 예요. for-each 로 바꾸면 <code>for (int p : points) { if (p &gt;= 80) System.out.println(p + "점"); }</code> — 결과는 같아요.</div>
+</section>
+<section class="card">
+<h2>3. 2차원 배열 · 비정방형 배열 (예제 3-10 · 3-11)</h2>
+<table class="ref">
+<tbody>
+<tr><th>코드</th><th>뜻</th></tr>
+<tr><td><code>double score[][] = {{3.3, 3.4}, {3.5, 3.6}, …};</code></td><td>2차원 배열 선언 + 초기화 (행 = 학년, 열 = 학기)</td></tr>
+<tr><td><code>score.length</code></td><td><b>행</b>의 개수 → 4</td></tr>
+<tr><td><code>score[year].length</code></td><td>year 번째 행의 <b>열</b> 개수 → 2</td></tr>
+<tr><td><code>new int[4][]</code> 후 <code>intArray[0] = new int[3];</code></td><td><b>비정방형 배열</b> — 행마다 열 개수가 다름</td></tr>
+</tbody></table>
+<h3>ScoreAverrage (예제 3-10) — 4년 평점 평균</h3>
+<pre><code class="language-java">// ScoreAverrage.java (예제 3-10) — 2차원 배열로 4년(8학기) 평점 평균
+public class ScoreAverrage {
+    public static void main(String[] args) {
+        double score[][] = {{3.3, 3.4},     // 1학년 1, 2학기
+                            {3.5, 3.6},     // 2학년
+                            {3.7, 4.0},     // 3학년
+                            {4.1, 4.2}};    // 4학년
+
+        double sum = 0;
+        for (int year = 0; year &lt; score.length; year++) {             // 학년(행) 4번
+            for (int term = 0; term &lt; score[year].length; term++) {   // 학기(열) 2번
+                sum += score[year][term];
+            }
+        }
+        int n = score.length;       // 행 개수 4
+        int m = score[0].length;    // 열 개수 2
+        System.out.println("4년 전체 평점 평균은 " + sum / (n * m));
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">4년 전체 평점 평균은 3.725</code></pre>
+<div class="tip">⚠️ 수업 파일 이름 <b>ScoreAverrage</b> 는 교재 <b>ScoreAverage</b> 의 오타(r 하나 더)예요 · 클래스 이름과 파일 이름만 서로 같으면 실행에는 문제없어요.</div>
+<h3>IrregularArray (예제 3-11) — 비정방형 배열</h3>
+<pre><code class="language-java">// IrregularArray.java (예제 3-11) — 행마다 열 개수가 다른 2차원 배열
+public class IrregularArray {
+    public static void main(String[] args) {
+        int intArray[][] = new int[4][];    // 행 4개만 먼저 만들고
+        intArray[0] = new int[3];           // 0행: 열 3개
+        intArray[1] = new int[2];           // 1행: 열 2개
+        intArray[2] = new int[3];
+        intArray[3] = new int[2];
+
+        for (int i = 0; i &lt; intArray.length; i++) {
+            for (int j = 0; j &lt; intArray[i].length; j++) {   // 행마다 길이가 달라서 intArray[i].length
+                intArray[i][j] = (i + 1) * 10 + j;
+            }
+        }
+        for (int i = 0; i &lt; intArray.length; i++) {
+            for (int j = 0; j &lt; intArray[i].length; j++) {
+                System.out.print(intArray[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">10 11 12 
+20 21 
+30 31 32 
+40 41 </code></pre>
+</section>
+<section class="card">
+<h2>4. 예외 처리 실습 — 0으로 나누기 (예제 3-15) ★시험단골</h2>
+<pre><code class="language-java">// DevideByZeroHandling.java (예제 3-15) — 0 으로 나누면 다시 입력받기
+import java.util.Scanner;
+
+public class DevideByZeroHandling {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.print("나뉨수를 입력하시오:");
+            int dividend = sc.nextInt();
+            System.out.print("나눗수를 입력하시오:");
+            int divisor = sc.nextInt();
+            try {
+                System.out.println(dividend + "를 " + divisor + "로 나누면 몫은 " + dividend / divisor + "입니다.");
+                break;                              // 정상으로 나누면 while 탈출
+            } catch (Exception e) {                 // 0 으로 나누면 여기로 (break 는 건너뜀)
+                System.out.println("에러났습니다.");
+                System.out.println("0으로 나눌 수 없습니다! 다시 입력하세요");
+                e.printStackTrace();                // 예외 종류와 발생 위치(줄 번호) 출력
+            }
+        }
+        sc.close();
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">나뉨수를 입력하시오:100
+나눗수를 입력하시오:0
+에러났습니다.
+0으로 나눌 수 없습니다! 다시 입력하세요
+java.lang.ArithmeticException: / by zero
+	at DevideByZeroHandling.main(DevideByZeroHandling.java:14)
+나뉨수를 입력하시오:100
+나눗수를 입력하시오:5
+100를 5로 나누면 몫은 20입니다.</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>교재 예제 3-15</th><th>수업 코드</th></tr>
+<tr><td><code>catch (ArithmeticException e)</code> — 0 으로 나누는 예외만 잡음</td><td><code>catch (Exception e)</code> — <b>Exception 은 모든 예외의 부모</b>라 어떤 예외든 잡음</td></tr>
+<tr><td>안내 문구만 출력</td><td>"에러났습니다." 추가 + <code>e.printStackTrace()</code> → 이클립스 콘솔에 <b>빨간 글씨</b>로 예외 이름과 발생 줄 번호 (위 결과의 14 = <code>println</code> 줄 · 수업 파일은 package test 라서 <code>test.DevideByZeroHandling … :15</code>)</td></tr>
+</tbody></table>
+<div class="tip">📌 try 안에서 예외가 나면 그 <b>아래 문장(break)은 건너뛰고</b> catch 로 간다 → while(true) 가 다시 돌아 입력을 받는다 · 정상이면 break 로 반복 탈출 (예외 처리 이론 → 4주차)</div>
+</section>
+<section class="card">
+<h2>5. 객체지향 특성 — 캡슐화 · 상속 · 다형성 (4장 p2 ~ 9)</h2>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 4장 첫 시간에 배운 것: <b>객체, 캡슐화, 상속</b> · 세상 모든 것이 객체 — 객체마다 고유한 <b>특성(state)</b> 과 <b>행동(behavior)</b> 을 가짐 (예: 테트리스의 블록, 한글 프로그램의 메뉴·버튼)</div>
+<table class="ref">
+<tbody>
+<tr><th>특성</th><th>뜻</th><th>자바에서는</th></tr>
+<tr><td><b>캡슐화</b></td><td>객체를 캡슐로 싸서 <b>내부를 볼 수 없게</b> 하는 것 · 외부의 접근으로부터 객체 보호</td><td>클래스 = 객체 모양을 선언한 틀 · 필드와 메소드를 <b>모두 클래스 안에</b> 구현 · 외부는 공개된 메소드로만 비공개 멤버에 접근</td></tr>
+<tr><td><b>상속</b></td><td>상위 개체의 속성이 하위 개체에 <b>물려짐</b> (나무는 식물이고 생물이다)</td><td>자식 클래스(<b>서브클래스</b>)가 부모 클래스(<b>수퍼클래스</b>)를 물려받고 기능 확장 · 클래스 <b>다중 상속 없음</b> (인터페이스 다중 상속은 허용)</td></tr>
+<tr><td><b>다형성</b></td><td>같은 이름의 메소드가 클래스나 객체에 따라 <b>다르게 동작</b></td><td>메소드 <b>오버로딩</b> (같은 이름, 다른 매개변수) · 메소드 <b>오버라이딩</b> (서브클래스마다 다르게 구현)</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>절차지향 프로그래밍</th><th>객체지향 프로그래밍</th></tr>
+<tr><td><b>작업 순서</b>를 표현 · 작업을 함수로 작성한 <b>함수들의 집합</b></td><td><b>객체들 간의 상호작용</b>으로 표현 · <b>클래스 혹은 객체들의 집합</b>으로 프로그램 작성</td></tr>
+</tbody></table>
+<div class="tip">📌 객체지향 언어의 목적 — ① <b>소프트웨어 생산성 향상</b> (상속·다형성·캡슐화로 재사용, 부분 수정이 빠름) ② <b>실세계에 대한 쉬운 모델링</b> (절차보다 객체들의 상호작용으로 묘사)</div>
+</section>
+<section class="card">
+<h2>6. 클래스와 객체 ★중요 (4장 p10 ~ 16)</h2>
+<div class="tip"><span class="wk-tag star">⭐ 강조</span> — ✍️ <b>클래스(중요!) = 객체를 만들어내기 위한 설계도 혹은 틀</b></div>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>뜻</th><th>예</th></tr>
+<tr><td><b>클래스</b></td><td>객체를 만들어내기 위한 <b>설계도 혹은 틀</b> · 객체의 속성(state)과 행동(behavior) 포함</td><td>붕어빵틀 · 소나타 자동차 · 사람</td></tr>
+<tr><td><b>객체</b> (인스턴스, instance)</td><td>클래스의 모양 그대로 <b>찍어낸 실체</b> · 프로그램 실행 중에 생성 · 메모리 공간을 갖는 구체적인 실체</td><td>구워낸 붕어빵들 · 출고된 실제 소나타 100대 · 나, 너, 윗집 사람</td></tr>
+</tbody></table>
+<div class="tip">📌 붕어빵은 틀의 모양대로 만들어지지만 치즈 · 크림 · 앙코처럼 서로 조금씩 다르다 → 객체들은 클래스에 선언된 <b>같은 속성</b>을 가지지만 <b>객체마다 값이 다르다</b></div>
+<table class="ref">
+<tbody>
+<tr><th>클래스 구성 (p14)</th><th>설명</th></tr>
+<tr><td><code>class Circle { }</code></td><td>class 키워드로 선언 · { } 안에 모든 필드와 메소드 구현</td></tr>
+<tr><td><code>public</code></td><td>접근 지정자 — 다른 모든 클래스의 접근 허용</td></tr>
+<tr><td><b>필드</b> (field)</td><td>객체 안에 값을 저장하는 <b>멤버 변수</b> (<code>int radius;</code>)</td></tr>
+<tr><td><b>메소드</b> (method)</td><td>함수 · 객체의 <b>행동</b> 구현 (<code>getArea()</code>)</td></tr>
+<tr><td><b>생성자</b></td><td>클래스 <b>이름과 같은</b> 특별한 메소드 · 객체가 생성될 때 <b>자동으로 한 번</b> 호출 · 객체 초기화 코드 작성</td></tr>
+</tbody></table>
+<h3>객체 생성과 멤버 접근 (p15 ~ 16)</h3>
+<pre><code class="language-java">Circle pizza;              // ① 레퍼런스 변수 선언 (아직 객체 없음)
+pizza = new Circle();      // ② 객체 생성 — new 가 메모리를 할당하고 생성자를 호출
+pizza.radius = 10;         // ③ 객체 멤버 접근 — 점(.) 연산자
+pizza.name = "자바피자";
+double area = pizza.getArea();   // ④ 메소드 호출도 점(.) 으로</code></pre>
+<div class="tip">📌 객체는 반드시 <b>new</b> 로 생성 (레퍼런스 변수 선언 → 객체 생성 → 메모리 할당 → 생성자 실행) · 멤버 접근은 <code>객체레퍼런스.멤버</code></div>
+</section>
+<section class="card">
+<h2>7. 클래스 실습 — Circle (예제 4-1) · Rectangle (예제 4-2) · 붕어빵</h2>
+<h3>Circle + CircleMain (예제 4-1 을 두 파일로)</h3>
+<pre><code class="language-java">// Circle.java — 원의 설계도(클래스)
+public class Circle {
+    public int radius;          // 필드: 반지름
+    public String name;         // 필드: 이름
+
+    public Circle() {           // 생성자 (클래스 이름과 같음 · 하는 일 없음)
+    }
+
+    public double getArea() {   // 메소드: 면적 계산
+        return 3.14 * radius * radius;
+    }
+}</code></pre>
+<pre><code class="language-java">// CircleMain.java — Circle 틀로 객체 3개 찍어내기
+public class CircleMain {
+    public static void main(String[] args) {
+        Circle pizza = new Circle();        // 객체 생성
+        pizza.name = "자바피자";
+        pizza.radius = 10;
+        double area = pizza.getArea();      // 3.14 * 10 * 10
+        System.out.println(pizza.name + "면적 = " + area);
+
+        Circle donut = new Circle();
+        donut.radius = 2;
+        donut.name = "자바도넛";
+        double area2 = donut.getArea();     // 3.14 * 2 * 2
+        System.out.println(donut.name + "면적 = " + area2);
+
+        Circle gomg = new Circle();
+        gomg.radius = 5;
+        gomg.name = "gomg";
+        double area3 = gomg.getArea();      // 3.14 * 5 * 5
+        System.out.println(gomg.name + "면적 = " + area3);
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">자바피자면적 = 314.0
+자바도넛면적 = 12.56
+gomg면적 = 78.5</code></pre>
+<div class="tip">📌 교재 예제 4-1 은 main 이 Circle 안에 있지만, 수업에서는 <b>Circle(설계도)</b> 과 <b>CircleMain(실행)</b> 을 두 파일로 나눴어요 · 틀 하나(Circle)로 찍은 객체 3개가 <b>반지름 · 이름을 각자</b> 가져요 · 같은 패키지(test)라서 CircleMain 에서 Circle 을 바로 쓸 수 있어요.</div>
+<h3>Rectangle (예제 4-2) — 너비 · 높이 입력받아 면적</h3>
+<pre><code class="language-java">// Rectangle.java (예제 4-2) — 필드 width · height 와 getArea() 메소드
+import java.util.Scanner;
+
+public class Rectangle {
+    int width;                      // 필드
+    int height;
+
+    public int getArea() {          // 메소드
+        return width * height;
+    }
+
+    public static void main(String[] args) {
+        Rectangle rect = new Rectangle();       // 객체 생성
+        Scanner sc = new Scanner(System.in);
+        System.out.print("&gt;&gt; ");
+
+        rect.width = sc.nextInt();              // 입력값을 객체의 필드에
+        rect.height = sc.nextInt();
+
+        System.out.println("사각형의 면적은" + rect.getArea());
+        sc.close();
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">&gt;&gt; 4 5
+사각형의 면적은20</code></pre>
+<div class="tip">⚠️ <code>"사각형의 면적은" + rect.getArea()</code> 는 문자열 끝에 띄어쓰기가 없어서 <b>면적은20</b> 으로 붙어 나와요 (교재 결과도 같음).</div>
+<h3>FishBread + Main — 붕어빵틀(클래스)과 붕어빵(객체)</h3>
+<pre><code class="language-java">// FishBread.java — 붕어빵틀 = 클래스
+public class FishBread {
+    // 필드(속성)
+    String flavor;      // 팥, 치즈, 슈크림
+    int price;          // 가격
+
+    // 생성자
+    FishBread() {
+    }
+
+    // 메서드
+    String showInfo() {
+        return flavor + " 붕어빵 가격은 " + price + "원";
+    }
+}</code></pre>
+<pre><code class="language-java">// Main.java — 틀 하나로 붕어빵(객체) 3개 굽기
+public class Main {
+    public static void main(String[] args) {
+        FishBread pap = new FishBread();
+        pap.flavor = "팥";
+        pap.price = 1000;
+        String result = pap.showInfo();
+        System.out.println("객체 = " + result);
+
+        FishBread sue = new FishBread();
+        sue.flavor = "슈크림";
+        sue.price = 2000;
+        String result2 = sue.showInfo();
+        System.out.println("객체 = " + result2);
+
+        FishBread cheese = new FishBread();
+        cheese.flavor = "치즈";
+        cheese.price = 3000;
+        String result3 = cheese.showInfo();
+        System.out.println("객체 = " + result3);
+    }
+}</code></pre>
+<pre class="io"><code class="language-text">객체 = 팥 붕어빵 가격은 1000원
+객체 = 슈크림 붕어빵 가격은 2000원
+객체 = 치즈 붕어빵 가격은 3000원</code></pre>
+<div class="tip">📌 4장 p10 ~ 11 의 <b>붕어빵틀 = 클래스, 구워낸 붕어빵 = 객체</b> 를 코드로 만든 것 · 세 객체 모두 flavor · price 필드를 가지지만 <b>값은 각자 다르다</b> · showInfo() 는 출력하지 않고 문자열을 <b>return</b> 해서, main 에서 받아 출력해요.</div>
+<p>---<br>*노션 필기 · 수업 소스 · 강의자료(3장 · 4장)를 바탕으로 Claude 가 정리한 요약입니다. 4장은 수업 파일로 확인된 예제 4-2(p18)까지만 정리했어요.*</p>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
+<pre><code class="language-text">객체,캡슐화,상속
+클래스(중요!) 객체를 만들어내기 위한 설계도 혹은 틀</code></pre>
+</details>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../자바프로그래밍.html#quiz">자바프로그래밍 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li><li><a href="../자바프로그래밍.html#output">🖥️ 출력 결과 맞히기 — for-each · 비정방형 배열 · Circle 객체</a></li><li><a href="../자바프로그래밍.html#code">💻 코딩테스트 — Rectangle 클래스 · 붕어빵 클래스</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-5주차.html">‹ 이전 · <b>5주차</b><br><small>3장 반복문·배열 실습 (while · 중첩 for · continue · break · 배열)</small></a><a class="next" href="자바프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「자바프로그래밍 · 6주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>
