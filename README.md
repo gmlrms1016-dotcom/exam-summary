@@ -52,7 +52,7 @@ weeks.js            2학기 과목 페이지의 1~15주차 버튼 — 진도 나
 weeks/             주차 페이지(<과목>-N주차.html · <과목>-8주차-중간고사.html) — scripts/build_weeks.py 가 생성
 weeks/src/         주차 페이지 원고(노션 주차 페이지 내용을 옮긴 .md) — 이것만 고치고 빌드
 scripts/build_weeks.py  weeks/src/*.md → weeks/*.html + weeks.js 버튼 데이터 갱신 (python3 scripts/build_weeks.py · 교양은 뒤에 liberal-arts-courses)
-자바프로그래밍-실제시험.html  🔒 스터디용 모의 중간고사(27문제) — 문제·정답은 비밀번호로 암호화돼 있어 소스에 보이지 않음. 원본·빌드 스크립트·비밀번호는 저장소 밖(iCloud 강의 폴더 자바프로그래밍/8주차_중간고사/실제시험_원본)에 있음 → 고칠 때는 거기서 build_exam.py 실행. 중간고사 원고의 `🔒 [실제시험](…)` 한 줄이 작은 입구 버튼. 점수 저장 · 이어 풀기 · 관리자 점수판 · 시험 초기화는 Firebase(Firestore · 익명 로그인 + 관리자 구글 로그인, 보안은 Firestore 규칙)
+자바프로그래밍-실제시험.html  🔒 스터디용 모의 중간고사(27문제) — 문제·정답은 비밀번호로 암호화돼 있어 소스에 보이지 않음. 원본·빌드 스크립트·비밀번호는 저장소 밖(iCloud 강의 폴더 자바프로그래밍/8주차_중간고사/실제시험_원본)에 있음 → 고칠 때는 거기서 build_exam.py 실행. 중간고사 원고의 `🔒 [실제시험](…)` 한 줄이 작은 입구 버튼. 점수 저장 · 이어 풀기 · 관리자 점수판 · 시험 초기화는 Firebase(Firestore · 친구들은 익명 로그인, 관리자는 비밀번호 칸에 관리자 코드 = Firebase 관리자 계정 비밀번호라 페이지에 없음 · 보안은 Firestore 규칙)
 scripts/build_liberal_arts.py  전공 index.html 을 복사해 교양 첫 화면(liberal-arts-courses/index.html) 생성
 liberal-arts-courses/   📚 교양 사이트 — 전공과 같은 구조(index · 과목 페이지 · weeks.js · weeks/) · 전공 사이트에서 링크하지 않음
 pyrun.js            Pyodide 인앱 파이썬 실행기   grader.py / grader_pm.py  채점 로직
