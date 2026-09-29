@@ -10,6 +10,7 @@
 - 첫 줄 `# 제목` = 버튼과 페이지에 보이는 주차 제목
 - `## ` 마다 카드 1개 · `### ` 소제목 · `> ` 안내 상자 · `- ` / `1. ` 목록(2칸 들여쓰기 = 하위 목록)
 - ``` 코드 블록 (```output = ▶ 출력 결과 상자 · ```bits = 2진수 풀이 상자) · `| a | b |` 표(첫 줄 머리글, 칸 안의 | 는 \\|) · <details> / <summary> 접기
+- `🔒 [이름](주소)` 한 줄 = 오른쪽에 작은 버튼 (실제시험 같은 숨은 페이지로 가는 입구)
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
 원고 파일이 있는 주차만 과목 페이지에서 버튼이 열리고, 나머지는 잠깁니다.
 """
@@ -180,6 +181,10 @@ def render_md(md):
             if para or tip:
                 flush()
             items.append((len(m_list.group(1)), "ol" if m_list.group(2)[0].isdigit() else "ul", m_list.group(3)))
+        elif re.match(r"^🔒 \[[^\]]+\]\([^)\s]+\)$", line.strip()):   # 🔒 [이름](주소) → 오른쪽의 작은 버튼 (예: 실제시험)
+            flush()
+            m_btn = re.match(r"^🔒 \[([^\]]+)\]\(([^)\s]+)\)$", line.strip())
+            parts.append('<p class="wk-lockbtn"><a href="%s">🔒 %s</a></p>' % (html.escape(m_btn.group(2), quote=True), html.escape(m_btn.group(1), quote=False)))
         elif line.strip() == "<details>":
             flush()
             parts.append('<details class="wk-details">')
@@ -216,6 +221,8 @@ PAGE_CSS = """
 .card li>ul,.card li>ol{margin:4px 0;}
 .card h3{margin:18px 0 8px;color:var(--main);}
 .card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -234,10 +241,10 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202609291405"></script>
+    <script src="{asset}theme.js?v=202609291739"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="{asset}style.css?v=202609291405">
+    <link rel="stylesheet" href="{asset}style.css?v=202609291739">
     <style>{css}</style>
 </head>
 <body>

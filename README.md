@@ -46,10 +46,12 @@ review.js           과목 페이지 공용 — 틀린 문제 모아 복사 + �
 quiz.js             2학기 과목 페이지 공용 퀴즈 — 객관식(.mcq)·주관식(.quiz-item) 채점 + 복습 모드
 codetest.js         언어 과목(C·Java·JS·SQL) 코딩테스트 — 소스코드를 붙여넣으면 채점 (C·Java = Wandbox 온라인 컴파일러, JS = 브라우저 Web Worker · setTimeout·setInterval 은 기다리지 않고 예약 시각 순서대로 바로 실행하는 가상 시계, SQL = 브라우저 안의 SQLite(sql.js)를 MySQL 처럼 맞춰 실행)
 outquiz.js          언어 과목 출력 결과 맞히기 — 코드를 읽고 실행 결과를 적으면 줄 단위로 채점 (#output, 정답은 실제 실행 결과 · SQL 은 data-table 로 결과 표 채점)
+                    data-space="strict" = 완전 일치(줄바꿈·빈 줄·띄어쓰기·마지막 줄바꿈까지, 정답 하나) — 실제시험 페이지에서 사용
 weeks.js            2학기 과목 페이지의 1~15주차 버튼 — 진도 나간 주차만 열림, 8주차 중간고사 · 15주차 기말고사, 새 탭으로 열기
 weeks/             주차 페이지(<과목>-N주차.html · <과목>-8주차-중간고사.html) — scripts/build_weeks.py 가 생성
 weeks/src/         주차 페이지 원고(노션 주차 페이지 내용을 옮긴 .md) — 이것만 고치고 빌드
 scripts/build_weeks.py  weeks/src/*.md → weeks/*.html + weeks.js 버튼 데이터 갱신 (python3 scripts/build_weeks.py · 교양은 뒤에 liberal-arts-courses)
+자바프로그래밍-실제시험.html  🔒 스터디용 모의 중간고사(27문제) — 문제·정답은 비밀번호로 암호화돼 있어 소스에 보이지 않음. 원본·빌드 스크립트·비밀번호는 저장소 밖(iCloud 강의 폴더 자바프로그래밍/8주차_중간고사/실제시험_원본)에 있음 → 고칠 때는 거기서 build_exam.py 실행. 중간고사 원고의 `🔒 [실제시험](…)` 한 줄이 작은 입구 버튼
 scripts/build_liberal_arts.py  전공 index.html 을 복사해 교양 첫 화면(liberal-arts-courses/index.html) 생성
 liberal-arts-courses/   📚 교양 사이트 — 전공과 같은 구조(index · 과목 페이지 · weeks.js · weeks/) · 전공 사이트에서 링크하지 않음
 pyrun.js            Pyodide 인앱 파이썬 실행기   grader.py / grader_pm.py  채점 로직
