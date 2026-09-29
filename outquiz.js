@@ -7,7 +7,7 @@
        <div class="oq-why">…풀이…</div>          (선택) 정답 보기 때만 보임
        data-exam="출처 설명"   (선택) 교수님이 "시험문제" 라고 한 코드 → 🔥 배지와 빨간 테두리
        data-space="exact"     (선택) 칸수 문제 — 줄 안의 띄어쓰기 개수까지 채점
-       data-space="strict"    (선택) 완전 일치 — 줄바꿈(\n)·빈 줄·띄어쓰기·마지막 줄바꿈까지 실제 출력과 글자 하나 다르지 않아야 정답 (실제시험 페이지)
+       data-space="strict"    (선택) 완전 일치 — 줄바꿈(\n)·빈 줄·줄 안의 띄어쓰기·마지막 줄바꿈까지 실제 출력과 같아야 정답 (줄 끝의 보이지 않는 공백만 무시)
                               oq-expect 는 "\n" + 실제 출력 + "\n" 로 적는다 (출력이 println 으로 끝나면 끝에 빈 줄이 하나 더 생김)
        data-table             (선택) SQL 결과 표 문제 — oq-expect 는 "열1 | 열2" 머리글 줄 + 행마다 한 줄 (칸은 " | " 로 구분, 널 값은 NULL)
                               답은 칸을 띄어쓰기 · | · 탭 아무거나로 구분 · +---+ 테두리 줄은 무시
@@ -124,7 +124,7 @@
         ta.setAttribute("autocomplete", "off");
         ta.setAttribute("autocapitalize", "off");
         ta.setAttribute("aria-label", title + " — 실행 결과 입력");
-        ta.placeholder = strict ? "실행 결과를 그대로 입력 — println 줄바꿈마다 Enter, 마지막 줄바꿈까지 · 띄어쓰기 개수까지 정확히 채점해요 (정답은 하나)"
+        ta.placeholder = strict ? "실행 결과를 그대로 입력 — 줄바꿈(\\n · println)마다 Enter, 마지막 줄바꿈까지 · 줄 안의 띄어쓰기 개수까지 정확히 채점해요 (정답은 하나)"
                        : table ? "결과 표를 입력 — 첫 줄은 열 이름, 그다음 한 줄에 한 행 · 칸은 띄어쓰기나 | 로 구분 · 널 값은 NULL (행 순서는 채점 안 함)"
                        : exact ? "실행 결과를 그대로 입력 — 줄마다 Enter · 이 문제는 띄어쓰기 개수까지 채점해요"
                                : "실행 결과를 그대로 입력 — 줄마다 Enter (띄어쓰기 개수·빈 줄은 채점에서 무시)";
@@ -181,10 +181,11 @@
             updateScore();
         });
         function checkStrict() {
-            var mineRaw = ta.value.replace(/\r/g, "");
+            var rtrim = function (t) { return t.split("\n").map(function (l) { return l.replace(/[ \t]+$/, ""); }).join("\n"); };
+            var mineRaw = rtrim(ta.value.replace(/\r/g, "")), rawT = rtrim(raw);
             if (!mineRaw.trim()) { box.innerHTML = '<p class="oq-sum no">실행 결과를 적고 확인을 누르세요.</p>'; return; }
-            var all = mineRaw === raw;
-            var want = raw.split("\n"), got = mineRaw.split("\n"), html = [], good = 0;
+            var all = mineRaw === rawT;
+            var want = rawT.split("\n"), got = mineRaw.split("\n"), html = [], good = 0;
             var n = Math.max(want.length, got.length);
             for (var i = 0; i < n; i++) {
                 if (i >= got.length) break;
@@ -197,11 +198,11 @@
             var msg;
             if (all) msg = '<p class="oq-sum ok">🎉 정답! 줄바꿈 · 띄어쓰기까지 실제 출력과 똑같아요.</p>';
             else {
-                var endWant = /\n$/.test(raw), endGot = /\n$/.test(mineRaw);
+                var endWant = /\n$/.test(rawT), endGot = /\n$/.test(mineRaw);
                 var why = [];
                 if (want.length !== got.length) why.push("줄 수가 달라요 (Enter 개수 확인)");
-                if (endWant && !endGot) why.push("마지막 줄 뒤 줄바꿈이 빠졌어요 — 마지막이 println 이면 Enter 까지");
-                if (!endWant && endGot) why.push("마지막 줄 뒤에는 줄바꿈이 없어요 — 마지막이 print 인지 확인");
+                if (endWant && !endGot) why.push("마지막 줄 뒤 줄바꿈이 빠졌어요 — 마지막 출력에 \\n(println)이 있거나 입력하고 Enter 를 쳤으면 Enter 까지");
+                if (!endWant && endGot) why.push("마지막 줄 뒤에는 줄바꿈이 없어요 — 마지막 출력에 \\n 이 없는지(print) 확인");
                 if (!why.length) why.push("글자나 띄어쓰기가 달라요");
                 msg = '<p class="oq-sum no">❌ 오답 — ' + why.join(" · ") + "</p>";
             }
