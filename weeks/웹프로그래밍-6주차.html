@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202609291405"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹프로그래밍 6주차 · &lt;9월 29일&gt; 비동기·타이머·구조분해 할당·DOM</title>
+    <link rel="stylesheet" href="../style.css?v=202609291405">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../웹프로그래밍.html">← 웹프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🕸️ 웹프로그래밍 · 6주차</h1>
+        <p>&lt;9월 29일&gt; 비동기·타이머·구조분해 할당·DOM</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-5주차.html">‹ 이전 · <b>5주차</b><br><small>&lt;9월 22일&gt; 함수·콜백·객체·배열</small></a><a class="next" href="웹프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+<div class="tip">자료: 수업 필기(노션) · 0929_01.html · 0929_03.js · 0929_04.js (강의자료 없음 · 0929_03_builtlnFunc.js 는 빈 파일) · 출력 결과는 전부 node 로 직접 실행한 값</div>
+<div class="tip">🎯 <b>시험 포인트</b> — 🔥 <b>매개변수 구조분해 "중괄호를 빼면 출력되는 결과"</b> (0929_04.js 시험문제) · 🔥 <b><code>new Date()</code> 안에 <code>2026-01-01</code> 을 쓰면 출력결과는?</b> (0929_03.js "시험에 나올 수 있음") · <b>동기화 뜻</b> · <b>setTimeout = 비동기로 동작하는 내장함수</b> (필기)</div>
+<section class="card">
+<h2>1. 수업 시작 복습 · 형변환(캐스팅)</h2>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 데이터타입 복습: NUMBER · STRING · BOOLEAN TYPE · NULL · UNDEFINED TYPE · OBJECT TYPE / 함수 선언 방법 복습: 선언적 · 표현적 · 화살표 / 호이스팅 복습 / 콜백 복습</div>
+<table class="ref">
+<tbody>
+<tr><th>복습</th><th>내용</th><th>배운 주차</th></tr>
+<tr><td>데이터타입</td><td>number · string · boolean · null · undefined · object</td><td>3주차</td></tr>
+<tr><td>함수 선언 3가지</td><td>선언적 <code>function f(){}</code> · 표현적 <code>let f = function(){}</code> · 화살표 <code>let f = () =&gt; {}</code></td><td>2주차</td></tr>
+<tr><td>호이스팅</td><td>선언적 함수는 선언보다 먼저 호출해도 실행된다</td><td>5주차</td></tr>
+<tr><td>콜백</td><td>다른 함수에 인자로 전달되어서, 나중에 실행되는 함수</td><td>5주차</td></tr>
+</tbody></table>
+<h3>예제 — 형변환(캐스팅) parseInt · Number</h3>
+<pre><code class="language-javascript">// ✍️ 필기 — 형변환(캐스팅): 문자열 "1" → 숫자 1
+console.log(parseInt("1"));                               // 1
+console.log(Number("1"));                                 // 1
+console.log(typeof parseInt("1"), typeof Number("1"));   // 둘 다 number</code></pre>
+<pre class="io"><code class="language-text">1
+1
+number number</code></pre>
+</section>
+<section class="card">
+<h2>2. 동기 vs 비동기 · 단일 스레드 vs 멀티 스레드</h2>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 클라이언트에서 백엔드까지 답이 오기까지 <b>아무것도 못 하는 것</b>을 <b>"동기화"</b> 라고 함 · <b>setTimeout 은 비동기화로 선언되는 내장함수</b></div>
+<div class="tip">🤖 필기에 적은 요청 — "비동기화와 동기화 차이를 표로 · 멀티스레드, 단일스레드 차이도 표로" — 대로 정리한 표예요.</div>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>동기 (synchronous)</th><th>비동기 (asynchronous)</th></tr>
+<tr><td>실행 방식</td><td>앞 작업이 <b>끝날 때까지 기다렸다가</b> 다음 작업</td><td>기다리지 않고 <b>다음 작업을 먼저</b> 실행 · 끝난 작업은 나중에 처리(콜백)</td></tr>
+<tr><td>필기 예</td><td>백엔드 답이 올 때까지 클라이언트가 아무것도 못 함</td><td><code>setTimeout</code> 3초를 기다리는 동안 아래 <code>console.log("끝")</code> 이 먼저 찍힘</td></tr>
+<tr><td>실행 순서</td><td>코드에 쓴 순서 그대로</td><td>코드 순서와 다를 수 있음</td></tr>
+<tr><td>장점</td><td>흐름이 단순해서 이해하기 쉽다</td><td>기다리는 동안 다른 일을 해서 <b>화면이 멈추지 않는다</b> · 전체 시간이 짧아진다</td></tr>
+<tr><td>단점</td><td>오래 걸리는 작업 하나가 <b>전체를 멈춘다</b></td><td>실행 순서를 따라가기 어렵다</td></tr>
+</tbody></table>
+<div class="tip">💡 <b>비동기 작업이 좋은 이유</b> — 서버 응답·타이머처럼 오래 걸리는 일을 기다리는 동안에도 다음 코드, 클릭, 화면 갱신이 계속된다 → 사용자가 멈춘 화면을 보지 않는다</div>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>단일 스레드 (single thread)</th><th>멀티 스레드 (multi thread)</th></tr>
+<tr><td>뜻</td><td>일하는 흐름(스레드)이 <b>1개</b> → 한 번에 한 가지 일</td><td>스레드가 <b>여러 개</b> → 여러 일을 동시에</td></tr>
+<tr><td>예</td><td><b>자바스크립트</b> (브라우저 · Node.js 의 JS 실행)</td><td>스레드를 여러 개 만드는 프로그램 (예: 자바의 Thread)</td></tr>
+<tr><td>장점</td><td>구조가 단순하고, 같은 데이터를 동시에 고치는 충돌이 없다</td><td>여러 작업을 동시에 처리해서 빠르다</td></tr>
+<tr><td>단점</td><td>오래 걸리는 일이 있으면 뒤의 일이 모두 기다린다 → <b>그래서 JS 는 비동기를 쓴다</b></td><td>스레드끼리 데이터가 꼬이지 않게 관리하기 어렵다</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>3. setTimeout · clearTimeout — 한 번 예약 ★</h2>
+<div class="tip">📌 <code>setTimeout(함수, 밀리초)</code> = 정해진 시간(1000 = 1초) <b>뒤에 한 번</b> 실행하는 <b>내장함수</b> · 기다리는 동안 아래 코드가 먼저 실행된다 (비동기)</div>
+<h3>예제 ① 0929_03.js — "끝" 이 먼저 찍힌다</h3>
+<pre><code class="language-javascript">// 0929_03.js 내장함수 : setTimeout — 3초 뒤에 한 번 실행 (비동기)
+console.log("시작");
+setTimeout(() =&gt; {
+    console.log("3초가 지났습니다!");
+}, 3000);                  // 3000 밀리초 = 3초
+console.log("끝");         // 3초를 기다리지 않고 바로 실행된다</code></pre>
+<pre class="io"><code class="language-text">시작
+끝
+3초가 지났습니다!</code></pre>
+<h3>예제 ② 0929_03.js — 인수 넘기기 · 예약 취소 clearTimeout</h3>
+<pre><code class="language-javascript">// 0929_03.js setTimeout(함수, 시간, 인수1, 인수2) — 3번째부터는 함수에 넘길 인수
+setTimeout(greet, 1000, '지민', '개발자');   // 1초 뒤 greet('지민', '개발자') — 함수는 괄호 없이 넘긴다 (콜백)
+function greet(name, role) {                  // 선언적 함수라 아래에 있어도 된다 (호이스팅)
+    console.log(`안녕하세요, ${role} ${name}님!`);
+}
+
+const timerId = setTimeout(() =&gt; {            // setTimeout 은 예약 번호(timerId)를 돌려준다
+    console.log("이 메시지는 출력되지 않습니다.");
+}, 5000);
+clearTimeout(timerId);                        // 예약 취소 → 5초가 지나도 아무것도 안 나온다</code></pre>
+<pre class="io"><code class="language-text">안녕하세요, 개발자 지민님!</code></pre>
+<div class="tip">📌 인수는 순서대로 name = '지민', role = '개발자' 로 들어가고, 템플릿 문자열이 <code>${role} ${name}</code> 순서라서 <b>개발자 지민님</b></div>
+<h3>✍️ 필기 — "둘다 실행이 된다 안된다(차이)"</h3>
+<div class="tip">필기의 두 코드(<code>let a=()=&gt;{}</code> / <code>function a(){...}</code>)는 a 를 부르지 않아서 <b>둘 다 오류 없이 실행</b>돼요. 차이는 <b>선언보다 먼저 쓸 때</b> 생겨요 → 5주차 호이스팅 복습</div>
+<pre><code class="language-javascript">// ① 선언적 함수 — 선언보다 먼저 setTimeout 에 넘겨도 된다 (호이스팅)
+console.log("시작");
+setTimeout(a, 1000);
+function a() { console.log("a 실행"); }</code></pre>
+<pre class="io"><code class="language-text">시작
+a 실행</code></pre>
+<pre><code class="language-javascript">// ② let 에 담은 화살표 함수 — 선언보다 먼저 쓰면 오류
+console.log("시작");
+setTimeout(b, 1000);
+let b = () =&gt; { console.log("b 실행"); };</code></pre>
+<pre class="io"><code class="language-text">시작
+ReferenceError: Cannot access 'b' before initialization</code></pre>
+</section>
+<section class="card">
+<h2>4. setInterval · clearInterval — 반복 예약</h2>
+<table class="ref">
+<tbody>
+<tr><th>내장함수</th><th>하는 일</th><th>멈추기</th></tr>
+<tr><td><code>setTimeout(함수, 시간)</code></td><td>시간 뒤 <b>한 번</b> 실행</td><td><code>clearTimeout(번호)</code></td></tr>
+<tr><td><code>setInterval(함수, 시간)</code></td><td>시간마다 <b>계속 반복</b> 실행</td><td><code>clearInterval(번호)</code></td></tr>
+</tbody></table>
+<h3>예제 ① 0929_03.js — 멈추지 않는 setInterval</h3>
+<pre><code class="language-javascript">// 0929_03.js setInterval — 1초마다 반복 (멈추는 코드가 없음)
+let count = 0;
+setInterval(() =&gt; {
+  count++;
+  console.log(`${count}초 경과`);
+}, 1000);</code></pre>
+<pre class="io"><code class="language-text">1초 경과
+2초 경과
+3초 경과
+4초 경과</code></pre>
+<div class="tip">⚠️ clearInterval 이 없어서 <b>영원히</b> 반복돼요 (위는 4초까지만 보여 준 것 · node 는 Ctrl + C 로 멈춤)</div>
+<h3>예제 ② 0929_03.js — 5초가 되면 clearInterval</h3>
+<pre><code class="language-javascript">// 0929_03.js 카운트다운 — sec 가 5 가 되면 clearInterval 로 멈춘다
+let sec = 0;
+
+const intervalId = setInterval(() =&gt; {   // setInterval 도 번호를 돌려준다
+  sec++;
+  console.log(`카운트다운: ${sec}초`);
+
+  if (sec &gt;= 5) {
+    clearInterval(intervalId);           // 반복 멈춤
+    console.log("카운트 종료!");
+  }
+}, 1000);</code></pre>
+<pre class="io"><code class="language-text">카운트다운: 1초
+카운트다운: 2초
+카운트다운: 3초
+카운트다운: 4초
+카운트다운: 5초
+카운트 종료!</code></pre>
+</section>
+<section class="card">
+<h2>5. Date 로 시계 만들기 · 🔥 new Date(2026-01-01)</h2>
+<h3>예제 0929_03.js — 1초마다 현재 시간</h3>
+<pre><code class="language-javascript">// 0929_03.js 시간출력 코드 — 1초마다 현재 시간을 찍는다
+const clockInterval = setInterval(() =&gt; {
+    const now = new Date(/*여기에 2026-01-01을 쓰면 출력결과는?(시험에 나올 수 있음)*/);
+    const timeString = now.toLocaleTimeString();   // 시간만 → 오후 12:03:15
+    if (timeString === "오전 8:58:00") {           // 오전 8시 58분 0초가 되면
+        clearInterval(clockInterval);              // 반복을 멈춘다
+    }
+    else {
+        console.log(`현재 시간: ${timeString}`);
+    }
+}, 1000);</code></pre>
+<pre class="io"><code class="language-text">현재 시간: 오후 12:03:15
+현재 시간: 오후 12:03:16
+현재 시간: 오후 12:03:17</code></pre>
+<div class="tip">📌 출력은 <b>실행한 시각</b>에 따라 달라요 (위는 예시). 노션 필기의 날짜출력 코드는 <code>toLocaleDateString()</code> 이라 <b>날짜만</b> 찍혀요 → <code>현재 시간: 2026. 9. 29.</code></div>
+<h3>🔥 시험 — new Date( ) 안에 2026-01-01 을 쓰면?</h3>
+<pre><code class="language-javascript">// ★ "여기에 2026-01-01을 쓰면 출력결과는?(시험에 나올 수 있음)"
+console.log(2026-01-01);                 // 따옴표가 없으면 그냥 빼기 계산 → 2024
+const d1 = new Date(2026-01-01);         // = new Date(2024) → 1970년 1월 1일 0시(UTC) + 2024밀리초
+console.log(d1.toLocaleDateString());    // 1970. 1. 1.
+console.log(d1.toLocaleTimeString());    // 오전 9:00:02 (한국 = UTC+9 → 9시 · 2024밀리초 → 2초)
+const d2 = new Date("2026-01-01");       // 따옴표 O → 날짜 문자열 (UTC 0시)
+console.log(d2.toLocaleDateString());    // 2026. 1. 1.
+console.log(d2.toLocaleTimeString());    // 오전 9:00:00</code></pre>
+<pre class="io"><code class="language-text">2024
+1970. 1. 1.
+오전 9:00:02
+2026. 1. 1.
+오전 9:00:00</code></pre>
+<div class="tip">🔥 <b>정답 포인트</b> — ① 따옴표 없이 <code>2026-01-01</code> → <b>2024</b> (숫자 빼기) → <code>new Date(2024)</code> 는 1970년 1월 1일에서 2024밀리초 지난 시각 → 날짜 <code>1970. 1. 1.</code> · 시간 <code>오전 9:00:02</code> ② 따옴표로 <code>"2026-01-01"</code> → <code>2026. 1. 1.</code> · <code>오전 9:00:00</code> ③ 어느 쪽이든 날짜가 <b>고정</b>돼서 1초마다 <b>같은 줄이 계속</b> 찍히고, <code>"오전 8:58:00"</code> 이 절대 안 돼서 <b>clearInterval 이 실행되지 않는다</b> (영원히 반복)</div>
+<div class="tip">📌 한국 시간(KST) · 한국어 윈도우 · 크롬 기준 결과예요. Node 24 이상 일부 버전은 <code>AM 9:00:02</code> 처럼 영어로 찍히기도 해요.</div>
+</section>
+<section class="card">
+<h2>6. 구조분해 할당 — 배열 · 객체 ★</h2>
+<div class="tip">📌 <b>구조분해 할당</b> = 배열·객체 안의 값을 꺼내 <b>여러 변수에 한 번에</b> 나눠 담는 문법 · <span class="wk-tag note">✍️ 필기</span> — 배열이 100개이면 코드를 100줄 쳐야 하니 구조분해를 한다 · <b>index 번호(순서)가 중요하다</b></div>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>모양</th><th>무엇으로 짝을 짓나</th></tr>
+<tr><td>배열 구조분해</td><td><code>let [a1, a2] = arrayObj;</code></td><td><b>순서</b>(index 번호)</td></tr>
+<tr><td>객체 구조분해</td><td><code>let { name, age } = person;</code></td><td><b>이름</b>(key) — 순서 상관없음</td></tr>
+</tbody></table>
+<h3>예제 ① 0929_04.js — 배열 구조분해</h3>
+<pre><code class="language-javascript">// 0929_04.js 배열 구조분해 — index 번호(순서)대로 들어간다
+let arrayObj = [1, 2, 3];
+// 구조분해 전: let a1 = arrayObj[0]; let a2 = arrayObj[1]; let a3 = arrayObj[2]; ← 하나씩
+let [a1, a2, a3, a4] = arrayObj;   // a1=1, a2=2, a3=3, a4 는 짝이 없음
+console.log(a1, a2, a3, a4);</code></pre>
+<pre class="io"><code class="language-text">1 2 3 undefined</code></pre>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — a4 는 <b>error 가 아니라 undefined</b> 이다 (배열에 4번째 값이 없어서)</div>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 수업 파일 0929_04.js 는 <code>let a1=arrayObj[0];</code> 과 <code>let [a1,a2,a3,a4]</code> 가 <b>둘 다</b> 있어서 그대로 실행하면 <code>SyntaxError: Identifier 'a1' has already been declared</code> (let 은 같은 이름을 다시 선언할 수 없음 → 3주차). 하나씩 꺼내는 세 줄은 주석으로 막고 실행하세요.</div>
+<h3>예제 ② 0929_04.js — 객체 구조분해 · 이름 바꾸기 · 기본값</h3>
+<pre><code class="language-javascript">// 0929_04.js 객체 구조분해 — key 이름으로 꺼낸다 (순서 상관없음)
+let person = {
+    name: "윤희근",
+    age: 23,
+    hobby: "테니스"
+};
+let { age: myAge, name, hobby, school = "동양미래대학교" } = person;
+// age 값은 myAge 에 · name · hobby 는 같은 이름으로 · school 은 person 에 없으니 기본값
+console.log(`이름 : ${name}\n나이 : ${myAge}살\n취미 : ${hobby}\n학교 : ${school}`);</code></pre>
+<pre class="io"><code class="language-text">이름 : 윤희근
+나이 : 23살
+취미 : 테니스
+학교 : 동양미래대학교</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>쓴 것</th><th>뜻</th></tr>
+<tr><td><code>name</code></td><td>person.name → 변수 name</td></tr>
+<tr><td><code>age: myAge</code></td><td>person.age → 변수 <b>myAge</b> (이름 바꾸기) — <code>age</code> 라는 변수는 만들어지지 않는다</td></tr>
+<tr><td><code>school = "동양미래대학교"</code></td><td>person 에 school 이 없으면 <b>기본값</b> 을 쓴다</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — <code>age: myAge</code> 처럼 작성하면 객체의 age 값을 myAge 라는 변수에 할당 → 출력할 때는 age 가 아니라 <b>myAge</b> 를 사용해야 한다</div>
+<pre><code class="language-javascript">// 이름을 바꾼 뒤 age 를 쓰면?
+let person = { name: "윤희근", age: 23, hobby: "테니스" };
+let { age: myAge, name } = person;
+console.log(myAge);   // 23
+console.log(age);     // ← 오류: age 라는 변수는 없다</code></pre>
+<pre class="io"><code class="language-text">23
+ReferenceError: age is not defined</code></pre>
+<h3>비교 — 구조분해 할당을 쓰지 않으면</h3>
+<pre><code class="language-javascript">// 0929_04.js 주석 — 구조분해할당을 사용하지 않는 경우 (속성마다 한 줄씩)
+let person = { name: "윤희근", age: 23, hobby: "테니스" };
+let n = person.name;
+let a = person.age;
+let h = person.hobby;
+console.log(`이름 : ${n}\n나이 : ${a}살\n취미 : ${h}`);</code></pre>
+<pre class="io"><code class="language-text">이름 : 윤희근
+나이 : 23살
+취미 : 테니스</code></pre>
+</section>
+<section class="card">
+<h2>7. 🔥 매개변수 구조분해 — "중괄호를 빼면?" ★시험</h2>
+<h3>예제 0929_04.js — 매개변수 자리에서 바로 구조분해</h3>
+<pre><code class="language-javascript">// 0929_04.js 매개변수를 { } 로 받으면 → 넘겨받은 객체를 그 자리에서 구조분해
+let person = { name: "윤희근", age: 23, hobby: "테니스" };
+const func = ({ name, age, hobby, extra }) =&gt; {   // person 에서 같은 이름의 속성을 꺼낸다
+    console.log(name, age, hobby, extra);          // extra 는 person 에 없음 → undefined
+}
+func(person);</code></pre>
+<pre class="io"><code class="language-text">윤희근 23 테니스 undefined</code></pre>
+<h3>🔥 시험문제 — 여기서 중괄호를 빼면 출력되는 결과</h3>
+<pre><code class="language-javascript">// ★시험문제 — "여기서 중괄호를 빼면 출력되는 결과" (0929_04.js)
+let person = { name: "윤희근", age: 23, hobby: "테니스" };
+const func = (name, age, hobby, extra) =&gt; {   // { } 가 없으면 평범한 매개변수 4개
+    console.log(name, age, hobby, extra);
+}
+func(person);   // 인수는 person 하나 → name 에 객체 통째로, 나머지는 받은 값이 없음</code></pre>
+<pre class="io"><code class="language-text">{ name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code></pre>
+<div class="tip">🔥 <b>정답</b> — <code>{ name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code> (수업 파일 주석과 같음). 중괄호가 있으면 객체에서 <b>속성을 꺼내고</b>, 없으면 첫 번째 매개변수 name 에 <b>객체가 통째로</b> 들어가고 age · hobby · extra 는 넘겨받은 인수가 없어서 <b>undefined</b> (4주차 매개변수 · 인수). 객체는 node 에서 <code>{ key: '값' }</code> 모양으로 찍혀요 (크롬 콘솔은 모양이 조금 달라요).</div>
+</section>
+<section class="card">
+<h2>8. DOM — 클릭으로 색 바꾸기 (0929_01.html)</h2>
+<pre><code class="language-html">&lt;!-- 0929_01.html --&gt;
+&lt;style&gt;
+    #box { width: 100px; height: 100px; border: 3px solid black; }   /* # = id 선택자 */
+    .box { background-color: orange; }                               /* . = class 선택자 */
+    .boxRed { background-color: red; }
+    .boxBlue { background-color: blue; }
+&lt;/style&gt;
+
+&lt;div id="box" onclick="changeColor()"&gt;Hello box&lt;/div&gt;
+&lt;input type="button" value="red" onclick="setColorRed()"&gt;
+&lt;input type="button" value="blue" onclick="setColorBlue()"&gt;
+
+&lt;script&gt;
+    function changeColor() {
+        var box = document.getElementsByTagName("body");   // 태그 이름으로 → 여러 개(목록)
+        box[0].setAttribute("class", "box");                 // 목록의 0번째 = body 에 class="box"
+    }
+    function setColorRed() {
+        var box = document.getElementById("box");            // id 로 → 딱 하나
+        box.setAttribute("class", "boxRed");                 // class 를 boxRed 로 → 빨간 배경
+    }
+    function setColorBlue() {
+        var box = document.getElementById("box");
+        box.setAttribute("class", "boxBlue");                // class 를 boxBlue 로 → 파란 배경
+    }
+&lt;/script&gt;</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>코드</th><th>돌려주는 것</th><th>쓰는 법</th></tr>
+<tr><td><code>document.getElementsByTagName("body")</code></td><td>그 태그의 요소 <b>전부</b>(목록) — Element<b>s</b></td><td><code>box[0]</code> 처럼 번지로 꺼낸다</td></tr>
+<tr><td><code>document.getElementById("box")</code></td><td>id 가 box 인 요소 <b>하나</b> — Element</td><td>바로 쓴다</td></tr>
+<tr><td><code>요소.setAttribute("class", "boxRed")</code></td><td>속성 값을 바꾼다 → 그 class 의 CSS 가 적용된다</td><td></td></tr>
+<tr><td><code>onclick="함수()"</code></td><td>클릭 이벤트가 생기면 함수 실행 (2주차 이벤트)</td><td></td></tr>
+</tbody></table>
+<div class="tip">📌 동작 — <b>Hello box</b> 를 누르면 <code>body</code> 에 class="box" → <b>페이지 배경 전체가 주황</b> (박스가 아니라 body!) · <b>red</b> 버튼 → 박스만 빨강 · <b>blue</b> 버튼 → 박스만 파랑</div>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 수업 코드 주석 <code>// box[0].style.background-color: orange;</code> 는 CSS 문법이라 JS 에서는 SyntaxError 예요. JS 로 직접 색을 넣으려면 <code>box[0].style.backgroundColor = "orange";</code> (<code>-</code> 를 빼고 뒤 글자를 대문자로)</div>
+<p>---<br>*노션 필기 · 수업 실습 파일을 바탕으로 Claude 가 정리한 요약입니다. 표 2개(동기·비동기 / 단일·멀티 스레드)는 필기에 적힌 요청대로 만들었고, 수업 파일의 오류는 "정정"으로 표시했습니다.*</p>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
+<pre><code class="language-text">데이터타입 복습:NUMBER,STRING,BOOLEAN TYPE,NULL,UNDEFINED TYPE,OBJECT TYPE
+함수선언방법 복습:선언적,표현적,화살표
+호이스팅 복습
+콜백 복습
+parseInt("1");
+Number("1");
+//형변환(캐스팅)
+클라이언트에서 백엔드까지 답이 오기까지 아무것도 못 하는것을 ”동기화”라고 함
+비동기 작업이 좋다 이유는?(비동기화와 동기화 차이를 표로 작성해줘 claude)
+멀티스레드,단일스레드 차이도 표로 작성해줘
+console.log("시작");
+let a=()=&gt;{}
+setTimeout(()=&gt;{} , 3000);
+// 둘다 실행이 된다 안된다(차이)
+console.log("시작");
+function a(){
+    ...
+}
+setTimeout(()=&gt;{} , 3000);
+setTimeout은 비동기화로 선언되는 내장함수
+//날짜출력 코드
+const clockInterval=setInterval(()=&gt;{
+    const now = new Date(/*여기에 2026-01-01을 쓰면 출력결과는?(시험에 나올 수 있음)*/);
+    const timeString=now.toLocaleDateString();
+    if(timeString==="오전 8:58:00"){
+        clearInterval(clockInterval)
+    }
+    else {
+        console.log(`현재 시간: ${timeString}`);
+    }
+},1000);
+//시간출력 코드
+const clockInterval=setInterval(()=&gt;{
+    const now = new Date(/*여기에 2026-01-01을 쓰면 출력결과는?(시험에 나올 수 있음)*/);
+    const timeString=now.toLocaleTimeString();
+    if(timeString==="오전 8:58:00"){
+        clearInterval(clockInterval)
+    }
+    else {
+        console.log(`현재 시간: ${timeString}`);
+    }
+},1000);
+구조분해할당
+let person = {
+    name: "윤희근",
+    age: 23,
+    hobby: "테니스"
+};
+
+let { age: myAge, name, hobby, school = "동양미래대학교" } = person;
+
+console.log(`이름 : ${name}\n나이 : ${myAge}살\n취미 : ${hobby}\n학교 : ${school}`);
+`age: myAge`처럼 작성하면 객체의 `age` 값을 `myAge`라는 변수에 할당합니다. 따라서 출력할 때는 `age`가 아니라 `myAge`를 사용해야 합니다.
+// 구조분해할당을 사용하지 않는 경우
+let n = person.name;
+let a = person.age;
+let h = person.hobby;
+
+console.log(`이름 : ${n}\n나이 : ${a}살\n취미 : ${h}`);</code></pre>
+</details>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../웹프로그래밍.html#quiz">웹프로그래밍 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li><li><a href="../웹프로그래밍.html#output">🖥️ 출력 결과 맞히기 — 🔥 매개변수 구조분해 · new Date(2026-01-01) 포함</a></li><li><a href="../웹프로그래밍.html#code">💻 코딩테스트 — 🔥 매개변수 구조분해 · 객체 구조분해 · setInterval 카운트다운</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-5주차.html">‹ 이전 · <b>5주차</b><br><small>&lt;9월 22일&gt; 함수·콜백·객체·배열</small></a><a class="next" href="웹프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「웹프로그래밍 · 6주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

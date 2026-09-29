@@ -44,7 +44,7 @@ motion.js           전 페이지 공용 — 애니메이션·인터랙션(화�
 scripts/bump_assets.py  ★ 공용 파일(theme.js·style.css·quiz.js…)을 고친 뒤 실행 — 모든 페이지 주소의 ?v= 버전을 올려 브라우저 캐시를 끊음
 review.js           과목 페이지 공용 — 틀린 문제 모아 복사 + 코드블록 복사 버튼
 quiz.js             2학기 과목 페이지 공용 퀴즈 — 객관식(.mcq)·주관식(.quiz-item) 채점 + 복습 모드
-codetest.js         언어 과목(C·Java·JS·SQL) 코딩테스트 — 소스코드를 붙여넣으면 채점 (C·Java = Wandbox 온라인 컴파일러, JS = 브라우저 Web Worker, SQL = 브라우저 안의 SQLite(sql.js)를 MySQL 처럼 맞춰 실행)
+codetest.js         언어 과목(C·Java·JS·SQL) 코딩테스트 — 소스코드를 붙여넣으면 채점 (C·Java = Wandbox 온라인 컴파일러, JS = 브라우저 Web Worker · setTimeout·setInterval 은 기다리지 않고 예약 시각 순서대로 바로 실행하는 가상 시계, SQL = 브라우저 안의 SQLite(sql.js)를 MySQL 처럼 맞춰 실행)
 outquiz.js          언어 과목 출력 결과 맞히기 — 코드를 읽고 실행 결과를 적으면 줄 단위로 채점 (#output, 정답은 실제 실행 결과 · SQL 은 data-table 로 결과 표 채점)
 weeks.js            2학기 과목 페이지의 1~15주차 버튼 — 진도 나간 주차만 열림, 8주차 중간고사 · 15주차 기말고사, 새 탭으로 열기
 weeks/             주차 페이지(<과목>-N주차.html · <과목>-8주차-중간고사.html) — scripts/build_weeks.py 가 생성

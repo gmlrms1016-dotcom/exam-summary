@@ -5,7 +5,8 @@
        <script type="text/plain" class="ct-answer">…</script>                                     정답 코드(정답 보기)
        data-must='["정규식", …]'  data-must-msg="…"  (선택) 코드에 꼭 들어가야 하는 것 — 목록의 정규식이 모두 맞아야 함 (SQL 은 대소문자 무시)
        data-exam="출처 설명"  (선택) 교수님이 "시험문제" 라고 한 코드 → 🔥 시험문제 배지와 빨간 테두리
-   - 실행: C · Java = Wandbox 온라인 컴파일러(gcc · OpenJDK) / JS = 브라우저 Web Worker (prompt() 는 입력 줄을 차례로 돌려줌)
+   - 실행: C · Java = Wandbox 온라인 컴파일러(gcc · OpenJDK) / JS = 브라우저 Web Worker (prompt() 는 입력 줄을 차례로 돌려줌 ·
+           setTimeout · setInterval 은 가상 시계 — 기다리지 않고 본 코드가 끝난 뒤 예약 시각 순서대로 실행, 콜백 1000번이 넘으면 멈추지 않는 것으로 봄)
            SQL = 브라우저 안의 SQLite(sql.js · cdnjs → 안 되면 jsDelivr)를 MySQL 처럼 맞춰서 실행 (아래 "SQL 실행기" 설명)
    - 채점: 줄 끝 공백 · 마지막 빈 줄만 무시하고 출력이 기대값과 같아야 통과
    - SQL 테스트 한 개 = 빈 DB → setup → 붙여넣은 코드 → check 순서로 실행
@@ -131,8 +132,24 @@
         "  }",
         "  var cons = { log: function () { out.push([].map.call(arguments, show).join(' ')); } };",
         "  var prompt = function () { return k < lines.length ? lines[k++] : null; };",
-        "  var win = { prompt: prompt, alert: function (v) { out.push(show(v)); } };",
-        "  try { new Function('console', 'prompt', 'window', 'alert', e.data.code)(cons, prompt, win, win.alert);",
+        // 가상 타이머 — setTimeout · setInterval 을 실제로 기다리지 않고, 본 코드가 끝난 뒤 예약 시각 순서대로 바로 실행 (같은 시각이면 먼저 예약한 것부터)
+        "  var tq = [], tseq = 0, tnow = 0, tid = 0, tdead = {};",
+        "  function tadd(fn, ms, args, rep) { ms = Number(ms); if (!(ms >= 1 && ms <= 2147483647)) ms = 1; var id = ++tid; tq.push({ id: id, at: tnow + ms, ms: ms, fn: fn, args: args, rep: rep, s: tseq++ }); return id; }",
+        "  function sT(fn, ms) { return tadd(fn, ms, [].slice.call(arguments, 2), false); }",
+        "  function sI(fn, ms) { return tadd(fn, ms, [].slice.call(arguments, 2), true); }",
+        "  function cT(id) { tdead[id] = 1; tq = tq.filter(function (t) { return t.id !== id; }); }",
+        "  function runTimers() {",
+        "    for (var n = 0; tq.length; n++) {",
+        "      if (n >= 1000) throw new Error('타이머가 끝나지 않아요 — setInterval 을 clearInterval 로 멈췄나요?');",
+        "      var k = 0; for (var i = 1; i < tq.length; i++) if (tq[i].at < tq[k].at || (tq[i].at === tq[k].at && tq[i].s < tq[k].s)) k = i;",
+        "      var t = tq.splice(k, 1)[0]; tnow = t.at;",
+        "      if (typeof t.fn === 'function') t.fn.apply(null, t.args);",
+        "      if (t.rep && !tdead[t.id]) { t.at = tnow + t.ms; t.s = tseq++; tq.push(t); }",
+        "    }",
+        "  }",
+        "  var win = { prompt: prompt, alert: function (v) { out.push(show(v)); }, setTimeout: sT, setInterval: sI, clearTimeout: cT, clearInterval: cT };",
+        "  try { new Function('console', 'prompt', 'window', 'alert', 'setTimeout', 'setInterval', 'clearTimeout', 'clearInterval', e.data.code)(cons, prompt, win, win.alert, sT, sI, cT, cT);",
+        "        runTimers();",
         "        self.postMessage({ out: out.join('\\n') }); }",
         "  catch (err) { self.postMessage({ out: out.join('\\n'), runtimeErr: String(err) }); }",
         "};"
