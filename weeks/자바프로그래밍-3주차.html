@@ -63,9 +63,9 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <section class="card">
 <h2>3. 타입 변환 ★시험단골</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 자동 형변환: 작은 타입 → 큰 타입 (컴파일러가 자동)</li><li><span class="wk-tag star">⭐ 강조</span> — 강제 형변환(캐스팅): 큰 타입 → 작은 타입, ()로 지정, 값 손실 우려 — 예 <code>(int)2.9</code> → 2</li></ul>
-<pre><code class="language-java">System.out.println((int)2.9 + 1.8);      // 3.8
-System.out.println((int)(2.9 + 1.8));    // 4
-System.out.println((int)2.9 + (int)1.8); // 3</code></pre>
+<pre><code class="language-java">System.out.println((int)2.9 + 1.8);      // (int)2.9 → 2 (소수점 버림) → 2 + 1.8 → 3.8
+System.out.println((int)(2.9 + 1.8));    // 괄호 먼저 2.9 + 1.8 → 4.7 → (int)4.7 → 4
+System.out.println((int)2.9 + (int)1.8); // (int)2.9 → 2 · (int)1.8 → 1 → 2 + 1 → 3</code></pre>
 </section>
 <section class="card">
 <h2>4. 키 입력 (Scanner)</h2>

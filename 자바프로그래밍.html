@@ -158,9 +158,9 @@ public class heegeun {                       // 파일명 = public 클래스명
         </table>
         <div class="tip"><b>카멜 표기법</b> — 클래스=첫 글자 <b>대문자</b> / 변수·메서드=첫 글자 <b>소문자</b> / 상수=<b>모두 대문자</b></div>
         <pre><code>int n = 15;      // 10진수
-int m = 015;     // 0으로 시작 → 8진수 (10진수 13)
-int k = 0x15;    // 0x로 시작 → 16진수 (10진수 21)
-int b = 0b0101;  // 0b로 시작 → 2진수 (10진수 5)
+int m = 015;     // 0 으로 시작 → 8진수 15 → 1×8 + 5 → 10진수 13
+int k = 0x15;    // 0x 로 시작 → 16진수 15 → 1×16 + 5 → 10진수 21
+int b = 0b0101;  // 0b 로 시작 → 2진수 0101 → 4 + 1 → 10진수 5
 final double PI = 3.14;   // final = 상수</code></pre>
     </section>
 
@@ -171,13 +171,13 @@ final double PI = 3.14;   // final = 상수</code></pre>
             <tr><td>자동 형변환</td><td><b>작은 타입 → 큰 타입</b> · 컴파일러가 자동</td></tr>
             <tr><td>강제 형변환(캐스팅)</td><td><b>큰 타입 → 작은 타입</b> · <code>()</code>로 지정 · <b>값 손실 우려</b></td></tr>
         </table>
-        <pre><code>System.out.println((int)2.9 + 1.8);      // 3.8  ← (int)2.9=2, 2+1.8
-System.out.println((int)(2.9 + 1.8));    // 4    ← 4.7을 int로
-System.out.println((int)2.9 + (int)1.8); // 3    ← 2+1
+        <pre><code>System.out.println((int)2.9 + 1.8);      // (int)2.9 → 2 (소수점 버림) → 2 + 1.8 → 3.8
+System.out.println((int)(2.9 + 1.8));    // 괄호 먼저 2.9 + 1.8 → 4.7 → (int)4.7 → 4
+System.out.println((int)2.9 + (int)1.8); // (int)2.9 → 2 · (int)1.8 → 1 → 2 + 1 → 3
 
 byte b = 127; int i = 100;
-System.out.println(b + i);          // 227
-System.out.println((byte)(b + i));  // -29  ← 손실 발생</code></pre>
+System.out.println(b + i);          // byte + int → int 로 계산 → 127 + 100 → 227
+System.out.println((byte)(b + i));  // 227 → byte(-128 ~ 127) 범위를 넘음 → 227 - 256 → -29 (손실 발생)</code></pre>
         <div class="tip">💻 <b>타입 변환 ★시험단골</b> — <a href="#output">🖥️ 출력 결과 맞히기</a>와 <a href="#code">코딩테스트</a>의 🔥 시험문제로 직접 풀어 보세요.</div>
     </section>
 
@@ -221,17 +221,17 @@ switch (score/10) {
     <section class="card" id="s10">
         <h2>10. 연산자 실습 — 몫·나머지 · 증감 · 삼항<span class="week">4주차</span></h2>
         <pre><code>// ArithmeticOperator.java — 5000 입력 → 5000초는 1시간 23분 20초입니다.
-int second = time % 60;          // 5000 % 60 = 20  (나머지)
-int minute = (time / 60) % 60;   // 83 % 60  = 23
-int hour   = (time / 60) / 60;   // 83 / 60  = 1   (몫)</code></pre>
+int second = time % 60;          // 5000 ÷ 60 = 83 … 나머지 20 → 5000 % 60 → 20
+int minute = (time / 60) % 60;   // 5000 / 60 → 83 (정수 나눗셈) → 83 % 60 → 23
+int hour   = (time / 60) / 60;   // 5000 / 60 → 83 → 83 / 60 → 1 (몫만 남음)</code></pre>
         <pre><code>// AssignmentIncDecOperator.java — 실행 결과를 주석으로
 int a = 3, b = 3, c = 3;
-a += 3;  b *= 3;  c %= 2;      // a=6 b=9 c=1
+a += 3;  b *= 3;  c %= 2;      // a = 3 + 3 → 6 · b = 3 * 3 → 9 · c = 3 % 2 → 1
 int d = 3;
-a = d++;    // a=3 d=4   ← 대입 먼저, 증가 나중
-a = ++d;    // a=5 d=5   ← 증가 먼저, 대입 나중
-a = d--;    // a=5 d=4
-a = --d;    // a=3 d=3</code></pre>
+a = d++;    // 후위: 지금 d(3) 을 a 에 먼저 대입 → a=3 → 그다음 d = 3 + 1 → 4
+a = ++d;    // 전위: 먼저 d = 4 + 1 → 5 → 그 값을 a 에 대입 → a=5, d=5
+a = d--;    // 후위: 지금 d(5) 를 a 에 먼저 대입 → a=5 → 그다음 d = 5 - 1 → 4
+a = --d;    // 전위: 먼저 d = 4 - 1 → 3 → 그 값을 a 에 대입 → a=3, d=3</code></pre>
         <div class="tip"><b>삼항 연산자</b> — 두 수의 차(항상 양수): <code>(a &gt; b) ? (a - b) : (b - a)</code> → 3, 8 입력 시 <b>두 수의 차는 5</b> (TernaryOperator.java)</div>
     </section>
 
@@ -348,7 +348,7 @@ int[] num = {1, 2, 3, 4, 5};
 int sum = 0;
 for (int k : num)      // k 는 num[0] ~ num[4] 로 차례대로
     sum += k;
-System.out.println("합은" + sum);   // 합은15</code></pre>
+System.out.println("합은" + sum);   // sum = 1+2+3+4+5 → 15 → "합은" + 15 → 합은15</code></pre>
         <div class="tip">예제 결과 — 3-7 제일 큰 수 <b>100</b> · 3-8 평균 <b>4.6</b> · 3-10 4년 평점 평균 <b>3.725</b> · 3-11 비정방형 <b>10 11 12 / 20 21 / 30 31 32 / 40 41</b> · 3-12 배열 리턴 <b>0 1 2 3</b></div>
     </section>
 
@@ -405,7 +405,7 @@ public class WhileSample {
             System.out.println("입력된 수가 없습니다.");
         } else {
             System.out.print("정수의 개수는 " + count + "개이며 ");
-            System.out.println("평균은 " + (double) sum / count + "입니다.");   // 실수 나눗셈
+            System.out.println("평균은 " + (double) sum / count + "입니다.");   // (double) 이 sum 에 먼저 → 실수 ÷ 정수 → 실수 나눗셈 (예: 10 / 4 → 2.5)
         }
         sc.close();
     }
@@ -531,7 +531,7 @@ public class ArrayAccess {
         numbers[3] = 40;
         numbers[4] = 50;                // 마지막 인덱스 = 크기 - 1
         System.out.println("첫번째 요소 : " + numbers[0]);
-        System.out.println("세번째 요소 : " + numbers[2]);   // 세 번째 = 인덱스 2
+        System.out.println("세번째 요소 : " + numbers[2]);   // 인덱스는 0 부터 → 세 번째 = numbers[2] → 30
 
         int[] score = {90, 85, 78, 100, 95};    // 선언과 동시에 초기화
         for (int i = 0; i &lt; 5; i++) {
@@ -558,7 +558,7 @@ public class ForEx1 {
     public static void main(String[] args) {
         int result = 1;                 // 곱하기는 1 부터 시작 (0 이면 계속 0)
         for (int i = 1; i &lt;= 5; i++) {
-            result *= i;                // 1 × 2 × 3 × 4 × 5
+            result *= i;                // i = 1 → 5 : result = 1 → 1×2=2 → 2×3=6 → 6×4=24 → 24×5=120
         }
         System.out.println(result);
     }
@@ -611,7 +611,7 @@ public class ArrayEx1 {
         numbers[4] = 50;                     // 마지막 인덱스 = 크기 - 1
 
         System.out.println("첫번째 요소 " + numbers[0]);
-        System.out.println("세번째 요소 " + numbers[2]);   // 세 번째 = 인덱스 2
+        System.out.println("세번째 요소 " + numbers[2]);   // 인덱스는 0 부터 → 세 번째 = numbers[2] → 30
 
         String names[] = new String[4];      // String 배열 · [] 는 이름 뒤에 써도 된다
         names[0] = "동미래";
@@ -661,13 +661,13 @@ public class ArrayLength {
         int sum = 0;
 
         Scanner sc = new Scanner(System.in);
-        System.out.print(intArray.length + "개의 정수를 입력하세요&gt;&gt;");   // length = 5
+        System.out.print(intArray.length + "개의 정수를 입력하세요&gt;&gt;");   // intArray.length → 5 → 5 + "개의 정수를…" → 5개의 정수를 입력하세요&gt;&gt;
         for (int i = 0; i &lt; intArray.length; i++)
             intArray[i] = sc.nextInt();
         for (int i = 0; i &lt; intArray.length; i++)
             sum += intArray[i];
 
-        System.out.print("평균은 " + (double) sum / intArray.length);   // sum 을 먼저 double 로
+        System.out.print("평균은 " + (double) sum / intArray.length);   // (double) 이 sum 에 먼저 → 실수 ÷ 5 → 소수점까지 평균
         sc.close();
     }
 }</code></pre>
@@ -773,8 +773,8 @@ public class ScoreAverrage {
                 sum += score[year][term];
             }
         }
-        int n = score.length;       // 행 개수 4
-        int m = score[0].length;    // 열 개수 2
+        int n = score.length;       // score.length → 행(학년) 개수 → 4
+        int m = score[0].length;    // score[0] = {3.3, 3.4} → 길이 → 열(학기) 개수 2
         System.out.println("4년 전체 평점 평균은 " + sum / (n * m));
     }
 }</code></pre>
@@ -915,19 +915,19 @@ public class CircleMain {
         Circle pizza = new Circle();        // 객체 생성
         pizza.name = "자바피자";
         pizza.radius = 10;
-        double area = pizza.getArea();      // 3.14 * 10 * 10
+        double area = pizza.getArea();      // radius = 10 → 3.14 * 10 * 10 → 314.0
         System.out.println(pizza.name + "면적 = " + area);
 
         Circle donut = new Circle();
         donut.radius = 2;
         donut.name = "자바도넛";
-        double area2 = donut.getArea();     // 3.14 * 2 * 2
+        double area2 = donut.getArea();     // radius = 2 → 3.14 * 2 * 2 → 12.56
         System.out.println(donut.name + "면적 = " + area2);
 
         Circle gomg = new Circle();
         gomg.radius = 5;
         gomg.name = "gomg";
-        double area3 = gomg.getArea();      // 3.14 * 5 * 5
+        double area3 = gomg.getArea();      // radius = 5 → 3.14 * 5 * 5 → 78.5
         System.out.println(gomg.name + "면적 = " + area3);
     }
 }</code></pre>

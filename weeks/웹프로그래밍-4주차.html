@@ -91,9 +91,9 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 let num1 = window.prompt("첫번째 피연산자 입력!");
 let num2 = window.prompt("두번째 피연산자 입력!");
 let resultObj = document.querySelector("#result");
-resultObj.innerHTML = num1 + num2;                   // 3, 4 입력 → 34 (문자열 연결)
-resultObj.innerHTML = Number(num1) + Number(num2);   // → 7
-resultObj.innerHTML = `결과값은 ${Number(num1) + Number(num2)}`;   // 백틱(템플릿 리터럴)</code></pre>
+resultObj.innerHTML = num1 + num2;                   // prompt 는 문자열을 돌려줌 → 3, 4 입력 = "3" + "4" → 문자열 연결 → "34"
+resultObj.innerHTML = Number(num1) + Number(num2);   // Number("3") → 3 · Number("4") → 4 → 3 + 4 숫자 덧셈 → 7
+resultObj.innerHTML = `결과값은 ${Number(num1) + Number(num2)}`;   // 백틱(템플릿 리터럴): ${ } 안을 먼저 계산 → 3 + 4 → 7 → "결과값은 7"</code></pre>
 </section>
 <section class="card">
 <h2>6. 요소 선택과 속성 쓰임새</h2>
@@ -120,8 +120,8 @@ resultObj.innerHTML = `결과값은 ${Number(num1) + Number(num2)}`;   // 백틱
 <h2>8. 증감 연산자: 전위 vs 후위 ★시험</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <b>전위</b> <code>++num8</code>: 먼저 1 증가 → 증가된 값을 사용 / <b>후위</b> <code>num8++</code>: 현재 값을 먼저 사용 → 그다음 1 증가</li></ul>
 <pre><code class="language-javascript">let num8 = 10;
-console.log(num8++);   // 10 출력 (출력한 뒤 num8 은 11)
-console.log(++num8);   // 12 출력 (11 → 12 로 먼저 증가)</code></pre>
+console.log(num8++);   // 후위 ++: 지금 값 10 을 먼저 출력 → 그다음 num8 = 10 + 1 = 11 → 출력 10
+console.log(++num8);   // 전위 ++: 먼저 num8 = 11 + 1 = 12 → 그 값을 출력 → 12</code></pre>
 </section>
 <section class="card">
 <h2>9. 비교 연산자: == vs === ★시험</h2>
@@ -149,28 +149,28 @@ console.log(++num8);   // 12 출력 (11 → 12 로 먼저 증가)</code></pre>
 </tbody></table>
 <h3>② true · false 로 모든 경우 (진리표)</h3>
 <pre><code class="language-javascript">// &amp; (비트 AND) : 둘 다 1(true) 일 때만 1 · 결과는 숫자
-console.log(true &amp; true);     // 1
-console.log(true &amp; false);    // 0
-console.log(false &amp; true);    // 0
-console.log(false &amp; false);   // 0
+console.log(true &amp; true);     // true → 1, true → 1 → 1 &amp; 1 → 1
+console.log(true &amp; false);    // true → 1, false → 0 → 1 &amp; 0 → 0
+console.log(false &amp; true);    // false → 0, true → 1 → 0 &amp; 1 → 0
+console.log(false &amp; false);   // false → 0, false → 0 → 0 &amp; 0 → 0
 
 // | (비트 OR) : 하나라도 1(true) 이면 1 · 결과는 숫자
-console.log(true | true);     // 1
-console.log(true | false);    // 1
-console.log(false | true);    // 1
-console.log(false | false);   // 0
+console.log(true | true);     // true → 1, true → 1 → 1 | 1 → 1
+console.log(true | false);    // true → 1, false → 0 → 1 | 0 → 1
+console.log(false | true);    // false → 0, true → 1 → 0 | 1 → 1
+console.log(false | false);   // false → 0, false → 0 → 0 | 0 → 0
 
 // &amp;&amp; (논리 AND) : 둘 다 true 일 때만 true
-console.log(true &amp;&amp; true);    // true
-console.log(true &amp;&amp; false);   // false
-console.log(false &amp;&amp; true);   // false
-console.log(false &amp;&amp; false);  // false
+console.log(true &amp;&amp; true);    // 왼쪽 true(참) → 오른쪽 값 → true
+console.log(true &amp;&amp; false);   // 왼쪽 true(참) → 오른쪽 값 → false
+console.log(false &amp;&amp; true);   // 왼쪽 false(거짓) → 왼쪽 값 그대로(오른쪽 안 봄) → false
+console.log(false &amp;&amp; false);  // 왼쪽 false(거짓) → 왼쪽 값 그대로 → false
 
 // || (논리 OR) : 하나라도 true 면 true
-console.log(true || true);    // true
-console.log(true || false);   // true
-console.log(false || true);   // true
-console.log(false || false);  // false</code></pre>
+console.log(true || true);    // 왼쪽 true(참) → 왼쪽 값 그대로(오른쪽 안 봄) → true
+console.log(true || false);   // 왼쪽 true(참) → 왼쪽 값 그대로 → true
+console.log(false || true);   // 왼쪽 false(거짓) → 오른쪽 값 → true
+console.log(false || false);  // 왼쪽 false(거짓) → 오른쪽 값 → false</code></pre>
 <table class="ref">
 <tbody style="min-width:548px;">
 <tr><th>A</th><th>B</th><th>A <b>&amp;</b> B</th><th>A <b>|</b> B</th><th>A <b>&amp;&amp;</b> B</th><th>A <b>||</b> B</th></tr>
@@ -186,14 +186,14 @@ console.log(false || false);  // false</code></pre>
     return true;
 }
 
-console.log("① true &amp; right()");   console.log("   결과 =", true &amp; right());
-console.log("② false &amp; right()");  console.log("   결과 =", false &amp; right());
-console.log("③ true | right()");   console.log("   결과 =", true | right());
-console.log("④ false | right()");  console.log("   결과 =", false | right());
-console.log("⑤ true &amp;&amp; right()");  console.log("   결과 =", true &amp;&amp; right());
-console.log("⑥ false &amp;&amp; right()"); console.log("   결과 =", false &amp;&amp; right());   // 왼쪽 false → 오른쪽 안 봄
-console.log("⑦ true || right()");  console.log("   결과 =", true || right());    // 왼쪽 true  → 오른쪽 안 봄
-console.log("⑧ false || right()"); console.log("   결과 =", false || right());</code></pre>
+console.log("① true &amp; right()");   console.log("   결과 =", true &amp; right());   // &amp; 는 오른쪽도 항상 실행 → "실행됨!" 출력 → true &amp; true → 1 &amp; 1 → 결과 = 1
+console.log("② false &amp; right()");  console.log("   결과 =", false &amp; right());   // 왼쪽이 false 여도 오른쪽 실행 → "실행됨!" → 0 &amp; 1 → 결과 = 0
+console.log("③ true | right()");   console.log("   결과 =", true | right());   // | 도 오른쪽을 항상 실행 → "실행됨!" → 1 | 1 → 결과 = 1
+console.log("④ false | right()");  console.log("   결과 =", false | right());   // 오른쪽 실행 → "실행됨!" → 0 | 1 → 결과 = 1
+console.log("⑤ true &amp;&amp; right()");  console.log("   결과 =", true &amp;&amp; right());   // 왼쪽 true(참) → 오른쪽 right() 실행 → "실행됨!" → 오른쪽 값 true → 결과 = true
+console.log("⑥ false &amp;&amp; right()"); console.log("   결과 =", false &amp;&amp; right());   // 왼쪽 false(거짓) → 이미 false 로 결정 → right() 실행 안 함 → 결과 = false
+console.log("⑦ true || right()");  console.log("   결과 =", true || right());    // 왼쪽 true(참) → 이미 true 로 결정 → right() 실행 안 함 → 결과 = true
+console.log("⑧ false || right()"); console.log("   결과 =", false || right());   // 왼쪽 false(거짓) → 오른쪽 right() 실행 → "실행됨!" → 오른쪽 값 true → 결과 = true</code></pre>
 <pre class="io"><code class="language-text">① true &amp; right()
    └ 오른쪽 right() 실행됨!
    결과 = 1
@@ -230,18 +230,18 @@ console.log("⑧ false || right()"); console.log("   결과 =", false || right()
 </tbody></table>
 <div class="tip">✍️ 필기 — <b>&amp;</b> 는 첫번째와 두번째를 <b>모두 보고</b> 판단하고, <b>&amp;&amp;</b> 는 첫번째 결과로 false 가 확정되면 <b>뒤를 안 보고</b> 바로 결과를 냅니다. <b>||</b> 는 반대로 첫번째가 true 면 뒤를 안 봅니다.</div>
 <h3>④ 숫자를 넣으면 — &amp; | 는 2진수 비트 계산, &amp;&amp; || 는 값 고르기</h3>
-<pre><code class="language-javascript">console.log(5 &amp; 3);     // 1
-console.log(5 | 3);     // 7
-console.log(5 &amp;&amp; 3);    // 3
-console.log(5 || 3);    // 5
+<pre><code class="language-javascript">console.log(5 &amp; 3);     // 5 = 101, 3 = 011 → 자리마다 AND → 001 → 1
+console.log(5 | 3);     // 5 = 101, 3 = 011 → 자리마다 OR → 111 → 4+2+1 → 7
+console.log(5 &amp;&amp; 3);    // 왼쪽 5 → 0 이 아니라 참 → 오른쪽 값 → 3
+console.log(5 || 3);    // 왼쪽 5 → 참 → 왼쪽 값 그대로 → 5
 
-console.log(0 &amp; 3);     // 0
-console.log(0 | 3);     // 3
-console.log(0 &amp;&amp; 3);    // 0
-console.log(0 || 3);    // 3
+console.log(0 &amp; 3);     // 0 = 00, 3 = 11 → 자리마다 AND → 00 → 0
+console.log(0 | 3);     // 0 = 00, 3 = 11 → 자리마다 OR → 11 → 3
+console.log(0 &amp;&amp; 3);    // 왼쪽 0 → 거짓 → 왼쪽 값 그대로 → 0
+console.log(0 || 3);    // 왼쪽 0 → 거짓 → 오른쪽 값 → 3
 
-console.log(12 &amp; 10);   // 8
-console.log(12 | 10);   // 14</code></pre>
+console.log(12 &amp; 10);   // 12 = 1100, 10 = 1010 → 자리마다 AND → 1000 → 8
+console.log(12 | 10);   // 12 = 1100, 10 = 1010 → 자리마다 OR → 1110 → 8+4+2 → 14</code></pre>
 <pre class="io bits"><code class="language-text">   5 = 0101         5 = 0101
    3 = 0011         3 = 0011
 &amp; ---------      | ---------
@@ -276,21 +276,21 @@ console.log(12 | 10);   // 14</code></pre>
 <tr><td><code>[]</code></td><td>🟢 truthy</td><td><code>[]</code></td><td><code>"뒤값"</code></td><td><code>0</code></td><td><code>0</code></td></tr>
 <tr><td><code>{}</code></td><td>🟢 truthy</td><td><code>{}</code></td><td><code>"뒤값"</code></td><td><code>0</code></td><td><code>0</code></td></tr>
 </tbody></table>
-<pre><code class="language-javascript">let v = "";               // falsy
-console.log(v || "기본값");   // "기본값"
-console.log(v &amp;&amp; "뒤값");     // ""
-console.log(v &amp; 1);          // 0
-console.log(v | 0);          // 0
+<pre><code class="language-javascript">let v = "";               // 빈 문자열 "" → 거짓(falsy)
+console.log(v || "기본값");   // 왼쪽 "" → 거짓 → 오른쪽 값 → "기본값"
+console.log(v &amp;&amp; "뒤값");     // 왼쪽 "" → 거짓 → 왼쪽 값 그대로 → ""
+console.log(v &amp; 1);          // "" → 숫자로 바꾸면 0 → 0 &amp; 1 → 0
+console.log(v | 0);          // "" → 숫자로 바꾸면 0 → 0 | 0 → 0
 
-v = "안녕";                  // truthy
-console.log(v || "기본값");   // "안녕"
-console.log(v &amp;&amp; "뒤값");     // "뒤값"
-console.log(v &amp; 1);          // 0   ← truthy 인데도 0 ! (&amp; 는 숫자로 바꿔서 계산)
-console.log(v | 0);          // 0
+v = "안녕";                  // 글자가 있는 문자열 → 참(truthy)
+console.log(v || "기본값");   // 왼쪽 "안녕" → 참 → 왼쪽 값 그대로 → "안녕"
+console.log(v &amp;&amp; "뒤값");     // 왼쪽 "안녕" → 참 → 오른쪽 값 → "뒤값"
+console.log(v &amp; 1);          // "안녕" → 숫자로 못 바꿔 NaN → 비트 연산에선 0 → 0 &amp; 1 → 0  ← truthy 인데도 0 ! (&amp; 는 참·거짓이 아니라 숫자로 계산)
+console.log(v | 0);          // "안녕" → 숫자로 못 바꿔 NaN → 비트 연산에선 0 → 0 | 0 → 0
 
-v = "10";                    // 숫자로 바뀌는 문자열
-console.log(v &amp; 1);          // 0
-console.log(v | 0);          // 10</code></pre>
+v = "10";                    // 숫자로 바뀌는 문자열 → "10" → 10
+console.log(v &amp; 1);          // "10" → 숫자 10 → 1010 &amp; 0001 → 0000 → 0
+console.log(v | 0);          // "10" → 숫자 10 → 1010 | 0000 → 1010 → 10</code></pre>
 <div class="tip">⚠️ <b>&amp; | 는 truthy/falsy 를 보지 않습니다.</b> 값을 <b>숫자로 바꾼 뒤</b> 비트 계산을 해요. 그래서 truthy 인 <code>"안녕"</code> 도 숫자로 못 바꿔 <b>0</b> 이 되고, <code>0n</code>(BigInt) 은 <b>TypeError</b> 가 납니다.</div>
 <h3>⑥ 문자열 · null · true 를 &amp; | 에 넣으면 — 숫자로 바뀐다</h3>
 <table class="ref">
@@ -312,11 +312,11 @@ console.log(v | 0);          // 10</code></pre>
 <pre><code class="language-javascript">// 0915_04.html — prompt 에서 받은 값 (빈칸 확인 "", 글자 입력 "안녕", 취소 null)
 let changeVar = window.prompt("추가할 제목 입력!");
 
-changeVar = changeVar == "" ? "입력없음" : changeVar;   // 수업 코드: "" 만 거르고 null 은 못 거름
-changeVar = changeVar || "입력없음";                    // falsy("", null) 를 한 번에 "입력없음" 으로
-changeVar = changeVar &amp;&amp; "입력없음";                    // 값이 있을 때만 "입력없음" 으로 덮어씀 (반대 동작)
-changeVar = changeVar | "입력없음";                     // ❌ 숫자 비트 연산 → 항상 0
-changeVar = changeVar &amp; "입력없음";                     // ❌ 숫자 비트 연산 → 항상 0</code></pre>
+changeVar = changeVar == "" ? "입력없음" : changeVar;   // 수업 코드: "" == "" → true → "입력없음" / 취소 null == "" → false → null 그대로 (null 은 못 거름)
+changeVar = changeVar || "입력없음";                    // "" · null → 거짓 → 오른쪽 "입력없음" / "안녕" → 참 → 왼쪽 "안녕" 그대로
+changeVar = changeVar &amp;&amp; "입력없음";                    // "안녕" → 참 → 오른쪽 "입력없음" 으로 덮어씀 / "" · null → 거짓 → 왼쪽 그대로 (반대 동작)
+changeVar = changeVar | "입력없음";                     // ❌ 양쪽을 숫자로: "입력없음" → NaN → 0 · "안녕" · "" · null → 0 → 0 | 0 → 0
+changeVar = changeVar &amp; "입력없음";                     // ❌ 양쪽을 숫자로: "입력없음" → NaN → 0 → 무엇이든 &amp; 0 → 0</code></pre>
 <table class="ref">
 <tbody style="min-width:760px;">
 <tr><th>prompt 입력</th><th>== "" ? : (수업 코드)</th><th><b>||</b> "입력없음"</th><th><b>&amp;&amp;</b> "입력없음"</th><th><b>|</b> "입력없음"</th><th><b>&amp;</b> "입력없음"</th></tr>
@@ -334,7 +334,7 @@ changeVar = changeVar &amp; "입력없음";                     // ❌ 숫자 �
 // 0915_04.html — 입력이 비었으면 "입력없음" (셋 다 같은 뜻)
 if (changeVar == "") { changeVar = "입력없음"; }
 changeVar = changeVar == "" ? "입력없음" : changeVar;
-changeVar = changeVar || "입력없음";   // 취소(null)까지 한 번에 처리</code></pre>
+changeVar = changeVar || "입력없음";   // "" · 취소 null → 거짓 → 오른쪽 "입력없음" / 입력값 → 참 → 그대로 (취소까지 한 번에 처리)</code></pre>
 <ul><li>⚠️ 0915_04.html 은 <code>querySelector("#result")</code> 인데 태그 id 가 <code>content</code> 라서 <b>null 오류</b>가 났다 → <code>#content</code> 로 맞춰야 화면에 출력된다 (4주차 폴더 파일은 <code>#content</code> 로 고침). prompt 에서 <b>취소</b>하면 <code>null</code> 이 들어와 <code>== ""</code> 검사로는 못 거른다</li></ul>
 </section>
 <section class="card">
@@ -348,8 +348,8 @@ changeVar = changeVar || "입력없음";   // 취소(null)까지 한 번에 처�
     console.log(person.name);
 }
 let person = { name: "홍길동" };
-printName(person);               // 인수 전달 → 홍길동
-printName();                     // 인수 없음 → person의 값이 없음</code></pre>
+printName(person);               // person 전달 → !person 은 false → if 건너뜀 → person.name → 홍길동
+printName();                     // 인수 없음 → person = undefined → !undefined 는 true → "person의 값이 없음" 출력 후 return</code></pre>
 </section>
 <section class="card">
 <h2>13. 복습: 함수 선언 3가지</h2>

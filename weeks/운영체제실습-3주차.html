@@ -130,7 +130,7 @@ ls -l                # 상세 목록</code></pre>
 <h3>4-1. 기호 모드 (심볼릭 모드)</h3>
 <div class="tip">🔑 <b>대상</b> — <code>u</code> 소유자 · <code>g</code> 그룹 · <code>o</code> 기타 사용자 · <code>a</code> 전체 사용자 / <b>연산</b> — <code>+</code> 권한 추가 · <code>-</code> 권한 제거 · <code>=</code> 권한 지정 / <b>권한</b> — <code>r</code> 읽기 · <code>w</code> 쓰기 · <code>x</code> 실행</div>
 <pre><code class="language-bash">chmod u+w centos_cp.txt        # 소유자에게 쓰기 추가
-chmod u-w centos_cp.txt        # 소유자 쓰기 제거 → -r--r--r--
+chmod u-w centos_cp.txt        # -rw-r--r-- 에서 소유자(u) 의 w 를 뺌(-) → -r--r--r--
 chmod u+x,go+w story.txt       # 여러 대상을 쉼표로 동시 지정
 chmod u-x,go-w story.txt       # 원상복구</code></pre>
 <div class="tip">⭐ <b>[내가 표시한 중요]</b> 기본 권한 <code>rw-r--r--</code> 에서 <code>d rwx rw- rw-</code> 로 변경했다가 다시 원상복구해서 <code>rw-r--r--</code> 로 바꾼다.</div>

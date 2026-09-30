@@ -61,7 +61,7 @@ n = 10;         // 대입
 n = 20;         // 변수는 값이 바뀔 수 있다
 
 int value = 0;              // 선언 + 초기화
-char name = 'a';            // 'a' 의 ASCII 코드 97 저장
+char name = 'a';            // 'a' → ASCII 코드 97 → 0110 0001 로 저장
 int data1, data2, data3;    // 여러 변수 한 줄 선언</code></pre>
 <ul><li>변수 표기법: 카멜 표기법 <code>myName</code> · 헝가리언 표기법 <code>c_name</code></li><li>변수 이름 규칙: 영문자·숫자·밑줄만 사용 / 숫자로 시작 X / 공백 X / 대·소문자 구별 / 예약어(키워드) 사용 X</li></ul>
 <div class="tip">📌 변수 = 값이 바뀌는 <b>기억장소</b> · 선언 = 공간 할당 · 초기화 = 선언하면서 값 넣기</div>
@@ -98,9 +98,9 @@ int main() {
     a2 = 100;
     a3 = 11.11;        // 11.11 은 double 상수 → float 에 들어가며 11.11 에 가장 가까운 값으로 저장
 
-    printf("a1: %c \n", a1);    // %c 문자
-    printf("a2: %d \n", a2);    // %d 정수
-    printf("a3: %f \n", a3);    // %f 실수 → 소수점 아래 6자리
+    printf("a1: %c \n", a1);    // a1 = 'c' → %c 는 문자로 → a1: c
+    printf("a2: %d \n", a2);    // a2 = 100 → %d 는 10진 정수로 → a2: 100
+    printf("a3: %f \n", a3);    // a3 = 11.11 → %f 는 소수점 아래 6자리 → a3: 11.110000
 
     int a7, a8, a9;             // 한 줄에 여러 변수 선언
     a7 = 300;
@@ -159,22 +159,22 @@ int main() {
 <pre><code class="language-c">// 자료형 크기 — sizeof 결과는 정수라 %d 로 출력
 #include &lt;stdio.h&gt;
 int main() {
-    printf("char   : %d byte\n", sizeof(char));     // 문자형
-    printf("short  : %d byte\n", sizeof(short));    // 정수형
-    printf("int    : %d byte\n", sizeof(int));      // 정수형
-    printf("float  : %d byte\n", sizeof(float));    // 실수형
-    printf("double : %d byte\n", sizeof(double));   // 실수형
+    printf("char   : %d byte\n", sizeof(char));     // 문자형 char → 1byte → char   : 1 byte
+    printf("short  : %d byte\n", sizeof(short));    // 정수형 short → 2byte → short  : 2 byte
+    printf("int    : %d byte\n", sizeof(int));      // 정수형 int → 4byte → int    : 4 byte
+    printf("float  : %d byte\n", sizeof(float));    // 실수형 float → 4byte → float  : 4 byte
+    printf("double : %d byte\n", sizeof(double));   // 실수형 double → 8byte → double : 8 byte
     // long 은 VS(윈도우) 4byte · Mac·Linux 8byte → 강의자료(VS) 기준 4byte
 
     int n = 10;
     double d = 3.14;
-    printf("변수 n : %d byte\n", sizeof(n));        // 변수 이름을 넣어도 된다 → int 크기
-    printf("변수 d : %d byte\n", sizeof(d));        // double 크기
-    printf("10     : %d byte\n", sizeof(10));       // 정수 상수 = int
-    printf("3.14   : %d byte\n", sizeof(3.14));     // 실수 상수 = double
-    printf("3.14f  : %d byte\n", sizeof(3.14f));    // f 를 붙이면 float
+    printf("변수 n : %d byte\n", sizeof(n));        // 변수 이름을 넣어도 된다 → n 은 int → 4 byte
+    printf("변수 d : %d byte\n", sizeof(d));        // d 는 double → 8 byte
+    printf("10     : %d byte\n", sizeof(10));       // 정수 상수 10 → int → 4 byte
+    printf("3.14   : %d byte\n", sizeof(3.14));     // 실수 상수 3.14 → double → 8 byte
+    printf("3.14f  : %d byte\n", sizeof(3.14f));    // f 를 붙이면 float → 4 byte
     char name = 'a';
-    printf("변수 name : %d byte\n", sizeof(name));  // char 변수 = 1byte
+    printf("변수 name : %d byte\n", sizeof(name));  // name 은 char 변수 → 1 byte
     return 0;
 }</code></pre>
 <pre class="io"><code class="language-text">char   : 1 byte
@@ -238,18 +238,18 @@ unsigned char : 0 ~ 255
 #include &lt;stdio.h&gt;
 int main() {
     int data = 100;
-    printf("10진수 : %d\n", data);        // %d  → 100
+    printf("10진수 : %d\n", data);        // data = 100 → %d 10진수 그대로 → 100
     printf("8진수  : %o\n", data);        // %o  → 144   (100 = 1×64 + 4×8 + 4)
     printf("16진수 : %x\n", data);        // %x  → 64    (100 = 6×16 + 4)
-    printf("16진수 : %X\n", 255);         // %X  → FF    (대문자 16진수, 소문자 %x 는 ff)
-    printf("문자   : %c\n", 'A');         // %c  → 문자 1개
-    printf("문자열 : %s\n", "안녕하세요");  // %s  → 여러 글자
-    printf("실수   : %f\n", 3.14);        // %f  → 소수점 아래 6자리
-    printf("double : %lf\n", 165.7);     // %lf → double 도 6자리
-    printf("long   : %ld\n", 123456L);   // %ld → long 정수
+    printf("16진수 : %X\n", 255);         // 255 = 15×16 + 15 → 15 = F → %X 대문자 16진수 → FF (소문자 %x 는 ff)
+    printf("문자   : %c\n", 'A');         // 'A' → %c 문자 1개 → A
+    printf("문자열 : %s\n", "안녕하세요");  // "안녕하세요" → %s 문자열 → 안녕하세요
+    printf("실수   : %f\n", 3.14);        // 3.14 → %f 소수점 아래 6자리 → 3.140000
+    printf("double : %lf\n", 165.7);     // 165.7 → %lf 도 소수점 아래 6자리 → 165.700000
+    printf("long   : %ld\n", 123456L);   // 123456L(long) → %ld → 123456
 
     float value = 2.1f;                  // 강의자료 10p
-    printf("float  : %f\n", value);      // 2.100000 (6자리)
+    printf("float  : %f\n", value);      // value = 2.1f → %f 소수점 아래 6자리 → 2.100000
     return 0;
 }</code></pre>
 <pre class="io"><code class="language-text">10진수 : 100
@@ -267,11 +267,11 @@ float  : 2.100000</code></pre>
 #include &lt;stdio.h&gt;
 int main() {
     int data = 7;
-    printf("[%d] [%5d]\n", data, data);                   // %5d : 5칸 오른쪽 맞춤
-    printf("[%5d] [%05d] [%-5d]\n", data, data, data);    // %05d 빈칸을 0 으로 · %-5d 왼쪽 맞춤
-    printf("[%5d] [%5d] [%5d]\n", 7, 77, 777);             // 자릿수가 달라도 오른쪽 끝이 맞는다
-    printf("[%-5d] [%-5d] [%-5d]\n", 7, 77, 777);          // 왼쪽 끝이 맞는다
-    printf("[%2d]\n", 12345);                               // 칸보다 숫자가 길면 그냥 다 찍는다
+    printf("[%d] [%5d]\n", data, data);                   // data = 7 → %d → [7] · %5d 5칸 오른쪽 맞춤 → [    7]
+    printf("[%5d] [%05d] [%-5d]\n", data, data, data);    // %5d → [    7] · %05d 빈칸을 0 으로 → [00007] · %-5d 왼쪽 맞춤 → [7    ]
+    printf("[%5d] [%5d] [%5d]\n", 7, 77, 777);             // 5칸 오른쪽 맞춤 → [    7] [   77] [  777] → 오른쪽 끝이 맞는다
+    printf("[%-5d] [%-5d] [%-5d]\n", 7, 77, 777);          // 5칸 왼쪽 맞춤 → [7    ] [77   ] [777  ] → 왼쪽 끝이 맞는다
+    printf("[%2d]\n", 12345);                               // 12345 는 5자리 &gt; 2칸 → 자르지 않고 다 찍음 → [12345]
     return 0;
 }</code></pre>
 <pre class="io"><code class="language-text">[7] [    7]
@@ -294,16 +294,16 @@ int main() {
 <pre><code class="language-c">// 문자와 ASCII 코드 — 문자는 1byte 정수(ASCII 코드)로 저장된다
 #include &lt;stdio.h&gt;
 int main() {
-    char name = 'a';                        // 'a' 의 ASCII 코드 97 이 저장된다
+    char name = 'a';                        // 'a' → ASCII 코드 97 → 0110 0001 로 저장된다
     printf("%c %d\n", name, name);          // %c → 문자 a · %d → 숫자 97
 
     printf("65의 ASCII 값은 %c입니다.\n", 65); // 강의자료 10p : %c 는 숫자를 문자로 → A
-    printf("'A' 는 %d\n", 'A');              // 65 = 0100 0001
-    printf("'a' 는 %d\n", 'a');              // 97
+    printf("'A' 는 %d\n", 'A');              // 'A' → ASCII 코드 → 65 (0100 0001)
+    printf("'a' 는 %d\n", 'a');              // 'a' → ASCII 코드 → 97
 
     char c1 = 'A';                          // 작은따옴표 = 문자 1개
     char c2 = 65;                           // 숫자 65 를 넣어도 같은 문자 A
-    printf("c1=%c c2=%c\n", c1, c2);
+    printf("c1=%c c2=%c\n", c1, c2);   // c1 = 'A' · c2 = 65 → 둘 다 %c → c1=A c2=A
 
     printf("%s\n", "A");                    // 큰따옴표 = 문자열 → %s
     // ❌ printf("%c", "A");  "A" 는 문자열이라 %c 로 찍으면 안 된다
@@ -343,9 +343,9 @@ int main() {
 #include &lt;stdio.h&gt;
 int main() {
     int a1 = 1000;
-    printf("a1: %d \n", a1);    // 1000
+    printf("a1: %d \n", a1);    // a1 = 1000 → a1: 1000
     a1 = 2000;                  // 변수라서 값이 바뀐다
-    printf("a1: %d \n", a1);    // 2000
+    printf("a1: %d \n", a1);    // a1 = 2000 으로 바뀜 → a1: 2000
     return 0;
 }</code></pre>
 <pre class="io"><code class="language-text">a1: 1000 
@@ -370,12 +370,12 @@ a1: 1000 </code></pre>
 #define DATA1 100
 int main() {
     // ⚠️ 강의자료 13p 는 printf("Even: %d\n, Even"); → 따옴표 위치가 틀려 값이 안 찍힌다
-    printf("Even: %d\n", Even);         // ✅ Even 이 2 로 바뀌어 컴파일된다
+    printf("Even: %d\n", Even);         // ✅ 전처리기가 Even → 2 로 바꿈 → Even: 2
     printf("Message: %s\n", MSG);       // MSG → "===================" 로 바뀐다
 
     const int a1 = 1000;                // const 상수와 같이 쓰기
-    printf("a1 %d DATA: %d\n", a1, DATA1);
-    printf("Even * DATA1 = %d\n", Even * DATA1);   // 2 * 100 으로 바뀌어 계산된다
+    printf("a1 %d DATA: %d\n", a1, DATA1);   // a1 = 1000 · DATA1 → 100 으로 바뀜 → a1 1000 DATA: 100
+    printf("Even * DATA1 = %d\n", Even * DATA1);   // Even → 2 · DATA1 → 100 으로 바뀜 → 2 * 100 → 200
     return 0;
 }</code></pre>
 <pre class="io"><code class="language-text">Even: 2

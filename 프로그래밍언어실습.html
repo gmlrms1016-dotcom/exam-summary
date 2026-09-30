@@ -299,8 +299,8 @@ void func2(void);
 
 int main(void) {
     printf("안녕하세요\n");
-    func2();        // "제 이름은"
-    func1();        // "gdhong 입니다."
+    func2();        // func2() 실행 → printf("제 이름은") → 제 이름은 (\n 없음 → 다음 출력이 바로 뒤에 붙음)
+    func1();        // func1() 실행 → "gdhong 입니다. \n" 이 앞 줄에 이어 붙음 → 제 이름은gdhong 입니다.
     return 0;
 }
 void func1(void) { printf("gdhong 입니다. \n"); }
@@ -447,9 +447,9 @@ int main() {
     a2 = 100;
     a3 = 11.11;        // 11.11 은 double 상수 → float 에 들어가며 11.11 에 가장 가까운 값으로 저장
 
-    printf("a1: %c \n", a1);    // %c 문자
-    printf("a2: %d \n", a2);    // %d 정수
-    printf("a3: %f \n", a3);    // %f 실수 → 소수점 아래 6자리
+    printf("a1: %c \n", a1);    // a1 = 'c' → %c 는 문자로 → a1: c
+    printf("a2: %d \n", a2);    // a2 = 100 → %d 는 10진 정수로 → a2: 100
+    printf("a3: %f \n", a3);    // a3 = 11.11 → %f 는 소수점 아래 6자리 → a3: 11.110000
 
     int a7, a8, a9;             // 한 줄에 여러 변수 선언
     a7 = 300;
@@ -502,22 +502,22 @@ int main() {
         <pre><code class="language-c">// 자료형 크기 — sizeof 결과는 정수라 %d 로 출력
 #include &lt;stdio.h&gt;
 int main() {
-    printf("char   : %d byte\n", sizeof(char));     // 문자형
-    printf("short  : %d byte\n", sizeof(short));    // 정수형
-    printf("int    : %d byte\n", sizeof(int));      // 정수형
-    printf("float  : %d byte\n", sizeof(float));    // 실수형
-    printf("double : %d byte\n", sizeof(double));   // 실수형
+    printf("char   : %d byte\n", sizeof(char));     // 문자형 char → 1byte → char   : 1 byte
+    printf("short  : %d byte\n", sizeof(short));    // 정수형 short → 2byte → short  : 2 byte
+    printf("int    : %d byte\n", sizeof(int));      // 정수형 int → 4byte → int    : 4 byte
+    printf("float  : %d byte\n", sizeof(float));    // 실수형 float → 4byte → float  : 4 byte
+    printf("double : %d byte\n", sizeof(double));   // 실수형 double → 8byte → double : 8 byte
     // long 은 VS(윈도우) 4byte · Mac·Linux 8byte → 강의자료(VS) 기준 4byte
 
     int n = 10;
     double d = 3.14;
-    printf("변수 n : %d byte\n", sizeof(n));        // 변수 이름을 넣어도 된다 → int 크기
-    printf("변수 d : %d byte\n", sizeof(d));        // double 크기
-    printf("10     : %d byte\n", sizeof(10));       // 정수 상수 = int
-    printf("3.14   : %d byte\n", sizeof(3.14));     // 실수 상수 = double
-    printf("3.14f  : %d byte\n", sizeof(3.14f));    // f 를 붙이면 float
+    printf("변수 n : %d byte\n", sizeof(n));        // 변수 이름을 넣어도 된다 → n 은 int → 4 byte
+    printf("변수 d : %d byte\n", sizeof(d));        // d 는 double → 8 byte
+    printf("10     : %d byte\n", sizeof(10));       // 정수 상수 10 → int → 4 byte
+    printf("3.14   : %d byte\n", sizeof(3.14));     // 실수 상수 3.14 → double → 8 byte
+    printf("3.14f  : %d byte\n", sizeof(3.14f));    // f 를 붙이면 float → 4 byte
     char name = 'a';
-    printf("변수 name : %d byte\n", sizeof(name));  // char 변수 = 1byte
+    printf("변수 name : %d byte\n", sizeof(name));  // name 은 char 변수 → 1 byte
     return 0;
 }</code></pre>
         <pre class="io"><code>char   : 1 byte
@@ -574,18 +574,18 @@ unsigned char : 0 ~ 255
 #include &lt;stdio.h&gt;
 int main() {
     int data = 100;
-    printf("10진수 : %d\n", data);        // %d  → 100
+    printf("10진수 : %d\n", data);        // data = 100 → %d 10진수 그대로 → 100
     printf("8진수  : %o\n", data);        // %o  → 144   (100 = 1×64 + 4×8 + 4)
     printf("16진수 : %x\n", data);        // %x  → 64    (100 = 6×16 + 4)
-    printf("16진수 : %X\n", 255);         // %X  → FF    (대문자 16진수, 소문자 %x 는 ff)
-    printf("문자   : %c\n", 'A');         // %c  → 문자 1개
-    printf("문자열 : %s\n", "안녕하세요");  // %s  → 여러 글자
-    printf("실수   : %f\n", 3.14);        // %f  → 소수점 아래 6자리
-    printf("double : %lf\n", 165.7);     // %lf → double 도 6자리
-    printf("long   : %ld\n", 123456L);   // %ld → long 정수
+    printf("16진수 : %X\n", 255);         // 255 = 15×16 + 15 → 15 = F → %X 대문자 16진수 → FF (소문자 %x 는 ff)
+    printf("문자   : %c\n", 'A');         // 'A' → %c 문자 1개 → A
+    printf("문자열 : %s\n", "안녕하세요");  // "안녕하세요" → %s 문자열 → 안녕하세요
+    printf("실수   : %f\n", 3.14);        // 3.14 → %f 소수점 아래 6자리 → 3.140000
+    printf("double : %lf\n", 165.7);     // 165.7 → %lf 도 소수점 아래 6자리 → 165.700000
+    printf("long   : %ld\n", 123456L);   // 123456L(long) → %ld → 123456
 
     float value = 2.1f;                  // 강의자료 10p
-    printf("float  : %f\n", value);      // 2.100000 (6자리)
+    printf("float  : %f\n", value);      // value = 2.1f → %f 소수점 아래 6자리 → 2.100000
     return 0;
 }</code></pre>
         <pre class="io"><code>10진수 : 100
@@ -603,11 +603,11 @@ float  : 2.100000</code></pre>
 #include &lt;stdio.h&gt;
 int main() {
     int data = 7;
-    printf("[%d] [%5d]\n", data, data);                   // %5d : 5칸 오른쪽 맞춤
-    printf("[%5d] [%05d] [%-5d]\n", data, data, data);    // %05d 빈칸을 0 으로 · %-5d 왼쪽 맞춤
-    printf("[%5d] [%5d] [%5d]\n", 7, 77, 777);             // 자릿수가 달라도 오른쪽 끝이 맞는다
-    printf("[%-5d] [%-5d] [%-5d]\n", 7, 77, 777);          // 왼쪽 끝이 맞는다
-    printf("[%2d]\n", 12345);                               // 칸보다 숫자가 길면 그냥 다 찍는다
+    printf("[%d] [%5d]\n", data, data);                   // data = 7 → %d → [7] · %5d 5칸 오른쪽 맞춤 → [    7]
+    printf("[%5d] [%05d] [%-5d]\n", data, data, data);    // %5d → [    7] · %05d 빈칸을 0 으로 → [00007] · %-5d 왼쪽 맞춤 → [7    ]
+    printf("[%5d] [%5d] [%5d]\n", 7, 77, 777);             // 5칸 오른쪽 맞춤 → [    7] [   77] [  777] → 오른쪽 끝이 맞는다
+    printf("[%-5d] [%-5d] [%-5d]\n", 7, 77, 777);          // 5칸 왼쪽 맞춤 → [7    ] [77   ] [777  ] → 왼쪽 끝이 맞는다
+    printf("[%2d]\n", 12345);                               // 12345 는 5자리 &gt; 2칸 → 자르지 않고 다 찍음 → [12345]
     return 0;
 }</code></pre>
         <pre class="io"><code>[7] [    7]
@@ -624,16 +624,16 @@ int main() {
         <pre><code class="language-c">// 문자와 ASCII 코드 — 문자는 1byte 정수(ASCII 코드)로 저장된다
 #include &lt;stdio.h&gt;
 int main() {
-    char name = 'a';                        // 'a' 의 ASCII 코드 97 이 저장된다
+    char name = 'a';                        // 'a' → ASCII 코드 97 → 0110 0001 로 저장된다
     printf("%c %d\n", name, name);          // %c → 문자 a · %d → 숫자 97
 
     printf("65의 ASCII 값은 %c입니다.\n", 65); // 강의자료 10p : %c 는 숫자를 문자로 → A
-    printf("'A' 는 %d\n", 'A');              // 65 = 0100 0001
-    printf("'a' 는 %d\n", 'a');              // 97
+    printf("'A' 는 %d\n", 'A');              // 'A' → ASCII 코드 → 65 (0100 0001)
+    printf("'a' 는 %d\n", 'a');              // 'a' → ASCII 코드 → 97
 
     char c1 = 'A';                          // 작은따옴표 = 문자 1개
     char c2 = 65;                           // 숫자 65 를 넣어도 같은 문자 A
-    printf("c1=%c c2=%c\n", c1, c2);
+    printf("c1=%c c2=%c\n", c1, c2);   // c1 = 'A' · c2 = 65 → 둘 다 %c → c1=A c2=A
 
     printf("%s\n", "A");                    // 큰따옴표 = 문자열 → %s
     // ❌ printf("%c", "A");  "A" 는 문자열이라 %c 로 찍으면 안 된다
@@ -656,9 +656,9 @@ A</code></pre>
 #include &lt;stdio.h&gt;
 int main() {
     int a1 = 1000;
-    printf("a1: %d \n", a1);    // 1000
+    printf("a1: %d \n", a1);    // a1 = 1000 → a1: 1000
     a1 = 2000;                  // 변수라서 값이 바뀐다
-    printf("a1: %d \n", a1);    // 2000
+    printf("a1: %d \n", a1);    // a1 = 2000 으로 바뀜 → a1: 2000
     return 0;
 }</code></pre>
         <pre class="io"><code>a1: 1000 
@@ -683,12 +683,12 @@ a1: 1000 </code></pre>
 #define DATA1 100
 int main() {
     // ⚠️ 강의자료 13p 는 printf("Even: %d\n, Even"); → 따옴표 위치가 틀려 값이 안 찍힌다
-    printf("Even: %d\n", Even);         // ✅ Even 이 2 로 바뀌어 컴파일된다
+    printf("Even: %d\n", Even);         // ✅ 전처리기가 Even → 2 로 바꿈 → Even: 2
     printf("Message: %s\n", MSG);       // MSG → "===================" 로 바뀐다
 
     const int a1 = 1000;                // const 상수와 같이 쓰기
-    printf("a1 %d DATA: %d\n", a1, DATA1);
-    printf("Even * DATA1 = %d\n", Even * DATA1);   // 2 * 100 으로 바뀌어 계산된다
+    printf("a1 %d DATA: %d\n", a1, DATA1);   // a1 = 1000 · DATA1 → 100 으로 바뀜 → a1 1000 DATA: 100
+    printf("Even * DATA1 = %d\n", Even * DATA1);   // Even → 2 · DATA1 → 100 으로 바뀜 → 2 * 100 → 200
     return 0;
 }</code></pre>
         <pre class="io"><code>Even: 2
@@ -809,15 +809,15 @@ int main() {
     int c;
 
     c = a + b;
-    printf("a+b= %d \n", c);     // 31
+    printf("a+b= %d \n", c);     // c = 21 + 10 → 31
     c = a - b;
-    printf("a-b= %d \n", c);     // 11
+    printf("a-b= %d \n", c);     // c = 21 - 10 → 11
     c = a * b;
-    printf("a*b= %d \n", c);     // 210
+    printf("a*b= %d \n", c);     // c = 21 * 10 → 210
     c = a / b;
-    printf("a/b= %d \n", c);     // 2   ← 정수 ÷ 정수 = 몫만 (소수점 버림)
+    printf("a/b= %d \n", c);     // c = 21 / 10 → 2.1 → 정수 ÷ 정수는 몫만(소수점 버림) → 2
     c = a % b;
-    printf("a%%b= %d \n", c);    // 1   ← % 는 나머지 / 글자 % 를 찍으려면 %% 로 써야 한다
+    printf("a%%b= %d \n", c);    // c = 21 % 10 → 21 ÷ 10 = 2 … 나머지 1 → 1 (글자 % 를 찍으려면 %% 로 써야 한다)
     return 0;
 }</code></pre>
         <pre class="io"><code>a+b= 31 
@@ -834,16 +834,16 @@ int main() {
     int c;
 
     c = a;
-    printf("c: %d \n", c);          // 21
-    c += a;                         // c = c + a → 42
+    printf("c: %d \n", c);          // c = a → 21
+    c += a;                         // c = c + a → 21 + 21 → 42
     printf("c+=a: %d \n", c);
-    c -= a;                         // c = c - a → 21
+    c -= a;                         // c = c - a → 42 - 21 → 21
     printf("c-=a: %d \n", c);
-    c *= a;                         // c = c * a → 441
+    c *= a;                         // c = c * a → 21 * 21 → 441
     printf("c*=a: %d \n", c);
-    c /= a;                         // c = c / a → 21
+    c /= a;                         // c = c / a → 441 / 21 → 21
     printf("c/=a: %d \n", c);
-    c %= a;                         // c = c % a → 0
+    c %= a;                         // c = c % a → 21 % 21 → 나머지 0 → 0
     printf("c%%=a: %d \n", c);
     return 0;
 }</code></pre>
@@ -880,8 +880,8 @@ int main() {
     int c;
     int d = 10, e = 10, f = 10, g = 10;
 
-    c = d;          // c=10
-    d = d + 1;      // d=11  (d++ 와 같은 뜻)
+    c = d;          // d(10) 을 c 에 대입 → c=10
+    d = d + 1;      // d = 10 + 1 → d=11 (d++ 와 같은 뜻)
     printf("c,d: %d, %d \n", c, d);
 
     d = 10;
@@ -891,10 +891,10 @@ int main() {
     c = ++e;        // 전위: e 먼저 증가(11) → 그 값을 c 에 대입(11)
     printf("c,e: %d, %d \n", c, e);
 
-    c = f--;        // 후위: c=10, f=9
+    c = f--;        // 후위: 지금 f(10) 을 c 에 먼저 대입 → c=10 → 그다음 f = 10 - 1 → 9
     printf("c,f: %d, %d \n", c, f);
 
-    c = --g;        // 전위: g=9, c=9
+    c = --g;        // 전위: 먼저 g = 10 - 1 → 9 → 그 값을 c 에 대입 → c=9
     printf("c,g: %d, %d \n", c, g);
     return 0;
 }</code></pre>
@@ -921,13 +921,13 @@ int main() {
     printf("a==b: %d \n", c);
     c = a != b;     // 21 != 10 → 참 → 1
     printf("a!=b: %d \n", c);
-    c = a &lt; b;      // 0
+    c = a &lt; b;      // 21 &lt; 10 → 거짓 → 0
     printf("a&lt;b: %d \n", c);
-    c = a &gt; b;      // 1
+    c = a &gt; b;      // 21 &gt; 10 → 참 → 1
     printf("a&gt;b: %d \n", c);
-    c = a &gt;= 21;    // 같아도 참 → 1
+    c = a &gt;= 21;    // 21 &gt;= 21 → 같아도 참 → 1
     printf("a&gt;=21: %d \n", c);
-    c = a &lt;= 20;    // 0
+    c = a &lt;= 20;    // 21 &lt;= 20 → 거짓 → 0
     printf("a&lt;=20: %d \n", c);
     return 0;
 }</code></pre>
@@ -950,11 +950,11 @@ a&lt;=20: 0 </code></pre>
         <pre><code class="language-c">// 논리 연산자 ! &amp;&amp; || — 결과는 참 1 / 거짓 0 (0 이 아니면 모두 참)
 #include &lt;stdio.h&gt;
 int main() {
-    printf("!0 = %d, !1 = %d\n", !0, !1);                       // NOT
-    printf("0&amp;&amp;0=%d 0&amp;&amp;1=%d 1&amp;&amp;0=%d 1&amp;&amp;1=%d\n", 0&amp;&amp;0, 0&amp;&amp;1, 1&amp;&amp;0, 1&amp;&amp;1);   // AND : 둘 다 참일 때만 1
-    printf("0||0=%d 0||1=%d 1||0=%d 1||1=%d\n", 0||0, 0||1, 1||0, 1||1);   // OR  : 하나라도 참이면 1
-    printf("0^0=%d 0^1=%d 1^0=%d 1^1=%d\n", 0^0, 0^1, 1^0, 1^1);           // ^ 는 비트 XOR : 서로 다르면 1
-    printf("3 &amp;&amp; -1 = %d\n", 3 &amp;&amp; -1);                          // 0 이 아닌 수는 모두 참 → 1
+    printf("!0 = %d, !1 = %d\n", !0, !1);                       // NOT: !0 → 거짓의 반대 → 1 · !1 → 참의 반대 → 0 → !0 = 1, !1 = 0
+    printf("0&amp;&amp;0=%d 0&amp;&amp;1=%d 1&amp;&amp;0=%d 1&amp;&amp;1=%d\n", 0&amp;&amp;0, 0&amp;&amp;1, 1&amp;&amp;0, 1&amp;&amp;1);   // AND: 둘 다 참일 때만 1 → 0 0 0 1
+    printf("0||0=%d 0||1=%d 1||0=%d 1||1=%d\n", 0||0, 0||1, 1||0, 1||1);   // OR: 하나라도 참이면 1 → 0 1 1 1
+    printf("0^0=%d 0^1=%d 1^0=%d 1^1=%d\n", 0^0, 0^1, 1^0, 1^1);           // ^ 는 비트 XOR: 서로 다르면 1 → 0 1 1 0
+    printf("3 &amp;&amp; -1 = %d\n", 3 &amp;&amp; -1);                          // 3 → 참 · -1 → 참(0 이 아니면 모두 참) → 참 &amp;&amp; 참 → 1
     printf("!5 = %d\n", !5);                                    // 5 는 참 → NOT → 0
     return 0;
 }</code></pre>
@@ -1040,26 +1040,26 @@ int main() {
         <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — 비트 연산자 &amp; | ^ ~ 와 시프트 &lt;&lt; &gt;&gt;   ★시험문제 ③
 #include &lt;stdio.h&gt;
 int main() {
-    int a = 60;          // 0011 1100
-    int b = 13;          // 0000 1101
+    int a = 60;          // 60 = 32 + 16 + 8 + 4 → 0011 1100
+    int b = 13;          // 13 = 8 + 4 + 1 → 0000 1101
     int c;
 
-    c = a &amp; b;           // 0000 1100 = 12  (둘 다 1 인 자리만 1)
+    c = a &amp; b;           // 0011 1100 &amp; 0000 1101 → 둘 다 1 인 자리만 1 → 0000 1100 → 8 + 4 → 12
     printf("a &amp; b: %d \n", c);
-    c = a | b;           // 0011 1101 = 61  (하나라도 1 이면 1)
+    c = a | b;           // 0011 1100 | 0000 1101 → 하나라도 1 이면 1 → 0011 1101 → 32+16+8+4+1 → 61
     printf("a | b: %d \n", c);
-    c = a ^ b;           // 0011 0001 = 49  (서로 다르면 1)
+    c = a ^ b;           // 0011 1100 ^ 0000 1101 → 서로 다르면 1 → 0011 0001 → 32 + 16 + 1 → 49
     printf("a ^ b: %d \n", c);
-    c = ~a;              // 1100 0011 = -61 (0 ↔ 1 뒤집기 = 1의 보수)
+    c = ~a;              // 0011 1100 → 0 ↔ 1 뒤집기(1의 보수) → 1100 0011 → 맨 앞 1 = 음수 → -(60 + 1) → -61
     printf("~a: %d \n", c);
 
-    c = a &lt;&lt; 2;          // 1111 0000 = 240 (왼쪽으로 2칸 = ×4)
+    c = a &lt;&lt; 2;          // 0011 1100 → 왼쪽으로 2칸 → 1111 0000 → 60 × 4 → 240
     printf("a &lt;&lt; 2: %d \n", c);
-    c = a &gt;&gt; 2;          // 0000 1111 = 15  (오른쪽으로 2칸 = ÷4)
+    c = a &gt;&gt; 2;          // 0011 1100 → 오른쪽으로 2칸 → 0000 1111 → 60 ÷ 4 → 15
     printf("a &gt;&gt; 2: %d \n", c);
-    c &lt;&lt;= 2;             // c = c &lt;&lt; 2 → 15 → 60
+    c &lt;&lt;= 2;             // c = c &lt;&lt; 2 → 15(0000 1111) → 왼쪽 2칸 → 0011 1100 → 60
     printf("c &lt;&lt;= 2: %d \n", c);
-    c &gt;&gt;= 2;             // c = c &gt;&gt; 2 → 60 → 15
+    c &gt;&gt;= 2;             // c = c &gt;&gt; 2 → 60(0011 1100) → 오른쪽 2칸 → 0000 1111 → 15
     printf("c &gt;&gt;= 2: %d \n", c);
     return 0;
 }</code></pre>
@@ -1087,19 +1087,19 @@ c &gt;&gt;= 2: 15 </code></pre>
         <pre><code class="language-c">// 시프트 연산자 — unsigned char data = 0x1A (필기 예제)
 #include &lt;stdio.h&gt;
 int main() {
-    unsigned char data = 0x1A;         // 0001 1010 = 26
+    unsigned char data = 0x1A;         // 0x1A → 1×16 + 10 → 26 → 0001 1010
     unsigned char left, right;
 
-    left = data &lt;&lt; 2;                  // 왼쪽으로 2칸 → 0110 1000 = 104
-    right = data &gt;&gt; 2;                 // 오른쪽으로 2칸 → 0000 0110 = 6
+    left = data &lt;&lt; 2;                  // 0001 1010 → 왼쪽으로 2칸 → 0110 1000 → 26 × 4 → 104
+    right = data &gt;&gt; 2;                 // 0001 1010 → 오른쪽으로 2칸 → 0000 0110 → 26 ÷ 4 = 6 (나머지 버림) → 6
     printf("data=%d, data&lt;&lt;2=%d, data&gt;&gt;2=%d\n", data, left, right);
 
-    data = data &lt;&lt; 2;                  // data 자체를 바꾸면 104
+    data = data &lt;&lt; 2;                  // 26 → 왼쪽 2칸 → 104 (data 자체가 104 로 바뀜)
     data = data &gt;&gt; 2;                  // 104 를 다시 오른쪽 2칸 → 0001 1010 = 26 (원래 값)
     printf("&lt;&lt;2 한 뒤 &gt;&gt;2 : %d\n", data);
 
-    unsigned char x = 0xFF;            // 1111 1111 = 255
-    x &lt;&lt;= 2;                           // x = x &lt;&lt; 2 → 1111 1100 = 252 (넘친 비트는 버려짐)
+    unsigned char x = 0xFF;            // 0xFF → 15×16 + 15 → 255 → 1111 1111
+    x &lt;&lt;= 2;                           // x = x &lt;&lt; 2 → 1111 1111 → 왼쪽 2칸 → 11 1111 1100 → 8비트만 남음(넘친 비트는 버려짐) → 1111 1100 → 252
     printf("0xFF &lt;&lt;= 2 : %d\n", x);
     return 0;
 }</code></pre>
@@ -1116,9 +1116,9 @@ int main() {
         <pre><code class="language-c">// 보수 — 0011 1100 (60)
 #include &lt;stdio.h&gt;
 int main() {
-    int n = 60;                    // 0011 1100
+    int n = 60;                    // 60 = 32 + 16 + 8 + 4 → 0011 1100
     printf("1의 보수 ~n     = %d\n", ~n);        // 1100 0011 → -61  (0 과 1 을 뒤집기)
-    printf("2의 보수 ~n + 1 = %d\n", ~n + 1);    // 1100 0100 → -60  (1의 보수 + 1 = 음수 표현)
+    printf("2의 보수 ~n + 1 = %d\n", ~n + 1);    // ~n = 1100 0011(-61) → + 1 → 1100 0100 → -60 (1의 보수 + 1 = 음수 표현)
     printf("-n              = %d\n", -n);        // 컴퓨터는 음수를 2의 보수로 저장 → -60
     return 0;
 }</code></pre>
@@ -1144,7 +1144,7 @@ int main() {
     printf("0x1A = %d\n", 0x1A);     // 16진수 1A = 1×16 + 10 = 26
     printf("0x5A = %d\n", 0x5A);     // 0101 1010 = 90
     printf("0xDF = %d\n", 0xDF);     // D=13=1101, F=15=1111 → 1101 1111 = 223
-    printf("26 → 8진수 %o, 16진수 %X\n", 26, 26);   // 32, 1A
+    printf("26 → 8진수 %o, 16진수 %X\n", 26, 26);   // 26 = 3×8 + 2 → 8진수 32 · 26 = 1×16 + 10 → 16진수 1A
     return 0;
 }</code></pre>
         <pre class="io"><code>017  = 15
@@ -1157,20 +1157,20 @@ int main() {
         <pre><code class="language-c">// 형변환 연산자 (자료형) · 콤마 연산자 ,
 #include &lt;stdio.h&gt;
 int main() {
-    printf("(int)'A'   = %d\n", (int)'A');       // 문자 A 의 코드값 65
+    printf("(int)'A'   = %d\n", (int)'A');       // 'A' → 문자 A 의 코드값 → 65
     printf("(int)3.14  = %d\n", (int)3.14);      // 소수점 버림 → 3
-    printf("(int)3.46  = %d\n", (int)3.46);      // 반올림 아님 → 3
-    printf("(double)9  = %f\n", (double)9);      // 9.000000
+    printf("(int)3.46  = %d\n", (int)3.46);      // 소수점 버림(반올림 아님) → 3
+    printf("(double)9  = %f\n", (double)9);      // 9 → 실수 9.0 → %f 소수점 6자리 → 9.000000
     printf("(double)3.45 = %f\n", (double)3.45);  // 원래 실수 → 그대로 3.450000 (반올림 X)
-    printf("7 / 2         = %d\n", 7 / 2);       // 정수 ÷ 정수 → 3
-    printf("(double)7 / 2 = %f\n", (double)7 / 2);  // 7.0 / 2 → 3.500000
+    printf("7 / 2         = %d\n", 7 / 2);       // 정수 ÷ 정수 → 3.5 의 몫만 → 3
+    printf("(double)7 / 2 = %f\n", (double)7 / 2);  // (double)7 → 7.0 → 7.0 / 2 → 3.5 → %f → 3.500000
 
     int x, y;
     x = 3 + 4, 5 - 10;          // 대입(=)이 콤마보다 먼저 → x = 7 (5-10 은 계산만 하고 버림)
     y = (3 + 4, 5 - 10);        // 괄호 안은 콤마의 "맨 뒤" 값 → -5
-    printf("x = %d, y = %d\n", x, y);
+    printf("x = %d, y = %d\n", x, y);   // → x = 7, y = -5
     y = (3 + 4, 5 - 10, 2 * 3); // 맨 뒤 2*3 → 6
-    printf("y = %d\n", y);
+    printf("y = %d\n", y);   // → y = 6
     return 0;
 }</code></pre>
         <pre class="io"><code>(int)'A'   = 65
@@ -1237,7 +1237,7 @@ x:2		y:1		z:1 </code></pre>
 int main() {
     int x = 1, y = 1, z = 1;
     ++x, y++;                                            // 콤마로 두 식 실행 → x=2, y=2
-    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // 2 2 1
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // ++x → 2 · y++ → 2 · z 그대로 1 → x:2 y:2 z:1
     printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);    // x++ → 2 를 찍고 3 / --y → 1 로 내리고 1 / z-- → 1 을 찍고 0
     printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // 끝난 뒤 실제 값 3 1 0
     return 0;
@@ -1956,7 +1956,7 @@ int main() {
     for (i = 1; i &lt;= 5; i++) {
         printf("%d, 안녕하세요\n", i);
     }
-    printf("종료-&gt;\ti == %d\n", i);    // i 가 6 이 돼서 i &lt;= 5 가 거짓 → 반복 끝
+    printf("종료-&gt;\ti == %d\n", i);    // i = 5 까지 출력 → i++ → 6 → 6 &lt;= 5 거짓 → 반복 끝 → i == 6
     return 0;
 }</code></pre>
         <pre class="io"><code class="language-text">1, 안녕하세요
@@ -1974,7 +1974,7 @@ int main() {
     int i;
     int sum = 0;                       // 합을 모을 변수는 0 으로 시작
     for (i = 1; i &lt;= 100; i++) {
-        sum += i;                      // sum = sum + i;
+        sum += i;                      // sum = sum + i → 1 + 2 + … + 10 → 55
     }
     printf("sum == %d", sum);
     return 0;
@@ -2002,7 +2002,7 @@ int main(void) {
         printf("반복, 재미있네요!\n");
         count++;
     };                                 // while 뒤의 ; 는 빈 문장이라 결과에 영향 없음
-    printf("\n제어 변수 count =&gt; %d\n", count);   // 반복이 끝난 뒤 count = 4
+    printf("\n제어 변수 count =&gt; %d\n", count);   // count 1, 2, 3 에서 반복 → count++ → 4 → 4 &lt;= 3 거짓 → 끝 → 4
 
     return 0;
 }</code></pre>
@@ -2092,8 +2092,8 @@ int main(void) {
     scanf("%d", &amp;input);
     result = input;
     do {
-        digit = result / devider;      // 385 / 100 = 3
-        result %= devider;             // 385 % 100 = 85 (남은 수)
+        digit = result / devider;      // 예: 385 → 385 / 100 → 3 (백의 자리)
+        result %= devider;             // 385 % 100 → 85 (남은 수)
         printf("%3d단위 출력: %d\n", devider, digit);
         devider /= 10;                 // 100 → 10 → 1 → 0
     } while (devider &gt;= 1);
@@ -2155,14 +2155,14 @@ int main(void) {
     int num = 13;
     printf("정수 %d의 오른쪽 8비트 내부 값:\n", num);
 
-    printf("%d", (num &gt;&gt; 7) &amp; 1);      // 오른쪽 8번째 비트 값 출력
-    printf("%d", num &gt;&gt; 6 &amp; 1);        // 오른쪽 7번째 비트 값 출력 (&gt;&gt; 가 &amp; 보다 먼저)
-    printf("%d", num &gt;&gt; 5 &amp; 1);
-    printf("%d ", num &gt;&gt; 4 &amp; 1);       // 4자리마다 한 칸 띄우기
-    printf("%d", num &gt;&gt; 3 &amp; 1);
-    printf("%d", num &gt;&gt; 2 &amp; 1);
-    printf("%d", num &gt;&gt; 1 &amp; 1);
-    printf("%d\n", num &gt;&gt; 0 &amp; 1);      // 오른쪽 첫 비트 값 출력
+    printf("%d", (num &gt;&gt; 7) &amp; 1);      // 13 = 0000 1101 → 오른쪽 8번째 비트 → 13 &gt;&gt; 7 → 0 → 0 &amp; 1 → 0
+    printf("%d", num &gt;&gt; 6 &amp; 1);        // &gt;&gt; 가 &amp; 보다 먼저 → 13 &gt;&gt; 6 → 0 → 0 &amp; 1 → 0
+    printf("%d", num &gt;&gt; 5 &amp; 1);   // 13 &gt;&gt; 5 → 0 → 0 &amp; 1 → 0
+    printf("%d ", num &gt;&gt; 4 &amp; 1);       // 13 &gt;&gt; 4 → 0 → 0 &amp; 1 → 0 · 뒤에 공백 = 4자리마다 한 칸
+    printf("%d", num &gt;&gt; 3 &amp; 1);   // 13 &gt;&gt; 3 → 1 (1101 → 1) → 1 &amp; 1 → 1
+    printf("%d", num &gt;&gt; 2 &amp; 1);   // 13 &gt;&gt; 2 → 3 (1101 → 11) → 3 &amp; 1 → 1
+    printf("%d", num &gt;&gt; 1 &amp; 1);   // 13 &gt;&gt; 1 → 6 (1101 → 110) → 6 &amp; 1 → 0
+    printf("%d\n", num &gt;&gt; 0 &amp; 1);      // 13 &gt;&gt; 0 → 13 (1101) → 13 &amp; 1 → 1 → 전체 출력 0000 1101
 
     return 0;
 }</code></pre>
@@ -2213,15 +2213,15 @@ for 종료 이후 i =&gt; 6</code></pre>
 int main(void) {
     int i, sum;
     for (i = 1, sum = 0; i &lt;= 10; i++) //++i도 가능
-        sum += i; // sum = sum + i;
+        sum += i; // sum = sum + i → 1 + 2 + … + 10 → 55
     printf("1 ~ 10 합: %d\n", sum);
 
     for (i = 1, sum = 0; i &lt;= 10; )    // 증감식을 비우고
-        sum += i++;                    // 몸체에서 후위 증가 (더한 다음 증가)
+        sum += i++;                    // 후위: 지금 i 를 먼저 더하고 → 그다음 i 증가 → 1 + 2 + … + 10 → 55
     printf("1 ~ 10 합: %d\n", sum);
 
     for (i = 0, sum = 0; i &lt;= 9; )     // 0 부터 시작하면
-        sum += ++i;                    // 전위 증가 (증가한 다음 더함)
+        sum += ++i;                    // 전위: i 를 먼저 1 올리고 → 그 값을 더함 → i = 0 에서 1, 2, …, 10 → 55
     printf("1 ~ 10 합: %d\n", sum);
 
     for (i = 1, sum = 0; i &lt;= 10; sum += i++); //반복 몸체가 없는 for 문
@@ -2247,12 +2247,12 @@ int main(void) {
     scanf("%d", &amp;max);
 
     for (i = 1, sum = 0; i &lt;= max; i++) //++i도 가능
-        sum += i; // sum = sum + i;
+        sum += i; // sum = sum + i → 1 + 2 + … + 10 → 55
     printf("\nfor 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);
 
     i = 1, sum = 0;                    // 초기식
     while (i &lt;= max) {                 // 조건식
-        sum += i; // sum = sum + i;
+        sum += i; // sum = sum + i → 1 + 2 + … + 10 → 55
         i++;      // 증감식 (++i도 가능)
     }
     printf("while 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);
@@ -2357,7 +2357,7 @@ int main(void) {
         scanf("%d", &amp;input);
         if (input == 0)
             break;                     // 0 → while 탈출
-        printf("입력한 정수 %d: 16진수 %#x\n", input, input);   // %#x = 앞에 0x 를 붙인 16진수
+        printf("입력한 정수 %d: 16진수 %#x\n", input, input);   // %#x = 앞에 0x 를 붙인 16진수 (예: 26 → 1×16 + 10 → 0x1a)
     }
     puts("종료");
 
@@ -2401,7 +2401,7 @@ int main(void) {
         scanf("%d", &amp;input);
         if (input &lt;= 0)
             break;                     // do ~ while(1) 도 break 로 빠져나옴
-        printf("정수 %d: 8진수 %#o  16진수 %#x\n", input, input, input);   // %#o = 앞에 0 을 붙인 8진수
+        printf("정수 %d: 8진수 %#o  16진수 %#x\n", input, input, input);   // %#o = 앞에 0 을 붙인 8진수 · %#x = 앞에 0x (예: 26 → 3×8 + 2 → 032 · 1×16 + 10 → 0x1a)
     } while (1);
 
     return 0;

@@ -66,9 +66,9 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <h3>예제 — 형변환(캐스팅) parseInt · Number</h3>
 <pre><code class="language-javascript">// ✍️ 필기 — 형변환(캐스팅): 문자열 "1" → 숫자 1
-console.log(parseInt("1"));                               // 1
-console.log(Number("1"));                                 // 1
-console.log(typeof parseInt("1"), typeof Number("1"));   // 둘 다 number</code></pre>
+console.log(parseInt("1"));                               // 문자열 "1" → 정수로 변환 → 1
+console.log(Number("1"));                                 // 문자열 "1" → 숫자로 변환 → 1
+console.log(typeof parseInt("1"), typeof Number("1"));   // parseInt("1") → 1 · Number("1") → 1 → typeof 1 → number number</code></pre>
 <pre class="io"><code class="language-text">1
 1
 number number</code></pre>
@@ -197,13 +197,13 @@ const clockInterval = setInterval(() =&gt; {
 <div class="tip">📌 출력은 <b>실행한 시각</b>에 따라 달라요 (위는 예시). 노션 필기의 날짜출력 코드는 <code>toLocaleDateString()</code> 이라 <b>날짜만</b> 찍혀요 → <code>현재 시간: 2026. 9. 29.</code></div>
 <h3>🔥 시험 — new Date( ) 안에 2026-01-01 을 쓰면?</h3>
 <pre><code class="language-javascript">// ★ "여기에 2026-01-01을 쓰면 출력결과는?(시험에 나올 수 있음)"
-console.log(2026-01-01);                 // 따옴표가 없으면 그냥 빼기 계산 → 2024
+console.log(2026-01-01);                 // 따옴표 X → 숫자 빼기 → 2026 - 1 - 1 → 2024
 const d1 = new Date(2026-01-01);         // = new Date(2024) → 1970년 1월 1일 0시(UTC) + 2024밀리초
-console.log(d1.toLocaleDateString());    // 1970. 1. 1.
-console.log(d1.toLocaleTimeString());    // 오전 9:00:02 (한국 = UTC+9 → 9시 · 2024밀리초 → 2초)
+console.log(d1.toLocaleDateString());    // 1970-01-01 0시(UTC) + 2024밀리초 → 한국도 같은 날 → 1970. 1. 1.
+console.log(d1.toLocaleTimeString());    // UTC 0시 + 9시간(한국) → 9시 · 2024밀리초 → 2초 → 오전 9:00:02
 const d2 = new Date("2026-01-01");       // 따옴표 O → 날짜 문자열 (UTC 0시)
-console.log(d2.toLocaleDateString());    // 2026. 1. 1.
-console.log(d2.toLocaleTimeString());    // 오전 9:00:00</code></pre>
+console.log(d2.toLocaleDateString());    // "2026-01-01" → UTC 0시 → 한국 9시 → 날짜 그대로 → 2026. 1. 1.
+console.log(d2.toLocaleTimeString());    // UTC 0시 + 9시간(한국) → 오전 9:00:00</code></pre>
 <pre class="io"><code class="language-text">2024
 1970. 1. 1.
 오전 9:00:02
@@ -225,8 +225,8 @@ console.log(d2.toLocaleTimeString());    // 오전 9:00:00</code></pre>
 <pre><code class="language-javascript">// 0929_04.js 배열 구조분해 — index 번호(순서)대로 들어간다
 let arrayObj = [1, 2, 3];
 // 구조분해 전: let a1 = arrayObj[0]; let a2 = arrayObj[1]; let a3 = arrayObj[2]; ← 하나씩
-let [a1, a2, a3, a4] = arrayObj;   // a1=1, a2=2, a3=3, a4 는 짝이 없음
-console.log(a1, a2, a3, a4);</code></pre>
+let [a1, a2, a3, a4] = arrayObj;   // 순서대로 a1 ← [0] = 1 · a2 ← [1] = 2 · a3 ← [2] = 3 · a4 ← [3] 없음 → undefined
+console.log(a1, a2, a3, a4);   // → 1 2 3 undefined</code></pre>
 <pre class="io"><code class="language-text">1 2 3 undefined</code></pre>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — a4 는 <b>error 가 아니라 undefined</b> 이다 (배열에 4번째 값이 없어서)</div>
 <div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 수업 파일 0929_04.js 는 <code>let a1=arrayObj[0];</code> 과 <code>let [a1,a2,a3,a4]</code> 가 <b>둘 다</b> 있어서 그대로 실행하면 <code>SyntaxError: Identifier 'a1' has already been declared</code> (let 은 같은 이름을 다시 선언할 수 없음 → 3주차). 하나씩 꺼내는 세 줄은 주석으로 막고 실행하세요.</div>
@@ -255,8 +255,8 @@ console.log(`이름 : ${name}\n나이 : ${myAge}살\n취미 : ${hobby}\n학교 :
 <pre><code class="language-javascript">// 이름을 바꾼 뒤 age 를 쓰면?
 let person = { name: "윤희근", age: 23, hobby: "테니스" };
 let { age: myAge, name } = person;
-console.log(myAge);   // 23
-console.log(age);     // ← 오류: age 라는 변수는 없다</code></pre>
+console.log(myAge);   // age 값을 myAge 라는 새 이름으로 받음 → myAge = 23 → 23
+console.log(age);     // ← 오류: age 는 myAge 로 이름을 바꿔 받았으니 변수 age 는 없음 → ReferenceError</code></pre>
 <pre class="io"><code class="language-text">23
 ReferenceError: age is not defined</code></pre>
 <h3>비교 — 구조분해 할당을 쓰지 않으면</h3>
@@ -276,7 +276,7 @@ console.log(`이름 : ${n}\n나이 : ${a}살\n취미 : ${h}`);</code></pre>
 <pre><code class="language-javascript">// 0929_04.js 매개변수를 { } 로 받으면 → 넘겨받은 객체를 그 자리에서 구조분해
 let person = { name: "윤희근", age: 23, hobby: "테니스" };
 const func = ({ name, age, hobby, extra }) =&gt; {   // person 에서 같은 이름의 속성을 꺼낸다
-    console.log(name, age, hobby, extra);          // extra 는 person 에 없음 → undefined
+    console.log(name, age, hobby, extra);          // name · age · hobby 는 person 에서 꺼냄 · extra 는 person 에 없음 → undefined → 윤희근 23 테니스 undefined
 }
 func(person);</code></pre>
 <pre class="io"><code class="language-text">윤희근 23 테니스 undefined</code></pre>
@@ -286,7 +286,7 @@ let person = { name: "윤희근", age: 23, hobby: "테니스" };
 const func = (name, age, hobby, extra) =&gt; {   // { } 가 없으면 평범한 매개변수 4개
     console.log(name, age, hobby, extra);
 }
-func(person);   // 인수는 person 하나 → name 에 객체 통째로, 나머지는 받은 값이 없음</code></pre>
+func(person);   // 인수는 person 하나 → name = 객체 통째로 · age · hobby · extra = 받은 값 없음(undefined) → { name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code></pre>
 <pre class="io"><code class="language-text">{ name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code></pre>
 <div class="tip">🔥 <b>정답</b> — <code>{ name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code> (수업 파일 주석과 같음). 중괄호가 있으면 객체에서 <b>속성을 꺼내고</b>, 없으면 첫 번째 매개변수 name 에 <b>객체가 통째로</b> 들어가고 age · hobby · extra 는 넘겨받은 인수가 없어서 <b>undefined</b> (4주차 매개변수 · 인수). 객체는 node 에서 <code>{ key: '값' }</code> 모양으로 찍혀요 (크롬 콘솔은 모양이 조금 달라요).</div>
 </section>

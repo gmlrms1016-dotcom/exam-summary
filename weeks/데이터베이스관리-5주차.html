@@ -199,7 +199,7 @@ SELECT * FROM 직원_뷰;
 INSERT INTO 직원_뷰(이름, 전화번호) VALUES('신재영','010-9999-9999');
 
 SELECT * FROM 직원_뷰;   -- 뷰 조회
-SELECT * FROM 직원;      -- 테이블 조회 → 신재영이 여기에도 들어가 있다</code></pre>
+SELECT * FROM 직원;      -- 뷰에 넣은 신재영 → 기반 테이블 직원에 저장됨 → 직원 조회에도 신재영이 나옴</code></pre>
 <div class="tip">⭐ <b>핵심</b> — 뷰에 넣은 데이터는 <b>기반 테이블(직원)에 들어갑니다</b>. 뷰에 없는 열(주소 · 연봉)은 값을 주지 않았으므로 <b>주소는 NULL, 연봉은 기본값 0</b>이 됩니다.<br>⚠️ <b>내 실습과 다른 점</b> — 강의요약에 적은 CREATE TABLE 은 <code>NOT NULL</code> · <code>DEFAULT 0</code> 없이 만들어서 연봉이 <b>NULL</b>이 됩니다. 또 요약에 <code>CREATE TABLE 작원(</code> 이라고 <b>오타</b>가 있으니 시험 답안에는 <b>직원</b>으로 쓰세요.</div>
 <h3>실습 — 3단계 구조를 뷰로 만들어 보기 (44~47p)</h3>
 <pre><code class="language-sql">use studydb;
