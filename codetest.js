@@ -442,12 +442,31 @@
         });
         return r;
     }
+    // 외래키 오류가 부모 쪽이면(자식이 참조 중인 기본키를 UPDATE · DELETE) MySQL 은 1452 가 아니라 1451
+    function sqlFkParent(db, s) {
+        var m = /^(UPDATE|DELETE\s+FROM)\s+(`[^`]+`|"[^"]+"|[^\s;]+)/i.exec(s);
+        if (!m) return false;
+        if (/^DELETE/i.test(m[1])) return true;                  // 자식 행을 지울 때는 외래키 오류가 나지 않음
+        var t = unq(m[2]);
+        if (sqlRows(db, "SELECT id FROM pragma_foreign_key_list(?)", [t]).length) return false;   // 자기도 외래키가 있으면 자식 쪽 오류로
+        return sqlRows(db, "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'").some(function (x) {
+            return sqlRows(db, "SELECT id FROM pragma_foreign_key_list(?) WHERE \"table\" = ? COLLATE NOCASE", [x.name, t]).length > 0;
+        });
+    }
     // 여러 문장을 차례로 — 오류가 나면 그 문장에서 멈춤 (MySQL Workbench 처럼)
     function sqlExec(db, src) {
         var list = sqlSplit(src || ""), result = null, notes = [];
         for (var k = 0; k < list.length; k++) {
             try { var r = sqlStatement(db, list[k], notes); if (r) result = r; }
-            catch (e) { return { result: result, notes: notes, error: sqlError(e, k + 1, list[k]), count: list.length }; }
+            catch (e) {
+                if (!e.mysql && /FOREIGN KEY constraint failed/.test(String(e.message)) && sqlFkParent(db, list[k])) {
+                    var p = myErr(1451, "Cannot delete or update a parent row: a foreign key constraint fails",
+                        "자식 테이블이 이 기본키 값을 참조하고 있어요 (참조 무결성) — 참조 중인 부모 값은 수정 · 삭제할 수 없어요.");
+                    p.message = e.message + " (" + p.message + ")";
+                    e = p;
+                }
+                return { result: result, notes: notes, error: sqlError(e, k + 1, list[k]), count: list.length };
+            }
         }
         return { result: result, notes: notes, error: null, count: list.length };
     }

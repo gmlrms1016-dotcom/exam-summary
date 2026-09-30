@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202609291935"></script>
+    <script src="theme.js?v=202609301321"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>데이터베이스관리 · 완전 정리</title>
-    <link rel="stylesheet" href="style.css?v=202609291935">
-    <script src="schedule.js?v=202609291935"></script>
+    <link rel="stylesheet" href="style.css?v=202609301321">
+    <script src="schedule.js?v=202609301321"></script>
 </head>
 <body>
 <div class="wrap">
@@ -15,7 +15,7 @@
 
     <header class="page-head">
         <h1>데이터베이스관리 · 완전 정리</h1>
-        <p>1주차 ~ 5주차 · DB 개념 + DBMS + 데이터언어 + 키 5종 + 관계형 데이터 모델 + 뷰(view) + 널 값 + INSERT</p>
+        <p>1주차 ~ 6주차 · DB 개념 + DBMS + 데이터언어 + 키 5종 + 관계형 데이터 모델 + 뷰(view) + 널 값 + INSERT + 무결성 제약조건 + SELECT · UPDATE · DELETE</p>
     </header>
 
     <div id="week-nav" data-subject="데이터베이스관리"></div>
@@ -49,13 +49,19 @@
         <a href="#s21">21.널값</a>
         <a href="#s22">22.INSERT5가지</a>
         <a href="#s23">23.5주차실습SQL</a>
+        <a href="#s24">24.★6주차시험안내</a>
+        <a href="#s25">25.SELECT★</a>
+        <a href="#s26">26.UPDATE·DELETE★</a>
+        <a href="#s27">27.무결성제약조건★</a>
+        <a href="#s28">28.참조무결성실습★</a>
+        <a href="#s29">29.수강키·용어★</a>
         <a href="#quiz">✏️퀴즈</a>
         <a href="#output">🖥️결과맞히기</a>
         <a href="#code">💻코딩테스트</a>
     </nav>
 
     <section class="card" id="red">
-        <h2>🔴 강의자료 빨간 글씨 = 암기<span class="week">3~5주차</span></h2>
+        <h2>🔴 강의자료 빨간 글씨 = 암기<span class="week">3~6주차</span></h2>
         <div class="tip">📌 강의자료 PDF 에서 <b>빨간색 글씨</b>로 표시된 부분은 <b>그대로 외워야 하는 내용</b>입니다. (1·2주차 자료에는 빨간 글씨가 없어요 · 페이지는 강의자료 쪽번호)</div>
         <table class="ref"><tbody style="min-width:520px;">
             <tr><th>주차</th><th>쪽</th><th>빨간 글씨 (암기)</th></tr>
@@ -78,6 +84,10 @@
             <tr><td>5주차</td><td>35</td><td>뷰(view) — <b style="color:#d62828;">가상의 테이블</b></td></tr>
             <tr><td>5주차</td><td>37</td><td><b style="color:#d62828;">널값</b>(Null Value)</td></tr>
             <tr><td>5주차</td><td>3 · 49</td><td>[실습 5-2] 데이터 입력 — <b style="color:#d62828;">널 값</b></td></tr>
+            <tr><td>6주차</td><td>7 · 24</td><td>개체 무결성 — <b style="color:#d62828;">기본키는 널 값을 가질 수 없다</b> / 참조 무결성 — <b style="color:#d62828;">참조하는</b> 테이블의 <b style="color:#d62828;">외래키</b> 값은 <b style="color:#d62828;">참조되는</b> 테이블의 <b style="color:#d62828;">기본키</b> 값에 반드시 존재해야 한다</td></tr>
+            <tr><td>6주차</td><td>14 · 16 · 21</td><td>키 특성 — 수퍼키 <b style="color:#d62828;">유일성</b> / <b style="color:#d62828;">후보키</b> <b style="color:#d62828;">유일성, 최소성</b> / <b style="color:#d62828;">기본키</b> · [요약] 키 — <b style="color:#d62828;">수퍼키 · 후보키 · 기본키 · 대체키 · 외래키</b></td></tr>
+            <tr><td>6주차</td><td>20</td><td>수강 기본키 — PRIMARY KEY<b style="color:#d62828;">(학번, 과목번호)</b></td></tr>
+            <tr><td>6주차</td><td>42 · 46</td><td>[실습 6-2] 주소록 — PRIMARY KEY(<b style="color:#d62828;">이름</b>)</td></tr>
         </tbody></table>
     </section>
 
@@ -625,8 +635,250 @@ SELECT * FROM 사원;</code></pre>
         <div class="tip">📝 <b>과제 (Quiz 6-1 · 6-2)</b> — ① 직원 테이블 + 뷰 만들고 조회 ② <b>생성형 AI</b>로 INSERT 예제 5가지 검색해서 <b>도서</b> 테이블에 적용 · 제출은 <b>프롬프트 + SQL + 실행 화면 캡처</b><br>→ 도서 테이블 SQL 전체는 <a href="weeks/데이터베이스관리-5주차.html">5주차 페이지</a>에 있어요.</div>
     </section>
 
+    <section class="card" id="s24">
+        <h2>24. ★ 중간고사 범위 · 6주차 시험 안내<span class="week">6주차</span></h2>
+        <div class="tip">✍️ <b>필기 — “오늘 하는 실습이 다 중간고사 시험 예상문제임”</b> → 실습 6-1 · Quiz 6-1 · 실습 6-2 · 실습 6-03 을 <a href="#output">🖥️ 결과 맞히기</a> · <a href="#code">💻 코딩테스트</a>의 <b>🔥 6주차 시험예상</b> 묶음에 모두 넣었어요.</div>
+        <table class="ref">
+            <tr><th>구분</th><th>✍️ 6주차 필기 — 중간고사 범위(예정)</th></tr>
+            <tr><td><b>시험범위</b></td><td><b>1 ~ 7주차 내용</b></td></tr>
+            <tr><td>교재(생능)</td><td><b>1 · 2 · 3장</b></td></tr>
+            <tr><td>교재 5장</td><td>p132~147 · p170~174 · p176</td></tr>
+            <tr><td>교재 6장</td><td>CREATE p188~195 · ALTER p195~198 · DROP p198~199 · VIEW p207~210</td></tr>
+        </table>
+        <div class="tip">⭐ 필기의 <b>(중간고사 범위 O · X)</b> — 무결성 제약조건 4가지 중 <b>개체 · 참조 무결성만 중간고사</b>, 키 · 도메인 제약조건은 <b>기말고사</b> → <a href="#s27">27번</a> · 용어는 <b>“같은 말 찾으시오 / 쓰시오”</b>로 나와요 → <a href="#s29">29번</a></div>
+    </section>
+
+    <section class="card" id="s25">
+        <h2>25. SELECT — 관계 연산자 · 실행 순서 · 실습 6-1 ★<span class="week">6주차</span></h2>
+        <h3>✍️ 관계 연산자 (필기)</h3>
+        <table class="ref">
+            <tr><th>뜻</th><th>SQL 기호</th><th>영어 약자</th></tr>
+            <tr><td>초과</td><td><code>&gt;</code></td><td>gt (greater than)</td></tr>
+            <tr><td>이상</td><td><code>&gt;=</code></td><td>gte</td></tr>
+            <tr><td>같다</td><td><code>=</code></td><td>equal</td></tr>
+            <tr><td>같지 않다</td><td><code>&lt;&gt;</code> · <code>!=</code></td><td>ne (not equal)</td></tr>
+            <tr><td>이하</td><td><code>&lt;=</code></td><td>lte</td></tr>
+            <tr><td>미만</td><td><code>&lt;</code></td><td>lt (less than)</td></tr>
+        </table>
+        <div class="tip">⚠️ <b>필기 정정</b> — 이하를 <code>let</code> 으로 적었는데 <b><code>lte</code></b>(less than or equal) 예요. SQL 의 “같다”는 <code>==</code> 가 아니라 <b><code>=</code> 하나</b>입니다.</div>
+        <h3>✍️ SELECT 문 — 실행 순서</h3>
+        <pre><code>SELECT 필드명      -- ③ 보여 줄 열을 고른다
+FROM   테이블명    -- ① 어느 테이블에서
+WHERE  조건절;     -- ② 조건에 맞는 행(레코드)만 남기고</code></pre>
+        <div class="tip">✍️ <b>필기</b> — 쓰는 순서는 SELECT → FROM → WHERE 지만 <b>실행(컴파일) 순서는 ① FROM → ② WHERE → ③ SELECT</b></div>
+        <h3>[실습 6-1] 데이터 조회 — customer</h3>
+        <pre><code>-- customer(cno, cname, city, point)
+CREATE TABLE customer (
+      cno        char(4)         NOT NULL   ,
+      cname     varchar(10)    NOT NULL ,
+      city         varchar(20) ,
+      point      int ,
+      PRIMARY KEY(cno)
+);
+insert into customer values('c101','홍길동','서울',500);
+insert into customer values('c102','임꺽정','인천',300);
+insert into customer values('c103','박찬호','안양',800);
+insert into customer values('c204','신동엽','과천',350);
+insert into customer values('c205','정진우','고양',400);
+
+-- 1) customer 테이블을 검색하라
+SELECT *
+FROM customer;
+
+-- 2) customer 테이블에서 cname, city 검색하라
+SELECT cname, city
+FROM customer;
+
+-- 3) cno가 c101 인 고객을 검색
+SELECT *
+FROM customer
+WHERE cno="c101";
+
+-- 4) customer 테이블에서 point가 400 이하인 고객을 검색하라
+SELECT *
+FROM customer
+WHERE point&lt;=400;</code></pre>
+        <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 4) point &lt;= 400 결과 (실행 결과)</div><div class="ct-tblwrap"><table class="ct-tbl"><tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr><tr><td>c102</td><td>임꺽정</td><td>인천</td><td>300</td></tr><tr><td>c204</td><td>신동엽</td><td>과천</td><td>350</td></tr><tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr></table></div></div></div>
+        <div class="tip">⭐ <b>400 이하</b> = <code>&lt;=</code> 라서 point 가 <b>딱 400 인 정진우도 나와요</b> (400 미만이면 <code>&lt;</code> → 2명). 내 실습은 <code>"c101"</code> 큰따옴표 — MySQL 은 되지만 문자는 <b>작은따옴표 <code>'c101'</code></b> 가 기본(4주차 필기)이니 답안은 작은따옴표로.</div>
+        <h3>[Quiz 6-1] SELECT 문법 — 직원 (내 답)</h3>
+        <pre><code>-- 직원(이름, 주소, 전화번호, 연봉)   ← 데이터 6건은 23번과 같음
+-- 1) 직원 테이블을 검색하라
+select * from 직원;
+
+-- 2) 직원 테이블에서 이름,전화번호 검색
+SELECT 이름,전화번호
+FROM 직원;
+
+-- 3) 이름이 우태하인 직원을 검색
+SELECT *
+FROM 직원
+WHERE 이름="우태하";
+
+-- 4) 직원 테이블에서 연봉이 4000 이하인 직원을 검색하라
+SELECT *
+FROM 직원
+WHERE 연봉&lt;=4000;</code></pre>
+        <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 4) 연봉 &lt;= 4000 결과 (실행 결과 · 행 순서는 기본키 순)</div><div class="ct-tblwrap"><table class="ct-tbl"><tr><th>이름</th><th>주소</th><th>전화번호</th><th>연봉</th></tr><tr><td>김선우</td><td>서울시 구로구</td><td>010-2222-2222</td><td>2000</td></tr><tr><td>우태하</td><td>서울시 서초구</td><td>010-1111-1111</td><td>1000</td></tr><tr><td>유희정</td><td>서울시 마포구</td><td>010-4444-4444</td><td>4000</td></tr><tr><td>이영지</td><td>서울시 마포구</td><td>010-3333-3333</td><td>3000</td></tr></table></div></div></div>
+    </section>
+
+    <section class="card" id="s26">
+        <h2>26. 데이터 조작 — INSERT(NULL) · UPDATE · DELETE (실습 6-2) ★<span class="week">6주차</span></h2>
+        <table class="ref">
+            <tr><th>명령</th><th>문법</th><th>단위</th></tr>
+            <tr><td><b>SELECT</b> 조회</td><td><code>SELECT 필드명 FROM 테이블명 WHERE 조건;</code></td><td>필드(열)</td></tr>
+            <tr><td><b>INSERT</b> 입력</td><td><code>INSERT INTO 테이블명(필드명, …) VALUES(값, …);</code></td><td>레코드 추가</td></tr>
+            <tr><td><b>UPDATE</b> 수정</td><td><code>UPDATE 테이블명 SET 필드명 = 수정후값 WHERE 필드명 = 값;</code></td><td>필드(열)</td></tr>
+            <tr><td><b>DELETE</b> 삭제</td><td><code>DELETE FROM 테이블명 WHERE 필드명 = 값;</code></td><td><b>레코드(행) 통째로</b></td></tr>
+        </table>
+        <pre><code>-- 주소록(이름, 전화번호, 주소, 생일)
+DROP TABLE if exists 주소록;
+CREATE TABLE 주소록(
+    이름        char(10)           NOT NULL ,
+    전화번호  char(13) ,
+    주소        varchar(10) ,
+    생일        varchar(11) ,
+    PRIMARY KEY(이름)
+);
+INSERT INTO 주소록 VALUES('홍길동','010-1234-5678','서울','3월 15일');
+INSERT INTO 주소록 VALUES('이몽룡','010-3354-5643','부산','12월 14일');
+INSERT INTO 주소록 VALUES('최용만','321-2345','대전','5월 8일');
+
+-- (MySQL) safe mode 해제
+SET SQL_SAFE_UPDATES = 0;
+
+-- [지시사항] 이건우의 데이터를 입력하시오 (널 값)
+INSERT INTO 주소록 VALUES('이건우','010-2132-2345', NULL, NULL);
+-- 둘다 같은말 ✍️ (둘 중 하나만!)
+INSERT INTO 주소록(이름,전화번호) VALUES('이건우','010-2132-2345');</code></pre>
+        <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 이건우 입력 후 select * from 주소록 (실행 결과)</div><div class="ct-tblwrap"><table class="ct-tbl"><tr><th>이름</th><th>전화번호</th><th>주소</th><th>생일</th></tr><tr><td>이건우</td><td>010-2132-2345</td><td><span class="ct-null">NULL</span></td><td><span class="ct-null">NULL</span></td></tr><tr><td>이몽룡</td><td>010-3354-5643</td><td>부산</td><td>12월 14일</td></tr><tr><td>최용만</td><td>321-2345</td><td>대전</td><td>5월 8일</td></tr><tr><td>홍길동</td><td>010-1234-5678</td><td>서울</td><td>3월 15일</td></tr></table></div></div></div>
+        <div class="tip">⚠️ <b>필기 정정</b> — ① “둘다 같은말” = 결과가 같은 <b>두 가지 방법</b>이라 <b>하나만</b> 실행해요. 둘 다 실행하면 이름(기본키) '이건우'가 겹쳐 <b>Error 1062 Duplicate entry</b>. ② 필기의 <code>INSERT INTO주소록(…)</code> 은 <b>띄어쓰기가 빠져</b> <b>Error 1064</b>(문법 오류) → <code>INSERT INTO 주소록(…)</code></div>
+        <pre><code>-- 1. 홍길동의 전화번호를 '010-3245-4368' 로 수정하라
+UPDATE 주소록
+SET 전화번호="010-3245-4368"
+WHERE 이름='홍길동';
+
+-- 2. 이건우의 주소는 '서울', 생일은 '8월 23일' 로 수정하라
+UPDATE 주소록
+SET 주소='서울',생일='8월23일'          -- 여러 필드는 쉼표로
+WHERE 이름='이건우';
+
+-- 3. 최용만의 레코드를 삭제하라
+DELETE
+FROM 주소록
+WHERE 이름='최용만';
+
+SELECT * FROM 주소록;</code></pre>
+        <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 1 · 2 · 3 실행 후 select * from 주소록 (실행 결과)</div><div class="ct-tblwrap"><table class="ct-tbl"><tr><th>이름</th><th>전화번호</th><th>주소</th><th>생일</th></tr><tr><td>이건우</td><td>010-2132-2345</td><td>서울</td><td>8월23일</td></tr><tr><td>이몽룡</td><td>010-3354-5643</td><td>부산</td><td>12월 14일</td></tr><tr><td>홍길동</td><td>010-3245-4368</td><td>서울</td><td>3월 15일</td></tr></table></div></div></div>
+        <div class="tip">✍️ <b>필기 — DELETE 주의사항</b> · DELETE 는 <b>레코드 단위(한 줄)</b>로 지우는 거라 <b>필드명이나 <code>*</code> 를 안 써요</b> (SELECT · UPDATE 는 필드 단위) → <code>DELETE FROM 주소록 …</code> ✅ · <code>DELETE * FROM …</code> ❌<br>
+        ✍️ <b>필기</b> — WHERE 절에 이름 말고 전화번호 · 주소 같은 필드를 써도 작동해요.<br>
+        ⚠️ 다만 그 값이 <b>여러 행에 있으면 전부 지워져요</b> — 예) 2번 뒤에 <code>WHERE 주소='서울'</code> 로 지우면 홍길동 · 이건우 <b>2명이 삭제</b>. 한 명만 지우려면 <b>기본키(이름)</b>로 지정하는 게 안전해요 (💻 코딩테스트 16번의 숨은 테스트가 이걸 확인해요).</div>
+    </section>
+
+    <section class="card" id="s27">
+        <h2>27. 무결성 제약조건 4가지 ★시험<span class="week">6주차</span></h2>
+        <div class="tip">🛡️ <b>무결성(integrity)</b> = 데이터의 <b>정확성</b> · 제약조건 = constraint<br>⚠️ <b>필기 철자 정정</b> — <code>intergrity constranint</code> → <b>integrity constraint</b> · <code>PRIMART KEY</code> → <b>PRIMARY KEY</b> · <code>FORIGEN KEY</code> → <b>FOREIGN KEY</b></div>
+        <table class="ref"><tbody style="min-width:560px;">
+            <tr><th>#</th><th>제약조건</th><th>내용</th><th>SQL</th><th>✍️ 범위</th></tr>
+            <tr><td>1</td><td><b>개체 무결성</b><br>(엔티티 무결성)</td><td><b style="color:#d62828;">기본키는 널 값을 가질 수 없다</b></td><td><code>PRIMARY KEY</code></td><td><b>중간 O</b></td></tr>
+            <tr><td>2</td><td><b>참조 무결성</b><br>★시험문제</td><td><b style="color:#d62828;">참조하는</b> 테이블의 <b style="color:#d62828;">외래키</b> 값은 <b style="color:#d62828;">참조되는</b> 테이블의 <b style="color:#d62828;">기본키</b> 값에 <b>반드시 존재해야 한다</b></td><td><code>FOREIGN KEY</code></td><td><b>중간 O</b></td></tr>
+            <tr><td>3</td><td>키 제약조건</td><td>키는 중복된 값을 갖지 않는다</td><td><code>UNIQUE</code></td><td>기말</td></tr>
+            <tr><td>4</td><td>도메인 제약조건</td><td>값의 범위 · 기본값 지정</td><td><code>CHECK</code> · <code>DEFAULT</code></td><td>기말</td></tr>
+        </tbody></table>
+        <div class="tip">✍️ <b>필기 — 꼭 “개체”</b> 라고 써야 해요. <b>“객체” 무결성이라고 쓰면 오답</b>.<br>
+        ✍️ <b>필기 — 참조 무결성 빈칸 (시험문제!)</b> · 참조<b>“하는”</b> 테이블의 <b>“외래키”</b> 값은 참조<b>“되는”</b> 테이블의 <b>“기본키”</b> 값에 반드시 있어야 한다 → <b>하는 = 자식(외래키)</b> · <b>되는 = 부모(기본키)</b> (빨간 글씨 7 · 24p)</div>
+        <h3>참조 무결성 — 부모 · 자식 테이블에서 검사하는 것 (7 · 24p)</h3>
+        <table class="ref"><tbody style="min-width:520px;">
+            <tr><th></th><th>부모 테이블 (참조<b>되는</b> · 기본키)</th><th>자식 테이블 (참조<b>하는</b> · 외래키)</th></tr>
+            <tr><td><b>입력</b></td><td><b>제약 없음</b> ✍️ O</td><td>부모 테이블에 그 값이 있는지 검증</td></tr>
+            <tr><td><b>수정</b></td><td>수정하려는 값을 자식이 참조하고 있는지 검증</td><td>부모에 있는 <b>다른 값으로만</b> 변경 가능</td></tr>
+            <tr><td><b>삭제</b></td><td>삭제하려는 값을 자식이 참조하고 있는지 검증</td><td><b>제약 없음</b> ✍️ O</td></tr>
+        </tbody></table>
+        <div class="tip">✍️ 필기 표의 <b>O 두 칸(부모 입력 · 자식 삭제) = “제약 없음”</b> 칸이에요. 나머지 4칸은 DBMS 가 검사합니다.</div>
+        <h3>[Quiz] 25p — 참조 무결성 만족 여부를 <u>검사할 필요가 있는</u> 항목에 O</h3>
+        <table class="ref">
+            <tr><th></th><th>INSERT</th><th>UPDATE</th><th>DELETE</th></tr>
+            <tr><td>외래키에 의해 참조되는 기본키 (부모)</td><td></td><td><b>O</b></td><td><b>O</b></td></tr>
+            <tr><td>외래키 (자식)</td><td><b>O</b></td><td><b>O</b></td><td></td></tr>
+        </table>
+        <div class="tip">⚠️ <b>필기 정정</b> — 필기 표는 <b>부모 INSERT · 자식 DELETE</b> 에 O 를 쳤는데, 그 두 칸은 <b>검사할 필요가 없는(제약 없음)</b> 칸이에요. 25p 문제는 <b>검사할 필요가 “있는”</b> 항목에 O → 정답은 <b>부모 UPDATE · DELETE, 자식 INSERT · UPDATE</b> (위 표). 실제로 실행해 보면 이 4가지에서만 오류가 나요 → <a href="#s28">28번</a></div>
+    </section>
+
+    <section class="card" id="s28">
+        <h2>28. [실습 6-03] 참조 무결성 — 부서 · 사원 (8 · 9p) ★<span class="week">6주차</span></h2>
+        <div class="tip">📸 <b>캡처</b> — 부모 = <b>부서</b>(기본키 부서코드) · 자식 = <b>사원</b>(외래키 부서코드 → 부서.부서코드). “다음 문법을 실행하라. 실행 가능한가? 그 이유는?”</div>
+        <pre><code>-- 부서(부서코드, 부서명)          ← 부모 테이블
+-- 사원(사원번호, 이름, 부서코드)    ← 자식 테이블 (부서코드 = 외래키)
+drop table 사원;      -- 삭제는 자식 먼저
+drop table 부서;
+
+CREATE TABLE 부서 (                -- 생성은 부모 먼저
+        부서코드 char(2)     NOT NULL ,
+        부서명    varchar(10) ,
+        PRIMARY KEY(부서코드)
+);
+CREATE TABLE 사원 (
+        사원번호 char(4)     NOT NULL ,
+        이름     varchar(12) ,
+        부서코드 char(2) ,
+        PRIMARY KEY(사원번호) ,
+        FOREIGN KEY (부서코드) REFERENCES 부서(부서코드)
+);
+insert into 부서 values('AA','총무부');
+insert into 부서 values('BB','영업부');
+insert into 부서 values('CC','기획부');
+
+insert into 사원 values('1111','홍길동','AA');
+insert into 사원 values('2222','임꺽정','AA');
+insert into 사원 values('3333','박찬호','BB');
+insert into 사원 values('4444','선동열','BB');
+insert into 사원 values('5555','차두리','AA');
+insert into 사원 values('6666','신동엽','BB');</code></pre>
+        <div class="tip" style="font-size:13px;">↔️ 칸이 많은 표입니다. 폰에서는 표를 <b>옆으로 밀어서</b> 보세요. (위에서부터 차례로 실행한 실제 결과)</div>
+        <table class="ref"><tbody style="min-width:640px;">
+            <tr><th>번호</th><th>SQL</th><th>결과</th><th>이유</th></tr>
+            <tr><td><b>1-1</b></td><td><code>INSERT INTO 사원 VALUES('7777','이승엽','BB');</code></td><td>✅ 성공</td><td>자식 입력 — 부서에 <b>BB 가 있음</b></td></tr>
+            <tr><td><b>1-2</b></td><td><code>UPDATE 부서 SET 부서코드='DD' WHERE 부서코드='BB';</code></td><td>❌ Error 1451</td><td>부모 수정 — 사원(3333 · 4444 · 6666 · 7777)이 <b>BB 를 참조 중</b></td></tr>
+            <tr><td><b>1-3</b></td><td><code>INSERT INTO 부서 VALUES('DD','개발부');</code></td><td>✅ 성공</td><td>부모 입력 — <b>제약 없음</b></td></tr>
+            <tr><td><b>1-4</b></td><td><code>DELETE FROM 부서 WHERE 부서코드='DD';</code></td><td>✅ 성공</td><td>부모 삭제 — DD 를 <b>참조하는 사원이 없음</b></td></tr>
+            <tr><td><b>1-5</b></td><td><code>UPDATE 사원 SET 부서코드='AA' WHERE 사원번호='7777';</code></td><td>✅ 성공</td><td>자식 수정 — 부모에 있는 <b>다른 값(AA)</b>으로 변경</td></tr>
+            <tr><td><b>1-6</b></td><td><code>UPDATE 사원 SET 부서코드='FF' WHERE 사원번호='7777';</code></td><td>❌ Error 1452</td><td>자식 수정 — 부서에 <b>FF 가 없음</b></td></tr>
+            <tr><td><b>1-7</b></td><td><code>DELETE FROM 사원 WHERE 사원번호='7777';</code></td><td>✅ 성공</td><td>자식 삭제 — <b>제약 없음</b></td></tr>
+        </tbody></table>
+        <div class="tip">🧾 <b>오류 메시지</b> — <b>1451</b> Cannot delete or update a <b>parent</b> row (부모 쪽 수정 · 삭제) · <b>1452</b> Cannot add or update a <b>child</b> row (자식 쪽 입력 · 수정)<br>⭐ 오류가 나는 건 <b>부모 수정 · 부모 삭제(참조 중일 때) · 자식 입력 · 자식 수정(부모에 없는 값)</b> — 27번 25p 표의 O 4칸과 같아요. 테이블 만들기 · 지우기 순서는 <a href="#s10">10번</a></div>
+    </section>
+
+    <section class="card" id="s29">
+        <h2>29. 수강 테이블의 키 · 용어 “같은 말” ★시험<span class="week">6주차</span></h2>
+        <h3>📸 키(Key) — 학생 · 수강 · 과목 (19p 캡처)</h3>
+        <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 수강 (19p) — 학생(학번, 학생명, 학년) · 과목(과목번호, 과목명)과 연결</div><div class="ct-tblwrap"><table class="ct-tbl"><tr><th>학번</th><th>과목번호</th><th>성적</th></tr><tr><td>1111</td><td>CS100</td><td>98</td></tr><tr><td>1111</td><td>CS102</td><td>88</td></tr><tr><td>2222</td><td>CS102</td><td>90</td></tr><tr><td>3333</td><td>CS100</td><td>92</td></tr></table></div></div></div>
+        <pre><code>-- 수강(학번, 과목번호, 성적)       ✍️ 내 답
+1. 수퍼키 : (학번, 과목번호) , (학번, 과목번호, 성적)
+2. 후보키 : (학번, 과목번호)
+3. 기본키 : (학번, 과목번호)       ← 빨간 글씨 20p PRIMARY KEY(학번, 과목번호)
+4. 대체키 : 없다</code></pre>
+        <div class="tip">🤖 <b>설명</b> (필기 “claude야 여기 설명해”)<br>
+        · <b>학번 하나로는 X</b> — 1111 이 두 번(CS100 · CS102) · <b>과목번호 하나로도 X</b> — CS102 가 두 번, CS100 도 두 번<br>
+        · <b>(학번, 과목번호)</b> 를 합치면 모든 행이 달라요 → <b>유일성 O</b>, 둘 중 하나라도 빼면 겹치니 <b>최소성 O</b> → <b>후보키</b><br>
+        · 후보키가 <b>하나뿐</b>이라 그대로 <b>기본키</b>(복합키) → 기본키로 안 뽑힌 후보키가 없으니 <b>대체키는 없다</b><br>
+        · 수퍼키는 <b>유일성만</b> 있으면 돼서 후보키에 성적을 붙인 <b>(학번, 과목번호, 성적)</b> 도 수퍼키 — 내 답 1~4번 모두 맞아요 ✅<br>
+        · 외래키 — 수강.학번 → 학생.학번 · 수강.과목번호 → 과목.과목번호 (수강이 두 테이블을 잇는 자식)</div>
+        <div class="tip">❓ <b>“다음은 후보키인가? 이유를 쓰시오 — (학번, 과목번호, 성적)”</b><br>→ <b>후보키가 아니다.</b> 유일성은 있지만, 성적을 빼도 <b>(학번, 과목번호)</b> 만으로 유일하게 구별되므로 <b>최소성을 만족하지 않는다</b> → 후보키가 아니라 <b>수퍼키</b>.<br>⚠️ 함정 — 지금 데이터만 보면 성적(98 · 88 · 90 · 92)도 안 겹치지만, 성적은 <b>같은 점수가 나올 수 있는 값</b>이라 키가 될 수 없어요. 키는 지금 들어 있는 값이 아니라 <b>속성의 의미</b>로 정해요.</div>
+        <h3>✍️ 용어 — 같은 말 찾기 · 쓰기 (중간고사 용어문제)</h3>
+        <table class="ref">
+            <tr><th>✍️ 외우는 법</th><th>같은 말</th></tr>
+            <tr><td>—</td><td><b>테이블 = 릴레이션</b>(relation)</td></tr>
+            <tr><td><b>투레행</b></td><td><b>투플</b>(tuple) = <b>레코드</b>(record) = <b>행</b>(row)</td></tr>
+            <tr><td><b>필속열</b></td><td><b>필드</b>(field) = <b>속성</b>(attribute · 애트리뷰트) = <b>열</b>(column) = 컬럼</td></tr>
+            <tr><td>차수(degree)</td><td><b>필드(열)의 개수</b></td></tr>
+            <tr><td>카디날리티(cardinality)</td><td><b>레코드(행)의 개수</b></td></tr>
+        </table>
+        <div class="tip">✍️ <b>필기</b> — 투플(행)들의 <b>모음 = 인스턴스</b> · <b>DELETE 의 삭제 단위 = 레코드(행)</b> (필기의 <code>DELECT</code> 는 DELETE 오타)<br>
+        📸 <b>13p 캡처</b> — 릴레이션 <b>스키마</b> = <b>내포</b>(intension) · <b>정적</b> / 릴레이션 <b>인스턴스</b> = <b>외연</b>(extension) · <b>동적</b><br>
+        예) 사원 — 스키마 = <code>사원번호 | 사원명 | 연락처 | 생일</code> 머리글 한 줄 · 인스턴스 = D001 · D002 · D003 행들 (연락처 빈칸 = <code>''</code>, NULL = 널 값). 복습은 <a href="#s11">11번</a> · <a href="#s15">15번</a></div>
+    </section>
+
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 20 · 주관식 20<span class="week">1~5주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 25 · 주관식 25<span class="week">1~6주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -790,6 +1042,46 @@ SELECT * FROM 사원;</code></pre>
             <button class="opt" type="button" data-opt="D"><b>D.</b> 기본키를 지정한다</button>
             <div class="mcq-exp"><b>정답 B</b> — 뷰 이름 뒤 괄호는 <b>뷰의 열 이름</b>입니다. 원래 테이블의 번호 → 고객번호처럼 보여 주는 이름만 바뀝니다.</div>
         </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">21</span><code>SELECT 필드명 FROM 테이블명 WHERE 조건절;</code> 이 <b>실행되는 순서</b>로 옳은 것은? (6주차 필기)</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> SELECT → FROM → WHERE</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> WHERE → FROM → SELECT</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> FROM → WHERE → SELECT</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> FROM → SELECT → WHERE</button>
+            <div class="mcq-exp"><b>정답 C</b> — 쓰는 순서와 달리 <b>① FROM(어느 테이블) → ② WHERE(행 고르기) → ③ SELECT(열 고르기)</b> 순서로 실행돼요.</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">22</span>[실습 6-03] 부서(부서코드 AA · BB · CC) · 사원(외래키 부서코드) 에서 <b>오류가 나는</b> 문장은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>INSERT INTO 사원 VALUES('7777','이승엽','BB');</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>UPDATE 사원 SET 부서코드='FF' WHERE 사원번호='7777';</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>INSERT INTO 부서 VALUES('DD','개발부');</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>DELETE FROM 사원 WHERE 사원번호='7777';</code></button>
+            <div class="mcq-exp"><b>정답 B</b> — 부서에 <b>FF 가 없어서</b> 자식(사원)의 외래키를 FF 로 바꿀 수 없어요 → <b>Error 1452</b> (참조 무결성). A 는 BB 가 있어서, C 는 부모 입력이라, D 는 자식 삭제라 제약이 없어요.</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">23</span>참조 무결성 제약조건을 <b>검사할 필요가 없는</b> 경우는? (25p Quiz)</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 자식 테이블에 INSERT</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 자식 테이블의 외래키를 UPDATE</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 부모 테이블에서 참조 중인 행을 DELETE</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 부모 테이블에 INSERT</button>
+            <div class="mcq-exp"><b>정답 D</b> — 부모 <b>입력</b>과 자식 <b>삭제</b>는 <b>제약 없음</b>. 검사가 필요한 것 = 부모 UPDATE · DELETE, 자식 INSERT · UPDATE</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">24</span>같은 뜻끼리 짝지은 것으로 <b>틀린</b> 것은? (용어 “같은 말” 문제)</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 투플 = 레코드 = 행</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 속성 = 필드 = 열</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 릴레이션 = 테이블</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 카디날리티 = 필드(열)의 개수</button>
+            <div class="mcq-exp"><b>정답 D</b> — 카디날리티 = <b>레코드(행)의 개수</b> · 필드(열)의 개수는 <b>차수</b>(degree). 외우는 법 — <b>투레행 · 필속열</b></div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">25</span><b>개체 무결성 제약조건</b>에 대한 설명으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 외래키 값은 참조되는 테이블의 기본키 값에 반드시 존재해야 한다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 기본키는 널(NULL) 값을 가질 수 없다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 키는 중복된 값을 갖지 않는다 (UNIQUE)</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> CHECK · DEFAULT 로 값의 범위를 제한한다</button>
+            <div class="mcq-exp"><b>정답 B</b> — 개체(엔티티) 무결성 = <b>기본키는 널 값을 가질 수 없다</b> · A 참조 무결성 · C 키 제약조건 · D 도메인 제약조건 (C · D 는 기말)</div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers="DBA" data-explain="DBA = 데이터베이스 관리자 (DDL·DCL 담당)">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>DB 를 구축하고 시스템을 운영·통제하는 <b>슈퍼유저</b>를 영문 약자로 쓰면?</p>
@@ -911,12 +1203,42 @@ SELECT * FROM 사원;</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
+        <div class="quiz-item" data-answers="개체무결성|개체 무결성|개체무결성제약조건|개체 무결성 제약조건|엔티티무결성|엔티티 무결성|엔티티무결성제약조건|엔티티 무결성 제약조건" data-explain="개체(엔티티) 무결성 제약조건 — ✍️ “객체”라고 쓰면 오답이에요!">
+            <p class="quiz-q"><span class="quiz-cat">주관식 21</span>“<b>기본키는 널 값을 가질 수 없다</b>” 는 무결성 제약조건은? (두 글자 + 무결성)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="하는,되는|하는되는|①하는②되는" data-explain="참조“하는” 테이블(자식)의 외래키 값은 참조“되는” 테이블(부모)의 기본키 값에 반드시 존재해야 한다">
+            <p class="quiz-q"><span class="quiz-cat">주관식 22</span>참조 무결성 — 참조( ① ) 테이블의 외래키 값은 참조( ② ) 테이블의 기본키 값에 반드시 존재해야 한다. ① · ② 를 순서대로 쉼표로 쓰시오. (✍️ 시험문제 빈칸)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="레코드|행|투플|row|record|tuple|레코드행|행레코드" data-explain="DELETE 는 레코드(행 · 투플) 한 줄을 통째로 지워서 DELETE FROM 테이블명 WHERE … 처럼 필드명을 쓰지 않아요.">
+            <p class="quiz-q"><span class="quiz-cat">주관식 23</span>DELETE 는 ______ 단위로 지우기 때문에 SELECT · UPDATE 처럼 필드명이나 <code>*</code> 를 쓰지 않는다. 빈칸은? (✍️ 필기)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="SET SQL_SAFE_UPDATES = 0;|SET SQL_SAFE_UPDATES = 0|SET SQL_SAFE_UPDATES=0;|SET SQL_SAFE_UPDATES=0" data-explain="(MySQL) safe mode 해제 — SET SQL_SAFE_UPDATES = 0;">
+            <p class="quiz-q"><span class="quiz-cat">주관식 24</span>MySQL Workbench 의 <b>safe mode(안전 모드)를 해제</b>하는 SQL 문은? (실습 6-2)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="외연|extension|외연extension|외연(extension)" data-explain="릴레이션 스키마 = 내포(intension) · 정적 / 릴레이션 인스턴스 = 외연(extension) · 동적 (13p)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 25</span>릴레이션 스키마를 <b>내포</b>(intension)라고 할 때, 릴레이션 <b>인스턴스</b>를 부르는 말은? (13p 캡처)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
     </section>
 
     <section class="card" id="output">
-        <h2>🖥️ 결과 맞히기 — SQL 을 읽고 결과 표 쓰기<span class="week">1~5주차</span></h2>
+        <h2>🖥️ 결과 맞히기 — SQL 을 읽고 결과 표 쓰기<span class="week">1~6주차</span></h2>
         <div class="tip">📝 시험의 <b>“조회한 결과를 작성하라”</b>(5주차 51p [실습 5-3]) 대비 — SQL 을 위에서부터 따라가며 <b>마지막 SELECT 의 결과 표</b>를 적고 <b>확인</b>을 누르세요. <b>첫 줄 = 열 이름</b>, 그다음 한 줄에 한 행 · 칸은 띄어쓰기나 <code>|</code> 로 구분 · 널 값은 <code>NULL</code> · 빈 문자열 <code>''</code> 은 아무것도 안 적기. <b>행 순서는 채점하지 않아요</b>(투플의 무순서성). 정답은 모두 <b>실제로 실행한 결과</b>예요.</div>
-        <div class="tip">🔥 <b>시험문제</b> = 교수님이 시험에 낸다고 한 코드 (빨간 테두리) · 5주차 [실습 5-2] 사원 — 필기 “차수, 카디널리티 갯수 시험문제”</div>
+        <div class="tip">🔥 <b>시험문제</b> = 교수님이 시험에 낸다고 한 코드 (빨간 테두리) · 5주차 [실습 5-2] 사원 — 필기 “차수, 카디널리티 갯수 시험문제” · <b>6주차 — 필기 “오늘 하는 실습이 다 중간고사 시험 예상문제”</b> (맨 아래 묶음)</div>
         <div id="oq-score"></div>
         <h3 class="oq-group">🔥 시험문제 — 수업 중 “시험문제”라고 한 코드</h3>
         <div class="oq" id="oq-db1" data-table data-exam="5주차 강의자료 49p [실습 5-2] · 필기 '차수, 카디널리티 갯수 시험문제'">
@@ -1244,13 +1566,123 @@ SELECT 도서번호, 출판연도 FROM 도서;</code></pre>
 </script>
             <div class="oq-why">💡 <b>풀이</b> — 출판연도는 <code>DEFAULT 2026</code>. 2번은 <b>NULL 을 직접</b> 넣어서 NULL, 4번은 출판연도 <b>열을 안 적어서</b> 기본값 2026, 5번은 값 자리에 <code>DEFAULT</code> 라고 써서 2026. 3번은 열 순서를 바꿨지만 출판연도 2026 을 직접 넣었어요.</div>
         </div>
+        <h3 class="oq-group">🔥 6주차 시험예상 — “오늘 하는 실습이 다 중간고사 시험 예상문제” (필기)</h3>
+        <div class="oq" id="oq-db11" data-table data-exam="6주차 필기 &#x27;오늘하는실습이 다 중간고사 시험예상문제임&#x27; · 실습 6-1 (3 · 37p)">
+            <p class="oq-q"><span class="oq-no">11</span>[실습 6-1] customer — point 가 400 이하인 고객<span class="oq-tag">6주차 · WHERE · &lt;=</span></p>
+            <pre><code class="language-sql">-- customer(cno, cname, city, point)
+CREATE TABLE customer (
+      cno        char(4)         NOT NULL   ,
+      cname     varchar(10)    NOT NULL ,
+      city         varchar(20) ,
+      point      int ,
+      PRIMARY KEY(cno)
+);
+insert into customer values('c101','홍길동','서울',500);
+insert into customer values('c102','임꺽정','인천',300);
+insert into customer values('c103','박찬호','안양',800);
+insert into customer values('c204','신동엽','과천',350);
+insert into customer values('c205','정진우','고양',400);
+
+SELECT *
+FROM customer
+WHERE point&lt;=400;</code></pre>
+            <script type="text/plain" class="oq-expect">
+cno | cname | city | point
+c102 | 임꺽정 | 인천 | 300
+c204 | 신동엽 | 과천 | 350
+c205 | 정진우 | 고양 | 400
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>&lt;=</code> 는 <b>이하</b>라서 300 · 350 · <b>400</b> 세 명이 나와요 (500 · 800 은 빠짐). <code>&lt;</code>(미만)이었다면 정진우(400)는 빠져요.</div>
+        </div>
+        <div class="oq" id="oq-db12" data-table data-exam="6주차 필기 &#x27;오늘하는실습이 다 중간고사 시험예상문제임&#x27; · 실습 6-2 (5 · 40 · 47~49p)">
+            <p class="oq-q"><span class="oq-no">12</span>[실습 6-2] 주소록 — UPDATE · DELETE 뒤 조회<span class="oq-tag">6주차 · NULL · UPDATE · DELETE</span></p>
+            <pre><code class="language-sql">-- 주소록(이름, 전화번호, 주소, 생일)
+CREATE TABLE 주소록(
+    이름        char(10)           NOT NULL ,
+    전화번호  char(13) ,
+    주소        varchar(10) ,
+    생일        varchar(11) ,
+    PRIMARY KEY(이름)
+);
+INSERT INTO 주소록 VALUES('홍길동','010-1234-5678','서울','3월 15일');
+INSERT INTO 주소록 VALUES('이몽룡','010-3354-5643','부산','12월 14일');
+INSERT INTO 주소록 VALUES('최용만','321-2345','대전','5월 8일');
+INSERT INTO 주소록 VALUES('이건우','010-2132-2345', NULL, NULL);
+
+UPDATE 주소록
+SET 전화번호="010-3245-4368"
+WHERE 이름='홍길동';
+
+UPDATE 주소록
+SET 주소='서울',생일='8월23일'
+WHERE 이름='이건우';
+
+DELETE
+FROM 주소록
+WHERE 이름='최용만';
+
+SELECT * FROM 주소록;</code></pre>
+            <script type="text/plain" class="oq-expect">
+이름 | 전화번호 | 주소 | 생일
+이건우 | 010-2132-2345 | 서울 | 8월23일
+이몽룡 | 010-3354-5643 | 부산 | 12월 14일
+홍길동 | 010-3245-4368 | 서울 | 3월 15일
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 홍길동은 <b>전화번호만</b> 바뀌고, 이건우는 NULL 이던 <b>주소 · 생일이 서울 · 8월23일</b>로 채워져요. 최용만은 <b>레코드째 삭제</b> → 남은 행 3개(카디날리티 3).</div>
+        </div>
+        <div class="oq" id="oq-db13" data-table data-exam="6주차 필기 &#x27;오늘하는실습이 다 중간고사 시험예상문제임&#x27; · 실습 6-03 (8 · 9p 캡처)">
+            <p class="oq-q"><span class="oq-no">13</span>[실습 6-03] 부서 · 사원 — 성공한 문장만 실행한 뒤 AA 부서 사원<span class="oq-tag">6주차 · 참조 무결성</span></p>
+            <pre><code class="language-sql">-- 부서(부서코드, 부서명)          ← 부모 테이블
+-- 사원(사원번호, 이름, 부서코드)    ← 자식 테이블 (부서코드 = 외래키)
+CREATE TABLE 부서 (                -- 생성은 부모 먼저
+        부서코드 char(2)     NOT NULL ,
+        부서명    varchar(10) ,
+        PRIMARY KEY(부서코드)
+);
+CREATE TABLE 사원 (
+        사원번호 char(4)     NOT NULL ,
+        이름     varchar(12) ,
+        부서코드 char(2) ,
+        PRIMARY KEY(사원번호) ,
+        FOREIGN KEY (부서코드) REFERENCES 부서(부서코드)
+);
+insert into 부서 values('AA','총무부');
+insert into 부서 values('BB','영업부');
+insert into 부서 values('CC','기획부');
+
+insert into 사원 values('1111','홍길동','AA');
+insert into 사원 values('2222','임꺽정','AA');
+insert into 사원 values('3333','박찬호','BB');
+insert into 사원 values('4444','선동열','BB');
+insert into 사원 values('5555','차두리','AA');
+insert into 사원 values('6666','신동엽','BB');
+
+-- 1-1)
+INSERT INTO 사원 VALUES('7777','이승엽','BB');
+-- 1-3)
+INSERT INTO 부서 VALUES('DD','개발부');
+-- 1-4)
+DELETE FROM 부서 WHERE 부서코드='DD';
+-- 1-5)
+UPDATE 사원 SET 부서코드='AA' WHERE 사원번호='7777';
+
+select * from 사원 where 부서코드='AA';</code></pre>
+            <script type="text/plain" class="oq-expect">
+사원번호 | 이름 | 부서코드
+1111 | 홍길동 | AA
+2222 | 임꺽정 | AA
+5555 | 차두리 | AA
+7777 | 이승엽 | AA
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 1-1 에서 BB 로 들어온 7777 이승엽이 1-5 에서 <b>AA 로 바뀌었으니</b> AA 부서 = 홍길동 · 임꺽정 · 차두리 · <b>이승엽</b> 4명. DD 는 1-3 에서 넣고 1-4 에서 지워서(참조하는 사원이 없어 삭제 가능) 결과와 상관없어요.</div>
+        </div>
     </section>
 
     <section class="card" id="code">
-        <h2>💻 코딩테스트 — SQL 을 붙여넣으면 채점<span class="week">1~5주차</span></h2>
+        <h2>💻 코딩테스트 — SQL 을 붙여넣으면 채점<span class="week">1~6주차</span></h2>
         <div class="tip">📝 문제를 읽고 <b>SQL 문</b>을 붙여넣은 뒤 <b>▶ 채점하기</b>를 누르세요. 테스트마다 빈 데이터베이스에서 <b>📦 준비된 표 → 내 SQL → 🔎 채점 SQL</b> 순서로 실제로 실행해서, 결과 표의 <b>열(이름 · 순서)</b>과 <b>행</b>이 같아야 통과예요 (행 순서는 무시). 기본키 중복 · NOT NULL · 외래키 같은 <b>제약조건</b>은 일부러 틀린 값을 넣어 보고 <b>거부되는지</b>로 채점해요.</div>
         <div class="tip">🐬 <b>MySQL 그대로 붙여넣어도 돼요</b> — 브라우저 안의 SQLite(sql.js)를 MySQL 처럼 맞춰서 돌려요. <code>USE testdb;</code> · <code>CREATE DATABASE</code> · <code>desc</code> 는 건너뛰고, 아직 없는 표를 <code>DROP TABLE</code> 해도 넘어가요. MySQL 과 같게: 문자 비교는 대소문자 무시 · 기본키는 필수 입력 · <code>char(n)</code> 글자 수 제한 · <code>DEFAULT NOW()</code> · 뷰에 INSERT · <b>자식을 부모보다 먼저 만들거나 부모를 먼저 지우면 오류</b> · <b>외래키 데이터 형식이 다르면 오류</b>. 다른 점 — 날짜(date) 표시 형식 · decimal 소수 자리는 MySQL 과 달라서 채점에 쓰지 않아요.</div>
-        <div class="tip">🔥 <b>시험문제</b> = 4주차 필기 “(시험문제) 강의자료 7p 빈칸 · 21p 키 빈칸 · 42p 퀴즈 · 스키마 표기법 · FOREIGN KEY 는 같은 데이터 형식” + 5주차 필기 “차수, 카디널리티 갯수 시험문제”(49p 사원)</div>
+        <div class="tip">🔥 <b>시험문제</b> = 4주차 필기 “(시험문제) 강의자료 7p 빈칸 · 21p 키 빈칸 · 42p 퀴즈 · 스키마 표기법 · FOREIGN KEY 는 같은 데이터 형식” + 5주차 필기 “차수, 카디널리티 갯수 시험문제”(49p 사원) + <b>6주차 필기 “오늘 하는 실습이 다 중간고사 시험 예상문제”</b>(맨 아래 묶음)</div>
         <div id="ct-score"></div>
         <h3 class="ct-group">🔥 시험문제 — 수업 중 “시험문제”라고 한 코드</h3>
         <div class="ct" id="ct-db1" data-lang="sql" data-must="[&quot;CREATE\\s+TABLE\\s+학과&quot;,&quot;NOT\\s+NULL&quot;,&quot;PRIMARY\\s+KEY\\s*\\(\\s*학과번호\\s*\\)&quot;]" data-must-msg="7p 빈칸 — CREATE TABLE · NOT NULL · PRIMARY KEY(학과번호) 를 모두 써야 해요." data-exam="4주차 강의자료 7p [Quiz] 테이블 생성 빈칸 · 필기 '(시험문제) 강의자료 … 7페이지(빈칸)'">
@@ -1654,6 +2086,139 @@ INSERT INTO clubmember(mno,mname,mbirth) VALUES(325,'홍진아','1994-12-14');
 SELECT * FROM clubmember;
 </script>
         </div>
+        <h3 class="ct-group">🔥 6주차 시험예상 — 실습 6-1 · Quiz 6-1 · 실습 6-2 · 실습 6-03</h3>
+        <div class="ct" id="ct-db14" data-lang="sql" data-must="[&quot;WHERE&quot;]" data-must-msg="WHERE 조건절로 point 를 비교해야 해요." data-exam="6주차 필기 &#x27;오늘하는실습이 다 중간고사 시험예상문제임&#x27; · 실습 6-1 4) (3 · 37p)">
+            <p class="ct-q"><span class="ct-no">14</span>[실습 6-1] customer — point 가 400 이하인 고객 검색<span class="ct-tag">6주차 · SELECT · WHERE · &lt;=</span></p>
+            <p class="ct-desc">customer 테이블이 <b>미리 준비</b>돼 있어요(실습 6-1 데이터). <b>point 가 400 이하</b>인 고객의 <b>모든 열</b>을 검색하는 SELECT 문을 쓰세요. (숨은 테스트는 다른 고객 데이터로 채점해요)</p>
+            <pre class="ct-setup"><code class="language-sql">-- customer(cno, cname, city, point)
+CREATE TABLE customer (
+      cno        char(4)         NOT NULL   ,
+      cname     varchar(10)    NOT NULL ,
+      city         varchar(20) ,
+      point      int ,
+      PRIMARY KEY(cno)
+);
+insert into customer values('c101','홍길동','서울',500);
+insert into customer values('c102','임꺽정','인천',300);
+insert into customer values('c103','박찬호','안양',800);
+insert into customer values('c204','신동엽','과천',350);
+insert into customer values('c205','정진우','고양',400);</code></pre>
+            <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 결과 예 — 실습 6-1 데이터</div><div class="ct-tblwrap"><table class="ct-tbl"><tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr><tr><td>c102</td><td>임꺽정</td><td>인천</td><td>300</td></tr><tr><td>c204</td><td>신동엽</td><td>과천</td><td>350</td></tr><tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr></table></div></div></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="[실습 6-1] customer — point 가 400 이하인 고객 검색 SQL"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"label": "실습 6-1 데이터 (3 · 37p)", "setup": "CREATE TABLE customer (\n      cno        char(4)         NOT NULL   ,\n      cname     varchar(10)    NOT NULL ,\n      city         varchar(20) ,\n      point      int , \n      PRIMARY KEY(cno) \n);\ninsert into customer values('c101','홍길동','서울',500);\ninsert into customer values('c102','임꺽정','인천',300);\ninsert into customer values('c103','박찬호','안양',800);\ninsert into customer values('c204','신동엽','과천',350);\ninsert into customer values('c205','정진우','고양',400);", "expect": {"columns": ["cno", "cname", "city", "point"], "rows": [["c102", "임꺽정", "인천", 300], ["c204", "신동엽", "과천", 350], ["c205", "정진우", "고양", 400]]}}, {"label": "숨은 테스트 — 다른 고객 데이터", "setup": "CREATE TABLE customer ( cno char(4) NOT NULL, cname varchar(10) NOT NULL, city varchar(20), point int, PRIMARY KEY(cno));\ninsert into customer values('c301','김하나','부산',400);\ninsert into customer values('c302','이두리','대구',401);\ninsert into customer values('c303','박세찬','광주',100);\ninsert into customer values('c304','최네모','울산',999);", "expect": {"columns": ["cno", "cname", "city", "point"], "rows": [["c301", "김하나", "부산", 400], ["c303", "박세찬", "광주", 100]]}}]</script>
+            <script type="text/plain" class="ct-answer">
+SELECT *
+FROM customer
+WHERE point <= 400;
+</script>
+        </div>
+        <div class="ct" id="ct-db15" data-lang="sql" data-must="[&quot;WHERE&quot;]" data-must-msg="WHERE 조건절로 이름을 비교해야 해요." data-exam="6주차 필기 &#x27;오늘하는실습이 다 중간고사 시험예상문제임&#x27; · Quiz 6-1 3) (4p)">
+            <p class="ct-q"><span class="ct-no">15</span>[Quiz 6-1] 직원 — 이름이 우태하인 직원 검색<span class="ct-tag">6주차 · SELECT · WHERE 문자</span></p>
+            <p class="ct-desc">직원(이름, 주소, 전화번호, 연봉) 테이블이 <b>미리 준비</b>돼 있어요(Quiz 6-1 데이터 6건). <b>이름이 우태하</b>인 직원의 <b>모든 열</b>을 검색하세요. 문자 값은 따옴표로 감싸요.</p>
+            <pre class="ct-setup"><code class="language-sql">CREATE TABLE 직원 (
+     이름       varchar(20) ,
+     주소       varchar(100) ,
+     전화번호  char(13) ,
+     연봉        int ,
+     PRIMARY KEY(이름)
+);
+INSERT INTO 직원 VALUES('우태하','서울시 서초구','010-1111-1111',1000); 
+INSERT INTO 직원 VALUES('김선우','서울시 구로구','010-2222-2222',2000); 
+INSERT INTO 직원 VALUES('이영지','서울시 마포구','010-3333-3333',3000); 
+INSERT INTO 직원 VALUES('유희정','서울시 마포구','010-4444-4444',4000); 
+INSERT INTO 직원 VALUES('오형준','부산시 연산구','010-5555-5555',5000); 
+INSERT INTO 직원 VALUES('고진수','서울시 구로구','010-6666-6666',6000);</code></pre>
+            <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 결과 예 — Quiz 6-1 데이터</div><div class="ct-tblwrap"><table class="ct-tbl"><tr><th>이름</th><th>주소</th><th>전화번호</th><th>연봉</th></tr><tr><td>우태하</td><td>서울시 서초구</td><td>010-1111-1111</td><td>1000</td></tr></table></div></div></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="[Quiz 6-1] 직원 — 이름이 우태하인 직원 검색 SQL"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"label": "Quiz 6-1 데이터 (4p)", "setup": "CREATE TABLE 직원 (\n     이름       varchar(20) ,\n     주소       varchar(100) ,\n     전화번호  char(13) ,\n     연봉        int ,\n     PRIMARY KEY(이름)\n);\nINSERT INTO 직원 VALUES('우태하','서울시 서초구','010-1111-1111',1000); \nINSERT INTO 직원 VALUES('김선우','서울시 구로구','010-2222-2222',2000); \nINSERT INTO 직원 VALUES('이영지','서울시 마포구','010-3333-3333',3000); \nINSERT INTO 직원 VALUES('유희정','서울시 마포구','010-4444-4444',4000); \nINSERT INTO 직원 VALUES('오형준','부산시 연산구','010-5555-5555',5000); \nINSERT INTO 직원 VALUES('고진수','서울시 구로구','010-6666-6666',6000);", "expect": {"columns": ["이름", "주소", "전화번호", "연봉"], "rows": [["우태하", "서울시 서초구", "010-1111-1111", 1000]]}}, {"label": "숨은 테스트 — 다른 직원 데이터", "setup": "CREATE TABLE 직원 ( 이름 varchar(20), 주소 varchar(100), 전화번호 char(13), 연봉 int, PRIMARY KEY(이름));\nINSERT INTO 직원 VALUES('김선우','서울시 구로구','010-2222-2222',2000);\nINSERT INTO 직원 VALUES('우태하','경기도 광명시','010-7777-7777',7000);\nINSERT INTO 직원 VALUES('우태호','서울시 서초구','010-1111-1111',1000);", "expect": {"columns": ["이름", "주소", "전화번호", "연봉"], "rows": [["우태하", "경기도 광명시", "010-7777-7777", 7000]]}}]</script>
+            <script type="text/plain" class="ct-answer">
+SELECT *
+FROM 직원
+WHERE 이름 = '우태하';
+</script>
+        </div>
+        <div class="ct" id="ct-db16" data-lang="sql" data-must="[&quot;UPDATE&quot;, &quot;DELETE\\s+FROM&quot;]" data-must-msg="UPDATE 와 DELETE FROM 을 써야 해요 (DELETE 에는 필드명 · * 를 쓰지 않아요)." data-exam="6주차 필기 &#x27;오늘하는실습이 다 중간고사 시험예상문제임&#x27; · 실습 6-2 (5 · 40 · 47~49p)">
+            <p class="ct-q"><span class="ct-no">16</span>[실습 6-2] 주소록 — 수정 2번 · 삭제 1번<span class="ct-tag">6주차 · UPDATE · DELETE</span></p>
+            <p class="ct-desc">주소록에 4명(이건우는 주소 · 생일 NULL)이 <b>미리 들어 있어요</b>. 차례로 실행하는 SQL 을 쓰세요.<br>1. 홍길동의 전화번호를 <code>'010-3245-4368'</code> 로 수정 · 2. 이건우의 주소는 <code>'서울'</code>, 생일은 <code>'8월23일'</code> 로 수정 · 3. <b>최용만의 레코드를 삭제</b><br>숨은 테스트에는 <b>대전에 사는 다른 사람</b>이 한 명 더 있어요 — 최용만만 지워야 해요.</p>
+            <pre class="ct-setup"><code class="language-sql">CREATE TABLE 주소록(
+    이름        char(10)           NOT NULL ,
+    전화번호  char(13) ,
+    주소        varchar(10) ,
+    생일        varchar(11) ,
+    PRIMARY KEY(이름)
+);
+INSERT INTO 주소록 VALUES('홍길동','010-1234-5678','서울','3월 15일');
+INSERT INTO 주소록 VALUES('이몽룡','010-3354-5643','부산','12월 14일');
+INSERT INTO 주소록 VALUES('최용만','321-2345','대전','5월 8일');
+INSERT INTO 주소록 VALUES('이건우','010-2132-2345', NULL, NULL);</code></pre>
+            <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 결과 예 — select * from 주소록</div><div class="ct-tblwrap"><table class="ct-tbl"><tr><th>이름</th><th>전화번호</th><th>주소</th><th>생일</th></tr><tr><td>이건우</td><td>010-2132-2345</td><td>서울</td><td>8월23일</td></tr><tr><td>이몽룡</td><td>010-3354-5643</td><td>부산</td><td>12월 14일</td></tr><tr><td>홍길동</td><td>010-3245-4368</td><td>서울</td><td>3월 15일</td></tr></table></div></div></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="[실습 6-2] 주소록 — 수정 2번 · 삭제 1번 SQL"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"label": "실습 6-2 데이터 — select * from 주소록", "setup": "CREATE TABLE 주소록(\n    이름        char(10)           NOT NULL ,\n    전화번호  char(13) ,\n    주소        varchar(10) ,\n    생일        varchar(11) ,\n    PRIMARY KEY(이름)\n);\nINSERT INTO 주소록 VALUES('홍길동','010-1234-5678','서울','3월 15일');\nINSERT INTO 주소록 VALUES('이몽룡','010-3354-5643','부산','12월 14일');\nINSERT INTO 주소록 VALUES('최용만','321-2345','대전','5월 8일');\nINSERT INTO 주소록 VALUES('이건우','010-2132-2345', NULL, NULL);", "check": "select * from 주소록;", "expect": {"columns": ["이름", "전화번호", "주소", "생일"], "rows": [["이건우", "010-2132-2345", "서울", "8월23일"], ["이몽룡", "010-3354-5643", "부산", "12월 14일"], ["홍길동", "010-3245-4368", "서울", "3월 15일"]]}}, {"label": "숨은 테스트 — 대전에 사는 유정두가 더 있을 때", "setup": "CREATE TABLE 주소록(\n    이름        char(10)           NOT NULL ,\n    전화번호  char(13) ,\n    주소        varchar(10) ,\n    생일        varchar(11) ,\n    PRIMARY KEY(이름)\n);\nINSERT INTO 주소록 VALUES('홍길동','010-1234-5678','서울','3월 15일');\nINSERT INTO 주소록 VALUES('이몽룡','010-3354-5643','부산','12월 14일');\nINSERT INTO 주소록 VALUES('최용만','321-2345','대전','5월 8일');\nINSERT INTO 주소록 VALUES('이건우','010-2132-2345', NULL, NULL);\nINSERT INTO 주소록 VALUES('유정두','010-9999-9999','대전',NULL);", "check": "select * from 주소록;", "expect": {"columns": ["이름", "전화번호", "주소", "생일"], "rows": [["유정두", "010-9999-9999", "대전", null], ["이건우", "010-2132-2345", "서울", "8월23일"], ["이몽룡", "010-3354-5643", "부산", "12월 14일"], ["홍길동", "010-3245-4368", "서울", "3월 15일"]]}}]</script>
+            <script type="text/plain" class="ct-answer">
+-- (MySQL) safe mode 해제
+SET SQL_SAFE_UPDATES = 0;
+
+-- 1. 홍길동의 전화번호를 '010-3245-4368' 로 수정하라
+UPDATE 주소록
+SET 전화번호 = '010-3245-4368'
+WHERE 이름 = '홍길동';
+
+-- 2. 이건우의 주소는 '서울', 생일은 '8월23일' 로 수정하라
+UPDATE 주소록
+SET 주소 = '서울', 생일 = '8월23일'
+WHERE 이름 = '이건우';
+
+-- 3. 최용만의 레코드를 삭제하라
+DELETE
+FROM 주소록
+WHERE 이름 = '최용만';
+
+SELECT * FROM 주소록;
+</script>
+        </div>
+        <div class="ct" id="ct-db17" data-lang="sql" data-must="[&quot;FOREIGN\\s+KEY\\s*\\(\\s*부서코드\\s*\\)\\s*REFERENCES\\s+부서&quot;]" data-must-msg="외래키 FOREIGN KEY (부서코드) REFERENCES 부서(부서코드) 를 써야 해요." data-exam="6주차 필기 &#x27;오늘하는실습이 다 중간고사 시험예상문제임&#x27; · 실습 6-03 (8 · 9p 캡처)">
+            <p class="ct-q"><span class="ct-no">17</span>[실습 6-03] 부서 · 사원 테이블 — 외래키로 참조 무결성<span class="ct-tag">6주차 · FOREIGN KEY · 참조 무결성</span></p>
+            <p class="ct-desc"><b>부서(<u>부서코드</u>, 부서명)</b> — 부서코드 <code>char(2)</code> NOT NULL 기본키 · 부서명 <code>varchar(10)</code><br><b>사원(<u>사원번호</u>, 이름, 부서코드)</b> — 사원번호 <code>char(4)</code> NOT NULL 기본키 · 이름 <code>varchar(12)</code> · 부서코드 <code>char(2)</code> = <b>부서(부서코드)를 참조하는 외래키</b><br>데이터: 부서 <code>AA 총무부 · BB 영업부 · CC 기획부</code> / 사원 <code>1111 홍길동 AA · 2222 임꺽정 AA · 3333 박찬호 BB · 4444 선동열 BB · 5555 차두리 AA · 6666 신동엽 BB</code><br>채점은 1-1(성공) · 1-2 · 1-6(거부돼야 함) 으로 해요.</p>
+            <div class="ct-ex"><div class="ct-out"><div class="ct-lbl">🖥️ 결과 예 — select * from 사원</div><div class="ct-tblwrap"><table class="ct-tbl"><tr><th>사원번호</th><th>이름</th><th>부서코드</th></tr><tr><td>1111</td><td>홍길동</td><td>AA</td></tr><tr><td>2222</td><td>임꺽정</td><td>AA</td></tr><tr><td>3333</td><td>박찬호</td><td>BB</td></tr><tr><td>4444</td><td>선동열</td><td>BB</td></tr><tr><td>5555</td><td>차두리</td><td>AA</td></tr><tr><td>6666</td><td>신동엽</td><td>BB</td></tr></table></div></div></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="[실습 6-03] 부서 · 사원 테이블 — 외래키로 참조 무결성 SQL"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"label": "부서 · 사원 데이터 (8p)", "check": "select * from 사원;", "expect": {"columns": ["사원번호", "이름", "부서코드"], "rows": [["1111", "홍길동", "AA"], ["2222", "임꺽정", "AA"], ["3333", "박찬호", "BB"], ["4444", "선동열", "BB"], ["5555", "차두리", "AA"], ["6666", "신동엽", "BB"]]}}, {"label": "1-6) 부서에 없는 FF 로 수정 = 거부", "check": "UPDATE 사원 SET 부서코드='FF' WHERE 사원번호='1111';", "error": "FOREIGN KEY", "why": "사원.부서코드가 부서(부서코드)를 참조하는 외래키면 부서에 없는 FF 는 거부돼야 해요 → FOREIGN KEY (부서코드) REFERENCES 부서(부서코드)"}, {"label": "1-2) 참조 중인 부서코드 BB 수정 = 거부", "check": "UPDATE 부서 SET 부서코드='DD' WHERE 부서코드='BB';", "error": "FOREIGN KEY", "why": "사원이 BB 를 참조 중이라 부모(부서)의 BB 는 바꿀 수 없어야 해요 (Error 1451)"}, {"label": "1-1) 부서에 있는 BB 로 입력 = 성공", "check": "INSERT INTO 사원 VALUES('7777','이승엽','BB');\nselect * from 사원 where 사원번호='7777';", "expect": {"columns": ["사원번호", "이름", "부서코드"], "rows": [["7777", "이승엽", "BB"]]}}]</script>
+            <script type="text/plain" class="ct-answer">
+drop table if exists 사원;
+drop table if exists 부서;
+CREATE TABLE 부서 (
+        부서코드 char(2)     NOT NULL ,
+        부서명    varchar(10) ,
+        PRIMARY KEY(부서코드)
+);
+CREATE TABLE 사원 (
+        사원번호 char(4)     NOT NULL ,
+        이름     varchar(12) ,
+        부서코드 char(2) ,
+        PRIMARY KEY(사원번호) ,
+        FOREIGN KEY (부서코드) REFERENCES 부서(부서코드)
+);
+insert into 부서 values('AA','총무부');
+insert into 부서 values('BB','영업부');
+insert into 부서 values('CC','기획부');
+insert into 사원 values('1111','홍길동','AA');
+insert into 사원 values('2222','임꺽정','AA');
+insert into 사원 values('3333','박찬호','BB');
+insert into 사원 values('4444','선동열','BB');
+insert into 사원 values('5555','차두리','AA');
+insert into 사원 values('6666','신동엽','BB');
+
+select * from 부서;
+select * from 사원;
+</script>
+        </div>
     </section>
 
 
@@ -1661,10 +2226,10 @@ SELECT * FROM clubmember;
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="quiz.js?v=202609291935"></script>
-<script src="review.js?v=202609291935"></script>
-<script src="weeks.js?v=202609291935"></script>
-<script src="codetest.js?v=202609291935"></script>
-<script src="outquiz.js?v=202609291935"></script>
+<script src="quiz.js?v=202609301321"></script>
+<script src="review.js?v=202609301321"></script>
+<script src="weeks.js?v=202609301321"></script>
+<script src="codetest.js?v=202609301321"></script>
+<script src="outquiz.js?v=202609301321"></script>
 </body>
 </html>

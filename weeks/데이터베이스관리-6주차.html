@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202609301321"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 6주차 · 무결성 제약조건 · SELECT · UPDATE · DELETE</title>
+    <link rel="stylesheet" href="../style.css?v=202609301321">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 6주차</h1>
+        <p>무결성 제약조건 · SELECT · UPDATE · DELETE</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-5주차.html">‹ 이전 · <b>5주차</b><br><small>키 5종 · 뷰(view) · 널 값 · INSERT</small></a><a class="next" href="데이터베이스관리-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+<div class="tip">자료: 노션 6주차 필기 + 캡처 4장(8 · 9 · 13 · 19p) · 6주차 폴더 <code>[강의요약] 6주차.txt</code> · 실습 SQL <code>up-dy262DB1-w06-customer-ins-stu-sql.txt</code> — 원본 txt 에 없고 <b>내가 쓴 것은 ✍️</b> 로 표시했어요.</div>
+<section class="card">
+<h2>🔴 빨간 글씨 = 암기 (강의자료 DB-Lect06)</h2>
+<table class="ref">
+<tbody>
+<tr><th>페이지</th><th>빨간 글씨</th></tr>
+<tr><td><b>7 · 24p</b></td><td>개체 무결성 — <b>기본키는 널 값을 가질 수 없다</b> / 참조 무결성 — <b>참조하는</b> 테이블의 <b>외래키</b> 값은 <b>참조되는</b> 테이블의 <b>기본키</b> 값에 반드시 존재해야 한다</td></tr>
+<tr><td><b>14 · 16 · 21p</b></td><td>키 특성 — 수퍼키 <b>유일성</b> / <b>후보키</b> <b>유일성, 최소성</b> / <b>기본키</b> · [요약] 키 — <b>수퍼키 · 후보키 · 기본키 · 대체키 · 외래키</b></td></tr>
+<tr><td><b>20p</b></td><td>수강 기본키 — PRIMARY KEY<b>(학번, 과목번호)</b></td></tr>
+<tr><td><b>42 · 46p</b></td><td>[실습 6-2] 주소록 — PRIMARY KEY(<b>이름</b>)</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>0. 이번 주 공지 ★</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — <b>“오늘 하는 실습이 다 중간고사 시험 예상문제임”</b> → 실습 6-1 · Quiz 6-1 · 실습 6-2 · 실습 6-03</li><li><span class="wk-tag note">✍️ 필기</span> — <b>시험범위: 1 ~ 7주차 내용</b></li><li><span class="wk-tag note">✍️ 필기</span> — 중간고사 범위(예정) · 교재(생능): <b>1 · 2 · 3장</b> / 5장 p132~147 · p170~174 · p176 / 6장 CREATE p188~195 · ALTER p195~198 · DROP p198~199 · VIEW p207~210</li><li><span class="wk-tag star">⭐ 강조</span> — 무결성 제약조건 4가지 중 <b>개체 · 참조 무결성만 중간고사</b>, 키 · 도메인 제약조건은 <b>기말고사</b></li><li><span class="wk-tag star">⭐ 강조</span> — 용어는 <b>“같은 말 찾으시오 / 쓰시오”</b> 로 나와요 (외우는 법: <b>투레행 · 필속열</b>)</li></ul>
+</section>
+<section class="card">
+<h2>1. 관계 연산자 · SELECT 실행 순서 ✍️</h2>
+<table class="ref">
+<tbody>
+<tr><th>뜻</th><th>SQL 기호</th><th>영어 약자</th></tr>
+<tr><td>초과</td><td><code>&gt;</code></td><td>gt (greater than)</td></tr>
+<tr><td>이상</td><td><code>&gt;=</code></td><td>gte</td></tr>
+<tr><td>같다</td><td><code>=</code></td><td>equal</td></tr>
+<tr><td>같지 않다</td><td><code>&lt;&gt;</code> · <code>!=</code></td><td>ne (not equal)</td></tr>
+<tr><td>이하</td><td><code>&lt;=</code></td><td>lte</td></tr>
+<tr><td>미만</td><td><code>&lt;</code></td><td>lt (less than)</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 필기에 이하를 <code>let</code> 으로 적었는데 <b><code>lte</code></b>(less than or equal) 예요. SQL 의 “같다”는 <code>==</code> 가 아니라 <b><code>=</code> 하나</b>.</div>
+<pre><code class="language-sql">SELECT 필드명      -- ③ 보여 줄 열을 고른다
+FROM   테이블명    -- ① 어느 테이블에서
+WHERE  조건절;     -- ② 조건에 맞는 행(레코드)만 남기고</code></pre>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 쓰는 순서는 SELECT → FROM → WHERE 지만 <b>실행(컴파일) 순서는 ① FROM → ② WHERE → ③ SELECT</b></div>
+</section>
+<section class="card">
+<h2>2. [실습 6-1] 데이터 조회 — customer ★시험예상</h2>
+<pre><code class="language-sql">-- customer(cno, cname, city, point)
+CREATE TABLE customer (
+      cno        char(4)         NOT NULL   ,
+      cname     varchar(10)    NOT NULL ,
+      city         varchar(20) ,
+      point      int ,
+      PRIMARY KEY(cno)
+);
+insert into customer values('c101','홍길동','서울',500);
+insert into customer values('c102','임꺽정','인천',300);
+insert into customer values('c103','박찬호','안양',800);
+insert into customer values('c204','신동엽','과천',350);
+insert into customer values('c205','정진우','고양',400);
+
+-- ✍️ 내 답
+-- 1) customer 테이블을 검색하라
+SELECT *
+FROM customer;
+
+-- 2) customer 테이블에서 cname, city 검색하라
+SELECT cname, city
+FROM customer;
+
+-- 3) cno가 c101 인 고객을 검색
+SELECT *
+FROM customer
+WHERE cno="c101";
+
+-- 4) customer 테이블에서 point가 400 이하인 고객을 검색하라
+SELECT *
+FROM customer
+WHERE point&lt;=400;</code></pre>
+<p>4) 의 실행 결과</p>
+<table class="ref">
+<tbody style="min-width:322px;">
+<tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr>
+<tr><td>c102</td><td>임꺽정</td><td>인천</td><td>300</td></tr>
+<tr><td>c204</td><td>신동엽</td><td>과천</td><td>350</td></tr>
+<tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag star">⭐ 강조</span> — <b>400 이하</b> = <code>&lt;=</code> 라서 point 가 <b>딱 400 인 정진우도 나와요</b> (미만 <code>&lt;</code> 이면 2명). 내 실습의 <code>"c101"</code> 큰따옴표는 MySQL 에서 되지만, 문자는 <b>작은따옴표 <code>'c101'</code></b> 가 기본이니 답안은 작은따옴표로.</div>
+</section>
+<section class="card">
+<h2>3. [Quiz 6-1] SELECT 문법 — 직원 ★시험예상</h2>
+<pre><code class="language-sql">-- 직원(이름, 주소, 전화번호, 연봉)   ← 데이터 6건 (우태하 1000 ~ 고진수 6000)
+-- ✍️ 내 답
+-- 1) 직원 테이블을 검색하라
+select * from 직원;
+
+-- 2) 직원 테이블에서 이름,전화번호 검색
+SELECT 이름,전화번호
+FROM 직원;
+
+-- 3) 이름이 우태하인 직원을 검색
+SELECT *
+FROM 직원
+WHERE 이름="우태하";
+
+-- 4) 직원 테이블에서 연봉이 4000 이하인 직원을 검색하라
+SELECT *
+FROM 직원
+WHERE 연봉&lt;=4000;</code></pre>
+<p>4) 의 실행 결과 (행 순서는 기본키 순)</p>
+<table class="ref">
+<tbody style="min-width:439px;">
+<tr><th>이름</th><th>주소</th><th>전화번호</th><th>연봉</th></tr>
+<tr><td>김선우</td><td>서울시 구로구</td><td>010-2222-2222</td><td>2000</td></tr>
+<tr><td>우태하</td><td>서울시 서초구</td><td>010-1111-1111</td><td>1000</td></tr>
+<tr><td>유희정</td><td>서울시 마포구</td><td>010-4444-4444</td><td>4000</td></tr>
+<tr><td>이영지</td><td>서울시 마포구</td><td>010-3333-3333</td><td>3000</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>4. [실습 6-2] 데이터 조작 — 주소록 INSERT(NULL) · UPDATE · DELETE ★시험예상</h2>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>문법</th><th>단위</th></tr>
+<tr><td><b>SELECT</b> 조회</td><td><code>SELECT 필드명 FROM 테이블명 WHERE 조건;</code></td><td>필드(열)</td></tr>
+<tr><td><b>INSERT</b> 입력</td><td><code>INSERT INTO 테이블명(필드명, …) VALUES(값, …);</code></td><td>레코드 추가</td></tr>
+<tr><td><b>UPDATE</b> 수정</td><td><code>UPDATE 테이블명 SET 필드명 = 수정후값 WHERE 필드명 = 값;</code></td><td>필드(열)</td></tr>
+<tr><td><b>DELETE</b> 삭제</td><td><code>DELETE FROM 테이블명 WHERE 필드명 = 값;</code></td><td><b>레코드(행) 통째로</b></td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- 주소록(이름, 전화번호, 주소, 생일)
+DROP TABLE if exists 주소록;
+CREATE TABLE 주소록(
+    이름        char(10)           NOT NULL ,
+    전화번호  char(13) ,
+    주소        varchar(10) ,
+    생일        varchar(11) ,
+    PRIMARY KEY(이름)
+);
+INSERT INTO 주소록 VALUES('홍길동','010-1234-5678','서울','3월 15일');
+INSERT INTO 주소록 VALUES('이몽룡','010-3354-5643','부산','12월 14일');
+INSERT INTO 주소록 VALUES('최용만','321-2345','대전','5월 8일');
+
+-- (MySQL) safe mode 해제
+SET SQL_SAFE_UPDATES = 0;
+
+-- [지시사항] 이건우의 데이터를 입력하시오 (널 값)
+INSERT INTO 주소록 VALUES('이건우','010-2132-2345', NULL, NULL);
+-- ✍️ 둘다 같은말 (둘 중 하나만!)
+INSERT INTO 주소록(이름,전화번호) VALUES('이건우','010-2132-2345');</code></pre>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — ① “둘다 같은말” = 결과가 같은 <b>두 가지 방법</b>이라 <b>하나만</b> 실행해요. 둘 다 실행하면 기본키(이름) '이건우'가 겹쳐 <b>Error 1062 Duplicate entry</b> ② 필기의 <code>INSERT INTO주소록(…)</code> 은 <b>띄어쓰기가 빠져 Error 1064</b>(문법 오류) → <code>INSERT INTO 주소록(…)</code></div>
+<pre><code class="language-sql">-- ✍️ 내 답
+-- 1. 홍길동의 전화번호를 '010-3245-4368' 로 수정하라
+UPDATE 주소록
+SET 전화번호="010-3245-4368"
+WHERE 이름='홍길동';
+
+-- 2. 이건우의 주소는 '서울', 생일은 '8월 23일' 로 수정하라
+UPDATE 주소록
+SET 주소='서울',생일='8월23일'          -- 여러 필드는 쉼표로
+WHERE 이름='이건우';
+
+-- 3. 최용만의 레코드를 삭제하라
+DELETE
+FROM 주소록
+WHERE 이름='최용만';  -- ✍️ 최용만의 이름말고 전화번호,주소 같은것을 WHERE절에 적어도 이상없이 작동함
+
+SELECT * FROM 주소록;</code></pre>
+<p>1 · 2 · 3 실행 후 결과</p>
+<table class="ref">
+<tbody style="min-width:413px;">
+<tr><th>이름</th><th>전화번호</th><th>주소</th><th>생일</th></tr>
+<tr><td>이건우</td><td>010-2132-2345</td><td>서울</td><td>8월23일</td></tr>
+<tr><td>이몽룡</td><td>010-3354-5643</td><td>부산</td><td>12월 14일</td></tr>
+<tr><td>홍길동</td><td>010-3245-4368</td><td>서울</td><td>3월 15일</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — <b>DELETE 주의사항</b>: 레코드 단위(한 줄)로 하는 것이라서 <b>필드명 또는 <code>*</code> 을 안 써도 됨</b> — SELECT · UPDATE 처럼 필드 단위가 아님 (<code>DELETE * FROM …</code> ❌)<br><span class="wk-tag fix">⚠️ 정정</span> — WHERE 에 전화번호 · 주소를 써도 작동은 하지만, 그 값이 <b>여러 행에 있으면 전부 지워져요</b> (예: 2번 뒤 <code>WHERE 주소='서울'</code> → 홍길동 · 이건우 2명 삭제). 한 명만 지우려면 <b>기본키(이름)</b> 로 지정하는 게 안전해요.</div>
+</section>
+<section class="card">
+<h2>5. 무결성 제약조건 4가지 ★시험 ✍️</h2>
+<div class="tip">🛡️ <b>무결성(integrity)</b> = 데이터의 <b>정확성</b> · 제약조건 = constraint</div>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>#</th><th>제약조건</th><th>내용</th><th>SQL</th><th>✍️ 범위</th></tr>
+<tr><td>1</td><td><b>개체 무결성</b> (엔티티 무결성)</td><td><b>기본키는 널 값을 가질 수 없다</b></td><td><code>PRIMARY KEY</code></td><td><b>중간 O</b></td></tr>
+<tr><td>2</td><td><b>참조 무결성</b> ★시험문제</td><td><b>참조하는</b> 테이블의 <b>외래키</b> 값은 <b>참조되는</b> 테이블의 <b>기본키</b> 값에 반드시 존재해야 한다</td><td><code>FOREIGN KEY</code></td><td><b>중간 O</b></td></tr>
+<tr><td>3</td><td>키 제약조건</td><td>키는 중복된 값을 갖지 않는다</td><td><code>UNIQUE</code></td><td>기말</td></tr>
+<tr><td>4</td><td>도메인 제약조건</td><td>값의 범위 · 기본값 지정</td><td><code>CHECK</code> · <code>DEFAULT</code></td><td>기말</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 꼭 <b>“개체”</b> 라고 써야 함. <b>“객체”라고 쓰면 오답</b><br><span class="wk-tag note">✍️ 필기</span> — 참조 무결성 <b>빈칸(시험문제!)</b> · 참조<b>“하는”</b> 테이블의 <b>“외래키”</b> 값은 참조<b>“되는”</b> 테이블의 <b>“기본키”</b> 값에 반드시 있어야 한다 → <b>하는 = 자식(외래키)</b> · <b>되는 = 부모(기본키)</b><br><span class="wk-tag fix">⚠️ 정정</span> — 필기 철자 <code>intergrity constranint</code> → <b>integrity constraint</b> · <code>PRIMART KEY</code> → <b>PRIMARY KEY</b> · <code>FORIGEN KEY</code> → <b>FOREIGN KEY</b></div>
+<h3>참조 무결성 — 부모 · 자식 테이블에서 검사하는 것 (7 · 24p)</h3>
+<table class="ref">
+<tbody>
+<tr><th></th><th>부모 테이블 (참조<b>되는</b> · 기본키)</th><th>자식 테이블 (참조<b>하는</b> · 외래키)</th></tr>
+<tr><td><b>입력</b></td><td><b>제약 없음</b> (✍️ O)</td><td>부모 테이블에 그 값이 있는지 검증</td></tr>
+<tr><td><b>수정</b></td><td>수정하려는 값을 자식이 참조하고 있는지 검증</td><td>부모에 있는 <b>다른 값으로만</b> 변경 가능</td></tr>
+<tr><td><b>삭제</b></td><td>삭제하려는 값을 자식이 참조하고 있는지 검증</td><td><b>제약 없음</b> (✍️ O)</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 필기 표의 <b>O 두 칸(부모 입력 · 자식 삭제) = “제약 없음”</b> 칸이에요.</div>
+<h3>[Quiz] 25p — 참조 무결성 만족 여부를 <b>검사할 필요가 있는</b> 항목에 O</h3>
+<table class="ref">
+<tbody style="min-width:595px;">
+<tr><th></th><th>INSERT</th><th>UPDATE</th><th>DELETE</th></tr>
+<tr><td>외래키에 의해 참조되는 기본키 (부모)</td><td></td><td><b>O</b></td><td><b>O</b></td></tr>
+<tr><td>외래키 (자식)</td><td><b>O</b></td><td><b>O</b></td><td></td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 필기 표는 <b>부모 INSERT · 자식 DELETE</b> 에 O 를 쳤는데, 그 두 칸은 <b>검사할 필요가 없는(제약 없음)</b> 칸이에요. 25p 문제는 검사할 필요가 <b>“있는”</b> 항목에 O → 정답은 <b>부모 UPDATE · DELETE, 자식 INSERT · UPDATE</b>. 실제로 실행해 보면 이 4가지에서만 오류가 나요 (아래 6번).</div>
+</section>
+<section class="card">
+<h2>6. [실습 6-03] 참조 무결성 — 부서 · 사원 (📸 8 · 9p 캡처) ★시험예상</h2>
+<pre><code class="language-sql">-- 부서(부서코드, 부서명)          ← 부모 테이블
+-- 사원(사원번호, 이름, 부서코드)    ← 자식 테이블 (부서코드 = 외래키)
+drop table 사원;      -- 삭제는 자식 먼저
+drop table 부서;
+
+CREATE TABLE 부서 (                -- 생성은 부모 먼저
+        부서코드 char(2)     NOT NULL ,
+        부서명    varchar(10) ,
+        PRIMARY KEY(부서코드)
+);
+CREATE TABLE 사원 (
+        사원번호 char(4)     NOT NULL ,
+        이름     varchar(12) ,
+        부서코드 char(2) ,
+        PRIMARY KEY(사원번호) ,
+        FOREIGN KEY (부서코드) REFERENCES 부서(부서코드)
+);
+insert into 부서 values('AA','총무부');
+insert into 부서 values('BB','영업부');
+insert into 부서 values('CC','기획부');
+
+insert into 사원 values('1111','홍길동','AA');
+insert into 사원 values('2222','임꺽정','AA');
+insert into 사원 values('3333','박찬호','BB');
+insert into 사원 values('4444','선동열','BB');
+insert into 사원 values('5555','차두리','AA');
+insert into 사원 values('6666','신동엽','BB');</code></pre>
+<p>“다음 문법을 실행하라. 실행 가능한가? 그 이유는?” — 위에서부터 차례로 실행한 실제 결과</p>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>번호</th><th>SQL</th><th>결과</th><th>이유</th></tr>
+<tr><td><b>1-1</b></td><td><code>INSERT INTO 사원 VALUES('7777','이승엽','BB');</code></td><td>✅ 성공</td><td>자식 입력 — 부서에 <b>BB 가 있음</b></td></tr>
+<tr><td><b>1-2</b></td><td><code>UPDATE 부서 SET 부서코드='DD' WHERE 부서코드='BB';</code></td><td>❌ Error 1451</td><td>부모 수정 — 사원이 <b>BB 를 참조 중</b></td></tr>
+<tr><td><b>1-3</b></td><td><code>INSERT INTO 부서 VALUES('DD','개발부');</code></td><td>✅ 성공</td><td>부모 입력 — <b>제약 없음</b></td></tr>
+<tr><td><b>1-4</b></td><td><code>DELETE FROM 부서 WHERE 부서코드='DD';</code></td><td>✅ 성공</td><td>부모 삭제 — DD 를 <b>참조하는 사원이 없음</b></td></tr>
+<tr><td><b>1-5</b></td><td><code>UPDATE 사원 SET 부서코드='AA' WHERE 사원번호='7777';</code></td><td>✅ 성공</td><td>자식 수정 — 부모에 있는 <b>다른 값(AA)</b> 으로 변경</td></tr>
+<tr><td><b>1-6</b></td><td><code>UPDATE 사원 SET 부서코드='FF' WHERE 사원번호='7777';</code></td><td>❌ Error 1452</td><td>자식 수정 — 부서에 <b>FF 가 없음</b></td></tr>
+<tr><td><b>1-7</b></td><td><code>DELETE FROM 사원 WHERE 사원번호='7777';</code></td><td>✅ 성공</td><td>자식 삭제 — <b>제약 없음</b></td></tr>
+</tbody></table>
+<div class="tip">🧾 <b>1451</b> Cannot delete or update a <b>parent</b> row (부모 쪽 수정 · 삭제) · <b>1452</b> Cannot add or update a <b>child</b> row (자식 쪽 입력 · 수정)</div>
+</section>
+<section class="card">
+<h2>7. 수강 테이블의 키 (📸 19p 캡처) ✍️</h2>
+<table class="ref">
+<tbody>
+<tr><th>학번</th><th>과목번호</th><th>성적</th></tr>
+<tr><td>1111</td><td>CS100</td><td>98</td></tr>
+<tr><td>1111</td><td>CS102</td><td>88</td></tr>
+<tr><td>2222</td><td>CS102</td><td>90</td></tr>
+<tr><td>3333</td><td>CS100</td><td>92</td></tr>
+</tbody></table>
+<pre><code class="language-text">-- 수강(학번, 과목번호, 성적)       ✍️ 내 답
+1. 수퍼키 : (학번, 과목번호) , (학번, 과목번호, 성적)
+2. 후보키 : (학번, 과목번호)
+3. 기본키 : (학번, 과목번호)       ← 빨간 글씨 20p PRIMARY KEY(학번, 과목번호)
+4. 대체키 : 없다</code></pre>
+<div class="tip">🤖 <b>설명</b> (필기 “claude야 여기 설명해”) — 학번 하나로는 X(1111 이 두 번) · 과목번호 하나로도 X(CS102 · CS100 이 두 번씩) → <b>(학번, 과목번호)</b> 를 합치면 모든 행이 달라 <b>유일성 O</b>, 하나라도 빼면 겹치니 <b>최소성 O</b> → <b>후보키</b>. 후보키가 <b>하나뿐</b>이라 그대로 <b>기본키</b>(복합키), 기본키로 안 뽑힌 후보키가 없으니 <b>대체키는 없다</b>. 수퍼키는 <b>유일성만</b> 있으면 돼서 성적을 붙인 것도 수퍼키 — 내 답 모두 맞아요 ✅ · 외래키: 수강.학번 → 학생.학번 · 수강.과목번호 → 과목.과목번호</div>
+<div class="tip">❓ <b>“다음은 후보키인가? 이유를 쓰시오 — (학번, 과목번호, 성적)”</b> → <b>후보키가 아니다.</b> 유일성은 있지만 성적을 빼도 (학번, 과목번호) 만으로 유일하게 구별되므로 <b>최소성을 만족하지 않는다</b> → 후보키가 아니라 <b>수퍼키</b>.<br>⚠️ <b>함정</b> — 지금 데이터만 보면 성적(98 · 88 · 90 · 92)도 안 겹치지만, 성적은 같은 점수가 나올 수 있는 값이라 키가 될 수 없어요. 키는 <b>속성의 의미</b>로 정해요.</div>
+</section>
+<section class="card">
+<h2>8. 용어 — 같은 말 찾기 · 쓰기 (중간고사 용어문제) ✍️</h2>
+<table class="ref">
+<tbody>
+<tr><th>✍️ 외우는 법</th><th>같은 말</th></tr>
+<tr><td>—</td><td><b>테이블 = 릴레이션</b>(relation)</td></tr>
+<tr><td><b>투레행</b></td><td><b>투플</b>(tuple) = <b>레코드</b>(record) = <b>행</b>(row)</td></tr>
+<tr><td><b>필속열</b></td><td><b>필드</b>(field) = <b>속성</b>(attribute · 애트리뷰트) = <b>열</b>(column) = 컬럼</td></tr>
+<tr><td>차수(degree)</td><td><b>필드(열)의 개수</b></td></tr>
+<tr><td>카디날리티(cardinality)</td><td><b>레코드(행)의 개수</b></td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 투플(행)들의 <b>모음 = 인스턴스</b> · <b>DELETE 의 삭제 단위 = 레코드(행)</b> (필기의 <code>DELECT</code> 는 DELETE 오타)<br>📸 <b>13p 캡처</b> — 릴레이션 <b>스키마</b> = <b>내포</b>(intension) · <b>정적</b> / 릴레이션 <b>인스턴스</b> = <b>외연</b>(extension) · <b>동적</b> · 예) 사원 스키마 = <code>사원번호 | 사원명 | 연락처 | 생일</code>, 인스턴스 = D001 · D002 · D003 행들</div>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../데이터베이스관리.html#quiz">퀴즈 — 6주차 객관식 21~25 · 주관식 21~25</a></li><li><a href="../데이터베이스관리.html#output">🖥️ 결과 맞히기 — 🔥 6주차 시험예상 11~13번 (customer · 주소록 · 부서/사원)</a></li><li><a href="../데이터베이스관리.html#code">💻 코딩테스트 — 🔥 6주차 시험예상 14~17번 (SELECT · UPDATE/DELETE · 외래키)</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-5주차.html">‹ 이전 · <b>5주차</b><br><small>키 5종 · 뷰(view) · 널 값 · INSERT</small></a><a class="next" href="데이터베이스관리-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리 · 6주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>
