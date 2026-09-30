@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202609301321"></script>
+    <script src="../theme.js?v=202609301805"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로그래밍언어실습 5주차 · 조건 · 반복 (ch06 · ch07)</title>
-    <link rel="stylesheet" href="../style.css?v=202609301321">
+    <link rel="stylesheet" href="../style.css?v=202609301805">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -749,7 +749,7 @@ int main() {
     int i;
     int sum = 0;                       // 합을 모을 변수는 0 으로 시작
     for (i = 1; i &lt;= 100; i++) {
-        sum += i;                      // sum = sum + i → 1 + 2 + … + 10 → 55
+        sum += i;                      // sum = sum + i → 1 + 2 + … + 100 → 5050
     }
     printf("sum == %d", sum);
     return 0;
@@ -1022,12 +1022,12 @@ int main(void) {
     scanf("%d", &amp;max);
 
     for (i = 1, sum = 0; i &lt;= max; i++) //++i도 가능
-        sum += i; // sum = sum + i → 1 + 2 + … + 10 → 55
+        sum += i; // sum = sum + i → 1 + 2 + … + max (예: 10 입력 → 55)
     printf("\nfor 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);
 
     i = 1, sum = 0;                    // 초기식
     while (i &lt;= max) {                 // 조건식
-        sum += i; // sum = sum + i → 1 + 2 + … + 10 → 55
+        sum += i; // sum = sum + i → 1 + 2 + … + max (예: 10 입력 → 55)
         i++;      // 증감식 (++i도 가능)
     }
     printf("while 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);

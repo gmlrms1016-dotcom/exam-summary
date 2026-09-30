@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202609301321"></script>
+    <script src="theme.js?v=202609301805"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로그래밍언어실습 · 완전 정리</title>
-    <link rel="stylesheet" href="style.css?v=202609301321">
-    <script src="schedule.js?v=202609301321"></script>
+    <link rel="stylesheet" href="style.css?v=202609301805">
+    <script src="schedule.js?v=202609301805"></script>
     <style>
         /* 출력 결과 박스 · 정답 접이식 (파이썬프로그래밍.html 과 동일) */
         pre.io { background:#0f1b14; }
@@ -1974,7 +1974,7 @@ int main() {
     int i;
     int sum = 0;                       // 합을 모을 변수는 0 으로 시작
     for (i = 1; i &lt;= 100; i++) {
-        sum += i;                      // sum = sum + i → 1 + 2 + … + 10 → 55
+        sum += i;                      // sum = sum + i → 1 + 2 + … + 100 → 5050
     }
     printf("sum == %d", sum);
     return 0;
@@ -2247,12 +2247,12 @@ int main(void) {
     scanf("%d", &amp;max);
 
     for (i = 1, sum = 0; i &lt;= max; i++) //++i도 가능
-        sum += i; // sum = sum + i → 1 + 2 + … + 10 → 55
+        sum += i; // sum = sum + i → 1 + 2 + … + max (예: 10 입력 → 55)
     printf("\nfor 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);
 
     i = 1, sum = 0;                    // 초기식
     while (i &lt;= max) {                 // 조건식
-        sum += i; // sum = sum + i → 1 + 2 + … + 10 → 55
+        sum += i; // sum = sum + i → 1 + 2 + … + max (예: 10 입력 → 55)
         i++;      // 증감식 (++i도 가능)
     }
     printf("while 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);
@@ -5893,10 +5893,10 @@ int main() {
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="quiz.js?v=202609301321"></script>
-<script src="review.js?v=202609301321"></script>
-<script src="weeks.js?v=202609301321"></script>
-<script src="codetest.js?v=202609301321"></script>
-<script src="outquiz.js?v=202609301321"></script>
+<script src="quiz.js?v=202609301805"></script>
+<script src="review.js?v=202609301805"></script>
+<script src="weeks.js?v=202609301805"></script>
+<script src="codetest.js?v=202609301805"></script>
+<script src="outquiz.js?v=202609301805"></script>
 </body>
 </html>

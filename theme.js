@@ -12,6 +12,7 @@
    - 오른쪽 위 ☀️/🌙 버튼으로 전환 · 주소 뒤 ?theme=light / ?theme=dark 로도 지정 가능
    - 소스코드 색칠 codecolor.js 도 여기서 함께 불러옴 (VS Code 고대비 색)
    - 애니메이션 · 인터랙션 motion.js 도 여기서 함께 불러옴 (자세한 건 motion.js 맨 위 설명)
+   - 출력 결과 상자 outview.js 도 여기서 함께 불러옴 (줄 번호 · 키보드 입력 표시 · 줄마다 설명)
    - 전환 버튼을 누르면 버튼 자리에서 원이 퍼지며 모드가 바뀜 (View Transitions 지원 브라우저)
    ===================================================================== */
 (function () {
@@ -31,6 +32,7 @@
     }
     loadSibling("codecolor-js", "codecolor.js");
     loadSibling("motion-js", "motion.js");
+    loadSibling("outview-js", "outview.js");      // ▶ 출력 결과 상자: 줄 번호 · 입력 표시 · 줄마다 설명
 
     function load() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
     function store(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }

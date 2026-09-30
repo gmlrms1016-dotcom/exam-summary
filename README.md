@@ -42,6 +42,7 @@ style.css           과목 페이지 공용 테마(초록) — 화이트모드 �
 theme.js            ★ 전 페이지 공용 — 다크모드(기본) / 화이트모드 전환 (오른쪽 위 ☀️/🌙 버튼)
 codecolor.js        전 페이지 공용 — 소스코드 색칠(VS Code 고대비 색) · theme.js 가 자동으로 불러옴
 motion.js           전 페이지 공용 — 애니메이션·인터랙션(화면 전환·스크롤 등장·퀴즈 반응·맨 위로 버튼) · theme.js 가 자동으로 불러옴
+outview.js          전 페이지 공용 — ▶ 출력 결과 상자(pre.io): 줄 번호 · ⌨️ 키보드 입력 강조 · 오류 줄 빨강 · [␣ 공백] 버튼 · 줄마다 💡 설명(앞 코드의 출력문 · 들어간 값 · 주석 · 반복 N번째 / 리눅스 passwd·group·shadow·ls -l·chage·id 칸 풀이) · theme.js 가 자동으로 불러옴
 scripts/bump_assets.py  ★ 공용 파일(theme.js·style.css·quiz.js…)을 고친 뒤 실행 — 모든 페이지 주소의 ?v= 버전을 올려 브라우저 캐시를 끊음
 review.js           과목 페이지 공용 — 틀린 문제 모아 복사 + 코드블록 복사 버튼
 quiz.js             2학기 과목 페이지 공용 퀴즈 — 객관식(.mcq)·주관식(.quiz-item) 채점 + 복습 모드
@@ -116,7 +117,7 @@ window.isExamFinished("X.html")                      // → true/false
 - **새 페이지**: `<head>` 의 `<meta charset>` 바로 다음 줄에 `<script src="theme.js"></script>` (weeks/ 안은 `../theme.js`). 다크 전용 CSS 는 페이지에 따로 쓰지 말고 화이트 기준으로만 작성하세요. 새 공용 부품의 다크 색을 정확히 맞추고 싶으면 `DARK_CSS` 에 `html[data-theme=dark] .클래스{…}` 한 줄을 추가합니다.
 - 오른쪽 위(`top:14px; right:14px`, 44px)는 전환 버튼 자리라 고정 UI 를 두지 않습니다. 변환에서 빼고 싶은 요소는 `data-theme-skip` 속성.
 - 전환 버튼을 누르면 버튼 자리에서 **원이 퍼지며** 모드가 바뀝니다(View Transitions 지원 브라우저, 나머지는 바로 전환).
-- ⚠️ **캐시 주의**: GitHub Pages 는 JS·CSS 를 10분 캐시하고 크롬은 새로고침해도 HTML 만 새로 받습니다. `theme.js`·`codecolor.js`·`motion.js`·`style.css`·`quiz.js`·`review.js`·`weeks.js`·`schedule.js`·`codetest.js`·`outquiz.js` 를 고쳤으면 커밋 전에 **`python3 scripts/bump_assets.py`** 를 실행하세요(모든 페이지의 `?v=` 를 갱신, codecolor.js·motion.js 는 theme.js 의 버전을 이어받음).
+- ⚠️ **캐시 주의**: GitHub Pages 는 JS·CSS 를 10분 캐시하고 크롬은 새로고침해도 HTML 만 새로 받습니다. `theme.js`·`codecolor.js`·`motion.js`·`outview.js`·`style.css`·`quiz.js`·`review.js`·`weeks.js`·`schedule.js`·`codetest.js`·`outquiz.js` 를 고쳤으면 커밋 전에 **`python3 scripts/bump_assets.py`** 를 실행하세요(모든 페이지의 `?v=` 를 갱신, codecolor.js·motion.js·outview.js 는 theme.js 의 버전을 이어받음).
 
 ### ✨ 애니메이션 · 인터랙션 — `motion.js` (토스 앱 느낌)
 theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다. 색은 **화이트 = 원래 초록·주황 토큰, 다크 = 파랑·무채색**(녹색 없음)이고, 기기의 **동작 줄이기**를 켜면 움직임은 모두 빠집니다(진행 막대·상단 바·맨 위로 버튼·포커스 테두리만 남음).
@@ -141,6 +142,13 @@ theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다. 
 - 화면이 가려진 탭에서는 `requestAnimationFrame`·애니메이션이 멈추므로, 상단 바·진행 막대·시트 닫기·화면 밀어내기에는 **타이머 대비책**이 들어 있습니다. 비슷한 처리를 추가할 때도 같은 방식을 쓰세요.
 - `index.html` 의 `tickHub()` 는 과목 카드 **순서가 바뀔 때만** 다시 끼우고, 상태 칩은 같은 종류면 요소를 그대로 둔 채 안쪽만 바꿉니다(1초마다 애니메이션이 끊기지 않게). 카드·칩을 고칠 때 이 방식을 유지하세요.
 - 새 부품은 클래스만 맞추면 자동으로 붙습니다(`.card`·`.mcq`·`.quiz-item`·`.opt`·`.wk-btn`·`.toc a` 등). 등장 애니메이션에서 빼고 싶은 영역은 `data-mo-skip` 속성.
+
+### 🖥️ 출력 결과 상자 — `outview.js` (줄 번호 · 줄마다 설명)
+- 페이지의 모든 `pre.io`(▶ 출력 결과) 를 자동으로 꾸밉니다 — 결과 맞히기(`.oq`) · 코딩테스트(`.ct`) · 실제시험 안은 **답이 보이면 안 되니 건드리지 않음**
+- **설명(💡)** 은 바로 앞 코드 블록(`language-c/java/javascript/python/bash`)에서 그 줄을 찍은 출력문을 찾아 붙입니다: 코드 줄 주석(단계별 설명) · `%d ← c = 31` 처럼 들어간 값 · 값이 변수면 그 변수를 계산한 줄의 주석 · 반복이면 `3번째`(한 줄에 여러 번이면 `1~9번째 · j = 1 ~ 9`)
+- **확실하지 않으면 비워 둡니다** — 값만 찍는 출력문이 반복·콜백 안에 여럿 · 같은 문장을 찍는 if/else 갈래 · 구분 글자 없이 이어 찍는 반복 · 줄 일부만 짝을 찾은 경우
+- 그래서 **코드 주석을 단계별로 잘 적어 두면 출력 설명도 자동으로 좋아집니다** (주석 규칙은 위 주차 정리 절차)
+- 확인: `node` 로 `require("./outview.js").analyze(코드, "c", 출력)` → 줄마다 `notes`
 
 ### 🎨 소스코드 색 — `codecolor.js` (VS Code Dark High Contrast)
 - 모든 `<pre><code>` 를 highlight.js(cdnjs)로 분석해 VS Code 고대비 색으로 칠합니다. 화이트·다크 모드 모두 같은 색(검은 바탕)입니다. theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다.
