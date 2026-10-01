@@ -59,6 +59,7 @@
         <a href="#s26">26.객체지향특성</a>
         <a href="#s27">27.★클래스·객체</a>
         <a href="#s28">28.클래스실습</a>
+        <a href="#s29">29.✍️PDF필기·🔥식별자</a>
         <a href="#quiz">✏️퀴즈</a>
         <a href="#output">🖥️출력맞히기</a>
         <a href="#code">💻코딩테스트</a>
@@ -1006,8 +1007,21 @@ public class Main {
         <div class="tip">📌 4장 p10 ~ 11 의 <b>붕어빵틀 = 클래스, 구워낸 붕어빵 = 객체</b> 를 코드로 만든 것 · 세 객체 모두 flavor · price 필드를 가지지만 <b>값은 각자 다르다</b> · showInfo() 는 출력하지 않고 문자열을 <b>return</b> 해서, main 에서 받아 출력해요.</div>
     </section>
 
+    <section class="card" id="s29">
+        <h2>29. ✍️ PDF 필기 — 🔥 식별자 ★ · 빈칸 · 1 · 2장<span class="week">2~3주차</span></h2>
+        <p>1장 · 2장 PDF 에 Apple Pencil 로 쓴 필기예요. <b>2장 7쪽 식별자 이름 사례에 큰 ★</b> (중간고사 폴더 PDF 에도 같은 쪽 ★) · <b>23쪽 CircleArea 의 double 에 “빈칸”</b></p>
+        <table class="ref">
+            <tr><th>🔥 식별자 — 사용 가능</th><th>🔥 식별자 — 잘못된 예</th></tr>
+            <tr><td><code>student_ID</code> (<code>_</code>) · <code>$func</code> (<code>$</code>) · <code>Monster3</code> (숫자는 첫 글자만 아니면) · 긴 이름 · <code>barChart</code> ≠ <code>barchart</code> · <code>가격</code> (한글)</td><td><code>3Chapter</code> (첫 글자 숫자) · <code>if</code> (예약어) · <code>false</code> · <code>null</code> · <code>%calc</code> (특수문자)</td></tr>
+        </table>
+        <pre><code class="language-java">final double PI = 3.14;               // ✍️ 빈칸 → double (final = 변경 X)
+double radius = 10.0;                 // ✍️ 빈칸 → double
+double circleArea = radius*radius*PI; // ✍️ 빈칸 → double · 10.0 × 10.0 × 3.14 → 314.0</code></pre>
+        <div class="tip">✍️ 카멜 표기: 클래스 첫 글자 <b>대문자</b> · 변수 · 메소드 첫 글자 <b>소문자</b> · 상수 <b>전부 대문자</b> · byte 범위 −2ⁿ ~ (2ⁿ − 1) (n = 7 → −128 ~ 127) · int 는 4바이트 · long 은 L 을 붙여야 해서 int 를 선호 · 실수는 double 을 많이 씀(D 필수 X) · main() = “메서드 필수”<br>1장: “소스를 컴파일해서 기계어로 번역한다” · “자바(.java)를 실행하면 바이트(.class)로 바뀐다” · JVM = 동일한 자바 실행 환경 · 플랫폼 독립성 · public 클래스는 하나 · 자세히는 <a href="weeks/자바프로그래밍-3주차.html" target="_blank" rel="noopener">3주차</a> · <a href="weeks/자바프로그래밍-2주차.html" target="_blank" rel="noopener">2주차</a></div>
+    </section>
+
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 20 · 주관식 20<span class="week">2~6주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 22 · 주관식 22<span class="week">2~6주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -1171,6 +1185,22 @@ public class Main {
             <button class="opt" type="button" data-opt="D"><b>D.</b> 8, 2</button>
             <div class="mcq-exp"><b>정답 B</b> — 2차원 배열의 length = 행의 개수 4 · intArray[1].length = 1번 행의 열 개수 2 (비정방형 배열은 행마다 다름)</div>
         </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">21</span>🔥 ★ 2장 7쪽 — 자바 <b>식별자로 쓸 수 없는</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> student_ID</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> $func</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 3Chapter</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 가격</button>
+            <div class="mcq-exp"><b>정답 C</b> — 첫 글자에 숫자 불가(3Chapter) · <code>_</code> · <code>$</code> · 한글은 가능</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">22</span>🔥 ★ 식별자 규칙으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> barChart 와 barchart 는 같은 식별자다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> true · false · null 은 식별자로 쓸 수 없다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 식별자 길이는 최대 31자다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> % 같은 특수문자는 첫 글자만 아니면 쓸 수 있다</button>
+            <div class="mcq-exp"><b>정답 B</b> — 대소문자 구분(둘은 다름) · 길이 제한 없음 · 특수문자는 _ 와 $ 만 · 불린 · 널 리터럴(true, false, null)과 예약어는 불가</div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers=".class|class" data-explain=".java → javac 컴파일 → .class (JVM 이 실행)">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>자바 소스를 컴파일하면 만들어지는 <b>바이트코드 파일</b>의 확장자는?</p>
@@ -1288,6 +1318,18 @@ public class Main {
         </div>
         <div class="quiz-item" data-answers="필드|field|멤버변수" data-explain="4장 p14 — 필드 = 멤버 변수 · 메소드 = 멤버 함수(객체의 행동)">
             <p class="quiz-q"><span class="quiz-cat">주관식 20</span>객체 안에 값을 저장하는 <b>멤버 변수</b>를 무엇이라고 하나요? (<code>int radius;</code> · <code>String name;</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="double" data-full="double" data-explain="✍️ 2장 23쪽 CircleArea 의 double 세 곳에 “빈칸” — 실수 변수는 double (final double PI = 3.14;)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 21</span>🔥 ✍️ “빈칸” — <code>final ( ① ) PI = 3.14;</code> 에서 ① 에 들어갈 타입은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="final" data-full="final" data-explain="✍️ final → “변경 X” — 상수: 선언 때 초기값 지정 · 실행 중 값 변경 불가">
+            <p class="quiz-q"><span class="quiz-cat">주관식 22</span>✍️ “변경 X” — 값을 바꿀 수 없는 <b>상수</b>를 선언할 때 쓰는 키워드는?</p>
             <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>

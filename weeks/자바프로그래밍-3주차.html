@@ -85,6 +85,23 @@ System.out.println((int)2.9 + (int)1.8); // (int)2.9 → 2 · (int)1.8 → 1 →
   default: grade='F';
 }</code></pre>
 </section>
+<section class="card">
+<h2>✍️ PDF 필기 (Apple Pencil · 2장) — 10/1 보충</h2>
+<div class="tip">2장 PDF 에 쓴 필기 · 강조예요. <b>7쪽 식별자 이름 사례에 큰 ★</b> (중간고사 폴더의 PDF 에도 같은 쪽 ★) → 🔥 시험</div>
+<ul><li>🔥 <span class="wk-tag note">✍️ 필기</span> — 7쪽 ★ <b>식별자 이름 사례</b></li></ul>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>사용 가능</th><th>이유</th><th>잘못된 예</th><th>이유</th></tr>
+<tr><td><code>int name;</code></td><td></td><td><code>int 3Chapter;</code></td><td>첫 글자 <b>숫자</b> 불가</td></tr>
+<tr><td><code>char student_ID;</code></td><td><code>_</code> 사용 가능</td><td><code>class if { }</code></td><td><b>예약어</b> if 불가</td></tr>
+<tr><td><code>void $func() { }</code></td><td><code>$</code> 사용 가능</td><td><code>char false;</code></td><td><b>false</b> 불가</td></tr>
+<tr><td><code>class Monster3 { }</code></td><td>숫자(첫 글자 아님) 가능</td><td><code>void null() { }</code></td><td><b>null</b> 불가</td></tr>
+<tr><td><code>int whatsyournamemynameiskitae;</code></td><td>길이 제한 없음</td><td><code>class %calc { }</code></td><td><code>%</code> 는 <b>특수문자</b></td></tr>
+<tr><td><code>int barChart; int barchart;</code></td><td>대소문자 구분 → 서로 다름</td><td></td><td></td></tr>
+<tr><td><code>int 가격;</code></td><td>한글 가능</td><td></td><td></td></tr>
+</tbody></table>
+<ul><li>6쪽 형광펜: <b>식별자 = 클래스 · 변수 · 상수 · 메소드 등에 붙이는 이름</b> · 대소문자 구별(Test 와 test 는 다른 식별자)</li><li>8쪽 키워드 표에서 동그라미: <code>for</code> · <code>if</code> · <code>else</code> · <code>int</code> · <code>char</code> · <code>while</code></li><li>9쪽 형광펜 — 카멜 표기: 클래스 이름 첫 글자 <b>대문자</b> · 변수 · 메소드 첫 글자 <b>소문자</b> · 상수는 <b>모든 문자를 대문자</b></li><li>2쪽 예제 2-1 — main() 옆 ✍️ “<b>메서드 필수</b>”</li><li>11쪽 byte 범위 옆 ✍️ <b>−2ⁿ ~ (2ⁿ − 1)</b> → byte 는 n = 7 → −128 ~ 127</li><li>13쪽 ✍️ “<b>int 는 4바이트의 정수형</b>” · 14쪽 <code>char</code> · <code>int</code> · <code>double</code> 동그라미</li><li>15쪽 ✍️ long 리터럴은 <code>24L</code> 처럼 <b>L 을 써야 해서 귀찮아서 int 를 선호한다</b></li><li>16쪽 ✍️ “<b>double 을 많이 쓴다 · 뒤에 D 가 필수 X</b>” (<code>0.1234f</code> 의 f · <code>.1234D</code> 의 D 에 동그라미)</li><li>22쪽 <code>final</code> → ✍️ “<b>변경 X</b>” (상수: 선언 때 초기값 · 실행 중 값 변경 불가)</li><li>🔥 23쪽 예제 2-2 CircleArea — <code>double</code> 세 곳에 네모 + ✍️ “<b>빈칸</b>” → 빈칸 문제 예상: <code>final ( ① ) PI = 3.14;</code> · <code>( ① ) radius = 10.0;</code> · <code>( ① ) circleArea = radius*radius*PI;</code> → ① = <b>double</b></li><li>27쪽 예제 2-3 TypeConversion — 줄마다 손계산: <code>b+i</code> 227 · <code>10/4</code> 2 · <code>10.0/4</code> 2.5 · <code>(char)0x12340041</code> A · <code>(byte)(b+i)</code> 227 − 256 = −29 · <code>(int)2.9 + 1.8</code> 2 + 1.8 = 3.8 · <code>(int)(2.9 + 1.8)</code> 4.7 → 4 · <code>(int)2.9 + (int)1.8</code> 2 + 1 = 3 · 아래 2진 자리값 256 128 64 32 16 8 4 2 1</li></ul>
+</section>
 
     <nav class="wk-pager"><a class="prev" href="자바프로그래밍-2주차.html">‹ 이전 · <b>2주차</b><br><small>1장 자바 개요</small></a><a class="next" href="자바프로그래밍-4주차.html">다음 · <b>4주차</b> ›<br><small>2장 실습 + 3장 반복문·배열·예외처리</small></a></nav>
 
