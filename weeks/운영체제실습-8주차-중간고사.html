@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202609301805"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~4주차 반영)</title>
+    <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~5주차 반영)</title>
     <link rel="stylesheet" href="../style.css?v=202609301805">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
@@ -46,13 +46,43 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🐧 운영체제실습 · 8주차 · 중간고사</h1>
-        <p>중간고사 시험문제 정리 (1~4주차 반영)</p>
+        <p>중간고사 시험문제 정리 (1~5주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-4주차.html">‹ 이전 · <b>4주차</b><br><small>사용자·그룹 관리 · rpm·dnf 패키지 설치</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>작업 예약 cron · at · 월간 백업 스크립트</small></a><span></span></nav>
 
-<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~4주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
-<div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종 ⑥ <b>DNF 작동 흐름도(그림 4-111) — 4주차 수업 화면에 나온 시험문제</b></div>
+<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~5주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
+<div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종 ⑥ <b>DNF 작동 흐름도(그림 4-111) — 4주차 수업 화면에 나온 시험문제</b> ⑦ <b>작업 예약 cron · at</b>(5주차 — crontab 칸 순서 · run-parts · 백업 스크립트)</div>
+<section class="card">
+<h2>5주차 — 작업 예약 cron · at · 월간 백업 (<a href="운영체제실습-5주차.html">5주차 자세히</a>)</h2>
+<h3>/etc/crontab 한 줄 — 분 시 일 월 요일 사용자 명령</h3>
+<table class="ref">
+<tbody style="min-width:696px;">
+<tr><th>칸</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
+<tr><td>뜻</td><td>분</td><td>시</td><td>일</td><td>월</td><td>요일</td><td>사용자</td><td>명령</td></tr>
+<tr><td>예</td><td>01</td><td>3</td><td>15</td><td>*</td><td>*</td><td>root</td><td>run-parts /etc/cron.monthly</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag star">⭐ 강조</span> <code>01 3 15 * *</code> → <b>매월 15일 03:01</b> (순서를 바꿔 <code>01 15 3</code> 이면 매월 3일 15:01)</li><li><code>run-parts /etc/cron.monthly</code> → 그 폴더의 <b>실행 권한 있는</b> 파일을 모두 실행 → 스크립트에 <code>chmod 755</code></li><li><code>systemctl restart crond</code> 는 서비스 재시작일 뿐 · 백업은 <b>정해진 시각</b>에 실행 (시계를 03:00 으로 맞추고 1분 뒤 03:01)</li></ul>
+<h3>백업 스크립트 (/etc/cron.monthly/mybackup.sh)</h3>
+<table class="ref">
+<tbody>
+<tr><th>줄</th><th>뜻</th></tr>
+<tr><td><code>set $(date)</code></td><td>date 결과를 $1 $2 $3 … 에 나눠 넣기</td></tr>
+<tr><td><code>fname="backup-$2$3tar.xz"</code></td><td>$2 · $3 = 월 · 일 → 한국어 화면 <code>backup-01.15.tar.xz</code> · 영어 화면 <code>backup-Jan15tar.xz</code></td></tr>
+<tr><td><code>tar cfJ /backup/$fname /home</code></td><td>c 묶기 · f 파일 이름 · <b>J xz 압축</b> → /home 을 /backup 에</td></tr>
+</tbody></table>
+<ul><li>저장 폴더 <code>/backup</code> 이 없으면 <code>cannot access '/backup': No such file or directory</code> → <code>mkdir /backup</code></li></ul>
+<h3>시계 · at</h3>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>설명</th></tr>
+<tr><td><code>date 011503002035</code></td><td><b>MMDDhhmmYYYY</b> 12자리 → 2035년 1월 15일 03:00 (11자리면 <code>부적절한 날짜</code>)</td></tr>
+<tr><td><code>rdate -s time.bora.net</code></td><td>시간 서버에 맞추기 (openrdate)</td></tr>
+<tr><td><code>at 4:00 am tomorrow</code></td><td>한 번만 예약 → <code>at&gt;</code> 에 명령 → Ctrl + D</td></tr>
+<tr><td><code>at -l</code> / <code>atrm 1</code></td><td>예약 목록 / 1번 예약 취소</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag star">⭐ 강조</span> cron = 정해진 시각마다 <b>반복</b> · at = <b>한 번만</b> — 둘 다 작업 <b>예약</b> 명령 (백업은 예약한 작업의 예)</li></ul>
+</section>
 <section class="card">
 <h2>4주차 — 사용자·그룹 관리 · rpm·dnf (<a href="운영체제실습-4주차.html">4주차 자세히</a>)</h2>
 <h3>★ 시험문제 — DNF 작동 흐름도 (그림 4-111)</h3>
@@ -147,10 +177,10 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </section>
 <section class="card">
 <h2>✏️ 문제로 확인하기</h2>
-<ul><li><a href="../운영체제실습.html#quiz">운영체제실습 과목 페이지 — 퀴즈(객관식 15 · 주관식 15)</a></li></ul>
+<ul><li><a href="../운영체제실습.html#quiz">운영체제실습 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-4주차.html">‹ 이전 · <b>4주차</b><br><small>사용자·그룹 관리 · rpm·dnf 패키지 설치</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>작업 예약 cron · at · 월간 백업 스크립트</small></a><span></span></nav>
 
     <p class="wk-src">노션 「운영체제실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 
