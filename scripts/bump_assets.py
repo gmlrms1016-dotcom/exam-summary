@@ -16,7 +16,7 @@ import sys
 from datetime import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = r"style\.css|theme\.js|quiz\.js|review\.js|weeks\.js|schedule\.js|pyrun\.js|codetest\.js|outquiz\.js"
+ASSETS = r"style\.css|theme\.js|quiz\.js|review\.js|weeks\.js|schedule\.js|pyrun\.js|codetest\.js|outquiz\.js|codecopy\.js"
 PATTERN = re.compile(r'((?:src|href)=["\'])((?:\.\./|\{asset\})*(?:' + ASSETS + r'))(?:\?v=[\w.-]*)?(["\'])')
 
 

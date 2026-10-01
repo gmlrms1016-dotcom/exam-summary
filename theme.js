@@ -33,6 +33,7 @@
     loadSibling("codecolor-js", "codecolor.js");
     loadSibling("motion-js", "motion.js");
     loadSibling("outview-js", "outview.js");      // ▶ 출력 결과 상자: 줄 번호 · 입력 표시 · 줄마다 설명
+    loadSibling("codecopy-js", "codecopy.js");    // ⧉ 복사 — 모든 코드블록 (주차 페이지 · 나중에 생기는 코드 포함)
 
     function load() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
     function store(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
