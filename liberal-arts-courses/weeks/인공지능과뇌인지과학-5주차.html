@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../../theme.js?v=202609301805"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인공지능과뇌인지과학 5주차 · 인지신경과학 2 · 뉴런</title>
+    <link rel="stylesheet" href="../../style.css?v=202609301805">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../인공지능과뇌인지과학.html">← 인공지능과뇌인지과학 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🧠 인공지능과뇌인지과학 · 5주차</h1>
+        <p>인지신경과학 2 · 뉴런</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-3주차.html">‹ 이전 · <b>3주차</b><br><small>인지과학의 출범</small></a><a class="next" href="인공지능과뇌인지과학-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~5주차 반영)</small></a></nav>
+
+<div class="tip">자료: 인공지능과_뇌인지과학_4장.pdf · 정리 범위 = 노션 필기 + 캡처 2장(교수님이 화면에 띄운 <code>4장.txt</code> 메모). 캡처 글자는 그대로 옮겼고, 카메라에 가린 글자 몇 개(“세포체” 제목 · “- 왜?” · 셋째 장 첫 줄 “-”)는 앞뒤 문맥으로 채웠어요.</div>
+<section class="card">
+<h2>🔥 시험 포인트</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — <b>신경전달물질에 OX로 나올 수 있음</b> → 아래 “신경전달물질” 카드 + 4장 22쪽 표를 OX 로 연습하기</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 큰 신경전달물질 = <b>세포체</b>에서 합성 · 작은 <b>아세틸콜린</b> = <b>축색 종말</b>에서 합성</li></ul>
+</section>
+<section class="card">
+<h2>세포체 (캡처 원문)</h2>
+<ul><li><span class="wk-tag memo">📝 교수님 메모</span> — 만약 뉴런이 반으로 잘린다면 -&gt; 세포체 없는 쪽 사망</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 왜? -&gt; 유전 정보를 포함하는 핵이 없어 생명에 필요한 단백질을 만들 수 X</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 정보처리에 필요한 화학물질(신경전달물질)을 생산</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 세포핵과 여러 소기관이 있다.</li><li><span class="wk-tag star">⭐ 강조</span> — 4장 3쪽: 세포체(soma / cell body) = 세포의 생명을 유지시켜 주는 기능 / 정보처리 과제를 통합</li></ul>
+</section>
+<section class="card">
+<h2>축색 종말 (캡처 원문)</h2>
+<ul><li><span class="wk-tag memo">📝 교수님 메모</span> — 축색의 끝부분 -&gt; 여기서 다른 뉴런에게 정보가 전달된다.</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 끝부분이 둥글게 부풀어 있다.</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 다른 뉴런의 수상돌기 또는 세포체와 접촉</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 이 부위를 시냅스라 한다.</li><li>4장 3쪽 영어 이름: 축색종말 = terminal button · 시냅스 = synapse · 신경전달물질 = neurotransmitter</li></ul>
+</section>
+<section class="card">
+<h2>신경전달물질 (캡처 원문) 🔥</h2>
+<ul><li><span class="wk-tag memo">📝 교수님 메모</span> — 만약 크기가 큰 경우 -&gt; 뉴런의 세포체에서 합성</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 그보다 작은 아세틸콜린 -&gt; 축색 종말에서 합성</li><li><span class="wk-tag note">✍️ 필기</span> — 신경전달물질에 OX로 나올 수 있음</li></ul>
+<h3>4장 22쪽 신경전달물질 표 (OX 대비)</h3>
+<table class="ref">
+<tbody>
+<tr><th>신경전달물질</th><th>기능</th><th>특징</th></tr>
+<tr><td>아세틸콜린(Ach)</td><td>뇌에서는 흥분성 / 다른 부위에선 흥분 or 억제성</td><td>기억 / 운동에 관여</td></tr>
+<tr><td>노르에피네프린</td><td>각성 조절 담당(아드레날린)</td><td>자율신경계 뉴런에서 주로 발견 · 경계와 각성 상태 조절</td></tr>
+<tr><td>도파민(DA)</td><td>시냅스후 수용기에 따라 흥분성 / 억제성</td><td>운동 / 주의 / 학습 · 부족 시 <b>파킨슨병</b></td></tr>
+<tr><td>세로토닌</td><td>시냅스후 수용기에 따라 흥분성 / 억제성</td><td>섭식 / 수면 / 기분 조절 · Prozac(우울증 약)은 세로토닌 재흡수를 막음</td></tr>
+<tr><td>GABA</td><td>뇌와 척수에서 주요한 <b>억제성</b></td><td>간질의 주요 원인 중 하나(GABA 뉴런 · 수용기 이상)</td></tr>
+<tr><td>글루타메이트</td><td>뇌와 척수에서 주요한 <b>흥분성</b></td><td>GABA 와 함께 최초로 진화한 것으로 추정 · 과도한 방출은 뇌중풍 원인</td></tr>
+</tbody></table>
+<ul><li>4장 22쪽: 대략 <b>50여 개</b>의 신경전달물질이 발견 · 노르에피네프린 · 도파민 · 세로토닌 = 모노아민 / GABA · 글루타메이트 = 아미노산</li></ul>
+</section>
+<section class="card">
+<h2>퍼킨제 세포 (캡처 원문)</h2>
+<ul><li><span class="wk-tag memo">📝 교수님 메모</span> — 소뇌 - 신체의 운동에 관여</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 소뇌 피질에 이 세포가 존재</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 단순 -&gt; 복잡 발달(생후 1년 = 성인) / 신경가소성</li><li>4장 4쪽 그림: 소뇌에 위치한 <b>퍼킨제 세포(Purkinje cell)</b> · 피부에서 척수로 가는 <b>감각뉴런</b></li></ul>
+</section>
+<section class="card">
+<h2>신경돌기 · 뉴런 분류 (캡처 원문)</h2>
+<ul><li><span class="wk-tag memo">📝 교수님 메모</span> — 신경돌기: 세포체에서 뻗어나온 가지</li><li><span class="wk-tag memo">📝 교수님 메모</span> — 뉴런의 연결 위치에 따라 분류</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>뉴런</th><th>하는 일</th></tr>
+<tr><td>감각뉴런</td><td>감각 신호를 받음 -&gt; 중추신경계로 전달</td></tr>
+<tr><td>연합뉴런(개재 뉴런, inter neuron)</td><td>뉴런끼리 연결</td></tr>
+<tr><td>운동뉴런</td><td>근육과 연결 -&gt; 움직임을 만듦</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag fix">⚠️ 정정</span> — 4장 5쪽에는 “개<b>제</b>뉴런”으로 적혀 있지만 교수님 메모의 “개<b>재</b> 뉴런(介在, 사이에 끼어 있는)”이 맞는 말이에요.</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-3주차.html">‹ 이전 · <b>3주차</b><br><small>인지과학의 출범</small></a><a class="next" href="인공지능과뇌인지과학-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~5주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「인공지능과뇌인지과학 · 5주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>
