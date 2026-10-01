@@ -19,6 +19,7 @@
 .card li{margin:6px 0;line-height:1.75;}
 .card li>ul,.card li>ol{margin:4px 0;}
 .card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
 .card p{line-height:1.75;}
 .wk-lockbtn{text-align:right;margin:4px 0 10px;}
 .wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
@@ -79,7 +80,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li>헷갈리는 짝 — <code>cp</code> 복사 ↔ <code>mv</code> 이동 · 이름 변경 / <code>cat</code> 파일 내용 ↔ <code>echo</code> 내가 쓴 글자 / <code>ps</code> 프로세스 목록 ↔ <code>kill</code> 종료 ↔ <code>top</code> 실시간 / <code>find</code> <b>파일</b>을 찾음 ↔ <code>grep</code> 파일 <b>안의 글자</b>를 찾음</li><li>2번의 오답 보기 “파일의 소유자를 변경” = <code>chown</code> (4주차) → 권한은 chmod, 소유자는 chown</li></ul>
 <h3>서술형 13문제 — 🤖 모범답안</h3>
-<p>#### 리눅스 명령어</p>
+<h4>리눅스 명령어</h4>
 <table class="ref">
 <tbody>
 <tr><th>#</th><th>문제</th><th>답</th></tr>
@@ -89,7 +90,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>4</td><td>PID 1234 프로세스 종료</td><td><code>kill 1234</code> (안 꺼지면 강제 종료 <code>kill -9 1234</code>)</td></tr>
 <tr><td>5</td><td>script.sh 를 소유자만 실행 가능하게</td><td><code>chmod 744 script.sh</code> → rwxr--r-- (실행 x 는 소유자만) · 소유자에게 실행만 더하려면 <code>chmod u+x script.sh</code></td></tr>
 </tbody></table>
-<p>#### 에디터 (vi · nano — 3주차에 이름만 나옴)</p>
+<h4>에디터 (vi · nano — 3주차에 이름만 나옴)</h4>
 <table class="ref">
 <tbody>
 <tr><th>#</th><th>문제</th><th>답</th></tr>

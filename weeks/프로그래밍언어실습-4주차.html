@@ -19,6 +19,7 @@
 .card li{margin:6px 0;line-height:1.75;}
 .card li>ul,.card li>ol{margin:4px 0;}
 .card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
 .card p{line-height:1.75;}
 .wk-lockbtn{text-align:right;margin:4px 0 10px;}
 .wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
@@ -347,7 +348,7 @@ int main() {
     printf("a | b: %d \n", c);
     c = a ^ b;           // 0011 1100 ^ 0000 1101 → 서로 다르면 1 → 0011 0001 → 32 + 16 + 1 → 49
     printf("a ^ b: %d \n", c);
-    c = ~a;              // 0011 1100 → 0 ↔ 1 뒤집기(1의 보수) → 1100 0011 → 맨 앞 1 = 음수 → -(60 + 1) → -61
+    c = ~a;              // 물결표 ~ = 모든 비트 0 ↔ 1 뒤집기(1의 보수) → 0011 1100 → 1100 0011 → 맨 앞 1 = 음수 → 거꾸로 읽기: 다시 뒤집기 60 + 1 = 61 → -61 (공식 ~x = -(x + 1))
     printf("~a: %d \n", c);
 
     c = a &lt;&lt; 2;          // 0011 1100 → 왼쪽으로 2칸 → 1111 0000 → 60 × 4 → 240

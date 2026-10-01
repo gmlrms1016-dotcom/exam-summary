@@ -8,7 +8,7 @@
 원고 규칙
 - 파일 이름: <과목>-<N>주차.md · 8주차 중간고사는 <과목>-8주차-중간고사.md · 15주차 기말고사는 <과목>-15주차-기말고사.md
 - 첫 줄 `# 제목` = 버튼과 페이지에 보이는 주차 제목
-- `## ` 마다 카드 1개 · `### ` 소제목 · `> ` 안내 상자 · `- ` / `1. ` 목록(2칸 들여쓰기 = 하위 목록)
+- `## ` 마다 카드 1개 · `### ` 소제목 · `#### ` 작은 소제목 · `> ` 안내 상자 · `- ` / `1. ` 목록(2칸 들여쓰기 = 하위 목록)
 - ``` 코드 블록 (```output = ▶ 출력 결과 상자 · ```bits = 2진수 풀이 상자) · `| a | b |` 표(첫 줄 머리글, 칸 안의 | 는 \\|) · <details> / <summary> 접기
 - `🔒 [이름](주소)` 한 줄 = 오른쪽에 작은 버튼 (실제시험 같은 숨은 페이지로 가는 입구)
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
@@ -162,6 +162,9 @@ def render_md(md):
                 parts.append("</section>")
             parts.append('<section class="card">\n<h2>%s</h2>' % inline(line[3:].strip()))
             in_card = True
+        elif line.startswith("#### "):
+            flush()
+            parts.append("<h4>%s</h4>" % inline(line[5:].strip()))
         elif line.startswith("### "):
             flush()
             parts.append("<h3>%s</h3>" % inline(line[4:].strip()))
@@ -220,6 +223,7 @@ PAGE_CSS = """
 .card li{margin:6px 0;line-height:1.75;}
 .card li>ul,.card li>ol{margin:4px 0;}
 .card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
 .card p{line-height:1.75;}
 .wk-lockbtn{text-align:right;margin:4px 0 10px;}
 .wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
