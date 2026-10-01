@@ -54,6 +54,56 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~5주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
 <div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종 ⑥ <b>DNF 작동 흐름도(그림 4-111) — 4주차 수업 화면에 나온 시험문제</b> ⑦ <b>작업 예약 cron · at</b>(5주차 — crontab 칸 순서 · run-parts · 백업 스크립트)</div>
 <section class="card">
+<h2>🎓 튜터링 — 2025년 2학기 중간고사 참고자료</h2>
+<div class="tip">자료: <code>8주차_중간고사/튜터링/</code> 의 TalkFile 2개 — <b>4지선다형 16문제</b>(정답 포함) · <b>서술형 13문제</b>(답은 마지막 1개만 있음 → 나머지는 🤖 로 채움). 작년 시험 대비 참고자료예요.<br>📌 1~5주차 수업에 <b>아직 안 나온 명령</b>: <code>ps</code> · <code>kill</code> · <code>top</code> · <code>df</code> · <code>echo</code> · <code>cat</code> · <code>mv</code> · <code>man</code> — 시험 범위는 교수님 진도 기준이라, 진도에 나오면 그때 다시 확인하세요.</div>
+<h3>4지선다 16문제 — 정답</h3>
+<table class="ref">
+<tbody style="min-width:556px;">
+<tr><th>#</th><th>명령</th><th>정답</th><th>수업</th></tr>
+<tr><td>1</td><td><code>ls</code></td><td>3. 파일의 <b>목록</b>을 출력한다</td><td>1~5주차</td></tr>
+<tr><td>2</td><td><code>chmod</code></td><td>3. 파일의 <b>접근 권한</b>을 변경한다</td><td>3주차 ★</td></tr>
+<tr><td>3</td><td><code>ps</code></td><td>1. <b>프로세스 상태</b>를 보여준다</td><td>아직</td></tr>
+<tr><td>4</td><td><code>grep</code></td><td>2. 텍스트 파일에서 <b>패턴을 검색</b>한다</td><td>4주차</td></tr>
+<tr><td>5</td><td><code>kill</code></td><td>3. 특정 <b>프로세스를 종료</b>한다</td><td>아직</td></tr>
+<tr><td>6</td><td><code>pwd</code></td><td>3. 현재 작업 중인 <b>디렉터리의 경로</b></td><td>1주차</td></tr>
+<tr><td>7</td><td><code>cp</code></td><td>2. 파일을 <b>복사</b>한다</td><td>3주차</td></tr>
+<tr><td>8</td><td><code>mkdir</code></td><td>2. 새로운 <b>디렉터리</b>를 만든다</td><td>2주차</td></tr>
+<tr><td>9</td><td><code>rm</code></td><td>2. 파일을 <b>삭제</b>한다</td><td>2주차</td></tr>
+<tr><td>10</td><td><code>mv</code></td><td>3. 파일의 <b>이름을 변경하거나 이동</b>한다</td><td>아직</td></tr>
+<tr><td>11</td><td><code>cat</code></td><td>2. 파일 <b>내용을 출력</b>한다</td><td>아직</td></tr>
+<tr><td>12</td><td><code>top</code></td><td>2. 시스템의 현재 <b>CPU 사용률</b>을 보여준다</td><td>아직</td></tr>
+<tr><td>13</td><td><code>df</code></td><td>2. 파일 시스템의 사용 가능한 <b>디스크 공간</b></td><td>아직</td></tr>
+<tr><td>14</td><td><code>man</code></td><td>1. <b>매뉴얼 페이지</b>를 보여준다</td><td>아직</td></tr>
+<tr><td>15</td><td><code>echo</code></td><td>2. <b>텍스트</b>를 출력한다</td><td>아직</td></tr>
+<tr><td>16</td><td><code>find</code></td><td>2. 파일을 <b>검색</b>한다</td><td>4주차</td></tr>
+</tbody></table>
+<ul><li>헷갈리는 짝 — <code>cp</code> 복사 ↔ <code>mv</code> 이동 · 이름 변경 / <code>cat</code> 파일 내용 ↔ <code>echo</code> 내가 쓴 글자 / <code>ps</code> 프로세스 목록 ↔ <code>kill</code> 종료 ↔ <code>top</code> 실시간 / <code>find</code> <b>파일</b>을 찾음 ↔ <code>grep</code> 파일 <b>안의 글자</b>를 찾음</li><li>2번의 오답 보기 “파일의 소유자를 변경” = <code>chown</code> (4주차) → 권한은 chmod, 소유자는 chown</li></ul>
+<h3>서술형 13문제 — 🤖 모범답안</h3>
+<p>#### 리눅스 명령어</p>
+<table class="ref">
+<tbody>
+<tr><th>#</th><th>문제</th><th>답</th></tr>
+<tr><td>1</td><td>숨김 파일까지 모든 파일 · 디렉터리 나열</td><td><code>ls -a</code> (자세히 <code>ls -al</code>) → 숨김 파일 = 이름이 <code>.</code> 으로 시작</td></tr>
+<tr><td>2</td><td>file.txt 를 읽기 · 쓰기 · 실행 가능하게</td><td>모두에게 <code>chmod 777 file.txt</code> (= <code>chmod a+rwx file.txt</code>) · 소유자에게만 <code>chmod u+rwx file.txt</code> → 7 = 4(r) + 2(w) + 1(x)</td></tr>
+<tr><td>3</td><td>실행 중인 모든 프로세스 나열</td><td><code>ps -ef</code> 또는 <code>ps aux</code></td></tr>
+<tr><td>4</td><td>PID 1234 프로세스 종료</td><td><code>kill 1234</code> (안 꺼지면 강제 종료 <code>kill -9 1234</code>)</td></tr>
+<tr><td>5</td><td>script.sh 를 소유자만 실행 가능하게</td><td><code>chmod 744 script.sh</code> → rwxr--r-- (실행 x 는 소유자만) · 소유자에게 실행만 더하려면 <code>chmod u+x script.sh</code></td></tr>
+</tbody></table>
+<p>#### 에디터 (vi · nano — 3주차에 이름만 나옴)</p>
+<table class="ref">
+<tbody>
+<tr><th>#</th><th>문제</th><th>답</th></tr>
+<tr><td>1</td><td>vi 로 example.txt 열고 저장 후 종료</td><td><code>vi example.txt</code> → <code>i</code> (입력 모드) → 내용 입력 → <code>Esc</code> → <code>:wq</code> Enter</td></tr>
+<tr><td>2</td><td>nano 로 수정 후 <b>저장하지 않고</b> 종료</td><td><code>nano example.txt</code> → 수정 → <code>Ctrl + X</code> → 저장할지 물으면 <code>N</code></td></tr>
+<tr><td>3</td><td>vi 명령 모드 → 입력 모드</td><td><code>i</code> (커서 앞 · <code>a</code> 커서 뒤 · <code>o</code> 아래 새 줄)</td></tr>
+<tr><td>4</td><td>vi 에서 "hello" 찾기</td><td><code>/hello</code> → Enter (다음 <code>n</code> · 거꾸로 <code>N</code>)</td></tr>
+<tr><td>5</td><td>nano 라인 번호 표시 옵션</td><td><code>nano -l example.txt</code> (= <code>--linenumbers</code>)</td></tr>
+<tr><td>6</td><td>vi 에서 모든 apple → orange</td><td><code>:%s/apple/orange/g</code> → <code>%</code> 파일 전체 · <code>s</code> 바꾸기 · <code>g</code> 한 줄의 모든 것</td></tr>
+<tr><td>7</td><td>vi 에서 커서가 있는 줄 삭제</td><td><code>dd</code></td></tr>
+<tr><td>8</td><td>nano 저장 단축키</td><td><code>Ctrl + O</code> (자료의 답) → Enter 로 파일 이름 확인 · 3주차 필기: <code>Ctrl + X</code> → <code>Y</code> → Enter = 저장하고 나가기</td></tr>
+</tbody></table>
+</section>
+<section class="card">
 <h2>5주차 — 작업 예약 cron · at · 월간 백업 (<a href="운영체제실습-5주차.html">5주차 자세히</a>)</h2>
 <h3>/etc/crontab 한 줄 — 분 시 일 월 요일 사용자 명령</h3>
 <table class="ref">
