@@ -171,19 +171,19 @@
         <h2>8. 함수 선언 3가지 방법 ★필수암기<span class="week">2주차</span></h2>
         <h3>① 선언적 함수</h3>
         <pre><code>function btnClick(){
-    ...
+    console.log("버튼을 눌렀어요");   // 할 일
 }
-btnClick();   // 호출</code></pre>
+btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
         <h3>② 표현적 함수 (익명 함수)</h3>
         <pre><code>let btnClick = function(){
-    ...
+    console.log("버튼을 눌렀어요");   // 할 일
 };
-btnClick();   // 호출</code></pre>
+btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
         <h3>③ 화살표 함수</h3>
         <pre><code>let btnClick = () =&gt; {
-    ...
+    console.log("버튼을 눌렀어요");   // 할 일
 };
-btnClick();   // 호출</code></pre>
+btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
         <div class="tip">함수도 <b>데이터(값)처럼 변수에 담아 넘겨줄 수 있습니다</b>. (일급 객체)</div>
     </section>
 
@@ -192,14 +192,15 @@ btnClick();   // 호출</code></pre>
         <div class="tip"><b>객체의 구성요소 = 속성(변수) + 메서드(함수)</b><br>비유: <b>붕어빵틀 = 클래스(Class)</b> / <b>붕어빵 = 객체(Object)</b></div>
         <p>즉 클래스는 <b>설계도(틀)</b>, 객체는 그 틀로 찍어낸 <b>실체(인스턴스)</b>입니다. 속성 접근은 프로퍼티, 동작 호출은 메서드입니다.</p>
         <pre><code>class Person {
-    String name;          // 속성(변수)
-    void eat(){ ... }     // 메서드(함수)
+    name;                 // 속성(변수)
+    eat() { console.log("쩝쩝"); }   // 메서드(함수)
 }
-P1 = new Person();
-P2 = new Person();
+let P1 = new Person();
+let P2 = new Person();
 P2.eat();                 // P2 의 eat() 메서드 실행 → "쩝쩝"
 P2.name = "쭈굴";          // P2 객체에 대입
-P1.name = "한주";          // P1 객체에 대입</code></pre>
+P1.name = "한주";          // P1 객체에 대입
+console.log(P1.name, P2.name);   // 한주 쭈굴</code></pre>
     </section>
 
     <section class="card" id="s10">
@@ -516,9 +517,11 @@ changeVar = changeVar &amp; "입력없음";                     // ❌ 양쪽을
             <tr><td><b>삼항</b> <code>? :</code></td><td>if 문을 짧게 줄인 연산자 — 조건이 true 면 <b>콜론 앞</b>, false 면 <b>콜론 뒤</b></td><td><code>10 % 2 === 0 ? "짝수" : "홀수"</code> → "짝수"</td></tr>
         </table>
         <pre><code>// 0915_04.html — 입력이 비었으면 "입력없음" (셋 다 같은 뜻)
+let changeVar = window.prompt("추가할 제목 입력!");   // 빈칸으로 확인 → ""
 if (changeVar == "") { changeVar = "입력없음"; }
 changeVar = changeVar == "" ? "입력없음" : changeVar;   // 삼항 연산자
-changeVar = changeVar || "입력없음";                    // 단락 평가: "" · 취소 null → 거짓 → "입력없음" / 입력값 → 참 → 그대로</code></pre>
+changeVar = changeVar || "입력없음";                    // 단락 평가: "" · 취소 null → 거짓 → "입력없음" / 입력값 → 참 → 그대로
+console.log(changeVar);</code></pre>
         <div class="tip">⚠️ 수업 코드 <b>0915_04.html</b> 은 <code>querySelector("#result")</code> 인데 태그 id 가 <b>content</b> 라서 <b>null 오류</b>가 났어요 → <code>#content</code> 로 맞춰야 화면에 출력돼요. (4주차 폴더의 실습 파일은 고쳐 둠) prompt 에서 <b>취소</b>를 누르면 null 이 들어와 <code>== ""</code> 검사로는 못 거릅니다 (<code>||</code> 는 처리됨).</div>
     </section>
 
@@ -627,13 +630,13 @@ undefined</code></pre>
         <h3>예제 ② 0922_01.js — 반복은 repeat, 할 일은 콜백</h3>
         <pre><code class="language-javascript">// 0922_01.js 콜백함수 예제 — 반복은 repeat 가, 할 일은 콜백이 정한다
 function repeat(count, callback) {
-    for (let idx = 1; idx &lt;= count; idx++) {
-        callback(idx);            // 넘겨받은 함수에 idx 를 넣어 실행
+    for (let i = 1; i &lt;= count; i++) {
+        callback(i);            // 넘겨받은 함수에 i 를 넣어 실행
     }
 }
-repeat(5, (idx) =&gt; { console.log(idx); });       // idx = 1 → 5 까지 → console.log(idx) → 1 2 3 4 5 (한 줄에 하나씩)
-repeat(5, (idx) =&gt; { console.log(idx * 2); });   // idx = 1 → 5 → idx * 2 → 2 4 6 8 10
-repeat(5, (idx) =&gt; { console.log(idx * 3); });   // idx = 1 → 5 → idx * 3 → 3 6 9 12 15</code></pre>
+repeat(5, (i) =&gt; { console.log(i); });       // i = 1 → 5 까지 → console.log(i) → 1 2 3 4 5 (한 줄에 하나씩)
+repeat(5, (i) =&gt; { console.log(i * 2); });   // i = 1 → 5 → i * 2 → 2 4 6 8 10
+repeat(5, (i) =&gt; { console.log(i * 3); });   // i = 1 → 5 → i * 3 → 3 6 9 12 15</code></pre>
         <pre class="io"><code>1
 2
 3
@@ -655,9 +658,9 @@ function repeat(count) {
     for (let i = 0; i &lt;= count; i++) console.log(i);
 }
 function repeat(count, callback) {   // 이 선언이 위의 repeat 를 덮어쓴다
-    for (let idx = 1; idx &lt;= count; idx++) callback(idx);
+    for (let i = 1; i &lt;= count; i++) callback(i);
 }
-repeat(3, (idx) =&gt; { console.log(idx * 10); });  // 아래 repeat(콜백 버전)가 위를 덮어씀 → idx = 1 → 3 → idx * 10 → 10 20 30
+repeat(3, (i) =&gt; { console.log(i * 10); });  // 아래 repeat(콜백 버전)가 위를 덮어씀 → i = 1 → 3 → i * 10 → 10 20 30
 repeat(3);                                       // ← 오류: 첫 번째 repeat 가 아니라 콜백 버전이 불려서 callback 이 없다</code></pre>
         <pre class="io"><code>10
 20

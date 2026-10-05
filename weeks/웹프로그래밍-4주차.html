@@ -330,12 +330,16 @@ changeVar = changeVar &amp; "입력없음";                     // ❌ 양쪽을
 <section class="card">
 <h2>11. null 병합 · typeof · 삼항 연산자</h2>
 <ul><li><code>??</code> (null 병합): 왼쪽이 <b>null·undefined 일 때만</b> 오른쪽 → <code>undefined ?? 10</code> 은 10, <code>0 ?? 5</code> 는 <b>0</b> (<code>0 || 5</code> 는 5)</li><li><code>typeof</code>: 값의 타입을 문자열로 반환 → <code>typeof true</code> 는 "boolean", <code>typeof null</code> 은 "object"</li><li><span class="wk-tag note">✍️ 필기</span> — 삼항 연산자 = if 문을 짧게 줄인 연산자: <code>조건 ? 참일 때 : 거짓일 때</code> → 조건이 true 면 <b>콜론 앞</b>, false 면 <b>콜론 뒤</b></li></ul>
-<pre><code class="language-javascript">let res = var8 % 2 === 0 ? "짝수" : "홀수";   // 0915_03.js
+<pre><code class="language-javascript">let var8 = 7;
+let res = var8 % 2 === 0 ? "짝수" : "홀수";   // 0915_03.js · 7 % 2 → 1 → 0 이 아님 → "홀수"
+console.log(res);   // 홀수
 
 // 0915_04.html — 입력이 비었으면 "입력없음" (셋 다 같은 뜻)
+let changeVar = window.prompt("추가할 제목 입력!");   // 빈칸으로 확인 → ""
 if (changeVar == "") { changeVar = "입력없음"; }
 changeVar = changeVar == "" ? "입력없음" : changeVar;
-changeVar = changeVar || "입력없음";   // "" · 취소 null → 거짓 → 오른쪽 "입력없음" / 입력값 → 참 → 그대로 (취소까지 한 번에 처리)</code></pre>
+changeVar = changeVar || "입력없음";   // "" · 취소 null → 거짓 → 오른쪽 "입력없음" / 입력값 → 참 → 그대로 (취소까지 한 번에 처리)
+console.log(changeVar);</code></pre>
 <ul><li>⚠️ 0915_04.html 은 <code>querySelector("#result")</code> 인데 태그 id 가 <code>content</code> 라서 <b>null 오류</b>가 났다 → <code>#content</code> 로 맞춰야 화면에 출력된다 (4주차 폴더 파일은 <code>#content</code> 로 고침). prompt 에서 <b>취소</b>하면 <code>null</code> 이 들어와 <code>== ""</code> 검사로는 못 거른다</li></ul>
 </section>
 <section class="card">

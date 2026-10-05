@@ -64,9 +64,13 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <section class="card">
 <h2>3. 타입 변환 ★시험단골</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 자동 형변환: 작은 타입 → 큰 타입 (컴파일러가 자동)</li><li><span class="wk-tag star">⭐ 강조</span> — 강제 형변환(캐스팅): 큰 타입 → 작은 타입, ()로 지정, 값 손실 우려 — 예 <code>(int)2.9</code> → 2</li></ul>
-<pre><code class="language-java">System.out.println((int)2.9 + 1.8);      // (int)2.9 → 2 (소수점 버림) → 2 + 1.8 → 3.8
-System.out.println((int)(2.9 + 1.8));    // 괄호 먼저 2.9 + 1.8 → 4.7 → (int)4.7 → 4
-System.out.println((int)2.9 + (int)1.8); // (int)2.9 → 2 · (int)1.8 → 1 → 2 + 1 → 3</code></pre>
+<pre><code class="language-java">public class 연습 {
+    public static void main(String[] args) {
+        System.out.println((int)2.9 + 1.8);      // (int)2.9 → 2 (소수점 버림) → 2 + 1.8 → 3.8
+        System.out.println((int)(2.9 + 1.8));    // 괄호 먼저 2.9 + 1.8 → 4.7 → (int)4.7 → 4
+        System.out.println((int)2.9 + (int)1.8); // (int)2.9 → 2 · (int)1.8 → 1 → 2 + 1 → 3
+    }
+}</code></pre>
 </section>
 <section class="card">
 <h2>4. 키 입력 (Scanner)</h2>
@@ -79,11 +83,19 @@ System.out.println((int)2.9 + (int)1.8); // (int)2.9 → 2 · (int)1.8 → 1 →
 <section class="card">
 <h2>6. 조건문 ★핵심</h2>
 <ul><li>단순 if / if-else / 다중 if-else(else if) / 중첩 if</li><li><span class="wk-tag star">⭐ 강조</span> — switch 문: case 값과 비교, break로 탈출, 없으면 다음 case로 계속(fall-through), default 생략가능</li><li><span class="wk-tag note">✍️ 필기</span> — case 값은 문자·정수·문자열 리터럴만 가능(실수·변수·수식 불가)</li></ul>
-<pre><code class="language-java">switch (score/10) {
-  case 10: case 9: grade='A'; break;
-  case 8: grade='B'; break;
-  ...
-  default: grade='F';
+<pre><code class="language-java">public class 연습 {
+    public static void main(String[] args) {
+        int score = 85;
+        char grade;
+        switch (score/10) {             // 85 / 10 → 8 (정수 나눗셈)
+          case 10: case 9: grade='A'; break;
+          case 8: grade='B'; break;
+          case 7: grade='C'; break;
+          case 6: grade='D'; break;
+          default: grade='F';
+        }
+        System.out.println("학점은 " + grade);   // 8 → case 8 → B → 학점은 B
+    }
 }</code></pre>
 </section>
 <section class="card">

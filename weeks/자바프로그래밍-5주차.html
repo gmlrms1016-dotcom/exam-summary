@@ -60,7 +60,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <pre><code class="language-java">// WhileSample.java (예제 3-2) — -1 이 입력될 때까지 정수를 받아 평균 구하기
 import java.util.Scanner;
 
-public class WhileSample {
+public class 연습 {   // 원래 이름 WhileSample → 파일 이름도 연습.java
     public static void main(String[] args) {
         int count = 0;                  // 입력된 정수의 개수
         int sum = 0;                    // 합
@@ -97,7 +97,7 @@ public class WhileSample {
 <h2>2. 중첩 for — 구구단 (예제 3-4)</h2>
 <div class="tip">📌 강의자료 p15 문제 — <b>2중 중첩 for 문을 사용하여 구구단을 출력</b>하는 프로그램을 작성하시오. <b>한 줄에 한 단씩</b> 출력한다.</div>
 <pre><code class="language-java">// NestedLoop.java (예제 3-4) — 2중 for 로 구구단 (한 줄에 한 단씩)
-public class NestedLoop {
+public class 연습 {   // 원래 이름 NestedLoop → 파일 이름도 연습.java
     public static void main(String[] args) {
         for (int i = 1; i &lt; 10; i++) {          // 바깥: 1단 ~ 9단
             for (int j = 1; j &lt; 10; j++) {      // 안쪽: 곱하는 수 1 ~ 9
@@ -136,7 +136,7 @@ public class NestedLoop {
 <pre><code class="language-java">// ContinueExample.java (예제 3-5) — continue 로 양수만 더하기
 import java.util.Scanner;
 
-public class ContinueExample {
+public class 연습 {   // 원래 이름 ContinueExample → 파일 이름도 연습.java
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("정수를 5개 입력하세요.");
@@ -161,7 +161,7 @@ public class ContinueExample {
 <pre><code class="language-java">// BreakExample.java (예제 3-6) — "exit" 이 입력되면 break 로 while 을 빠져나간다
 import java.util.Scanner;
 
-public class BreakExample {
+public class 연습 {   // 원래 이름 BreakExample → 파일 이름도 연습.java
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("exit을 입력하면 종료합니다.");
@@ -195,7 +195,7 @@ public class BreakExample {
 <div class="tip">📌 배열 = 인덱스와 그에 대응하는 <b>같은 타입</b> 데이터들의 모음 · 한 번에 많은 메모리 공간 할당 · 인덱스는 <b>0 부터</b>, 마지막은 <b>크기 − 1</b> · <b>반복문으로 처리하기에 적합</b> (강의자료 p20 · p25) — 선언·생성 문법은 4주차 배열</div>
 <h3>ArrayAccess — 인덱스로 넣고 꺼내기, for 로 전체 출력</h3>
 <pre><code class="language-java">// ArrayAccess.java — 배열 생성 · 인덱스로 접근 · for 로 전체 출력
-public class ArrayAccess {
+public class 연습 {   // 원래 이름 ArrayAccess → 파일 이름도 연습.java
     public static void main(String[] args) {
         int[] numbers = new int[5];     // 정수 5개짜리 배열 생성 → 인덱스 0 ~ 4
         numbers[0] = 10;
@@ -226,7 +226,7 @@ public class ArrayAccess {
 <h2>5. 수업 실습 문제 — ForEx1 · ForEx2 · ForEx3</h2>
 <h3>ForEx1 — 5! 구하는 프로그램을 작성하시오</h3>
 <pre><code class="language-java">// ForEx1.java — 5! (5 팩토리얼) 구하기
-public class ForEx1 {
+public class 연습 {   // 원래 이름 ForEx1 → 파일 이름도 연습.java
     public static void main(String[] args) {
         int result = 1;                 // 곱하기는 1 부터 시작 (0 이면 계속 0)
         for (int i = 1; i &lt;= 5; i++) {
@@ -238,7 +238,7 @@ public class ForEx1 {
 <pre class="io"><code class="language-text">120</code></pre>
 <h3>ForEx2 — 1~10 사이의 숫자 중 짝수만 골라 출력하시오</h3>
 <pre><code class="language-java">// ForEx2.java — 1 ~ 10 사이의 숫자 중 짝수만 출력
-public class ForEx2 {
+public class 연습 {   // 원래 이름 ForEx2 → 파일 이름도 연습.java
     public static void main(String[] args) {
         for (int i = 1; i &lt;= 10; i++) {
             if (i % 2 == 0) {           // 2 로 나눈 나머지가 0 → 짝수
@@ -254,7 +254,7 @@ public class ForEx2 {
 10</code></pre>
 <h3>ForEx3 — while 문으로 0~9 사이의 숫자를 출력하시오</h3>
 <pre><code class="language-java">// ForEx3.java — while 문으로 0 ~ 9 출력
-public class ForEx3 {
+public class 연습 {   // 원래 이름 ForEx3 → 파일 이름도 연습.java
     public static void main(String[] args) {
         int i = 0;                      // 초기화는 while 밖에서
         while (i &lt; 10) {                // 조건

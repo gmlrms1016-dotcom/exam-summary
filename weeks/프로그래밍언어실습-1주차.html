@@ -66,14 +66,14 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <ul><li><span class="wk-tag star">⭐ 강조</span> — ① 소스코드 작성(.c) → ② 컴파일(→ 오브젝트 .obj/.o) → ③ 링킹(→ 실행파일 .exe/a.out) → ④ 실행</li></ul>
 <pre><code class="language-c">// hello.c
 #include &lt;stdio.h&gt;
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("hello world!");  // 출력
     return 0;               // 프로그램 종료
 }</code></pre>
 <h3>첫 프로그램 (hello.c) — 한 줄씩 주석</h3>
 <pre><code class="language-c">// hello.c — ① 소스코드 작성 (.c 파일)
 #include &lt;stdio.h&gt;            // 전처리기: printf 가 들어 있는 stdio.h 를 가져온다
-int main(void) {              // 프로그램은 main() 에서 자동으로 시작
+int main(void) {              // 프로그램은 main() 에서 자동으로 시작 · (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("hello world!");   // 화면에 출력 (\n 이 없어서 줄은 안 바뀜)
     return 0;                 // 0 을 돌려주며 프로그램 정상 종료
 }

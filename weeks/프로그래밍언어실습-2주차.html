@@ -62,7 +62,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>printf("...")</code> : 서식 출력 (자동 줄바꿈 없음, <code>\n</code> 필요)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>puts("...")</code> : 문자열을 출력하고 자동으로 줄바꿈</li><li><code>putc()</code> : 문자 하나 출력</li></ul>
 <pre><code class="language-c">// P02-PutString/02put.c
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("hello world!\n");
     puts("C 언어, 재미있다!");
     return 0;
@@ -70,7 +70,7 @@ int main() {
 <h3>예제 — printf 와 puts 의 줄바꿈 (모든 경우)</h3>
 <pre><code class="language-c">// printf 는 자동 줄바꿈이 없다 → \n 을 직접 넣어야 한다
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("hello");             // 줄바꿈 없음 → 다음 출력이 바로 뒤에 붙는다
     printf("world\n");           // 여기서 \n → 줄이 바뀜   =&gt; helloworld
     printf("C 언어\n");           // 한 줄 출력
@@ -91,7 +91,7 @@ puts 는
 <h3>예제 — 2주차 연습문제 Quiz-01 · 02 · 05 (printf 한 번으로)</h3>
 <pre><code class="language-c">// [Quiz-01 · 02 · 05] printf 한 번으로 출력하기 (2주차 연습문제)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     // Quiz-01 : 한 줄에 공백 두 칸씩
     printf("C  Pascal  Java  Python  kotlin\n");
 
@@ -119,7 +119,7 @@ kotlin
 <ul><li><span class="wk-tag note">✍️ 필기</span> — C언어는 함수들로 구성된다</li><li><span class="wk-tag note">✍️ 필기</span> — C언어는 main() 함수로 시작된다 (자동 실행), 다른 함수는 호출해야 실행됨</li><li>표준 라이브러리 함수 vs 사용자 정의 함수</li></ul>
 <pre><code class="language-c">#include &lt;stdio.h&gt;
 void func1(void);
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("main() start!!!\n");
     func1();            // 호출해야 실행
     printf("main() end!!!\n");
@@ -133,7 +133,7 @@ void func1(void) {
 <pre><code class="language-c">// ex-function-01.c — func1() 을 만들기만 하고 호출하지 않은 경우
 #include &lt;stdio.h&gt;
 void func1();                       // 함수 원형(선언): main 보다 아래에 정의할 거라 미리 알려 줌
-int main(void) {                    // C 프로그램은 main() 부터 자동 실행
+int main(void) {                    // C 프로그램은 main() 부터 자동 실행 · (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("main() start!!! \n");
     printf("main() end!!! \n");     // func1() 을 부르지 않았다
     return 0;
@@ -149,7 +149,7 @@ main() end!!! </code></pre>
 <pre><code class="language-c">// ex-function-02.c — main() 안에서 func1() 을 호출한 경우
 #include &lt;stdio.h&gt;
 void func1();
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("main() start!!! \n");   // ① 먼저 실행
     func1();                        // ② func1 로 이동 → 안의 두 줄을 실행하고 돌아온다
     printf("main() end!!! \n");     // ③ 돌아와서 나머지 실행
@@ -168,7 +168,7 @@ main() end!!! </code></pre>
 #include &lt;stdio.h&gt;
 void func1(void);
 void func2(void);
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("안녕하세요\n");
     func2();          // func2 를 먼저 부른다 → "제 이름은" (\n 없음 → 다음 글자가 붙는다)
     func1();          // 그다음 func1         → "gdhong 입니다."
@@ -185,11 +185,24 @@ gdhong 입니다. </code></pre>
 <h2>4. 디버깅 &amp; 퀴즈</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 오류 예: <code>printf("...")</code> 뒤 세미콜론(;) 누락, 닫는 따옴표 누락 → 컴파일 오류</li><li>Quiz: printf 한 번으로 여러 줄 출력 / 함수(func1,func2)를 사용해 출력 순서 맞추기</li></ul>
 <pre><code class="language-c">// 마지막 퀴즈 정답
-int main(void){
+#include &lt;stdio.h&gt;
+
+void func1(void);   // 함수 원형(선언) — main 보다 아래에 정의할 거라 미리 알려 줌
+void func2(void);
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("안녕하세요\n");
     func2();   // func2() 실행 → printf("제 이름은") → 제 이름은 (\n 없음 → 다음 출력이 바로 뒤에 붙음)
     func1();   // func1() 실행 → "gdhong 입니다. \n" 이 앞 줄에 이어 붙음 → 제 이름은gdhong 입니다.
     return 0;
+}
+
+void func1(void) {
+    printf("gdhong 입니다. \n");
+}
+
+void func2(void) {
+    printf("제 이름은");
 }</code></pre>
 <pre class="io"><code class="language-text">안녕하세요
 제 이름은gdhong 입니다. </code></pre>
@@ -198,7 +211,7 @@ int main(void){
 <h3>예제 — 03debug.c 의 오류 2개 고치기</h3>
 <pre><code class="language-c">// P03-Debugging/03debug.c — 강의자료 원본에는 오류가 2군데 숨어 있다
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     // ❌ printf("컴퓨터공학과학생이며\n")    ← 세미콜론(;) 누락 → 컴파일 오류
     // ❌ printf("C 언어를수강합니다\n);     ← 닫는 따옴표(") 누락 → 컴파일 오류
     printf("컴퓨터공학과학생이며\n");      // ✅ 문장 끝에는 항상 ;

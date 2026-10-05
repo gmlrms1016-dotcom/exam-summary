@@ -60,15 +60,21 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <section class="card">
 <h2>2. 첫 자바 프로그램 (heegeun.java)</h2>
 <ul><li>package 선언 + <code>import java.util.Scanner</code> + public class(파일명과 동일)</li><li><span class="wk-tag star">⭐ 강조</span> — 자바 프로그램은 <code>public static void main(String[] args)</code> 에서 실행을 시작한다</li><li>Scanner로 키 입력, if-else 조건문, for/while 반복문 사용 실습</li></ul>
-<pre><code class="language-java">package heegeun;
-import java.util.Scanner;
-public class heegeun {
+<pre><code class="language-java">import java.util.Scanner;
+public class 연습 {   // 원래 이름 heegeun → 파일 이름도 연습.java
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("반갑습니다. 여러분~~");
         int age = sc.nextInt();
         if (age &gt;= 19) {
-            for (int i=1; i&lt;=10; i++) { ... }
+            for (int i=1; i&lt;=10; i++) {
+                System.out.println(1+100*30/23);   // 100*30 → 3000 → 3000/23 → 130 (정수 나눗셈) → 1+130 → 131
+                int j=1;
+                while (j&lt;=10) {
+                    System.out.println(j);
+                    j++;
+                }
+            }
         } else {
             System.out.printf("10대 입니다.");
         }

@@ -113,7 +113,7 @@
         <h3>첫 프로그램 (hello.c) — 한 줄씩 주석</h3>
         <pre><code class="language-c">// hello.c — ① 소스코드 작성 (.c 파일)
 #include &lt;stdio.h&gt;            // 전처리기: printf 가 들어 있는 stdio.h 를 가져온다
-int main(void) {              // 프로그램은 main() 에서 자동으로 시작
+int main(void) {              // 프로그램은 main() 에서 자동으로 시작 · (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("hello world!");   // 화면에 출력 (\n 이 없어서 줄은 안 바뀜)
     return 0;                 // 0 을 돌려주며 프로그램 정상 종료
 }
@@ -145,7 +145,7 @@ int main(void) {              // 프로그램은 main() 에서 자동으로 시�
         </table>
         <pre><code>// P02-PutString/02put.c
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("hello world!\n");   // \n 을 직접 넣어야 줄바꿈
     puts("C 언어, 재미있다!");   // puts 는 자동 줄바꿈
     return 0;
@@ -154,7 +154,7 @@ int main() {
         <h3>예제 — printf 와 puts 의 줄바꿈 (모든 경우)</h3>
         <pre><code class="language-c">// printf 는 자동 줄바꿈이 없다 → \n 을 직접 넣어야 한다
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("hello");             // 줄바꿈 없음 → 다음 출력이 바로 뒤에 붙는다
     printf("world\n");           // 여기서 \n → 줄이 바뀜   =&gt; helloworld
     printf("C 언어\n");           // 한 줄 출력
@@ -175,7 +175,7 @@ puts 는
         <h3>예제 — 2주차 연습문제 Quiz-01 · 02 · 05 (printf 한 번으로)</h3>
         <pre><code class="language-c">// [Quiz-01 · 02 · 05] printf 한 번으로 출력하기 (2주차 연습문제)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     // Quiz-01 : 한 줄에 공백 두 칸씩
     printf("C  Pascal  Java  Python  kotlin\n");
 
@@ -206,7 +206,7 @@ kotlin
         <pre><code>#include &lt;stdio.h&gt;
 void func1(void);            // 함수 원형(선언)
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("main() start!!!\n");
     func1();                 // ← 호출해야 실행된다
     printf("main() end!!!\n");
@@ -221,7 +221,7 @@ void func1(void) {           // 함수 정의
         <pre><code class="language-c">// ex-function-01.c — func1() 을 만들기만 하고 호출하지 않은 경우
 #include &lt;stdio.h&gt;
 void func1();                       // 함수 원형(선언): main 보다 아래에 정의할 거라 미리 알려 줌
-int main(void) {                    // C 프로그램은 main() 부터 자동 실행
+int main(void) {                    // C 프로그램은 main() 부터 자동 실행 · (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("main() start!!! \n");
     printf("main() end!!! \n");     // func1() 을 부르지 않았다
     return 0;
@@ -237,7 +237,7 @@ main() end!!! </code></pre>
         <pre><code class="language-c">// ex-function-02.c — main() 안에서 func1() 을 호출한 경우
 #include &lt;stdio.h&gt;
 void func1();
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("main() start!!! \n");   // ① 먼저 실행
     func1();                        // ② func1 로 이동 → 안의 두 줄을 실행하고 돌아온다
     printf("main() end!!! \n");     // ③ 돌아와서 나머지 실행
@@ -256,7 +256,7 @@ main() end!!! </code></pre>
 #include &lt;stdio.h&gt;
 void func1(void);
 void func2(void);
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("안녕하세요\n");
     func2();          // func2 를 먼저 부른다 → "제 이름은" (\n 없음 → 다음 글자가 붙는다)
     func1();          // 그다음 func1         → "gdhong 입니다."
@@ -282,7 +282,7 @@ gdhong 입니다. </code></pre>
                 <h3>예제 — 03debug.c 의 오류 2개 고치기</h3>
         <pre><code class="language-c">// P03-Debugging/03debug.c — 강의자료 원본에는 오류가 2군데 숨어 있다
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     // ❌ printf("컴퓨터공학과학생이며\n")    ← 세미콜론(;) 누락 → 컴파일 오류
     // ❌ printf("C 언어를수강합니다\n);     ← 닫는 따옴표(") 누락 → 컴파일 오류
     printf("컴퓨터공학과학생이며\n");      // ✅ 문장 끝에는 항상 ;
@@ -297,7 +297,7 @@ C 언어를수강합니다</code></pre>
 void func1(void);
 void func2(void);
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("안녕하세요\n");
     func2();        // func2() 실행 → printf("제 이름은") → 제 이름은 (\n 없음 → 다음 출력이 바로 뒤에 붙음)
     func1();        // func1() 실행 → "gdhong 입니다. \n" 이 앞 줄에 이어 붙음 → 제 이름은gdhong 입니다.
@@ -327,7 +327,7 @@ void func2(void) { printf("제 이름은"); }</code></pre>
         <h3>문제 ① 실행결과를 쓰시오 — [실습 1-05] ex01_05-sizeof.c<span class="week">강의자료 23p</span></h3>
         <pre><code>// ex01_05-sizeof.c
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     char gender;
     int age;
     float weight;
@@ -395,7 +395,7 @@ int main() {
         <details class="akey"><summary>💡 정답 코드 보기</summary>
             <pre><code>// quiz01-01_ex01.c (정답)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     char gender;
     int age;
     double height;
@@ -417,7 +417,7 @@ int main() {
         <h3>예제 ① sample03_01.c — 선언 → 대입 → 값 바꾸기</h3>
         <pre><code class="language-c">// sample03_01.c — 변수에 값을 저장하고 출력
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int money;                              // 선언: int(4byte) 저장 공간을 할당
     money = 3000;                           // 대입: 공간에 3000 을 저장
     printf("money에 저장된 값 %d \n", money);
@@ -437,7 +437,7 @@ value=0 data1=10 data2=20 data3=30</code></pre>
         <h3>예제 ② 실습 1-02 · 1-03 — char · int · float 초기화</h3>
         <pre><code class="language-c">// ex01_03-var.c — char · int · float 변수 초기화 (실습 1-02 · 1-03)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     char  a1;          // 문자 1개 (1byte)
     int   a2;          // 정수 (4byte)
     float a3;          // 실수 (4byte)
@@ -474,7 +474,7 @@ a9: 500 </code></pre>
         <h3>예제 — 되는 이름 ✅ / 안 되는 이름 ❌</h3>
         <pre><code class="language-c">// 변수 이름 규칙 — 영문자 a~z A~Z · 숫자 0~9 · 밑줄 _ 만 사용
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int age = 21;        // ✅ 영문자
     int Age = 30;        // ✅ age 와 Age 는 다른 변수 (대·소문자 구별)
     int my_age = 22;     // ✅ 밑줄 사용 가능
@@ -501,7 +501,7 @@ int main() {
         <h3>예제 — 자료형 · 변수 · 상수의 크기</h3>
         <pre><code class="language-c">// 자료형 크기 — sizeof 결과는 정수라 %d 로 출력
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("char   : %d byte\n", sizeof(char));     // 문자형 char → 1byte → char   : 1 byte
     printf("short  : %d byte\n", sizeof(short));    // 정수형 short → 2byte → short  : 2 byte
     printf("int    : %d byte\n", sizeof(int));      // 정수형 int → 4byte → int    : 4 byte
@@ -540,7 +540,7 @@ double : 8 byte
         <h3>예제 — 같은 비트, 다른 값</h3>
         <pre><code class="language-c">// 부호 비트 — 1byte = 8bit, 맨 앞 비트가 0 이면 양수 · 1 이면 음수 (signed)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     signed char   s1 = 127;    // 0111 1111 → signed 최댓값
     signed char   s2 = -128;   // 1000 0000 → signed 최솟값
     unsigned char u1 = 0;      // 0000 0000 → unsigned 최솟값
@@ -572,7 +572,7 @@ unsigned char : 0 ~ 255
         <h3>예제 ① 서식 지정자 전부 (%d %o %x %X %c %s %f %lf %ld)</h3>
         <pre><code class="language-c">// printf 서식 지정자 — % 뒤의 글자가 "어떤 모양으로 찍을지"를 정한다
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int data = 100;
     printf("10진수 : %d\n", data);        // data = 100 → %d 10진수 그대로 → 100
     printf("8진수  : %o\n", data);        // %o  → 144   (100 = 1×64 + 4×8 + 4)
@@ -601,7 +601,7 @@ float  : 2.100000</code></pre>
         <h3>예제 ② 출력 칸수 [%5d] [%05d] [%-5d] (강의자료 11p)</h3>
         <pre><code class="language-c">// 출력 칸수 조정 — [ ] 로 칸을 눈으로 확인 (강의자료 11p)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int data = 7;
     printf("[%d] [%5d]\n", data, data);                   // data = 7 → %d → [7] · %5d 5칸 오른쪽 맞춤 → [    7]
     printf("[%5d] [%05d] [%-5d]\n", data, data, data);    // %5d → [    7] · %05d 빈칸을 0 으로 → [00007] · %-5d 왼쪽 맞춤 → [7    ]
@@ -623,7 +623,7 @@ int main() {
         <h3>예제 — %c 와 %d 로 같은 값을 찍어 보기</h3>
         <pre><code class="language-c">// 문자와 ASCII 코드 — 문자는 1byte 정수(ASCII 코드)로 저장된다
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     char name = 'a';                        // 'a' → ASCII 코드 97 → 0110 0001 로 저장된다
     printf("%c %d\n", name, name);          // %c → 문자 a · %d → 숫자 97
 
@@ -654,7 +654,7 @@ A</code></pre>
         <h3>예제 ① const 없이 — 값이 바뀐다</h3>
         <pre><code class="language-c">// ex01_04-const.c ① const 없이 — 변수는 다시 대입할 수 있다
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int a1 = 1000;
     printf("a1: %d \n", a1);    // a1 = 1000 → a1: 1000
     a1 = 2000;                  // 변수라서 값이 바뀐다
@@ -666,7 +666,7 @@ a1: 2000 </code></pre>
         <h3>예제 ② const 를 붙이면 — 바꿀 수 없다</h3>
         <pre><code class="language-c">// ex01_04-const.c ② const 를 붙이면 상수 → 다시 대입하면 컴파일 오류
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     const int a1 = 1000;        // 상수는 선언과 동시에 초기화해야 한다
     printf("a1: %d \n", a1);
     // a1 = 2000;               // ❌ error: 상수에 값 재할당 → 컴파일되지 않는다
@@ -681,7 +681,7 @@ a1: 1000 </code></pre>
 #define Even 2                        // 끝에 ; 를 붙이지 않는다
 #define MSG "==================="     // 문자열도 정의할 수 있다
 #define DATA1 100
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     // ⚠️ 강의자료 13p 는 printf("Even: %d\n, Even"); → 따옴표 위치가 틀려 값이 안 찍힌다
     printf("Even: %d\n", Even);         // ✅ 전처리기가 Even → 2 로 바꿈 → Even: 2
     printf("Message: %s\n", MSG);       // MSG → "===================" 로 바뀐다
@@ -704,7 +704,7 @@ Even * DATA1 = 200</code></pre>
         <pre><code class="language-c">// Prj06/06scanf.c — scanf 로 키보드 입력 받기 (실습 2-01)
 #define _CRT_SECURE_NO_WARNINGS    // VS 에서 scanf 를 쓰려면 맨 위에 (없으면 C4996 오류)
 #include &lt;stdio.h&gt;
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int month = 0;
     printf("1년은 몇 달? ");
     scanf("%d", &amp;month);           // &amp; = 변수의 주소 → 입력값을 month 공간에 저장
@@ -725,7 +725,7 @@ int main(void) {
         <pre><code class="language-c">// scanf 서식 — 받을 변수의 자료형에 맞춘다 (double 은 반드시 %lf)
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     char gender = 'w';
     int age;
     double height;
@@ -740,7 +740,7 @@ int main(void) {
         <h3>예제 ③ %p 로 주소 찍어 보기</h3>
         <pre><code class="language-c">// &amp; 주소 연산자 — 변수가 메모리 몇 번지에 있는지 (%p = 주소 출력)
 #include &lt;stdio.h&gt;
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int age = 25;
     printf("%p, %d\n", &amp;age, age);     // 주소, 값 (강의자료 12p)
 
@@ -781,7 +781,7 @@ a * b      // 이항 연산자 : 피연산자 2개  (+ - * / % == &amp;&amp; &am
         <h3>예제 — 우선순위 (필기 <code>3&lt;&lt;2+5&lt;&lt;3</code>)</h3>
         <pre><code class="language-c">// 연산자 우선순위 — 괄호 &gt; 단항 &gt; 산술 &gt; (시프트) &gt; 관계 &gt; 논리 &gt; 조건 &gt; 대입 &gt; 콤마
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("%d\n", 3 &lt;&lt; 2 + 5 &lt;&lt; 3);        // + 가 &lt;&lt; 보다 먼저 → 3 &lt;&lt; 7 &lt;&lt; 3 = 3072
     printf("%d\n", (3 &lt;&lt; 2) + (5 &lt;&lt; 3));    // 괄호 먼저 → 12 + 40 = 52
     printf("%d\n", 2 + 3 * 4);              // * 가 먼저 → 14
@@ -803,7 +803,7 @@ int main() {
         <h3>예제 ① ex01_00-op1.c — 산술 연산자 (a=21, b=10)</h3>
         <pre><code class="language-c">// ex01_00-op1.c ① 산술 연산자 + - * / %  (a=21, b=10)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int a = 21;
     int b = 10;
     int c;
@@ -829,7 +829,7 @@ a%b= 1 </code></pre>
         <h3>예제 ② ex01_00-op2.c (수업 화면) — 복합 대입 연산자</h3>
         <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — 복합 대입 연산자  c += a 는 c = c + a
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int a = 21;
     int c;
 
@@ -876,7 +876,7 @@ c%=a: 0 </code></pre>
         <h3>예제 — ex01_00-op1.c 증감 연산자</h3>
         <pre><code class="language-c">// ex01_00-op1.c ② 증감 연산자 ++ --  ★시험에 많이 나옴
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int c;
     int d = 10, e = 10, f = 10, g = 10;
 
@@ -912,7 +912,7 @@ c,g: 9, 9 </code></pre>
         <h3>예제 ① ex01_00-op1.c — 관계 연산자</h3>
         <pre><code class="language-c">// ex01_00-op1.c ③ 관계 연산자 — 참이면 1, 거짓이면 0
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int a = 21;
     int b = 10;
     int c;
@@ -949,7 +949,7 @@ a&lt;=20: 0 </code></pre>
         <h3>예제 ② 논리 연산자 — 모든 경우</h3>
         <pre><code class="language-c">// 논리 연산자 ! &amp;&amp; || — 결과는 참 1 / 거짓 0 (0 이 아니면 모두 참)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("!0 = %d, !1 = %d\n", !0, !1);                       // NOT: !0 → 거짓의 반대 → 1 · !1 → 참의 반대 → 0 → !0 = 1, !1 = 0
     printf("0&amp;&amp;0=%d 0&amp;&amp;1=%d 1&amp;&amp;0=%d 1&amp;&amp;1=%d\n", 0&amp;&amp;0, 0&amp;&amp;1, 1&amp;&amp;0, 1&amp;&amp;1);   // AND: 둘 다 참일 때만 1 → 0 0 0 1
     printf("0||0=%d 0||1=%d 1||0=%d 1||1=%d\n", 0||0, 0||1, 1||0, 1||1);   // OR: 하나라도 참이면 1 → 0 1 1 1
@@ -968,7 +968,7 @@ int main() {
         <h3>예제 ③ 단축 평가 (강의자료 14p · 실습 07shorteval.c)</h3>
         <pre><code class="language-c">// 단축 평가 — 왼쪽만 보고 결과가 정해지면 오른쪽은 계산하지 않는다 (강의자료 14p)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int n = 5;
     int r;
 
@@ -988,7 +988,7 @@ r=1, n=6</code></pre>
         <h3>예제 ④ ex01_00-op2.c (수업 화면) — sizeof · 조건(삼항) 연산자</h3>
         <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — sizeof 연산자 · 조건(삼항) 연산자
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int a = sizeof(int);            // sizeof 도 연산자 → int 크기 4
     printf("int: %d \n", a);
 
@@ -1012,7 +1012,7 @@ b: 20 </code></pre>
         <h3>예제 ⑤ 삼항 연산자로 최대값 · 최소값 (강의자료 19~20p)</h3>
         <pre><code class="language-c">// 조건(삼항) 연산자로 최대값 · 최소값 (강의자료 19~20p)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int x = 7, y = 3;
     int max = (x &gt; y) ? x : y;     // 조건 참 → x
     int min = (x &lt; y) ? x : y;     // 조건 거짓 → y
@@ -1039,7 +1039,7 @@ int main() {
         <h3>예제 ① ex01_00-op2.c (수업 화면) — a=60, b=13 ★시험문제 ③</h3>
         <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — 비트 연산자 &amp; | ^ ~ 와 시프트 &lt;&lt; &gt;&gt;   ★시험문제 ③
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int a = 60;          // 60 = 32 + 16 + 8 + 4 → 0011 1100
     int b = 13;          // 13 = 8 + 4 + 1 → 0000 1101
     int c;
@@ -1086,7 +1086,7 @@ c &gt;&gt;= 2: 15 </code></pre>
         <h3>예제 ② 시프트 — unsigned char data = 0x1A (필기 예제)</h3>
         <pre><code class="language-c">// 시프트 연산자 — unsigned char data = 0x1A (필기 예제)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     unsigned char data = 0x1A;         // 0x1A → 1×16 + 10 → 26 → 0001 1010
     unsigned char left, right;
 
@@ -1115,7 +1115,7 @@ int main() {
         <h3>예제 ③ 보수 — 0011 1100 (필기)</h3>
         <pre><code class="language-c">// 보수 — 0011 1100 (60)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int n = 60;                    // 60 = 32 + 16 + 8 + 4 → 0011 1100
     printf("1의 보수 ~n     = %d\n", ~n);        // 1100 0011 → -61  (0 과 1 을 뒤집기)
     printf("2의 보수 ~n + 1 = %d\n", ~n + 1);    // ~n = 1100 0011(-61) → + 1 → 1100 0100 → -60 (1의 보수 + 1 = 음수 표현)
@@ -1139,7 +1139,7 @@ int main() {
         <h3>예제 ① 진법 표기</h3>
         <pre><code class="language-c">// 진법 표기 — 0 으로 시작 = 8진수, 0x 로 시작 = 16진수
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("017  = %d\n", 017);      // 8진수 17 = 1×8 + 7 = 15
     printf("0x1A = %d\n", 0x1A);     // 16진수 1A = 1×16 + 10 = 26
     printf("0x5A = %d\n", 0x5A);     // 0101 1010 = 90
@@ -1156,7 +1156,7 @@ int main() {
         <h3>예제 ② 형변환 <code>(자료형)</code> · 콤마 <code>,</code> 연산자</h3>
         <pre><code class="language-c">// 형변환 연산자 (자료형) · 콤마 연산자 ,
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("(int)'A'   = %d\n", (int)'A');       // 'A' → 문자 A 의 코드값 → 65
     printf("(int)3.14  = %d\n", (int)3.14);      // 소수점 버림 → 3
     printf("(int)3.46  = %d\n", (int)3.46);      // 소수점 버림(반올림 아님) → 3
@@ -1199,7 +1199,7 @@ y = 6</code></pre>
         <div class="tip">🔥 <b>수업 중 “시험문제!”</b> — ① 메모장·C 파일의 <b>1)시험문제</b> (증감 + 우선순위) ② <b>2)시험문제</b> (콤마 + printf 안의 증감) ③ C 파일의 <b>3)시험문제</b> (비트 연산자, 수업 화면 ex01_00-op2.c) · 먼저 직접 풀고 <b>💡 정답</b>을 펼치세요. 아래 <a href="#output">🖥️ 출력 결과 맞히기</a>에서 실행결과를 적어 채점하고, <a href="#code">💻 코딩테스트</a>의 <b>🔥 시험문제</b>로 직접 코드를 짜서 채점도 할 수 있어요.</div>
         <h3>문제 ① 실행결과를 쓰시오 — 1)시험문제!</h3>
         <pre><code class="language-c">#include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int x = 10;
     int y = 10;
     int z;
@@ -1219,7 +1219,7 @@ int main() {
         </div>
         <h3>문제 ② 실행결과를 쓰시오 — 2)시험문제!</h3>
         <pre><code class="language-c">#include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int x = 1, y = 1, z = 1;
     ++x, y++;
     printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);
@@ -1234,7 +1234,7 @@ x:2		y:1		z:1 </code></pre>
         <h3>확인용 — printf 한 줄을 더 넣어 끝난 뒤 값까지 보기</h3>
         <pre><code class="language-c">// ★시험문제 ② — 콤마 연산자와 printf 안의 증감 연산자
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int x = 1, y = 1, z = 1;
     ++x, y++;                                            // 콤마로 두 식 실행 → x=2, y=2
     printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // ++x → 2 · y++ → 2 · z 그대로 1 → x:2 y:2 z:1
@@ -1294,7 +1294,7 @@ x:3		y:1		z:0 </code></pre>
         <pre><code class="language-c">// E00-condition/ex01_00-01if1.c (수업 코드) — if ~ else if
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int a = 10;
     int b = 20;
     if (a &gt; b) {                       // 10 &gt; 20 → 거짓(0) → 건너뜀
@@ -1311,7 +1311,7 @@ int main() {
         <pre><code class="language-c">// Quiz 1, 2 (else if.c) — 0 이상이면 Positive, 아니면 Negative
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i;
     printf("숫자를 입력하세요? ");
     scanf("%d", &amp;i);
@@ -1334,7 +1334,7 @@ quit..</code></pre>
         <pre><code class="language-c">// Quiz 3 (axa.c) — 짝수면 정사각형 넓이, 홀수면 정사각형 둘레
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i;
     printf("숫자를 입력하세요 : ");
     scanf("%d", &amp;i);
@@ -1365,7 +1365,7 @@ quit..</code></pre>
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     double temperature;
 
     printf("현재 온도 입력: ");
@@ -1397,7 +1397,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int n;
     printf("정수 입력: ");
     scanf("%d", &amp;n);
@@ -1425,7 +1425,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     double gpa;
 
     printf("평균평점 입력: ");
@@ -1452,7 +1452,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int a = 0, b = 0;
     printf("두 정수 입력 &gt;&gt; ");
     scanf("%d%d", &amp;a, &amp;b);
@@ -1480,7 +1480,7 @@ int main(void) {
         <pre><code class="language-c">// Quiz 8 (수업 코드) — 키보드로 세 수를 입력받아 가장 큰 값 출력 (중첩 if)
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int x, y, z;
     printf("세 수를 입력하세요? ");
     scanf("%d%d%d", &amp;x, &amp;y, &amp;z);       // 스페이스 · 엔터로 구분해서 3개
@@ -1514,7 +1514,7 @@ max : 9</code></pre>
         <pre><code class="language-c">// Quiz 8 (수업 화면 사진) — 세 수를 한 번 더 찍고, max 뒤에 \n
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int x, y, z;
 
     printf("세 수를 입력하세요? ");
@@ -1545,7 +1545,7 @@ max: 9 </code></pre>
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int type, point;
 
     printf("번호를 선택: 1(1종면허), 2(2종면허): ");
@@ -1579,7 +1579,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int age = 0;
 
     printf("당신의 나이는? ");
@@ -1605,7 +1605,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int x, y, z;
     printf("세 정수를 입력: ");
     scanf("%d %d %d", &amp;x, &amp;y, &amp;z);
@@ -1642,7 +1642,7 @@ int main(void) {
         <h3>예제 ① ★ break 가 있을 때 vs 없을 때 (필기 시험 내용 확인)</h3>
         <pre><code class="language-c">// ★시험 — switch 에서 break 를 빼면? (필기: 안 멈추고 밑의 case 까지 실행)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int n = 2;
 
     printf("① break 있음\n");
@@ -1691,7 +1691,7 @@ default</code></pre>
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int month;
     printf("월(month)을 입력: ");
     scanf("%d", &amp;month);
@@ -1728,7 +1728,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     double x, y, result;
     int op;
 
@@ -1768,7 +1768,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int score;
     printf("점수(0에서 100사이) 입력: ");
     scanf("%d", &amp;score);
@@ -1809,7 +1809,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int type;
     double width, height;
 
@@ -1859,7 +1859,7 @@ int main(void) {
         <pre><code class="language-c">// for/for.c (수업 코드) — 0 ~ 9 출력
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i;
     for (i = 0; i &lt; 10; i++) {         // 0, 1, …, 9 → 10번 (i == 10 이면 조건 거짓)
         printf("%d\n", i);
@@ -1882,7 +1882,7 @@ for문 종료...</code></pre>
         <pre><code class="language-c">// while/while.c (수업 코드) — i 가 20 보다 작은 동안 반복
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i = 10;                        // 초기식은 while 앞에
     while (i &lt; 20) {                   // 조건이 참인 동안 반복, 거짓이면 빠져나옴
         printf("i == %d\n", i);
@@ -1906,7 +1906,7 @@ while문 종료...</code></pre>
         <pre><code class="language-c">// do~while/do~while.c (수업 코드) — 먼저 실행하고 나서 조건 검사
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i = 10;
     do {
         printf("i == %d\n", i);        // 조건을 보기 전에 일단 한 번 실행
@@ -1929,7 +1929,7 @@ do~while문 종료...</code></pre>
         <h3>예제 ④ 확인용 — 시작값이 i = 20 이면? (while 0번 · do ~ while 1번)</h3>
         <pre><code class="language-c">// 확인용 — 시작값이 i = 20 이면? (조건 i &lt; 20 이 처음부터 거짓)
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i = 20;
     while (i &lt; 20) {                   // 검사 먼저 → 거짓 → 한 번도 실행 안 함
         printf("while : i == %d\n", i);
@@ -1951,7 +1951,7 @@ int main() {
         <pre><code class="language-c">// Quiz 4 (수업 코드) — for 로 5번 인사하고, 끝난 뒤 i 값 확인
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i;
     for (i = 1; i &lt;= 5; i++) {
         printf("%d, 안녕하세요\n", i);
@@ -1970,7 +1970,7 @@ int main() {
         <pre><code class="language-c">// Quiz 5 (수업 코드) — 1 ~ 100 까지의 합
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i;
     int sum = 0;                       // 합을 모을 변수는 0 으로 시작
     for (i = 1; i &lt;= 100; i++) {
@@ -1995,7 +1995,7 @@ int main() {
         <pre><code class="language-c">// 03whilebasic.c — 특정 문자열을 여러 번 반복해 출력 (while)
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int count = 1;
 
     while (count &lt;= 3) {               // 1, 2, 3 → 3번
@@ -2016,7 +2016,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     double number = 1, sum = 0;        // number 를 0 이 아닌 값으로 시작해야 처음 조건이 참
     while (number != 0.0) {
         printf("실수 입력 &gt;&gt; ");
@@ -2037,7 +2037,7 @@ int main() {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int input;
     do {                               // 메뉴는 최소 한 번 보여 줘야 하니 do ~ while
         printf("[0]종료 [1]아메리카노 [2]카페라떼 [3]카푸치노 \n");
@@ -2059,7 +2059,7 @@ int main(void) {
 #include &lt;stdio.h&gt;
 #define MAX 4
 
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int num = 0;
     double height = 0;
     while (num &lt; MAX) {                // 4명이 찰 때까지
@@ -2084,7 +2084,7 @@ int main() {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int input = 0, result = 0, digit = 0;
     int devider = 100;
 
@@ -2111,7 +2111,7 @@ int main(void) {
         <pre><code class="language-c">// 01cel2far3.c — 3개의 섭씨 온도를 화씨 온도로 변환 (반복문 없이 같은 줄을 3번)
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     double celsius = 12.46;
 
     printf("  섭씨(C)  화씨(F)\n");
@@ -2133,7 +2133,7 @@ int main(void) {
 #define MAX 3
 #define INCREMENT 10
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     double celsius = 12.46;
 
     printf("  섭씨(C)  화씨(F)\n");
@@ -2151,7 +2151,7 @@ int main(void) {
         <pre><code class="language-c">// 02bitpos.c — 정수 오른쪽 8개의 비트 출력 (반복문 없이 8줄)
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int num = 13;
     printf("정수 %d의 오른쪽 8비트 내부 값:\n", num);
 
@@ -2173,7 +2173,7 @@ int main(void) {
 #include &lt;stdio.h&gt;
 #define TOTAL_BIT 32
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int num = 13;
     printf("%d의 %d비트 내부 값:\n", num, TOTAL_BIT);
 
@@ -2190,7 +2190,7 @@ int main(void) {
 #include &lt;stdio.h&gt;
 #define MAX 5
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int i;
     for (i = 1; i &lt;= MAX; i++)         // 몸체가 한 문장이면 { } 생략 가능
         printf("반복 %d\n", i);
@@ -2210,7 +2210,7 @@ for 종료 이후 i =&gt; 6</code></pre>
         <pre><code class="language-c">// 09forsum.c — 1 에서 10 까지의 합을 구한다 (for)
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int i, sum;
     for (i = 1, sum = 0; i &lt;= 10; i++) //++i도 가능
         sum += i; // sum = sum + i → 1 + 2 + … + 10 → 55
@@ -2241,7 +2241,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int i, sum, max;
     printf("양의 정수 입력 &gt;&gt; ");
     scanf("%d", &amp;max);
@@ -2279,7 +2279,7 @@ while 문으로 구한 1에서 10까지 합:  55</code></pre>
         <pre><code class="language-c">// Quiz 6 (수업 코드 · break.c) — 1 ~ 100 까지 for 문을 반복한다 (단, 1 ~ 10 까지만 if 문을 사용하여 빠져나온다)
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i, j;                          // j 는 선언만 하고 쓰지 않음
     for (i = 1; i &lt;= 100; i++) {
         printf("%d ", i);              // 숫자 뒤에 공백 하나
@@ -2297,7 +2297,7 @@ int main() {
 //                                    (단, 음수가 입력되면 다시 입력받기 위해 continue 문을 사용)
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int num, count = 0, sum = 0;
     while (1) {                        // 조건이 항상 참(1) → break 를 만나야 끝남
         printf("input number ? ");
@@ -2330,7 +2330,7 @@ input number ? 7
         <pre><code class="language-c">// 12continue.c — 3으로 나누어지지 않는 정수 출력 (continue)
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     const int MAX = 15;
 
     printf("1에서 %d까지 정수 중에서 3으로 나누어 떨어지지 않는 수\n", MAX);
@@ -2350,7 +2350,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int input;
     while (1) {
         printf("양의 정수 또는 0[종료] 입력 후 [Enter] &gt;&gt; ");
@@ -2373,7 +2373,7 @@ int main(void) {
         <pre><code class="language-c">// 13goto.c — goto 문을 사용해 1에서 10까지의 정수 출력
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int count = 1;
 
 loop:                                  // 레이블(이름표) — 이름 뒤에 콜론
@@ -2394,7 +2394,7 @@ loop:                                  // 레이블(이름표) — 이름 뒤에
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int input;
     do {
         printf("양의 정수 또는 음수나 0[종료] 입력 후 [Enter] &gt;&gt; ");
@@ -2416,7 +2416,7 @@ int main(void) {
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int num, j;
     printf("2 이상 양의 정수 입력 &gt;&gt; ");
     scanf("%d", &amp;num);
@@ -2445,7 +2445,7 @@ int main() {
         <pre><code class="language-c">// 16triangle.c — 별을 삼각형 모양으로 출력 (중첩 for)
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     const int MAX = 5;
     int i, j;
 
@@ -2468,7 +2468,7 @@ int main(void) {
 #include &lt;stdio.h&gt;
 #define MAX 9
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     for (int i = 2; i &lt;= MAX; i++) {   // 바깥: 단 (2 ~ 9)
         printf("%5d단 출력\n", i);
         for (int j = 2; j &lt;= MAX; j++) // 안쪽: 곱하는 수 (2 ~ 9)
@@ -2500,33 +2500,33 @@ int main(void) {
         <pre><code class="language-c">// 15nestedloop.c — 내부 반복과 외부 반복에서 각각의 변수 값의 변화
 #include &lt;stdio.h&gt;
 
-int main(void) {
-    int m, n;
-    for (m = 1; m &lt;= 5; m++) {         // 바깥 5번
-        printf("m = %-2d\n", m);       // %-2d = 2칸 왼쪽 정렬
-        for (n = 1; n &lt;= 7; n++)       // 바깥 1번마다 안쪽 7번 → 총 35번
-            printf("n = %-3d", n);
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i, j;
+    for (i = 1; i &lt;= 5; i++) {         // 바깥 5번
+        printf("i = %-2d\n", i);       // %-2d = 2칸 왼쪽 정렬
+        for (j = 1; j &lt;= 7; j++)       // 바깥 1번마다 안쪽 7번 → 총 35번
+            printf("j = %-3d", j);
         puts("");
     }
 
     return 0;
 }</code></pre>
-        <pre class="io"><code class="language-text">m = 1 
-n = 1  n = 2  n = 3  n = 4  n = 5  n = 6  n = 7  
-m = 2 
-n = 1  n = 2  n = 3  n = 4  n = 5  n = 6  n = 7  
-m = 3 
-n = 1  n = 2  n = 3  n = 4  n = 5  n = 6  n = 7  
-m = 4 
-n = 1  n = 2  n = 3  n = 4  n = 5  n = 6  n = 7  
-m = 5 
-n = 1  n = 2  n = 3  n = 4  n = 5  n = 6  n = 7  </code></pre>
+        <pre class="io"><code class="language-text">i = 1 
+j = 1  j = 2  j = 3  j = 4  j = 5  j = 6  j = 7  
+i = 2 
+j = 1  j = 2  j = 3  j = 4  j = 5  j = 6  j = 7  
+i = 3 
+j = 1  j = 2  j = 3  j = 4  j = 5  j = 6  j = 7  
+i = 4 
+j = 1  j = 2  j = 3  j = 4  j = 5  j = 6  j = 7  
+i = 5 
+j = 1  j = 2  j = 3  j = 4  j = 5  j = 6  j = 7  </code></pre>
         <h3>17loopsum.c — 1 에서 입력된 정수까지의 합을 식으로 — 입력: 4, 0</h3>
         <pre><code class="language-c">// 17loopsum.c — 1에서 입력된 정수까지의 합 구하기 (do ~ while 안에 중첩 for)
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
-int main(void) {
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     int input, sum, i, j;
     do {
         printf("양의 정수 또는 0(종료)을 입력: ");
@@ -2562,7 +2562,7 @@ int main(void) {
         <ol><li>교재 시험범위: <b>1장 · 2장 · 3장 · 4장 · 5장 · 6장 · 7장 · 9장</b></li><li><b>switch case 에 break 를 빼면 어떻게 되는지</b> → 안 멈추고 밑의 case 까지 실행돼 printf 가 계속 출력됨 → 25번 예제 ①</li><li><b>continue · break 시험에 나옴</b> → 27번 예제 ① ②</li><li>문제 유형: <b>괄호넣기 · 실행결과 · 소스코드를 보고 한글로 설명 · 실행 결과를 보고 손코딩하기</b></li><li>실행결과 풀이에서 <b><code>\n</code> 이 있나 없나</b> 주의하고 실행결과 쓰기</li></ol>
         <h3>연습 ① 실행결과를 쓰시오 — <code>\n</code> 있나 없나</h3>
         <pre><code class="language-c">#include &lt;stdio.h&gt;
-int main() {
+int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i;
     for (i = 1; i &lt;= 3; i++)
         printf("%d ", i);
