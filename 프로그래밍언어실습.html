@@ -116,7 +116,7 @@
 int main(void) {              // 프로그램은 main() 에서 자동으로 시작 · (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("hello world!");   // 화면에 출력 (\n 이 없어서 줄은 안 바뀜)
     return 0;                 // 0 을 돌려주며 프로그램 정상 종료
-}
+}   // main 함수 끝
 // ② 컴파일 Ctrl+Shift+B → hello.obj   ③ 링크 → hello.exe   ④ 실행 Ctrl+F5</code></pre>
         <pre class="io"><code>hello world!</code></pre>
         <div class="tip"><b>Visual Studio 단축키</b> — 모두 저장 <b>Ctrl+Shift+S</b> · 빌드 <b>Ctrl+Shift+B</b> · 실행 <b>Ctrl+F5</b><br>⚠️ 새 항목 추가 시 파일명에 확장자 <b>.c</b> 를 생략하면 <b>.cpp</b> 로 저장됩니다.</div>
@@ -144,16 +144,16 @@ int main(void) {              // 프로그램은 main() 에서 자동으로 시�
             <tr><td>putc()</td><td>문자 하나 출력</td></tr>
         </table>
         <pre><code>// P02-PutString/02put.c
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("hello world!\n");   // \n 을 직접 넣어야 줄바꿈
     puts("C 언어, 재미있다!");   // puts 는 자동 줄바꿈
-    return 0;
-}</code></pre>
+    return 0;   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}               // main 함수 끝</code></pre>
 
         <h3>예제 — printf 와 puts 의 줄바꿈 (모든 경우)</h3>
         <pre><code class="language-c">// printf 는 자동 줄바꿈이 없다 → \n 을 직접 넣어야 한다
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("hello");             // 줄바꿈 없음 → 다음 출력이 바로 뒤에 붙는다
     printf("world\n");           // 여기서 \n → 줄이 바뀜   =&gt; helloworld
@@ -161,9 +161,9 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     printf("첫째 줄\n둘째 줄\n");   // printf 한 번으로 두 줄 (\n 이 두 번)
     puts("puts 는");              // puts 는 출력한 뒤 자동으로 줄을 바꾼다
     puts("자동 줄바꿈");            // \n 을 안 넣어도 다음 출력은 새 줄에서 시작
-    printf("끝\n");
-    return 0;
-}</code></pre>
+    printf("끝\n");   // 끝 출력 후 줄바꿈
+    return 0;        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                    // main 함수 끝</code></pre>
         <pre class="io"><code>helloworld
 C 언어
 첫째 줄
@@ -174,18 +174,18 @@ puts 는
         <div class="tip">printf 는 <b>\n 을 만날 때만</b> 줄이 바뀌고, puts 는 <b>출력할 때마다</b> 줄이 바뀝니다. 첫 두 줄이 <b>helloworld</b> 로 붙은 이유가 이것이에요.</div>
         <h3>예제 — 2주차 연습문제 Quiz-01 · 02 · 05 (printf 한 번으로)</h3>
         <pre><code class="language-c">// [Quiz-01 · 02 · 05] printf 한 번으로 출력하기 (2주차 연습문제)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     // Quiz-01 : 한 줄에 공백 두 칸씩
-    printf("C  Pascal  Java  Python  kotlin\n");
+    printf("C  Pascal  Java  Python  kotlin\n");   // 한 줄에 공백 두 칸씩 → C  Pascal  Java  Python  kotlin
 
     // Quiz-02 : printf 는 한 번만 — 줄마다 \n
-    printf("C\nPascal\nJava\nPython\nkotlin\n");
+    printf("C\nPascal\nJava\nPython\nkotlin\n");   // \n 마다 줄이 바뀜 → C / Pascal / Java / Python / kotlin (5줄)
 
     // Quiz-05 : 여러 줄 문장도 \n 으로 이어서 한 번에
-    printf("프로그램 개발과정\n1. 프로젝트 작성\n2. 소스 작성\n3. 빌드\n4. 실행\n");
-    return 0;
-}</code></pre>
+    printf("프로그램 개발과정\n1. 프로젝트 작성\n2. 소스 작성\n3. 빌드\n4. 실행\n");   // \n 으로 줄 나눔 → 프로그램 개발과정 / 1. 프로젝트 작성 / 2. 소스 작성 / 3. 빌드 / 4. 실행
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code>C  Pascal  Java  Python  kotlin
 C
 Pascal
@@ -203,66 +203,66 @@ kotlin
         <h2>5. 함수와 프로그램 구조<span class="week">2주차</span></h2>
         <div class="tip"><b>암기</b> — ① <b>C언어는 함수들로 구성</b>된다  ② <b>C언어는 main() 함수로 시작</b>된다(자동 실행)  ③ 다른 함수는 <b>호출해야</b> 실행된다</div>
         <p>함수는 <b>표준 라이브러리 함수</b>(printf 등)와 <b>사용자 정의 함수</b>로 나뉩니다.</p>
-        <pre><code>#include &lt;stdio.h&gt;
+        <pre><code>#include &lt;stdio.h&gt;                  // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 void func1(void);            // 함수 원형(선언)
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    printf("main() start!!!\n");
+    printf("main() start!!!\n");    // ① main() start!!!
     func1();                 // ← 호출해야 실행된다
-    printf("main() end!!!\n");
-    return 0;
-}
+    printf("main() end!!!\n");      // ③ func1 에서 돌아와서 → main() end!!!
+    return 0;                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                   // main 함수 끝
 void func1(void) {           // 함수 정의
-    printf("func1() start!!!\n");
-    printf("func1() end!!!\n");
-}</code></pre>
+    printf("func1() start!!!\n");   // ② func1() start!!!
+    printf("func1() end!!!\n");     // ② func1() end!!! → main 으로 돌아감
+}                                   // func1 함수 끝 → 호출한 곳으로 돌아감</code></pre>
 
         <h3>예제 ① 함수를 만들기만 하고 호출하지 않으면</h3>
         <pre><code class="language-c">// ex-function-01.c — func1() 을 만들기만 하고 호출하지 않은 경우
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 void func1();                       // 함수 원형(선언): main 보다 아래에 정의할 거라 미리 알려 줌
 int main(void) {                    // C 프로그램은 main() 부터 자동 실행 · (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    printf("main() start!!! \n");
+    printf("main() start!!! \n");    // main() start!!!
     printf("main() end!!! \n");     // func1() 을 부르지 않았다
-    return 0;
-}
+    return 0;                        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                    // main 함수 끝
 void func1(void) {                  // 정의는 있지만 호출이 없으니 실행되지 않는다
-    printf("func1() start!!! \n");
-    printf("func1() end!!! \n");
-}</code></pre>
+    printf("func1() start!!! \n");   // 호출이 없어서 실행 안 됨
+    printf("func1() end!!! \n");     // 호출이 없어서 실행 안 됨
+}                                    // func1 함수 끝 → 호출한 곳으로 돌아감</code></pre>
         <pre class="io"><code>main() start!!! 
 main() end!!! </code></pre>
         <div class="tip">func1() 안의 printf 는 <b>한 줄도 출력되지 않습니다</b> — 호출하지 않았기 때문.</div>
         <h3>예제 ② main() 안에서 호출하면</h3>
         <pre><code class="language-c">// ex-function-02.c — main() 안에서 func1() 을 호출한 경우
-#include &lt;stdio.h&gt;
-void func1();
+#include &lt;stdio.h&gt;                   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+void func1();                        // 함수 원형(선언) — main 아래에 정의할 func1 을 미리 알림
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     printf("main() start!!! \n");   // ① 먼저 실행
     func1();                        // ② func1 로 이동 → 안의 두 줄을 실행하고 돌아온다
     printf("main() end!!! \n");     // ③ 돌아와서 나머지 실행
-    return 0;
-}
-void func1(void) {
-    printf("func1() start!!! \n");
-    printf("func1() end!!! \n");
-}</code></pre>
+    return 0;                        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                    // main 함수 끝
+void func1(void) {                   // func1 함수 정의 시작 (매개변수 · 반환값 없음)
+    printf("func1() start!!! \n");   // ②-1 func1() start!!!
+    printf("func1() end!!! \n");     // ②-2 func1() end!!! → main 으로 돌아감
+}                                    // func1 함수 끝 → 호출한 곳으로 돌아감</code></pre>
         <pre class="io"><code>main() start!!! 
 func1() start!!! 
 func1() end!!! 
 main() end!!! </code></pre>
         <h3>예제 ③ 실행 순서는 "정의한 순서"가 아니라 "부른 순서"</h3>
         <pre><code class="language-c">// 함수 호출 순서 = 출력 순서 (정의한 순서가 아니라 "부른 순서")
-#include &lt;stdio.h&gt;
-void func1(void);
-void func2(void);
+#include &lt;stdio.h&gt;       // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+void func1(void);        // 함수 원형 — main 아래에 정의할 func1 을 미리 알림
+void func2(void);        // 함수 원형 — func2 도 미리 알림
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    printf("안녕하세요\n");
+    printf("안녕하세요\n");   // 안녕하세요 출력 후 줄바꿈
     func2();          // func2 를 먼저 부른다 → "제 이름은" (\n 없음 → 다음 글자가 붙는다)
     func1();          // 그다음 func1         → "gdhong 입니다."
     func1();          // 같은 함수를 여러 번 부르면 여러 번 실행된다
-    return 0;
-}
+    return 0;            // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                        // main 함수 끝
 void func1(void) { printf("gdhong 입니다. \n"); }   // 정의는 func1 이 먼저여도
 void func2(void) { printf("제 이름은 "); }         // 실행 순서는 main 이 정한다</code></pre>
         <pre class="io"><code>안녕하세요
@@ -281,30 +281,30 @@ gdhong 입니다. </code></pre>
         </table>
                 <h3>예제 — 03debug.c 의 오류 2개 고치기</h3>
         <pre><code class="language-c">// P03-Debugging/03debug.c — 강의자료 원본에는 오류가 2군데 숨어 있다
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     // ❌ printf("컴퓨터공학과학생이며\n")    ← 세미콜론(;) 누락 → 컴파일 오류
     // ❌ printf("C 언어를수강합니다\n);     ← 닫는 따옴표(") 누락 → 컴파일 오류
     printf("컴퓨터공학과학생이며\n");      // ✅ 문장 끝에는 항상 ;
     printf("C 언어를수강합니다\n");        // ✅ 문자열은 " 로 열고 " 로 닫는다
-    return 0;
-}</code></pre>
+    return 0;   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}               // main 함수 끝</code></pre>
         <pre class="io"><code>컴퓨터공학과학생이며
 C 언어를수강합니다</code></pre>
         <h3>연습문제 정답 — 함수 호출 순서</h3>
         <pre><code>// quiz-01-02-function.c
-#include &lt;stdio.h&gt;
-void func1(void);
-void func2(void);
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+void func1(void);                               // 함수 원형 — main 아래에 정의할 func1 을 미리 알림
+void func2(void);                               // 함수 원형 — func2 도 미리 알림
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    printf("안녕하세요\n");
+    printf("안녕하세요\n");                          // 안녕하세요 출력 후 줄바꿈
     func2();        // func2() 실행 → printf("제 이름은") → 제 이름은 (\n 없음 → 다음 출력이 바로 뒤에 붙음)
     func1();        // func1() 실행 → "gdhong 입니다. \n" 이 앞 줄에 이어 붙음 → 제 이름은gdhong 입니다.
-    return 0;
-}
-void func1(void) { printf("gdhong 입니다. \n"); }
-void func2(void) { printf("제 이름은"); }</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝
+void func1(void) { printf("gdhong 입니다. \n"); }  // func1 정의 — gdhong 입니다. 출력 후 줄바꿈
+void func2(void) { printf("제 이름은"); }           // func2 정의 — 제 이름은 (\n 없음 → 다음 출력이 바로 뒤에)</code></pre>
 
         <pre class="io"><code>안녕하세요
 제 이름은gdhong 입니다. </code></pre>
@@ -326,25 +326,25 @@ void func2(void) { printf("제 이름은"); }</code></pre>
 
         <h3>문제 ① 실행결과를 쓰시오 — [실습 1-05] ex01_05-sizeof.c<span class="week">강의자료 23p</span></h3>
         <pre><code>// ex01_05-sizeof.c
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    char gender;
-    int age;
-    float weight;
-    double height;
+    char gender;                                // 문자형 변수
+    int age;                                    // 정수형 변수
+    float weight;                               // 실수형 변수 (float)
+    double height;                              // 실수형 변수 (double)
 
-    printf("변수의 할당크기\n");
-    printf("gender: %d, age: %d, weight: %d, height: %d\n\n",
-        sizeof(gender), sizeof(age), sizeof(weight), sizeof(height));
+    printf("변수의 할당크기\n");                       // 제목 출력 후 줄바꿈
+    printf("gender: %d, age: %d, weight: %d, height: %d\n\n",   // sizeof 결과(바이트 수)는 정수 → 전부 %d
+        sizeof(gender), sizeof(age), sizeof(weight), sizeof(height));   // 네 변수가 차지하는 바이트 수 (\n\n → 빈 줄 하나) · 결과는 아래 정답 보기
 
-    printf("자료형 크기\n");
-    printf("char: %d, int: %d, float: %d, double: %d\n\n",
-        sizeof(char), sizeof(int), sizeof(float), sizeof(double));
+    printf("자료형 크기\n");                         // 제목 출력
+    printf("char: %d, int: %d, float: %d, double: %d\n\n",   // 자료형 이름으로도 크기를 잴 수 있음
+        sizeof(char), sizeof(int), sizeof(float), sizeof(double));   // 자료형 이름으로 잰 크기
 
-    printf("정수형상수: %d, 실수형상수: %d\n",
-        sizeof(10), sizeof(3.14159));
-    return 0;
-}</code></pre>
+    printf("정수형상수: %d, 실수형상수: %d\n",            // 상수의 크기
+        sizeof(10), sizeof(3.14159));           // 정수 상수 10 · 실수 상수 3.14159 의 크기 (상수도 자료형이 정해져 있음)
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <details class="akey"><summary>💡 정답(실행결과) 보기</summary>
             <pre class="io"><code>변수의 할당크기
 gender: 1, age: 4, weight: 4, height: 8
@@ -394,19 +394,19 @@ int main() {
         </div>
         <details class="akey"><summary>💡 정답 코드 보기</summary>
             <pre><code>// quiz01-01_ex01.c (정답)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    char gender;
-    int age;
-    double height;
+    char gender;     // 성별 문자 하나
+    int age;         // 나이 (정수)
+    double height;   // 키 (실수 · double)
 
-    gender = 'w';
-    age = 21;
+    gender = 'w';    // 문자는 작은따옴표 → 'w'
+    age = 21;        // 나이 21
     height = 165.7;     // 오류 수정: 세미콜론(;) 누락 → 컴파일 오류
 
     printf("성별: %c, 나이: %d, 신장: %lf\n", gender, age, height);   // 빈칸 ①
-    return 0;
-}</code></pre>
+    return 0;        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                    // main 함수 끝</code></pre>
             <div class="tip"><b>풀이</b> — char → <b>%c</b> · int → <b>%d</b> · double → <b>%lf</b> (printf 에서는 %f 도 OK). 실수는 소수점 아래 <b>6자리</b>까지 출력되므로 165.7 → <b>165.700000</b>. 자료 속 <b>height = 165.7</b> 뒤에 세미콜론이 빠져 있어 그대로 두면 컴파일 오류가 납니다.</div>
         </details>
     </section>
@@ -416,27 +416,27 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <div class="tip">📌 변수 = 값이 바뀌는 <b>기억장소</b> · 선언 = 공간 할당 · 초기화 = 선언하면서 값 넣기</div>
         <h3>예제 ① sample03_01.c — 선언 → 대입 → 값 바꾸기</h3>
         <pre><code class="language-c">// sample03_01.c — 변수에 값을 저장하고 출력
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int money;                              // 선언: int(4byte) 저장 공간을 할당
     money = 3000;                           // 대입: 공간에 3000 을 저장
-    printf("money에 저장된 값 %d \n", money);
+    printf("money에 저장된 값 %d \n", money);        // money = 3000 → money에 저장된 값 3000
 
     money = 5000;                           // 변수는 값이 바뀔 수 있다
-    printf("money에 저장된 값 %d \n", money);
+    printf("money에 저장된 값 %d \n", money);        // 새 값 5000 → money에 저장된 값 5000
 
     int value = 0;                          // 선언 + 초기화를 한 줄에
     int data1, data2, data3;                // 같은 자료형은 쉼표로 여러 개 선언
-    data1 = 10; data2 = 20; data3 = 30;
-    printf("value=%d data1=%d data2=%d data3=%d\n", value, data1, data2, data3);
-    return 0;
-}</code></pre>
+    data1 = 10; data2 = 20; data3 = 30;         // 세 변수에 차례로 10 · 20 · 30
+    printf("value=%d data1=%d data2=%d data3=%d\n", value, data1, data2, data3);   // value=0 data1=10 data2=20 data3=30
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code>money에 저장된 값 3000 
 money에 저장된 값 5000 
 value=0 data1=10 data2=20 data3=30</code></pre>
         <h3>예제 ② 실습 1-02 · 1-03 — char · int · float 초기화</h3>
         <pre><code class="language-c">// ex01_03-var.c — char · int · float 변수 초기화 (실습 1-02 · 1-03)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;             // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     char  a1;          // 문자 1개 (1byte)
     int   a2;          // 정수 (4byte)
@@ -444,7 +444,7 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     // ⚠️ 여기서 바로 a1~a3 을 출력하면 쓰레기값 → VS 에서는 C4700 오류 (실습 1-01)
 
     a1 = 'c';          // 문자는 작은따옴표
-    a2 = 100;
+    a2 = 100;                  // 정수 100
     a3 = 11.11;        // 11.11 은 double 상수 → float 에 들어가며 11.11 에 가장 가까운 값으로 저장
 
     printf("a1: %c \n", a1);    // a1 = 'c' → %c 는 문자로 → a1: c
@@ -452,14 +452,14 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     printf("a3: %f \n", a3);    // a3 = 11.11 → %f 는 소수점 아래 6자리 → a3: 11.110000
 
     int a7, a8, a9;             // 한 줄에 여러 변수 선언
-    a7 = 300;
-    a8 = 400;
-    a9 = 500;
-    printf("a7: %d \n", a7);
-    printf("a8: %d \n", a8);
-    printf("a9: %d \n", a9);
-    return 0;
-}</code></pre>
+    a7 = 300;                  // a7 에 300
+    a8 = 400;                  // a8 에 400
+    a9 = 500;                  // a9 에 500
+    printf("a7: %d \n", a7);   // a7: 300
+    printf("a8: %d \n", a8);   // a8: 400
+    printf("a9: %d \n", a9);   // a9: 500
+    return 0;                  // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                              // main 함수 끝</code></pre>
         <pre class="io"><code>a1: c 
 a2: 100 
 a3: 11.110000 
@@ -473,7 +473,7 @@ a9: 500 </code></pre>
         <div class="tip">📌 영문자 · 숫자 · 밑줄(_)만 · 숫자로 시작 X · 공백 X · 대·소문자 구별 · 예약어 X</div>
         <h3>예제 — 되는 이름 ✅ / 안 되는 이름 ❌</h3>
         <pre><code class="language-c">// 변수 이름 규칙 — 영문자 a~z A~Z · 숫자 0~9 · 밑줄 _ 만 사용
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int age = 21;        // ✅ 영문자
     int Age = 30;        // ✅ age 와 Age 는 다른 변수 (대·소문자 구별)
@@ -489,9 +489,9 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     // int my-age = 1;   // ❌ - 같은 기호는 안 됨
     // int int = 1;      // ❌ 예약어(키워드) 사용
 
-    printf("age=%d Age=%d my_age=%d age2=%d _count=%d\n", age, Age, my_age, age2, _count);
-    return 0;
-}</code></pre>
+    printf("age=%d Age=%d my_age=%d age2=%d _count=%d\n", age, Age, my_age, age2, _count);   // age=21 Age=30 my_age=22 age2=23 _count=1 (대·소문자가 다르면 다른 변수)
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code>age=21 Age=30 my_age=22 age2=23 _count=1</code></pre>
     </section>
 
@@ -500,7 +500,7 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <div class="tip">📌 sizeof 결과는 <b>정수</b> → 항상 <b>%d</b> 로 출력 · 정수 상수는 int(4) · 실수 상수는 double(8)</div>
         <h3>예제 — 자료형 · 변수 · 상수의 크기</h3>
         <pre><code class="language-c">// 자료형 크기 — sizeof 결과는 정수라 %d 로 출력
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;     // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("char   : %d byte\n", sizeof(char));     // 문자형 char → 1byte → char   : 1 byte
     printf("short  : %d byte\n", sizeof(short));    // 정수형 short → 2byte → short  : 2 byte
@@ -509,17 +509,17 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     printf("double : %d byte\n", sizeof(double));   // 실수형 double → 8byte → double : 8 byte
     // long 은 VS(윈도우) 4byte · Mac·Linux 8byte → 강의자료(VS) 기준 4byte
 
-    int n = 10;
-    double d = 3.14;
+    int n = 10;        // int 변수 n
+    double d = 3.14;   // double 변수 d
     printf("변수 n : %d byte\n", sizeof(n));        // 변수 이름을 넣어도 된다 → n 은 int → 4 byte
     printf("변수 d : %d byte\n", sizeof(d));        // d 는 double → 8 byte
     printf("10     : %d byte\n", sizeof(10));       // 정수 상수 10 → int → 4 byte
     printf("3.14   : %d byte\n", sizeof(3.14));     // 실수 상수 3.14 → double → 8 byte
     printf("3.14f  : %d byte\n", sizeof(3.14f));    // f 를 붙이면 float → 4 byte
-    char name = 'a';
+    char name = 'a';   // char 변수 name
     printf("변수 name : %d byte\n", sizeof(name));  // name 은 char 변수 → 1 byte
-    return 0;
-}</code></pre>
+    return 0;          // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                      // main 함수 끝</code></pre>
         <pre class="io"><code>char   : 1 byte
 short  : 2 byte
 int    : 4 byte
@@ -539,27 +539,27 @@ double : 8 byte
         <div class="tip">📌 1byte = 8bit · 맨 앞 비트가 <b>0 이면 양수, 1 이면 음수</b>(signed) · unsigned 는 0 이상만</div>
         <h3>예제 — 같은 비트, 다른 값</h3>
         <pre><code class="language-c">// 부호 비트 — 1byte = 8bit, 맨 앞 비트가 0 이면 양수 · 1 이면 음수 (signed)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     signed char   s1 = 127;    // 0111 1111 → signed 최댓값
     signed char   s2 = -128;   // 1000 0000 → signed 최솟값
     unsigned char u1 = 0;      // 0000 0000 → unsigned 최솟값
     unsigned char u2 = 255;    // 1111 1111 → unsigned 최댓값
-    printf("signed char   : %d ~ %d\n", s2, s1);
-    printf("unsigned char : %d ~ %d\n", u1, u2);
+    printf("signed char   : %d ~ %d\n", s2, s1);   // signed char 범위 → signed char   : -128 ~ 127
+    printf("unsigned char : %d ~ %d\n", u1, u2);   // unsigned char 범위 → unsigned char : 0 ~ 255
 
     // 같은 비트라도 signed / unsigned 에 따라 값이 달라진다
     unsigned char u3 = 128;    // 1000 0000 → 부호 없음 : 128
     signed char   s3 = 128;    // 1000 0000 → 부호 있음 : 맨 앞 1 = 음수 → -128
     unsigned char u4 = 255;    // 1111 1111 → 부호 없음 : 255
     signed char   s4 = 255;    // 1111 1111 → 부호 있음 : -1
-    printf("1000 0000 → unsigned %d / signed %d\n", u3, s3);
-    printf("1111 1111 → unsigned %d / signed %d\n", u4, s4);
+    printf("1000 0000 → unsigned %d / signed %d\n", u3, s3);   // 1000 0000 → unsigned 128 / signed -128
+    printf("1111 1111 → unsigned %d / signed %d\n", u4, s4);   // 1111 1111 → unsigned 255 / signed -1
 
     // int n;          ← 기본이 signed (signed int n; 과 같다) : 음수·양수 모두
     // unsigned int n; ← 부호 없는 int : 0 이상만 저장
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code>signed char   : -128 ~ 127
 unsigned char : 0 ~ 255
 1000 0000 → unsigned 128 / signed -128
@@ -571,9 +571,9 @@ unsigned char : 0 ~ 255
         <div class="tip">📌 % 뒤 글자가 출력 모양을 정한다 · 숫자를 넣으면 칸수 조정</div>
         <h3>예제 ① 서식 지정자 전부 (%d %o %x %X %c %s %f %lf %ld)</h3>
         <pre><code class="language-c">// printf 서식 지정자 — % 뒤의 글자가 "어떤 모양으로 찍을지"를 정한다
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;    // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int data = 100;
+    int data = 100;   // 출력해 볼 정수 100
     printf("10진수 : %d\n", data);        // data = 100 → %d 10진수 그대로 → 100
     printf("8진수  : %o\n", data);        // %o  → 144   (100 = 1×64 + 4×8 + 4)
     printf("16진수 : %x\n", data);        // %x  → 64    (100 = 6×16 + 4)
@@ -586,8 +586,8 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
 
     float value = 2.1f;                  // 강의자료 10p
     printf("float  : %f\n", value);      // value = 2.1f → %f 소수점 아래 6자리 → 2.100000
-    return 0;
-}</code></pre>
+    return 0;         // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                     // main 함수 끝</code></pre>
         <pre class="io"><code>10진수 : 100
 8진수  : 144
 16진수 : 64
@@ -600,16 +600,16 @@ long   : 123456
 float  : 2.100000</code></pre>
         <h3>예제 ② 출력 칸수 [%5d] [%05d] [%-5d] (강의자료 11p)</h3>
         <pre><code class="language-c">// 출력 칸수 조정 — [ ] 로 칸을 눈으로 확인 (강의자료 11p)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int data = 7;
+    int data = 7;    // 칸 맞추기를 볼 정수 7
     printf("[%d] [%5d]\n", data, data);                   // data = 7 → %d → [7] · %5d 5칸 오른쪽 맞춤 → [    7]
     printf("[%5d] [%05d] [%-5d]\n", data, data, data);    // %5d → [    7] · %05d 빈칸을 0 으로 → [00007] · %-5d 왼쪽 맞춤 → [7    ]
     printf("[%5d] [%5d] [%5d]\n", 7, 77, 777);             // 5칸 오른쪽 맞춤 → [    7] [   77] [  777] → 오른쪽 끝이 맞는다
     printf("[%-5d] [%-5d] [%-5d]\n", 7, 77, 777);          // 5칸 왼쪽 맞춤 → [7    ] [77   ] [777  ] → 왼쪽 끝이 맞는다
     printf("[%2d]\n", 12345);                               // 12345 는 5자리 &gt; 2칸 → 자르지 않고 다 찍음 → [12345]
-    return 0;
-}</code></pre>
+    return 0;        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                    // main 함수 끝</code></pre>
         <pre class="io"><code>[7] [    7]
 [    7] [00007] [7    ]
 [    7] [   77] [  777]
@@ -622,7 +622,7 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <div class="tip">📌 문자는 1byte 정수(ASCII 코드)로 저장 · <b>'A' = 65</b> · <b>'a' = 97</b> · 작은따옴표 = 문자, 큰따옴표 = 문자열</div>
         <h3>예제 — %c 와 %d 로 같은 값을 찍어 보기</h3>
         <pre><code class="language-c">// 문자와 ASCII 코드 — 문자는 1byte 정수(ASCII 코드)로 저장된다
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     char name = 'a';                        // 'a' → ASCII 코드 97 → 0110 0001 로 저장된다
     printf("%c %d\n", name, name);          // %c → 문자 a · %d → 숫자 97
@@ -638,8 +638,8 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     printf("%s\n", "A");                    // 큰따옴표 = 문자열 → %s
     // ❌ printf("%c", "A");  "A" 는 문자열이라 %c 로 찍으면 안 된다
     // ❌ char a1 = "c";      문자열을 char 에 넣을 수 없다 → 'c' 로
-    return 0;
-}</code></pre>
+    return 0;   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}               // main 함수 끝</code></pre>
         <pre class="io"><code>a 97
 65의 ASCII 값은 A입니다.
 'A' 는 65
@@ -653,34 +653,34 @@ A</code></pre>
         <div class="tip">📌 <b>const</b> = 선언과 동시에 초기화, 재대입하면 컴파일 오류 · <b>#define</b> = 전처리기가 컴파일 전에 값으로 바꿔 놓음 (끝에 ; 없음)</div>
         <h3>예제 ① const 없이 — 값이 바뀐다</h3>
         <pre><code class="language-c">// ex01_04-const.c ① const 없이 — 변수는 다시 대입할 수 있다
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int a1 = 1000;
+    int a1 = 1000;   // 보통 변수 a1 = 1000 (const 없음 → 나중에 바꿀 수 있음)
     printf("a1: %d \n", a1);    // a1 = 1000 → a1: 1000
     a1 = 2000;                  // 변수라서 값이 바뀐다
     printf("a1: %d \n", a1);    // a1 = 2000 으로 바뀜 → a1: 2000
-    return 0;
-}</code></pre>
+    return 0;        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                    // main 함수 끝</code></pre>
         <pre class="io"><code>a1: 1000 
 a1: 2000 </code></pre>
         <h3>예제 ② const 를 붙이면 — 바꿀 수 없다</h3>
         <pre><code class="language-c">// ex01_04-const.c ② const 를 붙이면 상수 → 다시 대입하면 컴파일 오류
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;             // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     const int a1 = 1000;        // 상수는 선언과 동시에 초기화해야 한다
-    printf("a1: %d \n", a1);
+    printf("a1: %d \n", a1);   // a1 = 1000 → a1: 1000
     // a1 = 2000;               // ❌ error: 상수에 값 재할당 → 컴파일되지 않는다
     printf("a1: %d \n", a1);    // 그대로 1000
-    return 0;
-}</code></pre>
+    return 0;                  // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                              // main 함수 끝</code></pre>
         <pre class="io"><code>a1: 1000 
 a1: 1000 </code></pre>
         <h3>예제 ③ #define 매크로 상수 (강의자료 13p)</h3>
         <pre><code class="language-c">// 매크로 상수 #define — 컴파일 전에 전처리기가 이름을 값으로 바꿔 놓는다 (강의자료 13p)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 #define Even 2                        // 끝에 ; 를 붙이지 않는다
 #define MSG "==================="     // 문자열도 정의할 수 있다
-#define DATA1 100
+#define DATA1 100    // DATA1 → 100 (매크로 상수)
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     // ⚠️ 강의자료 13p 는 printf("Even: %d\n, Even"); → 따옴표 위치가 틀려 값이 안 찍힌다
     printf("Even: %d\n", Even);         // ✅ 전처리기가 Even → 2 로 바꿈 → Even: 2
@@ -689,8 +689,8 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     const int a1 = 1000;                // const 상수와 같이 쓰기
     printf("a1 %d DATA: %d\n", a1, DATA1);   // a1 = 1000 · DATA1 → 100 으로 바뀜 → a1 1000 DATA: 100
     printf("Even * DATA1 = %d\n", Even * DATA1);   // Even → 2 · DATA1 → 100 으로 바뀜 → 2 * 100 → 200
-    return 0;
-}</code></pre>
+    return 0;   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}               // main 함수 끝</code></pre>
         <pre class="io"><code>Even: 2
 Message: ===================
 a1 1000 DATA: 100
@@ -703,19 +703,19 @@ Even * DATA1 = 200</code></pre>
         <h3>예제 ① Prj06/06scanf.c (실습 2-01) — 입력: 12 / 20232629 18</h3>
         <pre><code class="language-c">// Prj06/06scanf.c — scanf 로 키보드 입력 받기 (실습 2-01)
 #define _CRT_SECURE_NO_WARNINGS    // VS 에서 scanf 를 쓰려면 맨 위에 (없으면 C4996 오류)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int month = 0;
-    printf("1년은 몇 달? ");
+    int month = 0;                              // 입력받을 변수 month 를 0 으로 시작
+    printf("1년은 몇 달? ");                        // 질문 출력 (\n 없음 → 같은 줄에서 입력)
     scanf("%d", &amp;month);           // &amp; = 변수의 주소 → 입력값을 month 공간에 저장
-    printf("1년은 %d달\n\n", month);
+    printf("1년은 %d달\n\n", month);               // 예: 12 입력 → 1년은 12달 (\n\n → 빈 줄 하나)
 
-    int snum, credit;
-    printf("당신의 학번과 신청 학점은? ");
+    int snum, credit;                           // 학번 · 학점을 담을 정수 변수 두 개
+    printf("당신의 학번과 신청 학점은? ");                 // 질문 출력 (줄바꿈 없음)
     scanf("%d %d", &amp;snum, &amp;credit);  // 공백(스페이스·엔터)으로 구분해서 두 개 입력
-    printf("학번:  %d 신청학점: %d\n", snum, credit);
-    return 0;
-}</code></pre>
+    printf("학번:  %d 신청학점: %d\n", snum, credit); // 예: 20261234 18 입력 → 학번:  20261234 신청학점: 18
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code>1년은 몇 달? 12
 1년은 12달
 
@@ -723,34 +723,34 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 학번:  20232629 신청학점: 18</code></pre>
         <h3>예제 ② 자료형에 맞는 scanf 서식 — 입력: 21 165.7</h3>
         <pre><code class="language-c">// scanf 서식 — 받을 변수의 자료형에 맞춘다 (double 은 반드시 %lf)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    char gender = 'w';
-    int age;
-    double height;
-    printf("나이와 신장은? ");
+    char gender = 'w';                          // 성별은 'w' 로 정해 둠
+    int age;                                    // 나이 (정수)
+    double height;                              // 신장 (double → scanf 는 %lf)
+    printf("나이와 신장은? ");                        // 질문 출력 (줄바꿈 없음)
     scanf("%d %lf", &amp;age, &amp;height);      // int → %d · double → %lf
-    printf("성별: %c, 나이: %d, 신장: %lf\n", gender, age, height);
+    printf("성별: %c, 나이: %d, 신장: %lf\n", gender, age, height);   // 예: 21 165.7 입력 → 성별: w, 나이: 21, 신장: 165.700000
     // ⚠️ printf 는 double 에 %f 도 되지만, scanf 는 %lf 가 아니면 값이 제대로 안 들어간다
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code>나이와 신장은? 21 165.7
 성별: w, 나이: 21, 신장: 165.700000</code></pre>
         <h3>예제 ③ %p 로 주소 찍어 보기</h3>
         <pre><code class="language-c">// &amp; 주소 연산자 — 변수가 메모리 몇 번지에 있는지 (%p = 주소 출력)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;               // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int age = 25;
+    int age = 25;                // 주소를 확인할 변수 age = 25
     printf("%p, %d\n", &amp;age, age);     // 주소, 값 (강의자료 12p)
 
-    int a = 1, b = 2;
+    int a = 1, b = 2;            // 변수 두 개 → 메모리의 서로 다른 곳에 저장
     printf("a 의 주소 %p\n", &amp;a);        // 변수마다 주소가 다르다
-    printf("b 의 주소 %p\n", &amp;b);
+    printf("b 의 주소 %p\n", &amp;b);   // a 와 다른 주소가 찍힘 (보통 4바이트쯤 차이)
     // 주소 값은 실행할 때마다 · 컴퓨터마다 다르다 (VS 는 00000012345ABCDE 모양)
     // scanf("%d", age);  ❌ &amp; 를 빠뜨리면 저장할 주소를 모른다 → 실행 중 오류
-    return 0;
-}</code></pre>
+    return 0;                    // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                // main 함수 끝</code></pre>
         <pre class="io"><code>0x16dda6938, 25
 a 의 주소 0x16dda6934
 b 의 주소 0x16dda6930</code></pre>
@@ -780,15 +780,15 @@ a * b      // 이항 연산자 : 피연산자 2개  (+ - * / % == &amp;&amp; &am
         <div class="tip">🎯 <b>괄호 → 단항 → 산술 → 관계 → 논리 → 조건(삼항) → 대입 → 콤마</b> (높은 것부터) · 우선순위가 같으면 보통 <b>왼쪽 → 오른쪽</b> (단항·대입은 오른쪽 → 왼쪽) · 시프트 <code>&lt;&lt; &gt;&gt;</code> 는 <b>산술보다 낮고 관계보다 높다</b></div>
         <h3>예제 — 우선순위 (필기 <code>3&lt;&lt;2+5&lt;&lt;3</code>)</h3>
         <pre><code class="language-c">// 연산자 우선순위 — 괄호 &gt; 단항 &gt; 산술 &gt; (시프트) &gt; 관계 &gt; 논리 &gt; 조건 &gt; 대입 &gt; 콤마
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("%d\n", 3 &lt;&lt; 2 + 5 &lt;&lt; 3);        // + 가 &lt;&lt; 보다 먼저 → 3 &lt;&lt; 7 &lt;&lt; 3 = 3072
     printf("%d\n", (3 &lt;&lt; 2) + (5 &lt;&lt; 3));    // 괄호 먼저 → 12 + 40 = 52
     printf("%d\n", 2 + 3 * 4);              // * 가 먼저 → 14
     printf("%d\n", (2 + 3) * 4);            // 괄호 먼저 → 20
     printf("%d\n", 5 &gt; 3 &amp;&amp; 2 &gt; 4);         // 관계(&gt;) 먼저 → 1 &amp;&amp; 0 → 0
-    return 0;
-}</code></pre>
+    return 0;   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}               // main 함수 끝</code></pre>
         <pre class="io"><code>3072
 52
 14
@@ -802,24 +802,24 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <div class="tip">📌 <b>정수 ÷ 정수 = 몫</b>(소수점 버림) · <code>%</code> = <b>나머지</b> (정수끼리만) · printf 에서 글자 <b>%</b> 를 찍으려면 <code>%%</code> · <code>c = c + a;</code> == <code>c += a;</code> (필기)</div>
         <h3>예제 ① ex01_00-op1.c — 산술 연산자 (a=21, b=10)</h3>
         <pre><code class="language-c">// ex01_00-op1.c ① 산술 연산자 + - * / %  (a=21, b=10)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int a = 21;
-    int b = 10;
-    int c;
+    int a = 21;      // 피연산자 a = 21
+    int b = 10;      // 피연산자 b = 10
+    int c;           // 결과를 담을 c
 
-    c = a + b;
+    c = a + b;       // 덧셈
     printf("a+b= %d \n", c);     // c = 21 + 10 → 31
-    c = a - b;
+    c = a - b;       // 뺄셈
     printf("a-b= %d \n", c);     // c = 21 - 10 → 11
-    c = a * b;
+    c = a * b;       // 곱셈
     printf("a*b= %d \n", c);     // c = 21 * 10 → 210
-    c = a / b;
+    c = a / b;       // 나눗셈 (정수끼리 → 몫)
     printf("a/b= %d \n", c);     // c = 21 / 10 → 2.1 → 정수 ÷ 정수는 몫만(소수점 버림) → 2
-    c = a % b;
+    c = a % b;       // 나머지
     printf("a%%b= %d \n", c);    // c = 21 % 10 → 21 ÷ 10 = 2 … 나머지 1 → 1 (글자 % 를 찍으려면 %% 로 써야 한다)
-    return 0;
-}</code></pre>
+    return 0;        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                    // main 함수 끝</code></pre>
         <pre class="io"><code>a+b= 31 
 a-b= 11 
 a*b= 210 
@@ -828,25 +828,25 @@ a%b= 1 </code></pre>
         <div class="tip"><b>필기 정정</b> — 수업 파일처럼 <code>printf("a%b= %d \n", c);</code> 로 쓰면 <code>%b</code> 를 서식으로 읽어서 원하는 글자가 안 나옵니다 → 글자 % 는 <code>%%</code></div>
         <h3>예제 ② ex01_00-op2.c (수업 화면) — 복합 대입 연산자</h3>
         <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — 복합 대입 연산자  c += a 는 c = c + a
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;               // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int a = 21;
-    int c;
+    int a = 21;                  // a = 21
+    int c;                       // 결과를 담을 c
 
-    c = a;
+    c = a;                       // c 에 a(21) 대입 → c = 21
     printf("c: %d \n", c);          // c = a → 21
     c += a;                         // c = c + a → 21 + 21 → 42
-    printf("c+=a: %d \n", c);
+    printf("c+=a: %d \n", c);    // c+=a: 42
     c -= a;                         // c = c - a → 42 - 21 → 21
-    printf("c-=a: %d \n", c);
+    printf("c-=a: %d \n", c);    // c-=a: 21
     c *= a;                         // c = c * a → 21 * 21 → 441
-    printf("c*=a: %d \n", c);
+    printf("c*=a: %d \n", c);    // c*=a: 441
     c /= a;                         // c = c / a → 441 / 21 → 21
-    printf("c/=a: %d \n", c);
+    printf("c/=a: %d \n", c);    // c/=a: 21
     c %= a;                         // c = c % a → 21 % 21 → 나머지 0 → 0
-    printf("c%%=a: %d \n", c);
-    return 0;
-}</code></pre>
+    printf("c%%=a: %d \n", c);   // %% → 글자 % → c%=a: 0
+    return 0;                    // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                // main 함수 끝</code></pre>
         <pre class="io"><code>c: 21 
 c+=a: 42 
 c-=a: 21 
@@ -875,29 +875,29 @@ c%=a: 0 </code></pre>
         </table>
         <h3>예제 — ex01_00-op1.c 증감 연산자</h3>
         <pre><code class="language-c">// ex01_00-op1.c ② 증감 연산자 ++ --  ★시험에 많이 나옴
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                        // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int c;
-    int d = 10, e = 10, f = 10, g = 10;
+    int c;                                // 결과를 담을 c
+    int d = 10, e = 10, f = 10, g = 10;   // d · e · f · g 모두 10 으로 시작 (각 증감 연산자 실험용)
 
     c = d;          // d(10) 을 c 에 대입 → c=10
     d = d + 1;      // d = 10 + 1 → d=11 (d++ 와 같은 뜻)
-    printf("c,d: %d, %d \n", c, d);
+    printf("c,d: %d, %d \n", c, d);       // c,d: 10, 11
 
-    d = 10;
+    d = 10;                               // d 를 다시 10 으로
     c = d++;        // 후위: c 에 먼저 대입(10) → 그다음 d 증가(11)
-    printf("c,d: %d, %d \n", c, d);
+    printf("c,d: %d, %d \n", c, d);       // c,d: 10, 11 (후위 → c 는 증가 전 값)
 
     c = ++e;        // 전위: e 먼저 증가(11) → 그 값을 c 에 대입(11)
-    printf("c,e: %d, %d \n", c, e);
+    printf("c,e: %d, %d \n", c, e);       // c,e: 11, 11 (전위 → c 도 증가한 값)
 
     c = f--;        // 후위: 지금 f(10) 을 c 에 먼저 대입 → c=10 → 그다음 f = 10 - 1 → 9
-    printf("c,f: %d, %d \n", c, f);
+    printf("c,f: %d, %d \n", c, f);       // c,f: 10, 9
 
     c = --g;        // 전위: 먼저 g = 10 - 1 → 9 → 그 값을 c 에 대입 → c=9
-    printf("c,g: %d, %d \n", c, g);
-    return 0;
-}</code></pre>
+    printf("c,g: %d, %d \n", c, g);       // c,g: 9, 9
+    return 0;                             // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                         // main 함수 끝</code></pre>
         <pre class="io"><code>c,d: 10, 11 
 c,d: 10, 11 
 c,e: 11, 11 
@@ -911,26 +911,26 @@ c,g: 9, 9 </code></pre>
         <div class="tip">📌 관계·논리 연산 결과는 <b>참 1 / 거짓 0</b> · 조건식에서는 <b>0 이 아니면 모두 참</b> · 문자도 코드값으로 비교 (<code>'a'</code> = 97)</div>
         <h3>예제 ① ex01_00-op1.c — 관계 연산자</h3>
         <pre><code class="language-c">// ex01_00-op1.c ③ 관계 연산자 — 참이면 1, 거짓이면 0
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;               // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int a = 21;
-    int b = 10;
-    int c;
+    int a = 21;                  // a = 21
+    int b = 10;                  // b = 10
+    int c;                       // 비교 결과(1 또는 0)를 담을 c
 
     c = a == b;     // 21 == 10 → 거짓 → 0
-    printf("a==b: %d \n", c);
+    printf("a==b: %d \n", c);    // a==b: 0
     c = a != b;     // 21 != 10 → 참 → 1
-    printf("a!=b: %d \n", c);
+    printf("a!=b: %d \n", c);    // a!=b: 1
     c = a &lt; b;      // 21 &lt; 10 → 거짓 → 0
-    printf("a&lt;b: %d \n", c);
+    printf("a&lt;b: %d \n", c);     // a&lt;b: 0
     c = a &gt; b;      // 21 &gt; 10 → 참 → 1
-    printf("a&gt;b: %d \n", c);
+    printf("a&gt;b: %d \n", c);     // a&gt;b: 1
     c = a &gt;= 21;    // 21 &gt;= 21 → 같아도 참 → 1
-    printf("a&gt;=21: %d \n", c);
+    printf("a&gt;=21: %d \n", c);   // a&gt;=21: 1
     c = a &lt;= 20;    // 21 &lt;= 20 → 거짓 → 0
-    printf("a&lt;=20: %d \n", c);
-    return 0;
-}</code></pre>
+    printf("a&lt;=20: %d \n", c);   // a&lt;=20: 0
+    return 0;                    // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                // main 함수 끝</code></pre>
         <pre class="io"><code>a==b: 0 
 a!=b: 1 
 a&lt;b: 0 
@@ -948,7 +948,7 @@ a&lt;=20: 0 </code></pre>
         </table>
         <h3>예제 ② 논리 연산자 — 모든 경우</h3>
         <pre><code class="language-c">// 논리 연산자 ! &amp;&amp; || — 결과는 참 1 / 거짓 0 (0 이 아니면 모두 참)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("!0 = %d, !1 = %d\n", !0, !1);                       // NOT: !0 → 거짓의 반대 → 1 · !1 → 참의 반대 → 0 → !0 = 1, !1 = 0
     printf("0&amp;&amp;0=%d 0&amp;&amp;1=%d 1&amp;&amp;0=%d 1&amp;&amp;1=%d\n", 0&amp;&amp;0, 0&amp;&amp;1, 1&amp;&amp;0, 1&amp;&amp;1);   // AND: 둘 다 참일 때만 1 → 0 0 0 1
@@ -956,8 +956,8 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     printf("0^0=%d 0^1=%d 1^0=%d 1^1=%d\n", 0^0, 0^1, 1^0, 1^1);           // ^ 는 비트 XOR: 서로 다르면 1 → 0 1 1 0
     printf("3 &amp;&amp; -1 = %d\n", 3 &amp;&amp; -1);                          // 3 → 참 · -1 → 참(0 이 아니면 모두 참) → 참 &amp;&amp; 참 → 1
     printf("!5 = %d\n", !5);                                    // 5 는 참 → NOT → 0
-    return 0;
-}</code></pre>
+    return 0;   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}               // main 함수 끝</code></pre>
         <pre class="io"><code>!0 = 1, !1 = 0
 0&amp;&amp;0=0 0&amp;&amp;1=0 1&amp;&amp;0=0 1&amp;&amp;1=1
 0||0=0 0||1=1 1||0=1 1||1=1
@@ -967,43 +967,43 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <div class="tip"><b>필기 정정</b> — 필기에 <code>^</code> 가 논리 연산자로 적혀 있지만 C 의 <b>논리 연산자는 <code>! &amp;&amp; ||</code> 3개</b>(강의자료 13p)이고 <code>^</code> 는 <b>비트 연산자(XOR)</b>입니다. 0 과 1 만 넣으면 표 값은 같아요 — 서로 다르면 1.</div>
         <h3>예제 ③ 단축 평가 (강의자료 14p · 실습 07shorteval.c)</h3>
         <pre><code class="language-c">// 단축 평가 — 왼쪽만 보고 결과가 정해지면 오른쪽은 계산하지 않는다 (강의자료 14p)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                  // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int n = 5;
-    int r;
+    int n = 5;                      // n = 5
+    int r;                          // 논리 연산 결과(1 · 0)를 담을 r
 
     r = (n &gt; 10) &amp;&amp; (++n &gt; 0);   // 왼쪽 거짓(0) → &amp;&amp; 결과는 무조건 0 → ++n 실행 안 됨
-    printf("r=%d, n=%d\n", r, n);
+    printf("r=%d, n=%d\n", r, n);   // r=0, n=5 (++n 이 실행 안 돼서 n 그대로)
 
     r = (n &gt; 1) || (++n &gt; 0);    // 왼쪽 참(1) → || 결과는 무조건 1 → ++n 실행 안 됨
-    printf("r=%d, n=%d\n", r, n);
+    printf("r=%d, n=%d\n", r, n);   // r=1, n=5 (역시 ++n 실행 안 됨)
 
     r = (n &gt; 1) &amp;&amp; (++n &gt; 0);    // 왼쪽 참 → 오른쪽까지 봐야 함 → ++n 실행 (n=6)
-    printf("r=%d, n=%d\n", r, n);
-    return 0;
-}</code></pre>
+    printf("r=%d, n=%d\n", r, n);   // r=1, n=6 (이번엔 ++n 실행됨)
+    return 0;                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                   // main 함수 끝</code></pre>
         <pre class="io"><code>r=0, n=5
 r=1, n=5
 r=1, n=6</code></pre>
         <h3>예제 ④ ex01_00-op2.c (수업 화면) — sizeof · 조건(삼항) 연산자</h3>
         <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — sizeof 연산자 · 조건(삼항) 연산자
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                             // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int a = sizeof(int);            // sizeof 도 연산자 → int 크기 4
-    printf("int: %d \n", a);
+    printf("int: %d \n", a);                   // int: 4
 
-    int b = 100;
+    int b = 100;                               // b = 100
     int c = sizeof(b);              // 변수 b 의 크기 → 4
-    printf("b: %d, sizeof(b): %d \n", b, c);
+    printf("b: %d, sizeof(b): %d \n", b, c);   // b: 100, sizeof(b): 4
 
-    a = 10;
+    a = 10;                                    // a 를 10 으로 바꿈
     b = (a == 1) ? 20 : 30;         // 조건이 거짓(0) → 콜론 뒤 30
-    printf("b: %d \n", b);
+    printf("b: %d \n", b);                     // b: 30
 
     b = (a == 10) ? 20 : 30;        // 조건이 참(1) → 콜론 앞 20
-    printf("b: %d \n", b);
-    return 0;
-}</code></pre>
+    printf("b: %d \n", b);                     // b: 20
+    return 0;                                  // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                              // main 함수 끝</code></pre>
         <pre class="io"><code>int: 4 
 b: 100, sizeof(b): 4 
 b: 30 
@@ -1011,15 +1011,15 @@ b: 20 </code></pre>
         <div class="tip">📌 <code>조건 ? 참일 때 값 : 거짓일 때 값</code> — 피연산자가 3개라 <b>삼항</b> 연산자 · <code>sizeof</code> 는 함수가 아니라 <b>연산자</b> (필기 “ziseof” → <b>sizeof</b>)</div>
         <h3>예제 ⑤ 삼항 연산자로 최대값 · 최소값 (강의자료 19~20p)</h3>
         <pre><code class="language-c">// 조건(삼항) 연산자로 최대값 · 최소값 (강의자료 19~20p)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                          // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int x = 7, y = 3;
+    int x = 7, y = 3;                       // x = 7, y = 3
     int max = (x &gt; y) ? x : y;     // 조건 참 → x
     int min = (x &lt; y) ? x : y;     // 조건 거짓 → y
-    printf("max=%d, min=%d\n", max, min);
+    printf("max=%d, min=%d\n", max, min);   // max=7, min=3
     printf("'a'=%d, 'a' &gt; 'A' : %d\n", 'a', 'a' &gt; 'A');   // 문자도 코드값으로 비교 97 &gt; 65 → 1
-    return 0;
-}</code></pre>
+    return 0;                               // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                           // main 함수 끝</code></pre>
         <pre class="io"><code>max=7, min=3
 'a'=97, 'a' &gt; 'A' : 1</code></pre>
     </section>
@@ -1038,31 +1038,31 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         </table>
         <h3>예제 ① ex01_00-op2.c (수업 화면) — a=60, b=13 ★시험문제 ③</h3>
         <pre><code class="language-c">// ex01_00-op2.c (수업 화면) — 비트 연산자 &amp; | ^ ~ 와 시프트 &lt;&lt; &gt;&gt;   ★시험문제 ③
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                 // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int a = 60;          // 60 = 32 + 16 + 8 + 4 → 0011 1100
     int b = 13;          // 13 = 8 + 4 + 1 → 0000 1101
-    int c;
+    int c;                         // 결과를 담을 c
 
     c = a &amp; b;           // 0011 1100 &amp; 0000 1101 → 둘 다 1 인 자리만 1 → 0000 1100 → 8 + 4 → 12
-    printf("a &amp; b: %d \n", c);
+    printf("a &amp; b: %d \n", c);     // a &amp; b: 12
     c = a | b;           // 0011 1100 | 0000 1101 → 하나라도 1 이면 1 → 0011 1101 → 32+16+8+4+1 → 61
-    printf("a | b: %d \n", c);
+    printf("a | b: %d \n", c);     // a | b: 61
     c = a ^ b;           // 0011 1100 ^ 0000 1101 → 서로 다르면 1 → 0011 0001 → 32 + 16 + 1 → 49
-    printf("a ^ b: %d \n", c);
+    printf("a ^ b: %d \n", c);     // a ^ b: 49
     c = ~a;              // 물결표 ~ = 모든 비트 0 ↔ 1 뒤집기(1의 보수) → 0011 1100 → 1100 0011 → 맨 앞 1 = 음수 → 거꾸로 읽기: 다시 뒤집기 60 + 1 = 61 → -61 (공식 ~x = -(x + 1))
-    printf("~a: %d \n", c);
+    printf("~a: %d \n", c);        // ~a: -61
 
     c = a &lt;&lt; 2;          // 0011 1100 → 왼쪽으로 2칸 → 1111 0000 → 60 × 4 → 240
-    printf("a &lt;&lt; 2: %d \n", c);
+    printf("a &lt;&lt; 2: %d \n", c);    // a &lt;&lt; 2: 240
     c = a &gt;&gt; 2;          // 0011 1100 → 오른쪽으로 2칸 → 0000 1111 → 60 ÷ 4 → 15
-    printf("a &gt;&gt; 2: %d \n", c);
+    printf("a &gt;&gt; 2: %d \n", c);    // a &gt;&gt; 2: 15 (지금 c = 15)
     c &lt;&lt;= 2;             // c = c &lt;&lt; 2 → 15(0000 1111) → 왼쪽 2칸 → 0011 1100 → 60
-    printf("c &lt;&lt;= 2: %d \n", c);
+    printf("c &lt;&lt;= 2: %d \n", c);   // c &lt;&lt;= 2: 60
     c &gt;&gt;= 2;             // c = c &gt;&gt; 2 → 60(0011 1100) → 오른쪽 2칸 → 0000 1111 → 15
-    printf("c &gt;&gt;= 2: %d \n", c);
-    return 0;
-}</code></pre>
+    printf("c &gt;&gt;= 2: %d \n", c);   // c &gt;&gt;= 2: 15
+    return 0;                      // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                  // main 함수 끝</code></pre>
         <pre class="io"><code>a &amp; b: 12 
 a | b: 61 
 a ^ b: 49 
@@ -1085,24 +1085,24 @@ c &gt;&gt;= 2: 15 </code></pre>
         </table>
         <h3>예제 ② 시프트 — unsigned char data = 0x1A (필기 예제)</h3>
         <pre><code class="language-c">// 시프트 연산자 — unsigned char data = 0x1A (필기 예제)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     unsigned char data = 0x1A;         // 0x1A → 1×16 + 10 → 26 → 0001 1010
-    unsigned char left, right;
+    unsigned char left, right;                  // 결과를 담을 unsigned char 변수 두 개
 
     left = data &lt;&lt; 2;                  // 0001 1010 → 왼쪽으로 2칸 → 0110 1000 → 26 × 4 → 104
     right = data &gt;&gt; 2;                 // 0001 1010 → 오른쪽으로 2칸 → 0000 0110 → 26 ÷ 4 = 6 (나머지 버림) → 6
-    printf("data=%d, data&lt;&lt;2=%d, data&gt;&gt;2=%d\n", data, left, right);
+    printf("data=%d, data&lt;&lt;2=%d, data&gt;&gt;2=%d\n", data, left, right);   // data=26, data&lt;&lt;2=104, data&gt;&gt;2=6
 
     data = data &lt;&lt; 2;                  // 26 → 왼쪽 2칸 → 104 (data 자체가 104 로 바뀜)
     data = data &gt;&gt; 2;                  // 104 를 다시 오른쪽 2칸 → 0001 1010 = 26 (원래 값)
-    printf("&lt;&lt;2 한 뒤 &gt;&gt;2 : %d\n", data);
+    printf("&lt;&lt;2 한 뒤 &gt;&gt;2 : %d\n", data);         // &lt;&lt;2 한 뒤 &gt;&gt;2 : 26
 
     unsigned char x = 0xFF;            // 0xFF → 15×16 + 15 → 255 → 1111 1111
     x &lt;&lt;= 2;                           // x = x &lt;&lt; 2 → 1111 1111 → 왼쪽 2칸 → 11 1111 1100 → 8비트만 남음(넘친 비트는 버려짐) → 1111 1100 → 252
-    printf("0xFF &lt;&lt;= 2 : %d\n", x);
-    return 0;
-}</code></pre>
+    printf("0xFF &lt;&lt;= 2 : %d\n", x);             // 0xFF &lt;&lt;= 2 : 252
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code>data=26, data&lt;&lt;2=104, data&gt;&gt;2=6
 &lt;&lt;2 한 뒤 &gt;&gt;2 : 26
 0xFF &lt;&lt;= 2 : 252</code></pre>
@@ -1114,14 +1114,14 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         </table>
         <h3>예제 ③ 보수 — 0011 1100 (필기)</h3>
         <pre><code class="language-c">// 보수 — 0011 1100 (60)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int n = 60;                    // 60 = 32 + 16 + 8 + 4 → 0011 1100
     printf("1의 보수 ~n     = %d\n", ~n);        // 1100 0011 → -61  (0 과 1 을 뒤집기)
     printf("2의 보수 ~n + 1 = %d\n", ~n + 1);    // ~n = 1100 0011(-61) → + 1 → 1100 0100 → -60 (1의 보수 + 1 = 음수 표현)
     printf("-n              = %d\n", -n);        // 컴퓨터는 음수를 2의 보수로 저장 → -60
-    return 0;
-}</code></pre>
+    return 0;   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}               // main 함수 끝</code></pre>
         <pre class="io"><code>1의 보수 ~n     = -61
 2의 보수 ~n + 1 = -60
 -n              = -60</code></pre>
@@ -1138,15 +1138,15 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <div class="tip">📌 C 코드에서 <b>0 으로 시작하면 8진수</b>(<code>017</code>), <b>0x 로 시작하면 16진수</b>(<code>0x1A</code>) · 16진수 A=10 B=11 C=12 D=13 E=14 F=15 · 16진수 한 자리 = 2진수 4자리</div>
         <h3>예제 ① 진법 표기</h3>
         <pre><code class="language-c">// 진법 표기 — 0 으로 시작 = 8진수, 0x 로 시작 = 16진수
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("017  = %d\n", 017);      // 8진수 17 = 1×8 + 7 = 15
     printf("0x1A = %d\n", 0x1A);     // 16진수 1A = 1×16 + 10 = 26
     printf("0x5A = %d\n", 0x5A);     // 0101 1010 = 90
     printf("0xDF = %d\n", 0xDF);     // D=13=1101, F=15=1111 → 1101 1111 = 223
     printf("26 → 8진수 %o, 16진수 %X\n", 26, 26);   // 26 = 3×8 + 2 → 8진수 32 · 26 = 1×16 + 10 → 16진수 1A
-    return 0;
-}</code></pre>
+    return 0;   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}               // main 함수 끝</code></pre>
         <pre class="io"><code>017  = 15
 0x1A = 26
 0x5A = 90
@@ -1155,7 +1155,7 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <div class="tip"><b>필기 정정</b> — <code>0xDF</code> 의 D=13 은 <b>1101</b> 이라 <code>1101 1111</code> = 223 입니다 (필기의 1110 은 14).</div>
         <h3>예제 ② 형변환 <code>(자료형)</code> · 콤마 <code>,</code> 연산자</h3>
         <pre><code class="language-c">// 형변환 연산자 (자료형) · 콤마 연산자 ,
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     printf("(int)'A'   = %d\n", (int)'A');       // 'A' → 문자 A 의 코드값 → 65
     printf("(int)3.14  = %d\n", (int)3.14);      // 소수점 버림 → 3
@@ -1165,14 +1165,14 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     printf("7 / 2         = %d\n", 7 / 2);       // 정수 ÷ 정수 → 3.5 의 몫만 → 3
     printf("(double)7 / 2 = %f\n", (double)7 / 2);  // (double)7 → 7.0 → 7.0 / 2 → 3.5 → %f → 3.500000
 
-    int x, y;
+    int x, y;        // 콤마 연산자 실험용 정수 두 개
     x = 3 + 4, 5 - 10;          // 대입(=)이 콤마보다 먼저 → x = 7 (5-10 은 계산만 하고 버림)
     y = (3 + 4, 5 - 10);        // 괄호 안은 콤마의 "맨 뒤" 값 → -5
     printf("x = %d, y = %d\n", x, y);   // → x = 7, y = -5
     y = (3 + 4, 5 - 10, 2 * 3); // 맨 뒤 2*3 → 6
     printf("y = %d\n", y);   // → y = 6
-    return 0;
-}</code></pre>
+    return 0;        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                    // main 함수 끝</code></pre>
         <pre class="io"><code>(int)'A'   = 65
 (int)3.14  = 3
 (int)3.46  = 3
@@ -1198,15 +1198,15 @@ y = 6</code></pre>
         <h2>22. ★ 4주차 시험문제 ① ② ③<span class="week">4주차</span></h2>
         <div class="tip">🔥 <b>수업 중 “시험문제!”</b> — ① 메모장·C 파일의 <b>1)시험문제</b> (증감 + 우선순위) ② <b>2)시험문제</b> (콤마 + printf 안의 증감) ③ C 파일의 <b>3)시험문제</b> (비트 연산자, 수업 화면 ex01_00-op2.c) · 먼저 직접 풀고 <b>💡 정답</b>을 펼치세요. 아래 <a href="#output">🖥️ 출력 결과 맞히기</a>에서 실행결과를 적어 채점하고, <a href="#code">💻 코딩테스트</a>의 <b>🔥 시험문제</b>로 직접 코드를 짜서 채점도 할 수 있어요.</div>
         <h3>문제 ① 실행결과를 쓰시오 — 1)시험문제!</h3>
-        <pre><code class="language-c">#include &lt;stdio.h&gt;
+        <pre><code class="language-c">#include &lt;stdio.h&gt;                        // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int x = 10;
-    int y = 10;
-    int z;
-    z = -x++ + ++y;
-    printf("x=%d\ty=%d\tz=%d\n",x,y,z);
-    return 0;
-}</code></pre>
+    int x = 10;                           // x 를 10 으로 시작
+    int y = 10;                           // y 를 10 으로 시작
+    int z;                                // 결과를 담을 z
+    z = -x++ + ++y;                       // 후위 x++ 는 지금 값을 쓰고 나중에 증가 · 전위 ++y 는 먼저 증가하고 그 값을 씀
+    printf("x=%d\ty=%d\tz=%d\n",x,y,z);   // x · y · z 를 탭(\t)으로 띄워 출력 → 결과는 아래 정답 보기
+    return 0;                             // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                         // main 함수 끝</code></pre>
         <details class="akey"><summary>💡 정답(실행결과) 보기</summary>
             <pre class="io"><code>x=11	y=11	z=1</code></pre>
             <div class="tip"><b>풀이</b> — ① <code>x++</code> 는 후위라 <b>지금 값 10</b> 을 쓰고 나중에 x=11 ② 단항 <code>-</code> → -10 ③ <code>++y</code> 는 전위라 <b>먼저 11</b> 로 올리고 11 을 씀 ④ z = -10 + 11 = <b>1</b> → <b>x=11 y=11 z=1</b> (printf 안의 \t 는 탭)</div>
@@ -1218,14 +1218,14 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
             <div class="quiz-feedback"></div>
         </div>
         <h3>문제 ② 실행결과를 쓰시오 — 2)시험문제!</h3>
-        <pre><code class="language-c">#include &lt;stdio.h&gt;
+        <pre><code class="language-c">#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int x = 1, y = 1, z = 1;
-    ++x, y++;
-    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);
-    printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);
-    return 0;
-}</code></pre>
+    int x = 1, y = 1, z = 1;                    // x · y · z 모두 1 로 시작
+    ++x, y++;                                   // 콤마 연산자 → 두 식을 차례로 모두 실행
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z); // 지금 x · y · z 값 출력
+    printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);   // 후위(x++ · z--)는 찍은 뒤 바뀌고 · 전위(--y)는 바꾼 뒤 찍음 → 결과는 아래 정답 보기
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <details class="akey"><summary>💡 정답(실행결과) 보기</summary>
             <pre class="io"><code>x:2		y:2		z:1 
 x:2		y:1		z:1 </code></pre>
@@ -1233,15 +1233,15 @@ x:2		y:1		z:1 </code></pre>
         </details>
         <h3>확인용 — printf 한 줄을 더 넣어 끝난 뒤 값까지 보기</h3>
         <pre><code class="language-c">// ★시험문제 ② — 콤마 연산자와 printf 안의 증감 연산자
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;             // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int x = 1, y = 1, z = 1;
+    int x = 1, y = 1, z = 1;   // x · y · z 모두 1
     ++x, y++;                                            // 콤마로 두 식 실행 → x=2, y=2
     printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // ++x → 2 · y++ → 2 · z 그대로 1 → x:2 y:2 z:1
     printf("x:%d\t\ty:%d\t\tz:%d \n", x++, --y, z--);    // x++ → 2 를 찍고 3 / --y → 1 로 내리고 1 / z-- → 1 을 찍고 0
     printf("x:%d\t\ty:%d\t\tz:%d \n", x, y, z);          // 끝난 뒤 실제 값 3 1 0
-    return 0;
-}</code></pre>
+    return 0;                  // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                              // main 함수 끝</code></pre>
         <pre class="io"><code>x:2		y:2		z:1 
 x:2		y:1		z:1 
 x:3		y:1		z:0 </code></pre>
@@ -1292,38 +1292,38 @@ x:3		y:1		z:0 </code></pre>
         </tbody></table>
         <h3>예제 ① E00-condition/ex01_00-01if1.c (수업 코드) — if ~ else if</h3>
         <pre><code class="language-c">// E00-condition/ex01_00-01if1.c (수업 코드) — if ~ else if
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int a = 10;
-    int b = 20;
+    int a = 10;                   // a = 10
+    int b = 20;                   // b = 20
     if (a &gt; b) {                       // 10 &gt; 20 → 거짓(0) → 건너뜀
-        printf("a는 b보다 크다");
-    }
+        printf("a는 b보다 크다");      // 실행 안 됨 (조건이 거짓)
+    }                             // if 끝
     else if (a &lt; b) {                  // 10 &lt; 20 → 참(1) → 실행
         printf("a는 b보다 작다");        // \n 이 없다 → 출력 뒤 줄이 안 바뀜
-    }
-    return 0;
-}</code></pre>
+    }                             // if 끝
+    return 0;                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                 // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">a는 b보다 작다</code></pre>
         <div class="tip">⚠️ printf 에 <code>\n</code> 이 없어서 출력 뒤에 줄이 바뀌지 않아요 → 실행결과를 쓸 때 <b><code>\n</code> 있나 없나</b> 먼저 확인 (필기) · 노션에 붙여넣은 첫 버전은 <code>else</code> 였고 WorkC 파일은 <code>else if (a &lt; b)</code> 라서, <b>a == b 이면 아무것도 출력되지 않습니다</b> (두 조건이 모두 거짓)</div>
         <h3>예제 ② Quiz 1 · 2 (수업 코드 · else if.c) — 0 이상이면 Positive — 입력: 7 / -3</h3>
         <pre><code class="language-c">// Quiz 1, 2 (else if.c) — 0 이상이면 Positive, 아니면 Negative
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int i;
-    printf("숫자를 입력하세요? ");
-    scanf("%d", &amp;i);
+    int i;                        // 입력받을 정수
+    printf("숫자를 입력하세요? ");        // 질문 출력 (줄바꿈 없음)
+    scanf("%d", &amp;i);              // 정수 입력 → i (&amp; = i 의 주소)
     if (i &gt;= 0) {                      // 0 도 여기(Positive)
-        printf("Positive\n");
-    }
+        printf("Positive\n");     // 0 이상이면 → Positive
+    }                             // if 끝
     else {                             // 조건이 거짓일 때만
-        printf("Negative\n");
-    }
+        printf("Negative\n");     // 음수면 → Negative
+    }                             // else 끝
     printf("quit..\n");                // if ~ else 가 끝나면 항상 실행
-    return 0;
-}</code></pre>
+    return 0;                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                 // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">숫자를 입력하세요? 7
 Positive
 quit..</code></pre>
@@ -1332,23 +1332,23 @@ Negative
 quit..</code></pre>
         <h3>예제 ③ Quiz 3 (수업 코드 · axa.c) — 짝수면 넓이, 홀수면 둘레 — 입력: 4 / 5</h3>
         <pre><code class="language-c">// Quiz 3 (axa.c) — 짝수면 정사각형 넓이, 홀수면 정사각형 둘레
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS    // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                 // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int i;
-    printf("숫자를 입력하세요 : ");
-    scanf("%d", &amp;i);
+    int i;                         // 입력받을 정수 (정사각형 한 변)
+    printf("숫자를 입력하세요 : ");        // 질문 출력 (줄바꿈 없음)
+    scanf("%d", &amp;i);               // 정수 입력 → i
     if (i % 2 == 0) {                  // 2 로 나눈 나머지가 0 → 짝수
-        printf("%d == 짝수\n", i);
+        printf("%d == 짝수\n", i);   // 예: 4 → 4 == 짝수
         printf("정사각형 넓이 : %d\n", i * i);     // 한 변 × 한 변
-    }
+    }                              // if 끝
     else {                             // 나머지가 1 → 홀수
-        printf("%d == 홀수\n", i);
+        printf("%d == 홀수\n", i);   // 예: 3 → 3 == 홀수
         printf("정사각형 둘레 : %d\n", 4 * i);     // 한 변 × 4
-    }
+    }                              // else 끝
     printf("quit..");                  // \n 없음
-    return 0;
-}</code></pre>
+    return 0;                      // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                  // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">숫자를 입력하세요 : 4
 4 == 짝수
 정사각형 넓이 : 16
@@ -1362,23 +1362,23 @@ quit..</code></pre>
         <summary>📘 교재 6장 실습 (요약 PDF · HW01) — 01basicif · 02evenifelse · 03addsub · 08scoreswitch</summary>
         <h3>01basicif.c — 현재 온도에 따른 폭염 주의 발령 (if) — 입력: 33.5 / 25</h3>
         <pre><code class="language-c">// 01basicif.c — 현재 온도에 따른 폭염 주의 발령 (if)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS       // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                    // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    double temperature;
+    double temperature;               // 온도 (소수 → double)
 
-    printf("현재 온도 입력: ");
+    printf("현재 온도 입력: ");             // 질문 출력 (줄바꿈 없음)
     scanf("%lf", &amp;temperature);        // double 입력은 %lf
 
     if (temperature &gt;= 32.0) {         // 참일 때만 { } 안의 두 줄 실행
-        printf("폭염 주의보를 발령합니다.\n");
-        printf("건강에 유의하세요.\n");
-    }
+        printf("폭염 주의보를 발령합니다.\n");   // 32.0 이상일 때 → 폭염 주의보를 발령합니다.
+        printf("건강에 유의하세요.\n");       // 이어서 → 건강에 유의하세요.
+    }                                 // if 끝
     printf("현재 온도는 섭씨 %.2f 입니다.\n", temperature);   // if 와 상관없이 항상 실행
 
-    return 0;
-}</code></pre>
+    return 0;                         // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                     // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">현재 온도 입력: 33.5
 폭염 주의보를 발령합니다.
 건강에 유의하세요.
@@ -1388,32 +1388,32 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         <h3>02evenifelse.c — 짝수와 홀수 판정 (if else · 조건 연산자) — 입력: 7 / 10</h3>
         <div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 요약 PDF 코드는 아래처럼 <b>여는 중괄호 <code>{</code> 가 주석 안</b>에 들어가 있어서, <code>};</code> 의 <code>}</code> 가 main 을 닫아 버리고 뒤의 <code>else</code> 는 짝이 되는 if 가 없어 <b>컴파일 오류</b>가 납니다 (직접 컴파일해서 확인). <code>{</code> 를 주석 밖으로 빼고 <code>};</code> → <code>}</code> 로 고쳐야 실행돼요.</div>
         <pre><code class="language-c">    if (n % 2) // if (n % 2 != 0) {    ← { 가 주석 안에 들어감
-        printf("홀수\n");
-    };                                 ← } 가 main 을 닫고, 뒤의 else 는 짝이 없음 → 오류
-    else {
-        printf("짝수\n");
-    }</code></pre>
+        printf("홀수\n");                         // 홀수 출력 — { 가 주석에 먹혀서 if 에는 이 한 줄만 걸림
+    };                                 ← } 가 main 을 닫고, 뒤의 else 는 짝이 없음 → 오류   // 그래서 이 } 가 if 가 아니라 다른 블록(main)을 닫음
+    else {                                      // 짝이 되는 if 가 없는 else → 컴파일 오류
+        printf("짝수\n");                         // 짝수 출력 (위 오류 때문에 실행되지 못함)
+    }                                           // else 끝</code></pre>
         <pre><code class="language-c">// 02evenifelse.c — 짝수와 홀수 판정 (if else · 조건 연산자)  ※ 중괄호 정정
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int n;
-    printf("정수 입력: ");
-    scanf("%d", &amp;n);
+    int n;                        // 입력받을 정수
+    printf("정수 입력: ");            // 질문 출력 (줄바꿈 없음)
+    scanf("%d", &amp;n);              // 정수 입력 → n
 
     if (n % 2) {                       // if (n % 2 != 0) 과 같다 — 나머지 1(0 이 아님) → 참
-        printf("홀수\n");
-    }
+        printf("홀수\n");           // 예: 7 → 홀수
+    }                             // if 끝
     else {                             // 나머지 0 → 거짓
-        printf("짝수\n");
-    }
+        printf("짝수\n");           // 예: 8 → 짝수
+    }                             // else 끝
 
     //조건연산자 이용
     (n % 2) ? printf("홀수\n") : printf("짝수\n");   // 같은 판정을 한 줄로
 
-    return 0;
-}</code></pre>
+    return 0;                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                 // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">정수 입력: 7
 홀수
 홀수</code></pre>
@@ -1422,26 +1422,26 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 짝수</code></pre>
         <h3>03addsub.c — 평균평점에 따른 구문 출력 (if ~ else if ~ else) — 입력: 3.9 / 2.5</h3>
         <pre><code class="language-c">// 03addsub.c — 평균평점에 따른 구문 출력 (if ~ else if ~ else)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    double gpa;
+    double gpa;                   // 평균평점 (소수 → double)
 
-    printf("평균평점 입력: ");
-    scanf("%lf", &amp;gpa);
+    printf("평균평점 입력: ");          // 질문 출력 (줄바꿈 없음)
+    scanf("%lf", &amp;gpa);           // double 입력은 %lf → gpa
 
     if (gpa &gt;= 4.3)                    // 위에서부터 검사 → 처음 참인 것 하나만 실행
-        printf("최우등\n");
+        printf("최우등\n");          // 4.3 이상 → 최우등
     else if (gpa &gt;= 3.8)               // 여기 왔다면 이미 4.3 미만
-        printf("우등\n");
-    else if (gpa &gt;= 3.0)
-        printf("우수\n");
+        printf("우등\n");           // 3.8 이상 4.3 미만 → 우등
+    else if (gpa &gt;= 3.0)          // 여기 왔다면 3.8 미만 → 3.0 이상인지 검사
+        printf("우수\n");           // 3.0 이상 3.8 미만 → 우수
     else                               // 위가 전부 거짓
-        printf("3.0 미만\n");
+        printf("3.0 미만\n");       // 3.0 미만 → 3.0 미만
 
-    return 0;
-}</code></pre>
+    return 0;                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                 // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">평균평점 입력: 3.9
 우등</code></pre>
         <pre class="io"><code class="language-text">평균평점 입력: 2.5
@@ -1449,24 +1449,24 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         <h3>08scoreswitch.c — 조건 연산자 ? : 로 최대 · 최소 · 절대값 · 짝홀 — 입력: -7 4</h3>
         <div class="tip">📌 파일 이름은 switch 지만 실제로는 <b>조건(삼항) 연산자</b> <code>조건 ? 참일 때 : 거짓일 때</code> 예제예요 (if ~ else 를 한 줄로)</div>
         <pre><code class="language-c">// 08scoreswitch.c — 조건 연산자 ? : 로 최대값 · 최소값 · 절대값 · 짝홀
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int a = 0, b = 0;
-    printf("두 정수 입력 &gt;&gt; ");
-    scanf("%d%d", &amp;a, &amp;b);
+    int a = 0, b = 0;                           // 두 정수 a · b 를 0 으로 시작
+    printf("두 정수 입력 &gt;&gt; ");                      // 질문 출력 (줄바꿈 없음)
+    scanf("%d%d", &amp;a, &amp;b);                      // 정수 두 개 입력 (공백 · 엔터로 구분) → a, b
 
     printf("최대값: %d ", (a &gt; b) ? a : b);        // 조건 ? 참일 때 : 거짓일 때
-    printf("최소값: %d\n", (a &lt; b) ? a : b);
+    printf("최소값: %d\n", (a &lt; b) ? a : b);       // 작은 쪽 → 예: 3 -5 → 최대값: 3 최소값: -5
     printf("절대값: %d ", (a &gt; 0) ? a : -a);       // 음수면 - 를 붙여 양수로
-    printf("절대값: %d\n", (b &gt; 0) ? b : -b);
+    printf("절대값: %d\n", (b &gt; 0) ? b : -b);      // b 의 절대값 → 예: -5 → 절대값: 3 절대값: 5
 
-    ((a % 2) == 0) ? printf("짝수 ") : printf("홀수 ");
+    ((a % 2) == 0) ? printf("짝수 ") : printf("홀수 ");   // a 가 짝수면 "짝수 " · 홀수면 "홀수 " 를 출력하는 printf 를 고름
     printf("%s\n", ((b % 2) == 0) ? "짝수" : "홀수");   // %s = 문자열
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">두 정수 입력 &gt;&gt; -7 4
 최대값: 4 최소값: -7
 절대값: 7 절대값: 4
@@ -1478,29 +1478,29 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         <div class="tip">📌 if 안에 또 if — <b>바깥 조건이 참일 때만</b> 안쪽 if 를 검사 · 안쪽 if 도 한 문장이면 <code>{ }</code> 생략 가능 (Quiz 8 의 <code>else printf(...)</code>)</div>
         <h3>예제 ① Quiz 8 (수업 코드) — 세 수 중 최대값 — 입력: 3 9 5</h3>
         <pre><code class="language-c">// Quiz 8 (수업 코드) — 키보드로 세 수를 입력받아 가장 큰 값 출력 (중첩 if)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS      // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int x, y, z;
-    printf("세 수를 입력하세요? ");
+    int x, y, z;                     // 세 수를 담을 변수
+    printf("세 수를 입력하세요? ");          // 질문 출력 (줄바꿈 없음)
     scanf("%d%d%d", &amp;x, &amp;y, &amp;z);       // 스페이스 · 엔터로 구분해서 3개
     if (x &gt; y) {                       // x 가 더 크면 → 이제 x 와 z 만 비교
-        if (x &gt; z) {
-            printf("max : %d", x);
-        }
-        else
-            printf("max : %d", z);
-    }
+        if (x &gt; z) {                 // x 와 z 중 큰 쪽
+            printf("max : %d", x);   // x 가 가장 큼 → max : x
+        }                            // if 끝
+        else                         // x &gt; y 이지만 z 가 x 이상
+            printf("max : %d", z);   // z 가 가장 큼 → max : z
+    }                                // if 끝
     else {                             // y 가 x 이상이면 → y 와 z 만 비교
-        if (y &gt; z) {
-            printf("max : %d", y);
-        }
-        else {
-            printf("max : %d", z);
-        }
-    }
-    return 0;
-}</code></pre>
+        if (y &gt; z) {                 // y 와 z 중 큰 쪽
+            printf("max : %d", y);   // y 가 가장 큼 → max : y
+        }                            // if 끝
+        else {                       // z 가 y 이상
+            printf("max : %d", z);   // z 가 가장 큼 → max : z
+        }                            // else 끝
+    }                                // else 끝
+    return 0;                        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                    // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">세 수를 입력하세요? 3 9 5
 max : 9</code></pre>
         <table class="ref">
@@ -1512,29 +1512,29 @@ max : 9</code></pre>
         <h3>예제 ② Quiz 8 수업 화면(사진) 버전 — 입력: 3 9 5</h3>
         <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 수업 화면 코드는 입력 뒤에 세 수를 <b>한 번 더 출력</b>하고, max 줄 끝에 <code> \n</code> 이 있어요. 또 x 가 최대일 때만 <code>max : </code> (콜론 앞에 공백), 나머지는 <code>max: </code> → 실행결과를 쓸 때는 <b>코드에 적힌 printf 를 글자 그대로</b> 따라가기</div>
         <pre><code class="language-c">// Quiz 8 (수업 화면 사진) — 세 수를 한 번 더 찍고, max 뒤에 \n
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int x, y, z;
+    int x, y, z;                                // 세 수를 담을 변수
 
-    printf("세 수를 입력하세요? ");
-    scanf("%d%d%d", &amp;x, &amp;y, &amp;z);
+    printf("세 수를 입력하세요? ");                     // 질문 출력 (줄바꿈 없음)
+    scanf("%d%d%d", &amp;x, &amp;y, &amp;z);                // 정수 3개 입력 → x, y, z
 
-    printf("x : %d, y : %d, z : %d\n", x, y, z);
+    printf("x : %d, y : %d, z : %d\n", x, y, z);   // 입력한 세 수 확인 → 예: x : 3, y : 9, z : 5
 
-    if (x &gt; y) {
-        if (x &gt; z)
-            printf("max : %d \n", x);
-        else
-            printf("max: %d \n", z);
-    } else {
-        if (y &gt; z)
-            printf("max: %d \n", y);
-        else
-            printf("max: %d \n", z);
-    }
-    return 0;
-}</code></pre>
+    if (x &gt; y) {                                // x 가 y 보다 크면 → x 와 z 비교
+        if (x &gt; z)                              // x 가 z 보다도 크면
+            printf("max : %d \n", x);           // max : x
+        else                                    // 아니면 z 가 가장 큼
+            printf("max: %d \n", z);            // max: z
+    } else {                                    // if 끝 · 조건이 거짓이면 아래 else 실행
+        if (y &gt; z)                              // y 가 x 이상 → y 와 z 비교
+            printf("max: %d \n", y);            // max: y → 예: 3 9 5 → max: 9
+        else                                    // 아니면 z 가 가장 큼
+            printf("max: %d \n", z);            // max: z
+    }                                           // else 끝
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">세 수를 입력하세요? 3 9 5
 x : 3, y : 9, z : 5
 max: 9 </code></pre>
@@ -1542,32 +1542,32 @@ max: 9 </code></pre>
         <summary>📘 교재 6장 실습 (요약 PDF · HW01) — 04nestedif · 05ageifelse · lab1pay</summary>
         <h3>04nestedif.c — 자동차 면허 합격 여부 판정 (중첩 if else) — 입력: 1, 75 / 2, 55</h3>
         <pre><code class="language-c">// 04nestedif.c — 자동차 면허 합격 여부 판정 (중첩 if else)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS             // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                          // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int type, point;
+    int type, point;                        // 면허 종류 · 필기 점수
 
-    printf("번호를 선택: 1(1종면허), 2(2종면허): ");
-    scanf("%d", &amp;type);
-    printf("필기시험 점수 입력: ");
-    scanf("%d", &amp;point);
+    printf("번호를 선택: 1(1종면허), 2(2종면허): ");   // 질문 출력 (줄바꿈 없음)
+    scanf("%d", &amp;type);                     // 1 또는 2 입력 → type
+    printf("필기시험 점수 입력: ");                 // 질문 출력
+    scanf("%d", &amp;point);                    // 점수 입력 → point
 
     if (type == 1) {                   // 1종 → 70점 이상 합격
-        if (point &gt;= 70)
-            printf("1종면허 합격\n");
-        else
-            printf("1종면허 불합격\n");
-    }
+        if (point &gt;= 70)                    // 70점 이상이면
+            printf("1종면허 합격\n");            // → 1종면허 합격
+        else                                // 70점 미만
+            printf("1종면허 불합격\n");           // → 1종면허 불합격
+    }                                       // if 끝
     else if (type == 2) {              // 2종 → 60점 이상 합격
-        if (point &gt;= 60)
-            printf("2종면허 합격\n");
-        else
-            printf("2종면허 불합격\n");
-    }
+        if (point &gt;= 60)                    // 60점 이상이면
+            printf("2종면허 합격\n");            // → 2종면허 합격
+        else                                // 60점 미만
+            printf("2종면허 불합격\n");           // → 2종면허 불합격
+    }                                       // if 끝
 
-    return 0;
-}</code></pre>
+    return 0;                               // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                           // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">번호를 선택: 1(1종면허), 2(2종면허): 1
 필기시험 점수 입력: 75
 1종면허 합격</code></pre>
@@ -1576,54 +1576,54 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 2종면허 불합격</code></pre>
         <h3>05ageifelse.c — 나이에 따른 선택 (중첩 if else) — 입력: 70 / 15</h3>
         <pre><code class="language-c">// 05ageifelse.c — 나이에 따른 선택 (중첩 if else)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS        // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                     // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int age = 0;
+    int age = 0;                       // 나이 0 으로 시작
 
-    printf("당신의 나이는? ");
-    scanf("%d", &amp;age);
+    printf("당신의 나이는? ");               // 질문 출력 (줄바꿈 없음)
+    scanf("%d", &amp;age);                 // 나이 입력 → age
 
     if (age &gt;= 20) {                   // 20 이상 중에서
         if (age &gt;= 65)                 //   65 이상이면 어르신
-            printf("당신은 어르신입니다.\n");
+            printf("당신은 어르신입니다.\n");   // 65 이상 → 당신은 어르신입니다.
         else                           //   20 ~ 64 는 성인
-            printf("당신은 성인입니다.\n");
+            printf("당신은 성인입니다.\n");    // 20 ~ 64 → 당신은 성인입니다.
     } else {                           // 20 미만
-        printf("당신은 미성년자입니다.\n");
-    }
+        printf("당신은 미성년자입니다.\n");      // 20 미만 → 당신은 미성년자입니다.
+    }                                  // else 끝
 
-    return 0;
-}</code></pre>
+    return 0;                          // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                      // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">당신의 나이는? 70
 당신은 어르신입니다.</code></pre>
         <pre class="io"><code class="language-text">당신의 나이는? 15
 당신은 미성년자입니다.</code></pre>
         <h3>lab1pay.c — 표준입력 받은 3개의 정수에서 최대값 출력 (= Quiz 8) — 입력: 12 7 30</h3>
         <pre><code class="language-c">// lab1pay.c — 표준입력 받은 3개의 정수에서 최대값 출력 (Quiz 8 과 같은 문제)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS        // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                     // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int x, y, z;
-    printf("세 정수를 입력: ");
-    scanf("%d %d %d", &amp;x, &amp;y, &amp;z);
+    int x, y, z;                       // 세 정수를 담을 변수
+    printf("세 정수를 입력: ");              // 질문 출력 (줄바꿈 없음)
+    scanf("%d %d %d", &amp;x, &amp;y, &amp;z);     // 정수 3개 입력 → x, y, z
 
-    if (x &gt; y) {
-        if (x &gt; z)
-            printf("최대 수: %d\n", x);
-        else
-            printf("최대 수: %d\n", z);
-    } else {
-        if (y &gt; z)
-            printf("최대 수: %d\n", y);
-        else
-            printf("최대 수: %d\n", z);
-    }
+    if (x &gt; y) {                       // x 가 y 보다 크면 → x 와 z 비교
+        if (x &gt; z)                     // x 가 z 보다도 크면
+            printf("최대 수: %d\n", x);   // 최대 수: x
+        else                           // 아니면 z 가 가장 큼
+            printf("최대 수: %d\n", z);   // 최대 수: z
+    } else {                           // if 끝 · 조건이 거짓이면 아래 else 실행
+        if (y &gt; z)                     // y 가 x 이상 → y 와 z 비교
+            printf("최대 수: %d\n", y);   // 최대 수: y
+        else                           // 아니면 z 가 가장 큼
+            printf("최대 수: %d\n", z);   // 최대 수: z
+    }                                  // else 끝
 
-    return 0;
-}</code></pre>
+    return 0;                          // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                      // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">세 정수를 입력: 12 7 30
 최대 수: 30</code></pre>
         </details>
@@ -1641,38 +1641,38 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         </tbody></table>
         <h3>예제 ① ★ break 가 있을 때 vs 없을 때 (필기 시험 내용 확인)</h3>
         <pre><code class="language-c">// ★시험 — switch 에서 break 를 빼면? (필기: 안 멈추고 밑의 case 까지 실행)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;             // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int n = 2;
+    int n = 2;                 // n = 2 → case 2 로 이동
 
-    printf("① break 있음\n");
-    switch (n) {
-    case 1:
-        printf("one\n");
-        break;
+    printf("① break 있음\n");    // ① break 있음
+    switch (n) {               // n 값과 같은 case 로 이동
+    case 1:                    // n == 1 일 때 (지금은 아님)
+        printf("one\n");       // one
+        break;                 // switch 빠져나감
     case 2:                            // n == 2 → 여기로 이동
-        printf("two\n");
+        printf("two\n");       // two (① 에서는 이것만 출력)
         break;                         // switch 블록을 빠져나감
-    case 3:
-        printf("three\n");
-        break;
-    default:
-        printf("default\n");
-    }
+    case 3:                    // n == 3 일 때
+        printf("three\n");     // three
+        break;                 // switch 빠져나감
+    default:                   // 어느 case 에도 안 맞을 때
+        printf("default\n");   // default
+    }                          // switch 끝
 
-    printf("② break 없음\n");
-    switch (n) {
-    case 1:
-        printf("one\n");
+    printf("② break 없음\n");    // ② break 없음
+    switch (n) {               // 다시 n 과 같은 case 로 이동
+    case 1:                    // n == 1 일 때 (지금은 아님)
+        printf("one\n");       // one
     case 2:                            // n == 2 → 여기서 시작해서
-        printf("two\n");
+        printf("two\n");       // two
     case 3:                            // break 가 없으니 멈추지 않고 아래로 계속
-        printf("three\n");
+        printf("three\n");     // three (break 가 없어서 이어서 실행)
     default:                           // default 까지 전부 실행
-        printf("default\n");
-    }
-    return 0;
-}</code></pre>
+        printf("default\n");   // default → ② 에서는 two · three · default 3줄
+    }                          // switch 끝
+    return 0;                  // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                              // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">① break 있음
 two
 ② break 없음
@@ -1688,33 +1688,33 @@ default</code></pre>
         <h3>예제 ② 07seasonswitch.c (교재) — case 묶기 — 입력: 5 / 12 / 13</h3>
         <div class="tip">📌 break 가 없으면 아래로 내려가는 성질을 <b>일부러</b> 쓰는 방법 — <code>case 4: case 5:</code> 처럼 case 를 이어 쓰면 4 <b>또는</b> 5 일 때 같은 문장을 실행</div>
         <pre><code class="language-c">// 07seasonswitch.c — 월에 따른 사계절 출력 (switch · case 묶기)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS             // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                          // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int month;
-    printf("월(month)을 입력: ");
-    scanf("%d", &amp;month);
+    int month;                              // 월을 담을 변수
+    printf("월(month)을 입력: ");               // 질문 출력 (줄바꿈 없음)
+    scanf("%d", &amp;month);                    // 월 입력 → month
 
-    switch (month) {
+    switch (month) {                        // month 와 같은 case 로 이동
     case 4: case 5:                    // 4 또는 5 → 같은 문장
-        printf("%d월은 봄입니다.\n", month);
-        break;
-    case 6: case 7: case 8:
-        printf("%d월은 여름입니다.\n", month);
-        break;
-    case 9: case 10: case 11:
-        printf("%d월은 가을입니다.\n", month);
-        break;
-    case 12: case 1: case 2: case 3:
-        printf("%d월은 겨울입니다.\n", month);
-        break;
+        printf("%d월은 봄입니다.\n", month);      // 예: 5 → 5월은 봄입니다.
+        break;                              // switch 빠져나감
+    case 6: case 7: case 8:                 // 6 · 7 · 8 → 여름
+        printf("%d월은 여름입니다.\n", month);     // 예: 7 → 7월은 여름입니다.
+        break;                              // switch 빠져나감
+    case 9: case 10: case 11:               // 9 · 10 · 11 → 가을
+        printf("%d월은 가을입니다.\n", month);     // 예: 10 → 10월은 가을입니다.
+        break;                              // switch 빠져나감
+    case 12: case 1: case 2: case 3:        // 12 · 1 · 2 · 3 → 겨울
+        printf("%d월은 겨울입니다.\n", month);     // 예: 1 → 1월은 겨울입니다.
+        break;                              // switch 빠져나감
     default:                           // 어느 case 에도 안 맞을 때
-        printf("월(month)을 잘못 입력했습니다.\n");
-    }
+        printf("월(month)을 잘못 입력했습니다.\n");   // 1 ~ 12 밖의 수 → 월(month)을 잘못 입력했습니다.
+    }                                       // switch 끝
 
-    return 0;
-}</code></pre>
+    return 0;                               // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                           // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">월(month)을 입력: 5
 5월은 봄입니다.</code></pre>
         <pre class="io"><code class="language-text">월(month)을 입력: 12
@@ -1725,38 +1725,38 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         <summary>📘 교재 6장 실습 (요약 PDF · HW01) — 06arithswitch · 09scoreswitch2 · lab2shapeswitch</summary>
         <h3>06arithswitch.c — 두 실수의 사칙연산 수행 (switch) — 입력: 3 4, 4 / 3 4, 7</h3>
         <pre><code class="language-c">// 06arithswitch.c — 두 실수의 사칙연산 수행 (switch)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    double x, y, result;
-    int op;
+    double x, y, result;                        // 두 실수와 결과 (소수 → double)
+    int op;                                     // 연산 번호 (정수)
 
-    printf("두 실수 입력: ");
-    scanf("%lf %lf", &amp;x, &amp;y);
-    printf("연산종류 번호선택 1(+), 2(-), 3(*), 4(/): ");
-    scanf("%d", &amp;op);
+    printf("두 실수 입력: ");                        // 질문 출력 (줄바꿈 없음)
+    scanf("%lf %lf", &amp;x, &amp;y);                   // 실수 두 개 입력 (double → %lf) → x, y
+    printf("연산종류 번호선택 1(+), 2(-), 3(*), 4(/): ");   // 메뉴 출력 (줄바꿈 없음)
+    scanf("%d", &amp;op);                           // 번호 입력 → op
 
     switch (op) {                      // op 값과 같은 case 로 이동
-    case 1:
-        printf("%.2f + %.2f = %.2f\n", x, y, x + y);
-        break;
-    case 2:
-        printf("%.2f - %.2f = %.2f\n", x, y, x - y);
-        break;
-    case 3:
-        printf("%.2f * %.2f = %.2f\n", x, y, x * y);
-        break;
-    case 4:
-        printf("%.2f / %.2f = %.2f\n", x, y, x / y);
-        break;
-    default:
-        printf("번호를 잘못 선택했습니다.\n");
+    case 1:                                     // 1 → 덧셈
+        printf("%.2f + %.2f = %.2f\n", x, y, x + y);   // 예: 3 4 → 3.00 + 4.00 = 7.00 (%.2f = 소수 둘째 자리까지)
+        break;                                  // switch 빠져나감
+    case 2:                                     // 2 → 뺄셈
+        printf("%.2f - %.2f = %.2f\n", x, y, x - y);   // 3.00 - 4.00 = -1.00
+        break;                                  // switch 빠져나감
+    case 3:                                     // 3 → 곱셈
+        printf("%.2f * %.2f = %.2f\n", x, y, x * y);   // 3.00 * 4.00 = 12.00
+        break;                                  // switch 빠져나감
+    case 4:                                     // 4 → 나눗셈 (실수끼리라 소수까지)
+        printf("%.2f / %.2f = %.2f\n", x, y, x / y);   // 3.00 / 4.00 = 0.75
+        break;                                  // switch 빠져나감
+    default:                                    // 1 ~ 4 가 아닐 때
+        printf("번호를 잘못 선택했습니다.\n");             // 번호를 잘못 선택했습니다.
         break;                         // 생략 가능 — 맨 마지막이라 없어도 결과가 같다
-    }
+    }                                           // switch 끝
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">두 실수 입력: 3 4
 연산종류 번호선택 1(+), 2(-), 3(*), 4(/): 4
 3.00 / 4.00 = 0.75</code></pre>
@@ -1765,38 +1765,38 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 번호를 잘못 선택했습니다.</code></pre>
         <h3>09scoreswitch2.c — 잘못된 점수도 고려해 성적 부여 (switch) — 입력: 87 / 42 / 105</h3>
         <pre><code class="language-c">// 09scoreswitch2.c — 잘못된 점수도 고려하여 점수에 따른 성적 부여 (switch)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int score;
-    printf("점수(0에서 100사이) 입력: ");
-    scanf("%d", &amp;score);
+    int score;                                  // 점수를 담을 변수
+    printf("점수(0에서 100사이) 입력: ");               // 질문 출력 (줄바꿈 없음)
+    scanf("%d", &amp;score);                        // 점수 입력 → score
     if (score &lt; 0 || score &gt; 100) {    // 범위 밖이면 먼저 걸러서
-        printf("점수 입력이 잘못되었습니다.\n");
+        printf("점수 입력이 잘못되었습니다.\n");            // 0 미만 · 100 초과 → 점수 입력이 잘못되었습니다.
         return 0;                      // main 을 바로 끝냄
-    }
+    }                                           // if 끝
 
     switch (score / 10) {              // 정수 ÷ 정수 = 몫 → 87 / 10 = 8
     default:                           // default 는 맨 앞에 와도 된다 (0 ~ 5 → F)
-        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'F');
-        break;
-    case 10: case 9:
-        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'A');
-        break;
-    case 8:
-        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'B');
-        break;
-    case 7:
-        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'C');
-        break;
-    case 6:
-        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'D');
-        break;
-    }
+        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'F');   // 0 ~ 59 → 점수가 45 점으로 성적이 F 입니다. (예: 45)
+        break;                                  // switch 빠져나감
+    case 10: case 9:                            // 100 · 90 ~ 99 → A
+        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'A');   // 예: 95 → 점수가 95 점으로 성적이 A 입니다.
+        break;                                  // switch 빠져나감
+    case 8:                                     // 80 ~ 89 → B
+        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'B');   // 예: 87 → 점수가 87 점으로 성적이 B 입니다.
+        break;                                  // switch 빠져나감
+    case 7:                                     // 70 ~ 79 → C
+        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'C');   // 점수가 75 점으로 성적이 C 입니다. (예: 75)
+        break;                                  // switch 빠져나감
+    case 6:                                     // 60 ~ 69 → D
+        printf("점수가 %d 점으로 성적이 %c 입니다.\n", score, 'D');   // 점수가 65 점으로 성적이 D 입니다. (예: 65)
+        break;                                  // switch 빠져나감
+    }                                           // switch 끝
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">점수(0에서 100사이) 입력: 87
 점수가 87 점으로 성적이 B 입니다.</code></pre>
         <pre class="io"><code class="language-text">점수(0에서 100사이) 입력: 42
@@ -1806,31 +1806,31 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         <h3>lab2shapeswitch.c — 삼각형[1] · 사각형[2] 면적 (switch) · 참고 풀이 — 입력: 1, 3 4 / 2, 3 4</h3>
         <div class="tip"><span class="wk-tag note">✍️ 필기</span> — HW01 목록에 있지만 요약 PDF 에는 코드가 없어서, 과제 설명(“번호 선택 → 실수형 가로와 세로 입력 → 가로, 세로, 다각형 면적 출력”)대로 작성한 <b>참고 풀이</b>예요. 교재 원본과 출력 문구는 다를 수 있어요.</div>
         <pre><code class="language-c">// lab2shapeswitch.c (참고 풀이) — 삼각형[1], 사각형[2] 중 번호 선택 → 가로 · 세로 입력 → 면적 출력
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int type;
-    double width, height;
+    int type;                                   // 도형 번호
+    double width, height;                       // 가로 · 세로 (소수 → double)
 
-    printf("도형 선택 삼각형[1], 사각형[2]: ");
-    scanf("%d", &amp;type);
-    printf("가로와 세로 입력: ");
-    scanf("%lf %lf", &amp;width, &amp;height);
+    printf("도형 선택 삼각형[1], 사각형[2]: ");           // 질문 출력 (줄바꿈 없음)
+    scanf("%d", &amp;type);                         // 1 또는 2 입력 → type
+    printf("가로와 세로 입력: ");                      // 질문 출력
+    scanf("%lf %lf", &amp;width, &amp;height);          // 실수 두 개 입력 (double → %lf) → width, height
 
-    switch (type) {
-    case 1:
-        printf("가로 %.2f, 세로 %.2f, 삼각형 면적 %.2f\n", width, height, width * height / 2);
-        break;
-    case 2:
-        printf("가로 %.2f, 세로 %.2f, 사각형 면적 %.2f\n", width, height, width * height);
-        break;
-    default:
-        printf("번호를 잘못 선택했습니다.\n");
-    }
+    switch (type) {                             // type 과 같은 case 로 이동
+    case 1:                                     // 1 → 삼각형
+        printf("가로 %.2f, 세로 %.2f, 삼각형 면적 %.2f\n", width, height, width * height / 2);   // 삼각형 넓이 = 가로 × 세로 ÷ 2 → 예: 4 5 → 가로 4.00, 세로 5.00, 삼각형 면적 10.00
+        break;                                  // switch 빠져나감
+    case 2:                                     // 2 → 사각형
+        printf("가로 %.2f, 세로 %.2f, 사각형 면적 %.2f\n", width, height, width * height);   // 사각형 넓이 = 가로 × 세로 → 사각형 면적 20.00
+        break;                                  // switch 빠져나감
+    default:                                    // 1 · 2 가 아닐 때
+        printf("번호를 잘못 선택했습니다.\n");             // 번호를 잘못 선택했습니다.
+    }                                           // switch 끝
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">도형 선택 삼각형[1], 사각형[2]: 1
 가로와 세로 입력: 3 4
 가로 3.00, 세로 4.00, 삼각형 면적 6.00</code></pre>
@@ -1857,16 +1857,16 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 ④ 증감식 i++ → 다시 ②</code></pre>
         <h3>예제 ① for.c (수업 코드) — 0 ~ 9</h3>
         <pre><code class="language-c">// for/for.c (수업 코드) — 0 ~ 9 출력
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int i;
+    int i;                        // 반복 변수 (for 밖에서 선언)
     for (i = 0; i &lt; 10; i++) {         // 0, 1, …, 9 → 10번 (i == 10 이면 조건 거짓)
-        printf("%d\n", i);
-    }
+        printf("%d\n", i);        // i 출력 후 줄바꿈 → 0 / 1 / … / 9
+    }                             // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
     printf("for문 종료...");           // 반복이 끝나면 한 번 (\n 없음)
-    return 0;
-}</code></pre>
+    return 0;                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                 // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">0
 1
 2
@@ -1880,17 +1880,17 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
 for문 종료...</code></pre>
         <h3>예제 ② while.c (수업 코드) — i == 10 ~ 19</h3>
         <pre><code class="language-c">// while/while.c (수업 코드) — i 가 20 보다 작은 동안 반복
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i = 10;                        // 초기식은 while 앞에
     while (i &lt; 20) {                   // 조건이 참인 동안 반복, 거짓이면 빠져나옴
-        printf("i == %d\n", i);
+        printf("i == %d\n", i);   // i == 10 / i == 11 / … / i == 19
         i++;                           // 증감식은 몸체 안에 (빠뜨리면 i 가 안 바뀌어 끝나지 않음)
-    }
-    printf("while문 종료...");
-    return 0;
-}</code></pre>
+    }                             // while 끝 → 조건 다시 검사 (거짓이면 빠져나옴)
+    printf("while문 종료...");       // 반복이 끝나면 한 번 → while문 종료... (\n 없음)
+    return 0;                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                 // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">i == 10
 i == 11
 i == 12
@@ -1904,17 +1904,17 @@ i == 19
 while문 종료...</code></pre>
         <h3>예제 ③ do~while.c (수업 코드) — 먼저 실행하고 검사</h3>
         <pre><code class="language-c">// do~while/do~while.c (수업 코드) — 먼저 실행하고 나서 조건 검사
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int i = 10;
-    do {
+    int i = 10;                   // i = 10 으로 시작
+    do {                          // do 블록을 먼저 실행 (조건은 끝에서 검사)
         printf("i == %d\n", i);        // 조건을 보기 전에 일단 한 번 실행
-        i++;
+        i++;                      // i = i + 1
     } while (i &lt; 20);                  // 끝에 세미콜론(;) 필수
-    printf("do~while문 종료...");
-    return 0;
-}</code></pre>
+    printf("do~while문 종료...");    // 반복이 끝나면 → do~while문 종료... (\n 없음)
+    return 0;                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                 // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">i == 10
 i == 11
 i == 12
@@ -1928,37 +1928,37 @@ i == 19
 do~while문 종료...</code></pre>
         <h3>예제 ④ 확인용 — 시작값이 i = 20 이면? (while 0번 · do ~ while 1번)</h3>
         <pre><code class="language-c">// 확인용 — 시작값이 i = 20 이면? (조건 i &lt; 20 이 처음부터 거짓)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                           // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int i = 20;
+    int i = 20;                              // i = 20 → 조건 i &lt; 20 이 처음부터 거짓
     while (i &lt; 20) {                   // 검사 먼저 → 거짓 → 한 번도 실행 안 함
-        printf("while : i == %d\n", i);
-        i++;
-    }
+        printf("while : i == %d\n", i);      // 실행 안 됨
+        i++;                                 // 실행 안 됨
+    }                                        // while 끝 → 조건 다시 검사 (거짓이면 빠져나옴)
 
-    i = 20;
+    i = 20;                                  // i 를 다시 20 으로
     do {                               // 실행 먼저 → 한 번은 실행
-        printf("do~while : i == %d\n", i);
-        i++;
+        printf("do~while : i == %d\n", i);   // 딱 한 번 → do~while : i == 20
+        i++;                                 // i = 21
     } while (i &lt; 20);                  // 그다음 검사 → 거짓 → 끝
-    printf("종료\n");
-    return 0;
-}</code></pre>
+    printf("종료\n");                          // 종료
+    return 0;                                // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                            // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">do~while : i == 20
 종료</code></pre>
         <div class="tip">📌 i = 10 에서 시작하면 while.c 와 do~while.c 의 결과가 <b>똑같지만</b>, 조건이 처음부터 거짓이면 <b>while 은 0번 · do ~ while 은 1번</b> 실행돼요</div>
         <h3>예제 ⑤ Quiz 4 (수업 코드) — 5번 인사 + 끝난 뒤 i</h3>
         <pre><code class="language-c">// Quiz 4 (수업 코드) — for 로 5번 인사하고, 끝난 뒤 i 값 확인
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS     // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                  // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int i;
-    for (i = 1; i &lt;= 5; i++) {
-        printf("%d, 안녕하세요\n", i);
-    }
+    int i;                          // 반복 변수 (for 가 끝난 뒤에도 값 확인용)
+    for (i = 1; i &lt;= 5; i++) {      // i = 1 → 5 → 5번 반복
+        printf("%d, 안녕하세요\n", i);   // 1, 안녕하세요 … 5, 안녕하세요
+    }                               // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
     printf("종료-&gt;\ti == %d\n", i);    // i = 5 까지 출력 → i++ → 6 → 6 &lt;= 5 거짓 → 반복 끝 → i == 6
-    return 0;
-}</code></pre>
+    return 0;                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                   // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">1, 안녕하세요
 2, 안녕하세요
 3, 안녕하세요
@@ -1968,17 +1968,17 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <div class="tip">📌 for 가 끝난 뒤 i 는 조건을 처음으로 <b>거짓</b>으로 만든 값 → <code>i &lt;= 5</code> 가 거짓이 되는 <b>6</b> (교재 06forbasic.c 도 <code>for 종료 이후 i =&gt; 6</code>) · <code>\t</code> 는 탭</div>
         <h3>예제 ⑥ Quiz 5 (수업 코드) — 1 ~ 100 까지의 합</h3>
         <pre><code class="language-c">// Quiz 5 (수업 코드) — 1 ~ 100 까지의 합
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS    // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                 // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int i;
+    int i;                         // 반복 변수
     int sum = 0;                       // 합을 모을 변수는 0 으로 시작
-    for (i = 1; i &lt;= 100; i++) {
+    for (i = 1; i &lt;= 100; i++) {   // i = 1 → 100 → 100번 반복
         sum += i;                      // sum = sum + i → 1 + 2 + … + 100 → 5050
-    }
-    printf("sum == %d", sum);
-    return 0;
-}</code></pre>
+    }                              // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
+    printf("sum == %d", sum);      // sum == 5050 (\n 없음)
+    return 0;                      // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                  // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">sum == 5050</code></pre>
         <table class="ref">
         <tbody>
@@ -1993,19 +1993,19 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <summary>📘 교재 7장 실습 (요약 PDF · HW01) — while · do ~ while : 03whilebasic · 04whilenum · 05dowhile · lab1max · lab2digit</summary>
         <h3>03whilebasic.c — 특정 문자열을 여러 번 반복해 출력 (while)</h3>
         <pre><code class="language-c">// 03whilebasic.c — 특정 문자열을 여러 번 반복해 출력 (while)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int count = 1;
+    int count = 1;                // 반복 횟수를 세는 제어 변수 1 로 시작
 
     while (count &lt;= 3) {               // 1, 2, 3 → 3번
-        printf("반복, 재미있네요!\n");
-        count++;
+        printf("반복, 재미있네요!\n");   // 반복, 재미있네요! (3번)
+        count++;                  // count = count + 1 → 2 → 3 → 4
     };                                 // while 뒤의 ; 는 빈 문장이라 결과에 영향 없음
     printf("\n제어 변수 count =&gt; %d\n", count);   // count 1, 2, 3 에서 반복 → count++ → 4 → 4 &lt;= 3 거짓 → 끝 → 4
 
-    return 0;
-}</code></pre>
+    return 0;                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                 // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">반복, 재미있네요!
 반복, 재미있네요!
 반복, 재미있네요!
@@ -2013,40 +2013,40 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 제어 변수 count =&gt; 4</code></pre>
         <h3>04whilenum.c — while 로 입력한 실수를 모두 더하기 (0 입력 시 종료) — 입력: 3.5, 2, 0</h3>
         <pre><code class="language-c">// 04whilenum.c — while 반복으로 표준입력 실수를 모두 더하기 (0 입력 시 종료)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     double number = 1, sum = 0;        // number 를 0 이 아닌 값으로 시작해야 처음 조건이 참
-    while (number != 0.0) {
-        printf("실수 입력 &gt;&gt; ");
-        scanf("%lf", &amp;number);
+    while (number != 0.0) {       // 입력한 수가 0 이 아닌 동안 반복
+        printf("실수 입력 &gt;&gt; ");      // 입력 안내 (줄바꿈 없음)
+        scanf("%lf", &amp;number);    // 실수 입력 → number (double → %lf)
         sum += number;                 // 마지막 0 도 더해지지만 0 이라 상관없음
-    }
+    }                             // while 끝 → 조건 다시 검사 (거짓이면 빠져나옴)
 
-    printf("합 = %.2f\n", sum);
+    printf("합 = %.2f\n", sum);    // 예: 1.5 2.5 0 → 합 = 4.00
 
-    return 0;
-}</code></pre>
+    return 0;                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                 // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">실수 입력 &gt;&gt; 3.5
 실수 입력 &gt;&gt; 2
 실수 입력 &gt;&gt; 0
 합 = 5.50</code></pre>
         <h3>05dowhile.c — 메뉴 주문 반복 (do ~ while) — 입력: 1, 3, 0</h3>
         <pre><code class="language-c">// 05dowhile.c — 메뉴 주문 반복 (do ~ while)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int input;
+    int input;                                  // 입력받을 메뉴 번호
     do {                               // 메뉴는 최소 한 번 보여 줘야 하니 do ~ while
-        printf("[0]종료 [1]아메리카노 [2]카페라떼 [3]카푸치노 \n");
-        printf("주문할 커피 또는 종료(0)를 입력 &gt;&gt; ");
-        scanf("%d", &amp;input);
+        printf("[0]종료 [1]아메리카노 [2]카페라떼 [3]카푸치노 \n");   // 메뉴 출력 후 줄바꿈
+        printf("주문할 커피 또는 종료(0)를 입력 &gt;&gt; ");      // 입력 안내 (줄바꿈 없음)
+        scanf("%d", &amp;input);                    // 번호 입력 → input (0 이면 아래 while 조건이 거짓 → 끝)
     } while (input != 0);              // while (input); 과 같다 (0 이 아니면 참)
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">[0]종료 [1]아메리카노 [2]카페라떼 [3]카푸치노 
 주문할 커피 또는 종료(0)를 입력 &gt;&gt; 1
 [0]종료 [1]아메리카노 [2]카페라떼 [3]카푸치노 
@@ -2055,24 +2055,24 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 주문할 커피 또는 종료(0)를 입력 &gt;&gt; 0</code></pre>
         <h3>lab1max.c — 놀이공원 키 130cm 이하 정원 채우기 (while) — 입력: 120, 140, 125, 130, 110</h3>
         <pre><code class="language-c">// lab1max.c — 놀이공원에서 키가 130 센티미터 이하인 정원(4명) 채우기
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
-#define MAX 4
+#define _CRT_SECURE_NO_WARNINGS    // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                 // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+#define MAX 4                      // MAX → 4 (정원 4명 · 매크로 상수)
 
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int num = 0;
-    double height = 0;
+    int num = 0;                   // 정원에 들어간 인원 0 으로 시작
+    double height = 0;             // 입력받을 키
     while (num &lt; MAX) {                // 4명이 찰 때까지
-        printf("키 입력 &gt;&gt; ");
-        scanf("%lf", &amp;height);
+        printf("키 입력 &gt;&gt; ");        // 입력 안내 (줄바꿈 없음)
+        scanf("%lf", &amp;height);     // 키 입력 (double → %lf)
         if (height &lt;= 130)             // 130 이하만 인원에 넣음 (140 은 안 셈)
-            num++;
-    }
+            num++;                 // 130 이하면 인원 1 증가
+    }                              // while 끝 → 조건 다시 검사 (거짓이면 빠져나옴)
 
-    printf("정원 %d명 완료!\n", num);
+    printf("정원 %d명 완료!\n", num);   // 4명이 차면 → 정원 4명 완료!
 
-    return 0;
-}</code></pre>
+    return 0;                      // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                  // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">키 입력 &gt;&gt; 120
 키 입력 &gt;&gt; 140
 키 입력 &gt;&gt; 125
@@ -2081,25 +2081,25 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
 정원 4명 완료!</code></pre>
         <h3>lab2digit.c — 백 단위 정수의 세 자릿수 출력 (do ~ while) — 입력: 385</h3>
         <pre><code class="language-c">// lab2digit.c — 백 단위 정수의 세 자릿수 출력 (do ~ while)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int input = 0, result = 0, digit = 0;
-    int devider = 100;
+    int input = 0, result = 0, digit = 0;       // 입력값 · 남은 수 · 한 자리 숫자
+    int devider = 100;                          // 나누는 수 100 (백의 자리부터)
 
-    printf("양의 정수[100~999] 입력 : ");
-    scanf("%d", &amp;input);
-    result = input;
-    do {
+    printf("양의 정수[100~999] 입력 : ");             // 입력 안내 (줄바꿈 없음)
+    scanf("%d", &amp;input);                        // 세 자리 정수 입력 → input (예: 385)
+    result = input;                             // 남은 수를 입력값으로 시작
+    do {                                        // 먼저 한 번 실행하고 조건은 끝에서
         digit = result / devider;      // 예: 385 → 385 / 100 → 3 (백의 자리)
         result %= devider;             // 385 % 100 → 85 (남은 수)
-        printf("%3d단위 출력: %d\n", devider, digit);
+        printf("%3d단위 출력: %d\n", devider, digit);   // %3d → 3칸 오른쪽 맞춤 → 100단위 출력: 3 /  10단위 출력: 8 /   1단위 출력: 5
         devider /= 10;                 // 100 → 10 → 1 → 0
-    } while (devider &gt;= 1);
+    } while (devider &gt;= 1);                     // devider 가 1 이상이면 반복 (0 이 되면 끝)
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">양의 정수[100~999] 입력 : 385
 100단위 출력: 3
  10단위 출력: 8
@@ -2109,51 +2109,51 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         <summary>📘 교재 7장 실습 (요약 PDF · HW01) — for : 01cel2far3 → 07forcel2far3 · 02bitpos → 08forintbit · 06forbasic · 09forsum · 10inputsum</summary>
         <h3>01cel2far3.c — 3개의 섭씨 온도를 화씨로 (반복문 없이)</h3>
         <pre><code class="language-c">// 01cel2far3.c — 3개의 섭씨 온도를 화씨 온도로 변환 (반복문 없이 같은 줄을 3번)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    double celsius = 12.46;
+    double celsius = 12.46;                     // 섭씨 12.46 도
 
-    printf("  섭씨(C)  화씨(F)\n");
+    printf("  섭씨(C)  화씨(F)\n");                 // 표 제목 출력
     printf("%8.2lf %8.2lf\n", celsius, 9.0 / 5 * celsius + 32);   // 화씨 = 9/5 × 섭씨 + 32
-    celsius += 10;
-    printf("%8.2lf %8.2lf\n", celsius, 9.0 / 5 * celsius + 32);
-    celsius += 10;
-    printf("%8.2lf %8.2lf\n", celsius, 9.0 / 5 * celsius + 32);
+    celsius += 10;                              // 10 도 올림 → 22.46
+    printf("%8.2lf %8.2lf\n", celsius, 9.0 / 5 * celsius + 32);   //    22.46    72.43
+    celsius += 10;                              // 10 도 더 → 32.46
+    printf("%8.2lf %8.2lf\n", celsius, 9.0 / 5 * celsius + 32);   //    32.46    90.43
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">  섭씨(C)  화씨(F)
    12.46    54.43
    22.46    72.43
    32.46    90.43</code></pre>
         <h3>07forcel2far3.c — 위 코드를 for 로 (결과 같음)</h3>
         <pre><code class="language-c">// 07forcel2far3.c — 3개의 섭씨 온도를 화씨 온도로 변환 (for)
-#include &lt;stdio.h&gt;
-#define MAX 3
-#define INCREMENT 10
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+#define MAX 3                                   // MAX → 3 (반복 횟수)
+#define INCREMENT 10                            // INCREMENT → 10 (한 번에 올릴 온도)
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    double celsius = 12.46;
+    double celsius = 12.46;                     // 섭씨 12.46 도에서 시작
 
-    printf("  섭씨(C)  화씨(F)\n");
+    printf("  섭씨(C)  화씨(F)\n");                 // 표 제목 출력
     for (int i = 1; i &lt;= MAX; i++, celsius += INCREMENT) {    // 증감식 자리에 콤마로 두 식
-        printf("%8.2f %8.2f\n", celsius, 9.0 / 5 * celsius + 32);
-    }
+        printf("%8.2f %8.2f\n", celsius, 9.0 / 5 * celsius + 32);   // %8.2f → 8칸 소수 둘째 자리 →    12.46    54.43 /    22.46    72.43 /    32.46    90.43
+    }                                           // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">  섭씨(C)  화씨(F)
    12.46    54.43
    22.46    72.43
    32.46    90.43</code></pre>
         <h3>02bitpos.c — 정수 오른쪽 8개의 비트 출력 (반복문 없이)</h3>
         <pre><code class="language-c">// 02bitpos.c — 정수 오른쪽 8개의 비트 출력 (반복문 없이 8줄)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                           // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int num = 13;
-    printf("정수 %d의 오른쪽 8비트 내부 값:\n", num);
+    int num = 13;                            // 13 = 8 + 4 + 1 → 0000 1101
+    printf("정수 %d의 오른쪽 8비트 내부 값:\n", num);   // 제목 출력 → 정수 13의 오른쪽 8비트 내부 값:
 
     printf("%d", (num &gt;&gt; 7) &amp; 1);      // 13 = 0000 1101 → 오른쪽 8번째 비트 → 13 &gt;&gt; 7 → 0 → 0 &amp; 1 → 0
     printf("%d", num &gt;&gt; 6 &amp; 1);        // &gt;&gt; 가 &amp; 보다 먼저 → 13 &gt;&gt; 6 → 0 → 0 &amp; 1 → 0
@@ -2164,41 +2164,41 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
     printf("%d", num &gt;&gt; 1 &amp; 1);   // 13 &gt;&gt; 1 → 6 (1101 → 110) → 6 &amp; 1 → 0
     printf("%d\n", num &gt;&gt; 0 &amp; 1);      // 13 &gt;&gt; 0 → 13 (1101) → 13 &amp; 1 → 1 → 전체 출력 0000 1101
 
-    return 0;
-}</code></pre>
+    return 0;                                // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                            // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">정수 13의 오른쪽 8비트 내부 값:
 0000 1101</code></pre>
         <h3>08forintbit.c — 정수의 32비트 이진수 출력 (for · 거꾸로 세기)</h3>
         <pre><code class="language-c">// 08forintbit.c — 정수의 32비트 이진수 출력 (for)
-#include &lt;stdio.h&gt;
-#define TOTAL_BIT 32
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+#define TOTAL_BIT 32                            // TOTAL_BIT → 32 (int 는 32비트)
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int num = 13;
-    printf("%d의 %d비트 내부 값:\n", num, TOTAL_BIT);
+    int num = 13;                               // 13 → 이진수 1101
+    printf("%d의 %d비트 내부 값:\n", num, TOTAL_BIT); // 13의 32비트 내부 값:
 
     for (int i = TOTAL_BIT - 1; i &gt;= 0; i--)   // 31 → 0 으로 줄여 가며 한 비트씩
-        printf("%d", num &gt;&gt; i &amp; 1);
-    printf("\n");
+        printf("%d", num &gt;&gt; i &amp; 1);             // i 번째 비트 하나(0 · 1)를 줄바꿈 없이 → 00000000000000000000000000001101
+    printf("\n");                               // 32비트를 다 찍고 줄바꿈
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">13의 32비트 내부 값:
 00000000000000000000000000001101</code></pre>
         <h3>06forbasic.c — 일정 횟수 반복 (for)</h3>
         <pre><code class="language-c">// 06forbasic.c — 일정 횟수 반복 (for)
-#include &lt;stdio.h&gt;
-#define MAX 5
+#include &lt;stdio.h&gt;                        // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+#define MAX 5                             // MAX → 5 (반복 횟수)
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int i;
+    int i;                                // 반복 변수 (for 밖에서 선언 → 끝난 뒤에도 쓸 수 있음)
     for (i = 1; i &lt;= MAX; i++)         // 몸체가 한 문장이면 { } 생략 가능
-        printf("반복 %d\n", i);
+        printf("반복 %d\n", i);             // 반복 1 … 반복 5
 
-    printf("\nfor 종료 이후 i =&gt; %d\n", i);
+    printf("\nfor 종료 이후 i =&gt; %d\n", i);   // 빈 줄 뒤 → for 종료 이후 i =&gt; 6 (i 가 6 이 되어 조건이 거짓)
 
-    return 0;
-}</code></pre>
+    return 0;                             // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                         // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">반복 1
 반복 2
 반복 3
@@ -2208,29 +2208,29 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 for 종료 이후 i =&gt; 6</code></pre>
         <h3>09forsum.c — 1 에서 10 까지의 합 (for 를 5가지로)</h3>
         <pre><code class="language-c">// 09forsum.c — 1 에서 10 까지의 합을 구한다 (for)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int i, sum;
+    int i, sum;                      // 반복 변수 i 와 합 sum
     for (i = 1, sum = 0; i &lt;= 10; i++) //++i도 가능
         sum += i; // sum = sum + i → 1 + 2 + … + 10 → 55
-    printf("1 ~ 10 합: %d\n", sum);
+    printf("1 ~ 10 합: %d\n", sum);   // 1 ~ 10 합: 55
 
     for (i = 1, sum = 0; i &lt;= 10; )    // 증감식을 비우고
         sum += i++;                    // 후위: 지금 i 를 먼저 더하고 → 그다음 i 증가 → 1 + 2 + … + 10 → 55
-    printf("1 ~ 10 합: %d\n", sum);
+    printf("1 ~ 10 합: %d\n", sum);   // 1 ~ 10 합: 55
 
     for (i = 0, sum = 0; i &lt;= 9; )     // 0 부터 시작하면
         sum += ++i;                    // 전위: i 를 먼저 1 올리고 → 그 값을 더함 → i = 0 에서 1, 2, …, 10 → 55
-    printf("1 ~ 10 합: %d\n", sum);
+    printf("1 ~ 10 합: %d\n", sum);   // 1 ~ 10 합: 55
 
     for (i = 1, sum = 0; i &lt;= 10; sum += i++); //반복 몸체가 없는 for 문
-    printf("1 ~ 10 합: %d\n", sum);
+    printf("1 ~ 10 합: %d\n", sum);   // 1 ~ 10 합: 55 (몸체 없이 증감식에서 더함)
     for (i = 0, sum = 0; i &lt;= 9; sum += ++i); //반복 몸체가 없는 for 문
-    printf("1 ~ 10 합: %d\n", sum);
+    printf("1 ~ 10 합: %d\n", sum);   // 1 ~ 10 합: 55
 
-    return 0;
-}</code></pre>
+    return 0;                        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                    // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">1 ~ 10 합: 55
 1 ~ 10 합: 55
 1 ~ 10 합: 55
@@ -2238,27 +2238,27 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 1 ~ 10 합: 55</code></pre>
         <h3>10inputsum.c — 1 부터 입력한 양수까지의 합 (for · while 비교) — 입력: 10</h3>
         <pre><code class="language-c">// 10inputsum.c — 1 에서부터 표준입력한 양수까지의 합 (for 와 while 비교)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int i, sum, max;
-    printf("양의 정수 입력 &gt;&gt; ");
-    scanf("%d", &amp;max);
+    int i, sum, max;                            // 반복 변수 · 합 · 끝 수
+    printf("양의 정수 입력 &gt;&gt; ");                     // 입력 안내 (줄바꿈 없음)
+    scanf("%d", &amp;max);                          // 양의 정수 입력 → max (예: 10)
 
     for (i = 1, sum = 0; i &lt;= max; i++) //++i도 가능
         sum += i; // sum = sum + i → 1 + 2 + … + max (예: 10 입력 → 55)
-    printf("\nfor 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);
+    printf("\nfor 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);   // \n 으로 한 줄 띄우고 → for 문으로 구한 1에서 10까지 합:  55 (%3d → 3칸)
 
     i = 1, sum = 0;                    // 초기식
     while (i &lt;= max) {                 // 조건식
         sum += i; // sum = sum + i → 1 + 2 + … + max (예: 10 입력 → 55)
         i++;      // 증감식 (++i도 가능)
-    }
-    printf("while 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);
+    }                                           // while 끝 → 조건 다시 검사 (거짓이면 빠져나옴)
+    printf("while 문으로 구한 1에서 %d까지 합: %3d\n", max, sum);   // while 문으로 구한 1에서 10까지 합:  55
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">양의 정수 입력 &gt;&gt; 10
 
 for 문으로 구한 1에서 10까지 합:  55
@@ -2277,41 +2277,41 @@ while 문으로 구한 1에서 10까지 합:  55</code></pre>
         </tbody></table>
         <h3>예제 ① ★ Quiz 6 (수업 코드 · break.c) — 1 ~ 100 반복하다 10 에서 탈출</h3>
         <pre><code class="language-c">// Quiz 6 (수업 코드 · break.c) — 1 ~ 100 까지 for 문을 반복한다 (단, 1 ~ 10 까지만 if 문을 사용하여 빠져나온다)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS    // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                 // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
     int i, j;                          // j 는 선언만 하고 쓰지 않음
-    for (i = 1; i &lt;= 100; i++) {
+    for (i = 1; i &lt;= 100; i++) {   // i = 1 → 100 까지 반복 (실제로는 10 에서 break)
         printf("%d ", i);              // 숫자 뒤에 공백 하나
         if (i % 10 == 0)               // i == 10 → 10 % 10 == 0 → 참
             break;                     // for 를 즉시 빠져나감 (11 ~ 100 은 실행 안 함)
-    }
-    printf("\n종료..\n");
-    return 0;
-}</code></pre>
+    }                              // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
+    printf("\n종료..\n");            // 줄을 바꾼 뒤 → 종료.. (출력: 1 2 3 … 10 / 종료..)
+    return 0;                      // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                  // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">1 2 3 4 5 6 7 8 9 10 
 종료..</code></pre>
         <div class="tip">📌 printf 가 break <b>앞</b>에 있어서 10 까지 찍히고 빠져나와요 · <code>"%d "</code> 라서 10 뒤에도 공백이 있고, <code>"\n종료..\n"</code> 의 앞쪽 <code>\n</code> 때문에 종료.. 는 <b>다음 줄</b>에 찍힙니다</div>
         <h3>예제 ② ★ Quiz 7 (수업 코드 · continue.c) — 음수는 건너뛰고 3개의 합 — 입력: 5, -2, 3, 7</h3>
         <pre><code class="language-c">// Quiz 7 (수업 코드 · continue.c) — 키보드로부터 입력된 수가 3개일 때 반복을 빠져나와 그 수의 합을 출력
 //                                    (단, 음수가 입력되면 다시 입력받기 위해 continue 문을 사용)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS      // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int num, count = 0, sum = 0;
+    int num, count = 0, sum = 0;     // 입력값 · 개수 · 합
     while (1) {                        // 조건이 항상 참(1) → break 를 만나야 끝남
-        printf("input number ? ");
-        scanf("%d", &amp;num);
+        printf("input number ? ");   // 입력 안내 (줄바꿈 없음)
+        scanf("%d", &amp;num);           // 정수 입력 → num
         if (num &lt; 0)                   // 음수이면 continue 로 다시 올려보내서 양수입력을 유도한다
             continue;                  // 아래 세 줄을 건너뛰고 while 조건으로
-        sum += num;
-        count++;
+        sum += num;                  // 양수만 sum 에 더함
+        count++;                     // 더한 개수 1 증가
         if (count == 3)                // 3개가 모이면
             break;                     // while 을 빠져나감
-    }
-    printf("합 : %d \n", sum);
-    return 0;
-}</code></pre>
+    }                                // while 끝 → 조건 다시 검사 (거짓이면 빠져나옴)
+    printf("합 : %d \n", sum);        // 예: 5 -1 3 4 → 음수는 건너뛰고 5 + 3 + 4 → 합 : 12
+    return 0;                        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                    // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">input number ? 5
 input number ? -2
 input number ? 3
@@ -2328,41 +2328,41 @@ input number ? 7
         <div class="tip">📌 조건이 <code>num &lt; 0</code> 이라 <b>0 은 음수가 아니어서 더해지고 개수에도 들어가요</b> · <code>"합 : %d \n"</code> 은 숫자 뒤에 공백 하나</div>
         <h3>예제 ③ 12continue.c (교재) — 3 으로 나누어떨어지는 수 건너뛰기</h3>
         <pre><code class="language-c">// 12continue.c — 3으로 나누어지지 않는 정수 출력 (continue)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    const int MAX = 15;
+    const int MAX = 15;                         // MAX = 15 (const → 바꿀 수 없는 상수)
 
-    printf("1에서 %d까지 정수 중에서 3으로 나누어 떨어지지 않는 수\n", MAX);
-    for (int i = 1; i &lt;= MAX; i++) {
+    printf("1에서 %d까지 정수 중에서 3으로 나누어 떨어지지 않는 수\n", MAX);   // 제목 출력
+    for (int i = 1; i &lt;= MAX; i++) {            // i = 1 → 15
         if (i % 3 == 0) // (!(i % 3))
             continue;                  // 3, 6, 9, 12, 15 는 printf 를 건너뛰고 i++ 로
         printf("%3d", i);              // 3칸 오른쪽 정렬
-    }
+    }                                           // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
     puts("");                          // 빈 문자열 + 자동 줄바꿈 = 줄만 바꾸기
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">1에서 15까지 정수 중에서 3으로 나누어 떨어지지 않는 수
   1  2  4  5  7  8 10 11 13 14</code></pre>
         <h3>예제 ④ 11break.c (교재) — 0 을 입력하면 break — 입력: 10, 255, 0</h3>
         <pre><code class="language-c">// 11break.c — 반복된 정수의 16진수 변환과 break 로 종료
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int input;
-    while (1) {
-        printf("양의 정수 또는 0[종료] 입력 후 [Enter] &gt;&gt; ");
-        scanf("%d", &amp;input);
-        if (input == 0)
+    int input;                                  // 입력받을 정수
+    while (1) {                                 // 조건이 항상 참 → break 를 만나야 끝남
+        printf("양의 정수 또는 0[종료] 입력 후 [Enter] &gt;&gt; ");   // 입력 안내 (줄바꿈 없음)
+        scanf("%d", &amp;input);                    // 정수 입력 → input
+        if (input == 0)                         // 0 이면
             break;                     // 0 → while 탈출
         printf("입력한 정수 %d: 16진수 %#x\n", input, input);   // %#x = 앞에 0x 를 붙인 16진수 (예: 26 → 1×16 + 10 → 0x1a)
-    }
-    puts("종료");
+    }                                           // while 끝 → 조건 다시 검사 (거짓이면 빠져나옴)
+    puts("종료");                                 // 반복이 끝난 뒤 → 종료 (puts 는 자동 줄바꿈)
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">양의 정수 또는 0[종료] 입력 후 [Enter] &gt;&gt; 10
 입력한 정수 10: 16진수 0xa
 양의 정수 또는 0[종료] 입력 후 [Enter] &gt;&gt; 255
@@ -2371,41 +2371,41 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 종료</code></pre>
         <h3>예제 ⑤ 13goto.c (교재) — goto 로 1 ~ 10 출력</h3>
         <pre><code class="language-c">// 13goto.c — goto 문을 사용해 1에서 10까지의 정수 출력
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;          // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int count = 1;
+    int count = 1;          // 출력할 수 1 로 시작
 
 loop:                                  // 레이블(이름표) — 이름 뒤에 콜론
-    printf("%3d", count);
+    printf("%3d", count);   // %3d → 3칸 오른쪽 맞춤 →   1  2  3 …  10
     if (++count &lt;= 10)                 // 먼저 1 증가시킨 뒤 비교
         goto loop;                     // loop: 위치로 되돌아감
 
-    printf("\n종료\n");
+    printf("\n종료\n");       // 줄을 바꾼 뒤 → 종료
 
-    return 0;
-}</code></pre>
+    return 0;               // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                           // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">  1  2  3  4  5  6  7  8  9 10
 종료</code></pre>
         <details class="wk-details">
         <summary>📘 교재 7장 실습 (요약 PDF · HW01) — 14octhex · lab3primebreak</summary>
         <h3>14octhex.c — 8진수 · 16진수 변환 반복 · 0 이하 입력 시 break — 입력: 8, 255, -1</h3>
         <pre><code class="language-c">// 14octhex.c — 반복된 정수의 8진수와 16진수 변환과 break 로 종료
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS                 // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int input;
-    do {
-        printf("양의 정수 또는 음수나 0[종료] 입력 후 [Enter] &gt;&gt; ");
-        scanf("%d", &amp;input);
-        if (input &lt;= 0)
+    int input;                                  // 입력받을 정수
+    do {                                        // 먼저 한 번 실행 (조건은 끝의 while(1) — 항상 참)
+        printf("양의 정수 또는 음수나 0[종료] 입력 후 [Enter] &gt;&gt; ");   // 입력 안내 (줄바꿈 없음)
+        scanf("%d", &amp;input);                    // 정수 입력 → input
+        if (input &lt;= 0)                         // 0 이하(0 · 음수)면
             break;                     // do ~ while(1) 도 break 로 빠져나옴
         printf("정수 %d: 8진수 %#o  16진수 %#x\n", input, input, input);   // %#o = 앞에 0 을 붙인 8진수 · %#x = 앞에 0x (예: 26 → 3×8 + 2 → 032 · 1×16 + 10 → 0x1a)
-    } while (1);
+    } while (1);                                // 조건이 1(항상 참) → break 를 만날 때까지 반복
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">양의 정수 또는 음수나 0[종료] 입력 후 [Enter] &gt;&gt; 8
 정수 8: 8진수 010  16진수 0x8
 양의 정수 또는 음수나 0[종료] 입력 후 [Enter] &gt;&gt; 255
@@ -2413,25 +2413,25 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 양의 정수 또는 음수나 0[종료] 입력 후 [Enter] &gt;&gt; -1</code></pre>
         <h3>lab3primebreak.c — 소수 여부 판단 (for + break) — 입력: 13 / 15</h3>
         <pre><code class="language-c">// lab3primebreak.c — 양의 정수의 소수 여부를 판단해 출력
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS         // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                      // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    int num, j;
-    printf("2 이상 양의 정수 입력 &gt;&gt; ");
-    scanf("%d", &amp;num);
+    int num, j;                         // 입력할 수 num 과 나눠 볼 수 j
+    printf("2 이상 양의 정수 입력 &gt;&gt; ");        // 입력 안내 (줄바꿈 없음)
+    scanf("%d", &amp;num);                  // 정수 입력 → num (예: 7)
 
     for (j = 2; j &lt; num; j++)          // 2 ~ num-1 로 나눠 보기
         if (num % j == 0)              // 나누어떨어지면 약수가 있다 → 소수 아님
-            break;
+            break;                      // 약수를 찾으면 for 를 바로 빠져나감 (j 는 그 약수)
 
     if (j == num)                      // break 없이 끝까지 돌았다 = 약수가 없다
-        printf("%d 소수이다.\n", num);
-    else
-        printf("%d 소수가 아니다.\n", num);
+        printf("%d 소수이다.\n", num);      // 예: 7 → 7 소수이다.
+    else                                // 중간에 break 했다면
+        printf("%d 소수가 아니다.\n", num);   // 예: 9 → 3 에서 break → 9 소수가 아니다.
 
-    return 0;
-}</code></pre>
+    return 0;                           // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                       // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">2 이상 양의 정수 입력 &gt;&gt; 13
 13 소수이다.</code></pre>
         <pre class="io"><code class="language-text">2 이상 양의 정수 입력 &gt;&gt; 15
@@ -2443,20 +2443,20 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
         <div class="tip">📌 반복문 안에 반복문 — 바깥이 <b>1번</b> 돌 때 안쪽은 <b>처음부터 끝까지</b> 다 돈다 → 실행 횟수 = 바깥 횟수 × 안쪽 횟수</div>
         <h3>예제 ① 16triangle.c — 별 삼각형</h3>
         <pre><code class="language-c">// 16triangle.c — 별을 삼각형 모양으로 출력 (중첩 for)
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;         // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    const int MAX = 5;
-    int i, j;
+    const int MAX = 5;     // 줄 수 5 (const 상수)
+    int i, j;              // 바깥 · 안쪽 반복 변수
 
     for (i = 1; i &lt;= MAX; i++) {       // 바깥: 줄 번호 1 ~ 5
         for (j = 1; j &lt;= i; j++)       // 안쪽: i 번째 줄에 별 i 개
-            printf("*");
+            printf("*");   // 별 하나 (줄바꿈 없음) → * / ** / *** / **** / *****
         puts("");                      // 한 줄이 끝나면 줄바꿈
-    }
+    }                      // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
 
-    return 0;
-}</code></pre>
+    return 0;              // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                          // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">*
 **
 ***
@@ -2465,19 +2465,19 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         <h3>예제 ② lab4mtable.c — 구구단 2 ~ 9단</h3>
         <div class="tip"><span class="wk-tag note">✍️ 필기</span> — HW01 목록에 설명이 비어 있던 lab4mtable.c 는 <b>구구단</b>이에요 (곱하는 수도 2 부터라 ×1 은 없음)</div>
         <pre><code class="language-c">// lab4mtable.c — 구구단 2 ~ 9단 출력 (중첩 for)
-#include &lt;stdio.h&gt;
-#define MAX 9
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+#define MAX 9                                   // MAX → 9 (9단 · 곱하는 수 9 까지)
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
     for (int i = 2; i &lt;= MAX; i++) {   // 바깥: 단 (2 ~ 9)
-        printf("%5d단 출력\n", i);
+        printf("%5d단 출력\n", i);                 // %5d → 5칸 오른쪽 맞춤 →     2단 출력
         for (int j = 2; j &lt;= MAX; j++) // 안쪽: 곱하는 수 (2 ~ 9)
-            printf("%d*%d = %2d ", i, j, i * j);
-        printf("\n");
-    }
+            printf("%d*%d = %2d ", i, j, i * j);   // %2d → 결과 2칸 → 2*2 =  4 2*3 =  6 … (줄바꿈 없음)
+        printf("\n");                           // 한 단이 끝나면 줄바꿈
+    }                                           // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
 
-    return 0;
-}</code></pre>
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">    2단 출력
 2*2 =  4 2*3 =  6 2*4 =  8 2*5 = 10 2*6 = 12 2*7 = 14 2*8 = 16 2*9 = 18 
     3단 출력
@@ -2498,19 +2498,19 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         <summary>📘 교재 7장 실습 (요약 PDF · HW01) — 15nestedloop · 17loopsum</summary>
         <h3>15nestedloop.c — 바깥 반복과 내부 반복에서 변수 값의 변화</h3>
         <pre><code class="language-c">// 15nestedloop.c — 내부 반복과 외부 반복에서 각각의 변수 값의 변화
-#include &lt;stdio.h&gt;
+#include &lt;stdio.h&gt;                   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int i, j;
+    int i, j;                        // 바깥 반복 변수 i · 안쪽 반복 변수 j
     for (i = 1; i &lt;= 5; i++) {         // 바깥 5번
         printf("i = %-2d\n", i);       // %-2d = 2칸 왼쪽 정렬
         for (j = 1; j &lt;= 7; j++)       // 바깥 1번마다 안쪽 7번 → 총 35번
-            printf("j = %-3d", j);
-        puts("");
-    }
+            printf("j = %-3d", j);   // %-3d → 3칸 왼쪽 맞춤 → j = 1  j = 2  … j = 7
+        puts("");                    // 안쪽이 끝나면 줄만 바꿈 (빈 문자열 + 자동 줄바꿈)
+    }                                // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
 
-    return 0;
-}</code></pre>
+    return 0;                        // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                    // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">i = 1 
 j = 1  j = 2  j = 3  j = 4  j = 5  j = 6  j = 7  
 i = 2 
@@ -2523,29 +2523,29 @@ i = 5
 j = 1  j = 2  j = 3  j = 4  j = 5  j = 6  j = 7  </code></pre>
         <h3>17loopsum.c — 1 에서 입력된 정수까지의 합을 식으로 — 입력: 4, 0</h3>
         <pre><code class="language-c">// 17loopsum.c — 1에서 입력된 정수까지의 합 구하기 (do ~ while 안에 중첩 for)
-#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
+#define _CRT_SECURE_NO_WARNINGS           // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                        // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
 int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-    int input, sum, i, j;
-    do {
-        printf("양의 정수 또는 0(종료)을 입력: ");
-        scanf("%d", &amp;input);
+    int input, sum, i, j;                 // 입력값 · 합 · 반복 변수 두 개
+    do {                                  // 먼저 한 번 실행하고 끝에서 조건 검사
+        printf("양의 정수 또는 0(종료)을 입력: ");   // 입력 안내 (줄바꿈 없음)
+        scanf("%d", &amp;input);              // 정수 입력 → input (예: 3)
 
         for (i = 1; i &lt;= input; i++) {             // 1 줄 ~ input 줄
             for (j = 1, sum = 0; j &lt;= i; j++) {    // 1 + 2 + … + i
-                printf("%d", j);
+                printf("%d", j);          // 더할 수 j (줄바꿈 없음)
                 j == i ? printf(" = ") : printf(" + ");   // 마지막 수 뒤에는 =
-                sum += j;
-            }
-            printf("%d\n", sum);
-        }
+                sum += j;                 // sum = sum + j
+            }                             // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
+            printf("%d\n", sum);          // 그 줄의 합 → 1 = 1 / 1 + 2 = 3 / 1 + 2 + 3 = 6
+        }                                 // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
     } while (input &gt; 0);               // 0 이하면 종료
 
-    puts("종료합니다.");
+    puts("종료합니다.");                       // 0 이하를 넣어 끝나면 → 종료합니다.
 
-    return 0;
-}</code></pre>
+    return 0;                             // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                         // main 함수 끝</code></pre>
         <pre class="io"><code class="language-text">양의 정수 또는 0(종료)을 입력: 4
 1 = 1
 1 + 2 = 3

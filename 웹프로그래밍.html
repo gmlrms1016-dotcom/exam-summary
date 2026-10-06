@@ -170,19 +170,19 @@
     <section class="card" id="s8">
         <h2>8. 함수 선언 3가지 방법 ★필수암기<span class="week">2주차</span></h2>
         <h3>① 선언적 함수</h3>
-        <pre><code>function btnClick(){
+        <pre><code>function btnClick(){   // 선언적 함수 — function 이름(){ } (호이스팅돼서 선언 전에 불러도 됨)
     console.log("버튼을 눌렀어요");   // 할 일
-}
+}                      // btnClick 함수 끝 → 호출한 곳으로 돌아감
 btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
         <h3>② 표현적 함수 (익명 함수)</h3>
-        <pre><code>let btnClick = function(){
+        <pre><code>let btnClick = function(){   // 익명 함수를 변수에 담음 (함수 표현식 — 선언 뒤에만 부를 수 있음)
     console.log("버튼을 눌렀어요");   // 할 일
-};
+};                           // btnClick 함수 끝 → 호출한 곳으로 돌아감
 btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
         <h3>③ 화살표 함수</h3>
-        <pre><code>let btnClick = () =&gt; {
+        <pre><code>let btnClick = () =&gt; {   // 화살표 함수 — function 대신 =&gt; (변수에 담아 씀)
     console.log("버튼을 눌렀어요");   // 할 일
-};
+};                       // btnClick 함수 끝 → 호출한 곳으로 돌아감
 btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
         <div class="tip">함수도 <b>데이터(값)처럼 변수에 담아 넘겨줄 수 있습니다</b>. (일급 객체)</div>
     </section>
@@ -191,12 +191,12 @@ btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
         <h2>9. 객체의 구성요소 ★필수암기<span class="week">2주차</span></h2>
         <div class="tip"><b>객체의 구성요소 = 속성(변수) + 메서드(함수)</b><br>비유: <b>붕어빵틀 = 클래스(Class)</b> / <b>붕어빵 = 객체(Object)</b></div>
         <p>즉 클래스는 <b>설계도(틀)</b>, 객체는 그 틀로 찍어낸 <b>실체(인스턴스)</b>입니다. 속성 접근은 프로퍼티, 동작 호출은 메서드입니다.</p>
-        <pre><code>class Person {
+        <pre><code>class Person {           // Person 클래스 = 객체를 찍어 내는 틀
     name;                 // 속성(변수)
     eat() { console.log("쩝쩝"); }   // 메서드(함수)
-}
-let P1 = new Person();
-let P2 = new Person();
+}                        // Person 클래스 끝
+let P1 = new Person();   // Person 틀로 객체 P1 만들기
+let P2 = new Person();   // 같은 틀로 객체 P2 만들기 (P1 과 따로)
 P2.eat();                 // P2 의 eat() 메서드 실행 → "쩝쩝"
 P2.name = "쭈굴";          // P2 객체에 대입
 P1.name = "한주";          // P1 객체에 대입
@@ -247,7 +247,7 @@ Number("10") + 5   ===&gt;  15      // 명시적 형변환: Number("10") → 10 
     <section class="card" id="s13">
         <h2>13. 템플릿 문자열 ★암기<span class="week">3주차</span></h2>
         <p>백틱( <b>`</b> )으로 감싸고 <b>${ }</b> 안에 표현식을 넣으면 문자열 안에서 계산됩니다.</p>
-        <pre><code>console.log(`273 + 52의 값은 ${273 + 52}입니다`)
+        <pre><code>console.log(`273 + 52의 값은 ${273 + 52}입니다`)   // 백틱 템플릿 문자열 — ${ } 안을 먼저 계산 → 273 + 52 → 325
 // 출력: 273 + 52의 값은 325입니다</code></pre>
     </section>
 
@@ -313,9 +313,9 @@ Number("10") + 5   ===&gt;  15      // 명시적 형변환: Number("10") → 10 
         </table>
         <div class="tip"><b>명시적 형변환 함수</b> — <code>Number("10")</code> → 10 · <code>parseInt("10개")</code> → 10 (숫자로 <b>시작하는</b> 부분만, <code>"hi10개"</code> → NaN) · <code>String(20)</code> → "20"<br>⚠️ <b>prompt()</b> 로 받은 값은 항상 <b>문자열</b>입니다. 그냥 더하면 "3"+"4" → <b>34</b>, Number() 로 바꿔야 <b>7</b>.</div>
         <pre><code>// 0915_01.html — 두 수를 입력받아 더하기
-let num1 = window.prompt("첫번째 피연산자 입력!");
-let num2 = window.prompt("두번째 피연산자 입력!");
-let resultObj = document.querySelector("#result");
+let num1 = window.prompt("첫번째 피연산자 입력!");       // 입력 창 → 입력한 값이 문자열로 들어옴 (예: "3")
+let num2 = window.prompt("두번째 피연산자 입력!");       // 두 번째 입력 (예: "4")
+let resultObj = document.querySelector("#result");   // id 가 result 인 요소를 찾아 변수에 담음
 resultObj.innerHTML = num1 + num2;                   // prompt 는 문자열을 돌려줌 → 3, 4 입력 = "3" + "4" → 문자열 연결 → "34"
 resultObj.innerHTML = Number(num1) + Number(num2);   // Number("3") → 3 · Number("4") → 4 → 3 + 4 숫자 덧셈 → 7
 resultObj.innerHTML = `결과값은 ${Number(num1) + Number(num2)}`;  // 백틱(템플릿 리터럴): ${ } 안을 먼저 계산 → 3 + 4 → 7 → "결과값은 7"</code></pre>
@@ -358,7 +358,7 @@ resultObj.innerHTML = `결과값은 ${Number(num1) + Number(num2)}`;  // 백틱(
             <tr><td><b>전위</b> <code>++num8</code></td><td><b>먼저 1 증가</b> → 증가된 값을 사용</td></tr>
             <tr><td><b>후위</b> <code>num8++</code></td><td>현재 값을 <b>먼저 사용</b> → 그다음 1 증가</td></tr>
         </table>
-        <pre><code>let num8 = 10;
+        <pre><code>let num8 = 10;   // num8 = 10
 console.log(num8++);   // 후위 ++: 지금 값 10 을 먼저 출력 → 그다음 num8 = 10 + 1 = 11 → 출력 10
 console.log(++num8);   // 전위 ++: 먼저 num8 = 11 + 1 = 12 → 그 값을 출력 → 12</code></pre>
         <table class="ref">
@@ -410,10 +410,10 @@ console.log(false || false);  // 왼쪽 false(거짓) → 오른쪽 값 → fals
         <div class="tip">같은 판단이지만 <b>&amp; |</b> 는 <b>1 · 0 (숫자)</b>, <b>&amp;&amp; ||</b> 는 <b>true · false</b> 가 나옵니다.</div>
 
         <h3>③ 단락 평가 — 오른쪽이 실행되는지 직접 확인</h3>
-        <pre><code class="language-javascript">function right() {
-    console.log("   └ 오른쪽 right() 실행됨!");
-    return true;
-}
+        <pre><code class="language-javascript">function right() {                          // 실행됐는지 눈으로 보이게 만든 함수
+    console.log("   └ 오른쪽 right() 실행됨!");   // 불리면 이 줄이 찍힘 →    └ 오른쪽 right() 실행됨!
+    return true;                            // 항상 true 를 돌려줌
+}                                           // right 함수 끝 → 호출한 곳으로 돌아감
 
 console.log("① true &amp; right()");   console.log("   결과 =", true &amp; right());   // &amp; 는 오른쪽도 항상 실행 → "실행됨!" 출력 → true &amp; true → 1 &amp; 1 → 결과 = 1
 console.log("② false &amp; right()");  console.log("   결과 =", false &amp; right());   // 왼쪽이 false 여도 오른쪽 실행 → "실행됨!" → 0 &amp; 1 → 결과 = 0
@@ -497,7 +497,7 @@ console.log(v | 0);          // "10" → 숫자 10 → 1010 | 0000 → 1010 → 
 
         <h3>⑦ 수업 예제 changeVar (0915_04.html) — 입력별 모든 경우</h3>
         <pre><code class="language-javascript">// 0915_04.html — prompt 에서 받은 값 (빈칸 확인 "", 글자 입력 "안녕", 취소 null)
-let changeVar = window.prompt("추가할 제목 입력!");
+let changeVar = window.prompt("추가할 제목 입력!");   // 입력 창 → 빈칸 확인 "" · 글자 "안녕" · 취소 null 중 하나가 들어옴
 
 changeVar = changeVar == "" ? "입력없음" : changeVar;   // 수업 코드: "" == "" → true → "입력없음" / 취소 null == "" → false → null 그대로 (null 은 못 거름)
 changeVar = changeVar || "입력없음";                    // "" · null → 거짓 → 오른쪽 "입력없음" / "안녕" → 참 → 왼쪽 "안녕" 그대로
@@ -518,10 +518,10 @@ changeVar = changeVar &amp; "입력없음";                     // ❌ 양쪽을
         </table>
         <pre><code>// 0915_04.html — 입력이 비었으면 "입력없음" (셋 다 같은 뜻)
 let changeVar = window.prompt("추가할 제목 입력!");   // 빈칸으로 확인 → ""
-if (changeVar == "") { changeVar = "입력없음"; }
+if (changeVar == "") { changeVar = "입력없음"; }   // 빈 문자열이면 "입력없음" 으로 바꿈 (if 로)
 changeVar = changeVar == "" ? "입력없음" : changeVar;   // 삼항 연산자
 changeVar = changeVar || "입력없음";                    // 단락 평가: "" · 취소 null → 거짓 → "입력없음" / 입력값 → 참 → 그대로
-console.log(changeVar);</code></pre>
+console.log(changeVar);                        // "" 를 넣었다면 → 입력없음</code></pre>
         <div class="tip">⚠️ 수업 코드 <b>0915_04.html</b> 은 <code>querySelector("#result")</code> 인데 태그 id 가 <b>content</b> 라서 <b>null 오류</b>가 났어요 → <code>#content</code> 로 맞춰야 화면에 출력돼요. (4주차 폴더의 실습 파일은 고쳐 둠) prompt 에서 <b>취소</b>를 누르면 null 이 들어와 <code>== ""</code> 검사로는 못 거릅니다 (<code>||</code> 는 처리됨).</div>
     </section>
 
@@ -534,12 +534,12 @@ console.log(changeVar);</code></pre>
         </table>
         <pre><code>function printName(person) {     // person = 매개변수
     if (!person) {               // 값이 없으면(falsy) 오류 대신 안내 후 종료
-        console.log("person의 값이 없음");
-        return 0;
-    }
-    console.log(person.name);
-}
-let person = { name: "홍길동" };
+        console.log("person의 값이 없음");   // 인수가 없을 때 안내 → person의 값이 없음
+        return 0;                       // 함수를 여기서 끝냄 (아래 줄 실행 안 함)
+    }                                   // if 끝
+    console.log(person.name);           // 객체의 name 속성 출력 → 홍길동
+}                                       // printName 함수 끝 → 호출한 곳으로 돌아감
+let person = { name: "홍길동" };           // name 속성이 있는 객체를 만들어 person 에 담음
 printName(person);               // person 전달 → !person 은 false → if 건너뜀 → person.name → 홍길동
 printName();                     // 인수 없음 → person = undefined → !undefined 는 true → "person의 값이 없음" 출력 후 return</code></pre>
         <div class="tip"><b>복습 — 함수 선언 3가지</b>: 선언적 함수 · 표현적(익명) 함수 · 화살표 함수 (→ 8번 참고)</div>
@@ -557,30 +557,30 @@ printName();                     // 인수 없음 → person = undefined → !un
         <h3>예제 ① 0922_01.js — 선언보다 먼저 부른 getArea</h3>
         <pre><code class="language-javascript">// 0922_01.js 1-1. 선언적 함수 — 선언보다 먼저 호출해도 실행된다 (호이스팅)
 console.log(getArea(5, 5));   // 선언적 함수는 호이스팅 → 선언 전에 호출해도 됨 → 5 * 5 → 25
-function getArea(width, height) {
-    let area = width * height;
-    return area;
-}
+function getArea(width, height) {   // 선언적 함수 — 가로 · 세로를 받아 넓이를 구함
+    let area = width * height;      // 넓이 = 가로 × 세로
+    return area;                    // 계산한 넓이를 돌려줌
+}                                   // getArea 함수 끝 → 호출한 곳으로 돌아감
 console.log(getArea(10, 5));  // width=10, height=5 → area = 10 * 5 → return 50 → 50</code></pre>
         <pre class="io"><code>25
 50</code></pre>
         <h3>🔥 시험문제 — “문제가 생기는 코드 라인을 찍어주시오”</h3>
         <pre><code class="language-javascript">// ★시험문제 — "문제가 생기는 코드 라인을 찍어주시오" (0922_01.js 에서 주석 처리한 두 줄)
 console.log(imsi);            // ← 여기서 오류! let 변수는 선언한 줄보다 먼저 쓸 수 없다
-let imsi;
+let imsi;                           // let 선언은 여기 — 위 줄에서 먼저 쓰면 ReferenceError (TDZ)
 console.log(getArea(5, 5));   // 이 줄은 문제없다 (선언적 함수는 호이스팅)
-function getArea(width, height) {
-    let area = width * height;
-    return area;
-}</code></pre>
+function getArea(width, height) {   // 선언적 함수 (호이스팅 → 위에서 불러도 됨)
+    let area = width * height;      // 넓이 = 가로 × 세로
+    return area;                    // 계산한 넓이를 돌려줌
+}                                   // getArea 함수 끝 → 호출한 곳으로 돌아감</code></pre>
         <pre class="io"><code>ReferenceError: Cannot access 'imsi' before initialization</code></pre>
         <div class="tip">🔥 <b>정답: <code>console.log(imsi);</code> 줄</b> — <code>let imsi</code> 가 아래에 있어서 선언 전에 쓴 것이 오류 (<code>ReferenceError</code>). 그 줄에서 멈추기 때문에 아래는 실행되지 않지만, <code>console.log(getArea(5, 5));</code> 자체는 호이스팅 덕분에 <b>문제없는 줄</b>이에요. (수업 파일에서는 이 두 줄을 주석으로 막아 둠)</div>
         <h3>비교 — 익명 함수는 선언 전에 부르면 오류</h3>
         <pre><code class="language-javascript">// 비교 — 익명 함수(함수 표현식)는 선언 전에 부르면 오류
 console.log(sum(7, 5));       // ← 오류: sum 은 let 변수라 아직 쓸 수 없다
-let sum = function (n1, n2) {
-    return n1 + n2;
-}</code></pre>
+let sum = function (n1, n2) {   // 익명 함수를 let 변수 sum 에 담음 — 이 줄보다 위에서는 sum 을 쓸 수 없음
+    return n1 + n2;             // 두 수의 합을 돌려줌
+}                               // sum 함수 끝 → 호출한 곳으로 돌아감</code></pre>
         <pre class="io"><code>ReferenceError: Cannot access 'sum' before initialization</code></pre>
     </section>
 
@@ -590,14 +590,14 @@ let sum = function (n1, n2) {
         <h3>예제 0922_01.js 1-2 · 1-3</h3>
         <pre><code class="language-javascript">// 0922_01.js 1-2. 익명 함수 · 1-3. 화살표 함수
 let sum = function (n1, n2) {     // 이름 없는 함수를 변수 sum 에 담는다
-    return n1 + n2;
-}
+    return n1 + n2;   // 두 수의 합을 돌려줌
+}                     // sum 함수 끝 → 호출한 곳으로 돌아감
 sum(7, 5);                        // 수업 코드: 계산만 하고 출력은 안 함 → 화면엔 아무것도 없다
 console.log(sum(7, 5));           // n1=7, n2=5 → 7 + 5 → return 12 → 12 출력 (결과를 보려면 console.log 로 감싼다)
 
 let sum1 = (n1, n2) =&gt; {          // function 대신 =&gt; (화살표)
-    return n1 + n2;
-}
+    return n1 + n2;   // 두 수의 합을 돌려줌
+}                     // sum1 함수 끝 → 호출한 곳으로 돌아감
 console.log(sum1(3, 4));          // n1=3, n2=4 → 3 + 4 → return 7 → 7</code></pre>
         <pre class="io"><code>12
 7</code></pre>
@@ -609,12 +609,12 @@ console.log(sum1(3, 4));          // n1=3, n2=4 → 3 + 4 → return 7 → 7</co
         <div class="tip">✍️ 필기 — <b>콜백 함수 : 다른 함수에 인자로 전달되어서, 나중에 실행되는 함수</b></div>
         <h3>예제 ① 0922_01.js 1-4 — call1 을 call2 에 넘기기</h3>
         <pre><code class="language-javascript">// 0922_01.js 1-4. 콜백 함수 — 다른 함수에 인자로 전달되어 나중에 실행되는 함수
-let call1 = function () {
-    console.log(`나는 콜되어진 함수`);
-}
+let call1 = function () {        // 익명 함수를 변수 call1 에 담음
+    console.log(`나는 콜되어진 함수`);   // 불리면 → 나는 콜되어진 함수
+}                                // call1 함수 끝 → 호출한 곳으로 돌아감
 function call2(funcVar) {         // funcVar 로 함수를 받아서
     funcVar();                    // 여기서 실행 (= 콜백)
-}
+}                                // call2 함수 끝 → 호출한 곳으로 돌아감
 call2(call1);                     // 괄호 없이 call1 을 넘김 → funcVar = call1 → funcVar() 실행 → 나는 콜되어진 함수
 
 console.log(call1());             // 괄호 O → call1 실행 → "나는 콜되어진 함수" 출력 → return 이 없어 undefined → console.log(undefined) → undefined</code></pre>
@@ -629,11 +629,11 @@ undefined</code></pre>
         <div class="tip">✍️ 필기 — 괄호가 있는 것과 없는 것은 다르다: <code>console.log(call1)</code> ≠ <code>console.log(call1())</code> · 콜백으로 넘길 때는 <b>괄호 없이</b> 이름만</div>
         <h3>예제 ② 0922_01.js — 반복은 repeat, 할 일은 콜백</h3>
         <pre><code class="language-javascript">// 0922_01.js 콜백함수 예제 — 반복은 repeat 가, 할 일은 콜백이 정한다
-function repeat(count, callback) {
-    for (let i = 1; i &lt;= count; i++) {
+function repeat(count, callback) {       // count 번 반복하면서 callback 함수를 부르는 함수
+    for (let i = 1; i &lt;= count; i++) {   // i = 1 → count 까지 반복
         callback(i);            // 넘겨받은 함수에 i 를 넣어 실행
-    }
-}
+    }                                    // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
+}                                        // repeat 함수 끝 → 호출한 곳으로 돌아감
 repeat(5, (i) =&gt; { console.log(i); });       // i = 1 → 5 까지 → console.log(i) → 1 2 3 4 5 (한 줄에 하나씩)
 repeat(5, (i) =&gt; { console.log(i * 2); });   // i = 1 → 5 → i * 2 → 2 4 6 8 10
 repeat(5, (i) =&gt; { console.log(i * 3); });   // i = 1 → 5 → i * 3 → 3 6 9 12 15</code></pre>
@@ -654,12 +654,12 @@ repeat(5, (i) =&gt; { console.log(i * 3); });   // i = 1 → 5 → i * 3 → 3 6
 15</code></pre>
         <h3>주의 — 같은 이름의 선언적 함수를 여러 번 만들면</h3>
         <pre><code class="language-javascript">// 수업 파일처럼 같은 이름의 선언적 함수를 여러 번 만들면 → 마지막 것만 남는다
-function repeat(count) {
-    for (let i = 0; i &lt;= count; i++) console.log(i);
-}
+function repeat(count) {                        // 첫 번째 repeat (0 ~ count 출력) — 아래 같은 이름 선언에 덮어써짐
+    for (let i = 0; i &lt;= count; i++) console.log(i);   // i = 0 → count 까지 출력 (실제로는 실행되지 않음)
+}                                               // repeat 함수 끝 → 호출한 곳으로 돌아감
 function repeat(count, callback) {   // 이 선언이 위의 repeat 를 덮어쓴다
-    for (let i = 1; i &lt;= count; i++) callback(i);
-}
+    for (let i = 1; i &lt;= count; i++) callback(i);   // i = 1 → count 까지 callback(i) 실행
+}                                               // repeat 함수 끝 → 호출한 곳으로 돌아감
 repeat(3, (i) =&gt; { console.log(i * 10); });  // 아래 repeat(콜백 버전)가 위를 덮어씀 → i = 1 → 3 → i * 10 → 10 20 30
 repeat(3);                                       // ← 오류: 첫 번째 repeat 가 아니라 콜백 버전이 불려서 callback 이 없다</code></pre>
         <pre class="io"><code>10
@@ -687,16 +687,16 @@ TypeError: callback is not a function</code></pre>
 let obj1 = new Object();          // 객체 생성자
 let obj2 = {};                    // 객체 리터럴 (대부분 이걸 쓴다)
 
-let person = {
+let person = {       // 객체 리터럴로 person 만들기
     name: "윤희근",                // 속성(프로퍼티)  key: value
-    age: 23,
+    age: 23,         // 속성 age: 23
     eat: () =&gt; { console.log("먹는다"); }   // 메서드 (객체 안의 함수)
-}
+}                    // person 객체 끝
 console.log(person.name);         // 점 표기법 → 윤희근
 console.log(person["age"]);       // 대괄호 표기법 → 23 (key 를 문자열로)
 person.eat();                     // 메서드 호출 → 먹는다
 
-let test = "name";
+let test = "name";   // key 이름 "name" 을 변수에 담음
 console.log(person[test]);        // 따옴표 없이 쓰면 변수 → test 안의 "name" → 윤희근</code></pre>
         <pre class="io"><code>윤희근
 23
@@ -705,7 +705,7 @@ console.log(person[test]);        // 따옴표 없이 쓰면 변수 → test 안
         <div class="tip"><b>필기 정정</b> — 필기의 “꼭!! 쌍따옴표로 key명” → 대괄호 안에는 key 를 <b>문자열</b>로 쓰면 되므로 <code>person["age"]</code> · <code>person['age']</code> 둘 다 돼요. 따옴표 없이 <code>person[test]</code> 처럼 쓰면 <b>변수</b>로 보고 그 안의 값("name")을 key 로 씁니다.</div>
         <h3>예제 ② 0922_02.js 2-3 — 속성 추가 · 삭제</h3>
         <pre><code class="language-javascript">// 0922_02.js 2-3. 프로퍼티 추가 · 삭제
-let person = { name: "윤희근", age: 23 };
+let person = { name: "윤희근", age: 23 };   // name · age 두 속성을 가진 객체
 
 person.job = "developer";         // 없던 key 에 대입 → 속성 추가
 console.log(person.job);          // 바로 위에서 추가한 job → "developer"
@@ -722,11 +722,11 @@ undefined
         <div class="tip">✍️ 필기 — 속성을 추가하는 건 <b>append 같은 개념</b>(없던 key 에 대입) · 수업 코드의 <code>person.jop</code> 은 <b>job</b>(직업)의 오타예요.</div>
         <h3>예제 ③ 0922_02.js — const 객체</h3>
         <pre><code class="language-javascript">// 0922_02.js const 객체 — 통째로 바꾸기는 X, 속성 추가·수정은 O
-const animal = {
-    type: "고양이",
-    name: "나비",
-    color: "black"
-}
+const animal = {     // const 로 객체 만들기 — 변수에 다른 객체를 다시 넣을 수 없음
+    type: "고양이",     // 속성 type
+    name: "나비",      // 속성 name
+    color: "black"   // 속성 color (마지막 속성 뒤에는 쉼표 없음)
+}                    // animal 객체 끝
 animal.age = 2;                   // 속성 추가는 된다
 animal.color = "white";           // 속성 수정도 된다
 console.log(animal.age, animal.color);   // age 추가 → 2 · color "black" → "white" 로 수정 → 2 white
@@ -753,9 +753,9 @@ console.log(arrC.length);         // 1, 2, 3, true, "hello", null, undefined →
 console.log(arrC[0], arrC[1]);    // 번지는 0 부터 → arrC[0] = 1, arrC[1] = 2 → 1 2
 
 arrC[0] = "hello";                // 0번지 값 1 → "hello" 로 바꾸기
-for (let i = 0; i &lt; arrC.length; i++) {
-    console.log(arrC[i]);
-}</code></pre>
+for (let i = 0; i &lt; arrC.length; i++) {   // i = 0 → length-1(6) → 요소 7개를 차례로
+    console.log(arrC[i]);                 // hello / 2 / 3 / true / hello / null / undefined (한 줄에 하나)
+}                                         // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)</code></pre>
         <pre class="io"><code>7
 1 2
 hello
@@ -817,9 +817,9 @@ number number</code></pre>
         <div class="tip">📌 <code>setTimeout(함수, 밀리초)</code> = 정해진 시간(1000 = 1초) <b>뒤에 한 번</b> 실행하는 <b>내장함수</b> · 기다리는 동안 아래 코드가 먼저 실행된다 (비동기)</div>
         <h3>예제 ① 0929_03.js — "끝" 이 먼저 찍힌다</h3>
         <pre><code class="language-javascript">// 0929_03.js 내장함수 : setTimeout — 3초 뒤에 한 번 실행 (비동기)
-console.log("시작");
-setTimeout(() =&gt; {
-    console.log("3초가 지났습니다!");
+console.log("시작");               // ① 시작
+setTimeout(() =&gt; {               // 3초 뒤에 실행할 함수를 예약 (기다리지 않고 바로 다음 줄로)
+    console.log("3초가 지났습니다!");   // ③ 3초 뒤 → 3초가 지났습니다!
 }, 3000);                  // 3000 밀리초 = 3초
 console.log("끝");         // 3초를 기다리지 않고 바로 실행된다</code></pre>
         <pre class="io"><code>시작
@@ -829,27 +829,27 @@ console.log("끝");         // 3초를 기다리지 않고 바로 실행된다</
         <pre><code class="language-javascript">// 0929_03.js setTimeout(함수, 시간, 인수1, 인수2) — 3번째부터는 함수에 넘길 인수
 setTimeout(greet, 1000, '지민', '개발자');   // 1초 뒤 greet('지민', '개발자') — 함수는 괄호 없이 넘긴다 (콜백)
 function greet(name, role) {                  // 선언적 함수라 아래에 있어도 된다 (호이스팅)
-    console.log(`안녕하세요, ${role} ${name}님!`);
-}
+    console.log(`안녕하세요, ${role} ${name}님!`);   // 1초 뒤 → 안녕하세요, 개발자 지민님!
+}                                              // greet 함수 끝 → 호출한 곳으로 돌아감
 
 const timerId = setTimeout(() =&gt; {            // setTimeout 은 예약 번호(timerId)를 돌려준다
-    console.log("이 메시지는 출력되지 않습니다.");
-}, 5000);
+    console.log("이 메시지는 출력되지 않습니다.");          // 예약이 취소돼서 실행되지 않음
+}, 5000);                                      // 5000 밀리초 = 5초 뒤로 예약했던 것
 clearTimeout(timerId);                        // 예약 취소 → 5초가 지나도 아무것도 안 나온다</code></pre>
         <pre class="io"><code>안녕하세요, 개발자 지민님!</code></pre>
         <div class="tip">📌 인수는 순서대로 name = '지민', role = '개발자' 로 들어가고, 템플릿 문자열이 <code>${role} ${name}</code> 순서라서 <b>개발자 지민님</b></div>
         <h3>✍️ 필기 — "둘다 실행이 된다 안된다(차이)"</h3>
         <div class="tip">필기의 두 코드(<code>let a=()=&gt;{}</code> / <code>function a(){...}</code>)는 a 를 부르지 않아서 <b>둘 다 오류 없이 실행</b>돼요. 차이는 <b>선언보다 먼저 쓸 때</b> 생겨요 → 5주차 호이스팅 복습</div>
         <pre><code class="language-javascript">// ① 선언적 함수 — 선언보다 먼저 setTimeout 에 넘겨도 된다 (호이스팅)
-console.log("시작");
-setTimeout(a, 1000);
-function a() { console.log("a 실행"); }</code></pre>
+console.log("시작");                      // 시작
+setTimeout(a, 1000);                    // 1초 뒤 a 실행을 예약 (함수 a 는 괄호 없이 넘김)
+function a() { console.log("a 실행"); }   // 선언적 함수 → 호이스팅돼서 위에서 써도 됨 → 1초 뒤 a 실행</code></pre>
         <pre class="io"><code>시작
 a 실행</code></pre>
         <pre><code class="language-javascript">// ② let 에 담은 화살표 함수 — 선언보다 먼저 쓰면 오류
-console.log("시작");
-setTimeout(b, 1000);
-let b = () =&gt; { console.log("b 실행"); };</code></pre>
+console.log("시작");                        // 시작
+setTimeout(b, 1000);                      // ← 오류: b 는 아래 let 줄 전이라 아직 쓸 수 없음 (ReferenceError)
+let b = () =&gt; { console.log("b 실행"); };   // let 에 담은 화살표 함수 (선언 뒤에만 사용 가능)</code></pre>
         <pre class="io"><code>시작
 ReferenceError: Cannot access 'b' before initialization</code></pre>
     </section>
@@ -863,11 +863,11 @@ ReferenceError: Cannot access 'b' before initialization</code></pre>
         </table>
         <h3>예제 ① 0929_03.js — 멈추지 않는 setInterval</h3>
         <pre><code class="language-javascript">// 0929_03.js setInterval — 1초마다 반복 (멈추는 코드가 없음)
-let count = 0;
-setInterval(() =&gt; {
-  count++;
-  console.log(`${count}초 경과`);
-}, 1000);</code></pre>
+let count = 0;                   // 경과 초를 셀 변수
+setInterval(() =&gt; {              // 1초마다 아래 함수를 계속 반복 실행
+  count++;                       // count = count + 1
+  console.log(`${count}초 경과`);   // 1초 경과 / 2초 경과 / … (멈추지 않고 계속)
+}, 1000);                        // 1000 밀리초 = 1초 간격</code></pre>
         <pre class="io"><code>1초 경과
 2초 경과
 3초 경과
@@ -875,17 +875,17 @@ setInterval(() =&gt; {
         <div class="tip">⚠️ clearInterval 이 없어서 <b>영원히</b> 반복돼요 (위는 4초까지만 보여 준 것 · node 는 Ctrl + C 로 멈춤)</div>
         <h3>예제 ② 0929_03.js — 5초가 되면 clearInterval</h3>
         <pre><code class="language-javascript">// 0929_03.js 카운트다운 — sec 가 5 가 되면 clearInterval 로 멈춘다
-let sec = 0;
+let sec = 0;                       // 지난 초를 셀 변수
 
 const intervalId = setInterval(() =&gt; {   // setInterval 도 번호를 돌려준다
-  sec++;
-  console.log(`카운트다운: ${sec}초`);
+  sec++;                           // sec = sec + 1
+  console.log(`카운트다운: ${sec}초`);   // 카운트다운: 1초 … 카운트다운: 5초
 
-  if (sec &gt;= 5) {
+  if (sec &gt;= 5) {                  // 5초가 되면
     clearInterval(intervalId);           // 반복 멈춤
-    console.log("카운트 종료!");
-  }
-}, 1000);</code></pre>
+    console.log("카운트 종료!");        // 카운트 종료! (마지막에 한 번)
+  }                                // if 끝
+}, 1000);                          // 1000 밀리초 = 1초 간격</code></pre>
         <pre class="io"><code>카운트다운: 1초
 카운트다운: 2초
 카운트다운: 3초
@@ -898,16 +898,16 @@ const intervalId = setInterval(() =&gt; {   // setInterval 도 번호를 돌려�
         <h2>33. Date 로 시계 만들기 · 🔥 new Date(2026-01-01) ★시험<span class="week">6주차</span></h2>
         <h3>예제 0929_03.js — 1초마다 현재 시간</h3>
         <pre><code class="language-javascript">// 0929_03.js 시간출력 코드 — 1초마다 현재 시간을 찍는다
-const clockInterval = setInterval(() =&gt; {
+const clockInterval = setInterval(() =&gt; {      // 1초마다 현재 시간을 확인하는 반복 예약 (번호를 clockInterval 에 저장)
     const now = new Date(/*여기에 2026-01-01을 쓰면 출력결과는?(시험에 나올 수 있음)*/);
     const timeString = now.toLocaleTimeString();   // 시간만 → 오후 12:03:15
     if (timeString === "오전 8:58:00") {           // 오전 8시 58분 0초가 되면
         clearInterval(clockInterval);              // 반복을 멈춘다
-    }
-    else {
-        console.log(`현재 시간: ${timeString}`);
-    }
-}, 1000);</code></pre>
+    }                                          // if 끝
+    else {                                     // 아직 그 시각이 아니면
+        console.log(`현재 시간: ${timeString}`);   // 현재 시간: 오후 12:03:15 처럼 1초마다
+    }                                          // else 끝
+}, 1000);                                      // 1000 밀리초 = 1초 간격</code></pre>
         <pre class="io"><code>현재 시간: 오후 12:03:15
 현재 시간: 오후 12:03:16
 현재 시간: 오후 12:03:17</code></pre>
@@ -940,7 +940,7 @@ console.log(d2.toLocaleTimeString());    // UTC 0시 + 9시간(한국) → 오�
         </table>
         <h3>예제 ① 0929_04.js — 배열 구조분해</h3>
         <pre><code class="language-javascript">// 0929_04.js 배열 구조분해 — index 번호(순서)대로 들어간다
-let arrayObj = [1, 2, 3];
+let arrayObj = [1, 2, 3];   // 요소 3개짜리 배열
 // 구조분해 전: let a1 = arrayObj[0]; let a2 = arrayObj[1]; let a3 = arrayObj[2]; ← 하나씩
 let [a1, a2, a3, a4] = arrayObj;   // 순서대로 a1 ← [0] = 1 · a2 ← [1] = 2 · a3 ← [2] = 3 · a4 ← [3] 없음 → undefined
 console.log(a1, a2, a3, a4);   // → 1 2 3 undefined</code></pre>
@@ -949,14 +949,14 @@ console.log(a1, a2, a3, a4);   // → 1 2 3 undefined</code></pre>
         <div class="tip">⚠️ <b>정정</b> — 수업 파일 0929_04.js 는 <code>let a1=arrayObj[0];</code> 과 <code>let [a1,a2,a3,a4]</code> 가 <b>둘 다</b> 있어서 그대로 실행하면 <code>SyntaxError: Identifier 'a1' has already been declared</code> (let 은 같은 이름을 다시 선언할 수 없음 → 3주차). 하나씩 꺼내는 세 줄은 주석으로 막고 실행하세요.</div>
         <h3>예제 ② 0929_04.js — 객체 구조분해 · 이름 바꾸기 · 기본값</h3>
         <pre><code class="language-javascript">// 0929_04.js 객체 구조분해 — key 이름으로 꺼낸다 (순서 상관없음)
-let person = {
-    name: "윤희근",
-    age: 23,
-    hobby: "테니스"
-};
-let { age: myAge, name, hobby, school = "동양미래대학교" } = person;
+let person = {                                  // 구조분해할 객체
+    name: "윤희근",                                // 속성 name
+    age: 23,                                    // 속성 age
+    hobby: "테니스"                                // 속성 hobby
+};                                              // person 객체 끝
+let { age: myAge, name, hobby, school = "동양미래대학교" } = person;   // age → myAge 로 이름 바꿔 받기 · name · hobby 는 그대로 · school 은 기본값
 // age 값은 myAge 에 · name · hobby 는 같은 이름으로 · school 은 person 에 없으니 기본값
-console.log(`이름 : ${name}\n나이 : ${myAge}살\n취미 : ${hobby}\n학교 : ${school}`);</code></pre>
+console.log(`이름 : ${name}\n나이 : ${myAge}살\n취미 : ${hobby}\n학교 : ${school}`);   // \n 마다 줄바꿈 → 이름 : 윤희근 / 나이 : 23살 / 취미 : 테니스 / 학교 : 동양미래대학교</code></pre>
         <pre class="io"><code>이름 : 윤희근
 나이 : 23살
 취미 : 테니스
@@ -969,19 +969,19 @@ console.log(`이름 : ${name}\n나이 : ${myAge}살\n취미 : ${hobby}\n학교 :
         </table>
         <div class="tip">✍️ <b>필기</b> — <code>age: myAge</code> 처럼 작성하면 객체의 age 값을 myAge 라는 변수에 할당 → 출력할 때는 age 가 아니라 <b>myAge</b> 를 사용해야 한다</div>
         <pre><code class="language-javascript">// 이름을 바꾼 뒤 age 를 쓰면?
-let person = { name: "윤희근", age: 23, hobby: "테니스" };
-let { age: myAge, name } = person;
+let person = { name: "윤희근", age: 23, hobby: "테니스" };   // 구조분해할 객체
+let { age: myAge, name } = person;              // age 는 myAge 라는 이름으로, name 은 그대로 꺼냄
 console.log(myAge);   // age 값을 myAge 라는 새 이름으로 받음 → myAge = 23 → 23
 console.log(age);     // ← 오류: age 는 myAge 로 이름을 바꿔 받았으니 변수 age 는 없음 → ReferenceError</code></pre>
         <pre class="io"><code>23
 ReferenceError: age is not defined</code></pre>
         <h3>비교 — 구조분해 할당을 쓰지 않으면</h3>
         <pre><code class="language-javascript">// 0929_04.js 주석 — 구조분해할당을 사용하지 않는 경우 (속성마다 한 줄씩)
-let person = { name: "윤희근", age: 23, hobby: "테니스" };
-let n = person.name;
-let a = person.age;
-let h = person.hobby;
-console.log(`이름 : ${n}\n나이 : ${a}살\n취미 : ${h}`);</code></pre>
+let person = { name: "윤희근", age: 23, hobby: "테니스" };   // 꺼낼 객체
+let n = person.name;                            // 점 표기법으로 하나씩 → n = "윤희근"
+let a = person.age;                             // a = 23
+let h = person.hobby;                           // h = "테니스"
+console.log(`이름 : ${n}\n나이 : ${a}살\n취미 : ${h}`);   // 이름 : 윤희근 / 나이 : 23살 / 취미 : 테니스</code></pre>
         <pre class="io"><code>이름 : 윤희근
 나이 : 23살
 취미 : 테니스</code></pre>
@@ -991,18 +991,18 @@ console.log(`이름 : ${n}\n나이 : ${a}살\n취미 : ${h}`);</code></pre>
         <h2>35. 🔥 매개변수 구조분해 — “중괄호를 빼면?” ★시험<span class="week">6주차</span></h2>
         <h3>예제 0929_04.js — 매개변수 자리에서 바로 구조분해</h3>
         <pre><code class="language-javascript">// 0929_04.js 매개변수를 { } 로 받으면 → 넘겨받은 객체를 그 자리에서 구조분해
-let person = { name: "윤희근", age: 23, hobby: "테니스" };
+let person = { name: "윤희근", age: 23, hobby: "테니스" };   // 넘겨줄 객체
 const func = ({ name, age, hobby, extra }) =&gt; {   // person 에서 같은 이름의 속성을 꺼낸다
     console.log(name, age, hobby, extra);          // name · age · hobby 는 person 에서 꺼냄 · extra 는 person 에 없음 → undefined → 윤희근 23 테니스 undefined
-}
-func(person);</code></pre>
+}                                               // func 함수 끝 → 호출한 곳으로 돌아감
+func(person);                                   // person 객체를 넘김 → 윤희근 23 테니스 undefined</code></pre>
         <pre class="io"><code>윤희근 23 테니스 undefined</code></pre>
         <h3>🔥 시험문제 — 여기서 중괄호를 빼면 출력되는 결과</h3>
         <pre><code class="language-javascript">// ★시험문제 — "여기서 중괄호를 빼면 출력되는 결과" (0929_04.js)
-let person = { name: "윤희근", age: 23, hobby: "테니스" };
+let person = { name: "윤희근", age: 23, hobby: "테니스" };   // 넘겨줄 객체
 const func = (name, age, hobby, extra) =&gt; {   // { } 가 없으면 평범한 매개변수 4개
-    console.log(name, age, hobby, extra);
-}
+    console.log(name, age, hobby, extra);       // → { name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined
+}                                               // func 함수 끝 → 호출한 곳으로 돌아감
 func(person);   // 인수는 person 하나 → name = 객체 통째로 · age · hobby · extra = 받은 값 없음(undefined) → { name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code></pre>
         <pre class="io"><code>{ name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code></pre>
         <div class="tip">🔥 <b>정답</b> — <code>{ name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code> (수업 파일 주석과 같음). 중괄호가 있으면 객체에서 <b>속성을 꺼내고</b>, 없으면 첫 번째 매개변수 name 에 <b>객체가 통째로</b> 들어가고 age · hobby · extra 는 넘겨받은 인수가 없어서 <b>undefined</b> (4주차 매개변수 · 인수). 객체는 node 에서 <code>{ key: '값' }</code> 모양으로 찍혀요 (크롬 콘솔은 모양이 조금 달라요).</div>
@@ -1011,31 +1011,31 @@ func(person);   // 인수는 person 하나 → name = 객체 통째로 · age ·
     <section class="card" id="s36">
         <h2>36. DOM — 클릭으로 색 바꾸기 (0929_01.html)<span class="week">6주차</span></h2>
         <pre><code class="language-html">&lt;!-- 0929_01.html --&gt;
-&lt;style&gt;
+&lt;style&gt;                                         &lt;!-- CSS 시작 --&gt;
     #box { width: 100px; height: 100px; border: 3px solid black; }   /* # = id 선택자 */
     .box { background-color: orange; }                               /* . = class 선택자 */
-    .boxRed { background-color: red; }
-    .boxBlue { background-color: blue; }
-&lt;/style&gt;
+    .boxRed { background-color: red; }          /* 빨간 배경 class */
+    .boxBlue { background-color: blue; }        /* 파란 배경 class */
+&lt;/style&gt;                                        &lt;!-- CSS 끝 --&gt;
 
-&lt;div id="box" onclick="changeColor()"&gt;Hello box&lt;/div&gt;
-&lt;input type="button" value="red" onclick="setColorRed()"&gt;
-&lt;input type="button" value="blue" onclick="setColorBlue()"&gt;
+&lt;div id="box" onclick="changeColor()"&gt;Hello box&lt;/div&gt;   &lt;!-- id=box 인 상자 · 누르면 changeColor() 실행 --&gt;
+&lt;input type="button" value="red" onclick="setColorRed()"&gt;   &lt;!-- red 버튼 · 누르면 setColorRed() --&gt;
+&lt;input type="button" value="blue" onclick="setColorBlue()"&gt;   &lt;!-- blue 버튼 · 누르면 setColorBlue() --&gt;
 
-&lt;script&gt;
-    function changeColor() {
+&lt;script&gt;                                        &lt;!-- 자바스크립트 시작 --&gt;
+    function changeColor() {                    // 상자를 누르면 → body 배경을 주황으로
         var box = document.getElementsByTagName("body");   // 태그 이름으로 → 여러 개(목록)
         box[0].setAttribute("class", "box");                 // 목록의 0번째 = body 에 class="box"
-    }
-    function setColorRed() {
+    }                                           // changeColor 끝
+    function setColorRed() {                    // red 버튼 → 상자를 빨갛게
         var box = document.getElementById("box");            // id 로 → 딱 하나
         box.setAttribute("class", "boxRed");                 // class 를 boxRed 로 → 빨간 배경
-    }
-    function setColorBlue() {
-        var box = document.getElementById("box");
+    }                                           // setColorRed 끝
+    function setColorBlue() {                   // blue 버튼 → 상자를 파랗게
+        var box = document.getElementById("box");   // id 로 상자 하나를 찾음
         box.setAttribute("class", "boxBlue");                // class 를 boxBlue 로 → 파란 배경
-    }
-&lt;/script&gt;</code></pre>
+    }                                           // setColorBlue 끝
+&lt;/script&gt;                                       &lt;!-- 자바스크립트 끝 --&gt;</code></pre>
         <table class="ref">
             <tr><th>코드</th><th>돌려주는 것</th><th>쓰는 법</th></tr>
             <tr><td><code>document.getElementsByTagName("body")</code></td><td>그 태그의 요소 <b>전부</b>(목록) — Element<b>s</b></td><td><code>box[0]</code> 처럼 번지로 꺼낸다</td></tr>

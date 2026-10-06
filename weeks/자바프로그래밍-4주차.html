@@ -58,28 +58,28 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <h2>1. 2장 연산자 실습</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>/</code> 는 <b>몫</b>, <code>%</code> 는 <b>나머지</b> → 초 단위를 시·분·초로 바꿀 때 활용</li></ul>
 <pre><code class="language-java">// ArithmeticOperator.java — 5000 입력 → 5000초는 1시간 23분 20초입니다.
-import java.util.Scanner;
+import java.util.Scanner;                      // Scanner(키보드 입력)를 쓰려고 불러옴
 
-public class 연습 {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("정수를 입력하세요: ");
+public class 연습 {                              // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {   // 프로그램이 시작되는 main 메소드
+        Scanner sc = new Scanner(System.in);   // 키보드(System.in)로 입력받는 Scanner 객체 sc 만들기
+        System.out.print("정수를 입력하세요: ");       // 입력 안내 (print → 줄바꿈 없이 커서가 옆에서 기다림)
         int time = sc.nextInt();         // 5000
         int second = time % 60;          // 5000 ÷ 60 = 83 … 나머지 20 → 5000 % 60 → 20
         int minute = (time / 60) % 60;   // 5000 / 60 → 83 (정수 나눗셈) → 83 % 60 → 23
         int hour   = (time / 60) / 60;   // 5000 / 60 → 83 → 83 / 60 → 1 (몫만 남음)
         System.out.println(time + "초는 " + hour + "시간 " + minute + "분 " + second + "초입니다.");   // 5000초는 1시간 23분 20초입니다.
-        sc.close();
-    }
-}</code></pre>
+        sc.close();                            // 다 쓴 Scanner 닫기
+    }                                          // main 끝 → 프로그램 종료
+}                                              // 클래스 끝</code></pre>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 증감 연산자: <code>a = d++</code> 는 <b>대입 먼저, 증가 나중</b> / <code>a = ++d</code> 는 <b>증가 먼저, 대입 나중</b></li></ul>
 <pre><code class="language-java">// AssignmentIncDecOperator.java — 실행 결과를 주석으로
-public class 연습 {
-    public static void main(String[] args) {
-        int a = 3, b = 3, c = 3;
+public class 연습 {                              // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {   // 프로그램이 시작되는 main 메소드
+        int a = 3, b = 3, c = 3;               // a · b · c 를 한 줄에 선언하고 모두 3 으로 시작
         a += 3;  b *= 3;  c %= 2;      // a = 3 + 3 → 6 · b = 3 * 3 → 9 · c = 3 % 2 → 1
         System.out.println("a=" + a + ", b=" + b + ", c=" + c);   // a=6, b=9, c=1
-        int d = 3;
+        int d = 3;                             // 증감 연산자 실험용 d = 3
         a = d++;    // 후위: 지금 d(3) 을 a 에 먼저 대입 → a=3 → 그다음 d = 3 + 1 → 4
         System.out.println("a=" + a + ", d=" + d);                // a=3, d=4
         a = ++d;    // 전위: 먼저 d = 4 + 1 → 5 → 그 값을 a 에 대입 → a=5, d=5
@@ -88,8 +88,8 @@ public class 연습 {
         System.out.println("a=" + a + ", d=" + d);                // a=5, d=4
         a = --d;    // 전위: 먼저 d = 4 - 1 → 3 → 그 값을 a 에 대입 → a=3, d=3
         System.out.println("a=" + a + ", d=" + d);                // a=3, d=3
-    }
-}</code></pre>
+    }                                          // main 끝 → 프로그램 종료
+}                                              // 클래스 끝</code></pre>
 <ul><li>삼항 연산자로 두 수의 차(항상 양수): <code>(a &gt; b) ? (a - b) : (b - a)</code> → 3, 8 입력 시 <code>두 수의 차는 5</code> (TernaryOperator.java)</li></ul>
 </section>
 <section class="card">
@@ -104,50 +104,50 @@ public class 연습 {
 <tr><td>CoffeePrice</td><td>switch (문자열)</td><td>카페라떼 → 3500원 · 녹차 → 메뉴가 없습니다! (default)</td></tr>
 </tbody></table>
 <pre><code class="language-java">// CoffeePrice.java — case 를 여러 개 이어 쓰면(fall-through) 같은 코드를 실행
-import java.util.Scanner;
+import java.util.Scanner;                      // Scanner(키보드 입력)를 쓰려고 불러옴
 
-public class 연습 {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("무슨 커피 드릴까요? ");
+public class 연습 {                              // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {   // 프로그램이 시작되는 main 메소드
+        Scanner sc = new Scanner(System.in);   // 키보드(System.in)로 입력받는 Scanner 객체 sc 만들기
+        System.out.print("무슨 커피 드릴까요? ");      // 질문 출력 (줄바꿈 없음 → 같은 줄에서 입력)
         String order = sc.next();      // 예: 카페라떼
-        int price = 0;
-        switch (order) {
-        case "에스프레소":
-        case "카푸치노":
-        case "카페라떼":
-            price = 3500;
-            break;
-        case "아메리카노":
-            price = 2000;
-            break;
-        default:
-            System.out.println("메뉴가 없습니다!");
-        }
-        if (price != 0)
+        int price = 0;                         // 가격 0 으로 시작 (메뉴에 없으면 0 그대로)
+        switch (order) {                       // order 문자열과 같은 case 로 이동 (자바 7부터 문자열 switch 가능)
+        case "에스프레소":                          // 에스프레소 → break 가 없으니 아래로 계속 (fall-through)
+        case "카푸치노":                           // 카푸치노 → 아래로 계속
+        case "카페라떼":                           // 카페라떼 → 세 메뉴 모두 여기 price = 3500 으로 모임
+            price = 3500;                      // 가격 3500 원
+            break;                             // switch 탈출
+        case "아메리카노":                          // 아메리카노 → 2000 원
+            price = 2000;                      // 가격 2000 원
+            break;                             // switch 탈출
+        default:                               // 위 case 어디에도 없을 때
+            System.out.println("메뉴가 없습니다!");   // 없는 메뉴 안내 → 메뉴가 없습니다!
+        }                                      // switch 끝
+        if (price != 0)                        // 가격이 정해졌을 때만 (0 이 아니면) 아래 줄 출력
             System.out.print(order + "는 " + price + "원입니다");   // 카페라떼 → 3500 → 카페라떼는 3500원입니다
-        sc.close();
-    }
-}</code></pre>
+        sc.close();                            // 다 쓴 Scanner 닫기
+    }                                          // main 끝 → 프로그램 종료
+}                                              // 클래스 끝</code></pre>
 </section>
 <section class="card">
 <h2>3. 반복문 for ★핵심</h2>
 <ul><li>자바 반복문 3가지: <b>for</b> · <b>while</b> · <b>do-while</b></li><li><span class="wk-tag star">⭐ 강조</span> — <code>for(초기작업; 반복조건; 반복후작업) { 작업문 }</code> : 반복조건이 true 인 동안 반복</li><li>for 문 안에서 선언한 변수(<code>for(int i=0; i&lt;10; i++)</code> 의 i)는 <b>for 문 밖에서 사용할 수 없다</b></li><li>반복조건이 <code>true</code> 이거나 <b>비어 있으면 무한 반복</b> · 초기작업·반복후작업은 <code>,</code> 로 여러 문장 나열 가능</li></ul>
 <pre><code class="language-java">// ForSample.java (예제 3-1) → 1+2+3+4+5+6+7+8+9+10=55
-public class 연습 {
-    public static void main(String[] args) {
-        int sum = 0;
-        for (int i = 1; i &lt;= 10; i++) {
-            sum += i;
-            System.out.print(i);
-            if (i &lt; 10) System.out.print("+");
-            else {
-                System.out.print("=");
-                System.out.print(sum);
-            }
-        }
-    }
-}</code></pre>
+public class 연습 {                               // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {    // 프로그램이 시작되는 main 메소드
+        int sum = 0;                            // 합계를 담을 변수 0 으로 시작
+        for (int i = 1; i &lt;= 10; i++) {         // i = 1 → 10 까지 1씩 증가 → 10번 반복
+            sum += i;                           // sum = sum + i → 1, 3, 6, … 55 로 누적
+            System.out.print(i);                // 지금 i 를 줄바꿈 없이 출력 → 1 2 3 … 이 붙어서 나옴
+            if (i &lt; 10) System.out.print("+");  // 10 보다 작으면 뒤에 + 를 붙임 → 1+2+…+9+
+            else {                              // i 가 10 일 때 (마지막)
+                System.out.print("=");          // 마지막 숫자 뒤에 = 출력
+                System.out.print(sum);          // 누적된 합계 출력 → 55 → 결과 1+2+3+4+5+6+7+8+9+10=55
+            }                                   // else 끝
+        }                                       // for 끝 → 증감식 실행 후 조건 다시 검사 (거짓이면 빠져나옴)
+    }                                           // main 끝 → 프로그램 종료
+}                                               // 클래스 끝</code></pre>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — (실습 결과) ForEx1: print 로 <code>0123456789</code> → println 으로 0~9 한 줄씩 → <code>i=1sum=1</code> … <code>i=5sum=15</code> → <code>합계 = 15</code></li></ul>
 </section>
 <section class="card">
@@ -160,33 +160,33 @@ public class 연습 {
 <tr><td>반복조건 생략</td><td>컴파일 오류</td><td>컴파일 오류</td></tr>
 </tbody></table>
 <pre><code class="language-java">// 예제 3-2 while — -1 이 입력될 때까지 평균 구하기  ·  예제 3-3 do-while — a~z 출력
-import java.util.Scanner;
+import java.util.Scanner;                       // Scanner(키보드 입력)를 쓰려고 불러옴
 
-public class 연습 {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int count = 0, n = 0;
-        double sum = 0;
-        System.out.println("정수를 입력하고 마지막에 -1을 입력하세요.");
-        n = sc.nextInt();
-        while (n != -1) {
-            sum += n;
-            count++;
-            n = sc.nextInt();
-        }
-        if (count == 0) System.out.println("입력된 수가 없습니다.");
-        else System.out.println("정수의 개수는 " + count + "개이며 평균은 " + sum / count + "입니다.");
+public class 연습 {                               // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {    // 프로그램이 시작되는 main 메소드
+        Scanner sc = new Scanner(System.in);    // 키보드(System.in)로 입력받는 Scanner 객체 sc 만들기
+        int count = 0, n = 0;                   // 입력 개수 count · 입력값 n 둘 다 0 으로 시작
+        double sum = 0;                         // 합계 (평균을 소수로 내려고 double)
+        System.out.println("정수를 입력하고 마지막에 -1을 입력하세요.");   // 안내문 출력 후 줄바꿈
+        n = sc.nextInt();                       // 첫 번째 정수 입력 → n (예: 10)
+        while (n != -1) {                       // n 이 -1 이 아닌 동안 반복 → -1 이 들어오면 끝
+            sum += n;                           // sum = sum + n → 10 → 40 → 20 → 60
+            count++;                            // 개수 1 증가 → 1 → 2 → 3 → 4
+            n = sc.nextInt();                   // 다음 정수 입력 → 30 → -20 → 40 → -1
+        }                                       // while 끝 → 조건 다시 검사 (거짓이면 빠져나옴)
+        if (count == 0) System.out.println("입력된 수가 없습니다.");   // 하나도 입력 안 하고 바로 -1 이면 → 입력된 수가 없습니다.
+        else System.out.println("정수의 개수는 " + count + "개이며 평균은 " + sum / count + "입니다.");   // 평균 = 60.0 / 4 → 15.0 → 정수의 개수는 4개이며 평균은 15.0입니다.
         // 10 30 -20 40 -1 → 정수의 개수는 4개이며 평균은 15.0입니다.
 
         // 예제 3-3 do-while — a~z 출력 → abcdefghijklmnopqrstuvwxyz
-        char c = 'a';
-        do {
-            System.out.print(c);
-            c = (char)(c + 1);
-        } while (c &lt;= 'z');
-        sc.close();
-    }
-}</code></pre>
+        char c = 'a';                           // 문자 c 를 'a' 로 시작 (내부 값 97)
+        do {                                    // do 블록을 먼저 한 번 실행하고 조건은 나중에 검사
+            System.out.print(c);                // 지금 문자 출력 (줄바꿈 없음) → a b c … 가 붙어서
+            c = (char)(c + 1);                  // c + 1 → 정수 98 → (char) 로 다시 문자 → 'b'
+        } while (c &lt;= 'z');                     // c 가 'z' 이하이면 do 로 돌아감 → z 까지 출력 후 끝 → abcdefghijklmnopqrstuvwxyz
+        sc.close();                             // 다 쓴 Scanner 닫기
+    }                                           // main 끝 → 프로그램 종료
+}                                               // 클래스 끝</code></pre>
 </section>
 <section class="card">
 <h2>5. 중첩 반복 · continue · break</h2>
@@ -195,27 +195,27 @@ public class 연습 {
 <section class="card">
 <h2>6. 배열 ★핵심</h2>
 <ul><li>배열 = 인덱스와 그에 대응하는 <b>같은 타입</b> 데이터들의 모음 · 인덱스는 <b>0부터</b>, 마지막은 <b>크기-1</b> · 자바에서 배열은 <b>객체</b></li></ul>
-<pre><code class="language-java">public class 연습 {
-    public static void main(String[] args) {
+<pre><code class="language-java">public class 연습 {                              // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {   // 프로그램이 시작되는 main 메소드
         int intArray[];                  // ① 배열 선언 (레퍼런스 변수)
         intArray = new int[10];          // ② 배열 생성
         int intArray2[] = new int[10];   // 선언 + 생성
         int intArray3[] = {0,1,2,3,4,5,6,7,8,9};   // 선언 + 초기화 (개수만큼 생성)
         // int intArray4[10];            // 컴파일 오류! 선언할 때 크기 지정 불가
         System.out.println(intArray.length + " " + intArray2[0] + " " + intArray3[9]);   // 10 · 0 (기본값) · 9 → 10 0 9
-    }
-}</code></pre>
+    }                                          // main 끝 → 프로그램 종료
+}                                              // 클래스 끝</code></pre>
 <ul><li>생성 전에는 원소 접근 불가 · 음수나 범위 밖 인덱스는 <b>실행 오류</b> · <code>배열.length</code> = 배열 크기</li><li>하나의 배열을 여러 레퍼런스 변수가 <b>공유</b>할 수 있다</li></ul>
 <pre><code class="language-java">// for-each 문 — 배열 원소를 차례로 꺼내 쓰기
-public class 연습 {
-    public static void main(String[] args) {
-        int[] num = {1, 2, 3, 4, 5};
-        int sum = 0;
+public class 연습 {                              // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {   // 프로그램이 시작되는 main 메소드
+        int[] num = {1, 2, 3, 4, 5};           // 정수 배열 5칸을 1~5 로 만들기 (num[0]=1 … num[4]=5)
+        int sum = 0;                           // 합계 0 으로 시작
         for (int i : num)      // i 는 num[0] ~ num[4] 로 차례대로
-            sum += i;
+            sum += i;                          // sum = sum + i → 1 → 3 → 6 → 10 → 15
         System.out.println("합은" + sum);   // sum = 1+2+3+4+5 → 15 → "합은" + 15 → 합은15
-    }
-}</code></pre>
+    }                                          // main 끝 → 프로그램 종료
+}                                              // 클래스 끝</code></pre>
 <ul><li>2차원 배열 <code>new int[2][5]</code> · <code>i.length</code> = <b>행</b> 개수 · <code>i[n].length</code> = n번째 행의 <b>열</b> 개수</li><li>비정방형 배열: 행마다 열 개수가 다름 → <code>new int[4][]</code> 후 <code>intArray[0] = new int[3];</code> 처럼 행별로 생성</li><li>메소드가 배열을 리턴: <code>static int[] makeArray()</code> — 리턴 타입에 <b>크기를 쓰지 않음</b></li><li>예제 결과: 3-7 제일 큰 수 100 · 3-8 평균 4.6 · 3-10 4년 평점 평균 3.725 · 3-11 비정방형 <code>10 11 12 / 20 21 / 30 31 32 / 40 41</code> · 3-12 <code>0 1 2 3</code></li></ul>
 </section>
 <section class="card">
@@ -225,23 +225,23 @@ public class 연습 {
 <section class="card">
 <h2>8. 예외 처리 ★시험단골</h2>
 <ul><li><b>컴파일 오류</b> = 문법 오류(컴파일할 때 발견) / <b>예외(Exception)</b> = <b>실행 중</b> 발생한 오류 → 처리하지 않으면 프로그램 <b>강제 종료</b></li></ul>
-<pre><code class="language-java">public class 연습 {
-    public static void main(String[] args) {
-        try {
+<pre><code class="language-java">public class 연습 {                               // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {    // 프로그램이 시작되는 main 메소드
+        try {                                   // 예외가 날 수 있는 코드를 try 로 감쌈
             // 예외가 발생할 가능성이 있는 실행문
             int i = 10 / 0;                       // 0 으로 나눔 → ArithmeticException 발생
             System.out.println(i);                // 위에서 예외 → 실행 안 됨
-        }
+        }                                       // try 끝
         catch (ArithmeticException e) {           // catch (처리할예외타입 e)
             // 예외 처리문
-            System.out.println("0으로 나눌 수 없습니다.");
-        }
-        finally {
+            System.out.println("0으로 나눌 수 없습니다.");   // 예외가 잡히면 이 줄 실행 → 0으로 나눌 수 없습니다.
+        }                                       // catch 끝
+        finally {                               // 예외가 나든 안 나든 마지막에 꼭 실행
             // 예외 발생 여부와 상관없이 무조건 실행 (생략 가능)
-            System.out.println("finally 실행");
-        }
-    }
-}</code></pre>
+            System.out.println("finally 실행");   // finally 실행 출력 (예외 처리 뒤에도 실행됨)
+        }                                       // finally 끝
+    }                                           // main 끝 → 프로그램 종료
+}                                               // 클래스 끝</code></pre>
 <table class="ref">
 <tbody>
 <tr><th>예외 클래스</th><th>발생 상황</th><th>예제</th></tr>

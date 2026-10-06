@@ -64,19 +64,19 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <section class="card">
 <h2>3. 함수 선언 방법 3가지 ★필수암기</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — ① 선언적 함수 — <code>function btnClick(){ ... }</code> 로 선언, <code>btnClick();</code> 로 호출</li></ul>
-<pre><code class="language-javascript">function btnClick(){
+<pre><code class="language-javascript">function btnClick(){   // 선언적 함수 — function 이름(){ } (호이스팅돼서 선언 전에 불러도 됨)
     console.log("버튼을 눌렀어요");   // 할 일
-}
+}                      // btnClick 함수 끝 → 호출한 곳으로 돌아감
 btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — ② 표현적 함수(익명 함수) — 변수에 함수를 대입</li></ul>
-<pre><code class="language-javascript">let btnClick = function(){
+<pre><code class="language-javascript">let btnClick = function(){   // 익명 함수를 변수에 담음 (함수 표현식 — 선언 뒤에만 부를 수 있음)
     console.log("버튼을 눌렀어요");   // 할 일
-};
+};                           // btnClick 함수 끝 → 호출한 곳으로 돌아감
 btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — ③ 화살표 함수 — function 키워드를 화살표 <code>=&gt;</code> 로 축약</li></ul>
-<pre><code class="language-javascript">let btnClick = () =&gt; {
+<pre><code class="language-javascript">let btnClick = () =&gt; {   // 화살표 함수 — function 대신 =&gt; (변수에 담아 씀)
     console.log("버튼을 눌렀어요");   // 할 일
-};
+};                       // btnClick 함수 끝 → 호출한 곳으로 돌아감
 btnClick();   // 호출 → 버튼을 눌렀어요</code></pre>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 함수도 데이터(값)처럼 변수에 담아 넘겨줄 수 있다 (일급 객체)</li></ul>
 </section>

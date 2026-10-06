@@ -110,40 +110,40 @@ if __name__ == &quot;__main__&quot;:
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
     <pre><code>def get_grade(score: int):                 # 점수(int 타입 힌트)를 받아 학점 문자열 반환
-    match str(score).zfill(2)[0]:          # 점수를 2자리 문자열로 만든 뒤 &#x27;맨 앞 자리&#x27;로 분기
-        case &quot;9&quot;:
-            return &quot;A+&quot;
-        case &quot;8&quot;:
-            return &quot;A&quot;
-        case &quot;7&quot;:
-            return &quot;B+&quot;
-        case &quot;6&quot;:
-            return &quot;B&quot;
-        case &quot;5&quot;:
-            return &quot;C+&quot;
-        case &quot;4&quot;:
-            return &quot;C&quot;
-        case &quot;1&quot; if score == 100:
-            return &quot;A+&quot;
-        case _:
-            return &quot;F&quot;
+    match str(score).zfill(2)[0]:          # 점수를 2자리 문자열로 만든 뒤 '맨 앞 자리'로 분기
+        case "9":                               # 앞자리 9 → 90 ~ 99
+            return "A+"                         # A+ 를 돌려줌
+        case "8":                               # 80 ~ 89
+            return "A"                          # A
+        case "7":                               # 70 ~ 79
+            return "B+"                         # B+
+        case "6":                               # 60 ~ 69
+            return "B"                          # B
+        case "5":                               # 50 ~ 59
+            return "C+"                         # C+
+        case "4":                               # 40 ~ 49
+            return "C"                          # C
+        case "1" if score == 100:               # 앞자리 1 은 100 일 때만 ("100" 의 첫 글자)
+            return "A+"                         # 100 → A+
+        case _:                                 # 그 밖 (0 ~ 39 · 한 자리 수는 zfill 로 "05" → '0')
+            return "F"                          # F
 
 
-def main():
-    while True:
-        score = input(&quot;점수를 입력하세요: &quot;)
-        if score.isdigit():
-            score = int(score)
-            if 0 &lt;= score &lt;= 100:
-                print(f&quot;당신의 학점은 {get_grade(score)} 입니다.&quot;)
-            else:
-                print(&quot;잘못된 점수입니다. 0에서 100 사이의 값을 입력해주세요.&quot;)
-        else:
-            print(&quot;유효하지 않은 입력입니다. 숫자를 입력해주세요.&quot;)
+def main():                                     # 프로그램 본체
+    while True:                                 # 올바른 점수가 들어올 때까지 계속 반복
+        score = input("점수를 입력하세요: ")            # 입력은 항상 문자열 (예: "85")
+        if score.isdigit():                     # 숫자로만 이루어졌으면
+            score = int(score)                  # 정수로 바꿈 → 85
+            if 0 &lt;= score &lt;= 100:               # 0 이상 100 이하면
+                print(f"당신의 학점은 {get_grade(score)} 입니다.")   # 예: 85 → 당신의 학점은 A 입니다.
+            else:                               # 범위 밖이면
+                print("잘못된 점수입니다. 0에서 100 사이의 값을 입력해주세요.")   # 범위 안내
+        else:                                   # 숫자가 아니면 (예: abc · -5)
+            print("유효하지 않은 입력입니다. 숫자를 입력해주세요.") # 숫자 입력 안내
 
 
-if __name__ == &quot;__main__&quot;:
-    main()</code></pre>
+if __name__ == "__main__":                      # 이 파일을 직접 실행했을 때만 (다른 파일에서 import 하면 실행 안 함)
+    main()                                      # main() 실행</code></pre>
     <div class="tip">채점은 get_grade 함수만 호출합니다(입력 루프는 실행 안 함). 0~100 전 구간을 검사해요.</div>
   </details>
 </section>
@@ -186,17 +186,17 @@ print(&quot;각 단어의 길이:&quot;)
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code>def calculate_word_lengths(text):
-    words = text.split()
-    return list(map(len, words))
+    <pre><code>def calculate_word_lengths(text):               # 문장을 받아 단어마다 글자 수 목록을 돌려주는 함수
+    words = text.split()                        # 공백 기준으로 단어 나누기 → ['Your', 'submitted', …]
+    return list(map(len, words))                # 단어마다 len 적용 → [4, 9, …] 리스트로
 
 
-input_text = input(&quot;문자열을 입력하세요: &quot;)
-word_lengths = calculate_word_lengths(input_text)
+input_text = input("문자열을 입력하세요: ")              # 문장 입력 → input_text
+word_lengths = calculate_word_lengths(input_text)   # 함수 호출 → 단어별 글자 수 리스트
 
-print(&quot;각 단어의 길이:&quot;)
-for word, length in zip(input_text.split(), word_lengths):
-    print(f&quot;{word}: {length}글자&quot;)</code></pre>
+print("각 단어의 길이:")                              # 제목 출력
+for word, length in zip(input_text.split(), word_lengths):   # 단어와 글자 수를 짝지어 하나씩 꺼냄
+    print(f"{word}: {length}글자")                # 예: Your: 4글자 / submitted: 9글자 …</code></pre>
     <div class="tip">채점은 위 예시 문자열을 입력으로 넣고 출력이 정답과 같은지 비교합니다.</div>
   </details>
 </section>
@@ -229,39 +229,39 @@ import random
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code>import turtle as t
-import random
+    <pre><code>import turtle as t                              # 거북이 그래픽 모듈을 t 라는 이름으로
+import random                                   # 난수 모듈
 
-color = [&quot;red&quot;, &quot;orange&quot;, &quot;yellow&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;magenta&quot;]
+color = ["red", "orange", "yellow", "green", "blue", "magenta"]   # 사각형 색 6가지
 
-while True:
-    count = int(input(&quot;몇개?(1~6범위 입력)&quot;))
-    if 1 &lt;= count &lt;= 6:
-        print(&quot;정상범위 입니다. 프로그램을 실행합니다.&quot;)
-        break
-    else:
-        print(&quot;비정상범위 입니다. 다시 입력 부탁드립니다.&quot;)
-        continue
+while True:                                     # 올바른 개수가 들어올 때까지 반복
+    count = int(input("몇개?(1~6범위 입력)"))         # 입력을 정수로 → count
+    if 1 &lt;= count &lt;= 6:                         # 1 ~ 6 이면
+        print("정상범위 입니다. 프로그램을 실행합니다.")         # 정상 안내
+        break                                   # 반복 탈출
+    else:                                       # 범위 밖이면
+        print("비정상범위 입니다. 다시 입력 부탁드립니다.")       # 다시 입력 안내
+        continue                                # 반복 처음으로 (없어도 같음)
 
-t.shape(&quot;turtle&quot;)
-t.setup(600, 600)
-t.speed(3)
+t.shape("turtle")                               # 커서를 거북이 모양으로
+t.setup(600, 600)                               # 창 크기 600 × 600
+t.speed(3)                                      # 그리는 속도 3 (1 느림 ~ 10 빠름)
 
-for i in range(count):
-    x = random.randint(-200, 200)
-    y = random.randint(-200, 200)
-    t.pu()
-    t.goto(x, y)
-    t.pd()
+for i in range(count):                          # count 번 반복 → i = 0, 1, …
+    x = random.randint(-200, 200)               # 가로 위치 -200 ~ 200 무작위
+    y = random.randint(-200, 200)               # 세로 위치 -200 ~ 200 무작위
+    t.pu()                                      # 펜 들기 (이동할 때 선을 안 그림)
+    t.goto(x, y)                                # (x, y) 로 이동
+    t.pd()                                      # 펜 내리기 (다시 그림)
 
-    t.fillcolor(color[i])
-    t.begin_fill()
-    for _ in range(4):
-        t.forward(100)
-        t.left(90)
-    t.end_fill()
+    t.fillcolor(color[i])                       # 채울 색 = 목록의 i 번째 색
+    t.begin_fill()                              # 채우기 시작
+    for _ in range(4):                          # 4번 반복 → 정사각형
+        t.forward(100)                          # 앞으로 100 이동 (한 변)
+        t.left(90)                              # 왼쪽으로 90도 회전
+    t.end_fill()                                # 채우기 끝 → 사각형 안이 색으로 칠해짐
 
-t.done()</code></pre>
+t.done()                                        # 창을 닫을 때까지 유지</code></pre>
     <div class="tip">⚠️ 브라우저에선 그래픽 창을 못 띄웁니다. <b>가상 실행</b>으로 '도형 개수·forward(100)·색칠' 동작을 검사해 채점합니다. (시험지는 ‘별’이지만 답지가 사각형이라 사각형 기준)</div>
   </details>
 </section>
@@ -310,39 +310,39 @@ if __name__ == &quot;__main__&quot;:
     <pre class="py-output"></pre>
   </div>
   <details class="akey"><summary>💡 정답 코드 보기</summary>
-    <pre><code>import random
+    <pre><code>import random                                   # 난수 모듈
 
-def student_count():
-    while True:
-        try:
-            a = input(&quot;학생수를 입력하세요: &quot;)
-            if a == &quot;x&quot; or a == &quot;X&quot;:
-                print(&quot;프로그램 종료.&quot;)
-                break
-            input_count = int(a)
-            if input_count &lt; 1 or input_count &gt; 10:
-                print(&quot;범위를 벗어났습니다. 올바른 값을 입력하세요.&quot;)
-            else:
-                return input_count
-        except Exception as e:
-            print(&quot;숫자가 아닙니다. 올바른 값을 입력하세요.&quot;)
-
-
-def locker_num(count):
-    return random.sample(range(10, 100), count)
+def student_count():                            # 학생 수를 올바르게 받을 때까지 묻는 함수
+    while True:                                 # 계속 반복
+        try:                                    # int() 변환 오류를 잡기 위해 try
+            a = input("학생수를 입력하세요: ")           # 입력 → a (문자열)
+            if a == "x" or a == "X":            # x · X 이면 종료
+                print("프로그램 종료.")               # 종료 안내
+                break                           # 반복 탈출 → 함수가 None 을 돌려줌
+            input_count = int(a)                # 정수로 변환 (숫자가 아니면 except 로)
+            if input_count &lt; 1 or input_count &gt; 10:   # 1 ~ 10 밖이면
+                print("범위를 벗어났습니다. 올바른 값을 입력하세요.")   # 범위 안내
+            else:                               # 1 ~ 10 이면
+                return input_count              # 학생 수를 돌려주고 함수 끝
+        except Exception as e:                  # 숫자로 바꿀 수 없을 때
+            print("숫자가 아닙니다. 올바른 값을 입력하세요.")    # 숫자 입력 안내
 
 
-def main():
-    print(&quot;사물함 배정을 시작합니다.&quot;)
-    count = student_count()
-    if count == None:
-        exit()
-    lockers = locker_num(count)
-    print(f&quot;{count}명에게 배정된 사물함 번호는 다음과 같습니다: {lockers}&quot;)
+def locker_num(count):                          # count 명에게 줄 사물함 번호를 뽑는 함수
+    return random.sample(range(10, 100), count) # 10 ~ 99 에서 겹치지 않게 count 개 무작위
 
 
-if __name__ == &quot;__main__&quot;:
-    main()</code></pre>
+def main():                                     # 프로그램 본체
+    print("사물함 배정을 시작합니다.")                     # 시작 안내
+    count = student_count()                     # 학생 수 받기 (x 로 끝내면 None)
+    if count == None:                           # x 로 종료했으면
+        exit()                                  # 프로그램 끝내기
+    lockers = locker_num(count)                 # 사물함 번호 뽑기 → 리스트
+    print(f"{count}명에게 배정된 사물함 번호는 다음과 같습니다: {lockers}")   # 예: 3명에게 배정된 사물함 번호는 다음과 같습니다: [42, 17, 88]
+
+
+if __name__ == "__main__":                      # 직접 실행했을 때만
+    main()                                      # main() 실행</code></pre>
     <div class="tip">채점은 학생 수 <b>10</b>을 입력으로 넣고, 두 자리 번호 10개가 중복 없이 출력되는지 확인합니다.</div>
   </details>
 </section>

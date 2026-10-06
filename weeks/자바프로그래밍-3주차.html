@@ -64,13 +64,13 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <section class="card">
 <h2>3. 타입 변환 ★시험단골</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 자동 형변환: 작은 타입 → 큰 타입 (컴파일러가 자동)</li><li><span class="wk-tag star">⭐ 강조</span> — 강제 형변환(캐스팅): 큰 타입 → 작은 타입, ()로 지정, 값 손실 우려 — 예 <code>(int)2.9</code> → 2</li></ul>
-<pre><code class="language-java">public class 연습 {
-    public static void main(String[] args) {
+<pre><code class="language-java">public class 연습 {                              // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {   // 프로그램이 시작되는 main 메소드
         System.out.println((int)2.9 + 1.8);      // (int)2.9 → 2 (소수점 버림) → 2 + 1.8 → 3.8
         System.out.println((int)(2.9 + 1.8));    // 괄호 먼저 2.9 + 1.8 → 4.7 → (int)4.7 → 4
         System.out.println((int)2.9 + (int)1.8); // (int)2.9 → 2 · (int)1.8 → 1 → 2 + 1 → 3
-    }
-}</code></pre>
+    }                                          // main 끝 → 프로그램 종료
+}                                              // 클래스 끝</code></pre>
 </section>
 <section class="card">
 <h2>4. 키 입력 (Scanner)</h2>
@@ -83,20 +83,20 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <section class="card">
 <h2>6. 조건문 ★핵심</h2>
 <ul><li>단순 if / if-else / 다중 if-else(else if) / 중첩 if</li><li><span class="wk-tag star">⭐ 강조</span> — switch 문: case 값과 비교, break로 탈출, 없으면 다음 case로 계속(fall-through), default 생략가능</li><li><span class="wk-tag note">✍️ 필기</span> — case 값은 문자·정수·문자열 리터럴만 가능(실수·변수·수식 불가)</li></ul>
-<pre><code class="language-java">public class 연습 {
-    public static void main(String[] args) {
-        int score = 85;
-        char grade;
+<pre><code class="language-java">public class 연습 {                              // 클래스 시작 — 파일 이름은 연습.java (public 클래스 이름과 같아야 함)
+    public static void main(String[] args) {   // 프로그램이 시작되는 main 메소드
+        int score = 85;                        // 점수 85
+        char grade;                            // 학점을 담을 문자 변수 (아래 switch 에서 정해짐)
         switch (score/10) {             // 85 / 10 → 8 (정수 나눗셈)
-          case 10: case 9: grade='A'; break;
-          case 8: grade='B'; break;
-          case 7: grade='C'; break;
-          case 6: grade='D'; break;
-          default: grade='F';
-        }
+          case 10: case 9: grade='A'; break;   // 10 · 9 → A 를 넣고 break 로 switch 탈출
+          case 8: grade='B'; break;            // 8 → B
+          case 7: grade='C'; break;            // 7 → C
+          case 6: grade='D'; break;            // 6 → D
+          default: grade='F';                  // 그 밖(0~5) → F
+        }                                      // switch 끝
         System.out.println("학점은 " + grade);   // 8 → case 8 → B → 학점은 B
-    }
-}</code></pre>
+    }                                          // main 끝 → 프로그램 종료
+}                                              // 클래스 끝</code></pre>
 </section>
 <section class="card">
 <h2>✍️ PDF 필기 (Apple Pencil · 2장) — 10/1 보충</h2>

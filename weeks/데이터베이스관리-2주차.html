@@ -64,17 +64,17 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <section class="card">
 <h2>3. MySQL 실습 4단계 ★핵심</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 1단계 데이터베이스(스키마) 생성 → 2단계 테이블 생성 → 3단계 데이터 입력 → 4단계 데이터 조회</li><li><span class="wk-tag note">✍️ 필기</span> — 주의: 들여쓰기는 Tab 말고 Spacebar 4번</li></ul>
-<pre><code class="language-sql">CREATE DATABASE testdb DEFAULT CHARACTER SET utf8mb4;
-USE testdb;
-CREATE TABLE 학생(
-  학번 int NOT NULL,
-  이름 varchar(30) NOT NULL,
-  성적 int,
-  지도교수 char(2),
-  PRIMARY KEY(학번)
-);
-insert into 학생 values('100','Kim',92,'P1');
-select * from 학생;</code></pre>
+<pre><code class="language-sql">CREATE DATABASE testdb DEFAULT CHARACTER SET utf8mb4;   -- testdb 데이터베이스 만들기 (utf8mb4 = 한글 · 이모지 저장)
+USE testdb;                                     -- 이제부터 testdb 사용
+CREATE TABLE 학생(                                -- 학생 테이블 만들기 시작
+  학번 int NOT NULL,                              -- 학번 — 정수 · 필수
+  이름 varchar(30) NOT NULL,                      -- 이름 — 최대 30자 · 필수
+  성적 int,                                       -- 성적 — 정수
+  지도교수 char(2),                                 -- 지도교수 — 문자 2자리
+  PRIMARY KEY(학번)                               -- 학번을 기본키로
+);                                              -- CREATE TABLE 끝
+insert into 학생 values('100','Kim',92,'P1');     -- 한 행 추가 → 100 · Kim · 92 · P1
+select * from 학생;                               -- 모든 열 · 모든 행 조회 → 1행</code></pre>
 <ul><li>PRIMARY KEY(기본키): 각 행을 유일하게 구분하는 열 (예: 학번, 고객번호)</li><li>GUI 입력 시: 데이터 입력 후 오른쪽 하단 <code>Apply</code> 를 눌러야 저장됨</li></ul>
 </section>
 

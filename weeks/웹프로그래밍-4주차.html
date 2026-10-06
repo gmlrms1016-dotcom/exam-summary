@@ -89,9 +89,9 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li>명시적 형변환 함수: <code>Number("10")</code> → 10 · <code>parseInt("10개")</code> → 10 (숫자로 <b>시작하는</b> 부분만, <code>parseInt("hi10개")</code> → NaN) · <code>String(20)</code> → "20"</li><li><span class="wk-tag star">⭐ 강조</span> — <code>prompt()</code> 로 받은 값은 항상 <b>문자열</b> → 그냥 더하면 <code>"3" + "4"</code> → 34, <code>Number()</code> 로 바꿔야 7</li></ul>
 <pre><code class="language-javascript">// 0915_01.html — 두 수를 입력받아 더하기
-let num1 = window.prompt("첫번째 피연산자 입력!");
-let num2 = window.prompt("두번째 피연산자 입력!");
-let resultObj = document.querySelector("#result");
+let num1 = window.prompt("첫번째 피연산자 입력!");       // 입력 창 → 입력한 값이 문자열로 들어옴 (예: "3")
+let num2 = window.prompt("두번째 피연산자 입력!");       // 두 번째 입력 (예: "4")
+let resultObj = document.querySelector("#result");   // id 가 result 인 요소를 찾아 변수에 담음
 resultObj.innerHTML = num1 + num2;                   // prompt 는 문자열을 돌려줌 → 3, 4 입력 = "3" + "4" → 문자열 연결 → "34"
 resultObj.innerHTML = Number(num1) + Number(num2);   // Number("3") → 3 · Number("4") → 4 → 3 + 4 숫자 덧셈 → 7
 resultObj.innerHTML = `결과값은 ${Number(num1) + Number(num2)}`;   // 백틱(템플릿 리터럴): ${ } 안을 먼저 계산 → 3 + 4 → 7 → "결과값은 7"</code></pre>
@@ -120,7 +120,7 @@ resultObj.innerHTML = `결과값은 ${Number(num1) + Number(num2)}`;   // 백틱
 <section class="card">
 <h2>8. 증감 연산자: 전위 vs 후위 ★시험</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <b>전위</b> <code>++num8</code>: 먼저 1 증가 → 증가된 값을 사용 / <b>후위</b> <code>num8++</code>: 현재 값을 먼저 사용 → 그다음 1 증가</li></ul>
-<pre><code class="language-javascript">let num8 = 10;
+<pre><code class="language-javascript">let num8 = 10;   // num8 = 10
 console.log(num8++);   // 후위 ++: 지금 값 10 을 먼저 출력 → 그다음 num8 = 10 + 1 = 11 → 출력 10
 console.log(++num8);   // 전위 ++: 먼저 num8 = 11 + 1 = 12 → 그 값을 출력 → 12</code></pre>
 </section>
@@ -182,10 +182,10 @@ console.log(false || false);  // 왼쪽 false(거짓) → 오른쪽 값 → fals
 </tbody></table>
 <div class="tip">같은 판단이지만 <b>&amp; |</b> 는 <b>1 · 0 (숫자)</b>, <b>&amp;&amp; ||</b> 는 <b>true · false</b> 가 나옵니다.</div>
 <h3>③ 단락 평가 — 오른쪽이 실행되는지 직접 확인</h3>
-<pre><code class="language-javascript">function right() {
-    console.log("   └ 오른쪽 right() 실행됨!");
-    return true;
-}
+<pre><code class="language-javascript">function right() {                          // 실행됐는지 눈으로 보이게 만든 함수
+    console.log("   └ 오른쪽 right() 실행됨!");   // 불리면 이 줄이 찍힘 →    └ 오른쪽 right() 실행됨!
+    return true;                            // 항상 true 를 돌려줌
+}                                           // right 함수 끝 → 호출한 곳으로 돌아감
 
 console.log("① true &amp; right()");   console.log("   결과 =", true &amp; right());   // &amp; 는 오른쪽도 항상 실행 → "실행됨!" 출력 → true &amp; true → 1 &amp; 1 → 결과 = 1
 console.log("② false &amp; right()");  console.log("   결과 =", false &amp; right());   // 왼쪽이 false 여도 오른쪽 실행 → "실행됨!" → 0 &amp; 1 → 결과 = 0
@@ -311,7 +311,7 @@ console.log(v | 0);          // "10" → 숫자 10 → 1010 | 0000 → 1010 → 
 </tbody></table>
 <h3>⑦ 수업 예제 changeVar (0915_04.html) — 입력별 모든 경우</h3>
 <pre><code class="language-javascript">// 0915_04.html — prompt 에서 받은 값 (빈칸 확인 "", 글자 입력 "안녕", 취소 null)
-let changeVar = window.prompt("추가할 제목 입력!");
+let changeVar = window.prompt("추가할 제목 입력!");   // 입력 창 → 빈칸 확인 "" · 글자 "안녕" · 취소 null 중 하나가 들어옴
 
 changeVar = changeVar == "" ? "입력없음" : changeVar;   // 수업 코드: "" == "" → true → "입력없음" / 취소 null == "" → false → null 그대로 (null 은 못 거름)
 changeVar = changeVar || "입력없음";                    // "" · null → 거짓 → 오른쪽 "입력없음" / "안녕" → 참 → 왼쪽 "안녕" 그대로
@@ -330,16 +330,16 @@ changeVar = changeVar &amp; "입력없음";                     // ❌ 양쪽을
 <section class="card">
 <h2>11. null 병합 · typeof · 삼항 연산자</h2>
 <ul><li><code>??</code> (null 병합): 왼쪽이 <b>null·undefined 일 때만</b> 오른쪽 → <code>undefined ?? 10</code> 은 10, <code>0 ?? 5</code> 는 <b>0</b> (<code>0 || 5</code> 는 5)</li><li><code>typeof</code>: 값의 타입을 문자열로 반환 → <code>typeof true</code> 는 "boolean", <code>typeof null</code> 은 "object"</li><li><span class="wk-tag note">✍️ 필기</span> — 삼항 연산자 = if 문을 짧게 줄인 연산자: <code>조건 ? 참일 때 : 거짓일 때</code> → 조건이 true 면 <b>콜론 앞</b>, false 면 <b>콜론 뒤</b></li></ul>
-<pre><code class="language-javascript">let var8 = 7;
+<pre><code class="language-javascript">let var8 = 7;                                   // 짝 · 홀을 판정할 수 7
 let res = var8 % 2 === 0 ? "짝수" : "홀수";   // 0915_03.js · 7 % 2 → 1 → 0 이 아님 → "홀수"
 console.log(res);   // 홀수
 
 // 0915_04.html — 입력이 비었으면 "입력없음" (셋 다 같은 뜻)
 let changeVar = window.prompt("추가할 제목 입력!");   // 빈칸으로 확인 → ""
-if (changeVar == "") { changeVar = "입력없음"; }
-changeVar = changeVar == "" ? "입력없음" : changeVar;
+if (changeVar == "") { changeVar = "입력없음"; }    // 빈 문자열이면 "입력없음" 으로 바꿈 (if 로)
+changeVar = changeVar == "" ? "입력없음" : changeVar;   // 같은 판정을 삼항 연산자로
 changeVar = changeVar || "입력없음";   // "" · 취소 null → 거짓 → 오른쪽 "입력없음" / 입력값 → 참 → 그대로 (취소까지 한 번에 처리)
-console.log(changeVar);</code></pre>
+console.log(changeVar);                         // "" 를 넣었다면 → 입력없음</code></pre>
 <ul><li>⚠️ 0915_04.html 은 <code>querySelector("#result")</code> 인데 태그 id 가 <code>content</code> 라서 <b>null 오류</b>가 났다 → <code>#content</code> 로 맞춰야 화면에 출력된다 (4주차 폴더 파일은 <code>#content</code> 로 고침). prompt 에서 <b>취소</b>하면 <code>null</code> 이 들어와 <code>== ""</code> 검사로는 못 거른다</li></ul>
 </section>
 <section class="card">
@@ -347,12 +347,12 @@ console.log(changeVar);</code></pre>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <b>매개변수</b> = 함수를 <b>정의</b>할 때 값을 받으려고 괄호 안에 적는 변수(<code>person</code>) / <b>인수</b> = 함수를 <b>호출</b>할 때 실제로 넘기는 값(<code>{ name: "홍길동" }</code>)</li></ul>
 <pre><code class="language-javascript">function printName(person) {     // person = 매개변수(파라미터)
     if (!person) {               // 값이 없으면(falsy) 오류 대신 안내 후 종료
-        console.log("person의 값이 없음");
-        return 0;
-    }
-    console.log(person.name);
-}
-let person = { name: "홍길동" };
+        console.log("person의 값이 없음");   // 인수가 없을 때 안내 → person의 값이 없음
+        return 0;                       // 함수를 여기서 끝냄 (아래 줄 실행 안 함)
+    }                                   // if 끝
+    console.log(person.name);           // 객체의 name 속성 출력 → 홍길동
+}                                       // printName 함수 끝 → 호출한 곳으로 돌아감
+let person = { name: "홍길동" };           // name 속성이 있는 객체를 만들어 person 에 담음
 printName(person);               // person 전달 → !person 은 false → if 건너뜀 → person.name → 홍길동
 printName();                     // 인수 없음 → person = undefined → !undefined 는 true → "person의 값이 없음" 출력 후 return</code></pre>
 </section>

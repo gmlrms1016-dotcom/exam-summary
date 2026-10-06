@@ -89,37 +89,37 @@ WHERE  조건절;     -- ② 조건에 맞는 행(레코드)만 남기고</code>
 <section class="card">
 <h2>2. [실습 6-1] 데이터 조회 — customer ★시험예상</h2>
 <pre><code class="language-sql">-- customer(cno, cname, city, point)
-CREATE TABLE customer (
-      cno        char(4)         NOT NULL   ,
-      cname     varchar(10)    NOT NULL ,
-      city         varchar(20) ,
-      point      int ,
-      PRIMARY KEY(cno)
-);
-insert into customer values('c101','홍길동','서울',500);
-insert into customer values('c102','임꺽정','인천',300);
-insert into customer values('c103','박찬호','안양',800);
-insert into customer values('c204','신동엽','과천',350);
-insert into customer values('c205','정진우','고양',400);
+CREATE TABLE customer (                         -- customer 테이블 만들기 시작
+      cno        char(4)         NOT NULL   ,   -- 고객번호 — 문자 4자리 · 필수
+      cname     varchar(10)    NOT NULL ,       -- 이름 — 최대 10자 · 필수
+      city         varchar(20) ,                -- 도시 — 최대 20자
+      point      int ,                          -- 포인트 — 정수
+      PRIMARY KEY(cno)                          -- cno 를 기본키로
+);                                              -- CREATE TABLE 끝
+insert into customer values('c101','홍길동','서울',500);   -- c101 · 홍길동 · 서울 · 500
+insert into customer values('c102','임꺽정','인천',300);   -- c102 · 임꺽정 · 인천 · 300
+insert into customer values('c103','박찬호','안양',800);   -- c103 · 박찬호 · 안양 · 800
+insert into customer values('c204','신동엽','과천',350);   -- c204 · 신동엽 · 과천 · 350
+insert into customer values('c205','정진우','고양',400);   -- c205 · 정진우 · 고양 · 400
 
 -- ✍️ 내 답
 -- 1) customer 테이블을 검색하라
-SELECT *
-FROM customer;
+SELECT *                                        -- 모든 열
+FROM customer;                                  -- customer 에서 → 5행
 
 -- 2) customer 테이블에서 cname, city 검색하라
-SELECT cname, city
-FROM customer;
+SELECT cname, city                              -- 이름 · 도시 두 열만
+FROM customer;                                  -- customer 에서 → 5행
 
 -- 3) cno가 c101 인 고객을 검색
-SELECT *
-FROM customer
-WHERE cno="c101";
+SELECT *                                        -- 모든 열
+FROM customer                                   -- customer 에서
+WHERE cno="c101";                               -- cno 가 c101 인 행만 → 홍길동 1행
 
 -- 4) customer 테이블에서 point가 400 이하인 고객을 검색하라
-SELECT *
-FROM customer
-WHERE point&lt;=400;</code></pre>
+SELECT *                                        -- 모든 열
+FROM customer                                   -- customer 에서
+WHERE point&lt;=400;                               -- point 가 400 이하 → 임꺽정 · 신동엽 · 정진우</code></pre>
 <p>4) 의 실행 결과</p>
 <table class="ref">
 <tbody style="min-width:322px;">
@@ -135,21 +135,21 @@ WHERE point&lt;=400;</code></pre>
 <pre><code class="language-sql">-- 직원(이름, 주소, 전화번호, 연봉)   ← 데이터 6건 (우태하 1000 ~ 고진수 6000)
 -- ✍️ 내 답
 -- 1) 직원 테이블을 검색하라
-select * from 직원;
+select * from 직원;   -- 직원 6행 모두 조회
 
 -- 2) 직원 테이블에서 이름,전화번호 검색
-SELECT 이름,전화번호
-FROM 직원;
+SELECT 이름,전화번호      -- 이름 · 전화번호 두 열만
+FROM 직원;            -- 직원 테이블에서 → 6행
 
 -- 3) 이름이 우태하인 직원을 검색
-SELECT *
-FROM 직원
-WHERE 이름="우태하";
+SELECT *            -- 모든 열
+FROM 직원             -- 직원 테이블에서
+WHERE 이름="우태하";     -- 이름이 우태하인 행만 → 1행
 
 -- 4) 직원 테이블에서 연봉이 4000 이하인 직원을 검색하라
-SELECT *
-FROM 직원
-WHERE 연봉&lt;=4000;</code></pre>
+SELECT *            -- 모든 열
+FROM 직원             -- 직원 테이블에서
+WHERE 연봉&lt;=4000;     -- 연봉 4000 이하 → 우태하 · 김선우 · 이영지 · 유희정 (4행)</code></pre>
 <p>4) 의 실행 결과 (행 순서는 기본키 순)</p>
 <table class="ref">
 <tbody style="min-width:439px;">
@@ -171,43 +171,43 @@ WHERE 연봉&lt;=4000;</code></pre>
 <tr><td><b>DELETE</b> 삭제</td><td><code>DELETE FROM 테이블명 WHERE 필드명 = 값;</code></td><td><b>레코드(행) 통째로</b></td></tr>
 </tbody></table>
 <pre><code class="language-sql">-- 주소록(이름, 전화번호, 주소, 생일)
-DROP TABLE if exists 주소록;
-CREATE TABLE 주소록(
-    이름        char(10)           NOT NULL ,
-    전화번호  char(13) ,
-    주소        varchar(10) ,
-    생일        varchar(11) ,
-    PRIMARY KEY(이름)
-);
-INSERT INTO 주소록 VALUES('홍길동','010-1234-5678','서울','3월 15일');
-INSERT INTO 주소록 VALUES('이몽룡','010-3354-5643','부산','12월 14일');
-INSERT INTO 주소록 VALUES('최용만','321-2345','대전','5월 8일');
+DROP TABLE if exists 주소록;                       -- 주소록 테이블이 있으면 지움
+CREATE TABLE 주소록(                               -- 주소록 테이블 만들기 시작
+    이름        char(10)           NOT NULL ,     -- 이름 — 고정 10자 · 필수
+    전화번호  char(13) ,                            -- 전화번호 — 13자리
+    주소        varchar(10) ,                     -- 주소 — 최대 10자
+    생일        varchar(11) ,                     -- 생일 — 최대 11자 문자
+    PRIMARY KEY(이름)                             -- 이름을 기본키로
+);                                              -- CREATE TABLE 끝
+INSERT INTO 주소록 VALUES('홍길동','010-1234-5678','서울','3월 15일');   -- 홍길동 · 서울
+INSERT INTO 주소록 VALUES('이몽룡','010-3354-5643','부산','12월 14일');   -- 이몽룡 · 부산
+INSERT INTO 주소록 VALUES('최용만','321-2345','대전','5월 8일');   -- 최용만 · 대전
 
 -- (MySQL) safe mode 해제
-SET SQL_SAFE_UPDATES = 0;
+SET SQL_SAFE_UPDATES = 0;                       -- 키 열 조건 없이 UPDATE · DELETE 해도 막지 않게 (MySQL Workbench 설정)
 
 -- [지시사항] 이건우의 데이터를 입력하시오 (널 값)
-INSERT INTO 주소록 VALUES('이건우','010-2132-2345', NULL, NULL);
+INSERT INTO 주소록 VALUES('이건우','010-2132-2345', NULL, NULL);   -- 주소 · 생일 자리에 NULL 직접
 -- ✍️ 둘다 같은말 (둘 중 하나만!)
-INSERT INTO 주소록(이름,전화번호) VALUES('이건우','010-2132-2345');</code></pre>
+INSERT INTO 주소록(이름,전화번호) VALUES('이건우','010-2132-2345');   -- 넣을 열만 → 나머지 NULL (위와 같은 결과 · 둘 다 하면 기본키 중복 오류)</code></pre>
 <div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — ① “둘다 같은말” = 결과가 같은 <b>두 가지 방법</b>이라 <b>하나만</b> 실행해요. 둘 다 실행하면 기본키(이름) '이건우'가 겹쳐 <b>Error 1062 Duplicate entry</b> ② 필기의 <code>INSERT INTO주소록(…)</code> 은 <b>띄어쓰기가 빠져 Error 1064</b>(문법 오류) → <code>INSERT INTO 주소록(…)</code></div>
 <pre><code class="language-sql">-- ✍️ 내 답
 -- 1. 홍길동의 전화번호를 '010-3245-4368' 로 수정하라
-UPDATE 주소록
-SET 전화번호="010-3245-4368"
-WHERE 이름='홍길동';
+UPDATE 주소록                 -- 주소록의 값을 고친다
+SET 전화번호="010-3245-4368"   -- 전화번호를 새 값으로
+WHERE 이름='홍길동';            -- 이름이 홍길동인 행만 (WHERE 가 없으면 모든 행이 바뀜)
 
 -- 2. 이건우의 주소는 '서울', 생일은 '8월 23일' 로 수정하라
-UPDATE 주소록
+UPDATE 주소록                 -- 주소록의 값을 고친다
 SET 주소='서울',생일='8월23일'          -- 여러 필드는 쉼표로
-WHERE 이름='이건우';
+WHERE 이름='이건우';            -- 이름이 이건우인 행만
 
 -- 3. 최용만의 레코드를 삭제하라
-DELETE
-FROM 주소록
+DELETE                     -- 행을 지운다
+FROM 주소록                   -- 주소록에서 (조건은 다음 줄 WHERE)
 WHERE 이름='최용만';  -- ✍️ 최용만의 이름말고 전화번호,주소 같은것을 WHERE절에 적어도 이상없이 작동함
 
-SELECT * FROM 주소록;</code></pre>
+SELECT * FROM 주소록;         -- 확인 → 최용만은 없고 홍길동 · 이건우 값이 바뀐 결과</code></pre>
 <p>1 · 2 · 3 실행 후 결과</p>
 <table class="ref">
 <tbody style="min-width:413px;">
@@ -253,30 +253,30 @@ SELECT * FROM 주소록;</code></pre>
 <pre><code class="language-sql">-- 부서(부서코드, 부서명)          ← 부모 테이블
 -- 사원(사원번호, 이름, 부서코드)    ← 자식 테이블 (부서코드 = 외래키)
 drop table 사원;      -- 삭제는 자식 먼저
-drop table 부서;
+drop table 부서;                                  -- 그다음 부모(부서) 삭제
 
 CREATE TABLE 부서 (                -- 생성은 부모 먼저
-        부서코드 char(2)     NOT NULL ,
-        부서명    varchar(10) ,
-        PRIMARY KEY(부서코드)
-);
-CREATE TABLE 사원 (
-        사원번호 char(4)     NOT NULL ,
-        이름     varchar(12) ,
-        부서코드 char(2) ,
-        PRIMARY KEY(사원번호) ,
-        FOREIGN KEY (부서코드) REFERENCES 부서(부서코드)
-);
-insert into 부서 values('AA','총무부');
-insert into 부서 values('BB','영업부');
-insert into 부서 values('CC','기획부');
+        부서코드 char(2)     NOT NULL ,             -- 부서코드 — 문자 2자리 · 필수
+        부서명    varchar(10) ,                    -- 부서명 — 최대 10자
+        PRIMARY KEY(부서코드)                       -- 부서코드를 기본키로
+);                                              -- CREATE TABLE 끝
+CREATE TABLE 사원 (                               -- 사원 테이블(자식) 만들기 시작
+        사원번호 char(4)     NOT NULL ,             -- 사원번호 — 문자 4자리 · 필수
+        이름     varchar(12) ,                    -- 이름 — 최대 12자
+        부서코드 char(2) ,                          -- 부서코드 — 부서 테이블을 가리킬 열
+        PRIMARY KEY(사원번호) ,                     -- 사원번호를 기본키로
+        FOREIGN KEY (부서코드) REFERENCES 부서(부서코드)  -- 외래키 — 부서 테이블에 있는 부서코드만 넣을 수 있음
+);                                              -- CREATE TABLE 끝
+insert into 부서 values('AA','총무부');              -- AA 총무부
+insert into 부서 values('BB','영업부');              -- BB 영업부
+insert into 부서 values('CC','기획부');              -- CC 기획부
 
-insert into 사원 values('1111','홍길동','AA');
-insert into 사원 values('2222','임꺽정','AA');
-insert into 사원 values('3333','박찬호','BB');
-insert into 사원 values('4444','선동열','BB');
-insert into 사원 values('5555','차두리','AA');
-insert into 사원 values('6666','신동엽','BB');</code></pre>
+insert into 사원 values('1111','홍길동','AA');       -- 홍길동 → AA(총무부)
+insert into 사원 values('2222','임꺽정','AA');       -- 임꺽정 → AA
+insert into 사원 values('3333','박찬호','BB');       -- 박찬호 → BB(영업부)
+insert into 사원 values('4444','선동열','BB');       -- 선동열 → BB
+insert into 사원 values('5555','차두리','AA');       -- 차두리 → AA
+insert into 사원 values('6666','신동엽','BB');       -- 신동엽 → BB</code></pre>
 <p>“다음 문법을 실행하라. 실행 가능한가? 그 이유는?” — 위에서부터 차례로 실행한 실제 결과</p>
 <table class="ref">
 <tbody style="min-width:760px;">
