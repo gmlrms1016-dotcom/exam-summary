@@ -9,6 +9,7 @@
        data-space="exact"     (선택) 칸수 문제 — 줄 안의 띄어쓰기 개수까지 채점
        data-space="strict"    (선택) 완전 일치 — 줄바꿈(\n)·빈 줄·줄 안의 띄어쓰기·마지막 줄바꿈까지 실제 출력과 같아야 정답 (줄 끝의 보이지 않는 공백만 무시)
                               oq-expect 는 "\n" + 실제 출력 + "\n" 로 적는다 (출력이 println 으로 끝나면 끝에 빈 줄이 하나 더 생김)
+       data-endnl="ignore"    (선택, strict 와 같이) 맨 끝 줄바꿈(Enter)은 채점 안 함 — 실제시험: 마지막 출력은 print 라 끝에 Enter 를 칠 일이 없음
        data-table             (선택) SQL 결과 표 문제 — oq-expect 는 "열1 | 열2" 머리글 줄 + 행마다 한 줄 (칸은 " | " 로 구분, 널 값은 NULL)
                               답은 칸을 띄어쓰기 · | · 탭 아무거나로 구분 · +---+ 테두리 줄은 무시
                               첫 줄(열 이름)은 그대로, 그다음 행들은 순서를 채점하지 않음 (투플의 무순서성 — ORDER BY 는 안 배움)
@@ -101,6 +102,7 @@
         if (!expEl) return;
         var raw = expEl.textContent.replace(/^\n/, "").replace(/\n$/, "");
         var strict = p.dataset.space === "strict";
+        var endFree = strict && p.dataset.endnl === "ignore";
         var exact = p.dataset.space === "exact";
         var table = p.hasAttribute("data-table");
         var expect = lines(raw, exact, table);
@@ -124,7 +126,8 @@
         ta.setAttribute("autocomplete", "off");
         ta.setAttribute("autocapitalize", "off");
         ta.setAttribute("aria-label", title + " — 실행 결과 입력");
-        ta.placeholder = strict ? "실행 결과를 그대로 입력 — 줄바꿈(\\n · println)마다 Enter, 마지막 줄바꿈까지 · 줄 안의 띄어쓰기 개수까지 정확히 채점해요 (정답은 하나)"
+        ta.placeholder = endFree ? "실행 결과를 그대로 입력 — 줄바꿈(\\n · println)마다 Enter · 줄 안의 띄어쓰기 개수까지 정확히 채점해요 (맨 끝 Enter 는 상관없음 · 정답은 하나)"
+                       : strict ? "실행 결과를 그대로 입력 — 줄바꿈(\\n · println)마다 Enter, 마지막 줄바꿈까지 · 줄 안의 띄어쓰기 개수까지 정확히 채점해요 (정답은 하나)"
                        : table ? "결과 표를 입력 — 첫 줄은 열 이름, 그다음 한 줄에 한 행 · 칸은 띄어쓰기나 | 로 구분 · 널 값은 NULL (행 순서는 채점 안 함)"
                        : exact ? "실행 결과를 그대로 입력 — 줄마다 Enter · 이 문제는 띄어쓰기 개수까지 채점해요"
                                : "실행 결과를 그대로 입력 — 줄마다 Enter (띄어쓰기 개수·빈 줄은 채점에서 무시)";
@@ -183,6 +186,7 @@
         function checkStrict() {
             var rtrim = function (t) { return t.split("\n").map(function (l) { return l.replace(/[ \t]+$/, ""); }).join("\n"); };
             var mineRaw = rtrim(ta.value.replace(/\r/g, "")), rawT = rtrim(raw);
+            if (endFree) { mineRaw = mineRaw.replace(/\n+$/, ""); rawT = rawT.replace(/\n+$/, ""); }
             if (!mineRaw.trim()) { box.innerHTML = '<p class="oq-sum no">실행 결과를 적고 확인을 누르세요.</p>'; return; }
             var all = mineRaw === rawT;
             var want = rawT.split("\n"), got = mineRaw.split("\n"), html = [], good = 0;

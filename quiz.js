@@ -4,6 +4,7 @@
    - 주관식 .quiz-item : 답 입력 후 확인 / Enter 로 채점 · 정답 보기
        data-answers="정답|다른 표현"  data-full="정답 보기에 표시할 답(선택)"  data-explain="해설(선택)"
        채점 정규화: 소문자 + 공백 제거 + 괄호·따옴표 제거
+       data-case="strict"  (선택) 대소문자는 그대로 채점 (자바처럼 대소문자를 구분하는 답 — String ≠ string)
    - #quiz-score 가 있으면 퀴즈 섹션(#quiz)의 맞힌 개수를 표시
    - 시험 종료(?done=1, schedule.js 가 자동으로 붙임)면 모든 정답·해설 공개
    사용: 과목 페이지 맨 끝에 <script src="quiz.js"></script> 다음 <script src="review.js"></script>
@@ -31,8 +32,10 @@
     st.textContent = css;
     document.head.appendChild(st);
 
-    function norm(s) {
-        return (s || "").toLowerCase().replace(/\s+/g, "").replace(/[()]/g, "").replace(/["'“”‘’]/g, "");
+    function norm(s, keepCase) {
+        s = s || "";
+        if (!keepCase) s = s.toLowerCase();
+        return s.replace(/\s+/g, "").replace(/[()]/g, "").replace(/["'“”‘’]/g, "");
     }
     function esc(s) {
         return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -81,7 +84,8 @@
         var shown = item.dataset.full || answers[0];
         var explain = item.dataset.explain ? '<span class="ans">' + esc(item.dataset.explain) + "</span>" : "";
         function check() {
-            var ok = answers.some(function (a) { return norm(a) === norm(input.value); });
+            var keep = item.dataset.case === "strict";
+            var ok = answers.some(function (a) { return norm(a, keep) === norm(input.value, keep); });
             fb.className = "quiz-feedback " + (ok ? "ok" : "no");
             fb.innerHTML = ok ? "⭕ 정답입니다!" + explain : "❌ 다시 생각해 보세요.";
             if (ok) { item.dataset.solved = "1"; item.dataset.wrong = ""; }

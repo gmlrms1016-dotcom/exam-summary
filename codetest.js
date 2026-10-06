@@ -88,8 +88,39 @@
 
     // ---- 실행기 ----
     function prepJava(src) {
-        return src.replace(/^\s*package\s+[\w.]+\s*;\s*$/m, "")                       // 패키지 줄 제거
-                  .replace(/\bpublic\s+((?:final\s+|abstract\s+)*)class\s+/g, "$1class ");  // 파일 이름 제약 없애기
+        return asciiNames(src.replace(/^\s*package\s+[\w.]+\s*;\s*$/m, "")                       // 패키지 줄 제거
+                  .replace(/\bpublic\s+((?:final\s+|abstract\s+)*)class\s+/g, "$1class "));  // 파일 이름 제약 없애기
+    }
+    // 채점 서버는 한글 이름의 .class 파일을 못 만듦 (class 연습 → 컴파일 오류) → 한글이 들어간 클래스 이름만 영어로 바꿔서 보냄
+    // 문자열 · 문자 · 주석 안은 그대로 (출력이 안 바뀜) · 결과 메시지는 back() 으로 다시 한글 이름으로
+    var ID_CH = /[\w$\u0080-￿]/;
+    function asciiNames(src) {
+        var names = [], m, re = /\b(?:class|interface|enum|record)\s+([\w$\u0080-￿]+)/g;
+        while ((m = re.exec(src))) if (/[^\x00-\x7f]/.test(m[1]) && names.indexOf(m[1]) < 0) names.push(m[1]);
+        var alias = names.map(function (nm) { return "K" + nm.split("").map(function (ch) { return ch.charCodeAt(0).toString(16); }).join("_"); });
+        var back = function (t) { names.forEach(function (nm, k) { t = String(t).split(alias[k]).join(nm); }); return t; };
+        if (!names.length) return { code: src, back: back };
+        var out = "", code = "", i = 0, n = src.length, e;
+        function swap() {                                    // 코드 부분에서 이름 전체가 일치하는 곳만 바꿈 (연습2 · 내연습 은 그대로)
+            names.forEach(function (nm, k) {
+                var parts = code.split(nm), r = parts[0];
+                for (var p = 1; p < parts.length; p++) r += (ID_CH.test(r.slice(-1)) || ID_CH.test(parts[p].charAt(0)) ? nm : alias[k]) + parts[p];
+                code = r;
+            });
+            out += code; code = "";
+        }
+        while (i < n) {
+            var c = src.charAt(i), two = src.substr(i, 2);
+            if (two === "//") e = src.indexOf("\n", i);
+            else if (two === "/*") { e = src.indexOf("*/", i + 2); if (e >= 0) e += 2; }
+            else if (src.substr(i, 3) === '"""') { e = src.indexOf('"""', i + 3); if (e >= 0) e += 3; }
+            else if (c === '"' || c === "'") { e = i + 1; while (e < n && src.charAt(e) !== c && src.charAt(e) !== "\n") e += src.charAt(e) === "\\" ? 2 : 1; e = Math.min(e + 1, n); }
+            else { code += c; i++; continue; }
+            if (e < 0) e = n;
+            swap(); out += src.slice(i, e); i = e;
+        }
+        swap();
+        return { code: out, back: back };
     }
     var BUSY = /OCI runtime error|Resource temporarily unavailable|too many|timed? ?out/i;
     var queue = Promise.resolve();                 // 채점 서버에는 한 번에 요청 하나씩만 보낸다
@@ -110,15 +141,16 @@
         });
     }
     function runRemoteOnce(lang, code, stdin) {
-        var body = { compiler: COMPILER[lang], code: lang === "java" ? prepJava(code) : code, stdin: stdin };
+        var jv = lang === "java" ? prepJava(code) : { code: code, back: String };
+        var body = { compiler: COMPILER[lang], code: jv.code, stdin: stdin };
         if (lang === "java") body["runtime-option-raw"] = "-Dstdout.encoding=UTF-8";
         return fetch(WANDBOX, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
             .then(function (r) { if (!r.ok) throw new Error("채점 서버 응답 " + r.status); return r.json(); })
             .then(function (j) {
-                var compileErr = (j.compiler_error || "").trim();
+                var compileErr = jv.back((j.compiler_error || "").trim());
                 var failed = String(j.status) !== "0";
                 if (compileErr && !j.program_output && failed) return { error: "컴파일 오류", detail: compileErr };
-                return { out: j.program_output || "", runtimeErr: failed ? ((j.program_error || "") + (j.signal ? "\n" + j.signal : "")).trim() : "" };
+                return { out: jv.back(j.program_output || ""), runtimeErr: failed ? jv.back(((j.program_error || "") + (j.signal ? "\n" + j.signal : "")).trim()) : "" };
             });
     }
     var WORKER_SRC = [
@@ -620,6 +652,7 @@
         var answerEl = p.querySelector(".ct-answer");
         var answer = answerEl ? answerEl.textContent.replace(/^\n/, "") : "";
         var ta = p.querySelector(".ct-code");
+        var start = ta.defaultValue;                             // 미리 써 둔 뼈대 (import · class · main) — 지우기 하면 여기로 돌아감
         var btnRun = p.querySelector(".ct-run"), btnShow = p.querySelector(".ct-show"), btnClear = p.querySelector(".ct-clear");
         var box = p.querySelector(".ct-result");
         var key = "ct:" + location.pathname + ":" + (p.id || "");
@@ -638,6 +671,7 @@
         btnRun.addEventListener("click", function () {
             var code = ta.value;
             if (!code.trim()) { box.innerHTML = '<p class="ct-sum no">소스코드를 붙여넣고 채점하세요.</p>'; return; }
+            if (start.trim() && code.trim() === start.trim()) { box.innerHTML = '<p class="ct-sum no">아직 뼈대만 있어요 — <b>// 여기에 작성</b> 자리에 코드를 써 주세요.</p>'; return; }
             var must = []; try { must = JSON.parse(p.dataset.must || "[]"); } catch (e) { }
             var missing = must.filter(function (m) { return !new RegExp(m, lang === "sql" ? "i" : "").test(code); });
             btnRun.disabled = true;
@@ -674,9 +708,10 @@
             if (window.hljs) try { window.hljs.highlightElement(box.querySelector(".ct-answer-box code")); } catch (e) { }
         });
         if (btnClear) btnClear.addEventListener("click", function () {
-            ta.value = ""; box.innerHTML = ""; p.dataset.passed = "";
+            ta.value = start; box.innerHTML = ""; p.dataset.passed = "";
             try { localStorage.removeItem(key); } catch (e) { }
             updateScore();
+            ta.dispatchEvent(new Event("input", { bubbles: true }));   // 시험 페이지도 지운 것을 저장하게
         });
         if (/[?&]done=1/.test(location.search)) btnShow.click();   // 시험 끝나면 정답 공개
         ta.setAttribute("placeholder", lang === "sql" ? "SQL 문을 여기에 붙여넣으세요 (MySQL 문법 그대로 · 문장 끝은 ; · Tab 키 = 들여쓰기)"
