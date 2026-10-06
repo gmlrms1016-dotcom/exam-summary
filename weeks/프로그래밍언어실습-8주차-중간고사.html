@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202610062029"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로그래밍언어실습 8주차 · 중간고사 시험문제 정리 (1~5주차 반영)</title>
+    <title>프로그래밍언어실습 8주차 · 중간고사 시험문제 정리 (1~6주차 반영)</title>
     <link rel="stylesheet" href="../style.css?v=202610062029">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
@@ -47,16 +47,100 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>💾 프로그래밍언어실습 · 8주차 · 중간고사</h1>
-        <p>중간고사 시험문제 정리 (1~5주차 반영)</p>
+        <p>중간고사 시험문제 정리 (1~6주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>조건 · 반복 (ch06 · ch07)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-6주차.html">‹ 이전 · <b>6주차</b><br><small>함수 · 표준 입출력 · 헤더파일 (ch09)</small></a><span></span></nav>
 
-<div class="tip">📅 <b>중간고사 — 10월 19일(월) 14:00</b> · 평가 비율: 출석 20% + <b>중간 40%</b> + 기말 40% (과제·실습은 가산점) · 지금까지 배운 <b>1~5주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
-<div class="tip">📚 <b>시험범위 · 문제 유형</b> (5주차 필기) — 교재 <b>1 · 2 · 3 · 4 · 5 · 6 · 7 · 9장</b> · <b>괄호넣기 · 실행결과 · 소스코드를 보고 한글로 설명 · 실행 결과를 보고 손코딩</b> · 실행결과는 <b><code>\n</code> 이 있나 없나</b> 주의</div>
+<div class="tip">📅 <b>중간고사 — 10월 19일(월) 14:00</b> · 평가 비율: 출석 20% + <b>중간 40%</b> + 기말 40% (과제·실습은 가산점) · 지금까지 배운 <b>1~6주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
+<div class="tip">📚 <b>시험범위 · 문제 유형</b> (5 · 6주차 필기) — 교재 <b>1 ~ 7장 · 9장 (함수 — 배열 예제 제외)</b> · 기본개념 · 변수 · 연산자 · 조건 · 반복 · 함수 · ✍️ 6주차 필기: <b>4주차 = 실행결과 · 5주차 = 조건 반복 + [과제1] 소스 · 6주차 = 함수 + [과제2] 소스</b> · <b>괄호넣기 · 실행결과 · 소스코드를 보고 한글로 설명 · 실행 결과를 보고 손코딩</b> · 실행결과는 <b><code>\n</code> 이 있나 없나</b> 주의</div>
+<div class="tip">🔥 <b>교수님이 시험이라고 한 것</b> (6주차) — ✍️ <b>“오늘 한 거 다 시험에 나온다”</b> (표준 입출력 · 함수 · 반복문 + 함수 · 헤더파일) · <b>“솔루션 밑에 Project3 시험문제(파일 3개)”</b> = func.h · func.c · main.c 절대값 myAbs · <b>[과제2] HW02 소스</b> (교재 9장 실습)</div>
 <div class="tip">🔥 <b>교수님이 시험이라고 한 것</b> (5주차) — ① <b>switch case 에 break 를 빼면?</b> → 안 멈추고 밑의 case 까지 실행 ② <b>continue · break 시험에 나옴</b> (Quiz 6 · Quiz 7)</div>
 <div class="tip">🔥 <b>교수님이 시험문제라고 한 것</b> (4주차) — ① <code>z = -x++ + ++y;</code> 실행 후 x·y·z ② <code>++x, y++;</code> 와 <code>printf("...", x++, --y, z--);</code> 에 찍히는 값 ③ 비트 연산자 <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code> (a=60, b=13) · 필기 <b>“증감연산자 시험에 많이 나옴”</b> · <b>연산자 우선순위(시험문제)</b></div>
 <div class="tip">🎯 <b>교수님이 시험문제라고 한 것</b> (3주차) — ① 강의자료 <b>23p</b> [실습 1-05] <code>sizeof</code> <b>실행결과 쓰기</b> ② 강의자료 <b>27p</b> [quiz 1-01] <b>빈칸채우기</b>(printf 서식) + <b>오류 수정</b> ③ 수업 중 "시험문제!" — <code>sizeof</code> 결과를 <code>%f</code> <code>%lf</code> <code>%c</code> 로 찍은 코드 고치기 → <b>전부 <code>%d</code></b></div>
+<section class="card">
+<h2>★ 6주차 시험 포인트 (<a href="프로그래밍언어실습-6주차.html">6주차 자세히</a>)</h2>
+<h3>① 🔥 Project3 시험문제 — 헤더파일 3개로 나눈 절대값 myAbs</h3>
+<table class="ref">
+<tbody>
+<tr><th>파일</th><th>들어 있는 것</th></tr>
+<tr><td><code>func.h</code></td><td>원형만 — <code>int myAbs(int value);</code> (+ <code>#pragma once</code>)</td></tr>
+<tr><td><code>func.c</code></td><td>몸체 — 양수면 그대로, 아니면 <code>-value</code></td></tr>
+<tr><td><code>main.c</code></td><td><code>#include "func.h"</code> (따옴표 = 내가 만든 헤더) · 입력 → <code>myAbs(iValue)</code> → 출력</td></tr>
+</tbody></table>
+<pre><code class="language-c">// func.h — 함수 원형(선언)만 두는 헤더파일
+#pragma once                                      // 헤더 중복 포함 막기
+int myAbs(int value);                             // 절대값 함수 원형 — 몸체는 func.c 에</code></pre>
+<pre><code class="language-c">// func.c — 함수 정의(몸체)만 두는 소스파일 · 절대값 계산 (기억하고 있기)
+int myAbs(int value) {                            // 정수 1개를 받아 절대값을 돌려줌
+    int iAbs;                                     // 결과를 담을 변수
+    if (value &gt; 0) {                              // 양수면 (예: 5 &gt; 0 → 참)
+        iAbs = value;                             // 그대로 → 5
+    }                                             // if 끝
+    else {                                        // 0 이나 음수면 (예: -7)
+        iAbs = -value;                            // 부호를 뒤집음 → -(-7) → 7
+    }                                             // else 끝
+    return iAbs;                                  // 절대값을 돌려주고 종료
+}                                                 // myAbs 끝</code></pre>
+<pre><code class="language-c">// main.c — 입력 → myAbs 호출 → 출력
+#define _CRT_SECURE_NO_WARNINGS                   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+#include "func.h"                                 // 내가 만든 헤더 → int myAbs(int value); 가 여기 들어옴
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int iValue, iResult;                          // 입력값 · 결과값
+    printf("정수를 입력하세요: ");                // 안내 문구 (\n 없음)
+    scanf("%d", &amp;iValue);                         // 정수 입력 → iValue (예: -7)
+    iResult = myAbs(iValue);                      // func.c 의 myAbs 실행 → 7 을 돌려받음
+    printf("%d의 절대값은 %d입니다.\n", iValue, iResult);   // -7의 절대값은 7입니다.
+    return 0;                                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                 // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">정수를 입력하세요: -7
+-7의 절대값은 7입니다.</code></pre>
+<h3>② 함수 용어 — return · void · 실인수 · 가인수 · 원형</h3>
+<ul><li><b>return</b> = 반환값을 돌려주고 <b>그 자리에서 함수 종료</b> · <b>void</b> = 값이 없음</li><li><b>실인수</b> = 호출할 때 넘기는 실제 값 <code>sum(a, b)</code> · <b>가인수(형식 인수)</b> = 정의의 괄호 안 변수 <code>int sum(int i, int j)</code> → 실인수 값이 <b>복사</b>됨</li><li>함수가 <code>main()</code> <b>뒤</b>에 있으면 앞에 <b>원형 선언</b> <code>int sum(int i, int j);</code> · 원형만 모아 두면 <b>헤더파일</b> (<code>MyMath.h</code>)</li></ul>
+<h3>③ 포맷 문자 · 문자 입출력 함수</h3>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>포맷</th><th>뜻</th><th></th><th>함수</th><th>뜻</th></tr>
+<tr><td><code>%d</code></td><td>부호 있는 정수</td><td></td><td><code>getchar()</code></td><td>문자 1개 입력</td></tr>
+<tr><td><code>%u</code></td><td>부호 없는 정수</td><td></td><td><code>putchar()</code></td><td>문자 1개 출력</td></tr>
+<tr><td><code>%f</code></td><td>실수 (소수 6자리)</td><td></td><td><code>gets()</code></td><td>문자열 입력</td></tr>
+<tr><td><code>%0.3f</code></td><td>실수 소수 3자리</td><td></td><td><code>puts()</code></td><td>문자열 출력 + 줄바꿈</td></tr>
+<tr><td><code>%c</code> · <code>%s</code></td><td>문자 1개 · 문자열</td><td></td><td><code>scanf()</code> · <code>printf()</code></td><td>다양한 타입 입력 · 출력</td></tr>
+</tbody></table>
+<h3>④ 실행결과 — 함수 호출 순서 (input3.c)</h3>
+<pre><code class="language-c">// input3.c (수업 코드) — 함수 정의 위치 · 원형 선언 · 반환값
+#include &lt;stdio.h&gt;                       // printf 를 쓰기 위한 표준 입출력 헤더
+void test1() {                           // main 보다 위에 정의 → 원형 선언 없이 호출 가능
+    printf("test1 함수 호출\n");         // test1 이 하는 일
+}                                        // test1 끝 (void → return 값 없음)
+void test2();                            // 함수 원형 선언 — 정의가 main 뒤에 있어서 필요
+int test3() {                            // 반환형 int → 정수를 돌려줌
+    return 100;                          // 100 을 돌려주고 종료
+}                                        // test3 끝
+int test4(int i, int j) {                // 가인수 i, j
+    int result = i + j;                  // 2 + 3 → 5
+    return result;                       // 5 를 돌려줌
+}                                        // test4 끝
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    test1();                             // ① 위로 올라가 test1 실행 → test1 함수 호출
+    test2();                             // ② 아래로 내려가 test2 실행 → test2 함수 호출
+    int a1 = test3();                    // ③ test3 이 돌려준 100 → a1
+    int a2 = test4(2, 3);                // ④ 실인수 2, 3 → 돌려받은 5 → a2
+    printf("a1: %d\n", a1);              // a1: 100
+    printf("a2: %d\n", a2);              // a2: 5
+    return 0;                            // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                        // main 함수 끝
+void test2() {                           // main 뒤에 정의 → 위에 원형 선언이 있어야 함
+    printf("test2 함수 호출\n");         // test2 가 하는 일
+}                                        // test2 끝</code></pre>
+<pre class="io"><code class="language-text">test1 함수 호출
+test2 함수 호출
+a1: 100
+a2: 5</code></pre>
+<h3>⑤ 🔥 HW02 (교재 9장) — 01basefunc · 02funcadd · 03functioncall · 07rand · 09math · 10char · lab1intpower · lab3numguess</h3>
+<div class="tip">코드 · 실행 결과는 <a href="프로그래밍언어실습-6주차.html">6주차 페이지 5번</a> · 과목 페이지 🖥️ 출력 결과 맞히기 · 💻 코딩테스트 <b>🔥 6주차</b> 묶음에서 직접 풀 수 있어요.</div>
+</section>
 <section class="card">
 <h2>🎓 튜터링 코드 — 온도 변환 · 윤년 · for 실행결과</h2>
 <div class="tip">자료: <code>8주차_중간고사/튜터링/solution/Project1/1.c</code> — 프로그램 3개가 한 파일에 있어요(앞의 2개는 주석 처리). 파일의 <b>한글이 깨져</b> 있어서(CP949 글자가 UTF-8 로 잘못 저장됨) 문자열은 <b>문맥으로 채웠어요(추정)</b>. 코드 · 식은 그대로이고, 아래 결과는 전부 직접 컴파일 · 실행한 값입니다.<br><span class="wk-tag fix">⚠️ 정정</span> 두 군데 — ① 섭씨 → 화씨 식 ② 윤년 조건. 둘 다 실행해 보면 틀린 값이 나와요.</div>
@@ -424,7 +508,7 @@ char: 1, int: 4, float: 4, double: 8
 <ul><li><a href="../프로그래밍언어실습.html#quiz">프로그래밍언어실습 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li><li><a href="../프로그래밍언어실습.html#code">💻 코딩테스트 — 🔥 시험문제 7개 + 🔥 HW01 예상문제 32개 직접 짜서 채점</a></li><li><a href="../프로그래밍언어실습.html#output">🖥️ 출력 결과 맞히기 — 🔥 시험문제 + 🔥 HW01 예상문제 32개</a></li><li><a href="../프로그래밍언어실습.html#s29">5주차 시험 포인트 · 괄호넣기 직접 풀기</a></li><li><a href="../프로그래밍언어실습.html#s22">4주차 시험문제 ① ② ③ 직접 풀기</a></li><li><a href="../프로그래밍언어실습.html#s7">23p · 27p 빈칸채우기 직접 풀기</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>조건 · 반복 (ch06 · ch07)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-6주차.html">‹ 이전 · <b>6주차</b><br><small>함수 · 표준 입출력 · 헤더파일 (ch09)</small></a><span></span></nav>
 
     <p class="wk-src">노션 「프로그래밍언어실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

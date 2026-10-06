@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610062029"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍언어실습 6주차 · 함수 · 표준 입출력 · 헤더파일 (ch09)</title>
+    <link rel="stylesheet" href="../style.css?v=202610062029">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../프로그래밍언어실습.html">← 프로그래밍언어실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>💾 프로그래밍언어실습 · 6주차</h1>
+        <p>함수 · 표준 입출력 · 헤더파일 (ch09)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>조건 · 반복 (ch06 · ch07)</small></a><a class="next" href="프로그래밍언어실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+<div class="tip">자료: 노션 필기(10/6 보강 수업) · WorkC <b>w06</b> (Project1 · 2 · 3 · 4) · C-Lect05-ch09-함수.pdf · 요약-w06-실습-stu-김희숙.pdf (교재 9장 실습 = <b>HW02 과제</b>) — 강의자료 전체가 아니라 <b>필기한 것 + 수업 코드</b>만 정리했어요. ✍️ = 강의자료에 없고 내가 쓴 것 · ⚠️ = 정정 · 🤖 = 필기의 “claude야 …” 요청. 코드 주석과 ▶ 출력 결과는 전부 직접 컴파일 · 실행한 값입니다.</div>
+<div class="tip">🔥 <b>시험 포인트</b> — ✍️ 필기 <b>“오늘 한 거 다 시험에 나온다”</b> + <b>“솔루션 밑에 Project3 시험문제(파일 3개)”</b> → 헤더파일로 나눈 <b>절대값 myAbs</b> (func.h · func.c · main.c) → 4번 · 중간고사 범위 <b>교재 1 ~ 7장 · 9장(함수 — 배열 예제 제외)</b> · 6주차 = <b>함수 + [과제2] 소스</b> → 5번 HW02</div>
+<div class="tip">📅 <b>10/5(월) 개천절 대체 휴일 → 10/6(화) 보강 수업</b> · ✍️ 오늘 진도 — 1교시 <b>문자열 입출력 · 함수</b> / 2교시 <b>반복문 + 함수</b> / 3교시 <b>헤더파일</b></div>
+<section class="card">
+<h2>1. 표준 입출력 함수 · 포맷 문자열</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — 한 개 문자 입력 <code>getchar()</code> · 한 개 문자 출력 <code>putchar()</code> · 문자열 입력 <code>gets()</code> · 문자열 출력 <code>puts()</code> · 다양한 타입 입력 <code>scanf()</code> · 출력 <code>printf()</code></p>
+<div class="tip">⚠️ <b>필기 정정</b> — 노션 필기의 <code>prinf()</code> → <b><code>printf()</code></b> (t 가 빠짐)</div>
+<table class="ref">
+<tbody>
+<tr><th>함수</th><th>하는 일</th><th>짝</th></tr>
+<tr><td><code>getchar()</code></td><td>문자 <b>1개</b> 입력</td><td>↔ <code>putchar()</code> 문자 1개 출력 (줄바꿈 없음)</td></tr>
+<tr><td><code>gets()</code></td><td><b>문자열</b> 입력 (한 줄)</td><td>↔ <code>puts()</code> 문자열 출력 + <b>자동 줄바꿈</b></td></tr>
+<tr><td><code>scanf()</code></td><td>다양한 타입의 값 입력 (포맷 문자 사용)</td><td>↔ <code>printf()</code> 다양한 타입의 값 출력</td></tr>
+</tbody></table>
+<div class="tip">🤖 <b>참고</b> — <code>gets()</code> 는 입력 길이를 검사하지 않아 C11 에서 빠졌어요. Visual Studio 2022 에서는 <code>gets()</code> 가 없어서 <b><code>gets_s(문자열, 크기)</code></b> 로 써야 컴파일돼요 (<code>scanf</code> 대신 <code>scanf_s</code> 와 같은 관계).</div>
+<h3>🤖 포맷 문자열 표 (필기: “claude야 이거 표로 정리해”)</h3>
+<p>포맷 문자 = <code>scanf()</code> 와 <code>printf()</code> 에서 <code>%</code> 로 값을 넣고 뺄 때 쓰는 문자 (강의자료 4p)</p>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>포맷</th><th>뜻</th><th>자료형 예</th><th><code>printf</code> 결과 예</th></tr>
+<tr><td><code>%d</code></td><td>부호 <b>있는</b> 정수 (10진수)</td><td><code>int i = -7;</code></td><td><code>-7</code></td></tr>
+<tr><td><code>%u</code></td><td>부호 <b>없는</b> 정수 (0 이상)</td><td><code>unsigned int j = 7;</code></td><td><code>7</code></td></tr>
+<tr><td><code>%f</code></td><td>실수 — 소수점 아래 <b>6자리</b></td><td><code>double d = 3.14159;</code></td><td><code>3.141590</code></td></tr>
+<tr><td><code>%0.3f</code></td><td>실수 — 소수점 아래 <b>3자리</b>까지 (반올림)</td><td><code>double d = 3.14159;</code></td><td><code>3.142</code></td></tr>
+<tr><td><code>%c</code></td><td>문자 <b>1개</b></td><td><code>char c = 'K';</code></td><td><code>K</code></td></tr>
+<tr><td><code>%s</code></td><td><b>문자열</b></td><td><code>char s[] = "Hello";</code></td><td><code>Hello</code></td></tr>
+</tbody></table>
+<h3>예제 ① 포맷 문자 한 번에 써 보기</h3>
+<pre><code class="language-c">// 포맷 문자 한 번에 써 보기 — %d %u %f %0.3f %c %s
+#include &lt;stdio.h&gt;                       // printf 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i = -7;                          // 부호 있는 정수 -7
+    unsigned int j = 7;                  // 부호 없는 정수 7 (0 이상만)
+    double d = 3.14159;                  // 실수 3.14159
+    char c = 'K';                        // 문자 1개 → 작은따옴표
+    char s[] = "Hello";                  // 문자열 → 큰따옴표 (char 배열)
+    printf("%%d : %d\n", i);             // %% = % 글자 그대로 · %d → -7
+    printf("%%u : %u\n", j);             // %u → 7
+    printf("%%f : %f\n", d);             // %f → 소수점 6자리 → 3.141590
+    printf("%%0.3f : %0.3f\n", d);       // %0.3f → 소수점 3자리 (넷째 자리 5 에서 반올림) → 3.142
+    printf("%%c : %c\n", c);             // %c → K
+    printf("%%s : %s\n", s);             // %s → Hello
+    return 0;                            // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                        // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">%d : -7
+%u : 7
+%f : 3.141590
+%0.3f : 3.142
+%c : K
+%s : Hello</code></pre>
+<h3>예제 ② input1.c (수업 코드 · 강의자료 4p) — getchar · putchar — 입력: A</h3>
+<pre><code class="language-c">// input1.c (수업 코드 · 강의자료 4p) — getchar() 로 문자 1개 입력 → putchar() 로 출력
+#include &lt;stdio.h&gt;                 // printf · getchar · putchar 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    printf("문자 입력: ");          // 안내 문구 (\n 없음 → 커서가 같은 줄에 남음)
+    char a1 = getchar();           // 키보드에서 문자 1개 → a1 (A 입력 → a1 = 'A')
+    printf("a1: %c\n", a1);        // %c = 문자 1개 → a1: A 다음 줄바꿈
+    putchar(a1);                   // 문자 1개 출력 → A (putchar 는 줄을 안 바꿈)
+    return 0;                      // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                  // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">문자 입력: A
+a1: A
+A</code></pre>
+<div class="tip">마지막 <code>putchar(a1);</code> 은 줄을 바꾸지 않아서 <code>A</code> 뒤에 줄바꿈이 없어요 · 입력한 <code>A</code> ⏎ 는 화면에 보이는 그대로 적었어요.</div>
+<h3>예제 ③ input2.c (수업 코드 · 강의자료 4p) — %f 와 %0.3f</h3>
+<pre><code class="language-c">// input2.c (수업 코드 · 강의자료 4p) — %f 와 %0.3f 의 차이
+#include &lt;stdio.h&gt;                 // printf 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    float a1 = 11.1111111;         // float 는 유효숫자 약 7자리 → 11.111111 정도로 저장
+    printf("a1: %f\n", a1);        // %f = 소수점 아래 6자리까지 → 11.111111
+    printf("a1: %0.3f\n", a1);     // %0.3f = 소수점 아래 3자리까지 → 11.111
+    return 0;                      // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                  // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">a1: 11.111111
+a1: 11.111</code></pre>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 수업 코드 주석은 <code>/*11.1111111 (%f는 소수점을 모두 출력)*/</code> 인데, 실제로는 <b><code>%f</code> = 소수점 아래 6자리까지</b> → <code>11.111111</code> (1 이 6개) · <code>%0.3f</code> → <code>11.111</code> 은 주석과 같아요.</div>
+<h3>예제 ④ puts · putchar</h3>
+<pre><code class="language-c">// puts · putchar — 문자열 출력 / 문자 1개 출력
+#include &lt;stdio.h&gt;                 // puts · putchar 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    puts("안녕하세요");            // puts = 문자열 출력 + 자동 줄바꿈
+    puts("C 언어");                // 다음 줄에 출력 + 줄바꿈
+    putchar('O');                  // 문자 1개 → O (줄바꿈 없음)
+    putchar('K');                  // 바로 옆에 K → OK
+    putchar('\n');                 // '\n' 도 문자 1개 → 줄바꿈
+    return 0;                      // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                  // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">안녕하세요
+C 언어
+OK</code></pre>
+</section>
+<section class="card">
+<h2>2. 함수 — 정의 · 호출 · return · void</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — <b>return 문</b> = ① <b>반환값(리턴값)</b> 을 돌려줌 ② <b>함수의 종료</b> · <b>void 형 = 값이 없음</b> · <b>실인수</b> / <b>가인수(형식 인수)</b> · <code>메서드()</code> ↔ <code>속성;</code> / <code>함수()</code> ↔ <code>변수;</code> (괄호가 붙으면 실행하는 것, 안 붙으면 값을 담는 것)</p>
+<table class="ref">
+<tbody>
+<tr><th>용어</th><th>뜻</th><th><code>sum(a, b)</code> · <code>int sum(int i, int j)</code> 에서</th></tr>
+<tr><td>함수</td><td>특정한 작업을 처리하도록 작성한 독립된 프로그램 단위 · C 프로그램 = 최소한 <code>main()</code> + 필요한 다른 함수</td><td><code>sum</code></td></tr>
+<tr><td>반환형</td><td>함수 이름 앞 — 돌려줄 값의 자료형 · 없으면 <code>void</code></td><td><code>int</code></td></tr>
+<tr><td>실인수</td><td>호출할 때 넘기는 <b>실제 값</b></td><td><code>a</code>(2) · <code>b</code>(3)</td></tr>
+<tr><td>가인수 (형식 인수 · 매개변수)</td><td>함수 정의의 괄호 안 변수 — 실인수 값이 <b>복사</b>됨</td><td><code>i</code> · <code>j</code></td></tr>
+<tr><td>return</td><td>값을 돌려주고 <b>그 자리에서 함수 종료</b></td><td><code>return result;</code></td></tr>
+<tr><td>함수 원형 선언 (prototype)</td><td>함수가 <code>main()</code> <b>뒤에</b> 있으면 <code>main()</code> 앞에 머리만 적어 둠</td><td><code>int sum(int i, int j);</code></td></tr>
+</tbody></table>
+<ul><li>매개변수 없는 함수는 <code>sum()</code> 또는 <code>sum(void)</code> (강의자료 11p)</li><li>호출 흐름 (8p) — <code>s = sum(2, 3);</code> → sum 으로 이동 → <code>return</code> 을 만나면 함수 종료하고 값 반환 → 돌아와서 받은 값을 <code>s</code> 에 저장</li><li>main() 4가지 모양 (6p) — <code>void main(void)</code> 반환값 없음 · <code>int main(void)</code> 인수 없음 · <code>int main(int argc)</code> 인수 있음 · main 은 운영체제에 정수를 반환하고 <b>정상 종료 시 0</b></li></ul>
+<h3>예제 ① func1.c (필기 · 강의자료 7p) — ⚠️ 필기 오타를 고친 코드</h3>
+<pre><code class="language-c">// func1.c (필기 · 강의자료 7p) — ⚠️ 필기의 오타 3곳을 고친 코드
+#include &lt;stdio.h&gt;                       // printf 를 쓰기 위한 표준 입출력 헤더
+int sum(int i, int j) {                  // 가인수(형식 인수) i, j ← 실인수 2, 3 이 복사됨 (⚠️ 필기는 i.int j → 쉼표)
+    int result = i + j;                  // 2 + 3 → result = 5
+    return result;                       // return → 5 를 돌려주고 sum 함수 종료
+}                                        // sum 함수 끝
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int a = 2, b = 3;                    // ⚠️ 필기는 a = 2.b = 3 → 쉼표로 구분
+    int value;                           // ⚠️ 필기 · 강의자료 모두 선언이 빠짐 → 없으면 컴파일 오류
+    value = sum(a, b);                   // 실인수 a(2), b(3) 전달 → 돌려받은 5 를 value 에 저장
+    printf("value: %d\n", value);        // value: 5
+    return 0;                            // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                        // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">value: 5</code></pre>
+<div class="tip">⚠️ <b>필기 정정 3곳</b> — ① <code>int sum(int i.int j)</code> → <b><code>int i, int j</code></b> (마침표 → 쉼표) ② <code>int a = 2.b = 3;</code> → <b><code>int a = 2, b = 3;</code></b> ③ <code>value</code> 를 선언하지 않음 → <b><code>int value;</code></b> 필요 (강의자료 7p 도 선언이 빠져 있어요 — 그대로 치면 컴파일 오류) · <code>void main()</code> 은 VS 에서 되지만 시험 답안은 <code>int main(void)</code> + <code>return 0;</code> 이 안전해요.</div>
+<h3>예제 ② input3.c (수업 코드) — 함수 위치 · 원형 선언 · 반환값</h3>
+<pre><code class="language-c">// input3.c (수업 코드) — 함수 정의 위치 · 원형 선언 · 반환값
+#include &lt;stdio.h&gt;                       // printf 를 쓰기 위한 표준 입출력 헤더
+void test1() {                           // main 보다 위에 정의 → 원형 선언 없이 호출 가능
+    printf("test1 함수 호출\n");         // test1 이 하는 일
+}                                        // test1 끝 (void → return 값 없음)
+void test2();                            // 함수 원형 선언 — 정의가 main 뒤에 있어서 필요
+int test3() {                            // 반환형 int → 정수를 돌려줌
+    return 100;                          // 100 을 돌려주고 종료
+}                                        // test3 끝
+int test4(int i, int j) {                // 가인수 i, j
+    int result = i + j;                  // 2 + 3 → 5
+    return result;                       // 5 를 돌려줌
+}                                        // test4 끝
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    test1();                             // ① 위로 올라가 test1 실행 → test1 함수 호출
+    test2();                             // ② 아래로 내려가 test2 실행 → test2 함수 호출
+    int a1 = test3();                    // ③ test3 이 돌려준 100 → a1
+    int a2 = test4(2, 3);                // ④ 실인수 2, 3 → 돌려받은 5 → a2
+    printf("a1: %d\n", a1);              // a1: 100
+    printf("a2: %d\n", a2);              // a2: 5
+    return 0;                            // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                        // main 함수 끝
+void test2() {                           // main 뒤에 정의 → 위에 원형 선언이 있어야 함
+    printf("test2 함수 호출\n");         // test2 가 하는 일
+}                                        // test2 끝</code></pre>
+<pre class="io"><code class="language-text">test1 함수 호출
+test2 함수 호출
+a1: 100
+a2: 5</code></pre>
+<div class="tip">수업 코드 주석 그대로 — <code>int main</code> 이 <b>먼저 시작</b>되고, <code>test1</code> 을 호출하니 <b>위로 올라가서</b> 호출받고, <code>test2</code> 를 호출하니 <b>밑으로 내려가서</b> 호출받는다 · 정의가 main 뒤에 있는 <code>test2</code> 만 위에 <b>원형 <code>void test2();</code></b> 가 필요해요.</div>
+<h3>예제 ③ Project1 · E04-func (강의자료 18p) — 원형 선언 + 사칙연산 함수</h3>
+<pre><code class="language-c">// Project1 · E04-func (강의자료 18p) — 함수 4개를 main 뒤에 정의 → 원형 선언 4줄
+#include &lt;stdio.h&gt;                                // printf 를 쓰기 위한 표준 입출력 헤더
+int add(int value1, int value2);                  // 원형 선언 — 덧셈
+int sub(int value1, int value2);                  // 원형 선언 — 뺄셈
+int mul(int value1, int value2);                  // 원형 선언 — 곱셈
+int div(int value1, int value2);                  // 원형 선언 — 나눗셈
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int result1, result2, result3, result4;       // 결과 4개를 담을 변수
+    result1 = add(2, 3);                          // 2 + 3 → 5
+    result2 = sub(2, 3);                          // 2 - 3 → -1
+    result3 = mul(2, 3);                          // 2 * 3 → 6
+    result4 = div(2, 3);                          // 2 / 3 → 정수끼리 나누면 몫만 → 0
+    printf("result1: %d\n", result1);             // result1: 5
+    printf("result2: %d\n", result2);             // result2: -1
+    printf("result3: %d\n", result3);             // result3: 6
+    printf("result4: %d\n", result4);             // result4: 0
+    return 0;                                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                 // main 함수 끝
+int add(int value1, int value2) {                 // 덧셈 함수 정의
+    return value1 + value2;                       // 두 값의 합을 돌려줌
+}                                                 // add 끝
+int sub(int value1, int value2) {                 // 뺄셈 함수 정의
+    return value1 - value2;                       // 두 값의 차를 돌려줌
+}                                                 // sub 끝
+int mul(int value1, int value2) {                 // 곱셈 함수 정의
+    return value1 * value2;                       // 두 값의 곱을 돌려줌
+}                                                 // mul 끝
+int div(int value1, int value2) {                 // 나눗셈 함수 정의
+    return value1 / value2;                       // 정수 나눗셈 → 몫만 돌려줌
+}                                                 // div 끝</code></pre>
+<pre class="io"><code class="language-text">result1: 5
+result2: -1
+result3: 6
+result4: 0</code></pre>
+<div class="tip"><code>div(2, 3)</code> → 정수끼리 나누면 <b>몫만</b> → <code>0</code> (소수점 버림)</div>
+<h3>예제 ④ Project1 마지막 코드 (수업 코드) — sqrt() 제곱근 — 입력: 16</h3>
+<pre><code class="language-c">// Project1 마지막 코드 (수업 코드) — sqrt() 제곱근 · ⚠️ #include &lt;math.h&gt; 추가
+#define _CRT_SECURE_NO_WARNINGS                   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+#include &lt;math.h&gt;                                 // ⚠️ 수업 코드에 없음 → sqrt() 원형이 들어 있는 수학 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int num;                                      // 입력받을 정수
+    double result;                                // 제곱근 결과 (실수)
+    printf("i:");                                 // 안내 문구 (\n 없음)
+    scanf("%d", &amp;num);                            // 정수 입력 → num (예: 16)
+    result = sqrt((double)num);                   // 16 → (double) 16.0 → 제곱근 → 4.0
+    printf("%d의 제곱근 : %lf", num, result);     // ⚠️ 수업 코드는 '제곱' → sqrt 는 제곱근 · %lf → 4.000000
+    return 0;                                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                 // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">i:16
+16의 제곱근 : 4.000000</code></pre>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 수업 코드는 ① <code>#include &lt;math.h&gt;</code> 가 없어요 → <code>sqrt</code> 원형이 없어서 VS 에서 경고 · 다른 컴파일러에서는 오류 ② 출력 문구가 <code>제곱</code> 인데 <code>sqrt</code> 는 <b>제곱근</b> (16 → 4)</div>
+</section>
+<section class="card">
+<h2>3. 반복문 + 함수 — 구구단 (2교시 · Project4)</h2>
+<p>✍️ <b>수업 코드</b> — 같은 2단 출력을 1번(for) → 2번(for + 함수) → 3번(단을 매개변수로) → 4번(모든 단) 으로 바꿔 가며 실습했어요. 수업 코드는 <code>void main()</code> 이라 <code>int main(void)</code> 로 바꿨고 결과는 같아요.</p>
+<h3>예제 ① 2번 — 2단을 함수 showMul() 로</h3>
+<pre><code class="language-c">// Project4 2번 (수업 코드) — 2단을 함수 showMul() 로
+#include &lt;stdio.h&gt;                                    // printf 를 쓰기 위한 표준 입출력 헤더
+void showMul() {                                      // 매개변수 없음 · 반환값 없음(void)
+    for (int i = 1; i &lt;= 9; i++) {                    // i = 1 ~ 9 → 9번 반복
+        printf("2 * %d = %d\n", i, 2 * i);            // 2 * 1 = 2 … 2 * 9 = 18
+    }                                                 // for 끝 → 다음 i
+}                                                     // showMul 끝
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    showMul();                                        // 함수 호출 → 2단 9줄 출력
+    return 0;                                         // ⚠️ 수업 코드는 void main() → int main(void) 로
+}                                                     // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">2 * 1 = 2
+2 * 2 = 4
+2 * 3 = 6
+2 * 4 = 8
+2 * 5 = 10
+2 * 6 = 12
+2 * 7 = 14
+2 * 8 = 16
+2 * 9 = 18</code></pre>
+<h3>예제 ② 3번 — 매개변수 step 으로 단 받기 → showMul(5)</h3>
+<pre><code class="language-c">// Project4 3번 (수업 코드) — 단을 매개변수 step 으로 받기
+#include &lt;stdio.h&gt;                                    // printf 를 쓰기 위한 표준 입출력 헤더
+void showMul(int step) {                              // 가인수 step ← 실인수 5 가 복사됨
+    for (int i = 1; i &lt;= 9; i++) {                    // i = 1 ~ 9
+        printf("%d * %d = %d\n", step, i, step * i);  // 5 * 1 = 5 … 5 * 9 = 45
+    }                                                 // for 끝 → 다음 i
+}                                                     // showMul 끝
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    showMul(5);                                       // 실인수 5 → 5단 출력
+    return 0;                                         // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                     // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">5 * 1 = 5
+5 * 2 = 10
+5 * 3 = 15
+5 * 4 = 20
+5 * 5 = 25
+5 * 6 = 30
+5 * 7 = 35
+5 * 8 = 40
+5 * 9 = 45</code></pre>
+<h3>예제 ③ 4번 — for 안에서 showMul(i) → 2단 ~ 9단 (72줄)</h3>
+<pre><code class="language-c">// Project4 4번 (수업 코드) — 반복문 + 함수 → 2단 ~ 9단 모두
+#include &lt;stdio.h&gt;                                    // printf 를 쓰기 위한 표준 입출력 헤더
+void showMul(int step) {                              // step 단을 출력하는 함수
+    for (int i = 1; i &lt;= 9; i++) {                    // i = 1 ~ 9
+        printf("%d * %d = %d\n", step, i, step * i);  // step * i 한 줄씩
+    }                                                 // for 끝 → 다음 i
+}                                                     // showMul 끝
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    for (int i = 2; i &lt;= 9; i++) {                    // 단 2 ~ 9 (수업 코드는 m · 이름만 다름)
+        showMul(i);                                   // i 단 9줄 출력 → 8번 호출 = 72줄
+    }                                                 // for 끝 → 다음 단
+    return 0;                                         // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                     // main 함수 끝</code></pre>
+<details class="wk-details">
+<summary>▶ 출력 결과 72줄 펼치기</summary>
+<pre class="io"><code class="language-text">2 * 1 = 2
+2 * 2 = 4
+2 * 3 = 6
+2 * 4 = 8
+2 * 5 = 10
+2 * 6 = 12
+2 * 7 = 14
+2 * 8 = 16
+2 * 9 = 18
+3 * 1 = 3
+3 * 2 = 6
+3 * 3 = 9
+3 * 4 = 12
+3 * 5 = 15
+3 * 6 = 18
+3 * 7 = 21
+3 * 8 = 24
+3 * 9 = 27
+4 * 1 = 4
+4 * 2 = 8
+4 * 3 = 12
+4 * 4 = 16
+4 * 5 = 20
+4 * 6 = 24
+4 * 7 = 28
+4 * 8 = 32
+4 * 9 = 36
+5 * 1 = 5
+5 * 2 = 10
+5 * 3 = 15
+5 * 4 = 20
+5 * 5 = 25
+5 * 6 = 30
+5 * 7 = 35
+5 * 8 = 40
+5 * 9 = 45
+6 * 1 = 6
+6 * 2 = 12
+6 * 3 = 18
+6 * 4 = 24
+6 * 5 = 30
+6 * 6 = 36
+6 * 7 = 42
+6 * 8 = 48
+6 * 9 = 54
+7 * 1 = 7
+7 * 2 = 14
+7 * 3 = 21
+7 * 4 = 28
+7 * 5 = 35
+7 * 6 = 42
+7 * 7 = 49
+7 * 8 = 56
+7 * 9 = 63
+8 * 1 = 8
+8 * 2 = 16
+8 * 3 = 24
+8 * 4 = 32
+8 * 5 = 40
+8 * 6 = 48
+8 * 7 = 56
+8 * 8 = 64
+8 * 9 = 72
+9 * 1 = 9
+9 * 2 = 18
+9 * 3 = 27
+9 * 4 = 36
+9 * 5 = 45
+9 * 6 = 54
+9 * 7 = 63
+9 * 8 = 72
+9 * 9 = 81</code></pre>
+</details>
+<h3>예제 ④ 5번 — 이중 for (함수 없이) · ⚠️ 줄바꿈 · 띄어쓰기 없음</h3>
+<pre><code class="language-c">// Project4 5번 (수업 코드) — 함수 없이 이중 for · ⚠️ 줄바꿈 · 띄어쓰기를 안 넣은 코드
+#include &lt;stdio.h&gt;                                        // printf 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    for (int step = 2; step &lt;= 3; step++) {               // 단 (여기서는 2 ~ 3단만 · 수업 코드는 9 까지)
+        for (int i = 1; i &lt;= 9; i++) {                    // i = 1 ~ 9
+            printf("%d * %d = %d", step, i, step * i);    // \n · 공백이 없어서 9개가 한 줄에 붙음
+        }                                                 // 안쪽 for 끝 → 다음 i
+        printf("\n");                                     // 한 단이 끝나면 줄바꿈
+    }                                                     // 바깥 for 끝 → 다음 단
+    return 0;                                             // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                         // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">2 * 1 = 22 * 2 = 42 * 3 = 62 * 4 = 82 * 5 = 102 * 6 = 122 * 7 = 142 * 8 = 162 * 9 = 18
+3 * 1 = 33 * 2 = 63 * 3 = 93 * 4 = 123 * 5 = 153 * 6 = 183 * 7 = 213 * 8 = 243 * 9 = 27</code></pre>
+<div class="tip">⚠️ 수업 코드 5번은 안쪽 printf 에 <code>\n</code> 도 공백도 없어서 <code>2 * 1 = 22 * 2 = 4…</code> 처럼 <b>숫자가 붙어</b> 나와요 (위는 2 · 3단만 실행) · 보기 좋게 하려면 <code>"%d * %d = %2d  "</code> 처럼 공백을 넣으세요. 실행결과 문제에서 <b><code>\n</code> 있나 없나</b> 가 바로 이런 함정이에요.</div>
+</section>
+<section class="card">
+<h2>4. 🔥 헤더파일 — Project3 시험문제 (파일 3개)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — <b>“솔루션 밑에 project3 시험문제(파일3개)”</b> · <b>“오늘 한 거 다 시험에 나온다 함”</b> · 3교시 = 헤더파일</p>
+<table class="ref">
+<tbody>
+<tr><th>파일</th><th>들어 있는 것</th><th>include</th></tr>
+<tr><td><code>func.h</code></td><td>함수 <b>원형(선언)</b> 만 — <code>int myAbs(int value);</code></td><td>—</td></tr>
+<tr><td><code>func.c</code></td><td>함수 <b>정의(몸체)</b> — 절대값 계산</td><td>—</td></tr>
+<tr><td><code>main.c</code></td><td><code>main()</code> — 입력 · 호출 · 출력</td><td><code>#include &lt;stdio.h&gt;</code> + <b><code>#include "func.h"</code></b></td></tr>
+</tbody></table>
+<ul><li><code>&lt; &gt;</code> = 표준 헤더 (컴파일러 폴더에서 찾음) · <code>" "</code> = <b>내가 만든 헤더</b> (프로젝트 폴더에서 먼저 찾음)</li><li><code>#pragma once</code> = 같은 헤더를 여러 번 include 해도 <b>한 번만</b> 읽게 함 (VS 가 헤더 파일을 추가하면 자동으로 넣어 줌)</li><li>VS 실습 방법 (강의자료 17 · 18p) — 솔루션 탐색기 → <b>소스 파일</b> 에 <code>main.c</code> · <code>func.c</code> 추가 / <b>헤더 파일</b> 에 <code>func.h</code> 추가 · 솔루션명 <code>w06</code></li></ul>
+<h3>func.h</h3>
+<pre><code class="language-c">// func.h — 함수 원형(선언)만 두는 헤더파일
+#pragma once                                      // 헤더 중복 포함 막기
+int myAbs(int value);                             // 절대값 함수 원형 — 몸체는 func.c 에</code></pre>
+<h3>func.c</h3>
+<pre><code class="language-c">// func.c — 함수 정의(몸체)만 두는 소스파일 · 절대값 계산 (기억하고 있기)
+int myAbs(int value) {                            // 정수 1개를 받아 절대값을 돌려줌
+    int iAbs;                                     // 결과를 담을 변수
+    if (value &gt; 0) {                              // 양수면 (예: 5 &gt; 0 → 참)
+        iAbs = value;                             // 그대로 → 5
+    }                                             // if 끝
+    else {                                        // 0 이나 음수면 (예: -7)
+        iAbs = -value;                            // 부호를 뒤집음 → -(-7) → 7
+    }                                             // else 끝
+    return iAbs;                                  // 절대값을 돌려주고 종료
+}                                                 // myAbs 끝</code></pre>
+<h3>main.c — 입력: -7 / 5</h3>
+<pre><code class="language-c">// main.c — 입력 → myAbs 호출 → 출력
+#define _CRT_SECURE_NO_WARNINGS                   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+#include "func.h"                                 // 내가 만든 헤더 → int myAbs(int value); 가 여기 들어옴
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int iValue, iResult;                          // 입력값 · 결과값
+    printf("정수를 입력하세요: ");                // 안내 문구 (\n 없음)
+    scanf("%d", &amp;iValue);                         // 정수 입력 → iValue (예: -7)
+    iResult = myAbs(iValue);                      // func.c 의 myAbs 실행 → 7 을 돌려받음
+    printf("%d의 절대값은 %d입니다.\n", iValue, iResult);   // -7의 절대값은 7입니다.
+    return 0;                                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                 // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">정수를 입력하세요: -7
+-7의 절대값은 7입니다.</code></pre>
+<pre class="io"><code class="language-text">정수를 입력하세요: 5
+5의 절대값은 5입니다.</code></pre>
+<div class="tip">🔥 시험 대비 — ① 파일 3개에 <b>무엇이 들어가는지</b> ② <code>#include "func.h"</code> (따옴표) ③ <code>myAbs</code> 의 if ~ else (음수면 <code>-value</code>) 를 손으로 쓸 수 있게. 과목 페이지의 💻 코딩테스트 🔥 묶음에서 직접 짜서 채점할 수 있어요.</div>
+<h3>예제 — Project2 · MyMath.h (강의자료 19p) — 원형 4줄을 헤더로</h3>
+<pre><code class="language-c">// MyMath.h — 함수 원형만 모아 둔 헤더파일 (3교시 · 강의자료 19p)
+#pragma once                                      // 이 헤더를 여러 번 include 해도 한 번만 읽게 함 (VS 가 자동으로 넣어 줌)
+int add(int value1, int value2);                  // 덧셈 원형
+int sub(int value1, int value2);                  // 뺄셈 원형
+int mul(int value1, int value2);                  // 곱셈 원형
+int div(int value1, int value2);                  // 나눗셈 원형</code></pre>
+<pre><code class="language-c">// Project2 · main.c — 원형 선언 4줄 대신 #include "MyMath.h" 한 줄
+#include &lt;stdio.h&gt;                                // &lt; &gt; = 표준 헤더 (컴파일러 폴더에서 찾음)
+#include "MyMath.h"                               // " " = 내가 만든 헤더 (프로젝트 폴더에서 먼저 찾음) → 원형 4줄이 여기 들어옴
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int result1, result2, result3, result4;       // 결과 4개를 담을 변수
+    result1 = add(2, 3);                          // 2 + 3 → 5
+    result2 = sub(2, 3);                          // 2 - 3 → -1
+    result3 = mul(2, 3);                          // 2 * 3 → 6
+    result4 = div(2, 3);                          // 2 / 3 → 몫만 → 0
+    printf("result1: %d\n", result1);             // result1: 5
+    printf("result2: %d\n", result2);             // result2: -1
+    printf("result3: %d\n", result3);             // result3: 6
+    printf("result4: %d\n", result4);             // result4: 0
+    return 0;                                     // ⚠️ 수업 코드는 void main() 인데 return 0; → int main 으로
+}                                                 // main 함수 끝
+int add(int value1, int value2) {                 // 덧셈 함수 정의
+    return value1 + value2;                       // 합
+}                                                 // add 끝
+int sub(int value1, int value2) {                 // 뺄셈 함수 정의
+    return value1 - value2;                       // 차
+}                                                 // sub 끝
+int mul(int value1, int value2) {                 // 곱셈 함수 정의
+    return value1 * value2;                       // 곱
+}                                                 // mul 끝
+int div(int value1, int value2) {                 // 나눗셈 함수 정의
+    return value1 / value2;                       // 몫
+}                                                 // div 끝</code></pre>
+<pre class="io"><code class="language-text">result1: 5
+result2: -1
+result3: 6
+result4: 0</code></pre>
+<div class="tip">⚠️ 수업 코드는 <code>void main()</code> 안에 <code>return 0;</code> 이 있어요 — void 함수는 값을 돌려줄 수 없어서 맞지 않아요 → <code>int main(void)</code> 로 · 강의자료 19p 는 MyMath.h 에 함수 <b>몸체까지</b> 넣었지만, 수업 코드(Project2)는 헤더에 <b>원형만</b> 두고 몸체는 main.c 아래에 뒀어요.</div>
+</section>
+<section class="card">
+<h2>5. 🔥 HW02 과제 — 교재 9장 실습 (중간고사 범위 “6주차: 함수, [과제2] 소스”)</h2>
+<p><span class="wk-tag memo">📝 교수님 메모</span> — 교재 9장 실습한 내용을 ① <b>문제</b>: 소스에 해당하는 문제 (예: <code>// 01basefunc.c 함수 정의와 호출 [Prj01]</code>) ② <b>C 소스</b> ③ <b>실행결과 화면캡처</b> 를 워드 파일에 작성해 제출 · 파일명 <code>과제02-w06-학번-이름-작성날짜.doc</code></p>
+<table class="ref">
+<tbody>
+<tr><th>파일</th><th>문제</th></tr>
+<tr><td>01basefunc.c · 01catalk.c</td><td>함수 정의와 호출 [Prj01] — 함수를 <b>다른 파일</b>에 구현</td></tr>
+<tr><td>02funcadd.c</td><td>함수 정의와 호출 [Prj02] — 원형을 main <b>안</b>에</td></tr>
+<tr><td>03functioncall.c · 03others.c</td><td>함수 정의와 호출 [Prj03] — 반환값 없는 함수 호출</td></tr>
+<tr><td>07rand.c</td><td>난수를 위한 함수 rand() 이용 [Prj07]</td></tr>
+<tr><td>09math.c</td><td>다양한 수학 관련 함수 [Prj09]</td></tr>
+<tr><td>10char.c</td><td>다양한 문자 관련 함수 [Prj10]</td></tr>
+<tr><td>lab1intpower.c</td><td>표준입력으로 받은 두 양의 정수로 거듭제곱 구하는 함수 intpow() 작성</td></tr>
+<tr><td>lab3numguess.c</td><td>1 ~ 100 사이의 난수 알아 맞히기</td></tr>
+</tbody></table>
+<details class="wk-details">
+<summary>📘 01basefunc.c · 01catalk.c — 함수를 다른 파일에 구현</summary>
+<pre><code class="language-c">// 01basefunc.c — 함수 정의와 호출 [Prj01]
+#include &lt;stdio.h&gt;                       // puts 를 쓰기 위한 표준 입출력 헤더
+void message();                          // 함수 원형 — 몸체는 이 파일 아래
+void cacao();                            // 함수 원형 — 몸체는 다른 파일(01catalk.c)
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    puts("메인 함수 시작입니다.");       // ① 출력 + 줄바꿈
+    message();                           // ② message 호출 → 탭 + 메시지입니다.
+    cacao();                             // ③ cacao 호출 → 탭 + 카톡입니다.
+    puts("메인 함수 종료입니다.");       // ④ 출력 + 줄바꿈
+    return 0;                            // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                        // main 함수 끝
+void message() {                         // 함수 message 구현
+    puts("\t메시지입니다.");             // \t = 탭 → 들여 쓰고 출력
+}                                        // message 끝</code></pre>
+<pre><code class="language-c">// 01catalk.c — 함수 main() 과 다른 파일에 함수 구현 가능 [Prj01]
+#include &lt;stdio.h&gt;                       // puts 를 쓰기 위한 표준 입출력 헤더 (PDF 에는 없음 — VS 는 경고만)
+void cacao() {                           // 함수 cacao 구현
+    puts("\t카톡입니다.");               // 탭 + 카톡입니다.
+}                                        // cacao 끝</code></pre>
+<pre class="io"><code class="language-text">메인 함수 시작입니다.
+	메시지입니다.
+	카톡입니다.
+메인 함수 종료입니다.</code></pre>
+</details>
+<details class="wk-details">
+<summary>📘 02funcadd.c — main 안의 원형 선언</summary>
+<pre><code class="language-c">// 02funcadd.c — 함수 정의와 호출 [Prj02]
+#include &lt;stdio.h&gt;                       // printf 를 쓰기 위한 표준 입출력 헤더
+// int add(int a, int b);                // 원형은 이 위치도 가능
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int a = 3, b = 5;                    // a = 3, b = 5
+    int add(int a, int b);               // main 안에 쓴 원형 선언 — int add(int, int) 도 가능 · 없으면 호출에서 경고
+    int sum = add(a, b);                 // 3 + 5 → 8 을 돌려받아 sum
+    printf("합: %d\n", sum);             // 합: 8
+    return 0;                            // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                        // main 함수 끝
+int add(int a, int b) {                  // 함수 add 의 함수구현(함수정의)
+    int sum = a + b;                     // 3 + 5 → 8
+    return (sum);                        // 괄호는 생략 가능 → 8 을 돌려줌
+}                                        // add 끝
+int findMin(int x, int y) {              // main 에서 호출하지 않으므로 실행되지 않음
+    int min = x &lt; y ? x : y;             // 조건 연산자 → 작은 값
+    return (min);                        // 작은 값을 돌려줌
+}                                        // findMin 끝</code></pre>
+<pre class="io"><code class="language-text">합: 8</code></pre>
+</details>
+<details class="wk-details">
+<summary>📘 03functioncall.c · 03others.c — 반환값을 바로 쓰기 · void 함수 호출</summary>
+<pre><code class="language-c">// 03functioncall.c — 함수 정의와 호출 [Prj03]
+#include &lt;stdio.h&gt;                       // printf 를 쓰기 위한 표준 입출력 헤더
+int add(int a, int b);                   // 원형 — int add(int, int) 도 가능
+int findMax(int, int);                   // 원형 — 매개변수 이름은 생략 가능
+void printMin(int, int);                 // 원형 — 반환값 없음
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int a = 10, b = 15;                  // a = 10, b = 15
+    int max = findMax(a, b);             // 10 &gt; 15 ? → 거짓 → 15 → max
+    printf("최대: %d\n", max);           // 최대: 15
+    printf("합: %d\n", add(a, b));       // 반환값을 바로 출력에 사용 → 10 + 15 → 합: 25
+    printMin(a, b);                      // 반환값이 없는 함수 호출은 일반 문장처럼 → 최소: 10
+    return 0;                            // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                        // main 함수 끝
+void printMin(int a, int b) {            // 최소값을 직접 출력하는 함수 (반환 없음)
+    int min = a &lt; b ? a : b;             // 10 &lt; 15 ? → 참 → 10
+    printf("최소: %d\n", min);           // 최소: 10
+}                                        // printMin 끝</code></pre>
+<pre><code class="language-c">// 03others.c — 함수 add, findMax, findMin 구현 (다른 파일) [Prj03]
+int add(int a, int b) {                  // 덧셈
+    int sum = a + b;                     // 두 수의 합
+    return (sum);                        // 합을 돌려줌
+}                                        // add 끝
+int findMax(int a, int b) {              // 큰 값
+    int max = a &gt; b ? a : b;             // a 가 크면 a, 아니면 b
+    return max;                          // 큰 값을 돌려줌
+}                                        // findMax 끝
+int findMin(int x, int y) {              // 작은 값
+    int min = x &lt; y ? x : y;             // x 가 작으면 x, 아니면 y
+    return (min);                        // 작은 값을 돌려줌
+}                                        // findMin 끝</code></pre>
+<pre class="io"><code class="language-text">최대: 15
+합: 25
+최소: 10</code></pre>
+</details>
+<details class="wk-details">
+<summary>📘 07rand.c · 08srand.c — rand() · srand(time(NULL)) (실행마다 결과가 달라요)</summary>
+<pre><code class="language-c">// 07rand.c — 난수를 위한 함수 rand() 이용 [Prj07]
+#include &lt;stdio.h&gt;                                      // printf · puts 를 쓰기 위한 표준 입출력 헤더
+#include &lt;stdlib.h&gt;                                     // rand() · RAND_MAX 를 위한 헤더파일
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    printf("0 ~ %5d 사이의 난수 8개: rand()\n", RAND_MAX);   // RAND_MAX = 난수 최대값 (VS 는 32767)
+    for (int i = 0; i &lt; 8; i++)                         // 8번 반복
+        printf("%5d ", rand());                         // 난수를 5칸에 맞춰 출력
+    puts("");                                           // 빈 문자열 + 줄바꿈 → 줄만 바꿈
+    return 0;                                           // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                       // main 함수 끝</code></pre>
+<pre><code class="language-c">// 08srand.c — srand(time(NULL)) 로 실행마다 다른 난수 [Prj08]
+#include &lt;stdio.h&gt;                                      // printf · puts 를 쓰기 위한 표준 입출력 헤더
+#include &lt;stdlib.h&gt;                                     // rand() · srand() 를 위한 헤더파일
+#include &lt;time.h&gt;                                       // time() 을 위한 헤더파일
+#define MAX 100                                         // 매크로 상수 MAX = 100
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    srand((long)time(NULL));                            // 현재 시각(초)을 씨앗으로 → 실행할 때마다 다른 난수
+    printf("1 ~ %5d 사이의 난수 8개:\n", MAX);          // 1 ~   100 사이의 난수 8개:
+    for (int i = 0; i &lt; 8; i++)                         // 8번 반복
+        printf("%5d ", rand() % MAX + 1);               // 나머지 0 ~ 99 → +1 → 1 ~ 100
+    puts("");                                           // 줄바꿈
+    return 0;                                           // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                       // main 함수 끝</code></pre>
+<div class="tip">난수는 실행할 때마다(또는 컴파일러마다) 값이 달라서 출력 결과를 적지 않았어요 · <code>rand() % MAX + 1</code> → <b>1 ~ 100</b> · <code>srand</code> 를 안 쓰면 매번 <b>같은 순서</b>의 난수가 나와요.</div>
+</details>
+<details class="wk-details">
+<summary>📘 09math.c — pow · sqrt · exp · ceil · floor · fabs</summary>
+<pre><code class="language-c">// 09math.c — 다양한 수학 관련 함수 [Prj09]
+#include &lt;stdio.h&gt;                                      // printf 를 쓰기 위한 표준 입출력 헤더
+#include &lt;math.h&gt;                                       // pow · sqrt · exp · ceil · floor · fabs 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    printf("  i   i제곱   i세제곱  제곱근(sqrt)\n");     // 표 머리글
+    printf("------------------------------------\n");   // 구분선
+    for (int i = 3; i &lt; 7; i++)                         // i = 3, 4, 5, 6
+        printf("%3d %7.1f %9.1f %9.1f\n", i, pow(i, 2), pow(i, 3), sqrt(i));   // pow(i,2) = i², pow(i,3) = i³, sqrt = 제곱근
+    printf("\n");                                       // 빈 줄
+    printf("%5.2f, ", exp(1.0));                        // e¹ = 2.718… → 소수 2자리 → 2.72
+    printf("%5.2f, ", pow(3.14, 1.0));                  // 3.14¹ → 3.14
+    printf("%5.2f\n", sqrt(81));                        // √81 → 9.00
+    printf("%5.2f, ", ceil(3.6));                       // 올림 → 4.00
+    printf("%5.2f, ", floor(5.8));                      // 내림 → 5.00
+    printf("%5.2f\n, ", fabs(-10.2));                   // 절대값 → 10.20 · ⚠️ \n 뒤에 ", " 가 있어 다음 줄에 쉼표가 찍힘 (PDF 그대로)
+    return 0;                                           // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                       // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">  i   i제곱   i세제곱  제곱근(sqrt)
+------------------------------------
+  3     9.0      27.0       1.7
+  4    16.0      64.0       2.0
+  5    25.0     125.0       2.2
+  6    36.0     216.0       2.4
+
+ 2.72,  3.14,  9.00
+ 4.00,  5.00, 10.20
+, </code></pre>
+<div class="tip"><code>ceil</code> = 올림 · <code>floor</code> = 내림 · <code>fabs</code> = 실수 절대값 · <code>%5.2f</code> = 전체 5칸, 소수 2자리 · ⚠️ 마지막 <code>"%5.2f\n, "</code> 은 <code>\n</code> 뒤에 <code>, </code> 가 있어서 <b>맨 아래 줄에 쉼표</b>가 찍혀요 (요약 PDF 그대로).</div>
+</details>
+<details class="wk-details">
+<summary>📘 10char.c — isalpha · isupper · tolower · toupper — 입력: A / b / 7 / x</summary>
+<pre><code class="language-c">// 10char.c — 다양한 문자 관련 함수 [Prj10]
+#define _CRT_SECURE_NO_WARNINGS                         // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                                      // printf · scanf · getchar 를 쓰기 위한 표준 입출력 헤더
+#include &lt;ctype.h&gt;                                      // isalpha · isupper · tolower · toupper 헤더
+void print2char(char);                                  // 원형 — 대소문자를 바꿔 출력
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    char ch;                                            // 입력받을 문자
+    printf("알파벳(종료x) 또는 다른 문자 입력하세요.\n");   // 안내
+    do {                                                // 먼저 한 번 실행하고 조건 검사
+        printf("문자 입력 후 Enter: ");                 // 안내 (\n 없음)
+        scanf("%c", &amp;ch);                               // 문자 1개 입력
+        getchar();                                      // Enter 키('\n') 를 받아서 버림
+        if (isalpha(ch))                                // 알파벳이면
+            print2char(ch);                             // 대소문자 바꿔 출력
+        else                                            // 알파벳이 아니면
+            printf("입력: %c\n", ch);                   // 그대로 출력
+    } while (ch != 'x' &amp;&amp; ch != 'X');                   // 입력이 x 또는 X 이면 종료
+    return 0;                                           // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                       // main 함수 끝
+void print2char(char ch) {                              // 문자 1개를 받음
+    if (isupper(ch))                                    // 대문자면
+        printf("입력: %c, 변환: %c\n", ch, tolower(ch));   // 소문자로 → A → a
+    else                                                // 소문자면
+        printf("입력: %c, 변환: %c\n", ch, toupper(ch));   // 대문자로 → b → B
+    return;                                             // void 함수의 return; → 값 없이 종료
+}                                                       // print2char 끝</code></pre>
+<pre class="io"><code class="language-text">알파벳(종료x) 또는 다른 문자 입력하세요.
+문자 입력 후 Enter: A
+입력: A, 변환: a
+문자 입력 후 Enter: b
+입력: b, 변환: B
+문자 입력 후 Enter: 7
+입력: 7
+문자 입력 후 Enter: x
+입력: x, 변환: X</code></pre>
+</details>
+<details class="wk-details">
+<summary>📘 lab1intpower.c — 거듭제곱 함수 intpow() — 입력: 2 5</summary>
+<pre><code class="language-c">// lab1intpower.c — 표준입력으로 받은 두 양의 정수로 거듭제곱 구하는 함수 intpow() 작성
+#define _CRT_SECURE_NO_WARNINGS                         // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                                      // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+int intpow(int m, int n);                               // 원형 — m 을 n 번 곱한 값을 돌려줌
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int m, n;                                           // 밑 m, 지수 n
+    printf("정수 m을 n번 제곱합니다.\n");               // 안내
+    printf("정수 m n을 계속 입력 &gt;&gt;&gt; ");                // 안내 (\n 없음)
+    scanf("%d %d", &amp;m, &amp;n);                             // 두 정수 입력 (예: 2 5)
+    printf("\n%d의 %d 제곱은 %d입니다.\n", m, n, intpow(m, n));   // 함수호출 결과를 바로 출력 → 2의 5 제곱은 32입니다.
+    return 0;                                           // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                       // main 함수 끝
+int intpow(int m, int n) {                              // 거듭제곱 함수
+    int mult = 1, i = 1;                                // 곱을 쌓을 mult 는 1 에서 시작
+    for (i = 1; i &lt;= n; i++) {                          // n 번 반복
+        mult *= m;                                      // mult = mult * m → 1→2→4→8→16→32
+    }                                                   // for 끝 → 다음 i
+    return mult;                                        // 32 를 돌려줌
+}                                                       // intpow 끝</code></pre>
+<pre class="io"><code class="language-text">정수 m을 n번 제곱합니다.
+정수 m n을 계속 입력 &gt;&gt;&gt; 2 5
+
+2의 5 제곱은 32입니다.</code></pre>
+</details>
+<details class="wk-details">
+<summary>📘 lab3numguess.c — 1 ~ 100 난수 맞히기 (실행마다 정답이 달라요)</summary>
+<pre><code class="language-c">// lab3numguess.c — 1 ~ 100 사이의 난수 알아 맞히기
+#define _CRT_SECURE_NO_WARNINGS                         // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                                      // printf · scanf · puts 를 쓰기 위한 표준 입출력 헤더
+#include &lt;stdlib.h&gt;                                     // rand() · srand() 를 위한 헤더파일
+#include &lt;time.h&gt;                                       // time() 을 위한 헤더파일
+#define MAX 100                                         // 매크로 상수 MAX = 100
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int guess, input;                                   // 정답 · 입력
+    srand((long)time(NULL));                            // 실행마다 다른 난수
+    guess = rand() % MAX + 1;                           // 1 ~ 100 중 하나
+    printf("1에서 %d 사이에서 한 정수가 결정되었습니다.\n", MAX);   // 안내
+    printf("이 정수는 무엇일까요? 입력해 보세요. : ");   // 안내 (\n 없음)
+    while (scanf("%d", &amp;input)) {                       // 정수를 읽으면 1(참) → 계속 반복
+        if (input &gt; guess)                              // 입력이 크면
+            printf("입력한 수 %d보다 작습니다. 다시 입력하세요. : ", input);   // 더 작은 수를 입력하라
+        else if (input &lt; guess)                         // 입력이 작으면
+            printf("입력한 수 %d보다 큼니다. 다시 입력하세요. : ", input);     // 더 큰 수를 입력하라 (PDF 오타 '큼니다' 그대로)
+        else {                                          // 같으면
+            puts("정답입니다.");                        // 정답 + 줄바꿈
+            break;                                      // while 을 빠져나감
+        }                                               // else 끝
+    }                                                   // while 끝
+    return 0;                                           // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                       // main 함수 끝</code></pre>
+</details>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../프로그래밍언어실습.html#quiz">프로그래밍언어실습 과목 페이지 — 퀴즈(객관식 25 · 주관식 25)</a></li><li><a href="../프로그래밍언어실습.html#output">🖥️ 출력 결과 맞히기 — 🔥 6주차 함수 · 헤더파일 · HW02</a></li><li><a href="../프로그래밍언어실습.html#code">💻 코딩테스트 — 🔥 Project3 myAbs · intpow · showMul 직접 짜서 채점</a></li><li><a href="../프로그래밍언어실습.html#s32">6주차 시험 포인트 · 괄호넣기 직접 풀기</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>조건 · 반복 (ch06 · ch07)</small></a><a class="next" href="프로그래밍언어실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「프로그래밍언어실습 · 6주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>
