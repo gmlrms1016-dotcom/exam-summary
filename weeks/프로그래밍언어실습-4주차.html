@@ -386,7 +386,7 @@ c &gt;&gt;= 2: 15 </code></pre>
 <pre><code class="language-c">// 시프트 연산자 — unsigned char data = 0x1A (필기 예제)
 #include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    unsigned char data = 0x1A;         // 0x1A → 1×16 + 10 → 26 → 0001 1010
+    unsigned char data = 0x1A;         // 0x1A(16진수) 1A=0001 1010=11010=2+8+16=26
     unsigned char left, right;                  // 결과를 담을 unsigned char 변수 두 개
 
     left = data &lt;&lt; 2;                  // 0001 1010 → 왼쪽으로 2칸 → 0110 1000 → 26 × 4 → 104
@@ -397,9 +397,9 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
     data = data &gt;&gt; 2;                  // 104 를 다시 오른쪽 2칸 → 0001 1010 = 26 (원래 값)
     printf("&lt;&lt;2 한 뒤 &gt;&gt;2 : %d\n", data);         // &lt;&lt;2 한 뒤 &gt;&gt;2 : 26
 
-    unsigned char x = 0xFF;            // 0xFF → 15×16 + 15 → 255 → 1111 1111
+    unsigned char x = 0xFF;            // 0xFF(16진수) FF=1111 1111=11111111=1+2+4+8+16+32+64+128=255
     x &lt;&lt;= 2;                           // x = x &lt;&lt; 2 → 1111 1111 → 왼쪽 2칸 → 11 1111 1100 → 8비트만 남음(넘친 비트는 버려짐) → 1111 1100 → 252
-    printf("0xFF &lt;&lt;= 2 : %d\n", x);             // 0xFF &lt;&lt;= 2 : 252
+    printf("0xFF &lt;&lt;= 2 : %d\n", x);             // 1111 1111 &lt;&lt;2 → 1111 1100=11111100=4+8+16+32+64+128=252
     return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
 }                                               // main 함수 끝</code></pre>
 <pre class="io"><code class="language-text">data=26, data&lt;&lt;2=104, data&gt;&gt;2=6
@@ -435,16 +435,16 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
 </section>
 <section class="card">
 <h2>6. 진법 · 형변환 · 콤마 연산자</h2>
-<div class="tip">📌 C 코드에서 <b>0 으로 시작하면 8진수</b>(<code>017</code>), <b>0x 로 시작하면 16진수</b>(<code>0x1A</code>) · 16진수 A=10 B=11 C=12 D=13 E=14 F=15 · 16진수 한 자리 = 2진수 4자리</div>
+<div class="tip">📌 C 코드에서 <b>0 으로 시작하면 8진수</b>(<code>017</code>), <b>0x 로 시작하면 16진수</b>(<code>0x1A</code>) · 16진수 A=10 B=11 C=12 D=13 E=14 F=15 · 16진수 한 자리 = 2진수 4자리 · 8진수 한 자리 = 2진수 3자리 → 예: <code>015</code>(8진수) 15=001 101=1101=1+4+8=13 · <code>0x15</code>(16진수) 15=0001 0101=10101=1+4+16=21 · <code>0b101</code>(2진수) 101=1+4=5</div>
 <h3>예제 ① 진법 표기</h3>
 <pre><code class="language-c">// 진법 표기 — 0 으로 시작 = 8진수, 0x 로 시작 = 16진수
 #include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
-    printf("017  = %d\n", 017);      // 8진수 17 = 1×8 + 7 = 15
-    printf("0x1A = %d\n", 0x1A);     // 16진수 1A = 1×16 + 10 = 26
-    printf("0x5A = %d\n", 0x5A);     // 0101 1010 = 90
+    printf("017  = %d\n", 017);      // 017(8진수) 17=001 111=1111=1+2+4+8=15
+    printf("0x1A = %d\n", 0x1A);     // 0x1A(16진수) 1A=0001 1010=11010=2+8+16=26
+    printf("0x5A = %d\n", 0x5A);     // 0x5A(16진수) 5A=0101 1010=1011010=2+8+16+64=90
     printf("0xDF = %d\n", 0xDF);     // D=13=1101, F=15=1111 → 1101 1111 = 223
-    printf("26 → 8진수 %o, 16진수 %X\n", 26, 26);   // 26 = 3×8 + 2 → 8진수 32 · 26 = 1×16 + 10 → 16진수 1A
+    printf("26 → 8진수 %o, 16진수 %X\n", 26, 26);   // 26=2+8+16=11010 → 011 010=32(8진수) · 0001 1010=1A(16진수)
     return 0;   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
 }               // main 함수 끝</code></pre>
 <pre class="io"><code class="language-text">017  = 15

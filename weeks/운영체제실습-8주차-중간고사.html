@@ -197,7 +197,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — inode = 파일 정보(크기·소유자·권한·데이터 위치) 번호표, 파일 1개당 1개 · <b>이름이 달라도 inode 가 같으면 같은 파일</b> · <code>ls -i</code> 로 확인</li></ul>
 <h3>접근 권한 chmod ★</h3>
-<ul><li><span class="wk-tag star">⭐ 강조</span> — 기호 모드: 대상 <code>u</code> 소유자 · <code>g</code> 그룹 · <code>o</code> 기타 · <code>a</code> 전체 / 연산 <code>+</code> <code>-</code> <code>=</code> / 권한 <code>r</code> <code>w</code> <code>x</code> → <code>chmod u+x,go+w story.txt</code></li><li><span class="wk-tag star">⭐ 강조</span> — 8진수 모드: r=4 · w=2 · x=1 → <code>755</code> = rwxr-xr-x · <code>644</code> = rw-r--r-- · <code>775</code> = rwxrwxr-x</li><li><code>rm -i 파일</code> = 삭제 전 확인 · 기본 권한 <code>rw-r--r--</code>(644) 에서 실습 시작</li></ul>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 기호 모드: 대상 <code>u</code> 소유자 · <code>g</code> 그룹 · <code>o</code> 기타 · <code>a</code> 전체 / 연산 <code>+</code> <code>-</code> <code>=</code> / 권한 <code>r</code> <code>w</code> <code>x</code> → <code>chmod u+x,go+w story.txt</code></li><li><span class="wk-tag star">⭐ 강조</span> — 8진수 모드: r=4 · w=2 · x=1 → 한 자리 = 3비트 · <code>755</code> 7=111=1+2+4=rwx · 5=101=1+4=r-x → rwxr-xr-x · <code>644</code> 6=110=2+4=rw- · 4=100=r-- → rw-r--r-- · <code>775</code> = rwxrwxr-x</li><li><code>rm -i 파일</code> = 삭제 전 확인 · 기본 권한 <code>rw-r--r--</code>(644) 에서 실습 시작</li></ul>
 <h3>사용자와 그룹 관리 ★</h3>
 <table class="ref">
 <tbody>

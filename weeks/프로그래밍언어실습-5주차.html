@@ -1133,7 +1133,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         scanf("%d", &amp;input);                    // 정수 입력 → input
         if (input == 0)                         // 0 이면
             break;                     // 0 → while 탈출
-        printf("입력한 정수 %d: 16진수 %#x\n", input, input);   // %#x = 앞에 0x 를 붙인 16진수 (예: 26 → 1×16 + 10 → 0x1a)
+        printf("입력한 정수 %d: 16진수 %#x\n", input, input);   // %#x = 앞에 0x 를 붙인 16진수 (예: 26=2+8+16=11010=0001 1010=0x1a)
     }                                           // while 끝 → 조건 다시 검사 (거짓이면 빠져나옴)
     puts("종료");                                 // 반복이 끝난 뒤 → 종료 (puts 는 자동 줄바꿈)
 
@@ -1177,7 +1177,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         scanf("%d", &amp;input);                    // 정수 입력 → input
         if (input &lt;= 0)                         // 0 이하(0 · 음수)면
             break;                     // do ~ while(1) 도 break 로 빠져나옴
-        printf("정수 %d: 8진수 %#o  16진수 %#x\n", input, input, input);   // %#o = 앞에 0 을 붙인 8진수 · %#x = 앞에 0x (예: 26 → 3×8 + 2 → 032 · 1×16 + 10 → 0x1a)
+        printf("정수 %d: 8진수 %#o  16진수 %#x\n", input, input, input);   // %#o = 앞에 0 을 붙인 8진수 · %#x = 앞에 0x (예: 26=2+8+16=11010 → 011 010=032 · 0001 1010=0x1a)
     } while (1);                                // 조건이 1(항상 참) → break 를 만날 때까지 반복
 
     return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
