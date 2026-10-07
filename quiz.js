@@ -40,6 +40,28 @@
     function esc(s) {
         return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
+    // 주관식 정답 비교 (2026-10-07 사용자: '실제 시험에서는 영어 또는 한글 또는 영어와 한글, 3가지 중 하나라도 맞으면 정답')
+    //  ① 정답 목록 중 하나와 같으면 정답 (띄어쓰기 · 괄호 · 따옴표 무시, 대소문자는 data-case="strict" 일 때만)
+    //  ② 정답이 "매개변수(파라미터)" 꼴이면 괄호 밖 · 안 하나만 써도 정답
+    //  ③ 정답 두 개를 이어 쓰면 정답 — 매개변수(파라미터) · 매개변수 parameter · parameter / 매개변수 (대소문자 채점 문제 = 코드 빈칸은 제외)
+    function sameAnswer(answers, value, keep) {
+        var all = [];
+        answers.forEach(function (a) {
+            all.push(a);
+            var m = /^\s*([^()]+?)\s*\(\s*([^()]+?)\s*\)\s*$/.exec(a || "");
+            if (m && !keep && !/[.;=<>{}\[\]]/.test(a)) { all.push(m[1]); all.push(m[2]); }
+        });
+        var keys = all.map(function (a) { return norm(a, keep); }).filter(function (a) { return a; });
+        var v = norm(value, keep);
+        if (!v) return false;
+        if (keys.indexOf(v) >= 0) return true;
+        if (keep) return false;
+        var w = v.replace(/[\/,·、|]/g, "");
+        for (var i = 0; i < keys.length; i++) for (var j = 0; j < keys.length; j++) {
+            if (keys[i] !== keys[j] && keys[i] + keys[j] === w) return true;
+        }
+        return false;
+    }
 
     var scope = document.getElementById("quiz") || document;
     var mcqs = document.querySelectorAll(".mcq");
@@ -85,7 +107,7 @@
         var explain = item.dataset.explain ? '<span class="ans">' + esc(item.dataset.explain) + "</span>" : "";
         function check() {
             var keep = item.dataset.case === "strict";
-            var ok = answers.some(function (a) { return norm(a, keep) === norm(input.value, keep); });
+            var ok = sameAnswer(answers, input.value, keep);
             fb.className = "quiz-feedback " + (ok ? "ok" : "no");
             fb.innerHTML = ok ? "⭕ 정답입니다!" + explain : "❌ 다시 생각해 보세요.";
             if (ok) { item.dataset.solved = "1"; item.dataset.wrong = ""; }
