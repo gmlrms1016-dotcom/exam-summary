@@ -629,13 +629,13 @@ INSERT INTO 사원 VALUES('D001','정지영', '', NULL);      -- '' = 빈 문자
 INSERT INTO 사원 VALUES('D002','김선주','010-1111-1111', NULL);   -- 생일만 NULL (값이 없음)
 INSERT INTO 사원 VALUES('D003','정성호', NULL, '10월4일');   -- 연락처가 NULL
 SELECT * FROM 사원;                               -- 3행 조회 → 빈 칸('')과 NULL 이 다르게 보임</code></pre>
-        <div class="tip">⭐ <b>시험 연결</b> — 사원 테이블의 <b>차수 = 4</b>(사원번호·사원명·연락처·생일), 위처럼 3줄 넣으면 <b>카디널리티 = 3</b><br>⚠️ 필기의 <code>INSERT INTO VALUES('D002',…)</code> 는 <b>테이블 이름이 빠져</b> 실행되지 않습니다.<br>⚠️ <b>강의자료 49p 는 D001 의 연락처를 <code>''</code>(빈 문자열)로 넣어요</b> — 결과 화면에서 <code>''</code> 은 빈칸, NULL 은 NULL 로 보입니다. 필기의 “<code>''</code> 랑 NULL 이 같은 뜻?” 의 답 = <b>아니요</b> (널 값은 0도 공백도 아님). → <a href="#output">🖥️ 결과 맞히기</a> · <a href="#code">💻 코딩테스트</a>의 🔥 사원 문제</div>
+        <div class="tip">⭐ <b>시험 연결</b> — 사원 테이블의 <b>차수 = 4</b>(사원번호·사원명·연락처·생일), 위처럼 3줄 넣으면 <b>카디널리티 = 3</b><br>⚠️ 필기의 <code>INSERT INTO VALUES('D002',…)</code> 는 <b>테이블 이름이 빠져</b> 실행되지 않습니다.<br>⚠️ <b>강의자료 49p 는 D001 의 연락처를 <code>''</code>(빈 문자열)로 넣어요</b> — 결과 화면에서 <code>''</code> 은 빈칸, NULL 은 NULL 로 보입니다. 필기의 “<code>''</code> 랑 NULL 이 같은 뜻?” 의 답 = <b>아니요</b> (널 값은 0도 공백도 아님). → <a href="데이터베이스관리-실제시험.html">🔒 실제시험</a>의 사원 문제 (출력결과 · 코드 작성)</div>
         <div class="tip">📝 <b>과제 (Quiz 6-1 · 6-2)</b> — ① 직원 테이블 + 뷰 만들고 조회 ② <b>생성형 AI</b>로 INSERT 예제 5가지 검색해서 <b>도서</b> 테이블에 적용 · 제출은 <b>프롬프트 + SQL + 실행 화면 캡처</b><br>→ 도서 테이블 SQL 전체는 <a href="weeks/데이터베이스관리-5주차.html">5주차 페이지</a>에 있어요.</div>
     </section>
 
     <section class="card" id="s24">
         <h2>24. ★ 중간고사 범위 · 6주차 시험 안내<span class="week">6주차</span></h2>
-        <div class="tip">✍️ <b>필기 — “오늘 하는 실습이 다 중간고사 시험 예상문제임”</b> → 실습 6-1 · Quiz 6-1 · 실습 6-2 · 실습 6-03 을 <a href="#output">🖥️ 결과 맞히기</a> · <a href="#code">💻 코딩테스트</a>의 <b>🔥 6주차 시험예상</b> 묶음에 모두 넣었어요.</div>
+        <div class="tip">✍️ <b>필기 — “오늘 하는 실습이 다 중간고사 시험 예상문제임”</b> → 실습 6-1 · Quiz 6-1 · 실습 6-2 · 실습 6-03 을 <a href="데이터베이스관리-실제시험.html">🔒 실제시험</a>의 출력결과 · 코드 작성 문제에 모두 넣었어요.</div>
         <table class="ref">
             <tr><th>구분</th><th>✍️ 6주차 필기 — 중간고사 범위(예정)</th></tr>
             <tr><td><b>시험범위</b></td><td><b>1 ~ 7주차 내용</b></td></tr>
