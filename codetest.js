@@ -138,6 +138,10 @@
             var text = (r.detail || "") + (r.runtimeErr || "");
             if (BUSY.test(text) && attempt < 4) return wait(1200 * (attempt + 1)).then(function () { return runRemoteTry(lang, code, stdin, attempt + 1); });
             return r;
+        }, function (e) {
+            // 채점 서버가 바쁨(429 요청 너무 많음 · 5xx) → 잠깐 쉬었다가 자동으로 다시 (시험 때 여럿이 같은 와이파이로 몰아서 채점해도) — 2026-10-07
+            if (/응답 (429|5\d\d)/.test(String(e && e.message || e)) && attempt < 5) return wait(Math.min(2000 * Math.pow(2, attempt), 15000)).then(function () { return runRemoteTry(lang, code, stdin, attempt + 1); });
+            throw e;
         });
     }
     function runRemoteOnce(lang, code, stdin) {
