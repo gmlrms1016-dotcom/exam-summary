@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202610081129"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~5주차 반영)</title>
+    <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~6주차 반영)</title>
     <link rel="stylesheet" href="../style.css?v=202610081129">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
@@ -47,36 +47,37 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🐧 운영체제실습 · 8주차 · 중간고사</h1>
-        <p>중간고사 시험문제 정리 (1~5주차 반영)</p>
+        <p>중간고사 시험문제 정리 (1~6주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>작업 예약 cron · at · 월간 백업 스크립트</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-6주차.html">‹ 이전 · <b>6주차</b><br><small>셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</small></a><span></span></nav>
 
-<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~5주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
-<div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종 ⑥ <b>DNF 작동 흐름도(그림 4-111) — 4주차 수업 화면에 나온 시험문제</b> ⑦ <b>작업 예약 cron · at</b>(5주차 — crontab 칸 순서 · run-parts · 백업 스크립트)</div>
+<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~6주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
+<div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종 ⑥ <b>DNF 작동 흐름도(그림 4-111) — 4주차 수업 화면에 나온 시험문제</b> ⑦ <b>작업 예약 cron · at</b>(5주차 — crontab 칸 순서 · run-parts · 백업 스크립트) ⑧ <b>셸 스크립트</b>(6주차 · 7장 — 변수 · expr · if 조건 · case · for · while · 함수)</div>
+<div class="tip">🔥 <b>6주차 공지 (✍️ 필기)</b> — 시험범위 <b>1장 · 2장 · 3장 · 4장 · 5장 · 7장</b> (6장 빠짐) · <b>시험에 나오는 용어</b>: <b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것 · <b>노틸러스</b> = 파일탐색기 · <b>에볼루션</b> = 메일 프로그램 → <a href="운영체제실습-6주차.html">6주차 자세히</a> · 아래 6주차 칸</div>
 <p class="wk-lockbtn"><a href="../운영체제실습-실제시험.html">🔒 실제시험</a></p>
 <section class="card">
 <h2>🎓 튜터링 — 2025년 2학기 중간고사 참고자료</h2>
-<div class="tip">자료: <code>8주차_중간고사/튜터링/</code> 의 TalkFile 2개 — <b>4지선다형 16문제</b>(정답 포함) · <b>서술형 13문제</b>(답은 마지막 1개만 있음 → 나머지는 🤖 로 채움). 작년 시험 대비 참고자료예요.<br>📌 1~5주차 수업에 <b>아직 안 나온 명령</b>: <code>ps</code> · <code>kill</code> · <code>top</code> · <code>df</code> · <code>echo</code> · <code>cat</code> · <code>mv</code> · <code>man</code> — 시험 범위는 교수님 진도 기준이라, 진도에 나오면 그때 다시 확인하세요.</div>
+<div class="tip">자료: <code>8주차_중간고사/튜터링/</code> 의 TalkFile 2개 — <b>4지선다형 16문제</b>(정답 포함) · <b>서술형 13문제</b>(답은 마지막 1개만 있음 → 나머지는 🤖 로 채움). 작년 시험 대비 참고자료예요.<br>📌 6주차에 <code>ps</code> · <code>kill</code> · <code>cat</code> · <code>echo</code> 가 나왔어요 → 1~6주차 수업에 <b>아직 안 나온 명령</b>: <code>top</code> · <code>df</code> · <code>mv</code> · <code>man</code> — 시험 범위는 교수님 진도 기준이라, 진도에 나오면 그때 다시 확인하세요.</div>
 <h3>4지선다 16문제 — 정답</h3>
 <table class="ref">
-<tbody style="min-width:556px;">
+<tbody style="min-width:647px;">
 <tr><th>#</th><th>명령</th><th>정답</th><th>수업</th></tr>
 <tr><td>1</td><td><code>ls</code></td><td>3. 파일의 <b>목록</b>을 출력한다</td><td>1~5주차</td></tr>
 <tr><td>2</td><td><code>chmod</code></td><td>3. 파일의 <b>접근 권한</b>을 변경한다</td><td>3주차 ★</td></tr>
-<tr><td>3</td><td><code>ps</code></td><td>1. <b>프로세스 상태</b>를 보여준다</td><td>아직</td></tr>
+<tr><td>3</td><td><code>ps</code></td><td>1. <b>프로세스 상태</b>를 보여준다</td><td>6주차</td></tr>
 <tr><td>4</td><td><code>grep</code></td><td>2. 텍스트 파일에서 <b>패턴을 검색</b>한다</td><td>4주차</td></tr>
-<tr><td>5</td><td><code>kill</code></td><td>3. 특정 <b>프로세스를 종료</b>한다</td><td>아직</td></tr>
+<tr><td>5</td><td><code>kill</code></td><td>3. 특정 <b>프로세스를 종료</b>한다</td><td>6주차</td></tr>
 <tr><td>6</td><td><code>pwd</code></td><td>3. 현재 작업 중인 <b>디렉터리의 경로</b></td><td>1주차</td></tr>
 <tr><td>7</td><td><code>cp</code></td><td>2. 파일을 <b>복사</b>한다</td><td>3주차</td></tr>
 <tr><td>8</td><td><code>mkdir</code></td><td>2. 새로운 <b>디렉터리</b>를 만든다</td><td>2주차</td></tr>
 <tr><td>9</td><td><code>rm</code></td><td>2. 파일을 <b>삭제</b>한다</td><td>2주차</td></tr>
 <tr><td>10</td><td><code>mv</code></td><td>3. 파일의 <b>이름을 변경하거나 이동</b>한다</td><td>아직</td></tr>
-<tr><td>11</td><td><code>cat</code></td><td>2. 파일 <b>내용을 출력</b>한다</td><td>아직</td></tr>
+<tr><td>11</td><td><code>cat</code></td><td>2. 파일 <b>내용을 출력</b>한다</td><td>6주차</td></tr>
 <tr><td>12</td><td><code>top</code></td><td>2. 시스템의 현재 <b>CPU 사용률</b>을 보여준다</td><td>아직</td></tr>
 <tr><td>13</td><td><code>df</code></td><td>2. 파일 시스템의 사용 가능한 <b>디스크 공간</b></td><td>아직</td></tr>
 <tr><td>14</td><td><code>man</code></td><td>1. <b>매뉴얼 페이지</b>를 보여준다</td><td>아직</td></tr>
-<tr><td>15</td><td><code>echo</code></td><td>2. <b>텍스트</b>를 출력한다</td><td>아직</td></tr>
+<tr><td>15</td><td><code>echo</code></td><td>2. <b>텍스트</b>를 출력한다</td><td>6주차 (셸 스크립트)</td></tr>
 <tr><td>16</td><td><code>find</code></td><td>2. 파일을 <b>검색</b>한다</td><td>4주차</td></tr>
 </tbody></table>
 <ul><li>헷갈리는 짝 — <code>cp</code> 복사 ↔ <code>mv</code> 이동 · 이름 변경 / <code>cat</code> 파일 내용 ↔ <code>echo</code> 내가 쓴 글자 / <code>ps</code> 프로세스 목록 ↔ <code>kill</code> 종료 ↔ <code>top</code> 실시간 / <code>find</code> <b>파일</b>을 찾음 ↔ <code>grep</code> 파일 <b>안의 글자</b>를 찾음</li><li>2번의 오답 보기 “파일의 소유자를 변경” = <code>chown</code> (4주차) → 권한은 chmod, 소유자는 chown</li></ul>
@@ -103,6 +104,48 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>6</td><td>vi 에서 모든 apple → orange</td><td><code>:%s/apple/orange/g</code> → <code>%</code> 파일 전체 · <code>s</code> 바꾸기 · <code>g</code> 한 줄의 모든 것</td></tr>
 <tr><td>7</td><td>vi 에서 커서가 있는 줄 삭제</td><td><code>dd</code></td></tr>
 <tr><td>8</td><td>nano 저장 단축키</td><td><code>Ctrl + O</code> (자료의 답) → Enter 로 파일 이름 확인 · 3주차 필기: <code>Ctrl + X</code> → <code>Y</code> → Enter = 저장하고 나가기</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>6주차 — 🔥 시험 용어 · 셸 스크립트 · 프로세스 (<a href="운영체제실습-6주차.html">6주차 자세히</a>)</h2>
+<h3>🔥 시험에 나오는 용어 (교수님이 불러 준 것)</h3>
+<table class="ref">
+<tbody>
+<tr><th>용어</th><th>뜻</th><th>🤖 외우기</th></tr>
+<tr><td><b>프로세스</b></td><td>하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것</td><td>하드디스크 → 메모리 → 활성화</td></tr>
+<tr><td><b>노틸러스</b> (Nautilus)</td><td>파일탐색기</td><td><b>노파</b> = 노틸러스 · 파일</td></tr>
+<tr><td><b>에볼루션</b> (Evolution)</td><td>메일 프로그램</td><td><b>에메</b> = 에볼루션 · 메일</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag star">⭐ 강조</span> 시험범위 <b>1 · 2 · 3 · 4 · 5 · 7장</b> — 6장은 빠짐 · 7장 = 셸 스크립트 프로그래밍</li></ul>
+<h3>셸 스크립트 (7장) ★</h3>
+<table class="ref">
+<tbody>
+<tr><th>문법</th><th>뜻 · 예</th></tr>
+<tr><td><code>sh 파일</code> / <code>chmod +x 파일</code> → <code>./파일</code></td><td>실행 (sh 로 실행하면 실행 권한 없어도 됨)</td></tr>
+<tr><td><code>변수=값</code> · <code>$변수</code></td><td>= 좌우 띄어쓰기 X · 모든 변수는 <b>문자열</b></td></tr>
+<tr><td><code>"$v"</code> / <code>'$v'</code> · <code>\$v</code></td><td>값으로 바뀜 / 글자 그대로 <code>$v</code></td></tr>
+<tr><td><code>num2=$num1+200</code></td><td>계산 안 함 → <code>100+200</code></td></tr>
+<tr><td><code>`expr $num1 + 200`</code></td><td>300 · 띄어쓰기 필수 · <code>\(</code> <code>\)</code> <code>\*</code> → <code>expr \( 100 + 200 \) / 10 \* 2</code> = <b>60</b></td></tr>
+<tr><td><code>$0</code> · <code>$1</code> · <code>$*</code></td><td>파일 이름 · 첫 번째 값 · 전체</td></tr>
+<tr><td><code>if [ 조건 ]</code> → <code>then</code> → <code>else</code> → <code>fi</code></td><td><code>[</code> 뒤 · <code>]</code> 앞 띄어쓰기 · <code>elif</code></td></tr>
+<tr><td><code>=</code> <code>!=</code> / <code>-eq</code> <code>-ne</code> <code>-gt</code> <code>-ge</code> <code>-lt</code> <code>-le</code></td><td>문자열 비교 / 숫자 비교</td></tr>
+<tr><td><code>-f</code> · <code>-d</code> · <code>-r</code> · <code>-s</code></td><td>일반 파일 · 디렉터리 · 읽기 가능 · 크기 0 아님</td></tr>
+<tr><td><code>&amp;&amp;</code> (<code>-a</code>) · <code>||</code> (<code>-o</code>)</td><td>AND · OR</td></tr>
+<tr><td><code>case 값 in</code> <code>패턴)</code> … <code>;;</code> <code>*)</code> <code>esac</code></td><td><code>yes | y)</code> 또는 · <code>[nN]*</code> n·N 으로 시작 · <code>*)</code> 나머지</td></tr>
+<tr><td><code>for i in 1 2 3</code> · <code>while [ ]</code> · <code>until [ ]</code> → <code>do</code> <code>done</code></td><td>until = 조건이 <b>참이 될 때까지</b></td></tr>
+<tr><td><code>break</code> · <code>continue</code> · <code>exit 1</code></td><td>반복 빠져나감 · 조건으로 · 프로그램 끝</td></tr>
+<tr><td><code>함수 () { … }</code> → <code>함수 10 20</code></td><td>함수 안의 <code>$1 $2</code> = 넘긴 값</td></tr>
+<tr><td><code>eval</code> · <code>export</code> · <code>set $(date)</code> · <code>shift</code></td><td>문자열을 명령으로 · 외부 변수 · $1… 에 나눠 넣기 · 파라미터 한 칸씩 당김</td></tr>
+</tbody></table>
+<ul><li>원본 if4.sh 는 <code>cron.service</code> → Rocky 에는 <b>crond.service</b> 라 else · 수업에서 <b>sshd.service</b> 로 바꿔 앞 5줄 출력</li><li><span class="wk-tag fix">⚠️ 정정</span> PPT 14쪽 if5.sh 의 둥근 따옴표 <code>“</code> → 문자열이 안 닫혀 코드가 글자로 찍힘 → <code>"</code> 로</li></ul>
+<h3>프로세스 · 작업 제어</h3>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>뜻</th></tr>
+<tr><td><code>ps -ef | grep yes</code></td><td>모든 프로세스 중 yes 줄 → 두 번째 칸 = <b>PID</b></td></tr>
+<tr><td><code>kill -9 PID</code></td><td>강제 종료 → 터미널에 <code>죽었음</code></td></tr>
+<tr><td><code>명령 &amp;</code> · Ctrl+Z · <code>bg</code> · <code>jobs</code> · <code>fg 1</code> · Ctrl+C</td><td>백그라운드 실행 · 멈춤 · 뒤에서 계속 · 목록 · 앞으로 · 종료</td></tr>
+<tr><td><code>ls -l &gt; list.txt</code> · <code>ls -l /etc | more</code></td><td>출력을 파일로 (리디렉션) · 한 화면씩 (파이프)</td></tr>
 </tbody></table>
 </section>
 <section class="card">
@@ -232,7 +275,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <ul><li><a href="../운영체제실습-실제시험.html">🔒 운영체제실습 실제시험 — 퀴즈 · 출력결과 · 코드 작성 문제를 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>작업 예약 cron · at · 월간 백업 스크립트</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-6주차.html">‹ 이전 · <b>6주차</b><br><small>셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</small></a><span></span></nav>
 
     <p class="wk-src">노션 「운영체제실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

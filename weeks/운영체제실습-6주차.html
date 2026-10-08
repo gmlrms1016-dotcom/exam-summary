@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610081129"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운영체제실습 6주차 · 셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</title>
+    <link rel="stylesheet" href="../style.css?v=202610081129">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../운영체제실습.html">← 운영체제실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🐧 운영체제실습 · 6주차</h1>
+        <p>셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>작업 예약 cron · at · 월간 백업 스크립트</small></a><a class="next" href="운영체제실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+<div class="tip">🐧 <b>운영체제실습 6주차 (10/8)</b> — 앞부분: 서비스 파일 · nmtui · 리디렉션 · <b>프로세스(ps · kill)</b> · <b>작업 제어(Ctrl+Z · bg · jobs · fg)</b> · alias / 뒷부분: <b>7장 셸 스크립트</b> — gedit 로 작성 → <code>chmod +x</code> → <code>sh 파일</code> 로 실행, 교수님 예제(chapter7_sources) 실습<br>노션 실습 기록 + 6주차 폴더(7장 PPT · sh 파일 · 과제 워드 캡처) 기준이에요. ✍️ = 노션에 내가 적은 것 · 수업 = 수업 터미널 기록 · 📝 과제 = 과제로 실행한 캡처. 출력은 전부 실제 실행 결과예요.<br>이번 주는 교수님 강의요약 txt 가 없어서 7장 PPT · 교수님 sh 파일과 대조했어요.</div>
+<section class="card">
+<h2>🔥 1. 중간고사 공지 — 시험범위 · 시험 용어</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> 시험범위 <b>1장 · 2장 · 3장 · 4장 · 5장 · 7장</b> → <b>6장은 빠짐</b><ul><li>3장 = 디렉터리와 파일 (3주차 PPT <code>ch03</code>) · 7장 = 셸 스크립트 프로그래밍 (오늘 PPT <code>07장</code>)</li></ul></li><li><span class="wk-tag note">✍️ 필기</span> 오늘 할 것 = 7장</li><li><span class="wk-tag note">✍️ 필기</span> <b>시험에 나오는 용어</b> — "claude에게 → 외우기 쉽게 가능한 만큼만 간추려줘"</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>용어</th><th>뜻 (필기 그대로)</th><th>🤖 외우기</th></tr>
+<tr><td><b>프로세스</b></td><td>하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것</td><td><b>하드디스크 → 메모리 → 활성화</b> · 디스크에 있으면 프로그램, 메모리에서 돌면 프로세스</td></tr>
+<tr><td><b>노틸러스</b> (Nautilus)</td><td>파일탐색기</td><td><b>노파</b> = 노틸러스 · 파일</td></tr>
+<tr><td><b>에볼루션</b> (Evolution)</td><td>메일 프로그램</td><td><b>에메</b> = 에볼루션 · 메일</td></tr>
+</tbody></table>
+<div class="tip">🤖 <b>한 줄로</b> — 프로세스 = 메모리에 올라와 활성화된 실행코드 · <b>노파 에메</b> (노틸러스 = 파일탐색기 · 에볼루션 = 메일)</div>
+</section>
+<section class="card">
+<h2>2. 오늘 수업 흐름 한눈에</h2>
+<table class="ref">
+<tbody>
+<tr><th>순서</th><th>한 일</th><th>명령</th></tr>
+<tr><td>1</td><td>서비스 설정 파일 보기</td><td><code>cd /usr/lib/systemd/system</code> · <code>ls -l *.service</code></td></tr>
+<tr><td>2</td><td>네트워크 설정 화면</td><td><code>nmtui</code></td></tr>
+<tr><td>3</td><td>긴 출력을 한 화면씩</td><td><code>ls -l /etc/ | more</code></td></tr>
+<tr><td>4</td><td>출력을 파일로 저장 (리디렉션)</td><td><code>ls -l &gt; list.txt</code> · <code>cat list.txt</code></td></tr>
+<tr><td>5</td><td>프로세스 찾기 · 강제 종료</td><td><code>ps -ef | grep yes</code> · <code>kill -9 2324</code></td></tr>
+<tr><td>6</td><td>작업 제어</td><td><code>yes &gt; /dev/null</code> → Ctrl+Z → <code>bg</code> → <code>jobs</code> → <code>fg 1</code> → Ctrl+C</td></tr>
+<tr><td>7</td><td>gedit 이름으로 편집기 쓰기</td><td><code>alias gedit="gnome-text-editor"</code></td></tr>
+<tr><td>8</td><td>첫 셸 스크립트</td><td><code>gedit name.sh &amp;</code> → <code>chmod +x name.sh</code> → <code>sh name.sh</code></td></tr>
+<tr><td>9</td><td>교수님 예제 실행</td><td><code>sh var1.sh</code> · <code>sh numcalc.sh</code> · … · <code>sh forin2.sh</code></td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>3. 서비스 파일 · nmtui · more</h2>
+<pre><code class="language-bash">cd /usr/lib/systemd/system   # 서비스(데몬)마다 설정 파일(.service)이 모여 있는 폴더로 이동
+ls -l *.service              # *.service → .service 로 끝나는 파일 전부 → 서비스 목록</code></pre>
+<details class="wk-details">
+<summary>📄 ls -l *.service 출력 일부 (290줄 가운데 cron · ssh 줄)</summary>
+<pre class="io"><code class="language-text">-rw-r--r--. 1 root root  371 2024년 12월 11일 crond.service
+-rw-r--r--. 1 root root  247 2025년  2월 18일 sshd-keygen@.service
+-rw-r--r--. 1 root root  555 2025년  2월 18일 sshd.service
+-rw-r--r--. 1 root root  441 2025년  2월 18일 sshd@.service</code></pre>
+</details>
+<ul><li>5주차의 cron 서비스 파일 이름은 <b>crond.service</b> (cron.service 가 아님) → 11번 if4.sh 에서 다시 나옴</li><li>수업 뒷부분에서는 <code>cd /lib/systemd/system</code> 으로 들어가 <code>ls -l sshd*.service</code> 로 같은 파일을 봤어요 → Rocky Linux 에서는 <code>/lib</code> 와 <code>/usr/lib</code> 가 같은 곳이라 둘 다 됩니다</li></ul>
+<pre><code class="language-bash">nmtui            # NetworkManager 의 글자 화면(TUI) → 네트워크 연결 편집 · 활성화 · 호스트 이름
+cd ~             # ~ = 내 홈 디렉터리 (root 는 /root)
+ls -l /etc/ | more   # | (파이프) → 앞 명령의 출력을 뒤 명령의 입력으로 → more 가 한 화면씩 보여 줌 (Space 다음 화면 · q 끝)</code></pre>
+</section>
+<section class="card">
+<h2>4. 리디렉션 — 출력을 파일로</h2>
+<pre><code class="language-bash">ls -l &gt; list.txt   # &gt; → 화면에 나올 출력을 list.txt 파일에 저장 (파일이 있으면 덮어씀)
+cat list.txt       # 파일 내용을 화면에 출력</code></pre>
+<pre class="io"><code class="language-text">합계 4
+-rw-------. 1 root root 1021 2025년  8월 31일 anaconda-ks.cfg
+-rw-r--r--  1 root root    0 10월  8일  14:26 list.txt
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 공개
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 다운로드
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 문서
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 바탕화면
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 비디오
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 사진
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 서식
+drwxr-xr-x. 2 root root    6 2025년  8월 31일 음악</code></pre>
+<ul><li>🤖 list.txt 의 크기가 <b>0</b> 인 이유 — 셸이 <code>&gt;</code> 를 보고 <b>list.txt 를 먼저 빈 파일로 만든 뒤</b> ls 를 실행 → ls 가 볼 때는 아직 0바이트 → 다 쓰고 나면 594바이트 (뒤의 <code>ls -l</code> 에서 <code>594</code> 로 보임)</li></ul>
+</section>
+<section class="card">
+<h2>5. 프로세스 — ps · kill ★</h2>
+<div class="tip">🔥 <b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것 (1번 시험 용어)</div>
+<pre><code class="language-bash">yes &gt; /dev/null          # (터미널 1) yes = y 를 끝없이 출력 → /dev/null(버리는 곳)으로 보냄 → 화면엔 안 나오고 계속 실행
+ps -ef | grep yes        # (터미널 2) ps -ef = 모든 프로세스를 자세히 → grep yes = yes 가 들어간 줄만</code></pre>
+<pre class="io"><code class="language-text">root        2324    2145 99 14:29 pts/0    00:01:09 yes
+root        2352    2328  0 14:30 pts/1    00:00:00 grep --color=auto yes</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>칸</th><th>값</th><th>뜻</th></tr>
+<tr><td>UID</td><td>root</td><td>실행한 사용자</td></tr>
+<tr><td>PID</td><td><b>2324</b></td><td>프로세스 번호 → kill 할 때 씀</td></tr>
+<tr><td>PPID</td><td>2145</td><td>부모 프로세스 번호 (yes 를 실행한 터미널 1 의 bash)</td></tr>
+<tr><td>C</td><td>99</td><td>CPU 사용률 — yes 가 CPU 를 거의 다 씀</td></tr>
+<tr><td>STIME</td><td>14:29</td><td>시작한 시각</td></tr>
+<tr><td>TTY</td><td>pts/0</td><td>실행 중인 터미널 (터미널 1 = pts/0 · 터미널 2 = pts/1)</td></tr>
+<tr><td>TIME</td><td>00:01:09</td><td>CPU 를 쓴 시간</td></tr>
+<tr><td>CMD</td><td>yes</td><td>명령</td></tr>
+</tbody></table>
+<ul><li>두 번째 줄은 방금 친 <b>grep 자기 자신</b> (pts/1) → 찾는 프로세스는 첫 줄</li></ul>
+<pre><code class="language-bash">kill -9 2324     # -9 = 강제 종료 신호 → PID 2324 (yes) 를 끝냄</code></pre>
+<pre class="io"><code class="language-text">죽었음</code></pre>
+<ul><li>터미널 1 에 <code>죽었음</code> → 영어 화면의 <code>Killed</code> (bash 가 강제 종료된 작업을 알려 주는 말)</li></ul>
+</section>
+<section class="card">
+<h2>6. 작업 제어 — Ctrl+Z · bg · jobs · fg ★</h2>
+<pre><code class="language-bash">yes &gt; /dev/null      # 앞에서(포그라운드) 실행 → 터미널을 붙잡고 있음</code></pre>
+<pre class="io"><code class="language-text">^Z
+[1]+  멈춤                  yes &gt; /dev/null</code></pre>
+<pre><code class="language-bash">bg       # 멈춘 작업을 백그라운드(뒤)에서 계속 실행
+jobs     # 이 터미널의 작업 목록 → [번호] 상태 명령
+fg 1     # 1번 작업을 포그라운드(앞)로 → Ctrl+C 로 종료</code></pre>
+<pre class="io"><code class="language-text">[1]+ yes &gt; /dev/null &amp;
+[1]+  실행중               yes &gt; /dev/null &amp;
+yes &gt; /dev/null
+^C</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>키 · 명령</th><th>하는 일</th></tr>
+<tr><td><code>명령 &amp;</code></td><td>처음부터 <b>백그라운드</b>로 실행 → <code>[1] 2680</code> = 작업 번호 · PID</td></tr>
+<tr><td><b>Ctrl + Z</b></td><td>포그라운드 작업을 <b>멈춤</b>(일시 정지)</td></tr>
+<tr><td><code>bg</code></td><td>멈춘 작업을 <b>백그라운드</b>에서 계속</td></tr>
+<tr><td><code>jobs</code></td><td>작업 목록 (실행중 · 멈춤 · 완료)</td></tr>
+<tr><td><code>fg 번호</code></td><td>그 작업을 <b>포그라운드</b>로</td></tr>
+<tr><td><b>Ctrl + C</b></td><td>포그라운드 작업 <b>종료</b></td></tr>
+<tr><td><code>kill -9 PID</code></td><td>PID 로 <b>강제 종료</b> (다른 터미널에서도)</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>7. gedit — alias 로 편집기 이름 붙이기</h2>
+<pre><code class="language-bash">gedit aaa.txt                      # Rocky Linux 10 에는 gedit 가 없음</code></pre>
+<pre class="io"><code class="language-text">bash: gedit: 명령을 찾을 수 없습니다...</code></pre>
+<pre><code class="language-bash">alias gedit="gnome-text-editor"    # alias 새이름="명령" → gedit 라고 치면 gnome-text-editor 가 실행됨
+gedit name.sh &amp;                    # &amp; → 편집기를 백그라운드로 띄우고 터미널은 계속 사용</code></pre>
+<pre class="io"><code class="language-text">[1] 2680</code></pre>
+<ul><li>✍️ 수업 중 실수 — <code>gditor forin2.sh</code> → <code>bash: gditor: 명령을 찾을 수 없습니다...</code> (gedit 오타)</li><li>🤖 alias 는 <b>지금 터미널에서만</b> 유지돼요 → 새 터미널을 열면 다시 입력 (계속 쓰려면 <code>~/.bashrc</code> 에 같은 줄을 넣음)</li><li>수업에서는 <code>gedit var1.sh &amp; sh var1.sh</code> 처럼 한 줄에 → <code>A &amp; B</code> = A 는 백그라운드로 띄우고 바로 B 실행 → <b>소스를 편집기로 보면서</b> 실행 결과를 확인</li></ul>
+</section>
+<section class="card">
+<h2>8. 첫 셸 스크립트 — name.sh 작성 · 실행 ✍️</h2>
+<pre><code class="language-bash">echo "사용자 이름:" $USER        # 환경변수 USER = 지금 사용자 → 인자 두 개를 띄어쓰기 하나로 이어서 출력
+echo "홈디렉토리:"$HOME          # 따옴표 바로 뒤에 $HOME 을 붙임 → 띄어쓰기 없이 출력
+exit 0                           # 스크립트 끝 · 0 = 정상 종료</code></pre>
+<pre><code class="language-bash">ls -l na*.sh        # na 로 시작하고 .sh 로 끝나는 파일 → 실행 권한 없음 (rw-r--r--)
+chmod +x name.sh    # +x → 실행 권한 추가
+ls -l na*.sh        # rwxr-xr-x 로 바뀜
+sh name.sh          # sh 로 실행</code></pre>
+<pre class="io"><code class="language-text">-rw-r--r-- 1 root root 67 10월  8일  14:46 name.sh
+-rwxr-xr-x 1 root root 67 10월  8일  14:46 name.sh
+사용자 이름: root
+홈디렉토리:/root</code></pre>
+<ul><li><span class="wk-tag note">✍️ 필기</span> 내가 쓴 name.sh (67바이트 = 위 세 줄) — 교수님 원본은 첫 줄에 <code>#!/bin/sh</code> 가 있고 <code>echo  "사용자 이름: "  $USER</code> / <code>echo  "홈 디렉터리: "  $HOME</code></li><li><code>#!/bin/sh</code> = 이 파일을 /bin/sh 로 실행하라는 표시 → <code>sh name.sh</code> 처럼 sh 로 실행하면 없어도 됩니다</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>실행 방법 (PPT 5쪽)</th><th>실행 권한</th></tr>
+<tr><td><code>sh 스크립트파일</code></td><td>없어도 됨</td></tr>
+<tr><td><code>chmod +x 스크립트파일</code> → <code>./스크립트파일</code></td><td><b>있어야</b> 함</td></tr>
+</tbody></table>
+<ul><li>셸 스크립트 파일의 확장명은 되도록 <code>*.sh</code> · <code>/usr/local/bin/</code> 에 복사하고 <code>755</code> 로 바꾸면 모든 사용자가 사용 (보안상 root 만)</li><li>그다음 교수님 예제 25개(<code>chapter7_sources</code>)를 홈 디렉터리에 받아서 실습 → <span class="wk-tag note">✍️ 필기</span> 실습한 파일 = var1 · numcalc · paravar · if1 · if4 · case1 · case2 · andor · forin2</li></ul>
+</section>
+<section class="card">
+<h2>9. 변수 — var1.sh ✍️ 수업</h2>
+<pre><code class="language-bash">#!/bin/sh                 # /bin/sh 로 실행
+myvar="Hi Woo"            # 변수에 값 넣기 → = 좌우에 띄어쓰기가 없어야 함 · 모든 변수는 문자열
+echo $myvar               # $변수 → 값으로 바뀜 → Hi Woo
+echo "$myvar"             # 큰따옴표 안의 $변수도 값으로 바뀜 → Hi Woo
+echo '$myvar'             # 작은따옴표 안은 글자 그대로 → $myvar
+echo \$myvar              # \ → 바로 뒤 $ 를 글자로 → $myvar
+echo 값 입력 :            # 따옴표 없이 써도 글자 출력 → 값 입력 :
+read myvar                # 키보드로 입력한 한 줄을 myvar 에 저장 (예: 3)
+echo '$myvar' = $myvar    # 앞은 글자 $myvar · 뒤는 값 3 → $myvar = 3
+exit 0                    # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">Hi Woo
+Hi Woo
+$myvar
+$myvar
+값 입력 :
+3
+$myvar = 3</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>쓰는 법</th><th>결과</th><th>이유</th></tr>
+<tr><td><code>$myvar</code> · <code>"$myvar"</code></td><td>Hi Woo</td><td>변수 → 값</td></tr>
+<tr><td><code>'$myvar'</code> · <code>\$myvar</code></td><td>$myvar</td><td>작은따옴표 · <code>\</code> → 글자 그대로</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>10. 숫자 계산 — numcalc.sh ✍️ 수업</h2>
+<pre><code class="language-bash">#!/bin/sh                                     # /bin/sh 로 실행
+num1=100                                      # num1 = "100" (문자열)
+num2=$num1+200                                # 계산하지 않고 글자를 이어 붙임 → "100+200"
+echo $num2                                    # 100+200
+num3=`expr  $num1   +  200`                   # `명령` → 명령의 결과로 바뀜 → expr 100 + 200 → 300
+echo $num3                                    # 300
+num4=`expr  \(  $num1  +  200  \)  /  10  \*  2`   # ( 100 + 200 ) = 300 → 300 / 10 = 30 → 30 * 2 = 60
+echo $num4                                    # 60
+exit 0                                        # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">100+200
+300
+60</code></pre>
+<ul><li><span class="wk-tag star">⭐ 강조</span> 계산은 <b>expr</b> · 숫자와 연산자 사이에 <b>띄어쓰기 필수</b> · <code>(</code> <code>)</code> <code>*</code> 는 셸의 특수문자라 앞에 <b><code>\</code></b> (<code>\(</code> <code>\)</code> <code>\*</code>)</li><li><code>`명령`</code> 과 <code>$(명령)</code> 은 같은 뜻 — 명령의 실행 결과로 바뀜</li></ul>
+</section>
+<section class="card">
+<h2>11. 파라미터 변수 — paravar.sh ✍️ 수업</h2>
+<pre><code class="language-bash">#!/bin/sh                                                    # /bin/sh 로 실행
+echo "실행파일 이름은 &lt;$0&gt;이다"                              # $0 = 실행한 파일 이름
+echo "첫번째 파라미터는 &lt;$1&gt;이고, 두번째 파라미터는 &lt;$2&gt;다"  # $1 · $2 = 파일 이름 뒤에 준 첫째 · 둘째 값
+echo "전체 파라미터는 &lt;$*&gt;다"                                # $* = 파라미터 전체
+exit 0                                                       # 정상 종료</code></pre>
+<pre><code class="language-bash">sh paravar.sh                 # 수업 — 파라미터 없이 → $1 $2 $* 가 비어 있음
+sh paravar.sh 값1 값2 값3     # 📝 과제 — 파라미터 3개</code></pre>
+<pre class="io"><code class="language-text">실행파일 이름은 &lt;paravar.sh&gt;이다
+첫번째 파라미터는 &lt;&gt;이고, 두번째 파라미터는 &lt;&gt;다
+전체 파라미터는 &lt;&gt;다
+실행파일 이름은 &lt;paravar.sh&gt;이다
+첫번째 파라미터는 &lt;값1&gt;이고, 두번째 파라미터는 &lt;값2&gt;다
+전체 파라미터는 &lt;값1 값2 값3&gt;다</code></pre>
+</section>
+<section class="card">
+<h2>12. if 문 — 문자열 · 숫자 비교 (if1 ✍️ · if2 · if3 📝)</h2>
+<pre><code class="language-bash">#!/bin/sh                        # if1.sh
+if [  "woo"  =  "woo"  ]         # [ 조건 ] → "woo" 와 "woo" 가 같음 → 참 · [ 뒤와 ] 앞에 띄어쓰기 필수
+then                             # 참이면 아래 실행
+  echo "참입니다"                # 출력
+fi                               # if 끝 (if 를 거꾸로)
+exit 0                           # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">참입니다</code></pre>
+<pre><code class="language-bash">#!/bin/sh                        # if2.sh
+if  [  "woo"  !=  "woo"  ]       # != → 다르면 참 → 같으니까 거짓
+then                             # 참이면 (여기는 실행 안 됨)
+  echo "참입니다"                # 건너뜀
+else                             # 거짓이면 아래 실행
+  echo "거짓입니다"              # 출력
+fi                               # if 끝
+exit 0                           # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">거짓입니다</code></pre>
+<pre><code class="language-bash">#!/bin/sh                        # if3.sh
+if [ 100 -eq 200 ]               # -eq → 숫자가 같으면 참 → 100 ≠ 200 → 거짓
+then                             # 참이면 (실행 안 됨)
+  echo "100과 200은 같다."       # 건너뜀
+else                             # 거짓이면
+  echo "100과 200은 다르다."     # 출력
+fi                               # if 끝
+exit 0                           # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">100과 200은 다르다.</code></pre>
+<table class="ref">
+<tbody style="min-width:647px;">
+<tr><th>문자열 비교</th><th>참일 때</th><th>숫자 비교</th><th>참일 때</th></tr>
+<tr><td><code>"A" = "B"</code></td><td>같으면</td><td><code>-eq</code></td><td>같으면 (equal)</td></tr>
+<tr><td><code>"A" != "B"</code></td><td>다르면</td><td><code>-ne</code></td><td>다르면 (not equal)</td></tr>
+<tr><td><code>-n "A"</code></td><td>비어 있지 않으면</td><td><code>-gt</code> · <code>-ge</code></td><td>크면 · 크거나 같으면</td></tr>
+<tr><td><code>-z "A"</code></td><td>비어 있으면</td><td><code>-lt</code> · <code>-le</code></td><td>작으면 · 작거나 같으면</td></tr>
+<tr><td></td><td></td><td><code>!수식</code></td><td>수식이 거짓이면</td></tr>
+</tbody></table>
+<ul><li>조건을 여러 개 이어 볼 때는 <code>else if</code> 를 합친 <b><code>elif</code></b> (PPT 11쪽)</li></ul>
+</section>
+<section class="card">
+<h2>13. 파일 조건 — if4 ✍️ 수업 · if5 📝</h2>
+<pre><code class="language-bash">#!/bin/sh                                  # if4.sh (교수님 원본)
+fname=/lib/systemd/system/cron.service     # 확인할 파일 경로
+if [ -f $fname ]                           # -f → 일반 파일이 있으면 참
+then                                       # 있으면
+  head -5 $fname                           # 파일의 앞 5줄 출력
+else                                       # 없으면
+  echo "cron 서버가 설치되지 않았습니다."  # 출력
+fi                                         # if 끝
+exit 0                                     # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">cron 서버가 설치되지 않았습니다.</code></pre>
+<ul><li>원본은 우분투용이라 <code>cron.service</code> → Rocky Linux 에는 <b>crond.service</b> 라서 파일이 없음 → else</li><li>수업에서 <code>ls -l sshd*.service</code> 로 확인하고 2번 줄을 <b><code>fname=/lib/systemd/system/sshd.service</code></b> 로 바꿔 다시 실행 (PPT 13쪽과 같음) → 파일이 있으니 then → 앞 5줄</li></ul>
+<pre class="io"><code class="language-text">[Unit]
+Description=OpenSSH server daemon
+Documentation=man:sshd(8) man:sshd_config(5)
+After=network.target sshd-keygen.target
+Wants=sshd-keygen.target</code></pre>
+<pre><code class="language-bash">#!/bin/sh                                    # if5.sh (PPT 14쪽 — 디렉터리 확인)
+dirname=/home                                # 확인할 디렉터리
+if [ -d $dirname ]                           # -d → 디렉터리면 참
+then                                         # 있으면
+    echo "$dirname 디렉터리가 존재합니다."   # /home 디렉터리가 존재합니다.
+    ls $dirname                              # /home 안의 목록 (사용자 홈 폴더들)
+else                                         # 없으면
+    echo "$dirname 디렉터리가 없습니다."     # 출력
+fi                                           # if 끝
+exit 0                                       # 정상 종료</code></pre>
+<ul><li><span class="wk-tag fix">⚠️ 정정</span> 과제 if5.sh 는 두 echo 줄의 끝 따옴표가 <code>"</code> 가 아니라 <b><code>“</code></b> (PPT 14쪽에 이미 둥근 따옴표로 되어 있음) → 문자열이 줄 끝에서 안 닫히고 <b>다음 <code>"</code> 까지 이어짐</b> → ls 가 실행되지 않고 코드가 글자로 찍힘:</li></ul>
+<pre class="io"><code class="language-text">/home 디렉터리가 존재합니다.“
+    ls /home
+else
+    echo /home 디렉터리가 없습니다.“</code></pre>
+<ul><li>리눅스에서 <code>sed -i 's/“/"/g' if5.sh</code> 로 바꾸면 위 코드처럼 → <code>/home 디렉터리가 존재합니다.</code> 다음 줄에 /home 안의 목록</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>파일 조건</th><th>참일 때</th></tr>
+<tr><td><code>-f 파일</code></td><td><b>일반 파일</b>이면</td></tr>
+<tr><td><code>-d 파일</code></td><td><b>디렉터리</b>면</td></tr>
+<tr><td><code>-e 파일</code></td><td>있으면 (종류 상관없이)</td></tr>
+<tr><td><code>-r</code> · <code>-w</code> · <code>-x</code></td><td>읽기 · 쓰기 · 실행 가능하면</td></tr>
+<tr><td><code>-s 파일</code></td><td>크기가 0 이 아니면</td></tr>
+<tr><td><code>-g</code> · <code>-u</code></td><td>set-group-id · set-user-id 가 설정되면</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>14. case 문 — case1 · case2 ✍️ 수업</h2>
+<pre><code class="language-bash">#!/bin/sh                     # case1.sh
+case "$1" in                  # $1 (첫 번째 파라미터) 값에 따라 나눔
+  start)                      # $1 이 start 면
+    echo "시작~~";;           # 출력 → ;; = 이 경우 끝
+  stop)                       # stop 이면
+    echo "중지~~";;           # 출력
+  restart)                    # restart 면
+    echo "다시 시작~~";;      # 출력
+  *)                          # * = 위에 없는 나머지 전부 (아무것도 안 줬을 때 포함)
+    echo "뭔지 모름~~";;      # 출력
+esac                          # case 끝 (case 를 거꾸로)
+exit 0                        # 정상 종료</code></pre>
+<pre><code class="language-bash">sh case1.sh          # 수업 — 파라미터 없음 → *) 
+sh case1.sh start    # start) </code></pre>
+<pre class="io"><code class="language-text">뭔지 모름~~
+시작~~</code></pre>
+<pre><code class="language-bash">#!/bin/sh                                       # case2.sh
+echo "리눅스가 재미있나요? (yes / no)"          # 질문 출력
+read answer                                     # 입력을 answer 에 저장
+case $answer in                                 # answer 값에 따라
+  yes | y | Y | Yes | YES)                      # | = 또는 → 다섯 가지 중 하나면
+    echo "다행입니다."                          # 출력
+    echo "더욱 열심히 하세요 ^^";;              # 출력 → 이 경우 끝
+  [nN]*)                                        # [nN] = n 또는 N · * = 뒤에 아무 글자 → no · No · nope …
+    echo "안타깝네요. ㅠㅠ";;                   # 출력
+  *)                                            # 그 밖의 입력
+    echo "yes 아니면 no만 입력했어야죠"         # 출력
+    exit 1;;                                    # 1 = 비정상 종료 → 아래 exit 0 까지 안 감
+esac                                            # case 끝
+exit 0                                          # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">리눅스가 재미있나요? (yes / no)
+yes
+다행입니다.
+더욱 열심히 하세요 ^^</code></pre>
+<ul><li><code>no</code> 를 넣으면 <code>안타깝네요. ㅠㅠ</code> · <code>maybe</code> 를 넣으면 <code>yes 아니면 no만 입력했어야죠</code></li></ul>
+</section>
+<section class="card">
+<h2>15. AND · OR — andor.sh ✍️ 수업</h2>
+<pre><code class="language-bash">#!/bin/sh                                                  # andor.sh
+echo "보고 싶은 파일명을 입력하세요."                      # 안내 출력
+read fname                                                 # 파일 이름 입력
+if [  -f  $fname  ]  &amp;&amp;  [  -s  $fname  ]  ;  then         # &amp;&amp; = 둘 다 참이면 → 일반 파일이고 크기가 0 이 아니면 · ; 로 then 을 같은 줄에
+  head -5 $fname                                           # 앞 5줄 출력
+else                                                       # 하나라도 거짓이면
+  echo "파일이 없거나, 크기가 0입니다."                    # 출력
+fi                                                         # if 끝
+exit 0                                                     # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">보고 싶은 파일명을 입력하세요.
+case2.sh
+#!/bin/sh
+echo "리눅스가 재미있나요? (yes / no)"
+read answer
+case $answer in
+  yes | y | Y | Yes | YES)</code></pre>
+<ul><li>AND = <b><code>-a</code></b> 또는 <b><code>&amp;&amp;</code></b> (둘 다 참) · OR = <b><code>-o</code></b> 또는 <b><code>||</code></b> (하나라도 참) (PPT 17쪽) · 없는 파일 이름을 넣으면 <code>파일이 없거나, 크기가 0입니다.</code></li><li>🤖 수업에서 <code>sh andor.sh &amp; gedit andor.sh</code> 로 실행했더니 <code>[3]+  멈춤  sh andor.sh</code> → <b>&amp; 로 백그라운드에 보낸 스크립트가 <code>read</code> 로 키보드 입력을 기다리면 멈춤</b> (백그라운드 작업은 키보드를 읽을 수 없음) → <code>fg 3</code> 으로 앞으로 가져와 입력하면 계속 실행 · case2.sh 도 같은 이유로 질문만 나오고 멈췄어요</li></ul>
+</section>
+<section class="card">
+<h2>16. for ~ in — forin1 📝 · forin2 ✍️ 수업</h2>
+<pre><code class="language-bash">#!/bin/sh                              # forin1.sh
+hap=0                                  # 합계 0 에서 시작
+for i in 1 2 3 4 5 6 7 8 9 10          # i 에 1, 2, … 10 을 차례로 넣으며 반복
+do                                     # 반복할 내용 시작
+  hap=`expr  $hap  +  $i`              # 0+1=1 → 1+2=3 → 3+3=6 → … → 45+10=55
+done                                   # 반복 끝
+echo "1부터 10까지의 합: "$hap         # 따옴표 문자열 바로 뒤에 $hap → 1부터 10까지의 합: 55
+exit 0                                 # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">1부터 10까지의 합: 55</code></pre>
+<pre><code class="language-bash">#!/bin/sh                              # forin2.sh
+for fname in $(ls *.sh)                # $(ls *.sh) = .sh 파일 목록 → fname 에 하나씩
+do                                     # 반복 시작
+  echo "--------$fname-------"         # 파일 이름 줄
+  head -3 $fname                       # 그 파일의 앞 3줄
+done                                   # 반복 끝
+exit 0                                 # 정상 종료</code></pre>
+<details class="wk-details">
+<summary>📄 수업 출력 처음 부분 (파일 25개마다 같은 모양)</summary>
+<pre class="io"><code class="language-text">--------andor.sh-------
+#!/bin/sh
+echo "보고 싶은 파일명을 입력하세요."
+read fname
+--------bce.sh-------
+#!/bin/sh
+echo "무한반복 입력을 시작합니다. (b: break, c: continue, e: exit)"
+while [ 1 ] ; do
+--------case1.sh-------
+#!/bin/sh
+case "$1" in
+  start)</code></pre>
+</details>
+</section>
+<section class="card">
+<h2>17. while · until — while1 · while2 · while3 · until 📝</h2>
+<pre><code class="language-bash">#!/bin/sh                     # while1.sh
+while [ 1 ]                   # [ 1 ] = 항상 참 → 끝없이 반복
+do                            # 반복 시작
+  echo "우분투 16.04 LTS"     # 계속 출력 (PPT 20쪽은 "로키 리눅스 10")
+done                          # 반복 끝 → Ctrl+C 로 멈춤
+exit 0                        # (도달하지 않음)</code></pre>
+<pre class="io"><code class="language-text">우분투 16.04 LTS
+우분투 16.04 LTS
+우분투 16.04 LTS
+^C</code></pre>
+<pre><code class="language-bash">#!/bin/sh                                # while2.sh
+hap=0                                    # 합계
+i=1                                      # 1 부터
+while [ $i -le 10 ]                      # i ≤ 10 인 동안 반복
+do                                       # 반복 시작
+  hap=`expr  $hap  +  $i`                # hap 에 i 더하기
+  i=`expr  $i  +  1`                     # i 1 증가 → 11 이 되면 조건이 거짓 → 끝
+done                                     # 반복 끝
+echo "1부터 10까지의 합 : "$hap          # 1부터 10까지의 합 : 55
+exit 0                                   # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">1부터 10까지의 합 : 55</code></pre>
+<pre><code class="language-bash">#!/bin/sh                                # until.sh (PPT 23쪽 — while2.sh 의 4행만 바꿈)
+hap=0                                    # 합계
+i=1                                      # 1 부터
+until [ $i -gt 10 ]                      # i &gt; 10 이 될 때까지 (= 거짓인 동안) 반복
+do                                       # 반복 시작
+  hap=`expr  $hap  +  $i`                # hap 에 i 더하기
+  i=`expr  $i  +  1`                     # i 1 증가
+done                                     # 반복 끝
+echo "1부터 10까지의 합 : "$hap          # 1부터 10까지의 합 : 55
+exit 0                                   # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">1부터 10까지의 합 : 55</code></pre>
+<pre><code class="language-bash">#!/bin/sh                                # while3.sh
+echo "비밀번호를 입력하세요."            # 안내
+read mypass                              # 입력
+while [  $mypass  !=  "1234"  ]          # 1234 가 아닌 동안 반복
+do                                       # 반복 시작
+  echo "틀렸음. 다시 입력하세요."        # 출력
+  read mypass                            # 다시 입력
+done                                     # 반복 끝 (1234 를 넣으면 빠져나옴)
+echo "통과~~"                            # 출력
+exit 0                                   # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">비밀번호를 입력하세요.
+1111
+틀렸음. 다시 입력하세요.
+1234
+통과~~</code></pre>
+<ul><li><code>while</code> = 조건이 <b>참인 동안</b> · <code>until</code> = 조건이 <b>참이 될 때까지</b> (거짓인 동안)</li></ul>
+</section>
+<section class="card">
+<h2>18. break · continue · exit — bce.sh 📝</h2>
+<pre><code class="language-bash">#!/bin/sh                                                             # bce.sh
+echo "무한반복 입력을 시작합니다. (b: break, c: continue, e: exit)"   # 안내
+while [ 1 ] ; do                                                      # 무한 반복
+  read input                                                          # 한 줄 입력
+  case $input in                                                      # 입력에 따라
+    b | B)                                                            # b 면
+      break;;                                                         # break → while 을 빠져나가 done 다음 줄로
+    c | C)                                                            # c 면
+      echo "continue를 누르면 while의 조건으로 돌아감"                # 출력
+      continue ;;                                                     # continue → 아래를 건너뛰고 while 조건으로
+    e | E)                                                            # e 면
+      echo  "exit를 누르면 프로그램(함수)를 완전히 종료함"            # 출력
+      exit 1;;                                                        # exit → 프로그램 끝 (마지막 echo 도 안 나옴)
+  esac;                                                               # case 끝 (그 밖의 입력은 아무 일 없이 다시 read)
+done                                                                  # while 끝
+echo "break를 누르면 while을 빠져나와 지금 이 문장이 출력됨."         # break 했을 때만 여기까지 옴
+exit 0                                                                # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">무한반복 입력을 시작합니다. (b: break, c: continue, e: exit)
+c
+continue를 누르면 while의 조건으로 돌아감
+b
+break를 누르면 while을 빠져나와 지금 이 문장이 출력됨.</code></pre>
+<ul><li><code>e</code> 를 넣으면 <code>exit를 누르면 프로그램(함수)를 완전히 종료함</code> 만 나오고 끝 (마지막 echo 안 나옴)</li></ul>
+<table class="ref">
+<tbody>
+<tr><th></th><th>하는 일</th></tr>
+<tr><td><code>break</code></td><td>반복문을 <b>빠져나감</b> → done 다음 줄</td></tr>
+<tr><td><code>continue</code></td><td>아래를 건너뛰고 반복문의 <b>조건으로</b> 돌아감</td></tr>
+<tr><td><code>exit 번호</code></td><td>프로그램을 <b>완전히 끝냄</b> (0 = 정상)</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>19. 함수 — func1 · func2 📝</h2>
+<pre><code class="language-bash">#!/bin/sh                              # func1.sh
+myFunction () {                        # 함수 정의 → 부르기 전까지는 실행 안 됨
+  echo "함수 안으로 들어 왔음"         # 함수 내용
+  return                               # 함수를 끝내고 부른 곳으로 돌아감
+}                                      # 함수 끝
+echo "프로그램을 시작합니다."          # ① 먼저 실행
+myFunction                             # ② 함수 호출 → 함수 안의 echo
+echo "프로그램을 종료합니다."          # ③
+exit 0                                 # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">프로그램을 시작합니다.
+함수 안으로 들어 왔음
+프로그램을 종료합니다.</code></pre>
+<pre><code class="language-bash">#!/bin/sh                              # func2.sh
+hap () {                               # 함수 hap 정의
+  echo `expr  $1  +  $2`               # 함수 안의 $1 $2 = 함수에 준 값 → 10 + 20 → 30
+}                                      # 함수 끝
+echo "10 더하기 20을 실행합니다"       # 출력
+hap 10 20                              # 함수이름 값1 값2 → 괄호 없이 띄어쓰기로 넘김
+exit 0                                 # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">10 더하기 20을 실행합니다
+30</code></pre>
+</section>
+<section class="card">
+<h2>20. eval · export · printf · set · shift 📝</h2>
+<pre><code class="language-bash">#!/bin/sh                     # eval.sh
+str="ls -l eval.sh"           # 명령을 문자열로 저장
+echo $str                     # 그냥 글자로 출력
+eval $str                     # eval → 문자열을 명령으로 실행
+exit 0                        # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">ls -l eval.sh
+-rwxrw-rw- 1 root root 57 2016년  8월  9일 eval.sh</code></pre>
+<pre><code class="language-bash">#!/bin/sh                     # exp1.sh
+echo $var1                    # exp2.sh 의 지역 변수 → 안 넘어옴 → 빈 줄
+echo $var2                    # exp2.sh 가 export 한 외부 변수 → 외부 변수
+exit 0                        # 정상 종료</code></pre>
+<pre><code class="language-bash">#!/bin/sh                     # exp2.sh
+var1="지역 변수"              # 이 스크립트 안에서만 쓰는 변수
+export var2="외부 변수"       # export → 이 스크립트가 실행하는 다른 프로그램에서도 쓸 수 있음
+sh exp1.sh                    # exp1.sh 실행 (같은 폴더에 있어야 함)
+exit 0                        # 정상 종료</code></pre>
+<pre><code class="language-bash">sh exp2.sh                    # exp1.sh 의 출력이 나옴</code></pre>
+<pre class="io"><code class="language-text">
+외부 변수</code></pre>
+<pre><code class="language-bash">#!/bin/sh                                      # printf.sh
+var1=100.5                                     # 실수처럼 보이는 문자열
+var2="재미있는 리눅스~~"                       # 띄어쓰기가 있는 문자열
+printf "%5.2f \n\n \t %s \n" $var1 "$var2"     # %5.2f → 5칸 · 소수 둘째 자리 → 100.50 · \n 줄바꿈 2번 · \t 탭 · %s ← "$var2" (따옴표 → 한 덩어리)
+exit                                           # 값 없이 → 마지막 명령의 종료 상태로 끝</code></pre>
+<pre class="io"><code class="language-text">100.50 
+
+ 	 재미있는 리눅스~~ </code></pre>
+<pre><code class="language-bash">#!/bin/sh                                # set.sh
+echo "오늘 날짜는 $(date) 입니다."       # $(date) → date 명령의 결과로 바뀜
+set $(date)                              # date 결과를 띄어쓰기로 나눠 $1 $2 $3 … 에 넣음
+echo "오늘은  $4  요일 입니다."          # 한국어 화면 → $1 2026. · $2 10. · $3 08. · $4 (목)
+exit 0                                   # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">오늘 날짜는 2026. 10. 08. (목) 16:18:57 KST 입니다.
+오늘은  (목)  요일 입니다.</code></pre>
+<pre><code class="language-bash">#!/bin/sh                                       # shift.sh
+myfunc () {                                     # 함수 정의
+  str=""                                        # 빈 문자열에서 시작
+  while [  "$1"  !=  ""  ] ; do                 # $1 이 빌 때까지 반복
+    str="$str  $1"                              # 지금 $1 을 뒤에 이어 붙임
+    shift                                       # $2 → $1 · $3 → $2 … 한 칸씩 당김
+  done                                          # 반복 끝
+  echo $str                                     # 따옴표 없이 → 여러 띄어쓰기가 하나로
+}                                               # 함수 끝
+myfunc AAA BBB CCC DDD EEE FFF GGG HHH III JJJ KKK   # 파라미터 11개로 호출
+exit 0                                          # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">AAA BBB CCC DDD EEE FFF GGG HHH III JJJ KKK</code></pre>
+<ul><li>🤖 shift 를 쓰는 이유 — 파라미터가 몇 개든 <code>$1</code> 하나로 차례차례 꺼낼 수 있음 (파라미터 변수는 <code>$9</code> 다음부터 <code>${10}</code> 처럼 써야 해서 불편)</li></ul>
+</section>
+<section class="card">
+<h2>21. 📝 과제 Lab1 ~ Lab5 — 내가 작성한 답 (PPT 32~36쪽)</h2>
+<h3>Lab1 · /etc/passwd 파일이 있는지 (-f)</h3>
+<pre><code class="language-bash">#!/bin/sh                                    # Lab1.sh
+if [ -f /etc/passwd ]                        # /etc/passwd 가 일반 파일이면 참
+then                                         # 있으면
+    echo "/etc/passwd 파일이 존재합니다."    # 출력
+else                                         # 없으면
+    echo "/etc/passwd 파일이 없습니다."      # 출력
+fi                                           # if 끝
+exit 0                                       # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">/etc/passwd 파일이 존재합니다.</code></pre>
+<h3>Lab2 · 입력한 파일의 앞 5줄 (read)</h3>
+<pre><code class="language-bash">#!/bin/sh                                    # Lab2.sh
+read filename                                # 파일 이름 입력
+if [ -f $filename ]                          # 일반 파일이면
+then                                         # 있으면
+    head -5 $filename                        # 앞 5줄
+else                                         # 없으면
+    echo "해당 파일이 없습니다."             # 출력
+fi                                           # if 끝
+exit 0                                       # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">Lab3.sh
+#!/bin/sh
+if [ -r /etc/hosts ]
+then
+    cat /etc/hosts
+else</code></pre>
+<h3>Lab3 · /etc/hosts 를 읽을 수 있는지 (-r)</h3>
+<pre><code class="language-bash">#!/bin/sh                                    # Lab3.sh
+if [ -r /etc/hosts ]                         # -r → 읽기 권한이 있으면 참
+then                                         # 읽을 수 있으면
+    cat /etc/hosts                           # 파일 내용 출력
+else                                         # 없으면
+    echo "읽기 권한이 없습니다."             # 출력
+fi                                           # if 끝
+exit 0                                       # 정상 종료</code></pre>
+<pre class="io"><code class="language-text"># Loopback entries; do not change.
+# For historical reasons, localhost precedes localhost.localdomain:
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+# See hosts(5) for proper format and other examples:
+# 192.168.1.10 foo.example.org foo
+# 192.168.1.13 bar.example.org bar</code></pre>
+<h3>Lab4 · 짝수 · 홀수 ($(( )))</h3>
+<pre><code class="language-bash">#!/bin/sh                                    # Lab4.sh
+read num                                     # 정수 입력 (예: 2)
+if [ $(($num % 2)) -eq 0 ]                   # $(( )) = 산술 계산 → 2 % 2 = 0 (나머지) → 0 이면 짝수
+then                                         # 나머지 0
+    echo "짝수입니다."                       # 출력
+else                                         # 나머지 1
+    echo "홀수입니다."                       # 출력
+fi                                           # if 끝
+exit 0                                       # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">2
+짝수입니다.</code></pre>
+<h3>Lab5 · 파일 백업 (-f · cp)</h3>
+<pre><code class="language-bash">#!/bin/sh                                    # Lab5.sh
+read filename                                # 파일 이름 입력 (예: Lab4.sh)
+if [ -f "$filename" ]                        # 따옴표 → 이름에 띄어쓰기가 있어도 한 덩어리
+then                                         # 있으면
+    cp -f "$filename" "$filename.bak"        # Lab4.sh → Lab4.sh.bak 으로 복사 · -f 이미 있으면 덮어씀
+else                                         # 없으면
+    echo "백업할 파일이 없습니다."           # 출력
+fi                                           # if 끝
+exit 0                                       # 정상 종료</code></pre>
+<pre><code class="language-bash">sh Lab5.sh       # Lab4.sh 입력 → 성공하면 아무것도 출력 안 함
+ls -l *.bak      # 백업 파일이 생겼는지 확인</code></pre>
+<pre class="io"><code class="language-text">Lab4.sh
+-rwxr--r-- 1 root root 121 10월  8일  16:20 Lab4.sh.bak</code></pre>
+</section>
+<section class="card">
+<h2>22. 이번 주 명령어 · 문법 총정리 ⭐</h2>
+<table class="ref">
+<tbody>
+<tr><th>분류</th><th>명령 · 문법</th><th>설명</th></tr>
+<tr><td>프로세스</td><td><code>ps -ef | grep 이름</code></td><td>모든 프로세스 중 이름이 들어간 줄 (PID 확인)</td></tr>
+<tr><td>프로세스</td><td><code>kill -9 PID</code></td><td>강제 종료 → <code>죽었음</code></td></tr>
+<tr><td>작업 제어</td><td><code>명령 &amp;</code> · Ctrl+Z · <code>bg</code> · <code>jobs</code> · <code>fg 번호</code> · Ctrl+C</td><td>백그라운드 실행 · 멈춤 · 뒤에서 계속 · 목록 · 앞으로 · 종료</td></tr>
+<tr><td>리디렉션</td><td><code>명령 &gt; 파일</code></td><td>출력을 파일에 저장 (덮어씀)</td></tr>
+<tr><td>파이프</td><td><code>명령1 | 명령2</code></td><td>명령1 의 출력 → 명령2 의 입력 (<code>| more</code> 한 화면씩)</td></tr>
+<tr><td>편집기</td><td><code>alias gedit="gnome-text-editor"</code></td><td>명령에 다른 이름 붙이기</td></tr>
+<tr><td>실행</td><td><code>sh 파일</code> / <code>chmod +x 파일</code> → <code>./파일</code></td><td>셸 스크립트 실행</td></tr>
+<tr><td>변수</td><td><code>변수=값</code> · <code>$변수</code> · <code>'$변수'</code> · <code>\$</code></td><td>= 좌우 띄어쓰기 X · 작은따옴표 · <code>\</code> = 글자 그대로</td></tr>
+<tr><td>입력</td><td><code>read 변수</code></td><td>키보드 한 줄 → 변수</td></tr>
+<tr><td>계산</td><td><code>`expr 1 + 2`</code> · <code>\(</code> <code>\)</code> <code>\*</code> · <code>$(( ))</code></td><td>띄어쓰기 필수 · 특수문자 앞 <code>\</code></td></tr>
+<tr><td>파라미터</td><td><code>$0</code> · <code>$1</code> … · <code>$*</code></td><td>파일 이름 · n번째 값 · 전체</td></tr>
+<tr><td>if</td><td><code>if [ 조건 ]</code> → <code>then</code> → <code>else</code> → <code>fi</code></td><td><code>[</code> 뒤 · <code>]</code> 앞 띄어쓰기</td></tr>
+<tr><td>비교</td><td><code>=</code> <code>!=</code> / <code>-eq</code> <code>-ne</code> <code>-gt</code> <code>-ge</code> <code>-lt</code> <code>-le</code></td><td>문자열 / 숫자</td></tr>
+<tr><td>파일</td><td><code>-f</code> <code>-d</code> <code>-e</code> <code>-r</code> <code>-w</code> <code>-x</code> <code>-s</code></td><td>일반 파일 · 디렉터리 · 존재 · 읽기 · 쓰기 · 실행 · 크기 0 아님</td></tr>
+<tr><td>논리</td><td><code>&amp;&amp;</code> (<code>-a</code>) · <code>||</code> (<code>-o</code>)</td><td>AND · OR</td></tr>
+<tr><td>case</td><td><code>case 값 in</code> → <code>패턴)</code> … <code>;;</code> → <code>*)</code> → <code>esac</code></td><td><code>|</code> 또는 · <code>[nN]*</code> 패턴</td></tr>
+<tr><td>반복</td><td><code>for 변수 in 목록</code> · <code>while [ ]</code> · <code>until [ ]</code> → <code>do</code> … <code>done</code></td><td>until = 참이 될 때까지</td></tr>
+<tr><td>반복 제어</td><td><code>break</code> · <code>continue</code> · <code>exit 번호</code></td><td>빠져나감 · 조건으로 · 프로그램 끝</td></tr>
+<tr><td>함수</td><td><code>이름 () { … }</code> → <code>이름 값1 값2</code></td><td>함수 안의 <code>$1 $2</code> = 넘긴 값</td></tr>
+<tr><td>기타</td><td><code>eval</code> · <code>export</code> · <code>printf</code> · <code>set $(명령)</code> · <code>shift</code></td><td>문자열을 명령으로 · 외부 변수 · 형식 출력 · 결과를 $1… 에 · 파라미터 당기기</td></tr>
+</tbody></table>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-5주차.html">‹ 이전 · <b>5주차</b><br><small>작업 예약 cron · at · 월간 백업 스크립트</small></a><a class="next" href="운영체제실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~6주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「운영체제실습 · 6주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>
