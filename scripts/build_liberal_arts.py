@@ -18,13 +18,13 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 SRC = os.path.join(ROOT, "index.html")
 OUT = os.path.join(ROOT, "liberal-arts-courses", "index.html")
 
-# 교양 2학기 과목 — 시험 시각은 schedule.js 와 맞춤 (과목 공지가 없어 시험 주간의 수업 시간)
+# 교양 2학기 과목 — 시험 시각은 schedule.js 와 맞춤 (중간: 2026-10-08 과목 공지 · 공동체 10:00 · 기업가정신 수업 시간 · 뇌인지 11:00 / 기말: 아직 공지 없어 수업 시간)
 G = 'fill="#d7ebe0" stroke="#2d6a4f" stroke-width="1.5"'
 SUBJECTS = [
     {
         "file": "공동체와배려의실천.html", "name": "공동체와배려의실천",
-        "mid": "2026-10-22T09:00:00", "final": "2026-12-10T09:00:00",
-        "desc": "<b>목 09:00</b> · 토론 vs 토의 · 하비거스트 · 프로이트 · 매슬로",
+        "mid": "2026-10-22T10:00:00", "final": "2026-12-10T09:00:00",
+        "desc": "<b>목 10:00</b> · 토론 vs 토의 · 하비거스트 · 프로이트 · 매슬로",
         "icon": '<svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8.2" r="2.9" %s/><circle cx="16" cy="8.2" r="2.9" %s/>'
                 '<path d="M2.8 19.6c.4-3.2 2.5-5.1 5.2-5.1 1.6 0 2.9.7 4 1.8 1.1-1.1 2.4-1.8 4-1.8 2.7 0 4.8 1.9 5.2 5.1" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>'
                 '<path d="M12 3.6c-.7-.8-1.9-.7-2.3.1-.4.8.2 1.7 2.3 3 2.1-1.3 2.7-2.2 2.3-3-.4-.8-1.6-.9-2.3-.1Z" fill="#d9772b" stroke="#d9772b" stroke-width=".8" stroke-linejoin="round"/></svg>' % (G, G),
