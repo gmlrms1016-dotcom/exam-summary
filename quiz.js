@@ -49,7 +49,10 @@
         answers.forEach(function (a) {
             all.push(a);
             var m = /^\s*([^()]+?)\s*\(\s*([^()]+?)\s*\)\s*$/.exec(a || "");
-            if (m && !keep && !/[.;=<>{}\[\]]/.test(a)) { all.push(m[1]); all.push(m[2]); }
+            // 용어(다른 표현) 꼴만 나눔 — 코드 · 목록(점 · 쉼표 · 기호)이나 영문이름(영문) 함수 호출은 그대로
+            //  (PRIMARY KEY(학번,과목번호) · 신입생(학번, …) · clearTimeout(timerId) 를 앞부분만 써도 정답이 되던 문제 — 2026-10-08)
+            var ident = function (x) { return /^[A-Za-z_]\w*$/.test(x); };
+            if (m && !keep && !/[.,;:=<>{}\[\]_]/.test(a) && !(ident(m[1]) && ident(m[2]))) { all.push(m[1]); all.push(m[2]); }
         });
         var keys = all.map(function (a) { return norm(a, keep); }).filter(function (a) { return a; });
         var v = norm(value, keep);
