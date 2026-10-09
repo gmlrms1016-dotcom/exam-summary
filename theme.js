@@ -35,6 +35,48 @@
     loadSibling("outview-js", "outview.js");      // ▶ 출력 결과 상자: 줄 번호 · 입력 표시 · 줄마다 설명
     loadSibling("codecopy-js", "codecopy.js");    // ⧉ 복사 — 모든 코드블록 (주차 페이지 · 나중에 생기는 코드 포함)
 
+    // ---- 전공 과목 로고 — 과목 이름 왼쪽에 (2026-10-09 사용자 요청) ----
+    //  과목 페이지 · 주차 페이지 · 중간고사 페이지 · 실제시험의 제목(h1, 앞의 이모지는 로고로 바꿈) + 첫 화면 과목 카드 아이콘
+    //  로고 = logo/<이름>.png (256×256 정사각형 · 투명 배경 · 비율 그대로 가운데) · 컴퓨터공학기초는 프로그램이 없는 이론 과목이라 CPU 칩 + 01
+    //  motion.js 가 이 뒤에 제목을 낱말로 쪼개고 위쪽 막대를 만들 때 로고도 같이 씀 → DOMContentLoaded 를 motion.js 보다 먼저 등록
+    var SUBJ_LOGO = [                              // 긴 이름부터 (웹프로그래밍 기초 → 웹프로그래밍)
+        ["프로그래밍언어실습", "c"], ["운영체제실습", "os"], ["웹프로그래밍 기초", "webbasic"], ["웹프로그래밍기초", "webbasic"],
+        ["웹프로그래밍", "web"], ["데이터베이스관리", "db"], ["자바프로그래밍", "java"], ["컴퓨터공학기초", "cs"],
+        ["파이썬프로그래밍", "python"], ["프로그래밍방법론", "method"], ["SW개발도구활용", "swtool"]
+    ];
+    function logoOf(text) {                        // "🐧 운영체제실습 · 6주차" → "os"
+        var t = String(text || "").replace(/^[^0-9A-Za-z가-힣]+/, "");   // 앞의 이모지 · 기호 · 띄어쓰기는 빼고 비교
+        for (var i = 0; i < SUBJ_LOGO.length; i++) if (t.indexOf(SUBJ_LOGO[i][0]) === 0) return SUBJ_LOGO[i][1];
+        return "";
+    }
+    function logoImg(slug) {
+        var img = document.createElement("img");
+        img.className = "subj-logo";
+        img.src = (selfSrc || "").replace(/theme\.js(\?[^#]*)?(#.*)?$/, "logo/" + slug + ".png$1");
+        img.alt = ""; img.setAttribute("aria-hidden", "true"); img.decoding = "async";
+        return img;
+    }
+    function addLogos() {
+        if (!selfSrc) return;
+        var h = document.querySelector(".page-head h1");
+        var slug = h && !h.querySelector(".subj-logo") && logoOf(h.textContent);
+        if (slug) {
+            var first = h.firstChild;               // 제목 맨 앞의 이모지는 로고와 겹치니 지움 (🐧 · 🗄️ …)
+            if (first && first.nodeType === 3) first.nodeValue = first.nodeValue.replace(/^[^0-9A-Za-z가-힣]+/, "");
+            h.insertBefore(logoImg(slug), h.firstChild);
+        }
+        [].forEach.call(document.querySelectorAll(".subject .subj-ic"), function (ic) {   // 첫 화면 과목 카드 — 아이콘 자리를 로고로
+            var card = ic.closest(".subject"), name = card && card.querySelector(".subj-name");
+            var s = name && logoOf(name.textContent);
+            if (!s || ic.classList.contains("has-logo")) return;
+            ic.classList.add("has-logo");
+            ic.innerHTML = "";
+            ic.appendChild(logoImg(s));
+        });
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", addLogos);
+    else addLogos();
+
     function load() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
     function store(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
 
@@ -248,6 +290,15 @@
         "html[data-theme=dark] .haksa-open{background:#25292e;color:#f5f5f5}",
         "html[data-theme=dark] .haksa-open:hover{background:#33373c}",
         "html[data-theme=dark] .haksa-frame{background:#0c1014;border-top-color:#262a2f}",
+
+        // ---- 과목 로고 (제목 · 위쪽 막대 · 첫 화면 카드) — 다크에서는 검은 로고(GitHub · JS 글자)가 보이게 흰 판 위에 ----
+        ".subj-logo{display:inline-block;width:1.15em;height:1.15em;object-fit:contain;vertical-align:-.2em;margin-right:.32em}",
+        "html[data-theme=dark] .subj-logo{background:#f5f5f5;border-radius:.24em;padding:.07em;box-sizing:border-box}",
+        ".mo-bar-t .subj-logo{width:1.3em;height:1.3em;vertical-align:-.3em;margin-right:.4em}",
+        ".subj-ic.has-logo .subj-logo{width:32px;height:32px;margin:0;vertical-align:middle}",
+        "html[data-theme=dark] .subj-ic.has-logo{background:#f5f5f5}",
+        "html[data-theme=dark] .subj-ic.has-logo .subj-logo{background:none;padding:0}",
+        "html[data-theme=dark] .subject.fin .subj-ic.has-logo{background:#cfd3d7}",
 
         // ---- 전환 버튼 ----
         ".theme-toggle{position:fixed;top:14px;right:14px;z-index:9999;width:44px;height:44px;border-radius:50%;",

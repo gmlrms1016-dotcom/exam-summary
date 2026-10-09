@@ -456,11 +456,13 @@
     function splitTitle() {
         if (!MOVE) return;
         var h = document.querySelector(".page-head h1");
-        if (!h || h.children.length || h.getAttribute("data-mo-split")) return;
+        var logo = h && h.querySelector(":scope > .subj-logo");   // theme.js 가 넣은 과목 로고는 그대로 맨 앞에 두고 글자만 쪼갬
+        if (!h || h.children.length > (logo ? 1 : 0) || h.getAttribute("data-mo-split")) return;
         var text = h.textContent, i = 0;
         h.setAttribute("data-mo-split", "1");
         h.setAttribute("aria-label", text.trim());
         h.textContent = "";
+        if (logo) h.appendChild(logo);
         text.split(/(\s+)/).forEach(function (part) {
             if (!part) return;
             if (/^\s+$/.test(part)) { h.appendChild(document.createTextNode(part)); return; }
@@ -496,6 +498,8 @@
                 + '<span class="mo-bar-t"></span>';
             barTitle = bar.querySelector(".mo-bar-t");
             barTitle.textContent = (title.getAttribute("aria-label") || title.textContent).replace(/\s+/g, " ").trim();
+            var tLogo = title.querySelector(".subj-logo");   // 과목 로고도 위쪽 막대 제목 앞에
+            if (tLogo) barTitle.insertBefore(tLogo.cloneNode(false), barTitle.firstChild);
             body.appendChild(bar);
             root.classList.add("mo-hasbar");
             bar.querySelector(".mo-bar-back").addEventListener("click", function () {
