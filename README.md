@@ -35,6 +35,7 @@ GitHub Pages면 `main`에 push하면 자동 배포됩니다.
 ## 파일 구성
 
 ```
+CLAUDE.md           Claude 작업 안내 — 클라우드 세션(claude.ai/code)이 시작할 때 자동으로 읽음 · 할 수 있는 일 / 없는 일 · 빌드 · 확인 · PR 규칙
 .nojekyll           GitHub Pages 의 Jekyll 변환 끄기 — 코드 속 {{ (예: 자바 2차원 배열 {{3.3, 3.4}}) 를 Jekyll 이 문법으로 읽어 배포가 실패하는 것을 막음 (지우지 말 것)
 index.html          첫 화면(허브) — 학기/시험 선택 + 개강·시험 카운트다운 (자체 스타일 내장)
 schedule.js         ★ 시험 일정 단일 소스 + "시험 +3h 자동 복습 전환"
