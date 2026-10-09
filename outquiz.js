@@ -11,7 +11,8 @@
                               oq-expect 는 "\n" + 실제 출력 + "\n" 로 적는다 (출력이 println 으로 끝나면 끝에 빈 줄이 하나 더 생김)
        data-endnl="ignore"    (선택, strict 와 같이) 맨 끝 줄바꿈(Enter)은 채점 안 함 — 실제시험: 마지막 출력은 print 라 끝에 Enter 를 칠 일이 없음
        data-table             (선택) SQL 결과 표 문제 — oq-expect 는 "열1 | 열2" 머리글 줄 + 행마다 한 줄 (칸은 " | " 로 구분, 널 값은 NULL)
-                              답은 칸을 띄어쓰기 · | · 탭 아무거나로 구분 · +---+ 테두리 줄은 무시
+                              답은 글자 칸 대신 표(기본 3 × 3 · ＋/－ 행 · 열 · Enter = 아래 칸)에 입력 → 숨긴 칸에 "칸 | 칸" 줄로 적힘 (2026-10-09)
+                              예전 답(띄어쓰기 · | · 탭으로 구분 · +---+ 테두리 줄)도 표로 되살림
                               첫 줄(열 이름)은 그대로, 그다음 행들은 순서를 채점하지 않음 (투플의 무순서성 — ORDER BY 는 안 배움)
    - 답칸·버튼은 이 스크립트가 만든다
    - 채점: 줄 앞뒤 공백 · 빈 줄 무시, 줄 안의 공백·탭 여러 개는 하나로 (글자·숫자·기호·대소문자는 그대로)
@@ -87,6 +88,123 @@
         }).join("") + "</table></div>";
     }
 
+    // ---- SQL 결과 표 입력 — 2026-10-09 사용자: '입력창 말고 표에 입력 · 3×3 기본 · 행 · 열을 늘리고 줄이기 · 확인' ----
+    //  진짜 답은 숨긴 textarea(.oq-ans) — 표를 고칠 때마다 "열1 | 열2" 줄로 적어 둠 → 채점 · 이 기기 저장 · 실제시험 저장 · 복원은 예전 그대로
+    //  누가 ta.value 를 바꾸면(저장된 답 되살리기 · 지우기) 표도 그 값으로 다시 그림 · 남는 빈 행 · 열은 답에 넣지 않음
+    css += ".oq{position:relative;}"
+        + ".oq-ans.oq-ans-src{position:absolute!important;left:0;top:0;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;opacity:0;pointer-events:none;overflow:hidden;resize:none;}"
+        + ".oq-grid{margin-top:10px;}"
+        + ".oq-gwrap{overflow-x:auto;max-width:100%;padding-bottom:2px;}"
+        + ".oq-gtbl{border-collapse:collapse;margin:0;width:auto;}"
+        + ".oq-gtbl td{border:1px solid var(--line);padding:0;background:var(--card);}"
+        + ".oq-gtbl td.h{background:rgba(127,127,127,.14);}"
+        + ".oq-cell{display:block;width:7.5em;box-sizing:border-box;border:0;margin:0;background:transparent;color:var(--ink,#222);font-family:Consolas,\"D2Coding\",Menlo,monospace;font-size:16px;padding:8px 10px;outline:none;}"   /* 16px 밑이면 아이폰이 누를 때 확대 */
+        + "@media (max-width:480px){.oq-cell{width:5.4em;padding:8px 8px;}}"   /* 폰: 기본 3열이 스크롤 없이 들어가게 */
+        + ".oq-gtbl td.h .oq-cell{font-weight:800;}"
+        + ".oq-cell:focus{box-shadow:inset 0 0 0 2px var(--main);}"
+        + ".oq-gbtns{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;}"
+        + ".oq-gbtns button{font:inherit;font-size:14px;font-weight:800;padding:5px 11px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--main);cursor:pointer;}"
+        + ".oq-gbtns button:disabled{opacity:.4;cursor:default;}"
+        + ".oq-gsize{font-size:12.5px;opacity:.7;margin-left:4px;}"
+        + ".oq-ghelp{font-size:12.5px;opacity:.75;margin:6px 0 0;line-height:1.6;}";
+    st.textContent = css;
+    var NATIVE = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value");
+    var MAXR = 30, MAXC = 12;
+    function parseTable(v) {           // "열1 | 열2" 줄들(또는 예전에 띄어쓰기 · 탭으로 쓴 답 · MySQL 의 | a | b | 모양) → [[칸…]…]
+        return String(v || "").replace(/\r/g, "").split("\n")
+            .filter(function (l) { return !/^[\s+\-=|:]*$/.test(l); })    // 빈 줄 · +---+ 테두리 줄은 빼고
+            .map(function (l) {
+                if (/^\|.*\|$/.test(l)) l = l.slice(1, -1);                // | a | b | → a | b
+                return /[|\t]/.test(l) ? l.split(/[|\t]/).map(function (c) { return c.trim(); }) : l.trim().split(/\s+/);
+            });
+    }
+    function serialize(M) {            // 표 → 답 (글자가 있는 마지막 행 · 열까지만 · 칸은 " | ")
+        var lastR = -1, lastC = -1;
+        M.forEach(function (row, r) { row.forEach(function (x, c) { if (x.trim()) { lastR = Math.max(lastR, r); lastC = Math.max(lastC, c); } }); });
+        if (lastR < 0) return "";
+        return M.slice(0, lastR + 1).map(function (row) { return row.slice(0, lastC + 1).map(function (x) { return x.trim(); }).join(" | "); }).join("\n");
+    }
+    function tableGrid(ta, title) {
+        var M = [], busy = false;
+        var wrap = document.createElement("div");
+        wrap.className = "oq-grid";
+        wrap.innerHTML = '<div class="oq-gwrap"><table class="oq-gtbl"></table></div>'
+            + '<div class="oq-gbtns"><button type="button" data-g="r+">＋ 행</button><button type="button" data-g="r-">－ 행</button>'
+            + '<button type="button" data-g="c+">＋ 열</button><button type="button" data-g="c-">－ 열</button><span class="oq-gsize"></span></div>'
+            + '<p class="oq-ghelp">첫 줄 = <b>열 이름</b> · 그다음 한 줄 = 한 행 · 널 값은 <b>NULL</b> · 행 순서는 채점 안 함 · 남는 빈 칸은 상관없음 · Enter = 아래 칸</p>';
+        ta.parentNode.insertBefore(wrap, ta);
+        ta.classList.add("oq-ans-src");
+        ta.setAttribute("aria-hidden", "true");
+        ta.tabIndex = -1;
+        var tbl = wrap.querySelector(".oq-gtbl"), size = wrap.querySelector(".oq-gsize"), btn = {};
+        [].forEach.call(wrap.querySelectorAll("[data-g]"), function (b) { btn[b.dataset.g] = b; });
+        var at = function (s) { return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;"); };
+        function emptyRow(C) { var a = []; for (var c = 0; c < C; c++) a.push(""); return a; }
+        function cell(r, c) { return tbl.querySelector('[data-r="' + r + '"][data-c="' + c + '"]'); }
+        function draw(focus) {
+            tbl.innerHTML = M.map(function (row, r) {
+                return "<tr>" + row.map(function (v, c) {
+                    return "<td" + (r ? "" : ' class="h"') + '><input class="oq-cell" data-r="' + r + '" data-c="' + c + '" value="' + at(v) + '"'
+                        + (r ? "" : ' placeholder="열 이름"') + ' spellcheck="false" autocomplete="off" autocapitalize="off"'
+                        + ' aria-label="' + at(title) + " — " + (r ? r + "행 " : "열 이름 ") + (c + 1) + '열"></td>';
+                }).join("") + "</tr>";
+            }).join("");
+            var R = M.length, C = M[0].length;
+            size.textContent = "열 " + C + " × 행 " + (R - 1) + " (+ 열 이름 줄)";
+            btn["r+"].disabled = R >= MAXR; btn["r-"].disabled = R <= 1; btn["c+"].disabled = C >= MAXC; btn["c-"].disabled = C <= 1;
+            if (focus) { var f = cell(focus[0], focus[1]); if (f) f.focus(); }
+        }
+        function write() {             // 표 → 숨긴 칸 → input 이벤트 (이 기기 저장 · 실제시험 서버 저장이 이 이벤트를 들음)
+            busy = true; NATIVE.set.call(ta, serialize(M)); busy = false;
+            ta.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+        function load(v) {             // 숨긴 칸 → 표 (작으면 3 × 3)
+            var rows = parseTable(v), C = 3;
+            rows.forEach(function (r) { C = Math.max(C, r.length); });
+            M = [];
+            for (var r = 0; r < Math.max(3, rows.length); r++) M.push(emptyRow(Math.min(C, MAXC)));
+            rows.forEach(function (row, r) { row.forEach(function (x, c) { if (c < MAXC) M[r][c] = x; }); });
+            draw();
+        }
+        Object.defineProperty(ta, "value", {
+            configurable: true,
+            get: function () { return NATIVE.get.call(ta); },
+            set: function (v) { NATIVE.set.call(ta, v); if (!busy) load(v); }
+        });
+        ta.addEventListener("focus", function () { var f = cell(0, 0); if (f) f.focus(); });   // 번호판에서 문제로 가면 첫 칸에
+        tbl.addEventListener("input", function (e) {
+            var t = e.target;
+            if (!t.classList.contains("oq-cell")) return;
+            e.stopPropagation();       // 칸의 input 대신 숨긴 칸의 input 하나만 위로 (저장이 두 번 되지 않게)
+            M[+t.dataset.r][+t.dataset.c] = t.value;
+            write();
+        });
+        tbl.addEventListener("keydown", function (e) {
+            var t = e.target;
+            if (!t.classList.contains("oq-cell") || e.key !== "Enter" || e.isComposing || e.keyCode === 229) return;   // 한글 조합 중 Enter 는 그대로
+            e.preventDefault();
+            var r = +t.dataset.r, c = +t.dataset.c;
+            if (e.shiftKey) { if (r > 0) cell(r - 1, c).focus(); return; }
+            if (r < M.length - 1) { cell(r + 1, c).focus(); return; }
+            if (M.length >= MAXR) return;
+            M.push(emptyRow(M[0].length)); draw([r + 1, c]); write();   // 마지막 줄에서 Enter = 행 하나 더
+        });
+        wrap.querySelector(".oq-gbtns").addEventListener("click", function (e) {
+            var b = e.target.closest("[data-g]");
+            if (!b || b.disabled) return;
+            var g = b.dataset.g, R = M.length, C = M[0].length;
+            var lost = g === "r-" ? M[R - 1].some(function (x) { return x.trim(); })
+                     : g === "c-" ? M.some(function (row) { return row[C - 1].trim(); }) : false;
+            if (lost && !window.confirm(g === "r-" ? "마지막 행에 쓴 글자도 지워져요. 행을 줄일까요?" : "마지막 열에 쓴 글자도 지워져요. 열을 줄일까요?")) return;
+            if (g === "r+") M.push(emptyRow(C));
+            else if (g === "r-") M.pop();
+            else if (g === "c+") M.forEach(function (row) { row.push(""); });
+            else if (g === "c-") M.forEach(function (row) { row.pop(); });
+            draw(); write();
+        });
+        load("");
+    }
+
     var scoreEl = document.getElementById("oq-score");
     function updateScore() {
         if (!scoreEl) return;
@@ -141,6 +259,7 @@
         expEl.parentNode.insertBefore(box, expEl);
 
         var key = "oq:" + location.pathname + ":" + (p.id || "");
+        if (table) tableGrid(ta, title);       // SQL 결과 표: 글자 칸 대신 표에 입력 (답은 숨긴 칸에 "열1 | 열2" 줄로 — 채점 · 저장은 그대로)
         try { var saved = localStorage.getItem(key); if (saved) ta.value = saved; } catch (e) { }
         ta.addEventListener("input", function () { try { localStorage.setItem(key, ta.value); } catch (e) { } });
 
@@ -223,6 +342,7 @@
         });
         btns.querySelector(".oq-clear").addEventListener("click", function () {
             ta.value = ""; box.innerHTML = ""; p.dataset.solved = "";
+            ta.dispatchEvent(new Event("input", { bubbles: true }));   // 실제시험 서버 저장에도 지운 것으로
             try { localStorage.removeItem(key); } catch (e) { }
             updateScore();
         });
