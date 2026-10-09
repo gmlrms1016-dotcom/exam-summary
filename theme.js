@@ -291,14 +291,15 @@
         "html[data-theme=dark] .haksa-open:hover{background:#33373c}",
         "html[data-theme=dark] .haksa-frame{background:#0c1014;border-top-color:#262a2f}",
 
-        // ---- 과목 로고 (제목 · 위쪽 막대 · 첫 화면 카드) — 다크에서는 검은 로고(GitHub · JS 글자)가 보이게 흰 판 위에 ----
-        ".subj-logo{display:inline-block;width:1.15em;height:1.15em;object-fit:contain;vertical-align:-.2em;margin-right:.32em}",
-        "html[data-theme=dark] .subj-logo{background:#f5f5f5;border-radius:.24em;padding:.07em;box-sizing:border-box}",
-        ".mo-bar-t .subj-logo{width:1.3em;height:1.3em;vertical-align:-.3em;margin-right:.4em}",
-        ".subj-ic.has-logo .subj-logo{width:32px;height:32px;margin:0;vertical-align:middle}",
-        "html[data-theme=dark] .subj-ic.has-logo{background:#f5f5f5}",
-        "html[data-theme=dark] .subj-ic.has-logo .subj-logo{background:none;padding:0}",
-        "html[data-theme=dark] .subject.fin .subj-ic.has-logo{background:#cfd3d7}",
+        // ---- 과목 로고 (제목 · 위쪽 막대 · 첫 화면 카드) — 흰 둥근 판 고정(라이트 · 다크 둘 다 · 2026-10-09 사용자) ----
+        //  로고 그림은 여백 없이(긴 쪽이 틀에 닿게 · 비율 그대로) → 판 안쪽 여백만 남기고 꽉 채움
+        ".subj-logo{display:inline-block;width:1.3em;height:1.3em;object-fit:contain;vertical-align:-.28em;margin-right:.32em;",
+        "background:#fff;border-radius:.26em;padding:.11em;box-sizing:border-box;box-shadow:0 0 0 1px rgba(0,0,0,.09)}",
+        "html[data-theme=dark] .subj-logo{background:#f5f5f5;box-shadow:none}",
+        ".mo-bar-t .subj-logo{width:1.45em;height:1.45em;vertical-align:-.38em;margin-right:.45em}",
+        ".subj-ic.has-logo,.subject.fin .subj-ic.has-logo{background:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}",
+        "html[data-theme=dark] .subj-ic.has-logo,html[data-theme=dark] .subject.fin .subj-ic.has-logo{background:#f5f5f5;box-shadow:none}",
+        ".subj-ic.has-logo .subj-logo{width:100%;height:100%;margin:0;padding:5px;vertical-align:top;background:none;box-shadow:none;border-radius:0}",
 
         // ---- 전환 버튼 ----
         ".theme-toggle{position:fixed;top:14px;right:14px;z-index:9999;width:44px;height:44px;border-radius:50%;",
