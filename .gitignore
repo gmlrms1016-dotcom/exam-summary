@@ -1,7 +1,4 @@
 .claude/
 __pycache__/
 
-# 과목 로고 원본 (TIFF · SVG — 사이트에는 logo/*.png 만 씀)
-logo/*.tiff
-logo/*.svg
 .DS_Store
