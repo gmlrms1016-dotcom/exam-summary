@@ -70,6 +70,7 @@
             var s = name && logoOf(name.textContent);
             if (!s || ic.classList.contains("has-logo")) return;
             ic.classList.add("has-logo");
+            card.classList.add("subj-logo-card");          // 로고 판을 카드 왼쪽에 꽉 붙임 (아래 CSS)
             ic.innerHTML = "";
             ic.appendChild(logoImg(s));
         });
@@ -297,9 +298,17 @@
         "background:#fff;border-radius:.26em;padding:.11em;box-sizing:border-box;box-shadow:0 0 0 1px rgba(0,0,0,.09)}",
         "html[data-theme=dark] .subj-logo{background:#f5f5f5;box-shadow:none}",
         ".mo-bar-t .subj-logo{width:1.45em;height:1.45em;vertical-align:-.38em;margin-right:.45em}",
-        ".subj-ic.has-logo,.subject.fin .subj-ic.has-logo{background:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}",
+        //  첫 화면 과목 카드: 흰 판이 카드 왼쪽 · 위 · 아래 끝까지 꽉 차는 정사각형 (2026-10-09 사용자 "카드를 꽉 채우게 · 카드랑 평탄하게")
+        //  판은 카드 테두리 바로 안쪽에 붙음 → 왼쪽 모서리는 카드 모서리와 같은 곡선, 오른쪽은 곧은 경계 · 카드 높이(min-height) = 판 크기라 정사각형
+        ".subject.subj-logo-card{--subj-ic:82px;position:relative;min-height:calc(var(--subj-ic) + 2px);padding-left:calc(var(--subj-ic) + 16px)}",
+        ".subj-logo-card .subj-ic.has-logo{position:absolute;left:0;top:0;bottom:0;width:var(--subj-ic);height:auto;",
+        "border-radius:calc(var(--r,18px) - 1px) 0 0 calc(var(--r,18px) - 1px)}",
+        ".subj-ic.has-logo,.subject.fin .subj-ic.has-logo{background:#fff;box-shadow:inset -1px 0 0 rgba(0,0,0,.08)}",   // 라이트: 흰 카드와 판 사이 옅은 경계선
         "html[data-theme=dark] .subj-ic.has-logo,html[data-theme=dark] .subject.fin .subj-ic.has-logo{background:#f5f5f5;box-shadow:none}",
-        ".subj-ic.has-logo .subj-logo{width:100%;height:100%;margin:0;padding:5px;vertical-align:top;background:none;box-shadow:none;border-radius:0}",
+        ".subj-ic.has-logo .subj-logo{width:100%;height:100%;margin:0;padding:13px;vertical-align:top;background:none;box-shadow:none;border-radius:0;",
+        "transition:transform .5s var(--mo-spring,ease)}",
+        ".subject:hover .subj-ic.has-logo{transform:none}",                                   // 판은 카드에 붙은 채로 두고
+        "@media (prefers-reduced-motion:no-preference){.subject:hover .subj-ic.has-logo .subj-logo{transform:scale(1.08) rotate(-6deg)}}",   // 로고만 스프링 (motion.js 아이콘 효과와 같은 값 · 동작 줄이기면 안 움직임)
 
         // ---- 전환 버튼 ----
         ".theme-toggle{position:fixed;top:14px;right:14px;z-index:9999;width:44px;height:44px;border-radius:50%;",
