@@ -101,13 +101,26 @@
         for (i = 0; i <= n; i++) { L.push([]); for (j = 0; j <= m; j++) L[i].push(0); }
         for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--) L[i][j] = want[i] === got[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
         var ops = [], gw = [], gg = [];
-        function gap() {
-            for (var k = 0; k < Math.max(gw.length, gg.length); k++) ops.push({ w: k < gw.length ? gw[k] : -1, g: k < gg.length ? gg[k] : -1, same: false });
+        function sim(a, b) { var k = 0; while (k < a.length && k < b.length && a[k] === b[k]) k++; return k; }   // 앞에서부터 같은 글자 수
+        function gap() {                // 남은 줄 수가 같으면 같은 자리끼리, 다르면 가장 닮은 줄끼리(순서 유지)
+            var A = gw.length, B = gg.length, k, a, b, S = [];
+            if (A === B || !A || !B) { for (k = 0; k < Math.max(A, B); k++) ops.push({ w: k < A ? gw[k] : -1, g: k < B ? gg[k] : -1, same: false }); gw = []; gg = []; return; }
+            for (a = 0; a <= A; a++) { S.push([]); for (b = 0; b <= B; b++) S[a].push(0); }
+            for (a = A - 1; a >= 0; a--) for (b = B - 1; b >= 0; b--) { var t = sim(want[gw[a]], got[gg[b]]) + S[a + 1][b + 1];
+                S[a][b] = A - a === B - b ? t : A - a < B - b ? Math.max(t, S[a][b + 1]) : Math.max(t, S[a + 1][b]); }
+            a = 0; b = 0;
+            while (a < A || b < B) {
+                if (a < A && b < B && S[a][b] === sim(want[gw[a]], got[gg[b]]) + S[a + 1][b + 1]) ops.push({ w: gw[a++], g: gg[b++], same: false });
+                else if (a < A && (b >= B || A - a > B - b)) ops.push({ w: gw[a++], g: -1, same: false });
+                else ops.push({ w: -1, g: gg[b++], same: false });
+            }
             gw = []; gg = [];
         }
         i = 0; j = 0;
         while (i < n && j < m) {
             if (want[i] === got[j]) { gap(); ops.push({ w: i, g: j, same: true }); i++; j++; }
+            else if (i + 1 < n && L[i + 2][j + 1] === L[i][j] && (got[j] === want[i] + want[i + 1] || got[j] === want[i] + " " + want[i + 1])) { gap(); ops.push({ w: i, g: j, same: false }, { w: i + 1, g: -1, same: false }); i += 2; j++; }   // 두 줄을 한 줄에 붙여 씀
+            else if (j + 1 < m && L[i + 1][j + 2] === L[i][j] && (want[i] === got[j] + got[j + 1] || want[i] === got[j] + " " + got[j + 1])) { gap(); ops.push({ w: i, g: j, same: false }, { w: -1, g: j + 1, same: false }); i++; j += 2; }   // 한 줄을 두 줄로 나눠 씀
             else if (L[i + 1][j + 1] === L[i][j]) { gw.push(i++); gg.push(j++); }   // 바꿔 쓴 줄은 같은 자리끼리
             else if (L[i + 1][j] >= L[i][j + 1]) gw.push(i++);
             else gg.push(j++);
@@ -126,25 +139,28 @@
                 blank: "괄호 안이 빈 <code>System.out.println()</code> 은 줄만 바꿔요", real: "자바는 실수(double)를 <code>3.0</code> 처럼 소수점을 붙여 찍어요",
                 toReal: "계산에 실수(double)가 하나라도 섞이면 결과도 실수이고, 자바는 <code>3.0</code> 처럼 소수점을 붙여 찍어요.",
                 toInt: "정수끼리 계산하거나 <code>(int)</code> 로 바꾸면 소수점이 없어요.",
-                bool: "<code>true</code> · <code>false</code> 는 소문자로 찍혀요", sp: "따옴표 안의 띄어쓰기(<code>\" \"</code>)를 한 칸씩 세어 볼까요?",
+                bool: "<code>true</code> · <code>false</code> 는 소문자로 찍혀요", bw: /\b(?:true|false)\b/g, sp: "따옴표 안의 띄어쓰기(<code>\" \"</code>)를 한 칸씩 세어 볼까요?",
+                pad0: "<code>%05d</code> 처럼 % 뒤의 <code>0</code> 은 남는 칸을 빈칸 대신 0 으로 채워요.",
                 endNl: "마지막 출력이 <code>println</code> 이라서 끝에 Enter 를 한 번 더 쳐야 해요", endNo: "마지막 출력이 <code>print</code> 라서 끝의 Enter 를 지워 주세요" },
             c: { nl: "<code>\\n</code> 이 있는 곳에서 줄이 바뀌어요", keep: "<code>\\n</code> 이 없으면 다음 출력이 같은 줄에 이어져요",
                 blank: "<code>printf(\"\\n\")</code> 처럼 <code>\\n</code> 만 찍으면 줄만 바뀌어요", real: "<code>%f</code> 는 소수점 아래 6자리, <code>%.1f</code> 는 1자리까지 찍어요",
                 toReal: "계산에 실수(double)가 섞여야 실수가 되고, <code>%f</code> 는 소수점 아래 6자리 · <code>%.1f</code> 는 1자리까지 찍어요.",
                 toInt: "정수끼리 계산하거나 <code>%d</code> 로 찍으면 소수점이 없어요.",
                 bool: "C 는 참 · 거짓을 <code>1</code> · <code>0</code> 으로 찍어요", sp: "<code>printf</code> 따옴표 안의 띄어쓰기를 한 칸씩 세어 볼까요?",
+                pad0: "<code>%05d</code> 처럼 % 뒤의 <code>0</code> 은 남는 칸을 빈칸 대신 0 으로 채워요.",
                 endNl: "마지막 출력이 <code>\\n</code> 으로 끝나서 끝에 Enter 를 한 번 더 쳐야 해요", endNo: "마지막 출력에 <code>\\n</code> 이 없어서 끝의 Enter 를 지워 주세요" },
             python: { nl: "<code>print()</code> 는 찍고 나서 줄을 바꿔요", keep: "<code>end=</code> (<code>end=\"\"</code> · <code>end=\" \"</code>) 가 있으면 줄을 바꾸지 않고 이어서 찍어요",
                 blank: "괄호 안이 빈 <code>print()</code> 는 줄만 바꿔요", real: "파이썬은 실수를 <code>2.0</code> 처럼 소수점을 붙여 찍어요",
                 toReal: "파이썬은 실수가 하나라도 섞이거나 <code>/</code> 로 나누면 결과가 실수예요 (<code>4 / 2</code> → 2.0).",
                 toInt: "<code>//</code>(몫) · <code>%</code> · <code>int()</code> 는 정수끼리면 정수예요 (<code>/</code> 만 늘 실수).",
-                bool: "<code>True</code> · <code>False</code> 는 첫 글자가 대문자예요", sp: "따옴표 안 띄어쓰기와, <code>print(a, b)</code> 처럼 쉼표 사이에 저절로 들어가는 한 칸을 세어 볼까요?",
+                bool: "<code>True</code> · <code>False</code> 는 첫 글자가 대문자예요", bw: /\b(?:True|False)\b/g, sp: "따옴표 안 띄어쓰기와, <code>print(a, b)</code> 처럼 쉼표 사이에 저절로 들어가는 한 칸을 세어 볼까요?",
+                pad0: "<code>f\"{x:05d}\"</code> · <code>\"%05d\" % x</code> 처럼 0 을 붙이면 남는 칸을 0 으로 채워요.",
                 endNl: "마지막 <code>print()</code> 도 줄을 바꿔서 끝에 Enter 를 한 번 더 쳐야 해요", endNo: "마지막 출력이 <code>end=\"\"</code> 라서 끝의 Enter 를 지워 주세요" },
             javascript: { nl: "<code>console.log</code> 는 찍고 나서 줄을 바꿔요", keep: "여기서는 줄이 바뀌지 않아요",
                 blank: "괄호 안이 빈 <code>console.log()</code> 는 빈 줄을 찍어요", real: "",
                 toReal: "자바스크립트는 나누어떨어지지 않으면 소수점이 나와요 (<code>5 / 2</code> → 2.5).",
                 toInt: "자바스크립트는 <code>3.0</code> 을 <code>3</code> 으로 찍어요 — 소수점 아래가 0 이면 안 붙어요.",
-                bool: "<code>true</code> · <code>false</code> 는 소문자로 찍혀요", sp: "따옴표 안의 띄어쓰기(<code>\" \"</code>)를 한 칸씩 세어 볼까요?",
+                bool: "<code>true</code> · <code>false</code> 는 소문자로 찍혀요", bw: /\b(?:true|false)\b/g, sp: "따옴표 안의 띄어쓰기(<code>\" \"</code>)를 한 칸씩 세어 볼까요?",
                 endNl: "마지막 출력도 줄을 바꿔서 끝에 Enter 를 한 번 더 쳐야 해요", endNo: "끝의 Enter 를 지워 주세요" }
         };
         return S[lang] || { nl: "여기서 줄이 바뀌어요", keep: "여기서는 줄이 바뀌지 않아요", blank: "여기는 글자 없이 줄만 바뀌어요", real: "",
@@ -158,26 +174,35 @@
         var upto = p ? "앞의 <code>" + esc(G.slice(0, p).join("")) + "</code> 까지는 정확해요" : "", good = upto ? upto + " 👍 " : "";
         var NUM = /-?\d+(?:\.\d+)?/g, wn = w.match(NUM) || [], gn = g.match(NUM) || [];
         if (w.replace(/\s/g, "") === g.replace(/\s/g, ""))
-            return { kind: "space", items: ["🔍 글자는 전부 맞았어요 👍 <b>띄어쓰기</b>만 조금 달라요. " + (upto ? upto + ". " : "") + sy.sp + " (이 줄에는 띄어쓰기가 " + (w.match(/ /g) || []).length + "개 있어요)"] };
+            return { kind: "space", items: ["🔍 글자는 전부 맞았어요 👍 <b>띄어쓰기</b>만 조금 달라요. " + (upto ? upto + ". " : "") + sy.sp + ((w.match(/ /g) || []).length ? " (이 줄에는 띄어쓰기가 " + (w.match(/ /g) || []).length + "개 있어요)" : " (이 줄에는 띄어쓰기가 하나도 없어요)")] };
         if (w.toLowerCase() === g.toLowerCase())
             return { kind: "case", items: ["🔍 글자는 맞았는데 <b>대문자 · 소문자</b>가 달라요. " + (upto ? upto + ". " : "")
-                + (/\b(true|false)\b/i.test(w) ? sy.bool + "." : "따옴표 안 글자는 쓴 그대로, 변수 값은 그 값 그대로 찍혀요 — 한 글자씩 비교해 볼까요?")] };
+                + (sy.bw && (w.match(sy.bw) || []).length > (g.match(sy.bw) || []).length ? sy.bool + "." : "따옴표 안 글자는 쓴 그대로, 변수 값은 그 값 그대로 찍혀요 — 한 글자씩 비교해 볼까요?")] };   // 그 언어가 참 · 거짓을 찍는 모양(java · js true · 파이썬 True)이 정답에 있고 쓴 답에서 바뀐 때만
         var bad = [];                         // 숫자만 다른지 (숫자 자리는 쓸 수 없는 글자 \u0000 로 바꿔 비교 · 출력의 # 과 헷갈리지 않게)
         if (wn.length && wn.length === gn.length && w.replace(NUM, "\u0000") === g.replace(NUM, "\u0000")) wn.forEach(function (x, i) { if (x !== gn[i]) bad.push(i); });
+        var shape = function (x) { return Number(wn[x]) === Number(gn[x]) && (wn[x].charAt(0) === "-") === (gn[x].charAt(0) === "-"); };   // 값은 같고 모양만 다름 (부호까지 같아야 · 314 ↔ 314.0 · 7 ↔ 00007)
         if (bad.length) {
-            var k = bad[0], more = bad.length > 1 ? " (그리고 숫자 " + (bad.length - 1) + "개 더)" : "";
-            if ((/\./.test(wn[k]) || /\./.test(gn[k])) && Number(wn[k]) === Number(gn[k])) {   // 값은 같고 찍히는 모양만 다름 (3.5 ↔ 3.500000 · 314 ↔ 314.0)
-                var dot = /\./.test(wn[k]);
-                return { kind: "fmt", items: ["🔍 값 <code>" + esc(gn[k]) + "</code> 은 맞았어요 👍 그런데 찍히는 <b>모양</b>이 달라요 — 정답은 "
+            var calc = bad.filter(function (x) { return !shape(x); }), k = calc.length ? calc[0] : bad[0], more = bad.length > 1 ? " (그리고 숫자 " + (bad.length - 1) + "개 더)" : "";
+            if (!calc.length) {   // 틀린 숫자가 모두 값은 같고 찍히는 모양만 다름 (3.5 ↔ 3.500000 · 314 ↔ 314.0)
+                var dot = /\./.test(wn[k]), pad = /\./.test(wn[k]) === /\./.test(gn[k]) && (wn[k].split(".")[1] || "") === (gn[k].split(".")[1] || "");   // 소수점은 같고 앞자리 0 채움만 다름 (%05d)
+                if (pad && /^-?0\d/.test(wn[k])) return { kind: "fmt", items: ["🔍 <code>" + esc(gn[k]) + "</code> — <b>값</b>은 맞았어요 👍 그런데 정답은 앞을 <b>0</b>으로 채워 <b>" + wn[k].replace(/^-/, "").split(".")[0].length + "자리</b>로 찍혀요" + more + ".", ].concat(sy.pad0 ? ["💬 " + sy.pad0] : []) };
+                if (pad) return { kind: "fmt", items: ["🔍 <code>" + esc(gn[k]) + "</code> — <b>값</b>은 맞았어요 👍 그런데 정답은 앞에 <b>0 없이</b> 찍혀요" + more + "."] };
+                return { kind: "fmt", items: ["🔍 <code>" + esc(gn[k]) + "</code> — <b>값</b>은 맞았어요 👍 그런데 찍히는 <b>모양</b>이 달라요 — 정답은 "
                     + (dot ? "소수점 아래 <b>" + wn[k].split(".")[1].length + "자리</b>까지" : "<b>소수점 없이</b>") + " 찍혀요" + more + "."].concat(dot ? (sy.real ? ["💬 " + sy.real + "."] : []) : ["💬 " + sy.toInt]) };
             }
             var re = /-?\d+(?:\.\d+)?/g, mm = null;
             for (var c = 0; c <= k; c++) mm = re.exec(g);
-            var it = ["🔍 글자는 다 잘 썼어요 👍 " + (mm && mm.index ? "앞의 <code>" + esc(g.slice(0, mm.index)) + "</code> 까지는 정확해요. 그다음 " : "")
+            var it = ["🔍 글자는 다 잘 썼어요 👍 " + (mm && mm.index ? (k === bad[0] ? "앞의 <code>" + esc(g.slice(0, mm.index)) + "</code> 까지는 정확해요. 그다음 " : "<code>" + esc(g.slice(0, mm.index)) + "</code> 다음의 ") : "")
                 + "<b>숫자</b> <code>" + esc(gn[k]) + "</code>" + more + " — 이 값을 다시 계산해 볼까요? 어떻게 나왔는지 한 단계씩 따라가 봐요."];
             if (/\./.test(wn[k]) && !/\./.test(gn[k])) it.push("🔢 정답은 <b>소수점이 있는 수</b>예요. " + sy.toReal);
             else if (!/\./.test(wn[k]) && /\./.test(gn[k])) it.push("🔢 정답은 <b>소수점이 없는 수</b>예요. " + sy.toInt);
             return { kind: "num", items: it };
+        }
+        if (p === G.length || p === W.length) {   // 한쪽이 다른 쪽의 앞부분 (끝 글자만 모자라거나 더 씀)
+            var rest = (p === G.length ? W : G).slice(p).join(""), sym = !/[0-9A-Za-z\u3131-\uD79D]/.test(rest);   // 남은 글자가 기호뿐인지 (마침표 · 느낌표)
+            return { kind: sym ? "tail" : "text", items: [p === G.length
+                ? "🔍 " + good + "그런데 정답 줄은 여기서 끝나지 않고 뒤에 <b>" + (W.length - p) + "글자</b>가 더 찍혀요. " + (sym ? "줄 끝에 찍히는 기호(마침표 등)를 다시 볼까요?" : "그다음에 무엇이 더 찍히는지 코드를 따라가 볼까요?")
+                : "🔍 " + good + "정답 줄은 여기서 끝나요 — 뒤에 더 쓴 <b>" + (G.length - p) + "글자</b>는 찍히지 않아요. " + (sym ? "" : "왜 거기서 끝나는지 코드를 따라가 볼까요?")] };
         }
         var it2 = [p ? "🔍 " + good + "<b>" + (p + 1) + "번째 글자부터</b> 달라져요. 그 부분을 찍는 코드를 같이 따라가 볼까요?" : "🔍 <b>첫 글자부터</b> 달라요. 이 줄을 찍는 코드부터 같이 찾아볼까요?"];
         if (W.length !== G.length) it2.push("📏 정답 줄은 띄어쓰기까지 <b>" + W.length + "글자</b>예요 (쓴 줄은 " + G.length + "글자).");
@@ -189,12 +214,30 @@
     function trace(lines, at, lang) {   // 출력문(at 줄)에 쓰인 변수의 값이 마지막으로 바뀌는 위쪽 줄 → [{name, line}] (최대 2개)
         var expr = cutLine(lines[at], lang), i0 = expr.indexOf("(");
         if (i0 >= 0) expr = expr.slice(i0 + 1);
+        var OV = window.OutView, bf = OV && OV.branchFlags ? OV.branchFlags(lines.join("\n"), lang, true) : [];   // if · else · switch 갈래 안인지 (삼항은 빼고)
+        function head(i) {              // 갈래 안의 줄 i 를 고르는 if · switch 머리 줄 (못 찾으면 -1)
+            for (var k = i, d = 0; k >= 0; k--) {
+                var t = cutLine(lines[k], lang);
+                d += (t.match(/\}/g) || []).length - (t.match(/\{/g) || []).length;
+                if ((k === i || d < 0) && /^\s*(\}\s*)?(else\s+)?(if|switch)\b/.test(t)) return k;
+            }
+            return -1;
+        }
         var seen = {}, out = [];
         (expr.match(/[A-Za-z_]\w*/g) || []).forEach(function (n) {
             if (seen[n] || NOTVAR.test(n) || out.length >= 2) return;
             seen[n] = 1;
-            var re = new RegExp("(^|[^\\w.])" + n + "\\s*(?:[-+*/%&|^]|<<|>>)?=(?!=)|(?:\\+\\+|--)\\s*" + n + "\\b|\\b" + n + "\\s*(?:\\+\\+|--)");
-            for (var i = at - 1; i >= 0; i--) if (re.test(cutLine(lines[i], lang))) { out.push({ name: n, line: i }); break; }
+            var re = new RegExp("(^|[^\\w.])(" + n + "(?:\\s*\\.\\s*\\w+|\\s*\\[[^\\]]*\\])*)\\s*(?:[-+*/%&|^]|<<|>>)?=(?!=)|(?:\\+\\+|--)\\s*" + n + "\\b|\\b" + n + "\\s*(?:\\+\\+|--)");
+            var fld = {};
+            for (var i = at - 1; i >= 0 && out.length < 2; i--) {
+                var mm = re.exec(cutLine(lines[i], lang));
+                if (!mm) continue;
+                var lhs = (mm[2] || n).replace(/\s+/g, ""), hd = bf[i] && !bf[at] ? head(i) : -2;   // 출력문은 갈래 밖인데 이 줄은 갈래 안(case · else …) → 그 줄 대신 갈래를 고르는 if · switch 줄
+                var v = hd === -2 ? { name: lhs, line: i } : hd >= 0 ? { name: lhs, line: hd, cond: true } : null;
+                if (/^\w+\./.test(lhs)) { if (!fld[lhs] && v) out.push(v); fld[lhs] = 1; continue; }   // 필드(b.radius =)는 필드마다 가장 가까운 줄 — 더 위로
+                if (v) out.push(v);
+                break;                                          // 변수 자체(n = · n[i] =)를 바꾼 줄에서 멈춤
+            }
         });
         return out;
     }
@@ -225,11 +268,15 @@
         var ops = align(want, got), html = [], wrong = [], bad = [], extra = 0, good = 0, cx = opt.ctx, sy = cx.sy;
         var show = function (t) { return t === "" ? '<span class="oq-nl">(빈 줄)</span>' : opt.sp ? showSp(t) : esc(t); };
         var tag = function (x) { return '<span class="oq-ln">' + x + "</span>"; };
+        ops.forEach(function (o) {             // 순서만 바뀐 줄: 빠진 정답 줄과 더 쓴 줄의 글자가 같으면 짝 (o.mv)
+            if (o.same || o.w < 0) return;
+            for (var b = 0; b < ops.length; b++) { var x = ops[b]; if (x.w < 0 && !x.mv && o.g < 0 && got[x.g] === want[o.w]) { o.mv = x; x.mv = o; break; } }
+        });
         ops.forEach(function (o) {
             if (o.same) { good++; html.push('<span class="l-ok">✅ ' + tag(opt.no(o.w)) + show(got[o.g]) + opt.nl(o.g) + "</span>"); return; }
-            if (o.g >= 0) html.push('<span class="l-no">❌ ' + tag(o.w >= 0 ? opt.no(o.w) : "+") + show(got[o.g]) + opt.nl(o.g) + "</span>");
-            else html.push('<span class="l-no l-miss">❌ ' + tag(opt.no(o.w)) + "(이 줄이 빠졌어요)</span>");
-            if (o.w >= 0) bad.push(opt.no(o.w)); else extra++;
+            if (o.g >= 0) html.push('<span class="l-no">❌ ' + tag(o.w >= 0 ? opt.no(o.w) : o.mv ? "↕" : "+") + show(got[o.g]) + opt.nl(o.g) + (o.mv ? ' <span class="oq-nl">(자리가 달라요 — ' + opt.no(o.mv.w) + "번째 줄)</span>" : "") + "</span>");
+            else html.push('<span class="l-no l-miss">❌ ' + tag(opt.no(o.w)) + (o.mv ? "(이 줄은 다른 자리에 썼어요)" : "(이 줄이 빠졌어요)") + "</span>");
+            if (o.w >= 0) bad.push(opt.no(o.w)); else if (!o.mv) extra++;
             wrong.push(o);
         });
         function place(i, deep) {       // 📍 이 줄을 찍는 코드 (+ deep: 🔎 값이 정해지는 줄 · 💬 문법 한마디)
@@ -247,9 +294,9 @@
             if (!deep) return out;
             var tr = trace(cx.lines, at, cx.lang), text = cutLine(cx.lines[at], cx.lang), raw = cx.lines[at] || "";
             var byLine = [];                 // 같은 줄에서 정해지는 변수는 한 문장으로 (int a = 10, b = 4;)
-            tr.forEach(function (v) { var x = byLine.filter(function (y) { return y.line === v.line; })[0]; if (x) x.names.push(v.name); else byLine.push({ line: v.line, names: [v.name] }); });
+            tr.forEach(function (v) { var x = byLine.filter(function (y) { return y.line === v.line && !y.cond === !v.cond; })[0]; if (x) x.names.push(v.name); else byLine.push({ line: v.line, names: [v.name], cond: v.cond }); });
             if (byLine.length) out.push("🔎 " + byLine.map(function (v) {
-                return v.names.map(function (n) { return "<code>" + esc(n) + "</code>"; }).join(" · ") + " 값은 <b>" + (v.line - cx.lead + 1) + "번째 줄</b>에서 정해져요: " + '<code class="c">' + esc(shortCode(cx.lines[v.line])) + "</code>";
+                return v.names.map(function (n) { return "<code>" + esc(n) + "</code>"; }).join(" · ") + (v.cond ? " 값은 <b>조건에 따라</b> 달라져요 — <b>" + (v.line - cx.lead + 1) + "번째 줄</b>에서 실제로 어느 갈래로 가는지 따라가 볼까요? " : " 값은 <b>" + (v.line - cx.lead + 1) + "번째 줄</b>에서 정해져요: ") + '<code class="c">' + esc(shortCode(cx.lines[v.line])) + "</code>";
             }).join(""));
             tr.forEach(function (v) { text += " " + cutLine(cx.lines[v.line], cx.lang); raw += " " + cx.lines[v.line]; });
             return out.concat(concepts(text, raw, cx.lang));
@@ -261,7 +308,15 @@
             if (/\btry\b/.test(all)) r.push("예외가 나면 <code>try</code> 안의 남은 줄은 건너뛰는지");
             return r.length ? r.join(", ") + " 다시 따라가 볼까요?" : "이 줄을 찍는 출력문이 정말 있는지 코드를 위에서부터 따라가 볼까요?";
         }
-        var boxes = [], used = {};
+        var boxes = [], used = {}, relines = false;
+        function split(o, nx) { return o && nx && o.w >= 0 && o.g >= 0 && nx.w < 0 && nx.g === o.g + 1 && (want[o.w] === got[o.g] + got[nx.g] || want[o.w] === got[o.g] + " " + got[nx.g]); }
+        var flat = function (a) { return a.join("").replace(/\s/g, ""); };
+        if (want.length !== got.length && flat(want) === flat(got) && wrong.length > 2) {   // 글자는 다 맞고 줄 바꾸는 곳만 다름 (print 를 println 처럼)
+            relines = true;
+            boxes.push(lineBox("🧑‍🏫 줄이 바뀌는 곳만 달라요", ["🔗 글자는 다 맞게 썼어요 👍 그런데 결과는 <b>" + want.length + "줄</b>이에요 (쓴 답은 " + got.length + "줄). "
+                + (got.length > want.length ? sy.keep : sy.nl) + " — 어디서 줄이 바뀌는지 다시 볼까요?"]));
+            wrong.forEach(function (o, idx) { used[idx] = true; });
+        }
         wrong.forEach(function (o, idx) {
             if (used[idx] || boxes.length >= 2) return;
             var nx = wrong[idx + 1], w = o.w >= 0 ? want[o.w] : null, g = o.g >= 0 ? got[o.g] : null, no = o.w >= 0 ? opt.no(o.w) : "";
@@ -272,16 +327,25 @@
                 boxes.push(lineBox(title, ["✂️ 두 줄이 한 줄로 붙었어요. " + sy.nl + " — 쓴 줄에서 <code>" + esc(cut) + "</code> 다음에 Enter 를 쳐 볼까요?"].concat(place(o.w))));
                 return;
             }
-            if (w !== null && g !== null && nx && nx.w < 0 && nx.g === o.g + 1 && (w === g + got[nx.g] || w === g + " " + got[nx.g])) {
+            if (split(o, nx)) {
                 used[idx + 1] = true;            // 한 줄을 두 줄로 나눠 씀 — 출력문 하나가 한 번에 찍는 줄이면 그 말로
                 var one = opt.where(o.w);
                 boxes.push(lineBox(title, ["🔗 한 줄을 두 줄로 나눴어요. " + (one && !one.many && !one.rep ? "이 줄은 출력문 <b>하나</b>가 한 번에 찍어서 중간에 줄이 바뀌지 않아요" : sy.keep)
                     + " — 두 줄을 이어서 한 줄로 써 볼까요?"].concat(place(o.w))));
                 return;
             }
-            if (w === null) {
-                boxes.push(lineBox("🧑‍🏫 결과에 없는 줄이 있어요", [g === "" ? "↩️ 빈 줄이 하나 더 들어갔어요 — Enter 를 한 번 더 쳤는지 볼까요?"
-                    : "➕ 쓴 줄 <code>" + esc(g) + "</code> — 이 줄은 실제 출력에는 없어요. " + whyExtra()]));
+            if (o.mv) {                      // 순서가 바뀐 줄 — 쓴 답에 있는 글자라 정답이 새로 보이지 않음
+                var m = o.w >= 0 ? o : o.mv;
+                used[wrong.indexOf(o.mv)] = true;
+                boxes.push(lineBox("🧑‍🏫 " + opt.no(m.w) + "번째 줄, 같이 볼까요?", [(want[m.w] === "" ? "🔀 빈 줄" : "🔀 이 줄(<code>" + esc(want[m.w]) + "</code>)") + "은 쓴 답에 있는데 <b>자리</b>가 달라요 — " + (/^[-\d.\s]+$/.test(want[m.w]) ? "두 줄의 순서가 바뀌었거나 두 값을 서로 바꿔 계산했을 수 있어요. 이 줄을 찍는 코드부터 같이 따라가 볼까요?" : "순서가 바뀌었어요. 어느 출력문이 먼저 실행되는지 위에서부터 따라가 볼까요?")].concat(place(m.w, want[m.w] !== ""))));
+                return;
+            }
+            if (w === null) {                // 결과에 없는 줄은 한 상자에 모아서 (틀린 줄 상자가 밀려나지 않게 · 🔗 나눠 쓴 줄의 뒷부분 · 🔀 자리만 바뀐 줄은 빼고)
+                var ex = wrong.filter(function (x, k) { return x.w < 0 && !x.mv && !used[k] && !split(wrong[k - 1], x) && (used[k] = true); }).map(function (x) { return got[x.g]; });
+                var txt = ex.filter(function (x) { return x !== ""; }), inOut = txt.some(function (x) { return want.indexOf(x) >= 0; });
+                boxes.push(lineBox("🧑‍🏫 결과에 없는 줄이 있어요", (txt.length ? ["➕ 쓴 줄 " + txt.slice(0, 3).map(function (x) { return "<code>" + esc(x) + "</code>"; }).join(" · ") + (txt.length > 3 ? " 등" : "")
+                    + " — " + (inOut ? "<b>이 자리</b>에는 없는 줄이에요 (결과에 아예 없거나, 자리가 다르거나, 한 번 더 썼어요). " : "실제 출력에는 없어요. ") + whyExtra()] : [])
+                    .concat(ex.length > txt.length ? ["↩️ 빈 줄이 더 들어갔어요 — Enter 를 한 번 더 쳤는지 볼까요?"] : [])));
                 return;
             }
             if (g === null) {
@@ -299,14 +363,15 @@
         });
         var left = wrong.filter(function (o, idx) { return !used[idx]; }).length - boxes.length;
         if (left > 0) boxes.push('<p class="oq-lh-more">… 다른 줄도 ' + left + "개 더 있어요. 위에서부터 하나씩 고치면 아래 줄도 훨씬 쉬워져요 🙂</p>");
-        return { good: good, bad: bad, extra: extra, html: html.join("\n"), hints: boxes.join("") };
+        extra = wrong.filter(function (x, k) { return x.w < 0 && !x.mv && !split(wrong[k - 1], x); }).length;   // 🔗 나눠 쓴 줄의 뒷부분은 '결과에 없는 줄'로 세지 않음
+        return { good: good, bad: bad, extra: extra, relines: relines, html: html.join("\n"), hints: boxes.join("") };
     }
     function goodText(good, total) {    // "👍 4줄 중 3줄은 맞았어요!" · (다 맞았는데 다른 게 틀리면) "👍 결과 4줄은 모두 맞게 썼어요. 그런데" · "아직 맞은 줄이 없어요."
         return !good ? "아직 맞은 줄이 없어요." : good === total ? "👍 결과 " + total + "줄은 모두 맞게 썼어요. 그런데" : "👍 " + total + "줄 중 " + good + "줄은 맞았어요!";
     }
-    function whereAt(n, list, good) {   // "2번째 줄만 다시 볼까요?" · "2 · 4번째 줄을 다시 볼까요?" + 결과에 없는 줄
+    function whereAt(n, list, good, also) {   // "2번째 줄만 다시 볼까요?" (다른 문제가 없을 때만 '만') · "2 · 4번째 줄을 다시 볼까요?" + 결과에 없는 줄
         var s = !list.length ? "" : !good && list.length > 2 ? "1번째 줄부터 코드를 한 줄씩 같이 따라가 볼까요?"
-            : list.slice(0, 4).join(" · ") + "번째 줄" + (list.length > 4 ? " 등" : "") + (list.length === 1 && good ? "만" : "을") + " 다시 볼까요?";
+            : list.slice(0, 4).join(" · ") + "번째 줄" + (list.length > 4 ? " 등" : "") + (list.length === 1 && good && !n && !also ? "만" : "을") + " 다시 볼까요?";
         return s + (!n ? "" : s ? " 결과에 없는 줄도 " + n + "개 있어요." : "결과에 없는 줄을 " + n + "개 더 썼어요 (❌ + 줄).");
     }
     function showSp(l) {                 // 줄 끝 공백을 눈에 보이게
@@ -561,7 +626,7 @@
             var msg;
             if (all) msg = '<p class="oq-sum ok">🎉 정답! ' + want.length + "줄 모두 맞았어요.</p>";
             else {
-                msg = '<p class="oq-sum no">' + goodText(fb.good, want.length) + " " + whereAt(fb.extra, fb.bad, fb.good);
+                msg = '<p class="oq-sum no">' + goodText(fb.good, want.length) + " " + whereAt(fb.relines ? 0 : fb.extra, fb.bad, fb.good);
                 if (got.length !== want.length && fb.bad.length) msg += " (결과는 " + want.length + "줄이에요 — 쓴 답은 " + got.length + "줄)";
                 msg += "</p>";
             }
@@ -587,7 +652,7 @@
             var msg;
             if (all) msg = '<p class="oq-sum ok">🎉 정답! 줄바꿈 · 띄어쓰기까지 실제 출력과 똑같아요.</p>';
             else {
-                var why = [], allLn = fb.good === want.length && !fb.extra, at = whereAt(fb.extra, fb.bad, fb.good);
+                var why = [], allLn = fb.good === want.length && !fb.extra, at = whereAt(fb.relines ? 0 : fb.extra, fb.bad, fb.good, endWant !== endGot);
                 if (!allLn) why.push(goodText(fb.good, want.length));
                 if (at) why.push(at);
                 if (want.length !== got.length && fb.bad.length) why.push("(결과는 " + want.length + "줄이에요 — 쓴 답은 " + got.length + "줄)");

@@ -241,11 +241,11 @@
         return flags;
     }
 
-    function branchFlags(code, lang) {
+    function branchFlags(code, lang, noTern) {   // noTern: 삼항(?:)은 갈래로 치지 않음 (그 줄은 늘 실행)
         var lines = code.split("\n"), flags = [], stack = [], single = false;
         lines.forEach(function (ln, i) {
             var c = splitComment(ln, lang)[0];
-            var header = /^\s*(\}\s*)?(if|else|switch|case\b|default\s*:)/.test(c) || /\?[^:]*:/.test(c) && !/::/.test(c);
+            var header = /^\s*(\}\s*)?(if|else|switch|case\b|default\s*:)/.test(c) || !noTern && /\?[^:]*:/.test(c) && !/::/.test(c);
             flags[i] = single || stack.some(function (x) { return x; }) || header;
             if (c.trim()) single = false;
             for (var k = 0; k < c.length; k++) { if (c[k] === "{") stack.push(header); else if (c[k] === "}") stack.pop(); }
@@ -549,7 +549,7 @@
         return res;
     }
 
-    var OV = { analyze: analyze, emittersOf: emittersOf, splitComment: splitComment, sourcesOf: sourcesOf };
+    var OV = { analyze: analyze, emittersOf: emittersOf, splitComment: splitComment, sourcesOf: sourcesOf, branchFlags: branchFlags };
     if (typeof module !== "undefined" && module.exports) { module.exports = OV; return; }
     global.OutView = OV;
 
