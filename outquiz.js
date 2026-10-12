@@ -71,7 +71,7 @@
         + ".oq-lh code{font-family:Consolas,\"D2Coding\",Menlo,monospace;font-size:13px;white-space:pre-wrap;word-break:break-all;}"
         + ".oq-lh code.c{display:block;width:fit-content;max-width:100%;box-sizing:border-box;margin:3px 0 1px;padding:2px 8px;border-radius:6px;background:rgba(127,127,127,.13);word-break:normal;overflow-wrap:anywhere;}"   /* 코드 줄은 따로 한 줄에 */
         + ".oq-lh-more{margin:6px 0 0;font-size:13px;opacity:.8;}"
-        + "body.ex-live:not(.ex-hint) .oq-lh,body.ex-live:not(.ex-hint) .oq-lh-more{display:none!important;}";   // 실제시험의 📝 실제시험 방식: 힌트 없이 ✅/❌ 만
+        + "body.ex-live:not(.ex-hint) .oq-lh,body.ex-live:not(.ex-hint) .oq-lh-more,body.ex-live:not(.ex-hint) .oq-hx{display:none!important;}";   // 실제시험의 📝 실제시험 방식: 힌트 없이 ✅/❌ 만 (정답 줄 수 · .oq-hx 도 숨김)
     var st = document.createElement("style");
     st.textContent = css;
     document.head.appendChild(st);
@@ -614,7 +614,7 @@
             }
             box.innerHTML = msg + '<div class="oq-mine">' + html.join("\n") + "</div>";
             if (all) { p.dataset.solved = "1"; p.dataset.wrong = ""; delete window.__examWrong[p.id]; }
-            else markWrong();
+            else { p.dataset.solved = ""; markWrong(); }   // 맞혔다가 답을 바꿔 틀리면 다시 틀린 것으로
             updateScore();
         });
         function checkLines() {          // 일반 · 칸수(exact) 문제: 빈 줄 무시 · 줄 짝짓기 + 틀린 줄 힌트
@@ -627,7 +627,7 @@
             if (all) msg = '<p class="oq-sum ok">🎉 정답! ' + want.length + "줄 모두 맞았어요.</p>";
             else {
                 msg = '<p class="oq-sum no">' + goodText(fb.good, want.length) + " " + whereAt(fb.relines ? 0 : fb.extra, fb.bad, fb.good);
-                if (got.length !== want.length && fb.bad.length) msg += " (결과는 " + want.length + "줄이에요 — 쓴 답은 " + got.length + "줄)";
+                if (got.length !== want.length && fb.bad.length) msg += ' <span class="oq-hx">(결과는 ' + want.length + "줄이에요 — 쓴 답은 " + got.length + "줄)</span>";
                 msg += "</p>";
             }
             box.innerHTML = msg + '<div class="oq-mine">' + fb.html + "</div>" + (all ? "" : fb.hints);
@@ -655,7 +655,7 @@
                 var why = [], allLn = fb.good === want.length && !fb.extra, at = whereAt(fb.relines ? 0 : fb.extra, fb.bad, fb.good, endWant !== endGot);
                 if (!allLn) why.push(goodText(fb.good, want.length));
                 if (at) why.push(at);
-                if (want.length !== got.length && fb.bad.length) why.push("(결과는 " + want.length + "줄이에요 — 쓴 답은 " + got.length + "줄)");
+                if (want.length !== got.length && fb.bad.length) why.push('<span class="oq-hx">(결과는 ' + want.length + "줄이에요 — 쓴 답은 " + got.length + "줄)</span>");
                 var lead2 = allLn ? "줄은 모두 맞았어요 👍 그런데" : "그리고";
                 if (endWant && !endGot) { why.push(lead2 + " <b>마지막 줄 뒤 줄바꿈</b>이 빠졌어요 — " + ctx.sy.endNl + "."); fb.html += '\n<span class="l-no l-miss">❌ <span class="oq-ln">⏎</span>(마지막 줄바꿈이 빠졌어요)</span>'; }
                 if (!endWant && endGot) { why.push(lead2 + " 마지막 줄 뒤에는 <b>줄바꿈이 없어야</b> 해요 — " + ctx.sy.endNo + "."); fb.html += '\n<span class="l-no l-miss">❌ <span class="oq-ln">⏎</span>(마지막 줄 뒤 줄바꿈은 없어야 해요)</span>'; }
