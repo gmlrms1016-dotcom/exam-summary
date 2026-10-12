@@ -68,10 +68,11 @@
         + ".oq-lh+.oq-lh{margin-top:6px;}"
         + ".oq-lh-t{font-weight:800;margin:0;}"
         + ".oq-lh ul{margin:2px 0 0;padding-left:20px;}"
-        + ".oq-lh code{font-family:Consolas,\"D2Coding\",Menlo,monospace;font-size:13px;white-space:pre-wrap;word-break:break-all;}"
+        + ".oq-lh code{font-family:Consolas,\"D2Coding\",Menlo,monospace;font-size:13px;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;}"   /* 314.0 이 3 / 14.0 으로 끊기지 않게 */
         + ".oq-lh code.c{display:block;width:fit-content;max-width:100%;box-sizing:border-box;margin:3px 0 1px;padding:2px 8px;border-radius:6px;background:rgba(127,127,127,.13);word-break:normal;overflow-wrap:anywhere;}"   /* 코드 줄은 따로 한 줄에 */
         + ".oq-lh-more{margin:6px 0 0;font-size:13px;opacity:.8;}"
-        + "body.ex-live:not(.ex-hint) .oq-lh,body.ex-live:not(.ex-hint) .oq-lh-more,body.ex-live:not(.ex-hint) .oq-hx{display:none!important;}";   // 실제시험의 📝 실제시험 방식: 힌트 없이 ✅/❌ 만 (정답 줄 수 · .oq-hx 도 숨김)
+        + "body.ex-live:not(.ex-hint) .oq-lh,body.ex-live:not(.ex-hint) .oq-lh-more,body.ex-live:not(.ex-hint) .oq-hx{display:none!important;}"
+        + ".oq-hx0{display:none;}body.ex-live:not(.ex-hint) .oq-hx0{display:inline;}";   // .oq-hx0 = 📝 방식에서만 보이는 대신 글자   // 실제시험의 📝 실제시험 방식: 힌트 없이 ✅/❌ 만 (정답 줄 수 · .oq-hx 도 숨김)
     var st = document.createElement("style");
     st.textContent = css;
     document.head.appendChild(st);
@@ -180,7 +181,8 @@
                 + (sy.bw && (w.match(sy.bw) || []).length > (g.match(sy.bw) || []).length ? sy.bool + "." : "따옴표 안 글자는 쓴 그대로, 변수 값은 그 값 그대로 찍혀요 — 한 글자씩 비교해 볼까요?")] };   // 그 언어가 참 · 거짓을 찍는 모양(java · js true · 파이썬 True)이 정답에 있고 쓴 답에서 바뀐 때만
         var bad = [];                         // 숫자만 다른지 (숫자 자리는 쓸 수 없는 글자 \u0000 로 바꿔 비교 · 출력의 # 과 헷갈리지 않게)
         if (wn.length && wn.length === gn.length && w.replace(NUM, "\u0000") === g.replace(NUM, "\u0000")) wn.forEach(function (x, i) { if (x !== gn[i]) bad.push(i); });
-        var shape = function (x) { return Number(wn[x]) === Number(gn[x]) && (wn[x].charAt(0) === "-") === (gn[x].charAt(0) === "-"); };   // 값은 같고 모양만 다름 (부호까지 같아야 · 314 ↔ 314.0 · 7 ↔ 00007)
+        var ilen = function (t) { return t.replace(/^-/, "").split(".")[0].length; };
+        var shape = function (x) { return Number(wn[x]) === Number(gn[x]) && (wn[x].charAt(0) === "-") === (gn[x].charAt(0) === "-") && (sy.zp || ilen(wn[x]) === ilen(gn[x])); };   // 값은 같고 모양만 다름 (부호까지 같아야 · 314 ↔ 314.0 · 7 ↔ 00007)
         if (bad.length) {
             var calc = bad.filter(function (x) { return !shape(x); }), k = calc.length ? calc[0] : bad[0], more = bad.length > 1 ? " (그리고 숫자 " + (bad.length - 1) + "개 더)" : "";
             if (!calc.length) {   // 틀린 숫자가 모두 값은 같고 찍히는 모양만 다름 (3.5 ↔ 3.500000 · 314 ↔ 314.0)
@@ -274,8 +276,8 @@
         });
         ops.forEach(function (o) {
             if (o.same) { good++; html.push('<span class="l-ok">✅ ' + tag(opt.no(o.w)) + show(got[o.g]) + opt.nl(o.g) + "</span>"); return; }
-            if (o.g >= 0) html.push('<span class="l-no">❌ ' + tag(o.w >= 0 ? opt.no(o.w) : o.mv ? "↕" : "+") + show(got[o.g]) + opt.nl(o.g) + (o.mv ? ' <span class="oq-nl">(자리가 달라요 — ' + opt.no(o.mv.w) + "번째 줄)</span>" : "") + "</span>");
-            else html.push('<span class="l-no l-miss">❌ ' + tag(opt.no(o.w)) + (o.mv ? "(이 줄은 다른 자리에 썼어요)" : "(이 줄이 빠졌어요)") + "</span>");
+            if (o.g >= 0) html.push('<span class="l-no">❌ ' + tag(o.w >= 0 ? opt.no(o.w) : o.mv ? '<span class="oq-hx">↕</span><span class="oq-hx0">+</span>' : "+") + show(got[o.g]) + opt.nl(o.g) + (o.mv ? '<span class="oq-nl oq-hx"> (자리가 달라요 — ' + opt.no(o.mv.w) + "번째 줄)</span>" : "") + "</span>");
+            else html.push('<span class="l-no l-miss">❌ ' + tag(opt.no(o.w)) + (o.mv ? '<span class="oq-hx">(이 줄은 다른 자리에 썼어요)</span><span class="oq-hx0">(이 줄이 빠졌어요)</span>' : "(이 줄이 빠졌어요)") + "</span>");
             if (o.w >= 0) bad.push(opt.no(o.w)); else if (!o.mv) extra++;
             wrong.push(o);
         });
@@ -314,7 +316,8 @@
         if (want.length !== got.length && flat(want) === flat(got) && wrong.length > 2) {   // 글자는 다 맞고 줄 바꾸는 곳만 다름 (print 를 println 처럼)
             relines = true;
             boxes.push(lineBox("🧑‍🏫 줄이 바뀌는 곳만 달라요", ["🔗 글자는 다 맞게 썼어요 👍 그런데 결과는 <b>" + want.length + "줄</b>이에요 (쓴 답은 " + got.length + "줄). "
-                + (got.length > want.length ? sy.keep : sy.nl) + " — 어디서 줄이 바뀌는지 다시 볼까요?"]));
+                + (got.length > want.length ? (wrong.every(function (o) { var s = o.w < 0 || opt.where(o.w); return s === true || !!s && !s.many && !s.rep; })
+                    ? "줄마다 출력문 <b>하나</b>가 한 줄을 한 번에 찍어서 중간에 줄이 바뀌지 않아요" : sy.keep) : sy.nl) + " — 어디서 줄이 바뀌는지 다시 볼까요?"]));
             wrong.forEach(function (o, idx) { used[idx] = true; });
         }
         wrong.forEach(function (o, idx) {
@@ -341,7 +344,7 @@
                 return;
             }
             if (w === null) {                // 결과에 없는 줄은 한 상자에 모아서 (틀린 줄 상자가 밀려나지 않게 · 🔗 나눠 쓴 줄의 뒷부분 · 🔀 자리만 바뀐 줄은 빼고)
-                var ex = wrong.filter(function (x, k) { return x.w < 0 && !x.mv && !used[k] && !split(wrong[k - 1], x) && (used[k] = true); }).map(function (x) { return got[x.g]; });
+                var ex = wrong.filter(function (x, k) { return x.w < 0 && !x.mv && !used[k] && !split(wrong[k - 1], x) && (k === idx || (used[k] = true)); }).map(function (x) { return got[x.g]; });
                 var txt = ex.filter(function (x) { return x !== ""; }), inOut = txt.some(function (x) { return want.indexOf(x) >= 0; });
                 boxes.push(lineBox("🧑‍🏫 결과에 없는 줄이 있어요", (txt.length ? ["➕ 쓴 줄 " + txt.slice(0, 3).map(function (x) { return "<code>" + esc(x) + "</code>"; }).join(" · ") + (txt.length > 3 ? " 등" : "")
                     + " — " + (inOut ? "<b>이 자리</b>에는 없는 줄이에요 (결과에 아예 없거나, 자리가 다르거나, 한 번 더 썼어요). " : "실제 출력에는 없어요. ") + whyExtra()] : [])
@@ -537,7 +540,8 @@
         if (lang === "js") lang = "javascript";
         var expRows = table ? null : rows(raw, exact);
         var srcMap = null;
-        var ctx = { lang: lang, lines: code.split("\n"), lead: (/^\n*/.exec(code) || [""])[0].length, sy: say(lang) };   // lead = 코드 맨 앞 빈 줄 (줄 번호에서 뺌)
+        var ctx = { lang: lang, lines: code.split("\n"), lead: (/^\n*/.exec(code) || [""])[0].length, sy: say(lang) };
+        ctx.sy.zp = /%0\d|:0\d|zfill|padStart/.test(code);   // 0 채움 서식(%05d · :05d · zfill · padStart)이 코드에 있을 때만 '0 으로 채워 찍혀요' 힌트   // lead = 코드 맨 앞 빈 줄 (줄 번호에서 뺌)
         function where(n) {              // 정답 출력의 n번째 줄(0부터)을 찍는 출력문 (outview.js 가 확실히 찾은 것만 · 없으면 null)
             if (!srcMap && window.OutView && window.OutView.sourcesOf && code && lang) {
                 try { srcMap = window.OutView.sourcesOf(code, lang, raw) || []; } catch (e) { srcMap = []; }
