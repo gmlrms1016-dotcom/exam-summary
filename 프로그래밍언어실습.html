@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202610120832"></script>
+    <script src="theme.js?v=202610122348"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로그래밍언어실습 · 완전 정리</title>
-    <link rel="stylesheet" href="style.css?v=202610120832">
-    <script src="schedule.js?v=202610120832"></script>
+    <link rel="stylesheet" href="style.css?v=202610122348">
+    <script src="schedule.js?v=202610122348"></script>
     <style>
         /* 출력 결과 박스 · 정답 접이식 (파이썬프로그래밍.html 과 동일) */
         pre.io { background:#0f1b14; }
@@ -37,7 +37,7 @@
 
     <header class="page-head">
         <h1>프로그래밍언어실습 · 완전 정리</h1>
-        <p>1주차 ~ 6주차 C 언어 · 실행과정 · 출력 · 함수 · 변수 · 자료형 · 서식 · 상수 · scanf · 연산자 · 조건 · 반복 · 함수 · 헤더파일 — <b>예제 코드 + 실제 출력 결과</b> 중심</p>
+        <p>1주차 ~ 7주차 C 언어 · 실행과정 · 출력 · 함수 · 변수 · 자료형 · 서식 · 상수 · scanf · 연산자 · 조건 · 반복 · 함수 · 헤더파일 · 시험 예고 — <b>예제 코드 + 실제 출력 결과</b> 중심</p>
     </header>
 
     <div id="week-nav" data-subject="프로그래밍언어실습"></div>
@@ -81,6 +81,7 @@
         <a href="#s32">32.반복+함수</a>
         <a href="#s33">33.★헤더파일</a>
         <a href="#s34">34.★HW02</a>
+        <a href="#s35">35.★7주차 예고</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -3412,9 +3413,156 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 </details>
     </section>
 
+    <section class="card" id="s35">
+        <h2>35. 🔥 7주차 — 시험 예고 · 복습 (중간고사 전 마지막 수업)<span class="week">7주차</span></h2>
+<p><span class="wk-tag note">✍️ 필기</span> — 유형 <b>괄호넣기 · 통으로 쓰기</b> · <b>“마지막 문제 통으로 낸다”</b> · <b>“03whilebasic 10점짜리 문제임!!!!!!”</b> · <b>“continue, break 시험에 꼭 나옴”</b> · <b>“switch 와 for 안에 break 는 완전 다르다”</b> · 범위 교재 <b>1 ~ 7장 · 9장(함수 — 배열은 기말)</b> · <b>조건문 반복문 위주</b></p>
+<table class="ref">
+<tbody>
+<tr><th>🔥 나오는 것</th><th>쪽</th><th>포인트</th></tr>
+<tr><td><b>03whilebasic.c (10점)</b></td><td>17쪽</td><td>while 3번 출력 → 끝난 뒤 count = <b>4</b></td></tr>
+<tr><td>06arithswitch.c</td><td>14쪽 첫 번째</td><td>switch 사칙연산 · <code>%.2f</code> → 2.50 * 2.50 = 6.25</td></tr>
+<tr><td>08scoreswitch.c</td><td>15쪽</td><td><code>? :</code> 최대 · 최소 · 절대값 · 짝홀</td></tr>
+<tr><td>lab1pay.c</td><td>15 ~ 16쪽</td><td>x, y, z 중 <b>최대 수</b> (중첩 if)</td></tr>
+<tr><td>04incdecop.c</td><td>24쪽</td><td>1 6 / 2 6 / 2 5 / 1 5 (⚠️ 원본은 <code>;</code> 빠짐)</td></tr>
+<tr><td>7쪽 반복문</td><td>7쪽</td><td><code>for(;;)</code> + break → num = <b>6</b> · sum = <b>15</b></td></tr>
+<tr><td>진수</td><td>7쪽</td><td><code>"%x, %d, %o"</code> ← 10 · 010 · 0x10 → <b>a, 8, 20</b></td></tr>
+<tr><td>별 삼각형 <b>반대로</b></td><td>4쪽 + ✍️</td><td>강의자료에 없음 — 역삼각형 · 오른쪽 정렬</td></tr>
+</tbody></table>
+<p><span class="wk-tag fix">❌ 안 나옴</span> — 6쪽 메뉴(switch) · 10쪽 10char.c · 13쪽 운전면허(04nestedif) · 어르신 판별(05ageifelse) · 섭씨 화씨(01cel2far3 · 07forcel2far3)</p>
+<table class="ref">
+<tbody>
+<tr><th>어디의 break</th><th>빠져나가는 곳</th></tr>
+<tr><td><b>switch 안</b></td><td>switch <b>만</b> → for 안에 있으면 반복은 계속</td></tr>
+<tr><td><b>for · while 안</b></td><td>반복문 <b>전체</b> (<code>i++</code> 도 안 함)</td></tr>
+<tr><td><b>continue</b></td><td>이번 바퀴만 건너뛰고 <code>i++</code> → 반복은 계속</td></tr>
+</tbody></table>
+        <h3>🔥 03whilebasic.c — 10점</h3>
+<pre><code class="language-c">// 03whilebasic.c                                  // 문자열을 3 번 반복 출력 · 끝난 뒤 count 는?
+#include &lt;stdio.h&gt;                                 // printf
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	int count = 1;                                 // 제어 변수 1 부터
+
+	while (count &lt;= 3) {                           // count 가 3 이하인 동안 → 1 · 2 · 3 일 때 실행
+		printf("반복, 재미있네요!\n");             // 3 번 출력
+		count++;                                   // 1 → 2 → 3 → 4
+	};                                             // 원본의 }; — 빈 문장 ; 이 하나 더 있을 뿐 오류 아님
+
+	printf("\n제어 변수 count =&gt; %d\n", count);    // 빈 줄 하나 뒤 → 4 (조건이 거짓이 된 값)
+
+	return 0;                                      // 정상 종료
+}                                                  // main 끝</code></pre>
+<pre class="io"><code class="language-text">반복, 재미있네요!
+반복, 재미있네요!
+반복, 재미있네요!
+
+제어 변수 count =&gt; 4</code></pre>
+        <h3>🔥 7쪽 반복문 — 출력결과 맞히기</h3>
+<pre><code class="language-c">// 반복문                                          // ✍️ 7쪽 반복문 문제 출력결과 맞히기
+#include &lt;stdio.h&gt;                                 // printf
+
+void main() {   // ⚠️ 원본 그대로 void main() — VS 는 실행되지만 표준은 int main(void) + return 0 (정상 종료를 알림)
+    int sum = 0, num = 1;                          // sum 은 0 부터 · num 은 1 부터
+
+    for (; ; ) {                     // 무한루프    // 초기 · 조건 · 증가를 비움 → 끝없이 반복 (break 로만 끝남)
+        printf("num(%d) + sum(%d) = ", num, sum);  // 지금 num 과 sum 출력 (줄바꿈 없음)
+        sum = sum + num;                           // sum += num → 0+1=1 → 1+2=3 → 3+3=6 → 6+4=10 → 10+5=15
+        printf("%d\n", sum);                       // 더한 sum 출력하고 줄바꿈
+        num++;                                     // num 1 증가 → 2 · 3 · 4 · 5 · 6
+        if (num &gt; 5) break;                        // num 이 6 이 되면 반복 끝
+    }                                              // for 끝
+
+    printf("\nResult : num = %d  sum = %d\n", num, sum);   // \n 이 앞에 있어 빈 줄 하나 → num = 6 · sum = 15
+}                                                  // main 끝</code></pre>
+<pre class="io"><code class="language-text">num(1) + sum(0) = 1
+num(2) + sum(1) = 3
+num(3) + sum(3) = 6
+num(4) + sum(6) = 10
+num(5) + sum(10) = 15
+
+Result : num = 6  sum = 15</code></pre>
+<div class="tip">함정 — 마지막 printf 앞 <code>\n</code> 때문에 <b>빈 줄</b> 하나 · break 가 <code>num++</code> 뒤라서 num 은 <b>6</b> · 과목 <a href="weeks/프로그래밍언어실습-7주차.html">7주차 페이지</a>에 복습 1 ~ 7쪽 · 🔥 코드 · 5장 연산자 전부 (실행 결과 포함)</div>
+        <h3>🔥 괄호넣기 — ( ① ) ~ ( ⑥ )</h3>
+        <pre><code class="language-c">// 03whilebasic.c
+#include &lt;stdio.h&gt;
+
+int main(void) {
+	int count = 1;
+
+	while ( ① ) {
+		printf("반복, 재미있네요!\n");
+		( ② );
+	};
+
+	printf("\n제어 변수 count =&gt; %d\n", count);
+
+	return 0;
+}</code></pre>
+        <div class="quiz-item" data-answers="count &lt;= 3|count&lt;=3|3 &gt;= count|count &lt; 4" data-explain="count 가 1 · 2 · 3 일 때만 반복 → 3번 출력">
+            <p class="quiz-q"><span class="quiz-cat">①</span>3번만 반복하려면 <code>while ( ① )</code> 에 들어갈 조건은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="count++|count++;|++count|count = count + 1|count+=1|count += 1" data-explain="제어 변수를 1씩 늘려야 조건이 언젠가 거짓 → 빠지면 무한 반복">
+            <p class="quiz-q"><span class="quiz-cat">②</span><code>( ② );</code> 에 들어갈 문장은? (빠지면 무한 반복)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="4" data-explain="count 가 4 가 되어 count &lt;= 3 이 거짓 → 반복 끝 → 4 출력">
+            <p class="quiz-q"><span class="quiz-cat">③</span>마지막 줄 <code>제어 변수 count =&gt; ?</code> 에 찍히는 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <pre><code class="language-c">// 역삼각형 — 입력 4 → **** / *** / ** / *
+#define _CRT_SECURE_NO_WARNINGS
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    int step, i, j;
+    printf("숫자를 입력하세요: ");
+    scanf("%d", &amp;step);
+
+    for (i = 1; i &lt;= step; i++) {
+        for (j = 1; j &lt;= ( ④ ); j++) {
+            printf("*");
+        }
+        printf("\n");
+    }
+    return 0;
+}</code></pre>
+        <div class="quiz-item" data-answers="step - i + 1|step-i+1|step + 1 - i|step+1-i|1 + step - i" data-explain="i = 1 → 4개 · i = 2 → 3개 … → step - i + 1">
+            <p class="quiz-q"><span class="quiz-cat">④</span>역삼각형이 되려면 안쪽 for 의 <code>j &lt;= ( ④ )</code> 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="j &lt;= i|j&lt;=i|i &gt;= j" data-explain="강의자료 삼각형은 i 번째 줄에 별 i 개">
+            <p class="quiz-q"><span class="quiz-cat">⑤</span>강의자료(4쪽) 삼각형 <b>*</b> / <b>**</b> / <b>***</b> / <b>****</b> 의 안쪽 for 조건은? (<code>for (j = 1; ( ⑤ ); j++)</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <pre><code class="language-c">// 구구단(continue 활용) — 3 * 5 줄만 빼고 출력
+for (i = 1; i &lt;= 9; i++) {
+    if (i == 5) {
+        ( ⑥ );
+    }
+    printf("%d * %d = %d\n", step, i, step * i);
+}</code></pre>
+        <div class="quiz-item" data-answers="continue|continue;" data-explain="continue = 이번 바퀴만 건너뛰기 (break 면 3 * 4 까지 찍고 끝)">
+            <p class="quiz-q"><span class="quiz-cat">⑥</span>i 가 5 일 때만 출력을 건너뛰려면 ( ⑥ ) 에 들어갈 키워드는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 25 · 주관식 25 · 출력결과 60 · 코드 작성 54 · 총 164문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 30 · 주관식 30 · 출력결과 63 · 코드 작성 56 · 총 179문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="프로그래밍언어실습-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
@@ -3423,10 +3571,10 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="quiz.js?v=202610120832"></script>
-<script src="review.js?v=202610120832"></script>
-<script src="weeks.js?v=202610120832"></script>
-<script src="codetest.js?v=202610120832"></script>
-<script src="outquiz.js?v=202610120832"></script>
+<script src="quiz.js?v=202610122348"></script>
+<script src="review.js?v=202610122348"></script>
+<script src="weeks.js?v=202610122348"></script>
+<script src="codetest.js?v=202610122348"></script>
+<script src="outquiz.js?v=202610122348"></script>
 </body>
 </html>
