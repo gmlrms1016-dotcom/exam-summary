@@ -86,6 +86,22 @@
     // 공백·줄바꿈을 전부 빼고도 같으면 "형식만 다름"
     function squash(s) { return norm(s).replace(/\s+/g, ""); }
 
+    // 주석만 빼기 (문자열 · 문자 안의 // · -- 는 그대로)
+    function noComments(src, lang) {
+        var keep = [], t = src.replace(/"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'/g, function (x) { keep.push(x); return "\u0000" + (keep.length - 1) + "\u0000"; });
+        t = lang === "sql" ? t.replace(/--[^\n]*/g, "") : lang === "python" ? t.replace(/#[^\n]*/g, "") : t.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+        return t.replace(/\u0000(\d+)\u0000/g, function (_, i) { return keep[+i]; });
+    }
+    // 자바: 한 파일에 맨 바깥 public class 가 둘 이상이면 실제 javac 는 컴파일 오류 → 같은 오류로 알려 줌
+    function twoPublic(src) {
+        var t = noComments(src, "java").replace(/"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'/g, '""'), depth = 0, names = [], m;
+        var re = /[{}]|\bpublic\s+(?:(?:final|abstract)\s+)*(?:class|interface|enum|record)\s+([\w$\u0080-\uffff]+)/g;
+        while ((m = re.exec(t))) { if (m[0] === "{") depth++; else if (m[0] === "}") depth--; else if (depth === 0) names.push(m[1]); }
+        if (names.length < 2) return "";
+        return "error: class " + names[1] + " is public, should be declared in a file named " + names[1] + ".java\n"
+            + "💡 한 파일에는 public class 를 하나만 쓸 수 있어요 — " + names[1] + " 은(는) public 없이 class " + names[1] + " 로";
+    }
+
     // ---- 실행기 ----
     function prepJava(src) {
         return asciiNames(src.replace(/^\s*package\s+[\w.]+\s*;\s*$/m, "")                       // 패키지 줄 제거
@@ -677,12 +693,20 @@
             if (!code.trim()) { box.innerHTML = '<p class="ct-sum no">소스코드를 붙여넣고 채점하세요.</p>'; return; }
             if (start.trim() && code.trim() === start.trim()) { box.innerHTML = '<p class="ct-sum no">아직 뼈대만 있어요 — <b>// 여기에 작성</b> 자리에 코드를 써 주세요.</p>'; return; }
             var must = []; try { must = JSON.parse(p.dataset.must || "[]"); } catch (e) { }
-            var missing = must.filter(function (m) { return !new RegExp(m, lang === "sql" ? "i" : "").test(code); });
+            // 조건(data-must) 검사: 주석은 빼고(문자열 안은 그대로) · 한글 변수 이름도 \w 로 보이게 한 코드로도 한 번 더
+            //  (초 / 3600 처럼 한글 이름 옆의 / 를 못 알아보던 것 · // for ( 같은 주석으로 조건이 채워지던 것 — 2026-10-12 시험 검사)
+            var bare = noComments(code, lang), latin = bare.replace(/[\u0080-\uffff]+/g, "K");
+            var missing = must.filter(function (m) {
+                var re = new RegExp(m, lang === "sql" ? "i" : "");
+                return !(re.test(bare) || (!/[^\x00-\x7f]/.test(m) && re.test(latin)));   // 한글이 든 조건(class 연습 …)은 원래 코드로만
+            });
+            var pubErr = lang === "java" ? twoPublic(code) : "";
             btnRun.disabled = true;
             box.innerHTML = '<p class="ct-sum">⏳ 채점 중…</p>';
             var res = [];
             var chain = Promise.resolve();
             if (lang === "sql") chain = gradeSql(code, tests, btnRun);
+            else if (pubErr) tests.forEach(function () { res.push({ error: "컴파일 오류", detail: pubErr }); });   // 실제 javac 처럼 (채점 서버는 public 을 떼고 돌려서 통과하던 것)
             else tests.forEach(function (t, i) {
                 chain = chain.then(function () {
                     btnRun.textContent = "⏳ 채점 대기 중…";
@@ -694,6 +718,10 @@
                 });
             });
             chain.then(function (sqlView) {
+                if (lang !== "sql" && res.some(function (r) { return r && r.error === "채점 서버에 연결하지 못했어요"; })) {   // 인터넷 · 채점 서버 문제 → 맞힘 · 틀림은 그대로 (통과했던 코드가 ❌ 로 바뀌던 것)
+                    box.innerHTML = '<p class="ct-sum no">⚠️ 채점 서버에 연결하지 못해서 이번 채점은 점수에 반영하지 않았어요 — 잠시 뒤 다시 ▶ 채점하기</p>' + showView(res, tests, lang).html;
+                    return;
+                }
                 var v = lang === "sql" ? sqlView : showView(res, tests, lang);
                 var passed = v.all && !missing.length;
                 var warn = missing.length ? '<p class="ct-sum no">⚠️ 조건 미충족 — ' + esc(p.dataset.mustMsg || "문제에서 쓰라고 한 문법을 사용하세요.") + "</p>" : "";

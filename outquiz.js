@@ -85,10 +85,11 @@
             return exact ? l.replace(/\s+$/, "") : l.replace(/\s+/g, " ").trim();
         }).filter(function (l) { return l.trim() !== ""; });
     }
+    function sq(t) { return String(t).replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\u00a0/g, " "); }   // 폰 자동 따옴표 ’ “ · 맥 Option+Space(NBSP) → 보통 글자 (쓴 답 · 정답 양쪽 다 · 2026-10-12 시험 검사)
     function rows(s, exact) {           // 채점할 줄 + 원래 출력에서 몇 번째 줄인지(0부터 · 빈 줄 빼고) → [{t, n}]
         var out = [];
         String(s || "").replace(/\r/g, "").split("\n").forEach(function (l, n) {
-            l = l.replace(/\t/g, " ");
+            l = sq(l).replace(/\t/g, " ");
             l = exact ? l.replace(/\s+$/, "") : l.replace(/\s+/g, " ").trim();
             if (l.trim() !== "") out.push({ t: l, n: n });
         });
@@ -561,6 +562,7 @@
         ta.spellcheck = false;
         ta.setAttribute("autocomplete", "off");
         ta.setAttribute("autocapitalize", "off");
+        ta.setAttribute("autocorrect", "off");   // 아이폰 스마트 따옴표(’ “) · 자동 고침 막기
         ta.setAttribute("aria-label", title + " — 실행 결과 입력");
         ta.placeholder = endFree ? "실행 결과를 그대로 입력 — 줄바꿈(\\n · println)마다 Enter · 줄 안의 띄어쓰기 개수까지 정확히 채점해요 (맨 끝 Enter 는 상관없음 · 정답은 하나)"
                        : strict ? "실행 결과를 그대로 입력 — 줄바꿈(\\n · println)마다 Enter, 마지막 줄바꿈까지 · 줄 안의 띄어쓰기 개수까지 정확히 채점해요 (정답은 하나)"
@@ -641,8 +643,16 @@
         }
         function checkStrict() {
             var rtrim = function (t) { return t.split("\n").map(function (l) { return l.replace(/[ \t]+$/, ""); }).join("\n"); };
-            var mineRaw = rtrim(ta.value.replace(/\r/g, "")), rawT = rtrim(raw);
+            var mineRaw = rtrim(sq(ta.value.replace(/\r/g, ""))), rawT = rtrim(sq(raw));
             if (endFree) { mineRaw = mineRaw.replace(/\n+$/, ""); rawT = rawT.replace(/\n+$/, ""); }
+            if (rawT.indexOf("\t") >= 0) {      // 탭(\t) 출력: 폰 · Tab 키로는 탭을 못 침 → 그 자리에 띄어쓰기 1칸 이상이면 그 탭으로 인정
+                var tabRe = function (w) { return new RegExp("^" + w.split(/\t+/).map(function (x) { return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }).join("[ \\t]+") + "$"); };
+                var wl = rawT.split("\n");
+                mineRaw = mineRaw.split("\n").map(function (g) {
+                    for (var i = 0; i < wl.length; i++) if (wl[i].indexOf("\t") >= 0 && tabRe(wl[i]).test(g)) return wl[i];
+                    return g;
+                }).join("\n");
+            }
             if (!mineRaw.trim()) { box.innerHTML = '<p class="oq-sum no">실행 결과를 적고 확인을 누르세요.</p>'; p.dataset.solved = ""; updateScore(); return; }   // 맞힌 뒤 비우고 확인 → 다시 안 푼 문제로
             var all = mineRaw === rawT;
             var endWant = /\n$/.test(rawT), endGot = /\n$/.test(mineRaw);

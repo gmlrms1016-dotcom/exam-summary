@@ -307,6 +307,8 @@
         "background:#fff;border-radius:.26em;padding:.11em;box-sizing:border-box;box-shadow:0 0 0 1px rgba(0,0,0,.09)}",
         "html[data-theme=dark] .subj-logo{background:#f5f5f5;box-shadow:none}",
         ".mo-bar-t .subj-logo{width:1.45em;height:1.45em;vertical-align:-.38em;margin-right:.45em}",
+        // 결과 맞히기 풀이(정답 포함)는 outquiz.js 가 불러와지기 전에도 안 보이게 (정답 보기 때는 .oq-key 안으로 옮겨져 보임 · 2026-10-12 시험 검사)
+        ".oq > .oq-why{display:none}",
         //  첫 화면 과목 카드: 흰 판이 카드 왼쪽 · 위 · 아래 끝까지 꽉 차는 정사각형 (2026-10-09 사용자 "카드를 꽉 채우게 · 카드랑 평탄하게")
         //  판은 카드 테두리 바로 안쪽에 붙음 → 왼쪽 모서리는 카드 모서리와 같은 곡선, 오른쪽은 곧은 경계 · 카드 높이(min-height) = 판 크기라 정사각형
         ".subject.subj-logo-card{--subj-ic:82px;position:relative;min-height:calc(var(--subj-ic) + 2px);padding-left:calc(var(--subj-ic) + 16px)}",

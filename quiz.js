@@ -32,10 +32,19 @@
     st.textContent = css;
     document.head.appendChild(st);
 
-    function norm(s, keepCase) {
-        s = s || "";
+    // 답 비교용으로 고르게: 띄어쓰기 · 괄호 · 따옴표 무시 (대소문자는 keepCase 일 때만 그대로)
+    //  NFKC = 전각 ｉｎｔ · 맥에서 붙여넣은 풀어쓴 한글도 같은 글자로 · 맥 한글 자판의 ₩ 는 역슬래시(\) 로 (2026-10-12)
+    //  keepQuote = 정답에 \" · \' 가 있는 문제(따옴표 자체가 답) → 따옴표까지 채점 (\ 만 써도 정답이 되던 것)
+    //  주관식(대소문자 무시)은 끝에 붙인 마침표도 무시
+    function norm(s, keepCase, keepQuote) {
+        s = String(s || "");
+        if (s.normalize) s = s.normalize("NFKC");
+        s = s.replace(/[₩￦]/g, "\\");
         if (!keepCase) s = s.toLowerCase();
-        return s.replace(/\s+/g, "").replace(/[()]/g, "").replace(/["'“”‘’]/g, "");
+        s = s.replace(/\s+/g, "").replace(/[()]/g, "");
+        s = keepQuote ? s.replace(/[“”]/g, '"').replace(/[‘’]/g, "'") : s.replace(/["'“”‘’]/g, "");
+        if (!keepCase) s = s.replace(/[.。!?]+$/, "");
+        return s;
     }
     function esc(s) {
         return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -54,8 +63,9 @@
             var ident = function (x) { return /^[A-Za-z_]\w*$/.test(x); };
             if (m && !keep && !/[.,;:=<>{}\[\]_]/.test(a) && !(ident(m[1]) && ident(m[2]))) { all.push(m[1]); all.push(m[2]); }
         });
-        var keys = all.map(function (a) { return norm(a, keep); }).filter(function (a) { return a; });
-        var v = norm(value, keep);
+        var q = answers.some(function (a) { return /\\["']/.test(a || ""); });   // 따옴표 자체가 답인 문제
+        var keys = all.map(function (a) { return norm(a, keep, q); }).filter(function (a) { return a; });
+        var v = norm(value, keep, q);
         if (!v) return false;
         if (keys.indexOf(v) >= 0) return true;
         if (keep) return false;
@@ -104,6 +114,9 @@
     // ---- 주관식: 입력 채점 · 정답 보기 ----
     items.forEach(function (item) {
         var input = item.querySelector("input, textarea");
+        if (input) {                                          // 폰 자판이 첫 글자를 대문자로 · 따옴표를 “ ” 로 바꾸지 않게 (대소문자 채점 빈칸에서 int → Int 오답)
+            input.setAttribute("autocapitalize", "off"); input.setAttribute("autocorrect", "off"); input.spellcheck = false;
+        }
         var fb = item.querySelector(".quiz-feedback");
         var answers = (item.dataset.answers || "").split("|");
         var shown = item.dataset.full || answers[0];
@@ -114,7 +127,7 @@
             fb.className = "quiz-feedback " + (ok ? "ok" : "no");
             fb.innerHTML = ok ? "⭕ 정답입니다!" + explain : "❌ 다시 생각해 보세요.";
             if (ok) { item.dataset.solved = "1"; item.dataset.wrong = ""; }
-            else { item.dataset.wrong = "1"; }
+            else { item.dataset.solved = ""; item.dataset.wrong = "1"; }   // 맞혔다가 바꿔서 틀리면 다시 안 푼 것으로 (outquiz.js 와 같게 · 시험 점수가 남던 것)
             updateScore();
         }
         var checkBtn = item.querySelector(".check");
