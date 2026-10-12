@@ -241,11 +241,11 @@
         return flags;
     }
 
-    function branchFlags(code, lang) {
+    function branchFlags(code, lang, noTern) {   // noTern: 삼항(?:)은 갈래로 치지 않음 (그 줄은 늘 실행)
         var lines = code.split("\n"), flags = [], stack = [], single = false;
         lines.forEach(function (ln, i) {
             var c = splitComment(ln, lang)[0];
-            var header = /^\s*(\}\s*)?(if|else|switch|case\b|default\s*:)/.test(c) || /\?[^:]*:/.test(c) && !/::/.test(c);
+            var header = /^\s*(\}\s*)?(if|else|switch|case\b|default\s*:)/.test(c) || !noTern && /\?[^:]*:/.test(c) && !/::/.test(c);
             flags[i] = single || stack.some(function (x) { return x; }) || header;
             if (c.trim()) single = false;
             for (var k = 0; k < c.length; k++) { if (c[k] === "{") stack.push(header); else if (c[k] === "}") stack.pop(); }
@@ -507,7 +507,49 @@
         return res;
     }
 
-    var OV = { analyze: analyze, emittersOf: emittersOf, splitComment: splitComment };
+    // 출력 줄마다 그 줄을 찍은 출력문 → [{ line: 코드 줄(0부터), src, nth: 여러 번 실행되는 출력문이면 몇 번째 실행(아니면 0),
+    //   rep: 같은 출력문이 이 줄을 여러 번 이어서 찍음(nth ~ to 번째 실행), to, many: 다른 출력문 여럿이 한 줄을 찍음 } | null]
+    //  결과 맞히기(outquiz.js)의 틀린 줄 힌트 "📍 이 줄을 찍는 코드" 용 · 값은 넘기지 않음(정답이 보이니까) · 확실하지 않은 줄은 null
+    function sourcesOf(code, lang, out) {
+        var lines = String(out || "").replace(/\r/g, "").split("\n");
+        if (lines.length && lines[lines.length - 1] === "") lines.pop();
+        var res = lines.map(function () { return null; });
+        if (!code || !lang || lang === "bash" || lang === "sql") return res;
+        var em = emittersOf(code, lang);
+        if (!em.length) return res;
+        var lf = loopFlags(code, lang), bf = branchFlags(code, lang);
+        em.forEach(function (e) { e.loop = !!lf[e.line]; e.branch = !!bf[e.line]; });
+        var full = lines.join("\n") + "\n", segs = match(em, full);
+        var starts = [], pos = 0;
+        lines.forEach(function (t) { starts.push(pos); pos += t.length + 1; });
+        function lineOf(ch) { var i = 0; while (i + 1 < starts.length && starts[i + 1] <= ch) i++; return i; }
+        var count = new Map(), total = new Map(), bad = {}, hit = lines.map(function () { return []; });
+        segs.forEach(function (sg) { if (sg.e) total.set(sg.e, (total.get(sg.e) || 0) + 1); });
+        segs.forEach(function (sg) {
+            var chunk = full.slice(sg.start, sg.end), lead = chunk.length - chunk.replace(/^\n+/, "").length;
+            var n = sg.e ? (count.get(sg.e) || 0) + 1 : 0;
+            if (sg.e) count.set(sg.e, n);
+            var nth = sg.e && (total.get(sg.e) || 0) > 1 ? n : 0;
+            if (!chunk.replace(/\n/g, "").length) {                      // 줄바꿈만 찍은 것 (println()) → 그 빈 줄의 출력문
+                var B = lineOf(sg.start);
+                if (sg.e && !sg.e.input && sg.sure !== false && B < res.length && lines[B] === "" && !hit[B].length) hit[B].push({ e: sg.e, nth: nth, to: nth, k: 1 });
+                return;
+            }
+            var L = lineOf(sg.start + lead), last = lineOf(Math.max(sg.start + lead, sg.end - 2));
+            for (var l = L; l <= Math.min(last, res.length - 1); l++) {
+                if (!sg.e || sg.e.input || sg.sure === false) { if (!sg.e || sg.sure === false) bad[l] = true; continue; }   // 모르는 조각이 섞인 줄은 비움
+                var h0 = hit[l].filter(function (h) { return h.e === sg.e; })[0];   // 같은 출력문이 이 줄을 또 찍음 (반복 안의 print)
+                if (h0) { h0.k++; h0.to = nth; } else hit[l].push({ e: sg.e, nth: nth, to: nth, k: 1 });
+            }
+        });
+        hit.forEach(function (h, l) {
+            if (!h.length || bad[l]) return;
+            res[l] = { line: h[0].e.line, src: shortSrc(h[0].e.src), nth: h[0].nth, to: h[0].k > 1 ? h[0].to : 0, rep: h[0].k > 1, many: h.length > 1 };
+        });
+        return res;
+    }
+
+    var OV = { analyze: analyze, emittersOf: emittersOf, splitComment: splitComment, sourcesOf: sourcesOf, branchFlags: branchFlags };
     if (typeof module !== "undefined" && module.exports) { module.exports = OV; return; }
     global.OutView = OV;
 
