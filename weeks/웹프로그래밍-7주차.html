@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610131732"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹프로그래밍 7주차 · &lt;10월 13일&gt; switch·truthy/falsy·객체 생성·spread·Rest·얕은/깊은 복사·BOM</title>
+    <link rel="stylesheet" href="../style.css?v=202610131732">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../웹프로그래밍.html">← 웹프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🕸️ 웹프로그래밍 · 7주차</h1>
+        <p>&lt;10월 13일&gt; switch·truthy/falsy·객체 생성·spread·Rest·얕은/깊은 복사·BOM</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-6주차.html">‹ 이전 · <b>6주차</b><br><small>&lt;9월 29일&gt; 비동기·타이머·구조분해 할당·DOM</small></a><a class="next" href="웹프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
+
+<div class="tip">자료: 수업 필기(노션) · 1013_01.html · 1013_02.js (강의자료 없음) · 출력 결과는 전부 node 로 직접 실행한 값 (브라우저의 prompt · alert 는 node 에 없어서 입력값을 고정하고 console.log 로 바꿨어요)</div>
+<div class="tip">🔥 <b>시험 예고 (✍️ 필기)</b> — “<b>코드 문법(손코딩)이나 용어는 객관식으로 시험에 출제될 예정</b>” · “<b>switch 문 시험에 나옴!</b>” · <b>BOM 시험문제 “다음 중 성격이 다른 것은?”</b> (window · screen · location · history · navigator) · <b>얕은 복사 · 깊은 복사 뜻 알기</b> · <b>구조분해 할당 뜻</b> · 1013_02.js “<b>claude야 여기 시험문제로 정리해</b>” (매개변수 빈칸 a1, a2, a3) · “<b>수업시간에 나온 내장객체는 시험에 나오고, 수업시간에 언급이 없는 내장객체는 미출제</b>”</div>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 교수님도 AI 를 활용하시니 <b>우리도 AI 로 문제를 만들어서 풀어 보는 것도 좋은 공부법</b>이라고 하심 → 과목 페이지 🔒 실제시험에 7주차 문제를 넣어 두었어요.</div>
+<section class="card">
+<h2>1. 🔥 switch 문 — 요일 번호로 요일 이름 (1013_01.html)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “<b>switch문 시험에 나옴!</b>”</p>
+<pre><code class="language-javascript">// 1013_01.html switch — 요일 번호(getDay)로 요일 이름 고르기 · 날짜를 수업 날(2026-10-13)로 고정
+let day = new Date(2026, 9, 13);                // 월은 0 부터 → 9 = 10월 · 2026년 10월 13일
+console.log(day.getDay());                      // getDay() = 요일 번호 0(일) ~ 6(토) → 화요일 → 2
+switch (day.getDay()) {                         // 2 와 같은 case 를 찾음 (=== 처럼 값 · 타입 비교)
+    case 0: console.log("오늘은 일요일 입니다."); break;   // 0 아님 → 건너뜀
+    case 1: console.log("오늘은 월요일 입니다."); break;   // 1 아님 → 건너뜀
+    case 2: console.log("오늘은 화요일 입니다."); break;   // 2 → 출력하고 break 로 switch 탈출
+    case 3: console.log("오늘은 수요일 입니다."); break;   // (실행 안 됨)
+    case 4: console.log("오늘은 목요일 입니다."); break;   // (실행 안 됨)
+    case 5: console.log("오늘은 금요일 입니다."); break;   // (실행 안 됨)
+    case 6: console.log("오늘은 토요일 입니다."); break;   // (실행 안 됨)
+    default: console.log("정상적인 요일이 아닙니다.");      // 0 ~ 6 이 아닐 때만
+}                                               // switch 끝</code></pre>
+<pre class="io"><code class="language-text">2
+오늘은 화요일 입니다.</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>부분</th><th>뜻</th></tr>
+<tr><td><code>new Date()</code></td><td>내장객체 Date 로 <b>지금 날짜 · 시간</b> 객체를 만듦 (위 코드는 결과가 늘 같게 수업 날 2026-10-13 으로 고정)</td></tr>
+<tr><td><code>getDay()</code></td><td>요일 번호 — <b>0 = 일요일</b> · 1 = 월 · … · 6 = 토 (월 <code>getMonth()</code> 도 0 부터)</td></tr>
+<tr><td><code>case 값:</code></td><td>switch 괄호 값과 <b>같은(===)</b> case 로 바로 감</td></tr>
+<tr><td><code>break;</code></td><td>switch 를 빠져나감 — 빠지면 <b>아래 case 까지 계속 실행</b>(fall-through)</td></tr>
+<tr><td><code>default:</code></td><td>어느 case 에도 안 맞을 때</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>2. if ~ else if ~ else — 나이 확인 (1013_01.html)</h2>
+<pre><code class="language-javascript">// 1013_01.html 나이 확인 — prompt 대신 입력값 3개를 차례로 넣어 봄 (브라우저에서는 prompt · alert)
+let inputs = ["17", "25", "abc"];               // prompt 로 받았다고 치는 문자열 3개
+for (let i = 0; i &lt; inputs.length; i++) {       // i = 0 · 1 · 2 → 입력 3번 시험
+    let ageInput = inputs[i];                   // "17" → "25" → "abc"
+    let age = parseInt(ageInput);               // 문자열 → 정수: "17" → 17 · "25" → 25 · "abc" → NaN(숫자 아님)
+    if (age &lt; 20) {                             // 17 &lt; 20 → true / 25 &lt; 20 → false / NaN &lt; 20 → false
+        console.log("미성년자!");               // 17 → 미성년자!
+    } else if (age &gt;= 20) {                     // 25 &gt;= 20 → true / NaN &gt;= 20 → false
+        console.log("성인!");                   // 25 → 성인!
+    } else {                                    // 둘 다 false 인 건 NaN 뿐
+        console.log("유효한 나이를 입력해주세요!");   // "abc" → NaN → 유효한 나이를 입력해주세요!
+    }                                           // if 끝
+}                                               // for 끝</code></pre>
+<pre class="io"><code class="language-text">미성년자!
+성인!
+유효한 나이를 입력해주세요!</code></pre>
+<div class="tip"><code>parseInt("abc")</code> → <b>NaN</b> · NaN 은 어떤 비교도 <b>false</b> 라서 <code>age &lt; 20</code> · <code>age &gt;= 20</code> 둘 다 거짓 → 마지막 else 로 가요. 브라우저 수업 코드는 <code>prompt("나이 입력!")</code> 으로 받고 <code>alert</code> 로 보여 줘요.</div>
+</section>
+<section class="card">
+<h2>3. truthy · falsy 로 짧게 — printName (1013_01.html)</h2>
+<pre><code class="language-javascript">// 1013_01.html truthy · falsy — 이름이 없을 때 처리 (두 함수를 이름만 바꿔 같이 비교)
+function printName1(name) {                     // 활용하기 전: undefined · null 만 직접 검사
+    if (name === undefined || name === null) {  // 두 가지만 막음 → 빈 문자열 "" 은 통과해 버림
+        return '사람이 없네요.';                 // 이름이 없을 때
+    }                                           // if 끝
+    return `안녕하세요 ${name}님`;              // 템플릿 문자열 → 이름을 끼워 넣음
+}                                               // printName1 끝
+function printName2(name) {                     // 활용한 코드: !name 하나로
+    if (!name) {                                // falsy(undefined · null · "" · 0 · NaN · false) → !falsy = true
+        return `사람이 없네요.`;                 // 이름이 없을 때
+    }                                           // if 끝
+    return `안녕하세요 ${name}님`;              // truthy 면 인사
+}                                               // printName2 끝
+console.log(printName1());                      // 인수 없음 → name = undefined → 사람이 없네요.
+console.log(printName2());                      // undefined → falsy → 사람이 없네요.
+console.log(printName1(""));                    // "" 은 undefined 도 null 도 아님 → 안녕하세요 님 (빈 이름 그대로)
+console.log(printName2(""));                    // "" 은 falsy → 사람이 없네요.
+console.log(printName2("윤희근"));              // "윤희근" → truthy → 안녕하세요 윤희근님</code></pre>
+<pre class="io"><code class="language-text">사람이 없네요.
+사람이 없네요.
+안녕하세요 님
+사람이 없네요.
+안녕하세요 윤희근님</code></pre>
+<div class="tip"><b>falsy</b> = <code>false</code> · <code>0</code> · <code>""</code>(빈 문자열) · <code>null</code> · <code>undefined</code> · <code>NaN</code> — 나머지는 전부 truthy · <code>!name</code> 하나가 <code>name === undefined || name === null</code> 보다 더 넓게 막아요 (빈 문자열 <code>""</code> 까지) · 🤖 <code>printName1("")</code> 줄은 차이를 보이려고 더한 줄이에요.</div>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 수업 파일은 두 함수를 <b>같은 이름 <code>printName</code></b> 으로 두 번 선언했어요. 선언적 함수는 호이스팅되고 <b>뒤에 쓴 것이 앞의 것을 덮어써서</b>, <code>console.log(printName());</code> 은 실제로 두 번째(<code>!name</code>) 함수로 실행돼요 (결과는 둘 다 <code>사람이 없네요.</code>).</div>
+</section>
+<section class="card">
+<h2>4. 객체를 만드는 방법 — new · { } · 내장객체 (1013_01.html)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “<b>object 를 생성할 때 new 라는 것을 쓰고 생성을 한다</b> · obj 를 만들 때, class 가 일을 하는 게 아니라 <b>obj 가 일을 해서</b> 만드는 거다”</p>
+<pre><code class="language-javascript">// 1013_01.html 객체 만드는 3가지 — new 생성자 · 리터럴 { } · 내장객체 Date
+let obj1 = new Object();                        // 객체 생성자 → 빈 객체 {}
+let obj2 = {};                                  // 객체 리터럴 → 빈 객체 {} (대부분 이걸 씀)
+let obj3 = new Date(2026, 9, 13);               // 내장객체 Date 를 new 로 → 날짜 객체 (수업 코드는 new Date() = 지금)
+obj1.name = "윤희근";                           // 점(.) 으로 속성 추가 → { name: "윤희근" }
+console.log(obj1);                              // { name: '윤희근' }
+console.log(obj2);                              // {}
+console.log(typeof obj1, typeof obj2, typeof obj3);   // 셋 다 object → object object object
+console.log(obj3.getFullYear(), obj3.getMonth() + 1, obj3.getDate());   // 2026 · 9+1=10 · 13 → 2026 10 13</code></pre>
+<pre class="io"><code class="language-text">{ name: '윤희근' }
+{}
+object object object
+2026 10 13</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>방법</th><th>코드</th><th>비고</th></tr>
+<tr><td>객체 생성자</td><td><code>let obj1 = new Object();</code></td><td>new 로 생성</td></tr>
+<tr><td><b>객체 리터럴</b></td><td><code>let obj2 = {};</code></td><td>✍️ 대부분 이걸 씀</td></tr>
+<tr><td>내장객체 생성자</td><td><code>let obj3 = new Date();</code></td><td>내장객체도 new 로 만듦</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — 수업 시간에 나온 <b>내장객체</b>만 시험에 나와요 → 지금까지 수업 파일 · 필기에 나온 것: <b>Object</b> · <b>Date</b>(<code>getDay</code> · <code>getFullYear</code> …) · <b>JSON</b>(<code>JSON.stringify</code>) · (6주차) Date 시계</div>
+</section>
+<section class="card">
+<h2>5. 🔥 얕은 복사 vs 깊은 복사 (노션 필기 코드)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — <code>let o2=o1; //얕은 복사(뜻 알기)</code> · <code>let o4={...o3}; //깊은 복사(뜻 알기)</code></p>
+<pre><code class="language-javascript">// 노션 필기 — 얕은 복사 vs 깊은 복사 · === 비교 · JSON.stringify 로 내용 비교
+let o1 = { name: "홍길동" };                    // 객체 하나 (메모리에 하나)
+let o2 = o1;                                    // 얕은 복사: 주소만 복사 → o1 과 o2 는 같은 객체
+let o3 = { name: "홍길동" };                    // 새 객체
+let o4 = { ...o3 };                             // 깊은 복사(수업 용어): spread 로 속성을 꺼내 새 객체를 만듦
+console.log(o1 === o2);                         // 같은 객체(같은 주소) → true
+console.log(o3 === o4);                         // 내용은 같아도 다른 객체 → false
+console.log(JSON.stringify(o3) === JSON.stringify(o4));   // 둘 다 '{"name":"홍길동"}' 문자열 → true (깊은 비교)
+o2.name = "이몽룡";                             // o2 를 바꾸면
+console.log(o1.name);                           // 같은 객체라 o1 도 바뀜 → 이몽룡
+o4.name = "성춘향";                             // o4 를 바꿔도
+console.log(o3.name);                           // 다른 객체라 o3 는 그대로 → 홍길동</code></pre>
+<pre class="io"><code class="language-text">true
+false
+true
+이몽룡
+홍길동</code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>구분</th><th>코드</th><th>뜻</th><th><code>===</code></th></tr>
+<tr><td><b>얕은 복사</b></td><td><code>let o2 = o1;</code></td><td>객체의 <b>주소(참조)만</b> 복사 → 두 변수가 <b>같은 객체</b>를 가리킴 → 하나를 바꾸면 둘 다 바뀜</td><td><code>o1 === o2</code> → <b>true</b></td></tr>
+<tr><td><b>깊은 복사</b></td><td><code>let o4 = { ...o3 };</code></td><td>속성을 꺼내 <b>새 객체</b>를 만듦 → 서로 따로</td><td><code>o3 === o4</code> → <b>false</b></td></tr>
+<tr><td>깊은 비교</td><td><code>JSON.stringify(o3) === JSON.stringify(o4)</code></td><td>객체를 <b>문자열로 바꿔 내용</b>을 비교</td><td><b>true</b></td></tr>
+</tbody></table>
+<div class="tip">🤖 <b>참고</b> — 시험은 수업 용어(위 표)대로 답하면 돼요. 다만 <code>{...o3}</code> 는 <b>한 단계만</b> 새로 만들어서, 객체 안에 또 객체가 있으면 안쪽은 같이 쓰게 돼요 (그래서 교재에 따라서는 spread 도 “얕은 복사”라고 부르기도 해요) · <code>let o2 = o1</code> 은 “참조 복사”라고도 해요.</div>
+</section>
+<section class="card">
+<h2>6. 🔥 매개변수 빈칸 — “claude야 여기 시험문제로 정리해” (1013_02.js)</h2>
+<pre><code class="language-javascript">let arrayObj=[1,"둘",true];
+function funcA(/*시험문제 빈칸          정답:a1,a2,a3*/){
+    console.log(a1);
+    console.log(a2);
+    console.log(a3);
+}
+funcA(arrayObj)</code></pre>
+<p>🤖 <b>시험문제로 정리</b> — ① 빈칸 = <b><code>a1, a2, a3</code></b> (함수 안에서 a1 · a2 · a3 를 쓰니까 매개변수 3개) ② 이때 <code>funcA(arrayObj)</code> 의 출력은? → 배열을 <b>통째로 1개</b>만 넘겨서 a1 만 받고 a2 · a3 는 <b>undefined</b> ③ 셋 다 받게 하려면 → <code>funcA(...arrayObj)</code> (spread 로 흩뿌려 넘김)</p>
+<pre><code class="language-javascript">// 1013_02.js 🔥 claude야 여기 시험문제로 정리해 — 매개변수 자리 빈칸 정답: a1, a2, a3
+let arrayObj = [1, "둘", true];                 // 배열 안에 숫자 · 문자열 · 불린이 섞여도 됨 (JS)
+function funcA(a1, a2, a3) {                    // 빈칸 → a1, a2, a3 (매개변수 3개)
+    console.log(a1);                            // 첫 번째 인수
+    console.log(a2);                            // 두 번째 인수
+    console.log(a3);                            // 세 번째 인수
+}                                               // funcA 끝
+funcA(arrayObj);                                // 배열 통째로 1개만 넘김 → a1 = [1,"둘",true] · a2 · a3 는 못 받음 → undefined
+console.log("---");                             // 구분선
+funcA(...arrayObj);                             // spread → funcA(1, "둘", true) 로 흩뿌려 넘김 → 1 · 둘 · true</code></pre>
+<pre class="io"><code class="language-text">[ 1, '둘', true ]
+undefined
+undefined
+---
+1
+둘
+true</code></pre>
+<div class="tip">node 는 배열을 <code>[ 1, '둘', true ]</code> 로, 브라우저 콘솔은 <code>(3) [1, '둘', true]</code> 로 보여 줘요.</div>
+</section>
+<section class="card">
+<h2>7. Rest 매개변수 (...a2) · spread 연산자 (...) (1013_02.js)</h2>
+<pre><code class="language-javascript">// 1013_02.js Rest 매개변수 (...a2) — 나머지 인수를 배열로 모음
+let arrayObj = [1, "둘", true];                 // 배열 3칸
+function funcB(a1, ...a2) {                     // a1 = 첫 번째 · ...a2 = 나머지를 배열로 (수업 코드 이름은 funcA)
+    console.log(a1);                            // 1
+    console.log(a2);                            // 나머지 "둘", true → [ '둘', true ]
+}                                               // funcB 끝
+funcB(...arrayObj);                             // spread 로 1, "둘", true 를 넘김
+funcB(arrayObj);                                // 배열 통째로 1개 → a1 = [1,'둘',true] · 나머지 없음 → []</code></pre>
+<pre class="io"><code class="language-text">1
+[ '둘', true ]
+[ 1, '둘', true ]
+[]</code></pre>
+<pre><code class="language-javascript">// 1013_02.js spread(...) · 구조분해 할당 — 이름을 겹치지 않게 고친 실행 가능한 판
+let arrayObj = [1, "둘", true];                 // 배열 3칸
+let obj = { a: 1, b: "하이" };                  // 객체 (key a · b)
+let obg2 = { ...obj, c: true };                 // 객체 spread → a:obj.a, b:obj.b 를 쓴 것과 같음 + c 추가
+console.log(obg2);                              // { a: 1, b: '하이', c: true }
+let arrayObj2 = [...arrayObj, 4];               // 배열 spread → [arrayObj[0], arrayObj[1], arrayObj[2], 4] 와 같음
+console.log(arrayObj2);                         // [ 1, '둘', true, 4 ]
+let [a1, a2, a3] = arrayObj;                    // 배열 구조분해 → 순서(index 0 · 1 · 2)대로 a1=1 · a2="둘" · a3=true
+let { b, a } = obj;                             // 객체 구조분해 → 순서가 아니라 key 이름으로 → b="하이" · a=1
+console.log(b, a);                              // 하이 1
+console.log(`첫번째 값:${a1}     두번째 값:${a2}     세번째 값:${a3}`);   // 첫번째 값:1     두번째 값:둘     세번째 값:true</code></pre>
+<pre class="io"><code class="language-text">{ a: 1, b: '하이', c: true }
+[ 1, '둘', true, 4 ]
+하이 1
+첫번째 값:1     두번째 값:둘     세번째 값:true</code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>이름</th><th>자리</th><th>하는 일</th><th>예</th></tr>
+<tr><td><b>spread</b> 연산자 <code>...</code></td><td><b>호출 · 배열 · 객체 안</b></td><td>여러 값을 <b>개별로 흩뿌림</b></td><td><code>funcA(...arrayObj)</code> → <code>funcA(1, "둘", true)</code> · <code>[...arrayObj, 4]</code> · <code>{...obj, c:true}</code></td></tr>
+<tr><td><b>Rest</b> 매개변수 <code>...</code></td><td><b>함수 선언의 매개변수 맨 끝</b></td><td>나머지 인수를 <b>배열로 모음</b></td><td><code>function funcA(a1, ...a2)</code> → a2 = <code>[ '둘', true ]</code></td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — “spread 연산자(...) : 객체나 배열에 저장된 여러 개의 값을 <b>개별로 흩뿌려 주는</b>” · 하나하나 쓰기 귀찮으면 <code>[...arrayObj, 4]</code> 로 한 번에 · <code>let obg2 = {...obj, c:true}</code> 는 <code>a: obj.a, b: obj.b</code> 를 쓴 것과 같은 말 · JS 는 배열 안에 <b>데이터 타입이 섞여도</b> 상관없음 · 선언적 함수는 <b>호이스팅</b> 덕분에 호출문이 위에 있어도 문제없음</div>
+<h3>구조분해 할당 — ✍️ 뜻</h3>
+<p><span class="wk-tag note">✍️ 필기</span> — “구조분해할당 뜻 { 안에 들어 있는 데이터를 넣거나 빼고 싶으면 <b>방 번호로 대괄호</b>를 이용해서 접근한다 · <b>index 번호는 0번부터</b> 시작 }”</p>
+<table class="ref">
+<tbody>
+<tr><th>방법</th><th>코드</th><th>결과</th></tr>
+<tr><td>방법 1 (하나씩)</td><td><code>let a1 = arrayObj[0]; let a2 = arrayObj[1]; let a3 = arrayObj[2];</code></td><td>방 번호 0 · 1 · 2</td></tr>
+<tr><td>방법 2 (배열 구조분해)</td><td><code>let [a1, a2, a3] = arrayObj;</code></td><td><b>순서대로</b> a1 = 1 · a2 = "둘" · a3 = true</td></tr>
+<tr><td>객체 구조분해</td><td><code>let {b, a} = obj;</code></td><td><b>key 이름으로</b> b = "하이" · a = 1 (순서 상관없음)</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 수업 파일 1013_02.js 는 그대로 실행하면 <code>SyntaxError: Identifier 'a1' has already been declared</code> 가 나요 — 방법 1 · 방법 2 를 같은 파일에 <code>let a1</code> 로 두 번 선언했고, <code>arrayObj2</code> 도 두 번 선언했어요. 위 코드는 한 번씩만 선언하게 고친 판이에요. 그리고 <b><code>funcA</code> 를 두 번 선언</b>해서(매개변수 3개 판 · Rest 판) 호이스팅으로 <b>뒤의 Rest 판만 남아요</b> → 파일 맨 위 <code>funcA(arrayObj)</code> 도 실제로는 Rest 판으로 실행돼 <code>[ 1, '둘', true ]</code> · <code>[]</code> 이 찍혀요 (같은 이름 함수 선언은 마지막 것이 이김).</div>
+<pre><code class="language-javascript">// 🤖 같은 이름 함수를 두 번 선언하면? — 수업 파일에서 중복 let 줄만 뺀 판
+let arrayObj = [1, "둘", true];                 // 배열 3칸
+funcA(arrayObj);                                // 호이스팅으로 선언보다 먼저 호출 가능 — 그런데 어느 funcA?
+function funcA(a1, a2, a3) {                    // 첫 번째 선언 (매개변수 3개)
+    console.log(a1); console.log(a2); console.log(a3);   // ← 덮어써져서 한 번도 실행 안 됨
+}                                               // 첫 번째 funcA 끝
+function funcA(a1, ...a2) {                     // 두 번째 선언 (Rest) → 같은 이름이라 앞의 것을 덮어씀
+    console.log(a1); console.log(a2);           // 위 호출: a1 = [1,'둘',true] · a2 = [] / 아래 호출: 1 · ['둘', true]
+}                                               // 두 번째 funcA 끝
+funcA(...arrayObj);                             // spread → funcA(1, "둘", true) → 1 · [ '둘', true ]</code></pre>
+<pre class="io"><code class="language-text">[ 1, '둘', true ]
+[]
+1
+[ '둘', true ]</code></pre>
+</section>
+<section class="card">
+<h2>8. 🔥 BOM — 브라우저 객체 모델 · “다음 중 성격이 다른 것은?”</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — 브라우저 객체모델(BOM) { // 시험문제 <b>다음 중 성격이 다른 것은?</b> window 객체 · screen 객체 · location 객체 · history 객체 · navigator 객체 }</p>
+<table class="ref">
+<tbody>
+<tr><th>객체</th><th>하는 일</th><th>관계</th></tr>
+<tr><td><b>window</b></td><td>브라우저 <b>창 전체</b> · BOM 의 <b>최상위 객체</b> (alert · prompt · setTimeout 도 window 의 메소드)</td><td>맨 위 (부모)</td></tr>
+<tr><td>screen</td><td>모니터 화면 정보 (너비 · 높이)</td><td><code>window.screen</code></td></tr>
+<tr><td>location</td><td>지금 페이지의 <b>주소(URL)</b> · 이동</td><td><code>window.location</code></td></tr>
+<tr><td>history</td><td>방문 기록 · 뒤로 / 앞으로</td><td><code>window.history</code></td></tr>
+<tr><td>navigator</td><td>브라우저 정보 (이름 · 버전 · 언어)</td><td><code>window.navigator</code></td></tr>
+</tbody></table>
+<div class="tip">🤖 <b>답 (추론)</b> — 성격이 다른 것 = <b>window 객체</b>: 나머지 4개는 모두 <b>window 의 하위 객체</b>(window 의 속성)인데, window 는 그것들을 담고 있는 <b>최상위 객체</b>예요. 수업에서 다른 기준을 말씀하셨으면 노션에 적어 두세요 — 반영할게요.</div>
+</section>
+<section class="card">
+<h2>9. 복습 — 이벤트</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — 복습 { <b>마우스 클릭: 이벤트</b> } → 사용자가 클릭 · 키 입력처럼 무언가를 했을 때 일어나는 일 = <b>이벤트</b> · <a href="웹프로그래밍-2주차.html">2주차 이벤트</a> · <a href="웹프로그래밍-6주차.html">6주차 DOM 클릭</a></p>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
+<pre><code class="language-text">코드 문법(손코딩)이나 용어는 객관식으로 시험에 출제 될 예정임
+교수님도 Ai를 활용하시니 우리도 ai로 문제를 만들어서 풀어보는것도 좋은 공부법 이라고 교수님이 말씀하심
+object를 생성할때 new라는 것을 쓰고 생성을 한다 obj를 만들때, class가 일을 하는게 아니라 obj가 일을해서 만드는거다
+브라우저 객체모델 (BOM{
+// 시험문제 다음중 성격이 다른것은?
+window 객체 screen 객체 locaiton객체 history 객체 navigator 객체
+}
+switch문 시험에 나옴!
+구조분해할당 뜻{
+안에 들어있는 데이터를 넣거나 뺴고싶으면 방 번호로 대괄호 이용해서 접근한다 index 번호는 0번부터 시작임
+}
+복습{
+마우스 클릭: 이벤트
+}</code></pre>
+<pre><code class="language-javascript">let o1={name:"홍길동"};
+let o2=o1; //얕은 복사(뜻 알기)
+
+let o3={name:"홍길동"};
+let o4={...o3}; //깊은 복사(뜻 알기)
+
+console.log(o1===o2); //true
+console.log(o3===o4); //false
+
+console.log(JSON.stringify(o3)===JSON.stringify(o4)); //true, 객체를 문자열로 변환하여 비교(깊은 비교)</code></pre>
+<pre><code class="language-text">수업시간에 나온 내장객체는 시험에 나오고 수업시간에 언급이 없는 내장객체는 시험에 미출제함</code></pre>
+<div class="tip">⚠️ 필기 오타 <code>locaiton</code> → <b>location</b> · <code>뺴고</code> → <b>빼고</b></div>
+</details>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../웹프로그래밍-실제시험.html">🔒 웹프로그래밍 실제시험 — 7주차 🔥 문제(객관식 · 주관식 · 출력결과 · 코드)까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="웹프로그래밍-8주차-중간고사.html">중간고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-6주차.html">‹ 이전 · <b>6주차</b><br><small>&lt;9월 29일&gt; 비동기·타이머·구조분해 할당·DOM</small></a><a class="next" href="웹프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「웹프로그래밍 · 7주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

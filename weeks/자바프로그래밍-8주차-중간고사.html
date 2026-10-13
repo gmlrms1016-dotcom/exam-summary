@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610122348"></script>
+    <script src="../theme.js?v=202610131732"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자바프로그래밍 8주차 · 중간고사 시험문제 정리 (1~6주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610122348">
+    <title>자바프로그래밍 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
+    <link rel="stylesheet" href="../style.css?v=202610131732">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -47,17 +47,22 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>☕ 자바프로그래밍 · 8주차 · 중간고사</h1>
-        <p>중간고사 시험문제 정리 (1~6주차 반영)</p>
+        <p>중간고사 시험문제 정리 (1~7주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-6주차.html">‹ 이전 · <b>6주차</b><br><small>3장 배열·예외 실습 + 4장 클래스와 객체</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-7주차.html">‹ 이전 · <b>7주차</b><br><small>4장 클래스 실습 — 생성자 · this (🔥 시험범위 Car · Book 까지)</small></a><span></span></nav>
 
-<div class="tip">📅 <b>중간고사 — 10월 20일(화) 14:00</b> · 평가: 필기평가1 30점 + 직무수행능력평가2 15점 + 직무수행능력평가3 등 (실습 중심) · 지금까지 배운 <b>1~6주차</b>를 반영했고, 진도가 나가면 계속 채워집니다.</div>
+<div class="tip">📅 <b>중간고사 — 10월 20일(화) 14:00</b> · 평가: 필기평가1 30점 + 직무수행능력평가2 15점 + 직무수행능력평가3 등 (실습 중심) · 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</div>
+<div class="tip">🔥 <b>7주차 필기 — 시험범위</b> — “<b>오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위</b>” · <b>자바 데이터타입 8가지 외우기</b> · <b>조건식 출력 true / false</b> · <b>for 문 · 배열</b> · <b>if · else</b> · <b>class 와 object</b> · <b>객체지향의 특성</b></div>
 <div class="tip">🎯 <b>강의자료에 ★시험단골로 표시된 것</b> — ① <b>타입 변환</b>(자동 / 강제 캐스팅) ② <b>예외 처리</b>(try-catch-finally, 예외 클래스) ③ WORA · JVM ④ 반복문 for / while / do-while 차이 ⑤ 배열 선언과 생성</div>
 <p class="wk-lockbtn"><a href="../자바프로그래밍-실제시험.html">🔒 실제시험</a></p>
 <section class="card">
 <h2>🔥 ✍️ PDF 필기 — 시험 표시 (10/1 보충)</h2>
 <ul><li>🔥 <b>식별자 이름 사례 ★</b> — 2장 7쪽에 큰 ★ (중간고사 폴더 <code>PDF 문서.pdf</code> 에도 같은 쪽 ★) · 안 되는 것: 첫 글자 <b>숫자</b>(3Chapter) · <b>예약어</b>(if) · <b>false · true · null</b> · 특수문자(<code>%</code>) / 되는 것: <code>_</code> · <code>$</code> · 숫자(첫 글자 아님) · 한글 · 길이 제한 없음 · 대소문자 구분 (<a href="자바프로그래밍-3주차.html">3주차 자세히</a>)</li><li>🔥 <b>빈칸</b> — 2장 23쪽 CircleArea 의 <code>double</code> 세 곳에 ✍️ “빈칸” → <code>final double PI = 3.14;</code> · <code>double radius</code> · <code>double circleArea</code></li><li>✍️ final = <b>변경 X</b> · long 리터럴은 <b>L</b> · 실수 리터럴은 <b>double</b> 이 기본(D 필수 X) · 카멜 표기(클래스 대문자 · 변수/메소드 소문자 · 상수 전부 대문자)</li></ul>
+</section>
+<section class="card">
+<h2>7주차 — 🔥 생성자 · this · 데이터타입 8가지 (<a href="자바프로그래밍-7주차.html">7주차 자세히</a>)</h2>
+<ul><li>🔥 <span class="wk-tag note">✍️ 필기</span> — <b>Car · CarMain · Book · BookMain 까지가 시험범위</b></li><li><b>생성자</b> — 클래스 이름과 같고 반환형이 없음 · 객체가 <code>new</code> 로 생성될 때 자동 호출 · <code>Car() {}</code> = <b>기본 생성자</b> (필드는 기본값 <code>null</code> · <code>0</code>) · <code>Car(String juin, String model, int year)</code> = <b>매개변수 생성자</b> (만들면서 값 넣기) · 여러 개 = 생성자 오버로딩</li><li><b>this</b> — 지금 이 객체 자신 · <code>this.juin = juin;</code> → 왼쪽은 <b>필드</b>, 오른쪽은 <b>매개변수</b> (이름이 같을 때 구분)</li><li>Car 실행: <code>new Car("내차", "BMW M5", 2026).showInfo()</code> → <code>소유주 : 내차     모델 : BMW M5     연식 : 2026</code> · Book 객체 5개 → 같은 클래스, 객체마다 다른 제목 · 저자</li><li>🔥 <b>데이터타입 8가지</b> — 정수 <code>byte</code>(1) · <code>short</code>(2) · <code>int</code>(4) · <code>long</code>(8, 끝에 L) / 실수 <code>float</code>(4, 끝에 F) · <code>double</code>(8) / 문자 <code>char</code>(2) / 논리 <code>boolean</code> → <b>String 은 8가지가 아님</b>(클래스)</li><li>🔥 <b>조건식 출력</b> — <code>System.out.println(85 &gt;= 80);</code> → <b>true</b> · <code>85 == 100</code> → <b>false</b> (1 · 0 이 아님)</li><li>4장-1 예제: Student · Dog(<code>barking()</code> 멍멍 짖는다 · <code>hungry()</code> 배고파요 · <code>sleeping()</code> ZZzz....) · Movie(<code>print()</code>) — 객체 2개씩</li><li>📝 과제: 2장 이론 107~109쪽 + 실습 1번(110쪽) · 3장 이론 163~165쪽 + 실습 1 · 2번(166쪽) — 이론은 정답만, 실습은 실행결과 + 소스 화면캡처</li></ul>
 </section>
 <section class="card">
 <h2>6주차 — 배열 · 예외 실습 + 4장 클래스와 객체 (<a href="자바프로그래밍-6주차.html">6주차 자세히</a>)</h2>
@@ -100,7 +105,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <ul><li><a href="../자바프로그래밍.html#quiz">자바프로그래밍 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-6주차.html">‹ 이전 · <b>6주차</b><br><small>3장 배열·예외 실습 + 4장 클래스와 객체</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-7주차.html">‹ 이전 · <b>7주차</b><br><small>4장 클래스 실습 — 생성자 · this (🔥 시험범위 Car · Book 까지)</small></a><span></span></nav>
 
     <p class="wk-src">노션 「자바프로그래밍」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

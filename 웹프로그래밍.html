@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202610122348"></script>
+    <script src="theme.js?v=202610131732"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>웹프로그래밍 · 완전 정리</title>
-    <link rel="stylesheet" href="style.css?v=202610122348">
-    <script src="schedule.js?v=202610122348"></script>
+    <link rel="stylesheet" href="style.css?v=202610131732">
+    <script src="schedule.js?v=202610131732"></script>
     <style>
         /* 출력 결과 박스 (프로그래밍언어실습.html 과 동일) */
         pre.io { background:#0f1b14; }
@@ -22,7 +22,7 @@
 
     <header class="page-head">
         <h1>웹프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 6주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29) · 강의시간에 나온 내용 전부 정리</p>
+        <p>1주차 ~ 7주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29 · 10/13) · 강의시간에 나온 내용 전부 정리</p>
     </header>
 
     <div id="week-nav" data-subject="웹프로그래밍"></div>
@@ -68,6 +68,7 @@
         <a href="#s34">34.★구조분해</a>
         <a href="#s35">35.🔥매개변수구조분해</a>
         <a href="#s36">36.DOM색바꾸기</a>
+        <a href="#s37">37.🔥7주차 switch·복사·BOM</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1045,9 +1046,92 @@ func(person);   // 인수는 person 하나 → name = 객체 통째로 · age ·
         <div class="tip">⚠️ <b>정정</b> — 수업 코드 주석 <code>// box[0].style.background-color: orange;</code> 는 CSS 문법이라 JS 에서는 SyntaxError 예요. JS 로 직접 색을 넣으려면 <code>box[0].style.backgroundColor = "orange";</code> (<code>-</code> 를 빼고 뒤 글자를 대문자로)</div>
     </section>
 
+    <section class="card" id="s37">
+        <h2>37. 🔥 7주차 — switch · 얕은/깊은 복사 · spread · Rest · BOM ★시험<span class="week">7주차</span></h2>
+        <p><span class="wk-tag note">✍️ 필기</span> — <b>“코드 문법(손코딩)이나 용어는 객관식으로 시험에 출제될 예정”</b> · <b>“switch문 시험에 나옴!”</b> · BOM <b>“다음 중 성격이 다른 것은?”</b> · <b>얕은 복사 · 깊은 복사 뜻 알기</b> · <b>“수업시간에 나온 내장객체만 출제”</b> · AI 로 문제를 만들어 풀어 보는 것도 좋은 공부법</p>
+        <h3>🔥 얕은 복사 vs 깊은 복사 (노션 필기 코드)</h3>
+        <pre><code class="language-javascript">// 노션 필기 — 얕은 복사 vs 깊은 복사 · === 비교 · JSON.stringify 로 내용 비교
+let o1 = { name: "홍길동" };                    // 객체 하나 (메모리에 하나)
+let o2 = o1;                                    // 얕은 복사: 주소만 복사 → o1 과 o2 는 같은 객체
+let o3 = { name: "홍길동" };                    // 새 객체
+let o4 = { ...o3 };                             // 깊은 복사(수업 용어): spread 로 속성을 꺼내 새 객체를 만듦
+console.log(o1 === o2);                         // 같은 객체(같은 주소) → true
+console.log(o3 === o4);                         // 내용은 같아도 다른 객체 → false
+console.log(JSON.stringify(o3) === JSON.stringify(o4));   // 둘 다 '{"name":"홍길동"}' 문자열 → true (깊은 비교)
+o2.name = "이몽룡";                             // o2 를 바꾸면
+console.log(o1.name);                           // 같은 객체라 o1 도 바뀜 → 이몽룡
+o4.name = "성춘향";                             // o4 를 바꿔도
+console.log(o3.name);                           // 다른 객체라 o3 는 그대로 → 홍길동</code></pre>
+        <pre class="io"><code>true
+false
+true
+이몽룡
+홍길동</code></pre>
+        <table class="ref">
+            <tr><th>구분</th><th>뜻</th></tr>
+            <tr><td>let o2 = o1;</td><td><b>얕은 복사</b> — 주소만 복사 → 같은 객체 → <code>o1 === o2</code> true · 하나를 바꾸면 둘 다 바뀜</td></tr>
+            <tr><td>let o4 = {...o3};</td><td><b>깊은 복사</b>(수업 용어) — 새 객체 → <code>o3 === o4</code> false</td></tr>
+            <tr><td>JSON.stringify()</td><td>객체를 <b>문자열</b>로 바꿔 내용 비교(깊은 비교) → true</td></tr>
+        </table>
+        <h3>🔥 switch — 요일 번호 (1013_01.html)</h3>
+        <pre><code class="language-javascript">// 1013_01.html switch — 요일 번호(getDay)로 요일 이름 고르기 · 날짜를 수업 날(2026-10-13)로 고정
+let day = new Date(2026, 9, 13);                // 월은 0 부터 → 9 = 10월 · 2026년 10월 13일
+console.log(day.getDay());                      // getDay() = 요일 번호 0(일) ~ 6(토) → 화요일 → 2
+switch (day.getDay()) {                         // 2 와 같은 case 를 찾음 (=== 처럼 값 · 타입 비교)
+    case 0: console.log("오늘은 일요일 입니다."); break;   // 0 아님 → 건너뜀
+    case 1: console.log("오늘은 월요일 입니다."); break;   // 1 아님 → 건너뜀
+    case 2: console.log("오늘은 화요일 입니다."); break;   // 2 → 출력하고 break 로 switch 탈출
+    case 3: console.log("오늘은 수요일 입니다."); break;   // (실행 안 됨)
+    case 4: console.log("오늘은 목요일 입니다."); break;   // (실행 안 됨)
+    case 5: console.log("오늘은 금요일 입니다."); break;   // (실행 안 됨)
+    case 6: console.log("오늘은 토요일 입니다."); break;   // (실행 안 됨)
+    default: console.log("정상적인 요일이 아닙니다.");      // 0 ~ 6 이 아닐 때만
+}                                               // switch 끝</code></pre>
+        <pre class="io"><code>2
+오늘은 화요일 입니다.</code></pre>
+        <table class="ref">
+            <tr><th>🔥 BOM 객체</th><th>성격 (“다음 중 성격이 다른 것은?”)</th></tr>
+            <tr><td>window</td><td>BOM <b>최상위 객체</b> — 브라우저 창 전체 (🤖 성격이 다른 것)</td></tr>
+            <tr><td>screen · location · history · navigator</td><td>모두 <b>window 의 하위 객체</b> — 화면 정보 · 주소(URL) · 방문 기록 · 브라우저 정보</td></tr>
+        </table>
+        <div class="tip">spread <code>...</code> = 값을 <b>흩뿌림</b> (<code>funcA(...arr)</code> · <code>[...arr, 4]</code> · <code>{...obj, c:true}</code>) / Rest <code>function f(a1, ...a2)</code> = 나머지를 <b>배열로 모음</b> / 구조분해 할당 = 방 번호(index 0 부터)로 꺼내기 → 자세한 예제 · ⚠️ 수업 파일 정정은 <a href="weeks/웹프로그래밍-7주차.html">7주차 페이지</a></div>
+        <h3>🔥 괄호넣기 — “claude야 여기 시험문제로 정리해” + switch ( ① ) ~ ( ③ )</h3>
+        <pre><code class="language-javascript">let arrayObj = [1, "둘", true];
+function funcA( ① ) {
+    console.log(a1);
+    console.log(a2);
+    console.log(a3);
+}
+funcA( ② );   // 1 · 둘 · true 가 한 줄씩 나오게
+
+let day = new Date(2026, 9, 13);
+switch (day.getDay()) {
+    case 2: console.log("오늘은 화요일 입니다."); ( ③ );
+    default: console.log("정상적인 요일이 아닙니다.");
+}</code></pre>
+        <div class="quiz-item" data-answers="a1, a2, a3|a1,a2,a3" data-explain="함수 안에서 a1 · a2 · a3 를 쓰므로 매개변수 3개 (1013_02.js 시험문제 빈칸)">
+            <p class="quiz-q"><span class="quiz-cat">①</span>함수 안에서 쓰는 이름에 맞게 매개변수 ( ① ) 를 쓰세요.</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="...arrayObj" data-explain="spread 로 흩뿌려 funcA(1, &quot;둘&quot;, true) — 그냥 funcA(arrayObj) 면 a1 에 배열 통째 · a2 · a3 는 undefined">
+            <p class="quiz-q"><span class="quiz-cat">②</span>1 · 둘 · true 가 한 줄씩 나오게 하는 인수 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="break|break;" data-explain="break 가 없으면 아래 default 까지 실행돼 “정상적인 요일이 아닙니다.” 도 찍힘">
+            <p class="quiz-q"><span class="quiz-cat">③</span>화요일 한 줄만 나오게 하려면 ( ③ ) 에 들어갈 문장은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 20 · 주관식 20 · 출력결과 22 · 코드 작성 13 · 총 75문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 37 · 주관식 27 · 출력결과 26 · 코드 작성 14 · 총 104문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="웹프로그래밍-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
@@ -1056,9 +1140,9 @@ func(person);   // 인수는 person 하나 → name = 객체 통째로 · age ·
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="quiz.js?v=202610122348"></script>
-<script src="weeks.js?v=202610122348"></script>
-<script src="codetest.js?v=202610122348"></script>
-<script src="outquiz.js?v=202610122348"></script>
+<script src="quiz.js?v=202610131732"></script>
+<script src="weeks.js?v=202610131732"></script>
+<script src="codetest.js?v=202610131732"></script>
+<script src="outquiz.js?v=202610131732"></script>
 </body>
 </html>

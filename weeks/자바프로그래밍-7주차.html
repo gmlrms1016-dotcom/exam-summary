@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610131732"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바프로그래밍 7주차 · 4장 클래스 실습 — 생성자 · this (🔥 시험범위 Car · Book 까지)</title>
+    <link rel="stylesheet" href="../style.css?v=202610131732">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../자바프로그래밍.html">← 자바프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>☕ 자바프로그래밍 · 7주차</h1>
+        <p>4장 클래스 실습 — 생성자 · this (🔥 시험범위 Car · Book 까지)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-6주차.html">‹ 이전 · <b>6주차</b><br><small>3장 배열·예외 실습 + 4장 클래스와 객체</small></a><a class="next" href="자바프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
+
+<div class="tip">수업: <b>10/13(화)</b> · 자료: 수업 소스 Car · CarMain · Book · BookMain · Student · StudentMain · Dog · DogMain · Movie · MovieMain + <code>4장-1(클래스)예제.txt</code> · 노션 필기. 코드 주석과 ▶ 출력 결과는 전부 javac · java 로 직접 실행한 결과예요 (수업 파일은 <code>package test;</code> 로 두 파일씩 나뉘어 있어서, 복사해 바로 실행되게 <code>연습.java</code> 한 파일로 합쳤어요).</div>
+<div class="tip">🔥 <b>시험범위 (✍️ 필기)</b> — “<b>오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위</b>” · 그리고 시험에 볼 것: <b>자바 데이터타입 8가지 외우기</b> · <b>조건식 출력 true / false</b> · <b>for 문 · 배열</b> · <b>if · else</b> · <b>class 와 object</b> · <b>객체지향의 특성</b></div>
+<section class="card">
+<h2>1. 🔥 시험범위 한눈에</h2>
+<table class="ref">
+<tbody>
+<tr><th>✍️ 필기</th><th>무엇을</th><th>정리</th></tr>
+<tr><td>Car · CarMain · Book · BookMain 까지</td><td>클래스 · 객체 · <b>생성자 2개(기본 · 매개변수)</b> · <b>this</b> · 메소드</td><td>2 · 3번</td></tr>
+<tr><td>자바 데이터타입 8가지 외우기</td><td>byte · short · int · long · float · double · char · boolean</td><td>4번</td></tr>
+<tr><td>조건식 출력 true / false</td><td><code>System.out.println(85 &gt;= 80);</code> → <b>true</b></td><td>4번</td></tr>
+<tr><td>for 문 · 배열 · if · else</td><td>3장 — <a href="자바프로그래밍-4주차.html">4주차</a> · <a href="자바프로그래밍-5주차.html">5주차</a> · <a href="자바프로그래밍-6주차.html">6주차</a></td><td>링크</td></tr>
+<tr><td>class 와 object · 객체지향의 특성</td><td>클래스 = 설계도(틀) · 객체 = 찍어낸 실체 · 캡슐화 · 상속 · 다형성</td><td>5번 · <a href="자바프로그래밍-6주차.html">6주차</a></td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>2. 🔥 Car + CarMain — 생성자 2개 · this</h2>
+<pre><code class="language-java">// Car.java + CarMain.java 를 한 파일로 — 🔥 시험범위 (생성자 2개 · this · showInfo)
+class Car {                                     // 자동차 설계도(클래스) · public 은 파일 이름과 같은 클래스(연습)에만
+    String juin;                                // 필드: 소유주
+    String model;                               // 필드: 모델
+    int year;                                   // 필드: 연식
+
+    Car() {}                                    // 2-1. 기본 생성자 — 매개변수 없음 · 하는 일 없음
+    Car(String juin, String model, int year) {  // 2-2. 매개변수 생성자 — 객체를 만들면서 값까지 넣음
+        this.juin = juin;                       // this.juin = 이 객체의 필드 ← 오른쪽 juin = 매개변수 "내차"
+        this.model = model;                     // 필드 model ← 매개변수 "BMW M5"
+        this.year = year;                       // 필드 year ← 매개변수 2026
+    }                                           // 생성자 끝
+
+    void showInfo() {                           // 3. 메소드 — 자기 필드 값을 한 줄로 출력
+        System.out.println("소유주 : " + juin + "     모델 : " + model + "     연식 : " + year);   // 칸 사이 공백 5칸
+    }                                           // showInfo 끝
+}                                               // Car 클래스 끝
+
+public class 연습 {                              // 원래 이름 CarMain → 파일 이름 연습.java
+    public static void main(String[] args) {    // 프로그램이 시작되는 main
+        Car myCar = new Car("내차", "BMW M5", 2026);   // new → 메모리에 객체 생성 → 매개변수 생성자 호출
+        myCar.showInfo();                       // 소유주 : 내차     모델 : BMW M5     연식 : 2026
+
+        Car dadCar = new Car("아빠차", "롤스로이스 팬텀", 2025);   // 두 번째 객체 (myCar 와 따로)
+        dadCar.showInfo();                      // 소유주 : 아빠차     모델 : 롤스로이스 팬텀     연식 : 2025
+
+        Car momCar = new Car("엄마차", "페라리 SF90", 2024);   // 세 번째 객체
+        momCar.showInfo();                      // 소유주 : 엄마차     모델 : 페라리 SF90     연식 : 2024
+
+        Car empty = new Car();                  // 기본 생성자로 만들면 필드는 기본값 (String → null · int → 0)
+        empty.showInfo();                       // 소유주 : null     모델 : null     연식 : 0
+    }                                           // main 끝
+}                                               // 연습 클래스 끝</code></pre>
+<pre class="io"><code class="language-text">소유주 : 내차     모델 : BMW M5     연식 : 2026
+소유주 : 아빠차     모델 : 롤스로이스 팬텀     연식 : 2025
+소유주 : 엄마차     모델 : 페라리 SF90     연식 : 2024
+소유주 : null     모델 : null     연식 : 0</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>코드</th><th>뜻</th></tr>
+<tr><td><code>Car() {}</code></td><td><b>기본 생성자</b> — 매개변수 없음 · <code>new Car()</code> 로 부르면 필드는 기본값(<code>String</code> → <code>null</code> · <code>int</code> → <code>0</code>)</td></tr>
+<tr><td><code>Car(String juin, String model, int year)</code></td><td><b>매개변수 생성자</b> — <code>new Car("내차", "BMW M5", 2026)</code> 처럼 만들면서 값까지 넣음</td></tr>
+<tr><td><code>this.juin = juin;</code></td><td><b>this</b> = 지금 만들어지는 <b>이 객체 자신</b> → 왼쪽 <code>this.juin</code> 은 필드, 오른쪽 <code>juin</code> 은 매개변수 (이름이 같아서 this 로 구분)</td></tr>
+<tr><td>생성자 이름</td><td><b>클래스 이름과 같고</b> 반환형(void · int …)을 쓰지 않음 · 이름은 같고 매개변수가 다른 생성자를 여러 개 = <b>생성자 오버로딩</b></td></tr>
+</tbody></table>
+<div class="tip">✍️ 수업 코드는 처음에 <code>myCar.juin="내차";</code> 처럼 <b>점(.)으로 필드에 하나씩</b> 넣다가(주석으로 남김) → <b>생성자로 한 줄에</b> 넣는 방식으로 바꿨어요. 두 방법의 결과는 같아요. 마지막 <code>new Car()</code> 줄은 🤖 기본 생성자를 보여 주려고 더한 줄이에요.</div>
+</section>
+<section class="card">
+<h2>3. 🔥 Book + BookMain — 객체 5개</h2>
+<pre><code class="language-java">// Book.java + BookMain.java 를 한 파일로 — 🔥 시험범위 (여기까지)
+class Book {                                    // 책 설계도(클래스)
+    String title;                               // 필드: 제목
+    String author;                              // 필드: 저자
+
+    Book() {                                    // 기본 생성자 — 아무것도 안 함
+    }                                           // 생성자 끝
+    Book(String title, String author) {         // 매개변수 생성자 — 제목 · 저자를 받아서
+        this.title = title;                     // 이 객체의 title ← 매개변수 title
+        this.author = author;                   // 이 객체의 author ← 매개변수 author
+    }                                           // 생성자 끝
+
+    void showInfo() {                           // 정보 출력 메소드
+        System.out.println("제목 : " + title + "     저자 : " + author);   // 제목 : …     저자 : …
+    }                                           // showInfo 끝
+}                                               // Book 클래스 끝
+
+public class 연습 {                              // 원래 이름 BookMain
+    public static void main(String[] args) {    // 시작점
+        Book mb1 = new Book("프로그래밍언어실습", "김희숙");   // 객체 1 생성 + 생성자로 값 넣기
+        mb1.showInfo();                         // 제목 : 프로그래밍언어실습     저자 : 김희숙
+        Book mb2 = new Book("웹프로그래밍", "장용미");         // 객체 2
+        mb2.showInfo();                         // 제목 : 웹프로그래밍     저자 : 장용미
+        Book mb3 = new Book("자바프로그래밍", "강은영");       // 객체 3
+        mb3.showInfo();                         // 제목 : 자바프로그래밍     저자 : 강은영
+        Book mb4 = new Book("데이터베이스", "김희숙");         // 객체 4
+        mb4.showInfo();                         // 제목 : 데이터베이스     저자 : 김희숙
+        Book mb5 = new Book("운영체제실습", "김현정");         // 객체 5
+        mb5.showInfo();                         // 제목 : 운영체제실습     저자 : 김현정
+    }                                           // main 끝
+}                                               // 연습 클래스 끝</code></pre>
+<pre class="io"><code class="language-text">제목 : 프로그래밍언어실습     저자 : 김희숙
+제목 : 웹프로그래밍     저자 : 장용미
+제목 : 자바프로그래밍     저자 : 강은영
+제목 : 데이터베이스     저자 : 김희숙
+제목 : 운영체제실습     저자 : 김현정</code></pre>
+<div class="tip">같은 설계도(Book)로 찍은 객체 5개가 <b>제목 · 저자를 각자</b> 가져요 · 클래스는 1개, 객체는 5개.</div>
+</section>
+<section class="card">
+<h2>4. 🔥 자바 데이터타입 8가지 · 조건식 true / false</h2>
+<table class="ref">
+<tbody style="min-width:595px;">
+<tr><th>분류</th><th>타입</th><th>크기</th><th>예</th></tr>
+<tr><td>정수</td><td><code>byte</code></td><td>1바이트</td><td><code>127</code></td></tr>
+<tr><td>정수</td><td><code>short</code></td><td>2바이트</td><td><code>32767</code></td></tr>
+<tr><td>정수</td><td><b><code>int</code></b> (정수 기본)</td><td>4바이트</td><td><code>2147483647</code></td></tr>
+<tr><td>정수</td><td><code>long</code></td><td>8바이트</td><td><code>10000000000L</code> (끝에 <b>L</b>)</td></tr>
+<tr><td>실수</td><td><code>float</code></td><td>4바이트</td><td><code>3.14F</code> (끝에 <b>F</b>)</td></tr>
+<tr><td>실수</td><td><b><code>double</code></b> (실수 기본)</td><td>8바이트</td><td><code>3.14</code></td></tr>
+<tr><td>문자</td><td><code>char</code></td><td>2바이트</td><td><code>'A'</code> (작은따옴표 · 문자 하나)</td></tr>
+<tr><td>논리</td><td><code>boolean</code></td><td>1바이트</td><td><code>true</code> · <code>false</code></td></tr>
+</tbody></table>
+<div class="tip">📌 외우는 법 — 정수 4개(byte · short · int · long) + 실수 2개(float · double) + 문자 1개(char) + 논리 1개(boolean) = <b>8개</b> · <b>String 은 기본 타입이 아니라 클래스(레퍼런스 타입)</b> 라서 8가지에 안 들어가요.</div>
+<pre><code class="language-java">// 🔥 자바 데이터 타입 8가지(기본형) · 조건식 출력 true / false
+public class 연습 {                              // 파일 이름 연습.java
+    public static void main(String[] args) {    // 시작점
+        byte b = 127;                           // 1바이트 정수 (-128 ~ 127)
+        short s = 32767;                        // 2바이트 정수
+        int i = 2147483647;                     // 4바이트 정수 (정수 기본형)
+        long l = 10000000000L;                  // 8바이트 정수 — int 범위를 넘는 수는 끝에 L
+        float f = 3.14F;                        // 4바이트 실수 — 끝에 F (없으면 double 이라 오류)
+        double d = 3.14;                        // 8바이트 실수 (실수 기본형)
+        char c = 'A';                           // 2바이트 문자 하나 — 작은따옴표
+        boolean ok = true;                      // 1바이트 논리 — true / false 만
+        System.out.println(b + " " + s + " " + i + " " + l);   // 127 32767 2147483647 10000000000
+        System.out.println(f + " " + d + " " + c + " " + ok);  // 3.14 3.14 A true
+        int score = 85;                         // 점수 85
+        System.out.println(score &gt;= 80);        // 조건식 85 &gt;= 80 → true (숫자 1 이 아니라 true 로 출력)
+        System.out.println(score == 100);       // 85 == 100 → false
+        System.out.println(score &gt; 80 &amp;&amp; score &lt; 90);   // true &amp;&amp; true → true
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">127 32767 2147483647 10000000000
+3.14 3.14 A true
+true
+false
+true</code></pre>
+<div class="tip">자바의 조건식(관계 · 논리 연산)은 <b>true / false</b> 로 출력돼요 — C 언어처럼 1 · 0 이 아니에요.</div>
+</section>
+<section class="card">
+<h2>5. class 와 object · 객체지향의 특성 (6주차 복습)</h2>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>뜻</th></tr>
+<tr><td><b>클래스</b> (class)</td><td>객체를 만들어내기 위한 <b>설계도 혹은 틀</b> — 필드(속성) + 메소드(행동) + 생성자</td></tr>
+<tr><td><b>객체</b> (object · 인스턴스)</td><td>클래스 모양 그대로 <b>new 로 찍어낸 실체</b> · 객체마다 필드 값이 다름</td></tr>
+<tr><td><b>캡슐화</b></td><td>필드와 메소드를 클래스 안에 묶고, 내부를 감춰 보호</td></tr>
+<tr><td><b>상속</b></td><td>부모 클래스의 필드 · 메소드를 자식 클래스가 물려받음 (<code>extends</code>)</td></tr>
+<tr><td><b>다형성</b></td><td>같은 이름의 메소드가 객체에 따라 다르게 동작 (오버로딩 · 오버라이딩)</td></tr>
+</tbody></table>
+<div class="tip">자세한 설명 · 붕어빵 비유는 <a href="자바프로그래밍-6주차.html">6주차 5 · 6번</a></div>
+</section>
+<section class="card">
+<h2>6. 4장-1 클래스 예제 (수업 연습 3문제)</h2>
+<div class="tip">문제(<code>4장-1(클래스)예제.txt</code>) — ① <b>Student</b>: 이름 · 학번 · 나이 · 연락처, 객체 2개 ② <b>Dog</b>: 이름 · 종 · 나이 · 색깔 + <code>barking()</code> “멍멍 짖는다” · <code>hungry()</code> “배고파요” · <code>sleeping()</code> “ZZzz....”, 객체 2개 ③ <b>Movie</b>: 제목(title) · 평점(jumsu) · 감독(gamdok) · 연도(year) + 모든 정보를 출력하는 <code>print()</code>, 객체 2개</div>
+<details class="wk-details">
+<summary>📘 Student + StudentMain (개인정보는 예시 값으로 바꿈)</summary>
+<pre><code class="language-java">// 4장-1 예제 1번 — Student.java + StudentMain.java (개인정보는 예시 값으로 바꿈)
+class Student {                                 // 학생 설계도
+    String name;                                // 이름
+    String stuid;                               // 학번 (문자열 — 0 으로 시작해도 안 잘림)
+    int age;                                    // 나이
+    String phone;                               // 연락처 (- 가 있어서 문자열)
+
+    Student() {                                 // 기본 생성자
+    }                                           // 생성자 끝
+    Student(String name, String stuid, int age, String phone) {   // 4개를 받는 생성자
+        this.name = name;                       // 필드 name ← 매개변수 name
+        this.stuid = stuid;                     // 필드 stuid ← 매개변수 stuid
+        this.age = age;                         // 필드 age ← 매개변수 age
+        this.phone = phone;                     // 필드 phone ← 매개변수 phone
+    }                                           // 생성자 끝
+
+    void showInfo() {                           // 정보 출력
+        System.out.println("이름 : " + name + "     학번 : " + stuid + "     나이 : " + age + "     전화번호 : " + phone);   // 한 줄
+    }                                           // showInfo 끝
+}                                               // Student 끝
+
+public class 연습 {                              // 원래 이름 StudentMain
+    public static void main(String[] args) {    // 시작점
+        Student s1 = new Student("홍길동", "20260001", 20, "010-0000-0001");   // 객체 1
+        s1.showInfo();                          // 이름 : 홍길동     학번 : 20260001     나이 : 20     전화번호 : 010-0000-0001
+        Student s2 = new Student("성춘향", "20260002", 21, "010-0000-0002");   // 객체 2
+        s2.showInfo();                          // 이름 : 성춘향     학번 : 20260002     나이 : 21     전화번호 : 010-0000-0002
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">이름 : 홍길동     학번 : 20260001     나이 : 20     전화번호 : 010-0000-0001
+이름 : 성춘향     학번 : 20260002     나이 : 21     전화번호 : 010-0000-0002</code></pre>
+</details>
+<details class="wk-details">
+<summary>📘 Dog + DogMain — 메소드 3개 (문제 문구 그대로)</summary>
+<pre><code class="language-java">// 4장-1 예제 2번 — Dog.java + DogMain.java (메소드 3개 · 문제의 출력 문구 그대로)
+class Dog {                                     // 강아지 설계도
+    String name;                                // 이름
+    String breed;                               // 종
+    int age;                                    // 나이
+    String color;                               // 색깔
+
+    Dog() {                                     // 기본 생성자
+    }                                           // 생성자 끝
+    Dog(String name, String breed, int age, String color) {   // 4개를 받는 생성자
+        this.name = name;                       // 필드 ← 매개변수
+        this.breed = breed;                     // 필드 ← 매개변수
+        this.age = age;                         // 필드 ← 매개변수
+        this.color = color;                     // 필드 ← 매개변수
+    }                                           // 생성자 끝
+
+    void showInfo() {                           // 정보 출력
+        System.out.println("이름 : " + name + "     종 : " + breed + "     나이 : " + age + "     색깔 : " + color);   // 한 줄
+    }                                           // showInfo 끝
+    void barking() {                            // 짖기
+        System.out.println("멍멍 짖는다");       // 문제 문구 "멍멍 짖는다"
+    }                                           // barking 끝
+    void hungry() {                             // 배고픔
+        System.out.println("배고파요");          // 문제 문구 "배고파요"
+    }                                           // hungry 끝
+    void sleeping() {                           // 잠
+        System.out.println("ZZzz....");         // 문제 문구 "ZZzz...."
+    }                                           // sleeping 끝
+}                                               // Dog 끝
+
+public class 연습 {                              // 원래 이름 DogMain
+    public static void main(String[] args) {    // 시작점
+        Dog d1 = new Dog("콩별이", "포메라니안", 11, "흰색");   // 객체 1
+        d1.showInfo();                          // 이름 : 콩별이     종 : 포메라니안     나이 : 11     색깔 : 흰색
+        d1.barking();                           // 멍멍 짖는다
+        d1.hungry();                            // 배고파요
+        d1.sleeping();                          // ZZzz....
+        Dog d2 = new Dog("둥이", "말티즈", 20, "흰색");         // 객체 2 — 같은 메소드, 다른 필드 값
+        d2.showInfo();                          // 이름 : 둥이     종 : 말티즈     나이 : 20     색깔 : 흰색
+        d2.barking();                           // 멍멍 짖는다
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">이름 : 콩별이     종 : 포메라니안     나이 : 11     색깔 : 흰색
+멍멍 짖는다
+배고파요
+ZZzz....
+이름 : 둥이     종 : 말티즈     나이 : 20     색깔 : 흰색
+멍멍 짖는다</code></pre>
+</details>
+<details class="wk-details">
+<summary>📘 Movie + MovieMain — print() 메소드</summary>
+<pre><code class="language-java">// 4장-1 예제 3번 — Movie.java + MovieMain.java (문제의 필드 이름 · print() 메소드로)
+class Movie {                                   // 영화 설계도
+    String title;                               // 영화 제목
+    double jumsu;                               // 평점 (7.5 처럼 소수 → double)
+    String gamdok;                              // 감독
+    int year;                                   // 발표된 연도
+
+    Movie() {                                   // 기본 생성자
+    }                                           // 생성자 끝
+    Movie(String title, double jumsu, String gamdok, int year) {   // 4개를 받는 생성자
+        this.title = title;                     // 필드 ← 매개변수
+        this.jumsu = jumsu;                     // 10 을 넘기면 double 로 자동 변환 → 10.0
+        this.gamdok = gamdok;                   // 필드 ← 매개변수
+        this.year = year;                       // 필드 ← 매개변수
+    }                                           // 생성자 끝
+
+    void print() {                              // 문제: 모든 정보를 출력하는 print() 메소드
+        System.out.println("제목 : " + title + "     평점 : " + jumsu + "     감독 : " + gamdok + "     연도 : " + year);   // 한 줄
+    }                                           // print 끝
+}                                               // Movie 끝
+
+public class 연습 {                              // 원래 이름 MovieMain
+    public static void main(String[] args) {    // 시작점
+        Movie m1 = new Movie("영화1", 10, "홍길동", 2004);   // int 10 → double 매개변수 → 10.0
+        m1.print();                             // 제목 : 영화1     평점 : 10.0     감독 : 홍길동     연도 : 2004
+        Movie m2 = new Movie("영화2", 7.5, "성춘향", 2007);  // 객체 2
+        m2.print();                             // 제목 : 영화2     평점 : 7.5     감독 : 성춘향     연도 : 2007
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">제목 : 영화1     평점 : 10.0     감독 : 홍길동     연도 : 2004
+제목 : 영화2     평점 : 7.5     감독 : 성춘향     연도 : 2007</code></pre>
+</details>
+<div class="tip">⚠️ <b>정정 · 보충 (내 수업 파일 ↔ 문제)</b> — Dog 의 출력이 문제와 달라요: <code>멍멍!</code> → <b>멍멍 짖는다</b> · <code>배고프다</code> → <b>배고파요</b> · <code>Zzz...</code> → <b>ZZzz....</b> / Movie 는 문제가 필드 이름 <b>title · jumsu · gamdok · year</b> 와 메소드 <b>print()</b> 를 정했는데 수업 파일은 <code>Mname · score · Pname</code> · <code>showInfo()</code> 예요 → 위 코드는 문제대로 고쳤어요 (실행 결과 모양은 같음) · <code>double</code> 필드에 <code>10</code> 을 넣으면 <b>10.0</b> 으로 출력돼요.</div>
+</section>
+<section class="card">
+<h2>7. 📝 과제 — 7주 중간고사대비 (연습문제)</h2>
+<ul><li>2장 연습문제: 이론문제 <b>107 ~ 109쪽</b>, 실습문제 <b>1번 (110쪽)</b></li><li>3장 연습문제: 이론문제 <b>163 ~ 165쪽</b>, 실습문제 <b>1번 · 2번 (166쪽)</b></li><li>이론문제는 <b>문제를 풀고 정답만</b> 적어서 제출 · 실습문제는 <b>실행결과와 소스를 동시에 화면캡쳐</b>하여 제출</li></ul>
+<div class="tip">과제 답은 제출 과제라서 사이트에는 올리지 않았어요.</div>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
+<pre><code class="language-text">오늘한 Car,CarMain,Book,BookMain 까지가 시험범위
+자바 데이터타입 8가지 외우기 
+조건식 출력 true flase
+for문,배열
+if,else
+class 와 object
+객체지향의 특성</code></pre>
+<div class="tip">⚠️ 필기 오타 <code>flase</code> → <b>false</b></div>
+</details>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../자바프로그래밍.html#quiz">자바프로그래밍 과목 페이지 — 퀴즈 (7주차 생성자 · this · 데이터타입 포함)</a></li><li><a href="../자바프로그래밍.html#output">🖥️ 출력 결과 맞히기 — Car 생성자 · 데이터타입</a></li><li><a href="../자바프로그래밍.html#code">💻 코딩테스트 — Book 클래스 만들기</a></li><li><a href="자바프로그래밍-8주차-중간고사.html">중간고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-6주차.html">‹ 이전 · <b>6주차</b><br><small>3장 배열·예외 실습 + 4장 클래스와 객체</small></a><a class="next" href="자바프로그래밍-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「자바프로그래밍 · 7주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+</body>
+</html>

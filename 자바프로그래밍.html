@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202610122348"></script>
+    <script src="theme.js?v=202610131732"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>자바프로그래밍 · 완전 정리</title>
-    <link rel="stylesheet" href="style.css?v=202610122348">
-    <script src="schedule.js?v=202610122348"></script>
+    <link rel="stylesheet" href="style.css?v=202610131732">
+    <script src="schedule.js?v=202610131732"></script>
     <style>
         /* 출력 결과 박스 (프로그래밍언어실습.html 과 동일) */
         pre.io { background:#0f1b14; }
@@ -21,7 +21,7 @@
 
     <header class="page-head">
         <h1>자바프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 6주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체</p>
+        <p>1주차 ~ 7주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체 + 생성자 · this</p>
     </header>
 
     <div id="week-nav" data-subject="자바프로그래밍"></div>
@@ -60,6 +60,7 @@
         <a href="#s27">27.★클래스·객체</a>
         <a href="#s28">28.클래스실습</a>
         <a href="#s29">29.✍️PDF필기·🔥식별자</a>
+        <a href="#s30">30.🔥생성자·this·타입8</a>
         <a href="#quiz">✏️퀴즈</a>
         <a href="#output">🖥️출력맞히기</a>
         <a href="#code">💻코딩테스트</a>
@@ -1183,8 +1184,103 @@ public class 연습 {   // 원래 이름 Main → 파일 이름도 연습.java
         <div class="tip">✍️ 카멜 표기: 클래스 첫 글자 <b>대문자</b> · 변수 · 메소드 첫 글자 <b>소문자</b> · 상수 <b>전부 대문자</b> · byte 범위 −2ⁿ ~ (2ⁿ − 1) (n = 7 → −128 ~ 127) · int 는 4바이트 · long 은 L 을 붙여야 해서 int 를 선호 · 실수는 double 을 많이 씀(D 필수 X) · main() = “메서드 필수”<br>1장: “소스를 컴파일해서 기계어로 번역한다” · “자바(.java)를 실행하면 바이트(.class)로 바뀐다” · JVM = 동일한 자바 실행 환경 · 플랫폼 독립성 · public 클래스는 하나 · 자세히는 <a href="weeks/자바프로그래밍-3주차.html" target="_blank" rel="noopener">3주차</a> · <a href="weeks/자바프로그래밍-2주차.html" target="_blank" rel="noopener">2주차</a></div>
     </section>
 
+    <section class="card" id="s30">
+        <h2>30. 🔥 생성자 · this · 데이터타입 8가지 (시험범위 Car · Book 까지)<span class="week">7주차</span></h2>
+        <p><span class="wk-tag note">✍️ 필기</span> — <b>“오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위”</b> · <b>자바 데이터타입 8가지 외우기</b> · <b>조건식 출력 true / false</b> · for 문 · 배열 · if · else · class 와 object · 객체지향의 특성</p>
+        <pre><code class="language-java">// Car.java + CarMain.java 를 한 파일로 — 🔥 시험범위 (생성자 2개 · this · showInfo)
+class Car {                                     // 자동차 설계도(클래스) · public 은 파일 이름과 같은 클래스(연습)에만
+    String juin;                                // 필드: 소유주
+    String model;                               // 필드: 모델
+    int year;                                   // 필드: 연식
+
+    Car() {}                                    // 2-1. 기본 생성자 — 매개변수 없음 · 하는 일 없음
+    Car(String juin, String model, int year) {  // 2-2. 매개변수 생성자 — 객체를 만들면서 값까지 넣음
+        this.juin = juin;                       // this.juin = 이 객체의 필드 ← 오른쪽 juin = 매개변수 "내차"
+        this.model = model;                     // 필드 model ← 매개변수 "BMW M5"
+        this.year = year;                       // 필드 year ← 매개변수 2026
+    }                                           // 생성자 끝
+
+    void showInfo() {                           // 3. 메소드 — 자기 필드 값을 한 줄로 출력
+        System.out.println("소유주 : " + juin + "     모델 : " + model + "     연식 : " + year);   // 칸 사이 공백 5칸
+    }                                           // showInfo 끝
+}                                               // Car 클래스 끝
+
+public class 연습 {                              // 원래 이름 CarMain → 파일 이름 연습.java
+    public static void main(String[] args) {    // 프로그램이 시작되는 main
+        Car myCar = new Car("내차", "BMW M5", 2026);   // new → 메모리에 객체 생성 → 매개변수 생성자 호출
+        myCar.showInfo();                       // 소유주 : 내차     모델 : BMW M5     연식 : 2026
+
+        Car dadCar = new Car("아빠차", "롤스로이스 팬텀", 2025);   // 두 번째 객체 (myCar 와 따로)
+        dadCar.showInfo();                      // 소유주 : 아빠차     모델 : 롤스로이스 팬텀     연식 : 2025
+
+        Car momCar = new Car("엄마차", "페라리 SF90", 2024);   // 세 번째 객체
+        momCar.showInfo();                      // 소유주 : 엄마차     모델 : 페라리 SF90     연식 : 2024
+
+        Car empty = new Car();                  // 기본 생성자로 만들면 필드는 기본값 (String → null · int → 0)
+        empty.showInfo();                       // 소유주 : null     모델 : null     연식 : 0
+    }                                           // main 끝
+}                                               // 연습 클래스 끝</code></pre>
+        <pre class="io"><code class="language-text">소유주 : 내차     모델 : BMW M5     연식 : 2026
+소유주 : 아빠차     모델 : 롤스로이스 팬텀     연식 : 2025
+소유주 : 엄마차     모델 : 페라리 SF90     연식 : 2024
+소유주 : null     모델 : null     연식 : 0</code></pre>
+        <table class="ref">
+            <tr><th>코드</th><th>뜻</th></tr>
+            <tr><td>Car() {}</td><td><b>기본 생성자</b> — 매개변수 없음 · 필드는 기본값 (<code>String</code> → <code>null</code> · <code>int</code> → <code>0</code>)</td></tr>
+            <tr><td>Car(String juin, …)</td><td><b>매개변수 생성자</b> — <code>new Car("내차", "BMW M5", 2026)</code> 처럼 만들면서 값 넣기</td></tr>
+            <tr><td>this.juin = juin;</td><td><b>this</b> = 이 객체 자신 → 왼쪽은 <b>필드</b>, 오른쪽은 <b>매개변수</b></td></tr>
+            <tr><td>생성자 규칙</td><td>클래스 이름과 같음 · 반환형 없음 · <code>new</code> 할 때 자동으로 한 번 호출</td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>🔥 데이터타입 8가지</th><th>크기</th></tr>
+            <tr><td>byte · short · int · long</td><td>정수 1 · 2 · 4 · 8바이트 (<code>long</code> 은 끝에 L)</td></tr>
+            <tr><td>float · double</td><td>실수 4 · 8바이트 (<code>float</code> 는 끝에 F · 실수 기본은 double)</td></tr>
+            <tr><td>char</td><td>문자 2바이트 (<code>'A'</code>)</td></tr>
+            <tr><td>boolean</td><td>논리 1바이트 (true · false) · 조건식 <code>85 &gt;= 80</code> 은 <b>true</b> 로 출력</td></tr>
+        </table>
+        <div class="tip">String 은 기본 타입이 아니라 <b>클래스</b>라서 8가지에 안 들어가요 · Book · Student · Dog · Movie 실습과 데이터타입 예제 전체는 <a href="weeks/자바프로그래밍-7주차.html">7주차 페이지</a></div>
+        <h3>🔥 괄호넣기 — Book 클래스 ( ① ) ~ ( ③ )</h3>
+        <pre><code class="language-java">class Book {
+    String title;
+    String author;
+    Book() {
+    }
+    ( ① )(String title, String author) {
+        ( ② ).title = title;
+        this.author = author;
+    }
+    void showInfo() {
+        System.out.println("제목 : " + title + "     저자 : " + author);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Book mb1 = ( ③ ) Book("자바프로그래밍", "강은영");
+        mb1.showInfo();
+    }
+}</code></pre>
+        <div class="quiz-item" data-answers="Book" data-explain="생성자 이름 = 클래스 이름 (반환형 없음)">
+            <p class="quiz-q"><span class="quiz-cat">①</span>매개변수 생성자의 이름 ( ① ) 은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="this" data-explain="this.title = 이 객체의 필드 ← 매개변수 title">
+            <p class="quiz-q"><span class="quiz-cat">②</span>필드와 매개변수 이름이 같을 때 필드를 가리키는 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="new" data-explain="객체는 new 로 생성 → 메모리 할당 + 생성자 호출">
+            <p class="quiz-q"><span class="quiz-cat">③</span>객체를 만드는 ( ③ ) 키워드는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 22 · 주관식 22<span class="week">2~6주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 27 · 주관식 27<span class="week">2~7주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -1364,6 +1460,46 @@ public class 연습 {   // 원래 이름 Main → 파일 이름도 연습.java
             <button class="opt" type="button" data-opt="D"><b>D.</b> % 같은 특수문자는 첫 글자만 아니면 쓸 수 있다</button>
             <div class="mcq-exp"><b>정답 B</b> — 대소문자 구분(둘은 다름) · 길이 제한 없음 · 특수문자는 _ 와 $ 만 · 불린 · 널 리터럴(true, false, null)과 예약어는 불가</div>
         </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">23</span>🔥 7주차 — <b>생성자</b>에 대한 설명으로 <b>틀린</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 클래스 이름과 같다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 객체가 <code>new</code> 로 생성될 때 자동으로 호출된다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 반환형 <code>void</code> 를 반드시 써야 한다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 매개변수가 다른 생성자를 여러 개 만들 수 있다</button>
+            <div class="mcq-exp"><b>정답 C</b> — 생성자는 <b>반환형을 쓰지 않아요</b> (void 도 X) · Car 처럼 <code>Car()</code> · <code>Car(String, String, int)</code> 두 개 가능</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">24</span>🔥 7주차 Car — 생성자 안의 <code>this.juin = juin;</code> 에서 <code>this.juin</code> 이 가리키는 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 매개변수 juin</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 이 객체의 필드 juin</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> Car 클래스 이름</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> main 의 지역변수 juin</button>
+            <div class="mcq-exp"><b>정답 B</b> — this = 지금 만들어지는 <b>이 객체 자신</b> → this.juin 은 <b>필드</b>, 오른쪽 juin 은 매개변수</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">25</span>🔥 ✍️ 데이터타입 8가지 — <b>8바이트</b> 크기의 <b>정수</b> 타입은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>int</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>short</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>double</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>long</code></button>
+            <div class="mcq-exp"><b>정답 D</b> — 정수 byte 1 · short 2 · int 4 · <b>long 8</b> (double 은 8바이트 <b>실수</b>)</div>
+        </div>
+        <div class="mcq" data-correct="A">
+            <p class="mcq-q"><span class="mcq-no">26</span>🔥 ✍️ “조건식 출력 true false” — <code>int score = 85; System.out.println(score &gt;= 80);</code> 의 출력은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>true</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>1</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>85</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 컴파일 오류</button>
+            <div class="mcq-exp"><b>정답 A</b> — 자바의 조건식은 <b>true / false</b> 로 출력 (C 처럼 1 · 0 이 아님)</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">27</span>7주차 Car — 기본 생성자 <code>Car() {}</code> 로 만든 객체의 <code>String juin</code> · <code>int year</code> 필드 값은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>""</code> 와 <code>0</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>null</code> 과 <code>null</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>null</code> 과 <code>0</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>0</code> 과 <code>0</code></button>
+            <div class="mcq-exp"><b>정답 C</b> — 값을 안 넣은 필드는 기본값 — 레퍼런스(String) → <b>null</b> · int → <b>0</b> · double → 0.0 · boolean → false</div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers=".class|class" data-explain=".java → javac 컴파일 → .class (JVM 이 실행)">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>자바 소스를 컴파일하면 만들어지는 <b>바이트코드 파일</b>의 확장자는?</p>
@@ -1497,10 +1633,40 @@ public class 연습 {   // 원래 이름 Main → 파일 이름도 연습.java
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
+        <div class="quiz-item" data-answers="this|디스" data-explain="this = 이 객체 자신 · 필드와 매개변수 이름이 같을 때 this.필드 로 구분">
+            <p class="quiz-q"><span class="quiz-cat">주관식 23</span>🔥 7주차 — 생성자 안에서 <b>지금 만들어지는 객체 자신</b>을 가리키는 키워드는? (<code>___.juin = juin;</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="기본 생성자|기본생성자|디폴트 생성자|디폴트생성자|default constructor|기본 생성자 메소드" data-full="기본 생성자" data-explain="Car() {} = 매개변수가 없는 기본 생성자 (✍️ 수업 코드 주석 “2-1. 기본생성자”)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 24</span>🔥 7주차 Car — <code>Car() {}</code> 처럼 <b>매개변수가 없는</b> 생성자를 무엇이라 하나요?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="double|더블" data-explain="실수 float 4바이트 · double 8바이트 (실수 기본형)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 25</span>🔥 ✍️ 데이터타입 8가지 — <b>8바이트 실수</b> 타입(실수의 기본형)은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="boolean|불리언|불린|논리형|boolean형|bool" data-explain="boolean = true · false 만 저장 · 조건식의 결과 타입">
+            <p class="quiz-q"><span class="quiz-cat">주관식 26</span>🔥 ✍️ 데이터타입 8가지 — <b>true · false</b> 만 저장하는 타입은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="1|1바이트|1byte|1 byte|1 바이트" data-explain="byte = 1바이트 정수 (−128 ~ 127) · short 2 · int 4 · long 8">
+            <p class="quiz-q"><span class="quiz-cat">주관식 27</span>🔥 ✍️ 데이터타입 8가지 — <code>byte</code> 타입의 크기는 몇 바이트? (숫자)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
     </section>
 
     <section class="card" id="output">
-        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~6주차</span></h2>
+        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~7주차</span></h2>
         <div class="tip">📝 시험의 <b>“실행결과를 쓰시오”</b> 대비 — 코드를 눈으로 따라가며 화면에 찍힐 결과를 적고 <b>확인</b>을 누르세요. 줄마다 <b>Enter</b>, 띄어쓰기 개수·빈 줄은 채점에서 무시하고 <b>글자·숫자·기호</b>는 정확히 봐요 (칸수 문제만 띄어쓰기까지). <code>print</code> 는 줄을 안 바꾸고 <code>println</code> 은 바꿔요. 정답은 모두 <b>실제로 실행한 결과</b>예요.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="oq-score"></div>
@@ -1917,10 +2083,62 @@ public class Main {
 </script>
             <div class="oq-why">💡 <b>풀이</b> — showInfo() 는 문자열을 <b>return</b> 만 해요 → println 으로 감싼 두 줄만 찍히고, 마지막 <code>pap.showInfo();</code> 는 아무것도 출력하지 않아요 · cheese 가격 = 1000 + 500</div>
         </div>
+        <div class="oq" id="oq-oj20">
+            <p class="oq-q"><span class="oq-no">20</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">7주차 · 생성자 · 타입</span></p>
+            <pre><code class="language-java">class Car {
+    String juin;
+    int year;
+    Car() {}
+    Car(String juin, int year) {
+        this.juin = juin;
+        this.year = year;
+    }
+    void showInfo() {
+        System.out.println(juin + " " + year);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Car a = new Car("내차", 2026);
+        Car b = new Car();
+        a.showInfo();
+        b.showInfo();
+        b.year = a.year - 1;
+        b.showInfo();
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+내차 2026
+null 0
+null 2025
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — a 는 매개변수 생성자 → this.juin = "내차" · this.year = 2026 / b 는 기본 생성자 → 필드 기본값 String <b>null</b> · int <b>0</b> → 그다음 b.year = 2026 − 1 = 2025 (juin 은 그대로 null)</div>
+        </div>
+        <div class="oq" id="oq-oj21">
+            <p class="oq-q"><span class="oq-no">21</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">7주차 · 생성자 · 타입</span></p>
+            <pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        int score = 85;
+        char c = 'A';
+        double d = 10;
+        System.out.println(score &gt;= 80);
+        System.out.println(score == 100 || c == 'A');
+        System.out.println(d);
+        System.out.println(score / 2);
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+true
+true
+10.0
+42
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 85 &gt;= 80 → <b>true</b> · (85 == 100) false || ('A' == 'A') true → <b>true</b> · double 에 10 → <b>10.0</b> · 정수 85 / 2 → 몫 <b>42</b></div>
+        </div>
     </section>
 
     <section class="card" id="code">
-        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~6주차</span></h2>
+        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~7주차</span></h2>
         <div class="tip">📝 문제를 읽고 <b>전체 소스코드</b>를 붙여넣은 뒤 <b>▶ 채점하기</b>를 누르세요. 입력 예 말고도 <b>숨은 테스트</b> 여러 개로 실제로 실행해서 출력이 모두 같아야 통과예요. Java 는 인터넷의 채점 서버(Wandbox · OpenJDK)에서 실행돼요. <code>package</code> 줄이나 클래스 이름은 그대로 붙여넣어도 괜찮아요. 입력은 <code>Scanner</code> 로 받습니다.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드를 채점 문제로 만든 것 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="ct-score"></div>
@@ -2256,6 +2474,44 @@ public class Main {
 }
 </script>
         </div>
+        <div class="ct" id="ct-j13" data-lang="java" data-must="[&quot;class\\s+Book&quot;, &quot;Book\\s*\\(\\s*String&quot;, &quot;this\\.title&quot;, &quot;new\\s+Book\\s*\\(&quot;]" data-must-msg="class Book · 생성자 Book(String …) · this.title · new Book( 를 모두 써야 해요.">
+            <p class="ct-q"><span class="ct-no">13</span>Book 클래스 — 생성자로 객체 두 개<span class="ct-tag">7주차 · 생성자 · this</span></p>
+            <p class="ct-desc">필드 <code>title</code> · <code>author</code> 와 <b>매개변수 생성자</b> <code>Book(String title, String author)</code>(<code>this</code> 로 필드에 넣기), <code>"제목 : 제목     저자 : 저자"</code>(칸 사이 공백 5칸)를 출력하는 <code>showInfo()</code> 를 가진 <b>Book 클래스</b>를 만들고, main 에서 제목 · 저자를 두 번 입력받아 <code>new Book(…)</code> 객체 2개를 만든 뒤 차례로 출력하세요. (public 클래스 이름은 Main)</p>
+            <div class="ct-ex"><pre class="io ct-in"><code>자바프로그래밍 강은영 웹프로그래밍 장용미</code></pre><pre class="io ct-out"><code>제목 : 자바프로그래밍     저자 : 강은영
+제목 : 웹프로그래밍     저자 : 장용미</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Book 클래스 — 생성자로 객체 두 개 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "자바프로그래밍 강은영 웹프로그래밍 장용미\n", "expect": "제목 : 자바프로그래밍     저자 : 강은영\n제목 : 웹프로그래밍     저자 : 장용미\n"}, {"stdin": "데이터베이스 김희숙 운영체제실습 김현정\n", "expect": "제목 : 데이터베이스     저자 : 김희숙\n제목 : 운영체제실습     저자 : 김현정\n"}, {"stdin": "명품자바 황기태 C언어 홍길동\n", "expect": "제목 : 명품자바     저자 : 황기태\n제목 : C언어     저자 : 홍길동\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+import java.util.Scanner;
+
+class Book {                            // 책 설계도
+    String title;                       // 필드: 제목
+    String author;                      // 필드: 저자
+
+    Book(String title, String author) { // 매개변수 생성자
+        this.title = title;             // this.필드 ← 매개변수
+        this.author = author;
+    }
+
+    void showInfo() {                   // 정보 출력 (칸 사이 공백 5칸)
+        System.out.println("제목 : " + title + "     저자 : " + author);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Book b1 = new Book(sc.next(), sc.next());   // 제목 저자
+        Book b2 = new Book(sc.next(), sc.next());
+        b1.showInfo();
+        b2.showInfo();
+        sc.close();
+    }
+}
+</script>
+        </div>
     </section>
 
 
@@ -2263,10 +2519,10 @@ public class Main {
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="quiz.js?v=202610122348"></script>
-<script src="review.js?v=202610122348"></script>
-<script src="weeks.js?v=202610122348"></script>
-<script src="codetest.js?v=202610122348"></script>
-<script src="outquiz.js?v=202610122348"></script>
+<script src="quiz.js?v=202610131732"></script>
+<script src="review.js?v=202610131732"></script>
+<script src="weeks.js?v=202610131732"></script>
+<script src="codetest.js?v=202610131732"></script>
+<script src="outquiz.js?v=202610131732"></script>
 </body>
 </html>
