@@ -121,7 +121,14 @@ window.isExamFinished("X.html")                      // → true/false
 - **새 페이지**: `<head>` 의 `<meta charset>` 바로 다음 줄에 `<script src="theme.js"></script>` (weeks/ 안은 `../theme.js`). 다크 전용 CSS 는 페이지에 따로 쓰지 말고 화이트 기준으로만 작성하세요. 새 공용 부품의 다크 색을 정확히 맞추고 싶으면 `DARK_CSS` 에 `html[data-theme=dark] .클래스{…}` 한 줄을 추가합니다.
 - 오른쪽 위(`top:14px; right:14px`, 44px)는 전환 버튼 자리라 고정 UI 를 두지 않습니다. 변환에서 빼고 싶은 요소는 `data-theme-skip` 속성.
 - 전환 버튼을 누르면 버튼 자리에서 **원이 퍼지며** 모드가 바뀝니다(View Transitions 지원 브라우저, 나머지는 바로 전환).
-- ⚠️ **캐시 주의**: GitHub Pages 는 JS·CSS 를 10분 캐시하고 크롬은 새로고침해도 HTML 만 새로 받습니다. `theme.js`·`codecolor.js`·`motion.js`·`outview.js`·`style.css`·`quiz.js`·`review.js`·`weeks.js`·`schedule.js`·`codetest.js`·`outquiz.js` 를 고쳤으면 커밋 전에 **`python3 scripts/bump_assets.py`** 를 실행하세요(모든 페이지의 `?v=` 를 갱신, codecolor.js·motion.js·outview.js 는 theme.js 의 버전을 이어받음).
+- ⚠️ **캐시 주의**: GitHub Pages 는 JS·CSS 를 10분 캐시하고 크롬은 새로고침해도 HTML 만 새로 받습니다. `theme.js`·`codecolor.js`·`motion.js`·`outview.js`·`style.css`·`quiz.js`·`review.js`·`weeks.js`·`schedule.js`·`codetest.js`·`outquiz.js`·`ink.js` 를 고쳤으면 커밋 전에 **`python3 scripts/bump_assets.py`** 를 실행하세요(모든 페이지의 `?v=` 를 갱신, codecolor.js·motion.js·outview.js 는 theme.js 의 버전을 이어받음).
+
+### ✏️ 주차 페이지 필기 — `ink.js` (2026-10-13)
+- 주차 페이지(전공 `weeks/*.html` · 교양 `liberal-arts-courses/weeks/*.html`) 왼쪽 아래 **✏️ 버튼** → 필기 모드: Apple Pencil(펜) · 마우스로 페이지 위에 직접 쓰기, **손가락은 그대로 스크롤**(☝️ 를 켜면 손가락으로도 쓰기).
+- 도구: 빨강 · 파랑 · 글자색 펜, 형광펜, 지우개(획 단위), 되돌리기 · 다시 하기(⌘Z · ⇧⌘Z), 필기 숨기기, 이 쪽 필기 모두 지우기, 완료(Esc).
+- 필기는 **그 기기 브라우저(IndexedDB `study-ink`)에 쪽 주소별로 저장** — 다른 기기 · 브라우저와 공유되지 않음.
+- 획마다 그 자리의 글 블록(문단 · 코드 · 표 · 접기 안 내용)에 붙여 저장 → 스크롤 · 접기 열고 닫기 · 위쪽 내용 높이 변화에 따라감. 화면 폭이 크게 바뀌면 줄바꿈 때문에 조금 어긋날 수 있음.
+- 주차 페이지 틀(`scripts/build_weeks.py` 의 `PAGE`) 끝에서 `<script src="{asset}ink.js?v=…">` 로 불러옴 → 빌드하면 모든 주차 페이지에 들어감.
 
 ### ✨ 애니메이션 · 인터랙션 — `motion.js` (토스 앱 느낌)
 theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다. 색은 **화이트 = 원래 초록·주황 토큰, 다크 = 파랑·무채색**(녹색 없음)이고, 기기의 **동작 줄이기**를 켜면 움직임은 모두 빠집니다(진행 막대·상단 바·맨 위로 버튼·포커스 테두리만 남음).
