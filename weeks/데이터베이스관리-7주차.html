@@ -202,7 +202,7 @@ insert into dmember values('조영수','101');       -- 성공
 insert into dmember values('윤희근','100');       -- ✍️ 본인 이름 1개 추가 (과제 요구)
 
 select * from dept;                             -- 학과 2행
-select * from dmember;                          -- 학생 4행 — 기본키(name) 순서로 보임
+select * from dmember;                          -- 학생 4행
 
 COMMIT;                                         -- 확정 (MySQL)</code></pre>
 <p><code>select * from dept;</code></p>
@@ -212,13 +212,13 @@ COMMIT;                                         -- 확정 (MySQL)</code></pre>
 <tr><td>100</td><td>컴퓨터공학과</td></tr>
 <tr><td>101</td><td>산업공학과</td></tr>
 </tbody></table>
-<p><code>select * from dmember;</code> — 기본키(name) 순서로 보여요</p>
+<p><code>select * from dmember;</code> — 실제 MySQL 8.4 결과 (외래키 dept_id 인덱스 순서로 나와요 · 행 순서는 채점하지 않아요)</p>
 <table class="ref">
 <tbody>
 <tr><th>name</th><th>dept_id</th></tr>
 <tr><td>김광식</td><td>100</td></tr>
-<tr><td>김현정</td><td>101</td></tr>
 <tr><td>윤희근</td><td>100</td></tr>
+<tr><td>김현정</td><td>101</td></tr>
 <tr><td>조영수</td><td>101</td></tr>
 </tbody></table>
 <div class="tip">⚠️ <b>정정 (내 필기)</b> — 필기의 <code>1)dept 2)dmember</code> → 삭제는 <b>자식 먼저</b>라 <b>1) dmember · 2) dept</b> (내 완성 코드도 dmember 를 먼저 지웠어요) · 필기의 <code>5)FOREIGN KEY REFERENCE dept(dept_id);</code> → <b>5) 는 dept_id 의 자료형 char(3)</b> 이고 외래키는 <b>6)</b> · 그리고 <b>REFERENCE&lt;u&gt;S&lt;/u&gt;</b> (S 가 빠지면 문법 오류) · 강의자료는 데이터베이스 <b>studydb</b>, 수업은 <b>testdb</b> 에서 했어요.</div>
