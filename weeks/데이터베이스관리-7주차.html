@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610141332"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 7주차 · ALTER · GRANT/REVOKE · Quiz 7-3 기본키 · 외래키 테이블 생성</title>
+    <link rel="stylesheet" href="../style.css?v=202610141332">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 7주차</h1>
+        <p>ALTER · GRANT/REVOKE · Quiz 7-3 기본키 · 외래키 테이블 생성</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-6주차.html">‹ 이전 · <b>6주차</b><br><small>무결성 제약조건 · SELECT · UPDATE · DELETE</small></a><a class="next" href="데이터베이스관리-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
+
+<div class="tip">자료: 노션 7주차 필기 + 수업 화면 사진 1장 · 7주차 폴더 <code>필기(원본).txt</code>(교수님 실습 원본) · DB-Lect07-alter-grant-stu-pdf.pdf (PDF 펜 필기 없음) — 원본 txt 에 없고 <b>내가 쓴 것은 ✍️</b> 로 표시했어요. 결과 표는 사이트 채점기(sql.js = 브라우저 SQLite, 수업 MySQL 처럼 맞춤)로 실행한 값이에요.</div>
+<div class="tip">🔥 <b>시험 (✍️ 필기)</b> — “<b>오늘 나오는 것은 시험에서 10%가 나온다</b>” · <b>ALTER ADD (시험에 나옴)</b> — “<b>추가하는 게 시험문제임</b>” · 강의자료 <b>8 · 9쪽(Quiz 7-3) = 시험에 나오는 페이지</b> · DDL · DML · DCL <b>약어도 시험에 나옴</b> · DML 은 <b>시험의 70%</b> (직접 쓰는 문법이 나올 수 있음) · <b>GRANT · REVOKE 는 중간고사에 안 나옴</b></div>
+<div class="tip">📚 <b>중간고사 범위 (✍️)</b> — 교재 <b>1 · 2 · 3장(중요) · 5 · 6장</b> · 수업은 <b>2주차 ~ 7주차</b> · <b>중간고사는 객관식이 없음</b> → SQL 을 직접 쓰고 빈칸을 채우는 연습이 중요해요.</div>
+<section class="card">
+<h2>1. 🔥 데이터베이스 언어(SQL) 3가지 — 약어도 시험 ✍️</h2>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>종류</th><th>약어 (✍️ 시험)</th><th>명령</th><th>✍️ 필기</th></tr>
+<tr><td>데이터 <b>정의어</b></td><td><b>DDL</b> (Data Definition Language)</td><td><code>CREATE</code> · <code>DROP</code> · <code>ALTER</code></td><td>ALTER <b>10%</b> 나옴</td></tr>
+<tr><td>데이터 <b>조작어</b></td><td><b>DML</b> (Data Manipulation Language)</td><td><code>SELECT</code> · <code>INSERT</code> · <code>UPDATE</code> · <code>DELETE</code></td><td>시험에 <b>70%</b> · 직접 쓰는 문법이 나올 수 있음</td></tr>
+<tr><td>데이터 <b>제어어</b></td><td><b>DCL</b> (Data Control Language)</td><td><code>GRANT</code> · <code>REVOKE</code></td><td>중간고사엔 안 나옴</td></tr>
+</tbody></table>
+<div class="tip">📌 DDL = 테이블 <b>구조(틀)</b> 를 만들고 · 바꾸고 · 없앰 / DML = 테이블 안의 <b>데이터(행)</b> 를 조회 · 입력 · 수정 · 삭제 / DCL = 사용자 <b>권한</b>을 주고 · 뺏음</div>
+</section>
+<section class="card">
+<h2>2. 데이터베이스 사용자 ✍️</h2>
+<table class="ref">
+<tbody>
+<tr><th>사용자</th><th>하는 일</th></tr>
+<tr><td>1. <b>데이터베이스 관리자 (DBA)</b></td><td>✍️ <b>root</b> — 데이터베이스 전체를 만들고 관리 · 사용자 권한 관리 (GRANT · REVOKE)</td></tr>
+<tr><td>2. <b>응용 프로그래머</b></td><td>데이터베이스를 쓰는 프로그램(앱)을 만드는 사람</td></tr>
+<tr><td>3. <b>일반 사용자 (최종 사용자)</b></td><td>만들어진 프로그램으로 데이터를 조회 · 입력하는 사람</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>3. 🔥 [실습 7-2] ALTER — 필드 추가 · 수정 · 삭제 (6쪽)</h2>
+<div class="tip"><b>ALTER</b> = 테이블의 <b>구조를 변경</b> (필드 추가 / 수정 / 삭제) — 강의자료 6쪽 · 문제: 1) budget 필드를 추가하라(int) 2) projname 필드의 데이터형식을 수정하라(varchar) 3) budget 필드를 삭제하라</div>
+<h3>① 🔥 필드 추가 — ADD (✍️ “추가하는 게 시험문제임”)</h3>
+<pre><code class="language-sql">-- [실습 7-2] project 테이블 만들기 (수업 코드)
+CREATE TABLE project (                          -- project 테이블 만들기 시작
+     projno           int	      NOT NULL ,     -- 프로젝트 번호 — 정수 · 필수
+     projname       char(20) ,                  -- 프로젝트 이름 — 고정 20자 문자
+     period           int                       -- 기간 — 정수
+);                                              -- CREATE TABLE 끝 (기본키 없음)
+INSERT INTO project VALUES(111,'작전중',2);      -- 111 · 작전중 · 2
+INSERT INTO project VALUES(222,'특공대',3);      -- 222 · 특공대 · 3
+INSERT INTO project VALUES(444,'다모여',1);      -- 444 · 다모여 · 1
+INSERT INTO project VALUES(333,'유레카',2);      -- 333 · 유레카 · 2
+
+-- 1) budget 필드를 추가하라 : 데이터형식 int   ← ✍️ "추가하는 게 시험문제임"
+ALTER TABLE project                             -- project 테이블의 구조를 바꾼다
+ADD budget int;                                 -- budget(int) 열을 맨 끝에 추가 → 기존 4행의 budget 은 값이 없어서 NULL
+DESC project;                                   -- 구조 확인 (MySQL) → projno · projname · period · budget 4개 필드
+SELECT * FROM project;                          -- 4행 × 4열 — budget 칸은 전부 NULL</code></pre>
+<p><code>SELECT * FROM project;</code> 의 결과 — budget 은 값을 넣은 적이 없어서 <b>NULL</b></p>
+<table class="ref">
+<tbody style="min-width:426px;">
+<tr><th>projno</th><th>projname</th><th>period</th><th>budget</th></tr>
+<tr><td>111</td><td>작전중</td><td>2</td><td>NULL</td></tr>
+<tr><td>222</td><td>특공대</td><td>3</td><td>NULL</td></tr>
+<tr><td>444</td><td>다모여</td><td>1</td><td>NULL</td></tr>
+<tr><td>333</td><td>유레카</td><td>2</td><td>NULL</td></tr>
+</tbody></table>
+<h3>② 필드 수정 — MODIFY (MySQL · Oracle)</h3>
+<pre><code class="language-sql">-- 2) projname 필드의 데이터형식을 수정하라 : varchar
+ALTER TABLE project                             -- project 테이블의 구조를 바꾼다
+MODIFY projname varchar(20);                    -- projname 의 자료형 char(20) → varchar(20) (데이터는 그대로)
+DESC project;                                   -- projname 의 Type 이 varchar(20) 으로 바뀐 것 확인</code></pre>
+<div class="tip"><span class="wk-tag note">✍️ 필기</span> — “이건 <b>MySQL · Oracle</b> 에서 돌아가고 <b>MS-SQL 은 다른 문법</b>이다” (🤖 MS-SQL 은 <code>ALTER TABLE project ALTER COLUMN projname varchar(20);</code>) · 사이트 채점기(SQLite)는 MODIFY 를 지원하지 않아서 결과 표 없이 문법만 실었어요.</div>
+<h3>③ 필드 삭제 — DROP COLUMN</h3>
+<pre><code class="language-sql">-- 3) budget 필드를 삭제하라 (위에 이어서)
+CREATE TABLE project (                          -- 같은 project 테이블
+     projno           int	      NOT NULL ,     -- 프로젝트 번호
+     projname       char(20) ,                  -- 프로젝트 이름
+     period           int                       -- 기간
+);                                              -- CREATE TABLE 끝
+INSERT INTO project VALUES(111,'작전중',2);      -- 데이터 4행
+INSERT INTO project VALUES(222,'특공대',3);      -- 〃
+INSERT INTO project VALUES(444,'다모여',1);      -- 〃
+INSERT INTO project VALUES(333,'유레카',2);      -- 〃
+ALTER TABLE project ADD budget int;             -- 1) budget 추가 → 열 4개
+ALTER TABLE project                             -- 구조를 다시 바꾼다
+DROP COLUMN budget;                             -- budget 열을 통째로 삭제 → 그 열의 값도 같이 사라짐
+SELECT * FROM project;                          -- 처음처럼 projno · projname · period 3열</code></pre>
+<p><code>SELECT * FROM project;</code> 의 결과 — budget 열이 없어짐</p>
+<table class="ref">
+<tbody>
+<tr><th>projno</th><th>projname</th><th>period</th></tr>
+<tr><td>111</td><td>작전중</td><td>2</td></tr>
+<tr><td>222</td><td>특공대</td><td>3</td></tr>
+<tr><td>444</td><td>다모여</td><td>1</td></tr>
+<tr><td>333</td><td>유레카</td><td>2</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>할 일</th><th>문법</th><th>예</th></tr>
+<tr><td>필드 <b>추가</b></td><td><code>ALTER TABLE 테이블 ADD 필드 자료형;</code></td><td><code>ALTER TABLE project ADD budget int;</code></td></tr>
+<tr><td>필드 <b>수정</b></td><td><code>ALTER TABLE 테이블 MODIFY 필드 자료형;</code></td><td><code>ALTER TABLE project MODIFY projname varchar(20);</code></td></tr>
+<tr><td>필드 <b>삭제</b></td><td><code>ALTER TABLE 테이블 DROP COLUMN 필드;</code></td><td><code>ALTER TABLE project DROP COLUMN budget;</code></td></tr>
+</tbody></table>
+<div class="tip">⚠️ <b>정정 (내 필기)</b> — 첫 필기의 <code>ADD budget char(20)</code> → 문제는 <b>int</b> · <code>MODIFY budget int</code> / 실습 코드의 <code>MODIFY budget varchar(20)</code> → 문제 2번은 <b>projname</b> 을 varchar 로 · 첫 필기의 <code>DROP COLUMN budget;</code> 앞에 <b><code>ALTER TABLE project</code></b> 가 빠졌어요 (ALTER 는 세 가지 모두 <code>ALTER TABLE 테이블명</code> 으로 시작). ALTER(DDL)는 <b>구조</b>를, UPDATE(DML)는 <b>값</b>을 바꿔요.</div>
+</section>
+<section class="card">
+<h2>4. 🔥 [Quiz 7-3] 테이블 2개 — dept · dmember (8 · 9쪽 = 시험에 나오는 페이지)</h2>
+<h3>8쪽 — 기본키 · 외래키 주의사항 · 테이블명세서</h3>
+<table class="ref">
+<tbody>
+<tr><th>8쪽 질문</th><th>답</th><th>까닭</th></tr>
+<tr><td>1) 테이블 <b>생성</b> 순서는?</td><td><b>dept → dmember</b> (부모 → 자식)</td><td>자식을 먼저 만들면 참조할 부모가 없음 → Error <b>1824</b></td></tr>
+<tr><td>2) 테이블 <b>삭제</b> 순서는?</td><td><b>dmember → dept</b> (자식 → 부모)</td><td>부모를 먼저 지우면 자식이 참조 중 → Error <b>3730</b></td></tr>
+<tr><td>3) 데이터 <b>입력</b> 순서는?</td><td><b>dept → dmember</b> (부모 → 자식)</td><td>부모에 없는 학과 번호를 넣으면 → Error <b>1452</b></td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>테이블명세서 ? 칸</th><th>답</th></tr>
+<tr><td>dmember.dept_id 의 <b>데이터 형식</b></td><td><b>char(3)</b> — 참조하는 <code>dept.dept_id</code> 와 <b>같은 자료형</b> (다르면 Error 3780 · 4주차 필기 “FOREIGN KEY 는 참조하는 열과 데이터 형식이 같아야”)</td></tr>
+<tr><td><b>FK 테이블명</b></td><td><b>dept</b></td></tr>
+<tr><td><b>FK 열 이름</b></td><td><b>dept_id</b></td></tr>
+</tbody></table>
+<h3>9쪽 — 빈칸 1) ~ 6)</h3>
+<table class="ref">
+<tbody>
+<tr><th>빈칸</th><th>답</th></tr>
+<tr><td>1) <code>DROP TABLE if exists ( 1 );</code></td><td><b>dmember</b> (자식 먼저)</td></tr>
+<tr><td>2) <code>DROP TABLE if exists ( 2 );</code></td><td><b>dept</b></td></tr>
+<tr><td>3) <code>( 3 ) TABLE dept (</code></td><td><b>CREATE</b></td></tr>
+<tr><td>4) <code>( 4 ) KEY(dept_id)</code></td><td><b>PRIMARY</b></td></tr>
+<tr><td>(번호 없음) <code>(   ) TABLE dmember (</code></td><td><b>CREATE</b></td></tr>
+<tr><td>5) <code>dept_id ( 5 ) ,</code></td><td><b>char(3)</b></td></tr>
+<tr><td>(번호 없음) <code>(   ) KEY(name)</code></td><td><b>PRIMARY</b></td></tr>
+<tr><td>6) <code>CONSTRAINT fk_dmember_dept ( 6 )</code></td><td><b>FOREIGN KEY(dept_id) REFERENCES dept(dept_id)</b></td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- [Quiz 7-3] dept(부모) · dmember(자식) — 9쪽 빈칸을 채운 완성 코드
+use testdb;                                     -- 수업은 testdb (강의자료는 studydb)
+
+DROP TABLE if exists dmember;                   -- 1) 삭제는 자식 먼저 → dmember
+DROP TABLE if exists dept;                      -- 2) 그다음 부모 → dept
+
+CREATE TABLE dept (                             -- 3) CREATE — 생성은 부모 먼저
+  dept_id   char(3)		    NOT NULL ,           -- 학과 번호 — 문자 3자리 · 필수
+  name      varchar(20) ,                       -- 학과 이름 — 최대 20자
+  PRIMARY KEY(dept_id)                          -- 4) PRIMARY — dept_id 가 기본키
+);                                              -- dept 끝
+
+CREATE TABLE dmember (                          -- (빈칸) CREATE — 자식 테이블
+  name      varchar(10)             NOT NULL ,  -- 이름 — 최대 10자 · 필수
+  dept_id   char(3) ,                           -- 5) char(3) — 참조하는 dept.dept_id 와 같은 자료형
+  PRIMARY KEY(name)    ,                        -- (빈칸) PRIMARY — name 이 기본키
+  CONSTRAINT fk_dmember_dept FOREIGN KEY(dept_id) REFERENCES dept(dept_id)   -- 6) 외래키: dept_id 는 dept(dept_id) 에 있는 값만
+);                                              -- dmember 끝
+
+INSERT INTO dept VALUES('100', '컴퓨터공학과');   -- 입력도 부모 먼저 — 100 · 컴퓨터공학과
+INSERT INTO dept VALUES('101', '산업공학과');     -- 101 · 산업공학과
+
+insert into dmember values('김광식','100');       -- 100 은 dept 에 있음 → 성공
+insert into dmember values('김현정','101');       -- 101 있음 → 성공
+insert into dmember values('조영수','101');       -- 성공
+insert into dmember values('윤희근','100');       -- ✍️ 본인 이름 1개 추가 (과제 요구)
+
+select * from dept;                             -- 학과 2행
+select * from dmember;                          -- 학생 4행 — 기본키(name) 순서로 보임
+
+COMMIT;                                         -- 확정 (MySQL)</code></pre>
+<p><code>select * from dept;</code></p>
+<table class="ref">
+<tbody>
+<tr><th>dept_id</th><th>name</th></tr>
+<tr><td>100</td><td>컴퓨터공학과</td></tr>
+<tr><td>101</td><td>산업공학과</td></tr>
+</tbody></table>
+<p><code>select * from dmember;</code> — 기본키(name) 순서로 보여요</p>
+<table class="ref">
+<tbody>
+<tr><th>name</th><th>dept_id</th></tr>
+<tr><td>김광식</td><td>100</td></tr>
+<tr><td>김현정</td><td>101</td></tr>
+<tr><td>윤희근</td><td>100</td></tr>
+<tr><td>조영수</td><td>101</td></tr>
+</tbody></table>
+<div class="tip">⚠️ <b>정정 (내 필기)</b> — 필기의 <code>1)dept 2)dmember</code> → 삭제는 <b>자식 먼저</b>라 <b>1) dmember · 2) dept</b> (내 완성 코드도 dmember 를 먼저 지웠어요) · 필기의 <code>5)FOREIGN KEY REFERENCE dept(dept_id);</code> → <b>5) 는 dept_id 의 자료형 char(3)</b> 이고 외래키는 <b>6)</b> · 그리고 <b>REFERENCE&lt;u&gt;S&lt;/u&gt;</b> (S 가 빠지면 문법 오류) · 강의자료는 데이터베이스 <b>studydb</b>, 수업은 <b>testdb</b> 에서 했어요.</div>
+<h3>이런 순서로 하면 오류 (채점기로 직접 확인)</h3>
+<table class="ref">
+<tbody>
+<tr><th>잘못한 것</th><th>결과</th></tr>
+<tr><td>dmember 를 dept 보다 <b>먼저 CREATE</b></td><td>❌ Error <b>1824</b> Failed to open the referenced table 'dept'</td></tr>
+<tr><td>dmember.dept_id 를 <b>int</b> 로 (부모는 char(3))</td><td>❌ Error <b>3780</b> … are incompatible (자료형이 달라요)</td></tr>
+<tr><td>dept 를 dmember 보다 <b>먼저 DROP</b></td><td>❌ Error <b>3730</b> Cannot drop table 'dept' referenced by a foreign key constraint</td></tr>
+<tr><td><code>insert into dmember values('홍길동','999');</code> (999 학과 없음)</td><td>❌ Error <b>1452</b> Cannot add or update a child row: a foreign key constraint fails</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2>5. [실습 7-1] GRANT · REVOKE — 사용자 권한 관리 (✍️ 중간고사엔 안 나옴)</h2>
+<div class="tip">원본 실습은 <b>학과</b> 테이블, 수업은 ✍️ <b>project 테이블</b>로 했어요 (사진 · 필기). 4 · 5쪽.</div>
+<pre><code class="language-sql">-- (root) 1. 데이터베이스 생성
+CREATE DATABASE testdb                          -- root 가 쓸 데이터베이스
+   default character set utf8mb4;               -- 한글 · 이모지까지 저장되는 문자 집합
+CREATE DATABASE kimdb                           -- kim 사용자가 쓸 데이터베이스
+   default character set utf8mb4;               -- 〃
+
+-- (root) 2. 사용자 생성 — ✍️ 수업은 GUI(Workbench)로 kim 을 만들었음
+CREATE USER 'kim'@'localhost' IDENTIFIED BY 'kim';         -- 4쪽: 아이디 kim · 비밀번호 kim (이 컴퓨터에서만 접속)
+GRANT ALL ON kimdb.* TO 'kim'@'localhost' WITH GRANT OPTION;   -- 4쪽: kimdb 의 모든 권한 + 남에게 줄 수 있는 권한까지
+
+-- (root) 4. 권한부여 — testdb.project 를 kim 이 조회 · 입력할 수 있게
+GRANT SELECT, INSERT ON testdb.project TO 'kim'@'localhost';   -- ✍️ 사진에서는 'kim'@'127.0.0.1' (localhost 와 같은 뜻의 IP)
+
+-- (kim) 접속해서 확인
+use kimdb;                                      -- kim 의 데이터베이스로
+select * from project;                          -- ✍️ error — kimdb 에는 project 가 없음
+select * from testdb.project;                   -- ✍️ ok — 데이터베이스이름.테이블이름 으로 root 의 표를 조회 (SELECT 권한)
+insert into testdb.project value(999,'가나다',10);   -- INSERT 권한이 있어서 성공 (MySQL 은 VALUE 도 VALUES 처럼 받아 줌)
+
+-- (root) 권한취소 — INSERT 만 뺏기
+REVOKE INSERT ON testdb.project FROM 'kim'@'localhost';    -- 이제 kim 은 조회만 가능 → 다시 insert 하면 권한 오류</code></pre>
+<div class="tip">📌 GRANT 는 <b>TO</b> 사용자, REVOKE 는 <b>FROM</b> 사용자 · <code>testdb.project</code> = 데이터베이스 <b>testdb</b> 의 테이블 <b>project</b> · 사이트 채점기는 데이터베이스 · 사용자가 하나뿐이라 GRANT · REVOKE 는 실행 결과 없이 실었어요.</div>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로 · 첫 코드 블록은 원본 txt 를 붙여 둔 것이라 생략)</summary>
+<pre><code class="language-text">오늘 나오는것은 시험에서 10%가 나온다</code></pre>
+<pre><code class="language-sql">중간고사 교재 시험범위:1,2,3(중요),5,6  수업은:2주차~7주차 중간고사는 객관식이 없음
+[이론] 데이터베이스 언어(SQL):
+CREATE
+DROP
+ALTER(10%나옴)
+1. 데이터 정의어(DDL(약어도 시험에 나옴)):
+2. 데이터 조작어(DML(약어도 시험에 나옴)):시험에 70%는 나옴(직접 쓰는 문법이 나올 수 있음)
+SELECT
+INSERT
+UPDATE
+DELETE
+3. 데이터 제어어(DCL(약어도 시험에 나옴)):GRANT,REVOKE
+-------------------------------------------------------
+데이터베이스 사용자
+1.데이터베이스관리자:(DBA) root
+2.응용프로그래머
+3.일반사용자(최종사용자)
+[실습](SQL)
+-- 테이블 구조 확인
+DESC 테이블명;
+/* ------------------------ */
+----------------------------------------
+# [실습 7-2] (데이터정의어): ALTER(project)
+
+-- project(projno, projname, period)  
+-- 1) budget 필드를 추가하라 : 데이터형식 int
+ALTER TABLE project
+ADD budget char(20);
+-- 2) projname 필드의 데이터형식을 수정하라 : varchar
+ALTER TABLE project
+MODIFY budget int;
+-- 3) budget 필드를 삭제하라
+DROP COLUMN budget;
+
+/* ------------------------ */
+-- project(projno, projname, period)  
+CREATE TABLE project (
+     projno           int	      NOT NULL ,
+     projname       char(20) ,
+     period           int
+);
+
+INSERT INTO project VALUES(111,'작전중',2);
+INSERT INTO project VALUES(222,'특공대',3);
+INSERT INTO project VALUES(444,'다모여',1);
+INSERT INTO project VALUES(333,'유레카',2);
+
+select * from project;
+/* ------------------------ */
+# [실습 7-1] (데이터제어어): GRANT, REVOKE (학과)
+
+-- [실습 7-1] 사용자 권한관리(학과)
+-- 1. 데이터베이스 생성
+/* ------------------------ */
+-- (root)
+CREATE DATABASE testdb
+   default character set utf8mb4;
+
+-- (kim)
+CREATE DATABASE kimdb
+   default character set utf8mb4;
+----------------------------------------
+/* ------------------------ */
+
+-- 2. 사용자 생성:Kim
+
+-- 3. 테이블 생성:project 테이블 생성했음
+
+-- 4. 사용자 권한관리(권한부여, 권한취소):
+
+/* ------------------------ */</code></pre>
+<pre><code class="language-sql">-- 실습 코드
+USE testdb;
+DROP TABLE project;
+CREATE TABLE project (
+     projno           int	      NOT NULL ,
+     projname       char(20) ,
+     period           int
+);
+
+INSERT INTO project VALUES(111,'작전중',2);
+INSERT INTO project VALUES(222,'특공대',3);
+INSERT INTO project VALUES(444,'다모여',1);
+INSERT INTO project VALUES(333,'유레카',2);
+
+
+select * from project;
+-- project(projno, projname, period)  
+-- 1) budget 필드를 추가하라 : 데이터형식 int
+-- 추가 하는게 시험문제임
+ALTER TABLE project
+ADD budget int;
+DESC project;
+select * from project;
+-- 2) projname 필드의 데이터형식을 수정하라 : varchar
+-- 이건 mySQL,oracle에서 돌아가고 msSQL은 다른 문법이다
+ALTER TABLE project
+MODIFY budget varchar(20);
+DESC project;
+SELECT * FROM project;
+-- 3) budget 필드를 삭제하라
+ALTER TABLE project
+DROP COLUMN budget;
+SELECT * FROM project;
+
+
+
+
+use kimdb;
+select * from project;
+
+select * from testdb.project;
+
+insert into testdb.project value(999,'가나다',10);
+insert into testdb.project value(888,'마바사',20);
+
+use kimdb;
+select * from project;
+
+select * from testdb.project;
+
+insert into testdb.project value(999,'가나다',10);
+insert into testdb.project value(888,'마바사',20);
+
+-- 권한부여
+GRANT SELECT,INSERT ON testdb.project TO 'kim'@'localhost';
+
+-- 권한취소
+REVOKE INSERT  ON testdb.project  FROM 'kim'@'localhost';
+
+-- error
+select * from project;
+
+-- ok
+select * from testdb.project;
+GRANT,REVOKE 들은 중간고사에 안 나옴
+ALTER ADD(시험에 나옴)
+강의자료 (시험에 나오는 페이지){
+8페이지
+9페이지(
+1)dept
+2)dmember
+3)CREATE
+4)PRIMARY
+?)CREATE
+5)FOREIGN KEY REFERENCE dept(dept_id);
+?)PRIMARY
+?)FOREIGN KEY
+DROP TABLE 
+}
+use testdb;
+DROP TABLE if exists
+
+
+use testdb;
+
+DROP TABLE if exists dmember;
+DROP TABLE if exists dept;
+
+CREATE TABLE dept (
+  dept_id   char(3)		    NOT NULL ,
+  name      varchar(20) ,
+PRIMARY KEY(dept_id)
+);
+
+CREATE TABLE dmember (
+  name      varchar(10)             NOT NULL ,
+  dept_id char(3),
+PRIMARY KEY(name)    ,
+  CONSTRAINT fk_dmember_dept FOREIGN KEY(dept_id) REFERENCES dept(dept_id)
+);
+
+INSERT INTO dept VALUES('100', '컴퓨터공학과');
+INSERT INTO dept VALUES('101', '산업공학과');
+
+insert into dmember values('김광식','100');
+insert into dmember values('김현정','101');
+insert into dmember values('조영수','101');
+insert into dmember values('윤희근','100');
+
+select * from dept;
+select * from dmember;
+
+COMMIT;</code></pre>
+</details>
+</section>
+<section class="card">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../데이터베이스관리-실제시험.html">🔒 데이터베이스관리 실제시험 — 7주차 🔥 ALTER ADD · Quiz 7-3 문제까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="데이터베이스관리-8주차-중간고사.html">중간고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-6주차.html">‹ 이전 · <b>6주차</b><br><small>무결성 제약조건 · SELECT · UPDATE · DELETE</small></a><a class="next" href="데이터베이스관리-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리 · 7주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202610141332"></script>
+</body>
+</html>
