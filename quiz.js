@@ -102,13 +102,28 @@
         s = s.replace(/^\s*(\[[^\]]*\]\s*)?[$#]\s+/, "");
         return s.replace(/\s+/g, " ").trim();
     }
+    // 같은 명령을 다르게 쓴 것도 같게: ls -l -F = ls -lF = ls -Fl (옵션에 값이 없는 명령만) · 경로 끝의 / · 앞의 ./ 무시 · 파이프(|) 앞뒤 띄어쓰기
+    var FLAG_CMDS = { ls: 1, dir: 1, vdir: 1, rm: 1, cp: 1, mkdir: 1, rmdir: 1, uname: 1, ps: 1 };
+    function canon(v) {
+        return String(v).split(/\s*\|\s*/).map(function (seg) {
+            var t = seg.split(" "), cmd = t[0];
+            var rest = t.slice(1).map(function (x) { var y = x.length > 1 ? x.replace(/^\.\/(?=.)/, "").replace(/(.)\/+$/, "$1") : x; return y || x; });
+            if (FLAG_CMDS[cmd]) {
+                var isF = function (x) { return /^-[A-Za-z]+$/.test(x); };
+                var letters = rest.filter(isF).join("").replace(/-/g, "").split("").filter(function (c, i, arr) { return arr.indexOf(c) === i; }).sort().join("");
+                rest = (letters ? ["-" + letters] : []).concat(rest.filter(function (x) { return !isF(x); }));
+            }
+            return [cmd].concat(rest).join(" ");
+        }).join(" | ");
+    }
     function altCmd(a) { return a && typeof a === "object" ? String(a.c || "") : String(a); }
     function lineMatch(alts, v) {             // 맞은 정답(글자 또는 {c,o}) · 없으면 null
         if (!v || !alts) return null;
+        var cv = canon(v);
         for (var i = 0; i < alts.length; i++) {
             var a = altCmd(alts[i]);
-            if (/^re:/.test(a)) { try { if (new RegExp(a.slice(3)).test(v)) return alts[i]; } catch (e) { } }
-            else if (cnorm(a) === v) return alts[i];
+            if (/^re:/.test(a)) { try { var re = new RegExp(a.slice(3)); if (re.test(v) || re.test(cv)) return alts[i]; } catch (e) { } }
+            else if (cnorm(a) === v || canon(cnorm(a)) === cv) return alts[i];
         }
         return null;
     }

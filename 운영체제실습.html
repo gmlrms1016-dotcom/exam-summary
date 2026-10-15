@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202610151752"></script>
+    <script src="theme.js?v=202610151845"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운영체제실습 · 완전 정리</title>
     <style>
@@ -10,8 +10,8 @@
         .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
         .ref.wrap1 td:first-child{white-space:normal;}   /* 명령이 긴 표(14 · 15번) — 폰에서 첫 칸도 줄바꿈해 설명 칸이 눌리지 않게 */
     </style>
-    <link rel="stylesheet" href="style.css?v=202610151752">
-    <script src="schedule.js?v=202610151752"></script>
+    <link rel="stylesheet" href="style.css?v=202610151845">
+    <script src="schedule.js?v=202610151845"></script>
 </head>
 <body>
 <div class="wrap">
@@ -995,9 +995,9 @@ exit 0                                 # 정상 종료</code></pre>
 
     <section class="card" id="s17">
         <h2>17. ⌨️ 도전문제 직접 풀기 — 2 · 3 · 5 · 6 · 10장<span class="week">7주차</span></h2>
-        <div class="tip">⌨️ 문제마다 명령을 <b>한 줄에 하나씩</b> 쓰세요 — <b>Shift+Enter = 다음 줄</b> · <b>Enter = 확인(채점)</b> (컴퓨터 · 폰 · 아이패드 모두 같음 · 화면 자판에 Shift+Enter 가 없으면 <b>↵ 다음 줄</b> 버튼) · 줄마다 채점해서 틀린 줄 번호를 알려 줘요 · 앞의 <code>$</code> · <code>#</code> 는 써도 되고 안 써도 돼요 · 대소문자 · 옵션 글자는 정확히<br>정답은 교수님 PPT 정답 슬라이드 기준이고, 슬라이드 오타는 문제대로 고쳤어요(정답 보기의 ⚠️) · 같은 문제가 🔒 실제시험에도 있어요</div>
+        <div class="tip">⌨️ 문제마다 명령을 <b>한 줄에 하나씩</b> 쓰세요 — <b>Shift+Enter = 다음 줄</b> · <b>Enter = 확인(채점)</b> (컴퓨터 · 폰 · 아이패드 모두 같음 · 화면 자판에 Shift+Enter 가 없으면 <b>↵ 다음 줄</b> 버튼) · 줄마다 채점해서 틀린 줄 번호를 알려 줘요 · 앞의 <code>$</code> · <code>#</code> 는 써도 되고 안 써도 돼요 · 대소문자 · 옵션 글자는 정확히<br><b>정답 = 문제 지시문 그대로</b> — 교수님 PPT 정답 슬라이드는 참고만 했고, 슬라이드가 문제와 다르거나 틀린 곳(오타 · 계산 실수 · ‘자세하게’ 인데 -l 빠짐 등)은 정답 보기의 ⚠️ 에 적었어요 · 같은 문제가 🔒 실제시험에도 있어요</div>
         <h3>2장 리눅스 명령어 입문</h3>
-        <div class="quiz-item" data-lines="[[&quot;cal 2025&quot;], [&quot;cal&quot;, &quot;cal -y&quot;]]" data-explain="PPT 정답: cal 2025 · cal (cal = 이번 달 · cal -y = 올해 전체)">
+        <div class="quiz-item" data-lines="[[&quot;cal 2025&quot;], [&quot;cal -y&quot;, &quot;cal 2026&quot;]]" data-explain="cal = 이번 달 · cal -y = 올해 전체 · cal 2025 = 2025년 전체 · ⚠️ PPT 정답은 2번을 cal 로 했지만 cal 은 **이번 달**만 나와요 → 금년도(올해) 달력 = cal -y (또는 cal 2026)">
             <p class="quiz-q"><span class="quiz-cat">도전 2-1</span>2025년도 달력을 출력하시오.</p>
             <ol class="quiz-steps"><li>2025년도 달력을 출력하는 명령어 사용하기</li><li>금년도 달력 출력하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>2줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1013,7 +1013,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;logname&quot;, &quot;whoami&quot;], [&quot;users&quot;], [&quot;who&quot;]]" data-explain="logname = 로그인 네임 · users = 접속한 사용자 ID · who = 계정 · 터미널 · 로그인 시각">
+        <div class="quiz-item" data-lines="[[&quot;logname&quot;], [&quot;users&quot;], [&quot;who&quot;]]" data-explain="logname = 로그인 네임 · users = 접속한 사용자 ID · who = 계정 · 터미널 · 로그인 시각 (whoami 는 ‘현재 시스템 사용자 확인’ 으로 따로 배운 명령이라 1번 정답 X)">
             <p class="quiz-q"><span class="quiz-cat">도전 2-3</span>현재 시스템에 접속된 사용자의 정보를 확인하시오.</p>
             <ol class="quiz-steps"><li>현재 접속하여 사용 중인 로그인 네임 확인하기</li><li>리눅스 시스템에 접속된 사용자 아이디 확인하기</li><li>시스템에 로그인한 모든 사용자의 계정과 터미널, 로그인 시각 등 확인하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>3줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1021,7 +1021,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;uname -m&quot;, &quot;arch&quot;], [&quot;uname -s&quot;], [&quot;uname -sv&quot;, &quot;uname -vs&quot;, &quot;uname -s -v&quot;, &quot;uname -v -s&quot;]]" data-explain="uname -m = 하드웨어(머신) · -s = 운영체제 이름 · -v = 버전(출시 일자)">
+        <div class="quiz-item" data-lines="[[&quot;uname -m&quot;, &quot;arch&quot;], [&quot;uname -s&quot;, &quot;uname&quot;], [&quot;uname -sv&quot;, &quot;uname -vs&quot;, &quot;uname -s -v&quot;, &quot;uname -v -s&quot;]]" data-explain="uname -m = 하드웨어(머신) · -s = 운영체제 이름 · -v = 버전(출시 일자)">
             <p class="quiz-q"><span class="quiz-cat">도전 2-4</span>현재 사용 중인 시스템에 대한 정보를 출력하시오.</p>
             <ol class="quiz-steps"><li>현재 시스템이 사용 중인 하드웨어의 정보 확인하기</li><li>현재 사용 중인 운영체제의 이름 확인하기</li><li>현재 사용 중인 운영체제의 이름과 버전출시 일자 한꺼번에 확인하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>3줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1058,7 +1058,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-feedback"></div>
         </div>
         <h3>3장 디렉터리와 파일</h3>
-        <div class="quiz-item" data-lines="[[&quot;ls -F&quot;, &quot;ls&quot;], [&quot;ls -F /usr&quot;, &quot;ls /usr&quot;]]" data-explain="⚠️ PPT 정답 ls –F /usrl 은 오타 → /usr">
+        <div class="quiz-item" data-lines="[[&quot;ls -F&quot;, &quot;ls&quot;, &quot;ls -a&quot;, &quot;ls -aF&quot;], [&quot;ls -F /usr&quot;, &quot;ls /usr&quot;, &quot;ls -a /usr&quot;, &quot;ls -aF /usr&quot;]]" data-explain="⚠️ PPT 정답 ls –F /usrl 은 오타 → /usr">
             <p class="quiz-q"><span class="quiz-cat">도전 3-1</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>현재 위치한 디렉터리에 존재하는 모든 파일목록을 한꺼번에 출력하기</li><li>usr 디렉터리에 존재하는 모든 파일목록 출력하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>2줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1098,7 +1098,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;ls /tmp/test&quot;], [&quot;cd /usr/lib&quot;], [&quot;ls sample.txt&quot;], [&quot;cd&quot;, &quot;cd ~&quot;]]" data-explain="2번은 이동(cd) + 확인(ls) 두 줄">
+        <div class="quiz-item" data-lines="[[&quot;ls /tmp/test&quot;, &quot;ls -l /tmp/test&quot;], [&quot;cd /usr/lib&quot;], [&quot;ls sample.txt&quot;, &quot;ls -l sample.txt&quot;], [&quot;cd&quot;, &quot;cd ~&quot;]]" data-explain="2번은 이동(cd) + 확인(ls) 두 줄">
             <p class="quiz-q"><span class="quiz-cat">도전 3-6</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>현재 디렉터리의 위치에서 tmp 디렉터리에 있는 test 파일 존재여부 확인하기</li><li>/usr/lib 디렉터리로 이동한 다음 sample.txt 파일이 존재하는지 확인하기</li><li>홈 디렉터리로 바로 이동하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>4줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1114,7 +1114,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;ls&quot;, &quot;ls -F&quot;], [&quot;rmdir d_mark01 d_mark02&quot;], [&quot;ls&quot;, &quot;ls -F&quot;]]" data-explain="⚠️ PPT 정답 rmdir d_make01 d_mard02 는 오타 → rmdir d_mark01 d_mark02">
+        <div class="quiz-item" data-lines="[[&quot;ls&quot;, &quot;ls -F&quot;, &quot;ls -l&quot;], [&quot;rmdir d_mark01 d_mark02&quot;], [&quot;ls&quot;, &quot;ls -F&quot;, &quot;ls -l&quot;]]" data-explain="⚠️ PPT 정답 rmdir d_make01 d_mard02 는 오타 → rmdir d_mark01 d_mark02">
             <p class="quiz-q"><span class="quiz-cat">도전 3-8</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>홈 디렉터리에 존재하는 디렉터리의 목록 출력하기</li><li>홈 디렉터리에 2개의 디렉터리 d_mark01, d_mark02 한꺼번에 삭제하기</li><li>d_mark01, d_mark02 디렉터리가 삭제되었는지 확인하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>3줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1122,7 +1122,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;mkdir -p work/space/zone&quot;, &quot;mkdir -p ~/work/space/zone&quot;], [&quot;ls -R work&quot;], [&quot;cd work/space/zone&quot;], [&quot;cd&quot;, &quot;cd ~&quot;], [&quot;rm -r work&quot;, &quot;rm -rf work&quot;], [&quot;ls&quot;]]" data-explain="-p = 부모까지 한 번에 만들기 · ls -R = 하위까지 · rm -r = 비어 있지 않은 디렉터리 통째로">
+        <div class="quiz-item" data-lines="[[&quot;mkdir -p work/space/zone&quot;, &quot;mkdir -p ~/work/space/zone&quot;, &quot;mkdir -p /work/space/zone&quot;], [&quot;ls -R work&quot;, &quot;ls -R /work&quot;, &quot;ls -R ~/work&quot;], [&quot;cd work/space/zone&quot;, &quot;cd /work/space/zone&quot;, &quot;cd ~/work/space/zone&quot;], [&quot;cd&quot;, &quot;cd ~&quot;], [&quot;rm -r work&quot;, &quot;rm -rf work&quot;, &quot;rm -r /work&quot;, &quot;rm -rf /work&quot;, &quot;rm -r ~/work&quot;], [&quot;ls&quot;]]" data-explain="-p = 부모까지 한 번에 만들기 · ls -R = 하위까지 · rm -r = 비어 있지 않은 디렉터리 통째로 · ⚠️ 문제는 /work/space/zone 처럼 / 로 썼지만 ‘홈 디렉터리에서’ 라서 PPT 정답은 홈 기준 work/space/zone → 둘 다 정답">
             <p class="quiz-q"><span class="quiz-cat">도전 3-9</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>홈 디렉터리에서 /work/space/zone 계층적 디렉터리 생성하기</li><li>work 디렉터리의 하위 디렉터리까지 한꺼번에 계층적 디렉터리 출력하기</li><li>zone 디렉터리로 한 번에 이동하기</li><li>홈 디렉터리로 바로 이동하기</li><li>한꺼번에 /work/space/zone 계층적 디렉터리 삭제하기</li><li>계층적 디렉터리가 정상적으로 삭제되었는지 확인하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>6줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1130,10 +1130,10 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;mkdir workspace&quot;], [&quot;touch workspace/sample.txt&quot;], [&quot;ls workspace&quot;], [&quot;touch -t 5508151023 workspace/sample.txt&quot;, &quot;touch -t 205508151023 workspace/sample.txt&quot;], [&quot;ls -l workspace&quot;, &quot;ls -l workspace/sample.txt&quot;], [&quot;rm -r workspace&quot;, &quot;rm -rf workspace&quot;], [&quot;ls&quot;]]" data-explain="touch -t [[CC]YY]MMDDhhmm → 55 08 15 10 23 = 2055년 8월 15일 10:23">
+        <div class="quiz-item" data-lines="{&quot;or&quot;: [[[&quot;mkdir workspace&quot;], [&quot;touch workspace/sample.txt&quot;], [&quot;ls workspace&quot;], [&quot;touch -t 5508151023 workspace/sample.txt&quot;, &quot;touch -t 205508151023 workspace/sample.txt&quot;], [&quot;ls -l workspace&quot;, &quot;ls -l workspace/sample.txt&quot;], [&quot;rm -r workspace&quot;, &quot;rm -rf workspace&quot;], [&quot;ls&quot;]], [[&quot;mkdir /workspace&quot;], [&quot;touch /workspace/sample.txt&quot;], [&quot;ls /workspace&quot;], [&quot;touch -t 5508151023 /workspace/sample.txt&quot;, &quot;touch -t 205508151023 /workspace/sample.txt&quot;], [&quot;ls -l /workspace&quot;, &quot;ls -l /workspace/sample.txt&quot;], [&quot;rm -r /workspace&quot;, &quot;rm -rf /workspace&quot;], [&quot;ls /&quot;, &quot;ls&quot;]]]}" data-explain="touch -t [[CC]YY]MMDDhhmm → 55 08 15 10 23 = 2055년 8월 15일 10:23 · ⚠️ 문제는 /workspace 로 썼지만 ‘홈 디렉터리에서’ 라서 PPT 정답은 홈 기준 workspace → 문제 그대로 /workspace 로 쓴 풀이도 정답 · 5번 ‘자세한 내용’ = ls -l (그냥 ls 는 오답)">
             <p class="quiz-q"><span class="quiz-cat">도전 3-10</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>홈 디렉터리에서 /workspace 디렉터리 생성하기</li><li>workspace 디렉터리에 빈파일 sample.txt 파일 생성하기</li><li>홈 디렉터리 위치에서 workspace 디렉터리에 있는 파일목록 출력하기</li><li>sample.txt 파일에 대한 최종 수정시각을 2055년 8월 15일 10:23분으로 변경하기</li><li>홈 디렉터리 위치에서 sample.txt 파일에 대한 자세한 내용을 확인하기</li><li>비어있지 않은 /workspace 디렉터리 삭제하기</li><li>workspace 디렉터리가 정상적으로 삭제되었는지 확인하기</li></ol>
-            <p class="quiz-lines-hint">⌨️ 명령 <b>7줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
+            <p class="quiz-lines-hint">⌨️ 명령 <b>7줄</b> · <b>다른 방법도 정답</b> (줄 수가 달라도 됨) · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
             <textarea class="quiz-lines" rows="7" placeholder="$ 명령어 → Shift+Enter → 다음 명령어 · 다 쓰면 Enter" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
@@ -1170,7 +1170,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;mkdir workspace&quot;], [&quot;touch workspace/sample.txt&quot;], [&quot;ls workspace&quot;], [&quot;mv workspace mv_workspace&quot;], [&quot;cp /etc/hosts /etc/services mv_workspace&quot;, &quot;cp /etc/hosts /etc/services mv_workspace/&quot;], [&quot;ls -l mv_workspace&quot;], [&quot;rm mv_workspace/sample.txt&quot;], [&quot;rm -ri mv_workspace&quot;, &quot;rm -ir mv_workspace&quot;, &quot;rm -r -i mv_workspace&quot;], [&quot;ls&quot;]]" data-explain="mv = 이름 바꾸기(이동) · rm -ri = 물어보면서(-i) 하위까지(-r) 삭제 · ⚠️ 문제 6번의 copy_workspace 는 mv_workspace 의 오타로 보여요 · PPT 정답은 확인용 ls 가 두 줄 더 있음(11줄) → 문제 9단계대로 9줄">
+        <div class="quiz-item" data-lines="[[&quot;mkdir workspace&quot;], [&quot;touch workspace/sample.txt&quot;], [&quot;ls workspace&quot;], [&quot;mv workspace mv_workspace&quot;], [&quot;cp /etc/hosts /etc/services mv_workspace&quot;, &quot;cp /etc/hosts /etc/services mv_workspace/&quot;], [&quot;ls -l copy_workspace&quot;], [&quot;rm mv_workspace/sample.txt&quot;], [&quot;rm -ri mv_workspace&quot;, &quot;rm -ir mv_workspace&quot;, &quot;rm -r -i mv_workspace&quot;], [&quot;ls&quot;]]" data-explain="mv = 이름 바꾸기(이동) · rm -ri = 물어보면서(-i) 하위까지(-r) 삭제 · ⚠️ 6번은 **문제 그대로** copy_workspace 를 자세하게 → ls -l copy_workspace (mv_workspace 가 아님 · 그냥 ls 도 아님) · PPT 정답은 확인용 ls 를 두 줄 더 넣고(11줄) 6번을 ls mv_workspace 로 써서 문제와 달라요 → 문제 9단계대로 9줄">
             <p class="quiz-q"><span class="quiz-cat">도전 3-15</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>홈 디렉터리에서 workspace 디렉터리 생성하기</li><li>홈 디렉터리 위치에서 workspace 디렉터리에 빈파일 sample.txt 파일 생성하기</li><li>workspace 디렉터리에 sample.txt 파일이 생성되었는지 확인하기</li><li>workspace 디렉터리를 mv_workspace 디렉터리로 이동하기</li><li>/etc/hosts 파일과 /etc/services 파일을 한꺼번에 mv_workspace 디렉터리로 복사하기</li><li>홈 디렉터리 위치에서 copy_workspace 디렉터리에 존재하는 파일목록을 자세하게 출력하기</li><li>mv_workspace 디렉터리에 sample.txt 파일 삭제하기</li><li>mv_workspace 디렉터리를 삭제여부를 물어가면서 삭제하기</li><li>mv_workspace 디렉터리가 정상적으로 삭제되었는지 확인하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>9줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1187,7 +1187,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;7&quot;, &quot;700&quot;], [&quot;5&quot;, &quot;050&quot;, &quot;50&quot;], [&quot;7&quot;, &quot;007&quot;, &quot;6&quot;, &quot;006&quot;], [&quot;757&quot;, &quot;756&quot;]]" data-explain="r = 4 · w = 2 · x = 1 · 자리마다 더하기 → 소유자 rwx = 7 · 그룹 r-x = 5 · 기타 rwx = 7 · ⚠️ 문제의 r-w 는 자리(r w x)에 맞지 않는 표기예요. PPT 정답은 그룹 = 040+000+010 = 050(r-x) · 기타 = 004+002+001 = 006 · 최종 756 으로 계산이 서로 안 맞아요 → rwx r-x rwx 로 보면 757, PPT 대로면 756 — 둘 다 정답 처리">
+        <div class="quiz-item" data-lines="[[&quot;7&quot;, &quot;700&quot;], [&quot;6&quot;, &quot;060&quot;, &quot;60&quot;], [&quot;7&quot;, &quot;007&quot;], [&quot;767&quot;]]" data-explain="r = 4 · w = 2 · x = 1 · 자리마다 더하기 → 소유자 rwx = 4+2+1 = 7 · 그룹 읽기+쓰기 = 4+2 = 6 · 기타 rwx = 7 → 700 + 060 + 007 = 767 · ⚠️ PPT 정답 슬라이드가 틀렸어요 — 그룹을 ‘읽기와 쓰기 권한(r-w)’ 이라고 설명해 놓고 040+000+010 = 050 으로(실행 x 를 더함), 기타 rwx 를 004+002+001 = 006 으로(4+2+1 = 7 인데) 계산해서 756 이 나왔어요 → 설명대로 그룹 = 읽기 + 쓰기 = 4+2 = 6 · 기타 = 7 → 767">
             <p class="quiz-q"><span class="quiz-cat">도전 5-2</span>다음 항목에서 주어진 지시사항을 수행하시오. (숫자만 한 줄에 하나씩 — 1번 설명은 채점 안 함)</p>
             <ol class="quiz-steps"><li>특정 파일에 주어진 권한 –rwx r-w rwx 설명하기</li><li>소유자 권한에 대한 권한값 숫자모드로 환산하기</li><li>그룹 권한에 대한 권한값 숫자모드로 환산하기</li><li>기타 사용자 권한에 대한 권한값 숫자모드로 환산하기</li><li>권한묶음에 대한 권한값 숫자모드로 최종 환산하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>4줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1228,7 +1228,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;groupadd professor&quot;], [&quot;grep professor /etc/group&quot;, &quot;tail /etc/group&quot;, &quot;tail -1 /etc/group&quot;], [&quot;groupadd -g 2018 student&quot;], [&quot;grep student /etc/group&quot;, &quot;tail /etc/group&quot;, &quot;tail -1 /etc/group&quot;], [&quot;groupadd -g 2018 -o db_space&quot;, &quot;groupadd -o -g 2018 db_space&quot;], [&quot;grep db_space /etc/group&quot;, &quot;tail /etc/group&quot;, &quot;tail -1 /etc/group&quot;]]" data-explain="groupadd -g = GID 지정 · -o = 이미 있는 GID 중복 허용" data-prompt="#">
+        <div class="quiz-item" data-lines="[[&quot;groupadd professor&quot;], [&quot;grep professor /etc/group&quot;, &quot;tail /etc/group&quot;, &quot;tail -1 /etc/group&quot;, &quot;cat /etc/group&quot;], [&quot;groupadd -g 2018 student&quot;], [&quot;grep student /etc/group&quot;, &quot;tail /etc/group&quot;, &quot;tail -1 /etc/group&quot;], [&quot;groupadd -g 2018 -o db_space&quot;, &quot;groupadd -o -g 2018 db_space&quot;], [&quot;grep db_space /etc/group&quot;, &quot;tail /etc/group&quot;, &quot;tail -1 /etc/group&quot;]]" data-explain="groupadd -g = GID 지정 · -o = 이미 있는 GID 중복 허용" data-prompt="#">
             <p class="quiz-q"><span class="quiz-cat">도전 6-4</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>professor 그룹을 옵션 없이 새로 생성하기</li><li>새로 생성한 professor 그룹에 자동으로 설정된 GID 확인하기</li><li>GID를 2018로 설정하여 student 그룹을 새로 생성하기</li><li>새로 생성한 student 그룹에 설정된 GID 확인하기</li><li>기존의 GID 2018을 중복 지정하여 db_space 그룹을 새로 생성하기</li><li>새로 생성한 db_space 그룹에 설정된 GID 확인하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>6줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · root(#) · 앞의 # 는 안 써도 돼요</p>
@@ -1236,7 +1236,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="{&quot;or&quot;: [[[&quot;useradd pro_001&quot;], [&quot;useradd pro_002&quot;], [&quot;ls /home&quot;], [&quot;gpasswd -a pro_001 professor&quot;], [&quot;gpasswd -a pro_002 professor&quot;], [&quot;grep pro_001 /etc/group&quot;, &quot;id pro_001&quot;, &quot;groups pro_001&quot;], [&quot;grep pro_002 /etc/group&quot;, &quot;id pro_002&quot;, &quot;groups pro_002&quot;]], [[&quot;useradd pro_001&quot;], [&quot;useradd pro_002&quot;], [&quot;ls /home&quot;], [&quot;gpasswd -a pro_001 professor&quot;], [&quot;gpasswd -a pro_002 professor&quot;], [&quot;grep professor /etc/group&quot;, &quot;tail /etc/group&quot;, &quot;tail -1 /etc/group&quot;, &quot;cat /etc/group&quot;]]]}" data-explain="1번 = useradd 두 줄 · 5번 = 계정마다 한 줄씩 → 명령 7줄 (5번을 grep professor /etc/group 한 줄로 해도 정답) · gpasswd -a 계정 그룹 = 그룹에 멤버 추가" data-prompt="#">
+        <div class="quiz-item" data-lines="{&quot;or&quot;: [[[&quot;useradd pro_001&quot;], [&quot;useradd pro_002&quot;], [&quot;ls /home&quot;, &quot;ls -l /home&quot;], [&quot;gpasswd -a pro_001 professor&quot;], [&quot;gpasswd -a pro_002 professor&quot;], [&quot;grep pro_001 /etc/group&quot;, &quot;id pro_001&quot;, &quot;groups pro_001&quot;], [&quot;grep pro_002 /etc/group&quot;, &quot;id pro_002&quot;, &quot;groups pro_002&quot;]], [[&quot;useradd pro_001&quot;], [&quot;useradd pro_002&quot;], [&quot;ls /home&quot;, &quot;ls -l /home&quot;], [&quot;gpasswd -a pro_001 professor&quot;], [&quot;gpasswd -a pro_002 professor&quot;], [&quot;grep professor /etc/group&quot;, &quot;tail /etc/group&quot;, &quot;tail -1 /etc/group&quot;, &quot;cat /etc/group&quot;]]]}" data-explain="1번 = useradd 두 줄 · 5번 = 계정마다 한 줄씩 → 명령 7줄 (5번을 grep professor /etc/group 한 줄로 해도 정답) · gpasswd -a 계정 그룹 = 그룹에 멤버 추가" data-prompt="#">
             <p class="quiz-q"><span class="quiz-cat">도전 6-5</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>사용자 계정 pro_001과 pro_002 계정을 새로 생성하기</li><li>새로 생성한 2개의 사용자 계정이 홈 디렉터리에 존재하는지 확인하기</li><li>professor 그룹에 사용자 계정 pro_001계정을 추가 지정하기</li><li>professor 그룹에 사용자 계정 pro_002계정을 추가 지정하기</li><li>사용자 계정 pro_001과 pro_002 계정에 지정된 그룹정보 확인하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>7줄</b> · <b>다른 방법도 정답</b> (줄 수가 달라도 됨) · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · root(#) · 앞의 # 는 안 써도 돼요</p>
@@ -1252,7 +1252,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;su - pro_002&quot;, &quot;su pro_002&quot;], [&quot;id&quot;], [&quot;newgrp professor&quot;], [&quot;id&quot;], [&quot;su - root&quot;, &quot;su -&quot;, &quot;su root&quot;]]" data-explain="su - 계정 = 그 계정으로 접속(환경까지) · id = UID · GID · 그룹 · newgrp 그룹 = 지금 소속 그룹 바꾸기 · ⚠️ PPT 정답 newgrp pro_002 → 문제(3번)대로 소속 그룹을 professor 로 바꾸는 newgrp professor" data-prompt="#">
+        <div class="quiz-item" data-lines="[[&quot;su - pro_002&quot;, &quot;su pro_002&quot;], [&quot;id&quot;, &quot;groups&quot;], [&quot;newgrp professor&quot;], [&quot;id&quot;, &quot;groups&quot;], [&quot;su - root&quot;, &quot;su -&quot;, &quot;su root&quot;, &quot;su&quot;]]" data-explain="su - 계정 = 그 계정으로 접속(환경까지) · id = UID · GID · 그룹 · newgrp 그룹 = 지금 소속 그룹 바꾸기 · ⚠️ PPT 정답 newgrp pro_002 → 문제(3번)대로 소속 그룹을 professor 로 바꾸는 newgrp professor" data-prompt="#">
             <p class="quiz-q"><span class="quiz-cat">도전 6-7</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>터미널 창에서 professor 그룹에 존재하는 pro_002 계정으로 접속하기</li><li>pro_002 계정의 그룹정보 출력하기</li><li>pro_002 계정의 소속 그룹을 professor 그룹으로 변경하기</li><li>pro_002 계정의 변경된 그룹 정보 출력하기</li><li>root 계정으로 프롬프트 변경하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>5줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · root(#) · 앞의 # 는 안 써도 돼요</p>
@@ -1261,7 +1261,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-feedback"></div>
         </div>
         <h3>10장 서비스 (systemctl)</h3>
-        <div class="quiz-item" data-lines="[[&quot;cd /usr/lib/systemd/system&quot;], [&quot;ls -l *.service&quot;, &quot;ls *.service&quot;, &quot;ls -l&quot;, &quot;ls&quot;], [&quot;systemctl status usbmuxd.service&quot;, &quot;systemctl status usbmuxd&quot;], [&quot;systemctl stop usbmuxd.service&quot;, &quot;systemctl stop usbmuxd&quot;], [&quot;systemctl status usbmuxd.service&quot;, &quot;systemctl status usbmuxd&quot;], [&quot;systemctl start usbmuxd.service&quot;, &quot;systemctl start usbmuxd&quot;, &quot;systemctl restart usbmuxd.service&quot;, &quot;systemctl restart usbmuxd&quot;], [&quot;ps -ef | grep usbmuxd&quot;, &quot;ps -ef|grep usbmuxd&quot;]]" data-explain="PPT 정답 슬라이드가 없어 6주차 수업(서비스 파일 · ps -ef | grep)과 7주차 필기(systemctl start · stop · restart)로 만든 답 · 4번은 stop + status 두 줄 → 명령 7줄 · ps -ef 의 PID · PPID 칸" data-prompt="#">
+        <div class="quiz-item" data-lines="[[&quot;cd /usr/lib/systemd/system&quot;], [&quot;ls -l *.service&quot;, &quot;ls -l&quot;], [&quot;systemctl status usbmuxd.service&quot;, &quot;systemctl status usbmuxd&quot;], [&quot;systemctl stop usbmuxd.service&quot;, &quot;systemctl stop usbmuxd&quot;], [&quot;systemctl status usbmuxd.service&quot;, &quot;systemctl status usbmuxd&quot;], [&quot;systemctl start usbmuxd.service&quot;, &quot;systemctl start usbmuxd&quot;, &quot;systemctl restart usbmuxd.service&quot;, &quot;systemctl restart usbmuxd&quot;], [&quot;ps -ef | grep usbmuxd&quot;, &quot;ps -ef|grep usbmuxd&quot;]]" data-explain="PPT 정답 슬라이드가 없어 6주차 수업(서비스 파일 ls -l *.service · ps -ef | grep)과 7주차 필기(systemctl start · stop · restart)로 만든 답 · 2번 ‘정보 확인’ = 자세히(ls -l) · 4번은 stop + status 두 줄 → 명령 7줄 · ps -ef 의 PID · PPID 칸" data-prompt="#">
             <p class="quiz-q"><span class="quiz-cat">도전 10-1</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>서비스 스크립트가 존재하는 디렉터리로 이동하기</li><li>리눅스 시스템에서 제공하고 있는 서비스의 스크립트 정보 확인하기</li><li>usbmuxd.service 유닛의 상태를 status 명령으로 확인하기</li><li>usbmuxd.service 유닛 정지 후 유닛 상태를 status 명령으로 확인하기</li><li>usbmuxd.service 유닛을 다시 시작하기</li><li>usbmuxd.service 유닛 실행 상태에서 PID와 PPID 확인하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>7줄</b> · 한 줄에 하나씩 (<span class="quiz-keys">Shift+Enter = 다음 줄 · Enter = 확인</span>) · root(#) · 앞의 # 는 안 써도 돼요</p>
@@ -1433,8 +1433,8 @@ exit 0                                    # 정상 종료</code></pre>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="quiz.js?v=202610151752"></script>
-<script src="weeks.js?v=202610151752"></script>
-<script src="ink.js?v=202610151752"></script>
+<script src="quiz.js?v=202610151845"></script>
+<script src="weeks.js?v=202610151845"></script>
+<script src="ink.js?v=202610151845"></script>
 </body>
 </html>
