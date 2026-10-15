@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610141332"></script>
+    <script src="../theme.js?v=202610151649"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~6주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610141332">
+    <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
+    <link rel="stylesheet" href="../style.css?v=202610151649">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -47,14 +47,15 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🐧 운영체제실습 · 8주차 · 중간고사</h1>
-        <p>중간고사 시험문제 정리 (1~6주차 반영)</p>
+        <p>중간고사 시험문제 정리 (1~7주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-6주차.html">‹ 이전 · <b>6주차</b><br><small>셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-7주차.html">‹ 이전 · <b>7주차</b><br><small>프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</small></a><span></span></nav>
 
-<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~6주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
+<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~7주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
 <div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종 ⑥ <b>DNF 작동 흐름도(그림 4-111) — 4주차 수업 화면에 나온 시험문제</b> ⑦ <b>작업 예약 cron · at</b>(5주차 — crontab 칸 순서 · run-parts · 백업 스크립트) ⑧ <b>셸 스크립트</b>(6주차 · 7장 — 변수 · expr · if 조건 · case · for · while · 함수)</div>
 <div class="tip">🔥 <b>6주차 공지 (✍️ 필기)</b> — 시험범위 <b>1장 · 2장 · 3장 · 4장 · 5장 · 7장</b> (6장 빠짐) · <b>시험에 나오는 용어</b>: <b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것 · <b>노틸러스</b> = 파일탐색기 · <b>에볼루션</b> = 메일 프로그램 → <a href="운영체제실습-6주차.html">6주차 자세히</a> · 아래 6주차 칸</div>
+<div class="tip">🔥 <b>7주차 (✍️ 필기)</b> — 강의자료에 없지만 <b>시험에 나오는 것</b>: <b>백업(크론)</b> · <b>런레벨</b> · <b>심볼릭 · 하드 링크</b> · <b>포그라운드 · 백그라운드</b> · <b>호스트 / 게스트 운영체제 중 하나 설명(1문제)</b> · <b>sh 문제(출력결과 · 파일 존재 · 사이즈 체크 if문)</b> · 시험 예시: <b>1~10 객관식</b> · 포그라운드 → 백그라운드 변경 · 마스터 유저로 디렉터리 설정 · 셸 스크립트 비중 낮음 · <b>도전문제 5-4 시험 X</b> · <b>6장은 중요</b> (⚠️ 6주차엔 6장 빠짐이었음) → <a href="운영체제실습-7주차.html">7주차 자세히</a></div>
 <p class="wk-lockbtn"><a href="../운영체제실습-실제시험.html">🔒 실제시험</a></p>
 <section class="card">
 <h2>🎓 튜터링 — 2025년 2학기 중간고사 참고자료</h2>
@@ -105,6 +106,21 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>7</td><td>vi 에서 커서가 있는 줄 삭제</td><td><code>dd</code></td></tr>
 <tr><td>8</td><td>nano 저장 단축키</td><td><code>Ctrl + O</code> (자료의 답) → Enter 로 파일 이름 확인 · 3주차 필기: <code>Ctrl + X</code> → <code>Y</code> → Enter = 저장하고 나가기</td></tr>
 </tbody></table>
+</section>
+<section class="card">
+<h2>7주차 — 🔥 시험 힌트 · 프로세스 · 도전문제 (<a href="운영체제실습-7주차.html">7주차 자세히</a>)</h2>
+<h3>시험에 나오는 것 (✍️ 필기 · 강의자료에 없음)</h3>
+<table class="ref">
+<tbody>
+<tr><th>항목</th><th>핵심</th></tr>
+<tr><td>백업 (크론)</td><td>crontab 한 줄 = 분 시 일 월 요일 사용자 명령</td></tr>
+<tr><td>런레벨</td><td>0 종료 · 1 단일 사용자 · 3 텍스트 다중 사용자 · 5 그래픽 · 6 재부팅</td></tr>
+<tr><td>심볼릭 · 하드 링크</td><td><code>ln -s</code> = 새 inode · 원본 지우면 깨짐 / <code>ln</code> = 같은 inode</td></tr>
+<tr><td>포그라운드 → 백그라운드</td><td><b>Ctrl+Z → <code>bg</code></b> · <code>jobs</code> · <code>fg 번호</code> · 처음부터 <code>명령 &amp;</code></td></tr>
+<tr><td>호스트 / 게스트 OS (1문제)</td><td>호스트 = 가상화 프로그램을 돌리는 실제 PC 의 OS · 게스트 = 가상 머신 안의 OS</td></tr>
+<tr><td>sh if 문</td><td><code>[ -e 파일 ]</code> 존재 · <code>[ -s 파일 ]</code> 크기 &gt; 0 · <code>[ -f ]</code> 일반 파일 · <code>[ -d ]</code> 디렉터리</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag note">✍️ 필기</span> 프로세스 상태 = <b>생성 · 실행 · 준비 · 대기 · 종료</b> · <code>ps -ef</code> (-e 모든 · -f 자세히) · service = <b>데몬</b>(서버 프로세스 · 거의 백그라운드) · <code>systemctl start · stop · restart · enable</code></li><li><span class="wk-tag note">✍️ 필기</span> 도전문제 <b>5-4 시험 X</b> · <b>6장 중요</b> · 시험 예시: 1~10 객관식 · 마스터 유저로 디렉터리 설정</li><li><span class="wk-tag star">⭐ 강조</span> 도전문제 33개(2 · 3 · 5 · 6 · 10장) + 셸 스크립트 5개(11장) → <a href="../운영체제실습.html#s17">과목 페이지 17 · 18번</a> · 🔒 실제시험</li></ul>
 </section>
 <section class="card">
 <h2>6주차 — 🔥 시험 용어 · 셸 스크립트 · 프로세스 (<a href="운영체제실습-6주차.html">6주차 자세히</a>)</h2>
@@ -275,7 +291,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <ul><li><a href="../운영체제실습-실제시험.html">🔒 운영체제실습 실제시험 — 퀴즈 · 출력결과 · 코드 작성 문제를 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-6주차.html">‹ 이전 · <b>6주차</b><br><small>셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-7주차.html">‹ 이전 · <b>7주차</b><br><small>프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</small></a><span></span></nav>
 
     <p class="wk-src">노션 「운영체제실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 
@@ -283,6 +299,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610141332"></script>
+<script src="../ink.js?v=202610151649"></script>
 </body>
 </html>

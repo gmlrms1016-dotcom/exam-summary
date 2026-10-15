@@ -272,6 +272,17 @@ theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다. 
 ```
 정규화 `norm`: 소문자 + 공백 제거 + 괄호 제거.
 
+### 여러 줄 명령 — `.quiz-item[data-lines]` (운영체제 도전문제 · 2026-10-15)
+```html
+<div class="quiz-item" data-lines='[["cal 2025"],["cal","cal -y"]]' data-explain="해설">   <!-- 줄마다 정답 목록 · 첫 번째 = 정답 보기 · "re:정규식" 도 됨 -->
+  <p class="quiz-q"><span class="quiz-cat">도전 2-1</span>질문…</p>
+  <ol class="quiz-steps"><li>지시 1</li><li>지시 2</li></ol>
+  <textarea class="quiz-lines" rows="2"></textarea>                <!-- Enter = 다음 줄 · 채점은 확인 버튼 · ⌘/Ctrl+Enter -->
+  <div class="quiz-btns">확인 · 정답 보기</div><div class="quiz-feedback"></div>
+</div>
+```
+채점 `cnorm`(quiz.js): 줄마다 앞의 `$ ` · `# ` 프롬프트 빼고 · `–`(긴 줄표) → `-` · 띄어쓰기 여러 칸 = 한 칸 · **대소문자 · 옵션 글자는 그대로**. 빈 줄은 건너뛰고, 줄 수와 순서까지 맞아야 정답(틀린 줄 번호를 알려 줌). 실제시험(`build_subject_exams.py`)도 같은 모양을 그대로 받아요.
+
 ### 복습(`?done=1`) 핸들러 — 과목 페이지 맨 끝, `review.js` **앞에**
 ```html
 <script>

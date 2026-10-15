@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610151649"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운영체제실습 7주차 · 프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</title>
+    <link rel="stylesheet" href="../style.css?v=202610151649">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../운영체제실습.html">← 운영체제실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🐧 운영체제실습 · 7주차</h1>
+        <p>프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-6주차.html">‹ 이전 · <b>6주차</b><br><small>셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</small></a><a class="next" href="운영체제실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
+
+<div class="tip">🐧 <b>운영체제실습 7주차 (10/15)</b> — 앞부분: <b>프로세스의 개념과 상태</b> · 포그라운드 / 백그라운드 · <code>ps</code> 옵션 · 서비스(데몬) · <code>systemctl</code> / 뒷부분: <b>강의시간에 도전문제를 쭉 풀었어요</b> (2 · 3 · 5 · 6 · 10 · 11장)<br>노션 7주차 필기 + 7주차 폴더(도전문제 PDF 8개 · 2 · 3 · 5 · 6 · 11장 PPT) 기준이에요. 정답은 교수님 PPT 의 <b>도전 문제 정답 슬라이드</b>와 대조했고, 슬라이드에 오타가 있는 곳은 ⚠️ 로 표시했어요. 셸 스크립트 모범답안은 전부 실제로 실행한 결과예요.<br>⌨️ <b>직접 풀기</b> — <a href="../운영체제실습.html#s17">과목 페이지 17번</a> 에서 명령을 <b>한 줄에 하나씩</b> 쓰고 채점 (Enter = 다음 줄) · 같은 문제가 🔒 실제시험에도 있어요.</div>
+<section class="card">
+<h2>🔥 1. 시험에 나오는 것 — 강의자료에는 없음 (✍️ 필기)</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> 오늘은 강의시간에 <b>도전문제</b> 쭉 풀음 · <b>도전문제 5-4 는 안 배움 → 시험에 안 나옴</b> · <b>6장은 중요</b><ul><li>⚠️ 6주차 필기는 “시험범위 1 · 2 · 3 · 4 · 5 · 7장 (6장 빠짐)” 이었는데 오늘은 <b>“6장은 중요”</b> → 6장(관리자 권한 실행 — 사용자 · 그룹 관리)도 꼭 공부하기</li></ul></li><li><span class="wk-tag note">✍️ 필기</span> 강의자료에는 없지만 <b>시험에 나오는 것들</b></li></ul>
+<table class="ref">
+<tbody>
+<tr><th>시험에 나오는 것 (✍️ 필기)</th><th>🤖 짧게 정리</th></tr>
+<tr><td><b>백업 (크론)</b></td><td><code>crontab</code> 한 줄 = <b>분 시 일 월 요일 사용자 명령</b> → 정해진 시각에 백업 스크립트 실행 (5주차 월간 백업)</td></tr>
+<tr><td><b>런레벨</b></td><td>리눅스가 어떤 상태로 돌고 있는지 나타내는 번호 <b>0 ~ 6</b> — 0 = 종료 · 1 = 단일 사용자(복구) · 3 = 텍스트(CLI) 다중 사용자 · 5 = 그래픽(GUI) · 6 = 재부팅 (🤖 수업 설명 기준이 아니라 일반적인 정리)</td></tr>
+<tr><td><b>심볼릭 링크 · 하드 링크</b> (✍️ “심봉일링크”)</td><td>하드 링크 <code>ln 원본 링크</code> = <b>같은 inode</b> (원본을 지워도 내용 남음) · 심볼릭 링크 <code>ln -s 원본 링크</code> = <b>새 inode</b> · 경로만 가리킴 (원본을 지우면 깨짐) — 3주차</td></tr>
+<tr><td><b>포그라운드 · 백그라운드</b></td><td>포그라운드 = 터미널을 차지하고 실행 · 백그라운드 = 뒤에서 실행 (<code>명령 &amp;</code>) · 앞 → 뒤: <b>Ctrl+Z → <code>bg</code></b> · 뒤 → 앞: <code>fg 작업번호</code> · 목록 <code>jobs</code> — 6주차</td></tr>
+<tr><td><b>호스트 운영체제 · 게스트 운영체제</b> — 둘 중 하나 설명 문제 1개</td><td>🤖 <b>호스트 OS</b> = 실제 컴퓨터에 설치되어 VirtualBox · VMware 같은 가상화 프로그램을 돌리는 OS (예: 내 PC 의 Windows · macOS) / <b>게스트 OS</b> = 가상 머신 <b>안에</b> 설치해서 돌리는 OS (예: 실습한 Rocky Linux)</td></tr>
+<tr><td><b>sh 문제</b></td><td>다음 코드의 <b>출력결과</b> · 파일 <b>존재 여부</b> · 파일 <b>사이즈</b>를 체크하는 <b>if문</b> → <code>[ -e 파일 ]</code> 있으면 참 · <code>[ -s 파일 ]</code> 크기가 0 보다 크면 참 · <code>[ -f 파일 ]</code> 일반 파일 · <code>[ -d 파일 ]</code> 디렉터리 (6주차 if4 · if5)</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag note">✍️ 필기</span> <b>시험 예시</b> — <b>1 ~ 10 객관식</b> · 어떤 작업을 <b>포그라운드에서 백그라운드로 변경</b> · <b>마스터 유저로 디렉터리 설정</b> … · <b>셸 스크립트 비중은 낮음</b> (코드를 읽고 출력결과만 알면 괜찮음)</li><li><span class="wk-tag fix">⚠️ 정정</span> — 필기의 “심봉일링크” → <b>심볼릭 링크</b></li></ul>
+</section>
+<section class="card">
+<h2>2. 프로세스 — 개념과 상태 (✍️ 필기)</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> 프로세스의 상태 = <b>생성 · 실행 · 준비 · 대기 · 종료</b></li><li><span class="wk-tag note">✍️ 필기</span> 상태가 있는 이유 — “CPU 는 멀티가 안 되고 순차적으로 처리를 하니 하나씩 <b>생성 → 실행 → 준비 → 대기 → 종료</b> 라는 절차를 거침”<ul><li>🤖 보충 — CPU(코어 하나)는 한 순간에 프로세스 <b>하나만</b> 실행해요. 그래서 여러 프로세스가 번갈아 쓰려면 CPU 차례를 기다리는 <b>준비</b>, 입출력(키보드 입력 · 파일 읽기)이 끝나길 기다리는 <b>대기</b> 상태가 필요해요</li></ul></li></ul>
+<table class="ref">
+<tbody>
+<tr><th>상태</th><th>🤖 뜻</th></tr>
+<tr><td>생성</td><td>프로그램이 메모리에 올라와 프로세스가 만들어짐</td></tr>
+<tr><td>준비</td><td>실행할 준비가 끝나 <b>CPU 차례를 기다림</b></td></tr>
+<tr><td>실행</td><td>CPU 를 받아 실제로 실행 중</td></tr>
+<tr><td>대기</td><td>입출력 같은 <b>일이 끝나기를 기다림</b> (끝나면 다시 준비로)</td></tr>
+<tr><td>종료</td><td>실행이 끝나 사라짐</td></tr>
+</tbody></table>
+<ul><li><span class="wk-tag note">✍️ 필기</span> <b>포그라운드 프로세스 vs 백그라운드 프로세스</b> · <b>프로세스 번호 vs 작업 번호</b><ul><li>🤖 프로세스 번호(<b>PID</b>) = 시스템 전체에서 프로세스마다 붙는 번호 (<code>ps -ef</code> 두 번째 칸) / 작업 번호 = 그 <b>터미널에서</b> <code>jobs</code> 에 <code>[1]</code> 처럼 나오는 번호 (<code>fg 1</code> · <code>bg 1</code> 에 씀) — 예: <code>[1] 2680</code> = 작업 번호 1 · PID 2680</li></ul></li><li><span class="wk-tag note">✍️ 필기</span> 프로세스 명령어 <code>ps</code> 와 옵션 — 교수님이 언급한 옵션 <b><code>-e</code> · <code>-f</code></b><ul><li>🤖 <code>-e</code> = 모든(every) 프로세스 · <code>-f</code> = 자세히(full — UID · PID · PPID · 시작 시각 · 명령) → 둘을 합친 <b><code>ps -ef</code></b></li></ul></li><li><span class="wk-tag note">✍️ 필기</span> <code>yes</code> — 🤖 <code>y</code> 를 끝없이 출력하는 명령 → 6주차에 <code>yes &gt; /dev/null</code> 로 프로세스 실습</li><li><span class="wk-tag note">✍️ 필기</span> <b>service</b> 는 <b>데몬</b>이라고도 하며 <b>서버 프로세스</b>를 의미하고, 거의 <b>백그라운드 프로세스</b></li><li><span class="wk-tag note">✍️ 필기</span> <code>systemctl</code> 명령으로 언급한 옵션 (start, stop, restart, en??) — service 의 시작과 종료<ul><li><span class="wk-tag fix">⚠️ 정정</span> — “en??” = <b><code>enable</code></b> (부팅할 때 자동으로 시작) · 반대는 <code>disable</code></li></ul></li></ul>
+<pre><code class="language-bash">systemctl status sshd.service      # 서비스 상태 보기 (active = 실행 중)
+systemctl stop sshd.service        # 서비스 정지
+systemctl start sshd.service       # 서비스 시작
+systemctl restart sshd.service     # 서비스 다시 시작 (stop + start)
+systemctl enable sshd.service      # 부팅할 때 자동으로 시작되게</code></pre>
+</section>
+<section class="card">
+<h2>3. 도전문제 — 명령 여러 줄 (2 · 3 · 5 · 6 · 10장)</h2>
+<div class="tip">문제는 7주차 폴더 PDF 그대로 · 정답 명령은 접어 두었어요 (먼저 풀어 보기). $ = 일반 사용자 · # = root. <a href="../운영체제실습.html#s17">과목 페이지 17번</a> 에서 바로 채점할 수 있어요.</div>
+<h3>2장 리눅스 명령어 입문</h3>
+<h4>도전 2-1 · 2025년도 달력을 출력하시오.</h4>
+<ol><li>2025년도 달력을 출력하는 명령어 사용하기</li><li>금년도 달력 출력하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 2줄 보기</summary>
+<pre><code class="language-bash">$ cal 2025
+$ cal</code></pre>
+<ul><li>🤖 PPT 정답: <code>cal 2025</code> · <code>cal</code> (cal = 이번 달 · cal -y = 올해 전체)</li></ul>
+</details>
+<h4>도전 2-2 · 지금까지 사용했던 모든 명령과 실행결과를 화면에서 모두 지우시오.</h4>
+<ol><li>지금까지 사용한 명령들의 목록 출력 : history 명령 사용</li><li>터미널 창에 있는 모든 명령과 출력결과 지우기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 2줄 보기</summary>
+<pre><code class="language-bash">$ history
+$ clear</code></pre>
+</details>
+<h4>도전 2-3 · 현재 시스템에 접속된 사용자의 정보를 확인하시오.</h4>
+<ol><li>현재 접속하여 사용 중인 로그인 네임 확인하기</li><li>리눅스 시스템에 접속된 사용자 아이디 확인하기</li><li>시스템에 로그인한 모든 사용자의 계정과 터미널, 로그인 시각 등 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 3줄 보기</summary>
+<pre><code class="language-bash">$ logname
+$ users
+$ who</code></pre>
+<ul><li>🤖 logname = 로그인 네임 · users = 접속한 사용자 ID · who = 계정 · 터미널 · 로그인 시각</li></ul>
+</details>
+<h4>도전 2-4 · 현재 사용 중인 시스템에 대한 정보를 출력하시오.</h4>
+<ol><li>현재 시스템이 사용 중인 하드웨어의 정보 확인하기</li><li>현재 사용 중인 운영체제의 이름 확인하기</li><li>현재 사용 중인 운영체제의 이름과 버전출시 일자 한꺼번에 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 3줄 보기</summary>
+<pre><code class="language-bash">$ uname -m
+$ uname -s
+$ uname -sv</code></pre>
+<ul><li>🤖 uname -m = 하드웨어(머신) · -s = 운영체제 이름 · -v = 버전(출시 일자)</li></ul>
+</details>
+<h4>도전 2-5 · 본인의 학과, 학번, 성명, 전화를 다음과 같이 출력하시오.</h4>
+<pre class="io"><code class="language-text">1. 학과 : 빅데이터분석학과
+2. 학번 : 201703125
+3. 성명 : 홍 길 동
+4. 전화 : 02-000-0000</code></pre>
+<details class="wk-details">
+<summary>💡 정답 명령 1줄 보기</summary>
+<pre><code class="language-bash">$ echo -e 1.학과 : 빅데이터분석학과 "\n"2.학번 : 201703125 "\n"3.성명 : 홍길동 "\n"4.전화 : 02-000-0000</code></pre>
+<ul><li>🤖 echo 한 줄 — <code>-e</code> 옵션 + 이스케이프 <code>"\n"</code> 로 줄바꿈 (이스케이프 문자는 인용부호로 묶기)</li></ul>
+</details>
+<h4>도전 2-6 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>cp 명령이 어느 디렉터리에 존재하는지를 출력하기</li><li>mv 명령이 어느 디렉터리에 존재하는지를 출력하기</li><li>cp와 mv 명령이 존재하는 디렉터리의 모든 파일목록 출력하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 3줄 보기</summary>
+<pre><code class="language-bash">$ which cp
+$ which mv
+$ ls /usr/bin</code></pre>
+<ul><li>🤖 which 결과 = /usr/bin/cp · /usr/bin/mv → 그 디렉터리를 ls</li></ul>
+</details>
+<h4>도전 2-7 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>지금까지 사용한 모든 명령들의 목록 출력하기</li><li>수행했던 라인번호 3의 명령을 다시 실행하기</li><li>사용한 명령들 중에서 라인번호 5번만 삭제하기</li><li>지금까지 수행했던 모든 명령들을 한꺼번에 삭제하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 4줄 보기</summary>
+<pre><code class="language-bash">$ history
+$ !3
+$ history -d 5
+$ history -c</code></pre>
+<ul><li>🤖 !번호 = 그 번호 다시 실행 · -d 번호 = 그 줄만 삭제 · -c = 모두 삭제(clear)</li></ul>
+</details>
+<h3>3장 디렉터리와 파일</h3>
+<h4>도전 3-1 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>현재 위치한 디렉터리에 존재하는 모든 파일목록을 한꺼번에 출력하기</li><li>usr 디렉터리에 존재하는 모든 파일목록 출력하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 2줄 보기</summary>
+<pre><code class="language-bash">$ ls -F
+$ ls -F /usr</code></pre>
+<ul><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답 <code>ls –F /usrl</code> 은 오타 → <code>/usr</code></li></ul>
+</details>
+<h4>도전 3-2 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>현재 위치에서 /usr/lib 디렉터리로 이동하기</li><li>이동한 /usr/lib 디렉터리에서 홈 디렉터리로 바로 이동하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 2줄 보기</summary>
+<pre><code class="language-bash">$ cd /usr/lib
+$ cd</code></pre>
+</details>
+<h4>도전 3-3 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>현재 디렉터리의 위치를 홈 디렉터리로 이동하기</li><li>홈 디렉터리 위치에서 /usr/lib 디렉터리의 숨김 파일까지 모두 출력하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 2줄 보기</summary>
+<pre><code class="language-bash">$ cd
+$ ls -aF /usr/lib</code></pre>
+<ul><li>🤖 -a = 숨김(.) 파일까지 · -F = 종류 기호(/ * @)</li></ul>
+</details>
+<h4>도전 3-4 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>현재 디렉터리의 위치에서 tmp 디렉터리에 있는 파일의 종류와 기호 출력하기</li><li>tmp 디렉터리에 존재하는 파일의 상세 정보화 파일 종류 및 기호를 한꺼번에 출력하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 2줄 보기</summary>
+<pre><code class="language-bash">$ ls -F /tmp
+$ ls -lF /tmp</code></pre>
+</details>
+<h4>도전 3-5 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>현재 디렉터리의 위치에서 tmp 디렉터리에 있는 심볼릭 링크 명령 출력하기</li><li>tmp 디렉터리에 존재하는 심볼릭 링크 명령에 대한 상세한 정보 출력하기</li><li>ls 명령을 사용하지 말고 dir 명령과 vdir 명령을 사용하여 출력</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 2줄 보기</summary>
+<pre><code class="language-bash">$ dir /tmp
+$ vdir /tmp</code></pre>
+<ul><li>🤖 3번 조건대로 ls 대신 — 1번 = dir (ls 처럼 목록) · 2번 = vdir (ls -l 처럼 자세히) → 명령 2줄</li></ul>
+</details>
+<h4>도전 3-6 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>현재 디렉터리의 위치에서 tmp 디렉터리에 있는 test 파일 존재여부 확인하기</li><li>/usr/lib 디렉터리로 이동한 다음 sample.txt 파일이 존재하는지 확인하기</li><li>홈 디렉터리로 바로 이동하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 4줄 보기</summary>
+<pre><code class="language-bash">$ ls /tmp/test
+$ cd /usr/lib
+$ ls sample.txt
+$ cd</code></pre>
+<ul><li>🤖 2번은 이동(cd) + 확인(ls) 두 줄</li></ul>
+</details>
+<h4>도전 3-7 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>홈 디렉터리에 2개의 디렉터리 d_mark01, d_mark02 생성하기</li><li>생성한 d_mark01 디렉터리로 이동하기</li><li>d_mark01 디렉터리 위치에서 상대번지를 사용하여 d_mark02 디렉터리로 바로 이동하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 3줄 보기</summary>
+<pre><code class="language-bash">$ mkdir d_mark01 d_mark02
+$ cd d_mark01
+$ cd ../d_mark02</code></pre>
+<ul><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답은 <code>mkdir d_make01 d_make02</code> · <code>cd d_make01</code> (make ↔ mark 오타) + 끝에 <code>cd</code> 가 더 있음 → 문제대로 d_mark · 3줄</li></ul>
+</details>
+<h4>도전 3-8 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>홈 디렉터리에 존재하는 디렉터리의 목록 출력하기</li><li>홈 디렉터리에 2개의 디렉터리 d_mark01, d_mark02 한꺼번에 삭제하기</li><li>d_mark01, d_mark02 디렉터리가 삭제되었는지 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 3줄 보기</summary>
+<pre><code class="language-bash">$ ls
+$ rmdir d_mark01 d_mark02
+$ ls</code></pre>
+<ul><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답 <code>rmdir d_make01 d_mard02</code> 는 오타 → <code>rmdir d_mark01 d_mark02</code></li></ul>
+</details>
+<h4>도전 3-9 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>홈 디렉터리에서 /work/space/zone 계층적 디렉터리 생성하기</li><li>work 디렉터리의 하위 디렉터리까지 한꺼번에 계층적 디렉터리 출력하기</li><li>zone 디렉터리로 한 번에 이동하기</li><li>홈 디렉터리로 바로 이동하기</li><li>한꺼번에 /work/space/zone 계층적 디렉터리 삭제하기</li><li>계층적 디렉터리가 정상적으로 삭제되었는지 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 6줄 보기</summary>
+<pre><code class="language-bash">$ mkdir -p work/space/zone
+$ ls -R work
+$ cd work/space/zone
+$ cd
+$ rm -r work
+$ ls</code></pre>
+<ul><li>🤖 -p = 부모까지 한 번에 만들기 · ls -R = 하위까지 · rm -r = 비어 있지 않은 디렉터리 통째로</li></ul>
+</details>
+<h4>도전 3-10 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>홈 디렉터리에서 /workspace 디렉터리 생성하기</li><li>workspace 디렉터리에 빈파일 sample.txt 파일 생성하기</li><li>홈 디렉터리 위치에서 workspace 디렉터리에 있는 파일목록 출력하기</li><li>sample.txt 파일에 대한 최종 수정시각을 2055년 8월 15일 10:23분으로 변경하기</li><li>홈 디렉터리 위치에서 sample.txt 파일에 대한 자세한 내용을 확인하기</li><li>비어있지 않은 /workspace 디렉터리 삭제하기</li><li>workspace 디렉터리가 정상적으로 삭제되었는지 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 7줄 보기</summary>
+<pre><code class="language-bash">$ mkdir workspace
+$ touch workspace/sample.txt
+$ ls workspace
+$ touch -t 5508151023 workspace/sample.txt
+$ ls -l workspace
+$ rm -r workspace
+$ ls</code></pre>
+<ul><li>🤖 touch -t [[CC]YY]MMDDhhmm → 55 08 15 10 23 = 2055년 8월 15일 10:23</li></ul>
+</details>
+<h4>도전 3-11 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>홈 디렉터리에서 workspace 디렉터리 생성하기</li><li>홈 디렉터리 위치에서 workspace 디렉터리에 빈파일 sample.txt 파일 생성하기</li><li>workspace 디렉터리에 sample.txt 파일이 생성되었는지 확인하기</li><li>workspace 디렉터리를 copy_workspace 디렉터리로 복사하기</li><li>/etc/hosts 파일과 /etc/services 파일을 한꺼번에 copy_workspace 디렉터리로 복사하기</li><li>홈 디렉터리 위치에서 copy_workspace 디렉터리에 존재하는 파일 목록을 자세하게 출력하기</li><li>비어있지 않은 workspace 디렉터리와 copy_workspace 디렉터리를 한꺼번에 삭제하기</li><li>workspace 디렉터리와 copy_workspace 디렉터리가 정상적으로 모두 삭제되었는지 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 8줄 보기</summary>
+<pre><code class="language-bash">$ mkdir workspace
+$ touch workspace/sample.txt
+$ ls workspace
+$ cp -r workspace copy_workspace
+$ cp /etc/hosts /etc/services copy_workspace
+$ ls -l copy_workspace
+$ rm -r workspace copy_workspace
+$ ls</code></pre>
+<ul><li>🤖 디렉터리 복사는 cp -r (하위까지)</li><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답은 <code>cp /etc/avahi/hosts /etc/avahi/services …</code> · 복사 뒤 <code>ls</code> 가 한 줄 더 있음 → 문제대로 <code>/etc/hosts /etc/services</code> · 8줄</li></ul>
+</details>
+<h4>도전 3-12 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>홈 디렉터리에서 section_05 디렉터리에 있는 파일목록을 출력하기</li><li>section_05 디렉터리에 존재하는 gedit_test.txt 파일내용을 행 번호와 함께 출력하기</li><li>터미널 창에 사용했던 명령어와 출력결과를 모두 지우기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 3줄 보기</summary>
+<pre><code class="language-bash">$ ls section_05
+$ cat -n ./section_05/gedit_test.txt
+$ clear</code></pre>
+</details>
+<h4>도전 3-13 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>홈 디렉터리에서 /etc/services 파일내용을 행 번호와 함께 출력하기</li><li>services 파일내용 중에서 cssc 문자열이 포함된 부분을 행 번호와 함께 출력하기</li><li>지금까지 사용했던 명령어를 모두 출력하기</li><li>맨 마지막 명령을 행 번호로 다시 실행하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 4줄 보기</summary>
+<pre><code class="language-bash">$ cat -n /etc/services
+$ grep -n cssc /etc/services
+$ history
+$ !행번호</code></pre>
+<ul><li>🤖 4번 = <code>!</code> + history 에 나온 번호 (예: !512)</li></ul>
+</details>
+<h4>도전 3-14 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>grep 명령이 어느 디렉터리에 있는지 위치 출력하기</li><li>cat 명령과 history 명령이 어느 디렉터리에 위치하고 있는지 한꺼번에 출력하기</li><li>터미널 창에 출력된 모든 명령과 출력결과 지우기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 3줄 보기</summary>
+<pre><code class="language-bash">$ whereis grep
+$ whereis cat history
+$ clear</code></pre>
+<ul><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답 <code>where cat history</code> 는 오타 → <code>whereis cat history</code></li></ul>
+</details>
+<h4>도전 3-15 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>홈 디렉터리에서 workspace 디렉터리 생성하기</li><li>홈 디렉터리 위치에서 workspace 디렉터리에 빈파일 sample.txt 파일 생성하기</li><li>workspace 디렉터리에 sample.txt 파일이 생성되었는지 확인하기</li><li>workspace 디렉터리를 mv_workspace 디렉터리로 이동하기</li><li>/etc/hosts 파일과 /etc/services 파일을 한꺼번에 mv_workspace 디렉터리로 복사하기</li><li>홈 디렉터리 위치에서 copy_workspace 디렉터리에 존재하는 파일목록을 자세하게 출력하기</li><li>mv_workspace 디렉터리에 sample.txt 파일 삭제하기</li><li>mv_workspace 디렉터리를 삭제여부를 물어가면서 삭제하기</li><li>mv_workspace 디렉터리가 정상적으로 삭제되었는지 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 9줄 보기</summary>
+<pre><code class="language-bash">$ mkdir workspace
+$ touch workspace/sample.txt
+$ ls workspace
+$ mv workspace mv_workspace
+$ cp /etc/hosts /etc/services mv_workspace
+$ ls -l mv_workspace
+$ rm mv_workspace/sample.txt
+$ rm -ri mv_workspace
+$ ls</code></pre>
+<ul><li>🤖 mv = 이름 바꾸기(이동) · rm -ri = 물어보면서(-i) 하위까지(-r) 삭제</li><li><span class="wk-tag fix">⚠️ 정정</span> — 문제 6번의 copy_workspace 는 mv_workspace 의 오타로 보여요 · PPT 정답은 확인용 ls 가 두 줄 더 있음(11줄) → 문제 9단계대로 9줄</li></ul>
+</details>
+<h3>5장 파일접근 권한설정 (5-4 는 안 배움 · 시험 X)</h3>
+<h4>도전 5-1 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>주어진 문장을 에디트 창에서 입력하기 (리눅스 운영체제는 / 컴퓨터를 사용함에 있어 / 많은 편의성과 기능을 제공해 줍니다.)</li><li>입력한 문장을 story.txt 파일명으로 저장하기 — gedit 창에서 저장 (명령 줄 없음)</li><li>story.txt 파일의 현재 설정된 접근권한 출력하기</li><li>story.txt 파일의 접근권한을 심볼릭 모드로 파일 소유자에게 실행권한과 그룹 및 사용자에게 쓰기 권한 부여하기</li><li>story.txt 파일에 변경된 접근권한 출력하기</li><li>story.txt 파일의 접근권한을 심볼릭 모드로 파일 소유자에게 실행권한과 그룹 및 사용자에게 쓰기 권한 제거하기</li><li>story.txt 파일에 변경된 접근권한 출력하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 6줄 보기</summary>
+<pre><code class="language-bash">$ gedit
+$ ls -l
+$ chmod u+x,go+w story.txt
+$ ls -l
+$ chmod u-x,go-w story.txt
+$ ls -l</code></pre>
+<ul><li>🤖 심볼릭 모드 = u(소유자) g(그룹) o(기타) + / − r w x · 쉼표 뒤에 띄어쓰기 없이</li></ul>
+</details>
+<h4>도전 5-2 · 다음 항목에서 주어진 지시사항을 수행하시오. (숫자만 한 줄에 하나씩 — 1번 설명은 채점 안 함)</h4>
+<ol><li>특정 파일에 주어진 권한 –rwx r-w rwx 설명하기</li><li>소유자 권한에 대한 권한값 숫자모드로 환산하기</li><li>그룹 권한에 대한 권한값 숫자모드로 환산하기</li><li>기타 사용자 권한에 대한 권한값 숫자모드로 환산하기</li><li>권한묶음에 대한 권한값 숫자모드로 최종 환산하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 4줄 보기</summary>
+<pre><code class="language-bash">$ 7
+$ 5
+$ 7
+$ 757</code></pre>
+<ul><li>🤖 r = 4 · w = 2 · x = 1 · 자리마다 더하기 → 소유자 rwx = 7 · 그룹 r-x = 5 · 기타 rwx = 7</li><li><span class="wk-tag fix">⚠️ 정정</span> — 문제의 <code>r-w</code> 는 자리(r w x)에 맞지 않는 표기예요. PPT 정답은 그룹 = 040+000+010 = 050(r-x) · 기타 = 004+002+001 = 006 · 최종 756 으로 계산이 서로 안 맞아요 → rwx r-x rwx 로 보면 757, PPT 대로면 756 — 둘 다 정답 처리</li></ul>
+</details>
+<h4>도전 5-3 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>새로운 빈파일 yesterday.txt 생성하기</li><li>yesterday.txt 파일에 설정되어 있는 접근권한 출력하기</li><li>yesterday.txt 파일에 대한 접근권한을 숫자모드를 이용하여 rwx rwx r-x로 변경하기</li><li>접근권한이 변경된 yesterday.txt 파일의 접근권한 출력하기</li><li>yesterday.txt 파일삭제 여부를 물어가며 삭제하기</li><li>삭제된 yesterday.txt 파일이 존재하는지 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 6줄 보기</summary>
+<pre><code class="language-bash">$ touch yesterday.txt
+$ ls -l
+$ chmod 775 yesterday.txt
+$ ls -l
+$ rm -i yesterday.txt
+$ ls -l</code></pre>
+<ul><li>🤖 rwx rwx r-x = 7 7 5 → chmod 775</li><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답 <code>touch yesterdat.txt</code> 는 오타 → yesterday.txt</li></ul>
+</details>
+<h3>6장 관리자 권한 실행 (# = root)</h3>
+<h4>도전 6-1 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>사용자 계정의 홈 디렉터리 /work_06을 지정하여 master 계정 생성하기</li><li>master 계정의 암호를 123456으로 설정하기</li><li>master 계정의 UID 확인하기</li><li>master 계정의 GID 확인하기</li><li>master 계정의 홈 디렉터리 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 3줄 보기</summary>
+<pre><code class="language-bash"># useradd -d /work_06 master
+# passwd master
+# tail /etc/passwd</code></pre>
+<ul><li>🤖 3 · 4 · 5번은 /etc/passwd 한 줄에서 같이 확인 (계정:x:UID:GID:설명:홈:셸) → 명령 3줄</li><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답 <code>pass master</code>(문제 PDF 는 <code>passwd vmaster</code>) 는 오타 → <code>passwd master</code> (암호 입력 화면에서 123456 두 번)</li></ul>
+</details>
+<h4>도전 6-2 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>[도전 6-1]에서 생성한 master 계정의 UID를 2003으로 변경하기</li><li>tail 명령으로 변경된 master 계정의 UID 확인하기</li><li>master 계정의 홈 디렉터리를 workspace_06 디렉터리로 지정하기</li><li>grep 명령으로 변경된 master 계정의 홈 디렉터리 확인하기</li><li>master 계정의 로그인 ID를 manager로 변경하기</li><li>grep 명령으로 변경된 master 계정의 로그인 ID 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 6줄 보기</summary>
+<pre><code class="language-bash"># usermod -u 2003 master
+# tail -2 /etc/passwd
+# usermod -d /home/workspace_06 master
+# grep master /etc/passwd
+# usermod -l manager master
+# grep manager /etc/passwd</code></pre>
+<ul><li>🤖 usermod -u = UID · -d = 홈 디렉터리 · -l 새이름 옛이름 = 로그인 ID</li><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답 <code>tail –2 /ect/passwd</code> → /etc/passwd · <code>grep master</code> · <code>grep manager</code> 는 파일 이름(/etc/passwd)이 빠짐</li></ul>
+</details>
+<h4>도전 6-3 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>[도전 6-1]에서 생성한 master 계정에 설정되어 있는 암호정보 확인하기</li><li>master 계정사용 만료 일자를 2030년 05월 05일로 변경하기</li><li>변경된 master 계정의 암호정보 확인하기</li><li>master 계정의 설정된 암호를 최대 30일까지 사용할 수 있도록 변경하기</li><li>변경된 master 계정의 암호정보 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 5줄 보기</summary>
+<pre><code class="language-bash"># chage -l master
+# chage -E 2030/05/05 master
+# chage -l master
+# chage -M 30 master
+# chage -l master</code></pre>
+<ul><li>🤖 chage -l = 보기 · -E = 계정 만료일 · -M = 암호 최대 사용 일수</li></ul>
+</details>
+<h4>도전 6-4 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>professor 그룹을 옵션 없이 새로 생성하기</li><li>새로 생성한 professor 그룹에 자동으로 설정된 GID 확인하기</li><li>GID를 2018로 설정하여 student 그룹을 새로 생성하기</li><li>새로 생성한 student 그룹에 설정된 GID 확인하기</li><li>기존의 GID 2018을 중복 지정하여 db_space 그룹을 새로 생성하기</li><li>새로 생성한 db_space 그룹에 설정된 GID 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 6줄 보기</summary>
+<pre><code class="language-bash"># groupadd professor
+# grep professor /etc/group
+# groupadd -g 2018 student
+# grep student /etc/group
+# groupadd -g 2018 -o db_space
+# grep db_space /etc/group</code></pre>
+<ul><li>🤖 groupadd -g = GID 지정 · -o = 이미 있는 GID 중복 허용</li></ul>
+</details>
+<h4>도전 6-5 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>사용자 계정 pro_001과 pro_002 계정을 새로 생성하기</li><li>새로 생성한 2개의 사용자 계정이 홈 디렉터리에 존재하는지 확인하기</li><li>professor 그룹에 사용자 계정 pro_001계정을 추가 지정하기</li><li>professor 그룹에 사용자 계정 pro_002계정을 추가 지정하기</li><li>사용자 계정 pro_001과 pro_002 계정에 지정된 그룹정보 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 7줄 보기</summary>
+<pre><code class="language-bash"># useradd pro_001
+# useradd pro_002
+# ls /home
+# gpasswd -a pro_001 professor
+# gpasswd -a pro_002 professor
+# grep pro_001 /etc/group
+# grep pro_002 /etc/group</code></pre>
+<ul><li>🤖 1번 = useradd 두 줄 · 5번 = 계정마다 한 줄씩 → 명령 7줄 · gpasswd -a 계정 그룹 = 그룹에 멤버 추가</li></ul>
+</details>
+<h4>도전 6-6 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>professor 그룹에 존재하는 pro_001 멤버를 삭제하기</li><li>grep 명령으로 pro_001 계정이 professor 그룹에 존재여부를 확인하기</li><li>professor 그룹에 암호를 123456으로 설정하기</li><li>student 그룹에 암호를 123456으로 설정하기</li><li>grep 명령으로 professor 그룹과 student 그룹에 설정된 암호에 대한 정보 확인</li><li>student 그룹에 설정된 암호 삭제하기</li><li>암호가 삭제된 student 그룹의 암호정보 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 8줄 보기</summary>
+<pre><code class="language-bash"># gpasswd -d pro_001 professor
+# grep pro_001 /etc/group
+# gpasswd professor
+# gpasswd student
+# grep professor /etc/gshadow
+# grep student /etc/gshadow
+# gpasswd -r student
+# grep student /etc/gshadow</code></pre>
+<ul><li>🤖 그룹 암호 정보 = /etc/gshadow · gpasswd -d = 멤버 삭제 · -r = 그룹 암호 삭제 · 5번은 그룹마다 한 줄 → 명령 8줄</li><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답 <code>gpasswd professer</code> · <code>grep professer /etc/gshadow</code> 는 오타 → professor</li></ul>
+</details>
+<h4>도전 6-7 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>터미널 창에서 professor 그룹에 존재하는 pro_002 계정으로 접속하기</li><li>pro_002 계정의 그룹정보 출력하기</li><li>pro_002 계정의 소속 그룹을 professor 그룹으로 변경하기</li><li>pro_002 계정의 변경된 그룹 정보 출력하기</li><li>root 계정으로 프롬프트 변경하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 5줄 보기</summary>
+<pre><code class="language-bash"># su - pro_002
+# id
+# newgrp professor
+# id
+# su - root</code></pre>
+<ul><li>🤖 su - 계정 = 그 계정으로 접속(환경까지) · id = UID · GID · 그룹 · newgrp 그룹 = 지금 소속 그룹 바꾸기</li><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 정답 <code>newgrp pro_002</code> → 문제(3번)대로 소속 그룹을 professor 로 바꾸는 <code>newgrp professor</code></li></ul>
+</details>
+<h3>10장 서비스 (systemctl)</h3>
+<h4>도전 10-1 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>서비스 스크립트가 존재하는 디렉터리로 이동하기</li><li>리눅스 시스템에서 제공하고 있는 서비스의 스크립트 정보 확인하기</li><li>usbmuxd.service 유닛의 상태를 status 명령으로 확인하기</li><li>usbmuxd.service 유닛 정지 후 유닛 상태를 status 명령으로 확인하기</li><li>usbmuxd.service 유닛을 다시 시작하기</li><li>usbmuxd.service 유닛 실행 상태에서 PID와 PPID 확인하기</li></ol>
+<details class="wk-details">
+<summary>💡 정답 명령 7줄 보기</summary>
+<pre><code class="language-bash"># cd /usr/lib/systemd/system
+# ls -l *.service
+# systemctl status usbmuxd.service
+# systemctl stop usbmuxd.service
+# systemctl status usbmuxd.service
+# systemctl start usbmuxd.service
+# ps -ef | grep usbmuxd</code></pre>
+<ul><li>🤖 PPT 정답 슬라이드가 없어 6주차 수업(서비스 파일 · ps -ef | grep)과 7주차 필기(systemctl start · stop · restart)로 만든 답 · 4번은 stop + status 두 줄 → 명령 7줄 · ps -ef 의 PID · PPID 칸</li></ul>
+</details>
+</section>
+<section class="card">
+<h2>4. 도전문제 — 11장 셸 스크립트</h2>
+<div class="tip">✍️ 시험에서 셸 스크립트는 <b>비중이 낮고 코드를 읽고 출력결과만 알면 괜찮다</b>고 했어요. 모범답안은 교수님 PPT 정답 슬라이드 기준(오류는 ⚠️ 로 고침) · 실행 결과는 직접 실행한 것 (터미널에서는 입력한 값도 화면에 보여요).</div>
+<h4>도전 11-1 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>셸 스크립트 프로그램 test_1101.sh 작성하기</li><li>두 개의 변수 su1, su2를 선언하기</li><li>su1 변수에 키보드로 23을 입력하여 저장하기</li><li>su2 변수에 키보드로 56을 입력하여 저장하기</li><li>두 수의 곱을 변수 gob에 저장하기</li><li>키보드로 입력받은 값 출력하기</li><li>두 수의 곱셈 연산과 결과값 출력하기</li></ol>
+<pre><code class="language-bash"># gedit test_1101.sh
+# sh test_1101.sh</code></pre>
+<details class="wk-details">
+<summary>💡 모범답안 · 실행 결과 (입력 23 · 56)</summary>
+<pre><code class="language-bash">#! /bin/sh                                # 이 파일을 sh(셸)로 실행
+echo "1. 첫 번째 정수 입력"               # 안내 출력
+read su1                                  # 키보드 입력 → 변수 su1 에 저장
+echo "2. 두 번째 정수 입력"               # 안내 출력
+read su2                                  # 키보드 입력 → 변수 su2 에 저장
+echo "&gt;&gt; 두 수의 곱셈연산 결과"           # 안내 출력
+gob=`expr $su1 \* $su2`                   # expr 로 곱셈 (* 는 \* 로) → 결과를 gob 에
+echo " $su1 * $su2 = $gob "               # 입력한 두 수와 곱 출력
+exit 0                                    # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">1. 첫 번째 정수 입력
+2. 두 번째 정수 입력
+&gt;&gt; 두 수의 곱셈연산 결과
+ 23 * 56 = 1288 </code></pre>
+</details>
+<h4>도전 11-2 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>셸 스크립트 프로그램 test_1102.sh 작성하기</li><li>명령 수행 파라미터 $1 사용하기</li><li>혈액형을 알파벳 대/소문자 구별 없이 A, B, O, AB 조건으로 정하기</li><li>혈액형 이외의 알파벳에 대해서는 유효한 알파벳 알림 메시지 출력하기</li><li>혈액형에 대해서는 출력 메시지는 “무슨 형을 선택하였습니다.”로 출력하기</li><li>마지막에는 “프로그램을 종료합니다.”를 출력하기</li></ol>
+<pre><code class="language-bash"># gedit test_1102.sh
+# sh test_1102.sh A</code></pre>
+<details class="wk-details">
+<summary>💡 모범답안 · 실행 결과 (입력 실행할 때 A)</summary>
+<pre><code class="language-bash">#! /bin/sh                                # sh 로 실행
+echo "&gt; 명령 수행 파라미터 (A, B, O, AB)"  # 안내 출력
+case "$1" in                              # $1 = sh test_1102.sh A 의 첫 번째 값
+A | a)                                    # A 또는 a (대/소문자 구별 없이)
+echo "A형을 선택하였습니다." ;;           # 출력 후 case 끝으로
+B | b)                                    # B 또는 b
+echo "B형을 선택하였습니다." ;;           # 출력
+O | o)                                    # O 또는 o
+echo "O형을 선택하였습니다." ;;           # 출력
+AB | ab | Ab | aB)                        # AB 의 대/소문자 조합
+echo "AB형을 선택하였습니다." ;;          # 출력
+*)                                        # 그 밖의 모든 값
+echo "혈액형은 알파벳 대/소문자 구별 없이 A, B, O, AB만 가능합니다." ;;   # 알림 메시지
+esac                                      # case 끝
+echo "프로그램을 종료합니다."             # 마지막 메시지 (문제 6번)
+exit 0                                    # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">&gt; 명령 수행 파라미터 (A, B, O, AB)
+A형을 선택하였습니다.
+프로그램을 종료합니다.</code></pre>
+<ul><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 모범답안에는 6번 “프로그램을 종료합니다.” 출력이 빠져 있어서 esac 뒤에 넣었어요 · AB 는 Ab · aB 도 받게 했어요</li></ul>
+</details>
+<h4>도전 11-3 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>셸 스크립트 프로그램 test_1103.sh 작성하기</li><li>프로그램은 while문과 case~esac문 사용하기</li><li>알파벳은 변수를 선언하여 키보드로 입력받기</li><li>대/소문자 구별 없이 알파벳 H, S, P, E를 조건으로 정하기</li><li>출력메시지는 H:처음, S:시작, P:스톱, E:종료</li><li>H는 continue 사용, P는 break 사용, E는 exit 0 사용</li><li>H, S, P, E 알파벳 이외의 알파벳 입력 시 무한 반복하기</li></ol>
+<pre><code class="language-bash"># gedit test_1103.sh
+# sh test_1103.sh</code></pre>
+<details class="wk-details">
+<summary>💡 모범답안 · 실행 결과 (입력 H · s · k · p)</summary>
+<pre><code class="language-bash">#! /bin/sh                                # sh 로 실행
+echo "&gt; 처음(H)/시작(S)/스톱(P)/종료(E) 분기 프로그램 "   # 안내 출력
+while [ 1 ]                               # 조건이 늘 참 → 무한 반복
+do                                        # 반복 시작
+echo "&gt; 대/소문자 구별 없이 알파벳 입력 (H, S, P, E) "   # 입력 안내
+read choice                               # 키보드 입력 → choice
+case $choice in                           # choice 값으로 나누기
+H | h)                                    # H 또는 h
+echo "처음" ; continue ;;                 # 출력 후 continue → 반복 처음으로
+S | s)                                    # S 또는 s
+echo "시작" ;;                            # 출력 후 다음 반복
+P | p)                                    # P 또는 p
+echo "스톱" ; break ;;                    # 출력 후 break → while 을 빠져나감
+E | e)                                    # E 또는 e
+echo "종료" ; exit 0 ;;                   # 출력 후 프로그램 끝
+*)                                        # 그 밖의 알파벳
+echo "허용하는 알파벳 대/소문자 구별 없이 H, S, P, E 만 가능합니다. "   # 알림
+continue ;;                               # 다시 입력받기 (무한 반복)
+esac                                      # case 끝
+done                                      # while 끝
+exit 0                                    # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">&gt; 처음(H)/시작(S)/스톱(P)/종료(E) 분기 프로그램 
+&gt; 대/소문자 구별 없이 알파벳 입력 (H, S, P, E) 
+처음
+&gt; 대/소문자 구별 없이 알파벳 입력 (H, S, P, E) 
+시작
+&gt; 대/소문자 구별 없이 알파벳 입력 (H, S, P, E) 
+허용하는 알파벳 대/소문자 구별 없이 H, S, P, E 만 가능합니다. 
+&gt; 대/소문자 구별 없이 알파벳 입력 (H, S, P, E) 
+스톱</code></pre>
+</details>
+<h4>도전 11-4 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>셸 스크립트 프로그램 test_1104.sh 작성하기</li><li>사용자 정의 함수 2개(hap, cha) 정의하기</li><li>hap( ) 함수는 덧셈을 cha( ) 함수는 뺄셈을 연산하기</li><li>함수 사용 선택은 숫자 1과 2로 구분하여 호출하기(1:hap 함수, 2:cha 함수)</li><li>키보드로 두 수를 입력 받아 변수 num1과 num2에 저장하기</li><li>함수를 선택하는 숫자 1, 2이외의 숫자가 입력되었을 경우에는 종료하기</li><li>각각의 함수에는 return문은 생략하기</li></ol>
+<pre><code class="language-bash"># gedit test_1104.sh
+# sh test_1104.sh</code></pre>
+<details class="wk-details">
+<summary>💡 모범답안 · 실행 결과 (입력 1 · 23 · 56)</summary>
+<pre><code class="language-bash">#! /bin/sh                                # sh 로 실행
+echo "&gt; 사용자 정의 함수 프로그램 "       # 안내 출력
+hap ( )                                   # 덧셈 함수 hap 정의
+{                                         # 함수 몸통 시작
+echo "&gt; 첫 번째 정수 입력"                # 입력 안내
+read num1                                 # 키보드 → num1
+echo "&gt; 두 번째 정수 입력 "               # 입력 안내
+read num2                                 # 키보드 → num2
+result=`expr $num1 + $num2`               # 덧셈
+echo " 덧셈 결과 : $num1 + $num2 = $result "   # 결과 출력 (return 문 없음)
+}                                         # hap 끝
+cha ( )                                   # 뺄셈 함수 cha 정의
+{                                         # 함수 몸통 시작
+echo "&gt; 첫 번째 정수 입력"                # 입력 안내
+read num1                                 # 키보드 → num1
+echo "&gt; 두 번째 정수 입력 "               # 입력 안내
+read num2                                 # 키보드 → num2
+result=`expr $num1 - $num2`               # 뺄셈
+echo " 뺄셈 결과 : $num1 - $num2 = $result "   # 결과 출력 (return 문 없음)
+}                                         # cha 끝
+echo "&gt; 함수를 숫자로 선택하세요.(1:덧셈, 2:뺄셈)"   # 선택 안내
+read choice                               # 키보드 → choice
+case $choice in                           # 고른 숫자로 나누기
+1)                                        # 1 이면
+hap ;;                                    # hap 함수 호출
+2)                                        # 2 이면
+cha ;;                                    # cha 함수 호출
+*)                                        # 1 · 2 가 아니면
+echo "허용되는 숫자가 아니라서 프로그램을 종료합니다. " ;;   # 종료 안내
+esac                                      # case 끝
+exit 0                                    # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">&gt; 사용자 정의 함수 프로그램 
+&gt; 함수를 숫자로 선택하세요.(1:덧셈, 2:뺄셈)
+&gt; 첫 번째 정수 입력
+&gt; 두 번째 정수 입력 
+ 덧셈 결과 : 23 + 56 = 79 </code></pre>
+<ul><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 모범답안의 cha( ) 는 <code>expr $num1 + $num2</code> · “뺄셈 결과 : $num1 + $num2” 로 덧셈을 하고 있어요 → <code>-</code> 로 고쳤어요</li></ul>
+</details>
+<h4>도전 11-5 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
+<ol><li>셸 스크립트 프로그램 test_1105.sh 작성하기</li><li>set와 $(명령어)를 사용하여 오늘의 날짜와 요일 시각 형식 지정하기</li><li>출력 메시지는 a. 연도출력 : · b. 월일출력 : · c. 요일출력 : · d. 시각출력 : 으로 출력하기</li><li>출력형식은 아래 실행결과 그림 참조</li></ol>
+<pre><code class="language-bash"># gedit test_1105.sh
+# sh test_1105.sh</code></pre>
+<details class="wk-details">
+<summary>💡 모범답안 · 실행 결과 (입력 (입력 없음 · 문제 그림의 날짜 2019. 12. 31. (화) 15:05:33 KST 로 실행))</summary>
+<pre><code class="language-bash">#! /bin/sh                                # sh 로 실행
+echo "==================================================="   # 줄 긋기
+echo "&gt; 오늘의 날짜 출력 : $(date) "     # $(date) = date 명령의 결과를 그 자리에
+set $(date)                               # date 결과를 띄어쓰기마다 $1 $2 $3 … 에 나눠 담기
+echo " a. 연도 출력 : [$1]년도 "          # $1 = 연도
+echo " b. 월일 출력 : [$2]월 [$3]일 "     # $2 = 월 · $3 = 일
+echo " c. 요일 출력 : $4요일 "            # $4 = 요일
+echo " d. 시각 출력 : [$5]초 "            # $5 = 시각
+exit 0                                    # 정상 종료</code></pre>
+<pre class="io"><code class="language-text">===================================================
+&gt; 오늘의 날짜 출력 : 2019. 12. 31. (화) 15:05:33 KST 
+ a. 연도 출력 : [2019.]년도 
+ b. 월일 출력 : [12.]월 [31.]일 
+ c. 요일 출력 : (화)요일 
+ d. 시각 출력 : [15:05:33]초 </code></pre>
+<ul><li><span class="wk-tag fix">⚠️ 정정</span> — PPT 모범답안은 네 줄 모두 “a.” → a · b · c · d 로 고쳤어요</li></ul>
+</details>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-6주차.html">‹ 이전 · <b>6주차</b><br><small>셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</small></a><a class="next" href="운영체제실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「운영체제실습 · 7주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202610151649"></script>
+</body>
+</html>
