@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202610151649"></script>
+    <script src="theme.js?v=202610151733"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운영체제실습 · 완전 정리</title>
     <style>
@@ -10,8 +10,8 @@
         .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
         .ref.wrap1 td:first-child{white-space:normal;}   /* 명령이 긴 표(14 · 15번) — 폰에서 첫 칸도 줄바꿈해 설명 칸이 눌리지 않게 */
     </style>
-    <link rel="stylesheet" href="style.css?v=202610151649">
-    <script src="schedule.js?v=202610151649"></script>
+    <link rel="stylesheet" href="style.css?v=202610151733">
+    <script src="schedule.js?v=202610151733"></script>
 </head>
 <body>
 <div class="wrap">
@@ -1029,14 +1029,14 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;echo -e 1.학과 : 빅데이터분석학과 \&quot;\\n\&quot;2.학번 : 201703125 \&quot;\\n\&quot;3.성명 : 홍길동 \&quot;\\n\&quot;4.전화 : 02-000-0000&quot;, &quot;re:^echo -e .*빅데이터분석학과.*\\\\n.*201703125.*\\\\n.*홍 ?길 ?동.*\\\\n.*02-000-0000&quot;]]" data-explain="echo 한 줄 — -e 옵션 + 이스케이프 &quot;\n&quot; 로 줄바꿈 (이스케이프 문자는 인용부호로 묶기)">
+        <div class="quiz-item" data-lines="{&quot;or&quot;: [[[&quot;echo -e 1.학과 : 빅데이터분석학과 \&quot;\\n\&quot;2.학번 : 201703125 \&quot;\\n\&quot;3.성명 : 홍길동 \&quot;\\n\&quot;4.전화 : 02-000-0000&quot;, &quot;re:^(echo -e|printf) .*빅데이터분석학과.*\\\\n.*201703125.*\\\\n.*홍 ?길 ?동.*\\\\n.*02-000-0000&quot;]], [[&quot;echo \&quot;1. 학과 : 빅데이터분석학과\&quot;&quot;, &quot;re:^echo (-e )?.*학과 ?: ?빅데이터분석학과&quot;], [&quot;echo \&quot;2. 학번 : 201703125\&quot;&quot;, &quot;re:^echo (-e )?.*학번 ?: ?201703125&quot;], [&quot;echo \&quot;3. 성명 : 홍 길 동\&quot;&quot;, &quot;re:^echo (-e )?.*성명 ?: ?홍 ?길 ?동&quot;], [&quot;echo \&quot;4. 전화 : 02-000-0000\&quot;&quot;, &quot;re:^echo (-e )?.*전화 ?: ?02-000-0000&quot;]], [[&quot;gnome-text-editor info.txt&quot;, &quot;re:^(gnome-text-editor|gedit)( \\S+)?( &amp;)?$&quot;], [&quot;cat info.txt&quot;, &quot;re:^cat \\S+$&quot;]]]}" data-explain="정답 방법 3가지 — ① echo -e 한 줄 + 이스케이프 &quot;\n&quot; 로 줄바꿈 (PPT 정답) ② echo 네 줄 ③ gnome-text-editor(gedit)로 파일에 써서 저장 → cat 으로 출력 (파일 이름은 자유)">
             <p class="quiz-q"><span class="quiz-cat">도전 2-5</span>본인의 학과, 학번, 성명, 전화를 다음과 같이 출력하시오.</p>
             <pre class="quiz-steps-out"><code class="language-text">1. 학과 : 빅데이터분석학과
 2. 학번 : 201703125
 3. 성명 : 홍 길 동
 4. 전화 : 02-000-0000</code></pre>
-            <p class="quiz-lines-hint">⌨️ 명령 <b>1줄</b> · 한 줄에 하나씩 (Enter = 다음 줄) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
-            <textarea class="quiz-lines" rows="2" placeholder="$ 명령어 → Enter → 다음 명령어" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
+            <p class="quiz-lines-hint">⌨️ 명령 <b>1줄</b> · <b>다른 방법도 정답</b> (줄 수가 달라도 됨) · 한 줄에 하나씩 (Enter = 다음 줄) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
+            <textarea class="quiz-lines" rows="4" placeholder="$ 명령어 → Enter → 다음 명령어" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
@@ -1178,7 +1178,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-feedback"></div>
         </div>
         <h3>5장 파일접근 권한설정 (5-4 는 안 배움 · 시험 X)</h3>
-        <div class="quiz-item" data-lines="[[&quot;gedit&quot;, &quot;gedit story.txt&quot;, &quot;gedit story.txt &amp;&quot;, &quot;gedit &amp;&quot;], [&quot;ls -l&quot;, &quot;ls -l story.txt&quot;], [&quot;chmod u+x,go+w story.txt&quot;, &quot;chmod u+x,g+w,o+w story.txt&quot;, &quot;chmod go+w,u+x story.txt&quot;], [&quot;ls -l&quot;, &quot;ls -l story.txt&quot;], [&quot;chmod u-x,go-w story.txt&quot;, &quot;chmod u-x,g-w,o-w story.txt&quot;, &quot;chmod go-w,u-x story.txt&quot;], [&quot;ls -l&quot;, &quot;ls -l story.txt&quot;]]" data-explain="심볼릭 모드 = u(소유자) g(그룹) o(기타) + / − r w x · 쉼표 뒤에 띄어쓰기 없이">
+        <div class="quiz-item" data-lines="[[&quot;gedit&quot;, &quot;gedit story.txt&quot;, &quot;gnome-text-editor story.txt&quot;, &quot;re:^(gedit|gnome-text-editor)( story\\.txt)?( &amp;)?$&quot;], [&quot;ls -l&quot;, &quot;ls -l story.txt&quot;], [&quot;chmod u+x,go+w story.txt&quot;, &quot;chmod u+x,g+w,o+w story.txt&quot;, &quot;chmod go+w,u+x story.txt&quot;], [&quot;ls -l&quot;, &quot;ls -l story.txt&quot;], [&quot;chmod u-x,go-w story.txt&quot;, &quot;chmod u-x,g-w,o-w story.txt&quot;, &quot;chmod go-w,u-x story.txt&quot;], [&quot;ls -l&quot;, &quot;ls -l story.txt&quot;]]" data-explain="편집기는 gedit · gnome-text-editor(Rocky 10) 둘 다 정답 · 심볼릭 모드 = u(소유자) g(그룹) o(기타) + / − r w x · 쉼표 뒤에 띄어쓰기 없이">
             <p class="quiz-q"><span class="quiz-cat">도전 5-1</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>주어진 문장을 에디트 창에서 입력하기 (리눅스 운영체제는 / 컴퓨터를 사용함에 있어 / 많은 편의성과 기능을 제공해 줍니다.)</li><li>입력한 문장을 story.txt 파일명으로 저장하기 — gedit 창에서 저장 (명령 줄 없음)</li><li>story.txt 파일의 현재 설정된 접근권한 출력하기</li><li>story.txt 파일의 접근권한을 심볼릭 모드로 파일 소유자에게 실행권한과 그룹 및 사용자에게 쓰기 권한 부여하기</li><li>story.txt 파일에 변경된 접근권한 출력하기</li><li>story.txt 파일의 접근권한을 심볼릭 모드로 파일 소유자에게 실행권한과 그룹 및 사용자에게 쓰기 권한 제거하기</li><li>story.txt 파일에 변경된 접근권한 출력하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>6줄</b> · 한 줄에 하나씩 (Enter = 다음 줄) · 일반 사용자($) · 앞의 $ 는 안 써도 돼요</p>
@@ -1203,7 +1203,7 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-feedback"></div>
         </div>
         <h3>6장 관리자 권한 실행 (# = root)</h3>
-        <div class="quiz-item" data-lines="[[&quot;useradd -d /work_06 master&quot;], [&quot;passwd master&quot;], [&quot;tail /etc/passwd&quot;, &quot;gedit /etc/passwd&quot;, &quot;grep master /etc/passwd&quot;, &quot;cat /etc/passwd&quot;, &quot;tail -1 /etc/passwd&quot;]]" data-explain="3 · 4 · 5번은 /etc/passwd 한 줄에서 같이 확인 (계정:x:UID:GID:설명:홈:셸) → 명령 3줄 · ⚠️ PPT 정답 pass master(문제 PDF 는 passwd vmaster) 는 오타 → passwd master (암호 입력 화면에서 123456 두 번)">
+        <div class="quiz-item" data-lines="[[&quot;useradd -d /work_06 master&quot;], [&quot;passwd master&quot;], [&quot;tail /etc/passwd&quot;, &quot;gedit /etc/passwd&quot;, &quot;gnome-text-editor /etc/passwd&quot;, &quot;grep master /etc/passwd&quot;, &quot;cat /etc/passwd&quot;, &quot;tail -1 /etc/passwd&quot;]]" data-explain="3 · 4 · 5번은 /etc/passwd 한 줄에서 같이 확인 (계정:x:UID:GID:설명:홈:셸) → 명령 3줄 · ⚠️ PPT 정답 pass master(문제 PDF 는 passwd vmaster) 는 오타 → passwd master (암호 입력 화면에서 123456 두 번)">
             <p class="quiz-q"><span class="quiz-cat">도전 6-1</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>사용자 계정의 홈 디렉터리 /work_06을 지정하여 master 계정 생성하기</li><li>master 계정의 암호를 123456으로 설정하기</li><li>master 계정의 UID 확인하기</li><li>master 계정의 GID 확인하기</li><li>master 계정의 홈 디렉터리 확인하기</li></ol>
             <p class="quiz-lines-hint">⌨️ 명령 <b>3줄</b> · 한 줄에 하나씩 (Enter = 다음 줄) · root(#) · 앞의 # 는 안 써도 돼요</p>
@@ -1235,10 +1235,10 @@ exit 0                                 # 정상 종료</code></pre>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-lines="[[&quot;useradd pro_001&quot;], [&quot;useradd pro_002&quot;], [&quot;ls /home&quot;], [&quot;gpasswd -a pro_001 professor&quot;], [&quot;gpasswd -a pro_002 professor&quot;], [&quot;grep pro_001 /etc/group&quot;, &quot;id pro_001&quot;, &quot;groups pro_001&quot;], [&quot;grep pro_002 /etc/group&quot;, &quot;id pro_002&quot;, &quot;groups pro_002&quot;]]" data-explain="1번 = useradd 두 줄 · 5번 = 계정마다 한 줄씩 → 명령 7줄 · gpasswd -a 계정 그룹 = 그룹에 멤버 추가">
+        <div class="quiz-item" data-lines="{&quot;or&quot;: [[[&quot;useradd pro_001&quot;], [&quot;useradd pro_002&quot;], [&quot;ls /home&quot;], [&quot;gpasswd -a pro_001 professor&quot;], [&quot;gpasswd -a pro_002 professor&quot;], [&quot;grep pro_001 /etc/group&quot;, &quot;id pro_001&quot;, &quot;groups pro_001&quot;], [&quot;grep pro_002 /etc/group&quot;, &quot;id pro_002&quot;, &quot;groups pro_002&quot;]], [[&quot;useradd pro_001&quot;], [&quot;useradd pro_002&quot;], [&quot;ls /home&quot;], [&quot;gpasswd -a pro_001 professor&quot;], [&quot;gpasswd -a pro_002 professor&quot;], [&quot;grep professor /etc/group&quot;, &quot;tail /etc/group&quot;, &quot;tail -1 /etc/group&quot;, &quot;cat /etc/group&quot;]]]}" data-explain="1번 = useradd 두 줄 · 5번 = 계정마다 한 줄씩 → 명령 7줄 (5번을 grep professor /etc/group 한 줄로 해도 정답) · gpasswd -a 계정 그룹 = 그룹에 멤버 추가">
             <p class="quiz-q"><span class="quiz-cat">도전 6-5</span>다음 항목에서 주어진 지시사항을 수행하시오.</p>
             <ol class="quiz-steps"><li>사용자 계정 pro_001과 pro_002 계정을 새로 생성하기</li><li>새로 생성한 2개의 사용자 계정이 홈 디렉터리에 존재하는지 확인하기</li><li>professor 그룹에 사용자 계정 pro_001계정을 추가 지정하기</li><li>professor 그룹에 사용자 계정 pro_002계정을 추가 지정하기</li><li>사용자 계정 pro_001과 pro_002 계정에 지정된 그룹정보 확인하기</li></ol>
-            <p class="quiz-lines-hint">⌨️ 명령 <b>7줄</b> · 한 줄에 하나씩 (Enter = 다음 줄) · root(#) · 앞의 # 는 안 써도 돼요</p>
+            <p class="quiz-lines-hint">⌨️ 명령 <b>7줄</b> · <b>다른 방법도 정답</b> (줄 수가 달라도 됨) · 한 줄에 하나씩 (Enter = 다음 줄) · root(#) · 앞의 # 는 안 써도 돼요</p>
             <textarea class="quiz-lines" rows="7" placeholder="# 명령어 → Enter → 다음 명령어" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
@@ -1432,8 +1432,8 @@ exit 0                                    # 정상 종료</code></pre>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="quiz.js?v=202610151649"></script>
-<script src="weeks.js?v=202610151649"></script>
-<script src="ink.js?v=202610151649"></script>
+<script src="quiz.js?v=202610151733"></script>
+<script src="weeks.js?v=202610151733"></script>
+<script src="ink.js?v=202610151733"></script>
 </body>
 </html>

@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610151649"></script>
+    <script src="../theme.js?v=202610151733"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운영체제실습 7주차 · 프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</title>
-    <link rel="stylesheet" href="../style.css?v=202610151649">
+    <link rel="stylesheet" href="../style.css?v=202610151733">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -132,7 +132,15 @@ $ uname -sv</code></pre>
 <details class="wk-details">
 <summary>💡 정답 명령 1줄 보기</summary>
 <pre><code class="language-bash">$ echo -e 1.학과 : 빅데이터분석학과 "\n"2.학번 : 201703125 "\n"3.성명 : 홍길동 "\n"4.전화 : 02-000-0000</code></pre>
-<ul><li>🤖 echo 한 줄 — <code>-e</code> 옵션 + 이스케이프 <code>"\n"</code> 로 줄바꿈 (이스케이프 문자는 인용부호로 묶기)</li></ul>
+<p>또 다른 정답 2</p>
+<pre><code class="language-bash">$ echo "1. 학과 : 빅데이터분석학과"
+$ echo "2. 학번 : 201703125"
+$ echo "3. 성명 : 홍 길 동"
+$ echo "4. 전화 : 02-000-0000"</code></pre>
+<p>또 다른 정답 3</p>
+<pre><code class="language-bash">$ gnome-text-editor info.txt
+$ cat info.txt</code></pre>
+<ul><li>🤖 정답 방법 3가지 — ① echo -e 한 줄 + 이스케이프 "\n" 로 줄바꿈 (PPT 정답) ② echo 네 줄 ③ gnome-text-editor(gedit)로 파일에 써서 저장 → cat 으로 출력 (파일 이름은 자유)</li></ul>
 </details>
 <h4>도전 2-6 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
 <ol><li>cp 명령이 어느 디렉터리에 존재하는지를 출력하기</li><li>mv 명령이 어느 디렉터리에 존재하는지를 출력하기</li><li>cp와 mv 명령이 존재하는 디렉터리의 모든 파일목록 출력하기</li></ol>
@@ -312,7 +320,7 @@ $ chmod u+x,go+w story.txt
 $ ls -l
 $ chmod u-x,go-w story.txt
 $ ls -l</code></pre>
-<ul><li>🤖 심볼릭 모드 = u(소유자) g(그룹) o(기타) + / − r w x · 쉼표 뒤에 띄어쓰기 없이</li></ul>
+<ul><li>🤖 편집기는 gedit · gnome-text-editor(Rocky 10) 둘 다 정답 · 심볼릭 모드 = u(소유자) g(그룹) o(기타) + / − r w x · 쉼표 뒤에 띄어쓰기 없이</li></ul>
 </details>
 <h4>도전 5-2 · 다음 항목에서 주어진 지시사항을 수행하시오. (숫자만 한 줄에 하나씩 — 1번 설명은 채점 안 함)</h4>
 <ol><li>특정 파일에 주어진 권한 –rwx r-w rwx 설명하기</li><li>소유자 권한에 대한 권한값 숫자모드로 환산하기</li><li>그룹 권한에 대한 권한값 숫자모드로 환산하기</li><li>기타 사용자 권한에 대한 권한값 숫자모드로 환산하기</li><li>권한묶음에 대한 권한값 숫자모드로 최종 환산하기</li></ol>
@@ -392,7 +400,14 @@ $ ls -l</code></pre>
 # gpasswd -a pro_002 professor
 # grep pro_001 /etc/group
 # grep pro_002 /etc/group</code></pre>
-<ul><li>🤖 1번 = useradd 두 줄 · 5번 = 계정마다 한 줄씩 → 명령 7줄 · gpasswd -a 계정 그룹 = 그룹에 멤버 추가</li></ul>
+<p>또 다른 정답 2</p>
+<pre><code class="language-bash"># useradd pro_001
+# useradd pro_002
+# ls /home
+# gpasswd -a pro_001 professor
+# gpasswd -a pro_002 professor
+# grep professor /etc/group</code></pre>
+<ul><li>🤖 1번 = useradd 두 줄 · 5번 = 계정마다 한 줄씩 → 명령 7줄 (5번을 grep professor /etc/group 한 줄로 해도 정답) · gpasswd -a 계정 그룹 = 그룹에 멤버 추가</li></ul>
 </details>
 <h4>도전 6-6 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
 <ol><li>professor 그룹에 존재하는 pro_001 멤버를 삭제하기</li><li>grep 명령으로 pro_001 계정이 professor 그룹에 존재여부를 확인하기</li><li>professor 그룹에 암호를 123456으로 설정하기</li><li>student 그룹에 암호를 123456으로 설정하기</li><li>grep 명령으로 professor 그룹과 student 그룹에 설정된 암호에 대한 정보 확인</li><li>student 그룹에 설정된 암호 삭제하기</li><li>암호가 삭제된 student 그룹의 암호정보 확인하기</li></ol>
@@ -598,6 +613,6 @@ exit 0                                    # 정상 종료</code></pre>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610151649"></script>
+<script src="../ink.js?v=202610151733"></script>
 </body>
 </html>

@@ -7,6 +7,7 @@
        data-case="strict"  (선택) 대소문자는 그대로 채점 (자바처럼 대소문자를 구분하는 답 — String ≠ string)
    - 여러 줄 명령 .quiz-item[data-lines] : 한 문제에 명령을 여러 줄 (운영체제 도전문제 · 2026-10-15)
        data-lines='[["cal 2025"],["cal","cal -y"]]'  줄마다 정답 목록 (첫 번째 = 정답 보기에 나오는 답 · "re:정규식" 도 됨)
+       풀이 방법이 여러 가지면 data-lines='{"or":[[…방법1 줄들…],[…방법2 줄들…]]}' — 줄 수가 달라도 하나만 맞으면 정답 (2026-10-15)
        <textarea class="quiz-lines"> 에서 Enter = 다음 줄 (채점은 확인 버튼 · ⌘/Ctrl+Enter)
        채점: 줄마다 앞의 $ · # 프롬프트 빼고 · – → - · 띄어쓰기 여러 칸 = 한 칸 · 대소문자는 그대로 (리눅스 명령)
    - #quiz-score 가 있으면 퀴즈 섹션(#quiz)의 맞힌 개수를 표시
@@ -99,11 +100,27 @@
             return cnorm(a) === v;
         });
     }
-    function linesOf(item) {
+    function linesOf(item) {                 // → 풀이 방법 목록 [[줄 정답들…], …] (방법이 하나면 길이 1)
         if (!item.dataset.lines) return null;
-        try { var L = JSON.parse(item.dataset.lines); return Array.isArray(L) && L.length ? L : null; } catch (e) { return null; }
+        try {
+            var L = JSON.parse(item.dataset.lines);
+            var sols = (L && !Array.isArray(L) && Array.isArray(L.or)) ? L.or : [L];
+            sols = sols.filter(function (x) { return Array.isArray(x) && x.length; });
+            return sols.length ? sols : null;
+        } catch (e) { return null; }
     }
     function linesShown(L) { return L.map(function (alts) { return String(alts[0]).replace(/^re:/, ""); }).join("\n"); }
+    function gradeLines(sols, text) {         // 방법마다 줄 채점 → 맞은 방법 · 없으면 가장 많이 맞은 방법
+        var got = text.split("\n").map(cnorm).filter(function (x) { return x; });
+        var best = null;
+        sols.forEach(function (L) {
+            var bad = [];
+            for (var i = 0; i < L.length; i++) if (!lineOk(L[i], got[i])) bad.push(i + 1);
+            var r = { L: L, bad: bad, got: got.length, ok: !bad.length && got.length === L.length, right: L.length - bad.length };
+            if (!best || (r.ok && !best.ok) || (!best.ok && r.right / L.length > best.right / best.L.length)) best = r;
+        });
+        return best;
+    }
 
     var scope = document.getElementById("quiz") || document;
     var mcqs = document.querySelectorAll(".mcq");
@@ -149,20 +166,19 @@
         var fb = item.querySelector(".quiz-feedback");
         var L = linesOf(item);
         var answers = (item.dataset.answers || "").split("|");
-        var shown = L ? linesShown(L) : (item.dataset.full || answers[0]);
+        var shown = L ? linesShown(L[0]) : (item.dataset.full || answers[0]);
         var explain = item.dataset.explain ? '<span class="ans">' + esc(item.dataset.explain) + "</span>" : "";
-        if (L && input && input.tagName === "TEXTAREA" && !input.getAttribute("rows")) input.rows = Math.max(2, L.length);
+        if (L && input && input.tagName === "TEXTAREA" && !input.getAttribute("rows")) input.rows = Math.max(2, L[0].length);
         function check() {
             var ok;
-            if (L) {                                          // 여러 줄 명령: 줄마다 채점 (빈 줄은 건너뜀)
-                var got = input.value.split("\n").map(cnorm).filter(function (x) { return x; });
-                var bad = [];
-                for (var i = 0; i < L.length; i++) if (!lineOk(L[i], got[i])) bad.push(i + 1);
-                ok = !bad.length && got.length === L.length;
+            if (L) {                                          // 여러 줄 명령: 줄마다 채점 (빈 줄은 건너뜀 · 풀이 방법이 여러 개면 하나만 맞아도 정답)
+                var g = gradeLines(L, input.value), n = g.L.length;
+                ok = g.ok;
                 fb.className = "quiz-feedback " + (ok ? "ok" : "no");
-                fb.innerHTML = ok ? "⭕ 정답입니다! (명령 " + L.length + "줄 모두 맞음)" + explain
-                    : "❌ " + (L.length - bad.length) + " / " + L.length + "줄 맞음" + (bad.length ? " — 다시 볼 줄: " + bad.join(" · ") + "번째" : "")
-                      + (got.length !== L.length ? " · 지금 " + got.length + "줄 / 필요한 명령 " + L.length + "줄" : "");
+                fb.innerHTML = ok ? "⭕ 정답입니다! (명령 " + n + "줄 모두 맞음" + (L.length > 1 ? " · 정답 방법 " + (L.indexOf(g.L) + 1) + " / " + L.length : "") + ")" + explain
+                    : "❌ " + g.right + " / " + n + "줄 맞음" + (g.bad.length ? " — 다시 볼 줄: " + g.bad.join(" · ") + "번째" : "")
+                      + (g.got !== n ? " · 지금 " + g.got + "줄 / 필요한 명령 " + n + "줄" : "")
+                      + (L.length > 1 ? " (가장 가까운 풀이 방법 기준 · 다른 방법도 정답)" : "");
             } else {
                 var keep = item.dataset.case === "strict";
                 ok = sameAnswer(answers, input.value, keep);
@@ -178,7 +194,8 @@
         if (checkBtn) checkBtn.addEventListener("click", check);
         if (showBtn) showBtn.addEventListener("click", function () {
             fb.className = "quiz-feedback ok";
-            fb.innerHTML = L ? '💡 정답 (줄마다 명령 하나)<pre class="ans-lines">' + esc(shown) + "</pre>" + explain
+            fb.innerHTML = L ? '💡 정답 (줄마다 명령 하나)<pre class="ans-lines">' + esc(shown) + "</pre>"
+                               + L.slice(1).map(function (x, i) { return '또 다른 정답 ' + (i + 2) + '<pre class="ans-lines">' + esc(linesShown(x)) + "</pre>"; }).join("") + explain
                              : '💡 정답 <span class="ans-code">' + esc(shown) + "</span>" + explain;
             if (item.dataset.solved !== "1") item.dataset.wrong = "1";
         });
@@ -211,7 +228,7 @@
         items.forEach(function (item) {
             if (item.dataset.solved === "1") return;
             var L2 = linesOf(item);
-            var shown = L2 ? linesShown(L2) : (item.dataset.full || (item.dataset.answers || "").split("|")[0]);
+            var shown = L2 ? linesShown(L2[0]) : (item.dataset.full || (item.dataset.answers || "").split("|")[0]);
             var input = item.querySelector("input, textarea");
             if (input) { input.value = shown; input.readOnly = true; }
             item.dataset.solved = "1";
