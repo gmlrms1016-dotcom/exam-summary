@@ -277,7 +277,7 @@ theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다. 
 <div class="quiz-item" data-lines='[["cal 2025"],["cal","cal -y"]]' data-explain="해설">   <!-- 줄마다 정답 목록 · 첫 번째 = 정답 보기 · "re:정규식" 도 됨 -->
   <p class="quiz-q"><span class="quiz-cat">도전 2-1</span>질문…</p>
   <ol class="quiz-steps"><li>지시 1</li><li>지시 2</li></ol>
-  <textarea class="quiz-lines" rows="2"></textarea>                <!-- Shift+Enter = 다음 줄 · Enter = 확인 (폰 화면 자판은 Enter = 다음 줄) -->
+  <textarea class="quiz-lines" rows="2"></textarea>                <!-- Shift+Enter = 다음 줄 · Enter = 확인 (모든 기기 같게 · 화면 자판용 ↵ 다음 줄 버튼은 quiz.js 가 붙임) -->
   <div class="quiz-btns">확인 · 정답 보기</div><div class="quiz-feedback"></div>
 </div>
 ```
