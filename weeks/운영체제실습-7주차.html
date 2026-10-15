@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610151742"></script>
+    <script src="../theme.js?v=202610151746"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운영체제실습 7주차 · 프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</title>
-    <link rel="stylesheet" href="../style.css?v=202610151742">
+    <link rel="stylesheet" href="../style.css?v=202610151746">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -52,7 +52,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <nav class="wk-pager"><a class="prev" href="운영체제실습-6주차.html">‹ 이전 · <b>6주차</b><br><small>셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</small></a><a class="next" href="운영체제실습-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
 
-<div class="tip">🐧 <b>운영체제실습 7주차 (10/15)</b> — 앞부분: <b>프로세스의 개념과 상태</b> · 포그라운드 / 백그라운드 · <code>ps</code> 옵션 · 서비스(데몬) · <code>systemctl</code> / 뒷부분: <b>강의시간에 도전문제를 쭉 풀었어요</b> (2 · 3 · 5 · 6 · 10 · 11장)<br>노션 7주차 필기 + 7주차 폴더(도전문제 PDF 8개 · 2 · 3 · 5 · 6 · 11장 PPT) 기준이에요. 정답은 교수님 PPT 의 <b>도전 문제 정답 슬라이드</b>와 대조했고, 슬라이드에 오타가 있는 곳은 ⚠️ 로 표시했어요. 셸 스크립트 모범답안은 전부 실제로 실행한 결과예요.<br>⌨️ <b>직접 풀기</b> — <a href="../운영체제실습.html#s17">과목 페이지 17번</a> 에서 명령을 <b>한 줄에 하나씩</b> 쓰고 채점 (Enter = 다음 줄) · 같은 문제가 🔒 실제시험에도 있어요.</div>
+<div class="tip">🐧 <b>운영체제실습 7주차 (10/15)</b> — 앞부분: <b>프로세스의 개념과 상태</b> · 포그라운드 / 백그라운드 · <code>ps</code> 옵션 · 서비스(데몬) · <code>systemctl</code> / 뒷부분: <b>강의시간에 도전문제를 쭉 풀었어요</b> (2 · 3 · 5 · 6 · 10 · 11장)<br>노션 7주차 필기 + 7주차 폴더(도전문제 PDF 8개 · 2 · 3 · 5 · 6 · 11장 PPT) 기준이에요. 정답은 교수님 PPT 의 <b>도전 문제 정답 슬라이드</b>와 대조했고, 슬라이드에 오타가 있는 곳은 ⚠️ 로 표시했어요. 셸 스크립트 모범답안은 전부 실제로 실행한 결과예요.<br>⌨️ <b>직접 풀기</b> — <a href="../운영체제실습.html#s17">과목 페이지 17번</a> 에서 명령을 <b>한 줄에 하나씩</b> 쓰고 채점 (Shift+Enter = 다음 줄 · Enter = 확인) · 같은 문제가 🔒 실제시험에도 있어요.</div>
 <section class="card">
 <h2>🔥 1. 시험에 나오는 것 — 강의자료에는 없음 (✍️ 필기)</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> 오늘은 강의시간에 <b>도전문제</b> 쭉 풀음 · <b>도전문제 5-4 는 안 배움 → 시험에 안 나옴</b> · <b>6장은 중요</b><ul><li>⚠️ 6주차 필기는 “시험범위 1 · 2 · 3 · 4 · 5 · 7장 (6장 빠짐)” 이었는데 오늘은 <b>“6장은 중요”</b> → 6장(관리자 권한 실행 — 사용자 · 그룹 관리)도 꼭 공부하기</li></ul></li><li><span class="wk-tag note">✍️ 필기</span> 강의자료에는 없지만 <b>시험에 나오는 것들</b></li></ul>
@@ -150,7 +150,7 @@ $ cat info.txt</code></pre>
 <pre><code class="language-bash">$ which cp
 $ which mv
 $ ls /usr/bin</code></pre>
-<ul><li>🤖 which 결과 = /usr/bin/cp · /usr/bin/mv → 3번은 그 디렉터리(/usr/bin)를 ls · 사이트에서는 1 · 2번을 맞게 치고 Enter 를 누르면 아래 🖥️ 터미널에 결과가 나와요</li></ul>
+<ul><li>🤖 which 결과 = /usr/bin/cp · /usr/bin/mv → 3번은 그 디렉터리(/usr/bin)를 ls · 사이트에서는 1 · 2번을 맞게 치고 Shift+Enter 로 다음 줄로 넘어가면 아래 🖥️ 터미널에 결과가 나와요</li></ul>
 </details>
 <h4>도전 2-7 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
 <ol><li>지금까지 사용한 모든 명령들의 목록 출력하기</li><li>수행했던 라인번호 3의 명령을 다시 실행하기</li><li>사용한 명령들 중에서 라인번호 5번만 삭제하기</li><li>지금까지 수행했던 모든 명령들을 한꺼번에 삭제하기</li></ol>
@@ -614,6 +614,6 @@ exit 0                                    # 정상 종료</code></pre>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610151742"></script>
+<script src="../ink.js?v=202610151746"></script>
 </body>
 </html>

@@ -11,7 +11,8 @@
        줄 정답을 {"c":"which cp","o":"/usr/bin/cp"} 로 쓰면 그 명령을 맞게 치고 Enter 를 누를 때 아래 🖥️ 터미널 칸에 결과(o)가 나옴
          — 앞 줄 결과를 봐야 다음 줄을 쓸 수 있는 문제용 (도전 2-6 · 3-13) · o 가 "{history}" = 지금까지 친 명령에 번호 · "{clear}" = 터미널 지우기
          data-prompt="#" (선택) 터미널 칸의 프롬프트 (기본 $)
-       <textarea class="quiz-lines"> 에서 Enter = 다음 줄 (채점은 확인 버튼 · ⌘/Ctrl+Enter)
+       <textarea class="quiz-lines"> 에서 Enter = 확인(채점) · Shift+Enter = 다음 줄 (2026-10-15 사용자 지정)
+         — 폰처럼 화면 자판만 있는 기기(Shift+Enter 가 없음)는 Enter = 다음 줄 · 채점은 확인 버튼
        채점: 줄마다 앞의 $ · # 프롬프트 빼고 · – → - · 띄어쓰기 여러 칸 = 한 칸 · 대소문자는 그대로 (리눅스 명령)
    - #quiz-score 가 있으면 퀴즈 섹션(#quiz)의 맞힌 개수를 표시
    - 시험 종료(?done=1, schedule.js 가 자동으로 붙임)면 모든 정답·해설 공개
@@ -156,6 +157,10 @@
         return best;
     }
 
+    // 화면 자판만 있는 기기(폰) — Shift+Enter 를 칠 수 없어서 여러 줄 칸에서 Enter = 다음 줄로 둠
+    var TOUCH_ONLY = !!(window.matchMedia && window.matchMedia("(hover: none) and (pointer: coarse)").matches);
+    var KEYS_HINT = TOUCH_ONLY ? "Enter = 다음 줄 · 다 쓰면 확인 버튼" : "Shift+Enter = 다음 줄 · Enter = 확인";
+
     var scope = document.getElementById("quiz") || document;
     var mcqs = document.querySelectorAll(".mcq");
     var items = document.querySelectorAll(".quiz-item");
@@ -203,9 +208,14 @@
         var shown = L ? linesShown(L[0]) : (item.dataset.full || answers[0]);
         var explain = item.dataset.explain ? '<span class="ans">' + esc(item.dataset.explain) + "</span>" : "";
         if (L && input && input.tagName === "TEXTAREA" && !input.getAttribute("rows")) input.rows = Math.max(2, L[0].length);
+        if (L && input) {
+            var kh = item.querySelector(".quiz-keys");
+            if (kh) kh.textContent = KEYS_HINT;
+            input.placeholder = (item.dataset.prompt || "$") + " 명령어 → " + (TOUCH_ONLY ? "Enter" : "Shift+Enter") + " → 다음 명령어 · 다 쓰면 " + (TOUCH_ONLY ? "확인 버튼" : "Enter");
+        }
         if (L && input && hasOut(L)) {
             var lbl = document.createElement("p"); lbl.className = "quiz-term-lbl";
-            lbl.textContent = "🖥️ 터미널 — 명령을 맞게 치고 Enter 를 누르면 실행 결과(예시)가 나와요 · 다음 줄에 그 결과를 보고 쓰기";
+            lbl.textContent = "🖥️ 터미널 — 명령을 맞게 치고 " + (TOUCH_ONLY ? "Enter" : "Shift+Enter") + " 로 다음 줄로 넘어가면 실행 결과(예시)가 나와요 · 그 결과를 보고 다음 줄 쓰기";
             var term = document.createElement("pre"); term.className = "quiz-term"; term.setAttribute("aria-live", "polite");
             input.insertAdjacentElement("afterend", term); input.insertAdjacentElement("afterend", lbl);
             var prompt = item.dataset.prompt || "$";
@@ -244,7 +254,7 @@
         });
         if (input) input.addEventListener("keydown", function (e) {
             if (e.key !== "Enter" || e.isComposing) return;
-            if (L && !(e.metaKey || e.ctrlKey)) return;   // 여러 줄 명령: Enter = 다음 줄 (⌘/Ctrl+Enter 로 채점)
+            if (L && (e.shiftKey || (TOUCH_ONLY && !(e.metaKey || e.ctrlKey)))) return;   // 여러 줄 명령: Shift+Enter = 다음 줄 (폰 화면 자판은 Enter 도 다음 줄)
             e.preventDefault(); check();
         });
     });
