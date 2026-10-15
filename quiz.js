@@ -13,7 +13,7 @@
          data-prompt="#" (선택) 터미널 칸의 프롬프트 (기본 $)
        <textarea class="quiz-lines"> 에서 Enter = 확인(채점) · Shift+Enter = 다음 줄 — 컴퓨터 · 폰 · 아이패드(매직키보드) 모두 같게 (2026-10-15 사용자 지정)
          — 화면 자판에 Shift+Enter 가 없을 때를 위해 버튼 줄에 '↵ 다음 줄' 버튼
-       줄을 끝낼 때(Shift+Enter · ↵ 다음 줄) 그 줄이 맞으면 입력칸 테두리가 잠깐 초록 (2026-10-15 사용자 지정)
+       줄을 끝낼 때(Shift+Enter · ↵ 다음 줄) · Enter 로 채점할 때 — 마지막에 쓴 줄이 맞으면 입력칸 테두리가 잠깐 초록 (2026-10-15 사용자 지정)
        채점: 줄마다 앞의 $ · # 프롬프트 빼고 · – → - · 띄어쓰기 여러 칸 = 한 칸 · 대소문자는 그대로 (리눅스 명령)
    - #quiz-score 가 있으면 퀴즈 섹션(#quiz)의 맞힌 개수를 표시
    - 시험 종료(?done=1, schedule.js 가 자동으로 붙임)면 모든 정답·해설 공개
@@ -275,7 +275,8 @@
             if (L) {                                          // 여러 줄 명령: 줄마다 채점 (빈 줄은 건너뜀 · 풀이 방법이 여러 개면 하나만 맞아도 정답)
                 var g = gradeLines(L, input.value), n = g.L.length;
                 ok = g.ok;
-                if (ok) flashOk(input);
+                var typed = input.value.split("\n").map(cnorm).filter(function (x) { return x; });
+                if (ok || (typed.length && lineRight(L, typed, typed.length - 1))) flashOk(input);   // Enter 도: 마지막에 쓴 줄이 맞으면 초록
                 fb.className = "quiz-feedback " + (ok ? "ok" : "no");
                 fb.innerHTML = ok ? "⭕ 정답입니다! (명령 " + n + "줄 모두 맞음" + (L.length > 1 ? " · 정답 방법 " + (L.indexOf(g.L) + 1) + " / " + L.length : "") + ")" + explain
                     : "❌ " + g.right + " / " + n + "줄 맞음" + (g.bad.length ? " — 다시 볼 줄: " + g.bad.join(" · ") + "번째" : "")
