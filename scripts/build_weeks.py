@@ -256,10 +256,10 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202610151845"></script>
+    <script src="{asset}theme.js?v=202610152001"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="{asset}style.css?v=202610151845">
+    <link rel="stylesheet" href="{asset}style.css?v=202610152001">
     <style>{css}</style>
 </head>
 <body>
@@ -287,7 +287,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202610151845"></script>
+<script src="{asset}ink.js?v=202610152001"></script>
 </body>
 </html>
 """

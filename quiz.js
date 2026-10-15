@@ -13,6 +13,7 @@
          data-prompt="#" (선택) 터미널 칸의 프롬프트 (기본 $)
        <textarea class="quiz-lines"> 에서 Enter = 확인(채점) · Shift+Enter = 다음 줄 — 컴퓨터 · 폰 · 아이패드(매직키보드) 모두 같게 (2026-10-15 사용자 지정)
          — 화면 자판에 Shift+Enter 가 없을 때를 위해 버튼 줄에 '↵ 다음 줄' 버튼
+       줄을 끝낼 때(Shift+Enter · ↵ 다음 줄) 그 줄이 맞으면 입력칸 테두리가 잠깐 초록 (2026-10-15 사용자 지정)
        채점: 줄마다 앞의 $ · # 프롬프트 빼고 · – → - · 띄어쓰기 여러 칸 = 한 칸 · 대소문자는 그대로 (리눅스 명령)
    - #quiz-score 가 있으면 퀴즈 섹션(#quiz)의 맞힌 개수를 표시
    - 시험 종료(?done=1, schedule.js 가 자동으로 붙임)면 모든 정답·해설 공개
@@ -49,6 +50,12 @@
     var st = document.createElement("style");
     st.textContent = css;
     document.head.appendChild(st);
+    // 맞은 줄 → 입력칸 테두리 잠깐 초록 · theme.js 가 다크 모드에서 초록을 파랑으로 바꾸지 않게 data-theme-skip (2026-10-15)
+    var st2 = document.createElement("style");
+    st2.setAttribute("data-theme-skip", "");
+    st2.textContent = "html .quiz-item textarea.quiz-lines.flash-ok,html .quiz-item textarea.quiz-lines.flash-ok:focus{border-color:#2f9e5b !important;box-shadow:0 0 0 4px rgba(47,158,91,.38) !important;transition:border-color .15s,box-shadow .15s;}"
+        + "html[data-theme=dark] .quiz-item textarea.quiz-lines.flash-ok,html[data-theme=dark] .quiz-item textarea.quiz-lines.flash-ok:focus{border-color:#4cc38a !important;box-shadow:0 0 0 4px rgba(76,195,138,.45) !important;}";
+    document.head.appendChild(st2);
 
     // 답 비교용으로 고르게: 띄어쓰기 · 괄호 · 따옴표 무시 (대소문자는 keepCase 일 때만 그대로)
     //  NFKC = 전각 ｉｎｔ · 맥에서 붙여넣은 풀어쓴 한글도 같은 글자로 · 맥 한글 자판의 ₩ 는 역슬래시(\) 로 (2026-10-12)
@@ -138,6 +145,13 @@
         } catch (e) { return null; }
     }
     function linesShown(L) { return L.map(function (alts) { return altCmd(alts[0]).replace(/^re:/, ""); }).join("\n"); }
+    function lineRight(sols, done, i) {        // i 번째 줄이 맞나 — 그 앞 줄까지 가장 많이 맞은 풀이 방법 기준 (줄 수가 다른 방법이 섞여도)
+        return sols.some(function (L) { return !!lineMatch(L[i], done[i]); });
+    }
+    function flashOk(el) {                     // 입력칸 테두리를 잠깐 초록으로 (밑의 채점 칸까지 스크롤하지 않아도 보이게)
+        el.classList.remove("flash-ok"); void el.offsetWidth; el.classList.add("flash-ok");
+        clearTimeout(el._flashT); el._flashT = setTimeout(function () { el.classList.remove("flash-ok"); }, 1100);
+    }
     function hasOut(sols) { return sols.some(function (L) { return L.some(function (alts) { return alts.some(function (a) { return a && typeof a === "object" && a.o != null; }); }); }); }
     // 🖥️ 터미널 칸: Enter 로 끝낸 줄만 · 맞은 명령이면 결과(o) · 가장 많이 맞은 풀이 방법 기준
     function termHtml(sols, text, prompt) {
@@ -222,6 +236,12 @@
         var explain = item.dataset.explain ? '<span class="ans">' + esc(item.dataset.explain) + "</span>" : "";
         if (L && input && input.tagName === "TEXTAREA" && !input.getAttribute("rows")) input.rows = Math.max(2, L[0].length);
         if (L && input) {
+            var prevDone = 0;
+            input.addEventListener("input", function () {
+                var done = input.value.split("\n").slice(0, -1).map(cnorm).filter(function (x) { return x; });
+                if (done.length > prevDone && lineRight(L, done, done.length - 1)) flashOk(input);   // 방금 끝낸 줄이 맞음
+                prevDone = done.length;
+            });
             var kh = item.querySelector(".quiz-keys");
             if (kh) kh.textContent = KEYS_HINT;
             input.placeholder = (item.dataset.prompt || "$") + " 명령어 → Shift+Enter → 다음 명령어 · 다 쓰면 Enter";
@@ -255,6 +275,7 @@
             if (L) {                                          // 여러 줄 명령: 줄마다 채점 (빈 줄은 건너뜀 · 풀이 방법이 여러 개면 하나만 맞아도 정답)
                 var g = gradeLines(L, input.value), n = g.L.length;
                 ok = g.ok;
+                if (ok) flashOk(input);
                 fb.className = "quiz-feedback " + (ok ? "ok" : "no");
                 fb.innerHTML = ok ? "⭕ 정답입니다! (명령 " + n + "줄 모두 맞음" + (L.length > 1 ? " · 정답 방법 " + (L.indexOf(g.L) + 1) + " / " + L.length : "") + ")" + explain
                     : "❌ " + g.right + " / " + n + "줄 맞음" + (g.bad.length ? " — 다시 볼 줄: " + g.bad.join(" · ") + "번째" : "")
