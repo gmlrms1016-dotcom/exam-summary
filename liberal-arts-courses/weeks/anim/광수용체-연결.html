@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>광수용체와 신경절의 연결 · 애니메이션</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;--rod:#5b7fd6;--cone:#7d6bd9;--gang:#e5484d;--light:#f5a524;--sig:#f0b400;--ok:#2f9e5b;--no:#c2410c;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;--rod:#7d9cf0;--cone:#a596f5;--gang:#ff6369;--light:#ffb547;--sig:#ffd34d;--ok:#4cc38a;--no:#ff8a5c;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+    .box{max-width:780px;margin:0 auto;padding:10px 12px 14px;}
+    .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px;}
+    .tabs button{flex:1 1 0;min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;}
+    .tabs button[aria-pressed=true]{border-color:var(--main);color:var(--main);}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;}
+    svg{display:block;width:100%;height:auto;}
+    svg text{fill:var(--ink);font-family:inherit;}
+    .cap{margin:8px 0 0;min-height:66px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:14.5px;line-height:1.65;}
+    .cap .no{display:inline-block;font-size:12px;font-weight:800;color:var(--main);margin-right:6px;}
+    .cap b{color:var(--main);}
+    .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;}
+    .ctl button,.ctl select{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+    .ctl button.play{border-color:var(--main);color:var(--main);min-width:96px;}
+    .ctl .sp{margin-left:auto;font-size:13px;color:var(--ink2);}
+    .dots{display:flex;gap:4px;margin:8px 0 0;}
+    .dots i{flex:1;height:4px;border-radius:2px;background:var(--line);}
+    .dots i.on{background:var(--main);}
+    /* 폰: 그림이 작아지니 그림 속 글자를 키움 (CSS 가 font-size 속성보다 우선) */
+    @media (max-width:560px){ svg text{font-size:25px !important;} svg text.sum{font-size:17px !important;} .tabs button{font-size:12px;padding:6px 4px;} .cap{font-size:14px;} }
+</style>
+</head>
+<body>
+<div class="box">
+    <div class="tabs" role="group" aria-label="장면 고르기">
+        <button type="button" data-scene="0">① 약한 빛 · 감도</button>
+        <button type="button" data-scene="1">② 두 점 · 선명도</button>
+        <button type="button" data-scene="2">③ 별빛 Why?</button>
+    </div>
+    <div class="stage"><svg id="svg" viewBox="0 0 720 400" role="img" aria-label="간상체 · 추상체와 신경절 세포의 연결 애니메이션"></svg></div>
+    <div class="dots" id="dots"></div>
+    <p class="cap" id="cap" aria-live="polite"></p>
+    <div class="ctl">
+        <button type="button" id="restart" title="처음부터">⏮ 처음</button>
+        <button type="button" id="prev" title="이전 단계">◀ 이전</button>
+        <button type="button" id="play" class="play">▶ 재생</button>
+        <button type="button" id="next" title="다음 단계">다음 ▶</button>
+        <label class="sp">속도 <select id="speed"><option value="0.5" selected>천천히</option><option value="1">보통</option><option value="2">빠르게</option></select></label>
+    </div>
+</div>
+<script>
+(function () {
+    "use strict";
+    var NS = "http://www.w3.org/2000/svg";
+    var svg = document.getElementById("svg"), cap = document.getElementById("cap"), dotsBox = document.getElementById("dots");
+    var playBtn = document.getElementById("play");
+    var S = { speed: 0.5, playing: false, instant: false, token: 0, scene: 0, step: 0, started: false, once: false };
+    var CANCEL = {};
+
+    // ---------- 그리기 도구 ----------
+    function el(tag, attrs, parent) {
+        var e = document.createElementNS(NS, tag);
+        for (var k in attrs) e.setAttribute(k, attrs[k]);
+        (parent || svg).appendChild(e);
+        return e;
+    }
+    function txt(x, y, s, attrs, parent) {
+        var a = { x: x, y: y, "text-anchor": "middle", "font-size": 15, "font-weight": 700 };
+        for (var k in attrs || {}) a[k] = attrs[k];
+        var t = el("text", a, parent); t.textContent = s; return t;
+    }
+    function frame() { return new Promise(function (r) { requestAnimationFrame(r); }); }
+    // 시간 흐름: 일시정지 · 속도 · 단계 건너뛰기(instant) · 장면 바꾸기(취소)를 모두 따름
+    async function tween(ms, fn) {
+        var my = S.token;
+        if (S.instant) { fn && fn(1); return; }
+        var t = 0, last = performance.now();
+        while (t < ms) {
+            await frame();
+            if (my !== S.token) throw CANCEL;
+            var now = performance.now();
+            if (S.playing) { t += (now - last) * S.speed; S.started = true; }
+            last = now;
+            if (S.instant) { t = ms; }
+            var p = Math.min(t / ms, 1);
+            fn && fn(p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);   // 부드럽게 (ease-in-out)
+        }
+    }
+    function wait(ms) { return tween(ms, null); }
+    async function drawLine(path, ms) {          // 선을 처음부터 끝까지 천천히 그리기
+        var L = path.getTotalLength();
+        path.style.strokeDasharray = L; path.style.strokeDashoffset = L;
+        await tween(ms, function (p) { path.style.strokeDashoffset = L * (1 - p); });
+        path.style.strokeDasharray = "none";
+    }
+    async function fadeIn(node, ms) {
+        node.style.opacity = 0;
+        await tween(ms, function (p) { node.style.opacity = p; });
+    }
+    async function moveAlong(path, dot, ms) {     // 신호 점이 선을 따라 내려가기
+        var L = path.getTotalLength();
+        dot.style.opacity = 1;
+        await tween(ms, function (p) { var q = path.getPointAtLength(L * p); dot.setAttribute("cx", q.x); dot.setAttribute("cy", q.y); });
+    }
+    async function burst(x, y, color, parent) {   // 신경절 세포가 반응(발화)하는 반짝임
+        var g = el("g", {}, parent);
+        var ring = el("circle", { cx: x, cy: y, r: 14, fill: "none", stroke: color, "stroke-width": 3 }, g);
+        await tween(700, function (p) { ring.setAttribute("r", 14 + p * 22); ring.style.opacity = 1 - p; });
+        g.remove();
+    }
+    function arrowDown(x, y1, y2, color, parent) {
+        var g = el("g", {}, parent);
+        var line = el("path", { d: "M" + x + " " + y1 + " L" + x + " " + (y2 - 8), stroke: color, "stroke-width": 3, fill: "none" }, g);
+        var head = el("path", { d: "M" + (x - 6) + " " + (y2 - 10) + " L" + x + " " + y2 + " L" + (x + 6) + " " + (y2 - 10) + " Z", fill: color }, g);
+        return { g: g, line: line, head: head };
+    }
+    function sun(x, y, parent, r) {
+        var g = el("g", {}, parent);
+        el("circle", { cx: x, cy: y, r: (r || 12) + 6, fill: "var(--light)", opacity: 0.25 }, g);
+        el("circle", { cx: x, cy: y, r: r || 12, fill: "var(--light)" }, g);
+        return g;
+    }
+    function rod(x, y, parent) {                 // 간상체 = 원통
+        var g = el("g", {}, parent);
+        el("rect", { x: x - 13, y: y, width: 26, height: 66, rx: 6, fill: "var(--rod)" }, g);
+        el("ellipse", { cx: x, cy: y + 3, rx: 13, ry: 5, fill: "#fff", opacity: 0.35 }, g);
+        return g;
+    }
+    function cone(x, y, parent) {                // 추상체 = 뾰족
+        var g = el("g", {}, parent);
+        el("path", { d: "M" + x + " " + y + " L" + (x + 15) + " " + (y + 40) + " L" + (x - 15) + " " + (y + 40) + " Z", fill: "var(--cone)" }, g);
+        el("rect", { x: x - 2, y: y + 40, width: 4, height: 26, fill: "var(--cone)" }, g);
+        return g;
+    }
+    function gang(x, y, parent) {                // 신경절 세포 = 빨간 공
+        return el("circle", { cx: x, cy: y, r: 13, fill: "var(--gang)" }, parent);
+    }
+    function sigDot(parent) { return el("circle", { cx: -50, cy: -50, r: 7, fill: "var(--sig)", stroke: "#fff", "stroke-width": 1.5, opacity: 0 }, parent); }
+
+    // ---------- ①② 공통 배선: 간상체 5 → 신경절 1 · 추상체 5 → 신경절 5 ----------
+    var RX = [70, 125, 180, 235, 290], CX = [430, 485, 540, 595, 650], TOP = 110, GY = 300, RG = { x: 180, y: GY };
+    function wiring(W) {
+        W.rods = RX.map(function (x) { return rod(x, TOP); });
+        W.cones = CX.map(function (x) { return cone(x, TOP); });
+        W.rodPaths = RX.map(function (x) {
+            return el("path", { d: "M" + x + " " + (TOP + 66) + " C" + x + " " + (GY - 40) + " " + RG.x + " " + (GY - 50) + " " + RG.x + " " + (GY - 14), stroke: "var(--rod)", "stroke-width": 3, fill: "none" });
+        });
+        W.conePaths = CX.map(function (x) { return el("path", { d: "M" + x + " " + (TOP + 66) + " L" + x + " " + (GY - 14), stroke: "var(--cone)", "stroke-width": 3, fill: "none" }); });
+        W.rodG = gang(RG.x, RG.y);
+        W.coneG = CX.map(function (x) { return gang(x, GY); });
+        W.rodOut = el("path", { d: "M" + RG.x + " " + (GY + 13) + " L" + RG.x + " " + (GY + 55), stroke: "var(--gang)", "stroke-width": 3, fill: "none" });
+        W.coneOut = CX.map(function (x) { return el("path", { d: "M" + x + " " + (GY + 13) + " L" + x + " " + (GY + 55), stroke: "var(--gang)", "stroke-width": 3, fill: "none" }); });
+        W.labels = [txt(180, 30, "간상체 (rod)", { fill: "var(--rod)" }), txt(540, 30, "추상체 (cone)", { fill: "var(--cone)" })];
+        return W;
+    }
+    function hide(nodes) { nodes.forEach(function (n) { n.style.opacity = 0; }); }
+    function show(nodes) { nodes.forEach(function (n) { n.style.opacity = 1; }); }
+
+    // ---------- 장면 ① 약한 빛 — 신호 모으기 (6쪽 왼쪽 그림) ----------
+    function scene1() {
+        var W = {};
+        return [
+            { t: "6쪽 왼쪽 그림이에요. 왼쪽은 <b>간상체</b>(원통) 5개, 오른쪽은 <b>추상체</b>(뾰족) 5개 — 둘 다 빛을 받아 전기 신호로 바꾸는 <b>광수용체</b>예요.",
+              run: async function () {
+                  wiring(W);
+                  hide([].concat(W.rods, W.cones, W.rodPaths, W.conePaths, [W.rodG, W.rodOut], W.coneG, W.coneOut, W.labels));
+                  await fadeIn(W.labels[0], 300);
+                  for (var i = 0; i < 5; i++) await fadeIn(W.rods[i], 260);
+                  await fadeIn(W.labels[1], 300);
+                  for (i = 0; i < 5; i++) await fadeIn(W.cones[i], 260);
+              } },
+            { t: "간상체 5개는 선이 모두 <b>신경절 세포 1개</b>로 모여요 → 간상체 : 신경절 = <b>다(多) : 1</b> (✍️ <b>N:1 로 연결</b>).",
+              run: async function () {
+                  for (var i = 0; i < 5; i++) { W.rodPaths[i].style.opacity = 1; await drawLine(W.rodPaths[i], 650); }
+                  await fadeIn(W.rodG, 400);
+                  W.rodOut.style.opacity = 1; await drawLine(W.rodOut, 400);
+              } },
+            { t: "추상체는 하나마다 <b>자기 신경절 세포</b>가 따로 있어요 → 추상체 : 신경절 = <b>소(小) : 1</b> (거의 1 : 1).",
+              run: async function () {
+                  for (var i = 0; i < 5; i++) { W.conePaths[i].style.opacity = 1; await drawLine(W.conePaths[i], 420); await fadeIn(W.coneG[i], 200); W.coneOut[i].style.opacity = 1; await drawLine(W.coneOut[i], 220); }
+              } },
+            { t: "어두운 곳의 <b>약한 빛</b>이 10개 모두에 똑같이 비쳐요. 수용기 하나가 만드는 신호는 <b>2</b> 만큼이에요.",
+              run: async function () {
+                  W.suns = [];
+                  RX.concat(CX).forEach(function (x) { var s = sun(x, 62); s.style.opacity = 0; W.suns.push({ s: s, a: arrowDown(x, 76, TOP - 4, "var(--light)") }); });
+                  for (var i = 0; i < W.suns.length; i++) { W.suns[i].a.g.style.opacity = 0; }
+                  await Promise.all(W.suns.map(function (o) { return fadeIn(o.s, 500); }));
+                  await Promise.all(W.suns.map(function (o) { o.a.g.style.opacity = 1; return drawLine(o.a.line, 500); }));
+                  W.twos = RX.concat(CX).map(function (x) { var t = txt(x + 22, TOP + 92, "2", { "font-size": 16, fill: "var(--sig)" }); t.style.opacity = 0; return t; });
+                  await Promise.all(W.twos.map(function (t) { return fadeIn(t, 400); }));
+              } },
+            { t: "신호가 내려가요. 간상체 쪽은 5개의 신호가 <b>한 신경절에 쌓여요</b> → 2 + 2 + 2 + 2 + 2 = <b>10</b>. 추상체 쪽 신경절은 각각 <b>2</b> 뿐이에요.",
+              run: async function () {
+                  W.sum = txt(RG.x + 52, GY + 6, "0", { "font-size": 22, fill: "var(--gang)" });
+                  W.cSum = CX.map(function (x) { var t = txt(x + 26, GY + 6, "", { "font-size": 15, fill: "var(--gang)" }); return t; });
+                  var dotsR = RX.map(function () { return sigDot(); }), dotsC = CX.map(function () { return sigDot(); });
+                  for (var i = 0; i < 5; i++) {
+                      await Promise.all([moveAlong(W.rodPaths[i], dotsR[i], 900), moveAlong(W.conePaths[i], dotsC[i], 900)]);
+                      dotsR[i].remove(); dotsC[i].remove();
+                      W.sum.textContent = "+" + (2 * (i + 1));
+                      W.cSum[i].textContent = "2";
+                      await wait(150);
+                  }
+              } },
+            { t: "그림에서는 신호가 <b>10</b> 모이면 신경절 세포가 <b>반응(Response)</b>해요. 간상체 쪽은 10 → <b>반응 ✓</b> · 추상체 쪽은 2 → <b>반응 없음(No response)</b>.",
+              run: async function () {
+                  await burst(RG.x, GY, "var(--gang)");
+                  W.resp = txt(RG.x, GY + 82, "반응 ✓ (Response)", { fill: "var(--ok)" });
+                  await burst(RG.x, GY, "var(--gang)");
+                  W.nores = txt(540, GY + 82, "반응 없음 (No response)", { fill: "var(--no)" });
+                  await fadeIn(W.nores, 500);
+              } },
+            { t: "정리 — 간상체는 약한 신호를 <b>여러 개 모아서(수렴)</b> 역치를 넘겨요 → <b>약한 빛에 민감</b> → ✍️ <b>어두울 때 사용</b>. 추상체는 모으지 않아 약한 빛에선 반응하지 못해요.",
+              run: async function () {
+                  var box = el("rect", { x: 20, y: 6, width: 680, height: 40, rx: 10, fill: "var(--card)", stroke: "var(--main)", "stroke-width": 2 });
+                  var t = txt(360, 32, "어두울 때(약한 빛) = 간상체 · 다(多):1 로 신호를 모아서 반응", { fill: "var(--main)", "font-size": 16, "class": "sum" });
+                  W.labels.forEach(function (l) { l.style.opacity = 0; });
+                  box.style.opacity = 0; t.style.opacity = 0;
+                  await Promise.all([fadeIn(box, 500), fadeIn(t, 500)]);
+              } }
+        ];
+    }
+
+    // ---------- 장면 ② 두 점 — 선명도 (6쪽 오른쪽 그림 (a)(b)) ----------
+    function scene2() {
+        var W = {};
+        function lights(rIdx, cIdx) {
+            if (W.lt) W.lt.forEach(function (n) { n.remove(); });
+            W.lt = [];
+            rIdx.forEach(function (i) { W.lt.push(sun(RX[i], 62)); var a = arrowDown(RX[i], 76, TOP - 4, "var(--light)"); W.lt.push(a.g); });
+            cIdx.forEach(function (i) { W.lt.push(sun(CX[i], 62)); var a = arrowDown(CX[i], 76, TOP - 4, "var(--light)"); W.lt.push(a.g); });
+            W.lt.forEach(function (n) { n.style.opacity = 0; });
+            return Promise.all(W.lt.map(function (n) { return fadeIn(n, 500); }));
+        }
+        async function fire(rIdx, cIdx) {
+            var ds = [];
+            rIdx.forEach(function (i) { var d = sigDot(); ds.push(moveAlong(W.rodPaths[i], d, 1000).then(function () { d.remove(); })); });
+            cIdx.forEach(function (i) { var d = sigDot(); ds.push(moveAlong(W.conePaths[i], d, 1000).then(function () { d.remove(); })); });
+            await Promise.all(ds);
+        }
+        function clearOut() { (W.outs || []).forEach(function (n) { n.remove(); }); W.outs = []; }
+        function outSpark(x) {                     // 출력 (축색 끝 반짝임)
+            var g = el("g", {});
+            for (var k = -2; k <= 2; k++) el("path", { d: "M" + x + " " + (GY + 55) + " L" + (x + k * 7) + " " + (GY + 70), stroke: "var(--light)", "stroke-width": 2.5 }, g);
+            W.outs.push(g); return g;
+        }
+        return [
+            { t: "6쪽 오른쪽 그림이에요. 배선은 ①과 같아요 — 간상체 5개 → 신경절 1개(<b>다:1</b>) · 추상체 → 하나씩 자기 신경절(<b>소:1</b>).",
+              run: async function () {
+                  wiring(W); W.outs = [];
+                  var all = [].concat(W.rods, W.cones, W.rodPaths, W.conePaths, [W.rodG, W.rodOut], W.coneG, W.coneOut, W.labels);
+                  hide(all);
+                  await Promise.all(all.map(function (n) { return fadeIn(n, 800); }));
+              } },
+            { t: "(a) <b>바로 붙어 있는 빛 점 2개</b>를 비춰요 — 간상체 4 · 5번, 추상체 4 · 5번에 하나씩.",
+              run: async function () { await lights([3, 4], [3, 4]); } },
+            { t: "간상체 쪽: 두 신호가 <b>같은 신경절 1개</b>로 모여서 출력도 <b>1개</b> → 뇌는 점이 하나인지 둘인지 알 수 없어요.",
+              run: async function () {
+                  clearOut();
+                  await fire([3, 4], []);
+                  await burst(RG.x, GY, "var(--gang)");
+                  await fadeIn(outSpark(RG.x), 300);
+                  W.q1 = txt(RG.x, GY + 92, "점 1개? (구분 X)", { fill: "var(--no)" }); W.outs.push(W.q1);
+                  await fadeIn(W.q1, 400);
+              } },
+            { t: "추상체 쪽: 빛을 받은 추상체마다 <b>자기 신경절이 따로</b> 반응 → 출력 <b>2개</b> → 점 두 개를 <b>구분</b>해요.",
+              run: async function () {
+                  await fire([], [3, 4]);
+                  await Promise.all([burst(CX[3], GY, "var(--gang)"), burst(CX[4], GY, "var(--gang)")]);
+                  await Promise.all([fadeIn(outSpark(CX[3]), 300), fadeIn(outSpark(CX[4]), 300)]);
+                  var t = txt(540, GY + 92, "점 2개! (구분 O)", { fill: "var(--ok)" }); W.outs.push(t);
+                  await fadeIn(t, 400);
+              } },
+            { t: "(b) 이번엔 두 점을 <b>떨어뜨려</b> 비춰요 — 간상체 3 · 5번, 추상체 3 · 5번.",
+              run: async function () { clearOut(); await lights([2, 4], [2, 4]); } },
+            { t: "간상체 쪽 출력은 (a)와 <b>똑같이 1개</b> — 빛이 <b>어디에</b> 왔는지(위치) 정보가 합쳐지며 사라져요 → ✍️ <b>선명도 ↓</b>.",
+              run: async function () {
+                  await fire([2, 4], []);
+                  await burst(RG.x, GY, "var(--gang)");
+                  await fadeIn(outSpark(RG.x), 300);
+                  var t = txt(RG.x, GY + 92, "(a)와 같음 → 흐릿", { fill: "var(--no)" }); W.outs.push(t);
+                  await fadeIn(t, 400);
+              } },
+            { t: "추상체 쪽은 <b>3번 · 5번 신경절</b>이 반응 → 위치까지 그대로 전달 → ✍️ <b>선명도 ↑</b> (✍️ 선명한 지각 · 밝을 때 사용).",
+              run: async function () {
+                  await fire([], [2, 4]);
+                  await Promise.all([burst(CX[2], GY, "var(--gang)"), burst(CX[4], GY, "var(--gang)")]);
+                  await Promise.all([fadeIn(outSpark(CX[2]), 300), fadeIn(outSpark(CX[4]), 300)]);
+                  var t = txt(540, GY + 92, "위치까지 구분 → 선명", { fill: "var(--ok)" }); W.outs.push(t);
+                  await fadeIn(t, 400);
+              } },
+            { t: "정리 — <b>다(多):1</b> 로 모으면 약한 빛엔 강하지만 <b>흐릿</b>(간상체 · 어두울 때) · <b>소(小):1</b> 이면 약한 빛엔 약하지만 <b>선명</b>(추상체 · 밝을 때 · 중심와).",
+              run: async function () {
+                  W.labels.forEach(function (l) { l.style.opacity = 0; });
+                  var box = el("rect", { x: 20, y: 6, width: 680, height: 40, rx: 10, fill: "var(--card)", stroke: "var(--main)", "stroke-width": 2 });
+                  var t = txt(360, 32, "간상체 = 감도 ↑ · 선명도 ↓   |   추상체 = 감도 ↓ · 선명도 ↑", { fill: "var(--main)", "font-size": 16, "class": "sum" });
+                  box.style.opacity = 0; t.style.opacity = 0;
+                  await Promise.all([fadeIn(box, 500), fadeIn(t, 500)]);
+              } }
+        ];
+    }
+
+    // ---------- 장면 ③ 주변시에 비친 얕은 별빛 — Why? (6쪽 · 5쪽 분포) ----------
+    function scene3() {
+        var W = {};
+        var E = { x: 400, y: 205, r: 150 };            // 눈 (오른쪽 벽이 망막)
+        function pt(deg) { var a = deg * Math.PI / 180; return { x: E.x + E.r * Math.cos(a), y: E.y + E.r * Math.sin(a) }; }
+        var LENS = { x: E.x - E.r + 18, y: E.y };
+        return [
+            { t: "눈을 옆에서 본 그림이에요. 빛은 왼쪽 <b>수정체</b>로 들어와 오른쪽 벽 <b>망막</b>에 맺혀요.",
+              run: async function () {
+                  W.eye = el("circle", { cx: E.x, cy: E.y, r: E.r, fill: "none", stroke: "var(--ink2)", "stroke-width": 3 });
+                  W.lens = el("ellipse", { cx: LENS.x, cy: LENS.y, rx: 10, ry: 34, fill: "var(--main)", opacity: 0.55 });
+                  W.retina = el("path", { d: "M" + pt(-70).x + " " + pt(-70).y + " A" + E.r + " " + E.r + " 0 0 1 " + pt(70).x + " " + pt(70).y, stroke: "var(--gang)", "stroke-width": 7, fill: "none", "stroke-linecap": "round" });
+                  W.l1 = txt(LENS.x - 4, LENS.y - 48, "수정체", { "font-size": 13 });
+                  W.l2 = txt(pt(0).x + 30, 40, "망막", { "font-size": 14, fill: "var(--gang)" });
+                  [W.eye, W.lens, W.l1, W.l2].forEach(function (n) { n.style.opacity = 0; });
+                  await fadeIn(W.eye, 600); await fadeIn(W.lens, 400); await fadeIn(W.l1, 300);
+                  await drawLine(W.retina, 1200); await fadeIn(W.l2, 300);
+              } },
+            { t: "망막 <b>가운데(중심와 · fovea)</b>에는 <b>추상체</b>, <b>주변부</b>에는 <b>간상체</b>가 몰려 있어요 (5쪽 · ✍️ 추상체 ↔ 중심와 밑줄).",
+              run: async function () {
+                  var f = pt(0);
+                  W.fov = el("circle", { cx: f.x, cy: f.y, r: 9, fill: "var(--cone)" });
+                  W.fovT = txt(f.x - 16, f.y - 16, "중심와 = 추상체", { "font-size": 13, fill: "var(--cone)", "text-anchor": "end" });
+                  W.per = [-55, -40, -25, 25, 40, 55].map(function (d) { var p = pt(d); return el("rect", { x: p.x - 4, y: p.y - 8, width: 8, height: 16, rx: 3, fill: "var(--rod)" }); });
+                  var pp = pt(40);
+                  W.perT = txt(712, pp.y + 44, "주변부 = 간상체", { "font-size": 13, fill: "var(--rod)", "text-anchor": "end" });
+                  [W.fov, W.fovT, W.perT].concat(W.per).forEach(function (n) { n.style.opacity = 0; });
+                  await fadeIn(W.fov, 400); await fadeIn(W.fovT, 400);
+                  for (var i = 0; i < W.per.length; i++) await fadeIn(W.per[i], 180);
+                  await fadeIn(W.perT, 400);
+              } },
+            { t: "희미한 별을 <b>곁눈질(주변시)</b>로 보면 — 별빛이 수정체를 지나 망막 <b>주변부 = 간상체</b>에 떨어져요.",
+              run: async function () {
+                  var hit = pt(40);
+                  W.star1 = sun(40, 70, null, 8);
+                  W.ray1 = el("path", { d: "M40 70 L" + LENS.x + " " + LENS.y + " L" + hit.x + " " + hit.y, stroke: "var(--light)", "stroke-width": 2.5, fill: "none", "stroke-dasharray": "none" });
+                  W.star1.style.opacity = 0;
+                  await fadeIn(W.star1, 500);
+                  await drawLine(W.ray1, 1600);
+              } },
+            { t: "간상체 여러 개의 약한 신호가 <b>한 신경절에 모여(다:1)</b> 역치를 넘어요 → <b>보여요 ✓</b>",
+              run: async function () {
+                  var hit = pt(40);
+                  W.ok = txt(E.x - 60, E.y + E.r + 32, "2+2+2+2+2 = 10 → 보임 ✓", { "font-size": 14, fill: "var(--ok)" });
+                  await burst(hit.x, hit.y, "var(--ok)");
+                  await fadeIn(W.ok, 500);
+              } },
+            { t: "이번엔 별을 <b>똑바로(중심시)</b> 보면 — 별빛이 <b>중심와 = 추상체</b>에 떨어져요.",
+              run: async function () {
+                  var f = pt(0);
+                  W.star2 = sun(40, E.y, null, 8);
+                  W.ray2 = el("path", { d: "M40 " + E.y + " L" + f.x + " " + f.y, stroke: "var(--light)", "stroke-width": 2.5, fill: "none" });
+                  W.star2.style.opacity = 0;
+                  await fadeIn(W.star2, 500);
+                  await drawLine(W.ray2, 1600);
+              } },
+            { t: "추상체는 신호를 모아 주지 않아(소:1) 신경절에 <b>2</b> 뿐 → 역치를 못 넘어 <b>안 보여요 ✗</b>",
+              run: async function () {
+                  var f = pt(0);
+                  W.no = txt(f.x - 16, f.y + 36, "2 뿐 → 안 보임 ✗", { "font-size": 14, fill: "var(--no)", "text-anchor": "end" });
+                  await fadeIn(W.no, 500);
+              } },
+            { t: "6쪽 <b>Why?</b> 의 답 — 약한 빛은 <b>간상체</b>가 모아서 잡는데, 간상체는 <b>주변부</b>에 있어요. 그래서 희미한 별은 <b>곁눈질로 볼 때 보이고 똑바로 보면 사라져요</b>.",
+              run: async function () {
+                  W.l2.style.opacity = 0;
+                  var box = el("rect", { x: 20, y: 6, width: 680, height: 40, rx: 10, fill: "var(--card)", stroke: "var(--main)", "stroke-width": 2 });
+                  var t = txt(360, 32, "약한 빛 = 간상체 = 주변부 → 곁눈질하면 보임", { fill: "var(--main)", "font-size": 16, "class": "sum" });
+                  box.style.opacity = 0; t.style.opacity = 0;
+                  await Promise.all([fadeIn(box, 500), fadeIn(t, 500)]);
+              } }
+        ];
+    }
+
+    var SCENES = [scene1, scene2, scene3];
+    var steps = [];
+
+    function renderDots() {
+        dotsBox.innerHTML = "";
+        steps.forEach(function (s, i) { var d = document.createElement("i"); if (i < S.step) d.className = "on"; dotsBox.appendChild(d); });
+    }
+    function setCap(i) {
+        var s = steps[Math.min(i, steps.length - 1)];
+        cap.innerHTML = '<span class="no">' + (Math.min(i, steps.length - 1) + 1) + " / " + steps.length + "</span>" + s.t;
+    }
+    function setPlay(on) { S.playing = on; playBtn.textContent = on ? "⏸ 일시정지" : (S.step >= steps.length ? "↻ 다시 보기" : "▶ 재생"); }
+
+    // 장면을 처음부터 다시 그리고 target 단계 앞까지는 바로(instant) 진행 → mode: 'play' 이어서 재생 · 'one' 한 단계만 그리고 멈춤 · 'pause' 멈춘 채 대기
+    async function goto(scene, target, mode) {
+        S.token++; var my = S.token;
+        S.scene = scene; svg.innerHTML = ""; steps = SCENES[scene]();
+        document.querySelectorAll(".tabs button").forEach(function (b) { b.setAttribute("aria-pressed", String(+b.dataset.scene === scene)); });
+        target = Math.max(0, Math.min(target, steps.length));
+        S.instant = true;
+        try { for (var i = 0; i < target; i++) await steps[i].run(); } catch (e) { if (e !== CANCEL) throw e; return; }
+        S.instant = false;
+        S.step = target; renderDots();
+        if (target >= steps.length) { setCap(steps.length - 1); setPlay(false); return; }
+        S.once = mode === "one";
+        setCap(target);
+        setPlay(mode === "play" || mode === "one");
+        run(my);
+    }
+    async function run(my) {                     // 지금 단계부터 끝까지 (재생 중일 때만 시간이 흐름)
+        try {
+            while (S.step < steps.length) {
+                setCap(S.step); S.started = false;
+                await steps[S.step].run();
+                if (my !== S.token) return;
+                S.step++; renderDots();
+                if (S.once) { S.once = false; setPlay(false); }
+                if (S.step < steps.length) { setCap(S.step); await wait(1400); }
+            }
+            setPlay(false);
+        } catch (e) { if (e !== CANCEL) throw e; }
+    }
+
+    playBtn.addEventListener("click", function () {
+        if (S.step >= steps.length) { goto(S.scene, 0, "play"); return; }
+        S.once = false;
+        setPlay(!S.playing);
+    });
+    document.getElementById("restart").addEventListener("click", function () { goto(S.scene, 0, "pause"); });
+    // 다음: 지금 단계를 아직 안 그렸으면 그 단계를 · 그리는 중이면 마저 끝내고 다음 단계를 한 번 그림
+    document.getElementById("next").addEventListener("click", function () {
+        if (S.step >= steps.length) return;
+        goto(S.scene, S.started ? S.step + 1 : S.step, S.playing ? "play" : "one");
+    });
+    document.getElementById("prev").addEventListener("click", function () { goto(S.scene, Math.max(0, S.step - 1), "one"); });
+    document.getElementById("speed").addEventListener("change", function () { S.speed = +this.value; });
+    document.querySelectorAll(".tabs button").forEach(function (b) { b.addEventListener("click", function () { goto(+b.dataset.scene, 0, "play"); }); });
+
+    // 주소 끝 #s=3&n=7 → ③ 장면 7단계까지 바로 그린 화면으로 열기 (링크 · 확인용)
+    var hm = /s=(\d)(?:&n=(\d+))?/.exec(location.hash);
+    goto(hm ? Math.min(+hm[1], 3) - 1 : 0, hm && hm[2] ? +hm[2] : 0, "pause");
+
+    // 주차 페이지에 끼워 넣었을 때: 높이를 알려 주고(창 크기 자동) · 화면에 보이면 한 번 자동 재생
+    var box = document.querySelector(".box");
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) {} }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell); tell();
+    if (window.IntersectionObserver) {
+        var started = false;
+        new IntersectionObserver(function (es) {
+            if (!started && es[0].isIntersecting && S.scene === 0 && S.step === 0 && !S.playing) { started = true; setPlay(true); }
+        }, { threshold: 0.6 }).observe(svg);
+    }
+})();
+</script>
+</body>
+</html>

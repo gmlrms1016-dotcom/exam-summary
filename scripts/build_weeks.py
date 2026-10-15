@@ -11,6 +11,7 @@
 - `## ` 마다 카드 1개 · `### ` 소제목 · `#### ` 작은 소제목 · `> ` 안내 상자 · `- ` / `1. ` 목록(2칸 들여쓰기 = 하위 목록)
 - ``` 코드 블록 (```output = ▶ 출력 결과 상자 · ```bits = 2진수 풀이 상자) · `| a | b |` 표(첫 줄 머리글, 칸 안의 | 는 \\|) · <details> / <summary> 접기
 - `🔒 [이름](주소)` 한 줄 = 오른쪽에 작은 버튼 (실제시험 같은 숨은 페이지로 가는 입구)
+- `🎬 [이름](주소)` 한 줄 = 그 자리에 애니메이션 · 데모 페이지를 끼워 넣음(iframe · 주소는 주차 페이지 기준) + 아래에 '새 창으로 크게 보기' 버튼
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
 원고 파일이 있는 주차만 과목 페이지에서 버튼이 열리고, 나머지는 잠깁니다.
 """
@@ -188,6 +189,16 @@ def render_md(md):
             flush()
             m_btn = re.match(r"^🔒 \[([^\]]+)\]\(([^)\s]+)\)$", line.strip())
             parts.append('<p class="wk-lockbtn"><a href="%s">🔒 %s</a></p>' % (html.escape(m_btn.group(2), quote=True), html.escape(m_btn.group(1), quote=False)))
+        elif re.match(r"^🎬 \[[^\]]+\]\([^)\s]+\)$", line.strip()):   # 🎬 [이름](주소) → 애니메이션 페이지를 그 자리에 (예: 뇌인지 7주차 광수용체)
+            flush()
+            m_an = re.match(r"^🎬 \[([^\]]+)\]\(([^)\s]+)\)$", line.strip())
+            src, name = html.escape(m_an.group(2), quote=True), html.escape(m_an.group(1), quote=False)
+            parts.append('<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="%s" title="%s" loading="lazy" '
+                         'style="display:block;width:100%%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe>'
+                         '<p class="wk-lockbtn"><a href="%s" target="_blank" rel="noopener">🎬 %s — 새 창으로 크게 보기</a></p></div>' % (src, name, src, name))
+            if not any('data-wk-anim-size' in x for x in parts):   # 끼운 페이지가 알려 주는 높이로 창 크기 맞춤 (한 번만)
+                parts.append('<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;'
+                             'document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>')
         elif line.strip() == "<details>":
             flush()
             parts.append('<details class="wk-details">')
