@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610151733"></script>
+    <script src="../theme.js?v=202610151742"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운영체제실습 7주차 · 프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</title>
-    <link rel="stylesheet" href="../style.css?v=202610151733">
+    <link rel="stylesheet" href="../style.css?v=202610151742">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -150,7 +150,7 @@ $ cat info.txt</code></pre>
 <pre><code class="language-bash">$ which cp
 $ which mv
 $ ls /usr/bin</code></pre>
-<ul><li>🤖 which 결과 = /usr/bin/cp · /usr/bin/mv → 그 디렉터리를 ls</li></ul>
+<ul><li>🤖 which 결과 = /usr/bin/cp · /usr/bin/mv → 3번은 그 디렉터리(/usr/bin)를 ls · 사이트에서는 1 · 2번을 맞게 치고 Enter 를 누르면 아래 🖥️ 터미널에 결과가 나와요</li></ul>
 </details>
 <h4>도전 2-7 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
 <ol><li>지금까지 사용한 모든 명령들의 목록 출력하기</li><li>수행했던 라인번호 3의 명령을 다시 실행하기</li><li>사용한 명령들 중에서 라인번호 5번만 삭제하기</li><li>지금까지 수행했던 모든 명령들을 한꺼번에 삭제하기</li></ol>
@@ -284,7 +284,7 @@ $ clear</code></pre>
 $ grep -n cssc /etc/services
 $ history
 $ !행번호</code></pre>
-<ul><li>🤖 4번 = <code>!</code> + history 에 나온 번호 (예: !512)</li></ul>
+<ul><li>🤖 4번 = <code>!</code> + history 에 나온 번호 (사이트 🖥️ 터미널에서는 3 → !3 · 실제 터미널은 번호가 더 큼)</li></ul>
 </details>
 <h4>도전 3-14 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
 <ol><li>grep 명령이 어느 디렉터리에 있는지 위치 출력하기</li><li>cat 명령과 history 명령이 어느 디렉터리에 위치하고 있는지 한꺼번에 출력하기</li><li>터미널 창에 출력된 모든 명령과 출력결과 지우기</li></ol>
@@ -614,6 +614,6 @@ exit 0                                    # 정상 종료</code></pre>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610151733"></script>
+<script src="../ink.js?v=202610151742"></script>
 </body>
 </html>

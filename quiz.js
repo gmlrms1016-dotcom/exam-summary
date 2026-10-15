@@ -8,6 +8,9 @@
    - 여러 줄 명령 .quiz-item[data-lines] : 한 문제에 명령을 여러 줄 (운영체제 도전문제 · 2026-10-15)
        data-lines='[["cal 2025"],["cal","cal -y"]]'  줄마다 정답 목록 (첫 번째 = 정답 보기에 나오는 답 · "re:정규식" 도 됨)
        풀이 방법이 여러 가지면 data-lines='{"or":[[…방법1 줄들…],[…방법2 줄들…]]}' — 줄 수가 달라도 하나만 맞으면 정답 (2026-10-15)
+       줄 정답을 {"c":"which cp","o":"/usr/bin/cp"} 로 쓰면 그 명령을 맞게 치고 Enter 를 누를 때 아래 🖥️ 터미널 칸에 결과(o)가 나옴
+         — 앞 줄 결과를 봐야 다음 줄을 쓸 수 있는 문제용 (도전 2-6 · 3-13) · o 가 "{history}" = 지금까지 친 명령에 번호 · "{clear}" = 터미널 지우기
+         data-prompt="#" (선택) 터미널 칸의 프롬프트 (기본 $)
        <textarea class="quiz-lines"> 에서 Enter = 다음 줄 (채점은 확인 버튼 · ⌘/Ctrl+Enter)
        채점: 줄마다 앞의 $ · # 프롬프트 빼고 · – → - · 띄어쓰기 여러 칸 = 한 칸 · 대소문자는 그대로 (리눅스 명령)
    - #quiz-score 가 있으면 퀴즈 섹션(#quiz)의 맞힌 개수를 표시
@@ -36,6 +39,11 @@
         + ".quiz-item textarea.quiz-lines{display:block;width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px;line-height:1.6;font-family:Consolas,Menlo,monospace;resize:vertical;}"
         + ".quiz-steps{margin:6px 0 10px;padding-left:22px;line-height:1.7;font-size:14.5px;}"
         + ".quiz-lines-hint{font-size:12.5px;color:#6b776e;margin:0 0 6px;}"
+        + ".quiz-term-lbl{font-size:12.5px;color:#6b776e;margin:8px 0 2px;}"
+        + ".quiz-term{margin:0;padding:8px 10px;border-radius:8px;background:#0f1b14;color:#dff5e6;font-size:13px;line-height:1.55;white-space:pre-wrap;word-break:break-all;max-height:260px;overflow:auto;font-family:Consolas,Menlo,monospace;}"
+        + ".quiz-term .cmd{color:#9fe6b4;}"
+        + ".quiz-term::before,.quiz-feedback pre.ans-lines::before{content:none;display:none;}"   // style.css 의 '</> 코드' 문구는 터미널 · 정답 줄에는 안 붙게
+        + "pre.quiz-steps-out::before{content:\"🖥️ 출력 예시\";}"
         + ".quiz-feedback pre.ans-lines{margin:6px 0 0;padding:8px 10px;border-radius:6px;background:#0f1b14;color:#dff5e6;font-size:13.5px;line-height:1.6;white-space:pre-wrap;}";
     var st = document.createElement("style");
     st.textContent = css;
@@ -93,13 +101,17 @@
         s = s.replace(/^\s*(\[[^\]]*\]\s*)?[$#]\s+/, "");
         return s.replace(/\s+/g, " ").trim();
     }
-    function lineOk(alts, v) {
-        if (!v) return false;
-        return alts.some(function (a) {
-            if (/^re:/.test(a)) { try { return new RegExp(a.slice(3)).test(v); } catch (e) { return false; } }
-            return cnorm(a) === v;
-        });
+    function altCmd(a) { return a && typeof a === "object" ? String(a.c || "") : String(a); }
+    function lineMatch(alts, v) {             // 맞은 정답(글자 또는 {c,o}) · 없으면 null
+        if (!v || !alts) return null;
+        for (var i = 0; i < alts.length; i++) {
+            var a = altCmd(alts[i]);
+            if (/^re:/.test(a)) { try { if (new RegExp(a.slice(3)).test(v)) return alts[i]; } catch (e) { } }
+            else if (cnorm(a) === v) return alts[i];
+        }
+        return null;
     }
+    function lineOk(alts, v) { return !!lineMatch(alts, v); }
     function linesOf(item) {                 // → 풀이 방법 목록 [[줄 정답들…], …] (방법이 하나면 길이 1)
         if (!item.dataset.lines) return null;
         try {
@@ -109,7 +121,29 @@
             return sols.length ? sols : null;
         } catch (e) { return null; }
     }
-    function linesShown(L) { return L.map(function (alts) { return String(alts[0]).replace(/^re:/, ""); }).join("\n"); }
+    function linesShown(L) { return L.map(function (alts) { return altCmd(alts[0]).replace(/^re:/, ""); }).join("\n"); }
+    function hasOut(sols) { return sols.some(function (L) { return L.some(function (alts) { return alts.some(function (a) { return a && typeof a === "object" && a.o != null; }); }); }); }
+    // 🖥️ 터미널 칸: Enter 로 끝낸 줄만 · 맞은 명령이면 결과(o) · 가장 많이 맞은 풀이 방법 기준
+    function termHtml(sols, text, prompt) {
+        var done = text.split("\n").slice(0, -1).map(cnorm).filter(function (x) { return x; });
+        if (!done.length) return "";
+        var sol = sols[0], bestN = -1;
+        sols.forEach(function (L) {
+            var n = 0;
+            for (var i = 0; i < done.length; i++) if (lineMatch(L[i], done[i])) n++;
+            if (n > bestN) { bestN = n; sol = L; }
+        });
+        var out = [], hist = [];
+        done.forEach(function (v, i) {
+            hist.push(v);
+            out.push('<span class="cmd">' + esc(prompt + " " + v) + "</span>");
+            var m = lineMatch(sol[i], v), o = m && typeof m === "object" ? m.o : null;
+            if (o === "{clear}") { out = []; return; }
+            if (o === "{history}") o = hist.map(function (h, k) { return ("    " + (k + 1)).slice(-5) + "  " + h; }).join("\n");
+            if (o != null && o !== "") out.push(esc(o));
+        });
+        return out.join("\n");
+    }
     function gradeLines(sols, text) {         // 방법마다 줄 채점 → 맞은 방법 · 없으면 가장 많이 맞은 방법
         var got = text.split("\n").map(cnorm).filter(function (x) { return x; });
         var best = null;
@@ -169,6 +203,15 @@
         var shown = L ? linesShown(L[0]) : (item.dataset.full || answers[0]);
         var explain = item.dataset.explain ? '<span class="ans">' + esc(item.dataset.explain) + "</span>" : "";
         if (L && input && input.tagName === "TEXTAREA" && !input.getAttribute("rows")) input.rows = Math.max(2, L[0].length);
+        if (L && input && hasOut(L)) {
+            var lbl = document.createElement("p"); lbl.className = "quiz-term-lbl";
+            lbl.textContent = "🖥️ 터미널 — 명령을 맞게 치고 Enter 를 누르면 실행 결과(예시)가 나와요 · 다음 줄에 그 결과를 보고 쓰기";
+            var term = document.createElement("pre"); term.className = "quiz-term"; term.setAttribute("aria-live", "polite");
+            input.insertAdjacentElement("afterend", term); input.insertAdjacentElement("afterend", lbl);
+            var prompt = item.dataset.prompt || "$";
+            var draw = function () { var h = termHtml(L, input.value, prompt); term.innerHTML = h || '<span style="opacity:.6">' + esc(prompt) + " _</span>"; term.scrollTop = term.scrollHeight; };
+            input.addEventListener("input", draw); draw();
+        }
         function check() {
             var ok;
             if (L) {                                          // 여러 줄 명령: 줄마다 채점 (빈 줄은 건너뜀 · 풀이 방법이 여러 개면 하나만 맞아도 정답)
