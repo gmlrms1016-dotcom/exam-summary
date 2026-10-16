@@ -10,7 +10,7 @@
        data-space="strict"    (선택) 완전 일치 — 줄바꿈(\n)·빈 줄·줄 안의 띄어쓰기·마지막 줄바꿈까지 실제 출력과 같아야 정답 (줄 끝의 보이지 않는 공백만 무시)
                               oq-expect 는 "\n" + 실제 출력 + "\n" 로 적는다 (출력이 println 으로 끝나면 끝에 빈 줄이 하나 더 생김)
        data-endnl="ignore"    (선택, strict 와 같이) 맨 끝 줄바꿈(Enter)은 채점 안 함 — 실제시험: 마지막 출력은 print 라 끝에 Enter 를 칠 일이 없음
-       data-table             (선택) SQL 결과 표 문제 — oq-expect 는 "열1 | 열2" 머리글 줄 + 행마다 한 줄 (칸은 " | " 로 구분, 널 값은 NULL)
+       data-table             (선택) SQL 결과 표 문제 — oq-expect 는 "열1 | 열2" 머리글 줄 + 행마다 한 줄 (칸은 " | " 로 구분, 널 값은 NULL) · 열 이름 줄은 안 써도 정답 (2026-10-16)
                               답은 글자 칸 대신 표(기본 3 × 3 · ＋/－ 행 · 열 · Enter = 아래 칸)에 입력 → 숨긴 칸에 "칸 | 칸" 줄로 적힘 (2026-10-09)
                               예전 답(띄어쓰기 · | · 탭으로 구분 · +---+ 테두리 줄)도 표로 되살림
                               첫 줄(열 이름)은 그대로, 그다음 행들은 순서를 채점하지 않음 (투플의 무순서성 — ORDER BY 는 안 배움)
@@ -602,16 +602,18 @@
             var mine = lines(ta.value, exact, table);
             if (!mine.length) { box.innerHTML = '<p class="oq-sum no">실행 결과를 적고 확인을 누르세요.</p>'; p.dataset.solved = ""; updateScore(); return; }   // 맞힌 뒤 비우고 확인 → 다시 안 푼 문제로
             var good = 0, html = [], pool = expect.slice(1);
+            var noHead = table && mine[0] !== expect[0] && mine.length === expect.length - 1;   // ✍️ 열 이름 줄은 안 써도 정답 (값 행만 · 2026-10-16)
+            if (noHead) { good = 1; html.push('<span class="l-ok">✅ (열 이름 줄 — 안 써도 돼요)</span>'); }
             mine.forEach(function (l, i) {
-                var at = table && i ? pool.indexOf(l) : -1;          // 표: 머리글 다음 행은 순서 상관없이 남은 행과 비교
+                var at = table && (i || noHead) ? pool.indexOf(l) : -1;          // 표: 머리글 다음 행은 순서 상관없이 남은 행과 비교
                 if (at >= 0) pool.splice(at, 1);
-                var ok = table && i ? at >= 0 : l === expect[i];
+                var ok = table && (i || noHead) ? at >= 0 : l === expect[i];
                 if (ok) good++;
                 html.push('<span class="' + (ok ? "l-ok" : "l-no") + '">' + (ok ? "✅ " : "❌ ") + esc(l) + "</span>");
             });
-            var all = good === expect.length && mine.length === expect.length;
+            var all = good === expect.length && mine.length + (noHead ? 1 : 0) === expect.length;
             var msg;
-            if (all) msg = '<p class="oq-sum ok">🎉 정답! ' + expect.length + "줄 모두 맞았어요.</p>";
+            if (all) msg = '<p class="oq-sum ok">🎉 정답! ' + (noHead ? "값 행이 모두 맞았어요 (열 이름 줄은 안 써도 돼요)." : expect.length + "줄 모두 맞았어요.") + "</p>";
             else {
                 msg = '<p class="oq-sum no">' + good + " / " + expect.length + " 줄 맞음";
                 if (mine.length < expect.length) msg += " — 줄이 모자라요 (결과는 " + expect.length + "줄)";
