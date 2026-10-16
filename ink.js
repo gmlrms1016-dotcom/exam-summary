@@ -163,57 +163,141 @@
         return c;
     }
     function f1(v) { return Math.round(v * 10) / 10; }
-    function lineD(pts, ox, oy) {                             // 같은 굵기 선 (마커)
-        var n = pts.length / 3;
-        if (!n) return "";
-        var d = "M" + f1(pts[0] + ox) + " " + f1(pts[1] + oy);
-        if (n === 1) return d + "l0.01 0";
-        for (var i = 1; i < n - 1; i++) {
-            var x1 = pts[3 * i] + ox, y1 = pts[3 * i + 1] + oy, x2 = pts[3 * i + 3] + ox, y2 = pts[3 * i + 4] + oy;
-            d += "Q" + f1(x1) + " " + f1(y1) + " " + f1((x1 + x2) / 2) + " " + f1((y1 + y2) / 2);
+    function f2(v) { return Math.round(v * 100) / 100; }
+
+    /* 획 모양 — 아이패드 마크업처럼 (2026-10-16 사용자: '아이패드 PDF 미리보기만큼 필기 퀄리티') · perfect-freehand(Steve Ruiz, MIT) 방식
+     *  ① 입력점을 살짝 늦게 따라가며 손떨림을 거른 매끈한 중심선 (stream)
+     *  ② 필압(펜슬) · 속도(마우스 · 손가락)로 반지름 → 양쪽 테두리 + 둥근 시작 · 끝 · 급히 꺾이는 곳은 둥글게 돌아감
+     *  ③ 테두리 점들을 2차 곡선으로 이어 채움 (점 간격이 너무 촘촘하면 건너뜀 = smooth) */
+    var PI1 = Math.PI + 0.0001, RATE = 0.275;
+    var FEEL = { pen: { thin: 0.48, smooth: 0.62, stream: 0.5 }, pencil: { thin: 0.3, smooth: 0.62, stream: 0.5 }, marker: { stream: 0.6 } };
+    function vsub(a, b) { return [a[0] - b[0], a[1] - b[1]]; }
+    function vper(a) { return [a[1], -a[0]]; }
+    function vuni(a) { var l = Math.hypot(a[0], a[1]) || 1; return [a[0] / l, a[1] / l]; }
+    function vdot(a, b) { return a[0] * b[0] + a[1] * b[1]; }
+    function vrot(a, c, r) { var s = Math.sin(r), k = Math.cos(r), px = a[0] - c[0], py = a[1] - c[1]; return [px * k - py * s + c[0], px * s + py * k + c[1]]; }
+    function vd2(a, b) { var x = a[0] - b[0], y = a[1] - b[1]; return x * x + y * y; }
+    function strokePts(pts, ox, oy, stream, size, done) {   // 입력점 → 매끈한 중심선 점 { p, pr(필압), v(방향), d, rl(누적 길이) }
+        var n = pts.length / 3, t = 0.15 + (1 - stream) * 0.85, out = [], raw = [], i, pp = pts[2];
+        if (!n) return out;
+        for (i = 0; i < n; i++) { pp = i ? pp * 0.4 + pts[3 * i + 2] * 0.6 : pts[2]; raw.push([pts[3 * i] + ox, pts[3 * i + 1] + oy, pp]); }   // 필압 흔들림 살짝 거름
+        if (raw.length === 1) raw.push([raw[0][0] + 1, raw[0][1] + 1, raw[0][2]]);
+        var prev = { p: [raw[0][0], raw[0][1]], pr: raw[0][2], v: [1, 1], d: 0, rl: 0 }, rl = 0, reached = false;
+        out.push(prev);
+        for (i = 1; i < raw.length; i++) {
+            var last = i === raw.length - 1;
+            var q = done && last ? [raw[i][0], raw[i][1]] : [prev.p[0] + (raw[i][0] - prev.p[0]) * t, prev.p[1] + (raw[i][1] - prev.p[1]) * t];
+            if (q[0] === prev.p[0] && q[1] === prev.p[1]) continue;
+            var dv = vsub(prev.p, q), d = Math.hypot(dv[0], dv[1]);
+            rl += d;
+            if (!last && !reached) { if (rl < size) continue; reached = true; }   // 시작 몇 점은 건너뜀 → 시작이 뭉치지 않게
+            prev = { p: q, pr: raw[i][2], v: [dv[0] / d, dv[1] / d], d: d, rl: rl };
+            out.push(prev);
         }
-        return d + "L" + f1(pts[3 * n - 3] + ox) + " " + f1(pts[3 * n - 2] + oy);
+        out[0].v = out[1] ? out[1].v : [0, 0];
+        return out;
     }
-    function outlineD(pts, ox, oy, w, thin) {                // 필압으로 굵기가 바뀌는 선 — 양쪽 테두리를 이어 채움
-        var n = pts.length / 3;
-        if (!n) return "";
-        var X = [], Y = [], R = [], i, sp = pts[2];
+    function outlinePts(sp, size, thin, smooth, sim) {      // 중심선 → 테두리 점 (왼쪽 · 끝 둥글게 · 오른쪽(거꾸로) · 시작 둥글게)
+        var n = sp.length;
+        if (!n) return [];
+        var total = sp[n - 1].rl, minD = Math.pow(size * smooth, 2), L = [], R = [], i, k;
+        var rad = function (p) { return size * (0.5 - thin * (0.5 - p)); };
+        var prevP = sp[0].pr;
+        if (sim) prevP = sp.slice(0, 10).reduce(function (acc, c) { var s = Math.min(1, c.d / size), r = Math.min(1, 1 - s); return (acc + Math.min(1, acc + (r - acc) * (s * RATE))) / 2; }, sp[0].pr);
+        var radius = rad(sp[n - 1].pr), first, prevV = sp[0].v, pl = sp[0].p, pr = pl, tl = pl, tr = pr, prevSharp = false;
         for (i = 0; i < n; i++) {
-            X.push(pts[3 * i] + ox);
-            Y.push(pts[3 * i + 1] + oy);
-            sp = sp * 0.6 + pts[3 * i + 2] * 0.4;             // 필압 흔들림 줄이기
-            var r = w / 2 * (1 - thin + thin * Math.min(1.25, sp * 1.6));
-            if (n > 6 && i < 3) r *= 0.55 + 0.15 * i;          // 시작 · 끝을 살짝 가늘게
-            if (n > 6 && i > n - 4) r *= 0.55 + 0.15 * (n - 1 - i);
-            R.push(Math.max(0.35, r));
-        }
-        if (n === 1) {
-            var rr = f1(R[0]);
-            return "M" + f1(X[0] - rr) + " " + f1(Y[0]) + "a" + rr + " " + rr + " 0 1 0 " + f1(2 * rr) + " 0a" + rr + " " + rr + " 0 1 0 " + f1(-2 * rr) + " 0Z";
-        }
-        var L = [], Rt = [];
-        for (i = 0; i < n; i++) {
-            var a = Math.max(0, i - 1), b = Math.min(n - 1, i + 1);
-            var dx = X[b] - X[a], dy = Y[b] - Y[a], len = Math.hypot(dx, dy) || 1;
-            var nx = -dy / len, ny = dx / len;
-            L.push([X[i] + nx * R[i], Y[i] + ny * R[i]]);
-            Rt.push([X[i] - nx * R[i], Y[i] - ny * R[i]]);
-        }
-        function through(arr) {
-            var s = "";
-            for (var k = 1; k < arr.length - 1; k++) {
-                s += "Q" + f1(arr[k][0]) + " " + f1(arr[k][1]) + " " + f1((arr[k][0] + arr[k + 1][0]) / 2) + " " + f1((arr[k][1] + arr[k + 1][1]) / 2);
+            var c = sp[i], press = c.pr, pt = c.p, v = c.v;
+            if (i < n - 1 && total - c.rl < 3) continue;
+            if (thin) {
+                if (sim) { var s = Math.min(1, c.d / size), r = Math.min(1, 1 - s); press = Math.min(1, prevP + (r - prevP) * (s * RATE)); }   // 빠르게 그으면 가늘게
+                radius = rad(press);
+            } else radius = size / 2;
+            radius = Math.max(0.2, radius);
+            if (first === undefined) first = radius;
+            var nv = (i < n - 1 ? sp[i + 1] : c).v, nd = i < n - 1 ? vdot(v, nv) : 1, pd = vdot(v, prevV);
+            var sharp = pd < 0 && !prevSharp, nextSharp = nd < 0;
+            if (sharp || nextSharp) {                          // 급히 꺾이는 곳: 반원으로 돌아감 (테두리가 꼬이지 않게)
+                var off = [vper(prevV)[0] * radius, vper(prevV)[1] * radius];
+                for (k = 0; k <= 1; k += 1 / 13) {
+                    tl = vrot(vsub(pt, off), pt, PI1 * k); L.push(tl);
+                    tr = vrot([pt[0] + off[0], pt[1] + off[1]], pt, -PI1 * k); R.push(tr);
+                }
+                pl = tl; pr = tr;
+                if (nextSharp) prevSharp = true;
+                continue;
             }
-            return s + "L" + f1(arr[arr.length - 1][0]) + " " + f1(arr[arr.length - 1][1]);
+            prevSharp = false;
+            if (i === n - 1) { var oe = vper(v); L.push([pt[0] - oe[0] * radius, pt[1] - oe[1] * radius]); R.push([pt[0] + oe[0] * radius, pt[1] + oe[1] * radius]); continue; }
+            var lv = vper([nv[0] + (v[0] - nv[0]) * nd, nv[1] + (v[1] - nv[1]) * nd]);
+            tl = [pt[0] - lv[0] * radius, pt[1] - lv[1] * radius];
+            if (i <= 1 || vd2(pl, tl) > minD) { L.push(tl); pl = tl; }
+            tr = [pt[0] + lv[0] * radius, pt[1] + lv[1] * radius];
+            if (i <= 1 || vd2(pr, tr) > minD) { R.push(tr); pr = tr; }
+            prevP = press; prevV = v;
         }
-        var back = Rt.slice().reverse(), re = f1(R[n - 1]), rs = f1(R[0]);
-        return "M" + f1(L[0][0]) + " " + f1(L[0][1]) + through(L) +
-            "A" + re + " " + re + " 0 0 1 " + f1(back[0][0]) + " " + f1(back[0][1]) + through(back) +
-            "A" + rs + " " + rs + " 0 0 1 " + f1(L[0][0]) + " " + f1(L[0][1]) + "Z";
+        var fp = sp[0].p, lp = n > 1 ? sp[n - 1].p : [fp[0] + 1, fp[1] + 1], sc = [], ec = [];
+        if (n === 1 || !L.length) {                            // 톡 찍은 점 → 동그라미
+            var fr = first || radius, st0 = [fp[0] + fr, fp[1]], dots = [];
+            for (k = 1 / 13; k <= 1.0001; k += 1 / 13) dots.push(vrot(st0, fp, PI1 * 2 * k));
+            return dots;
+        }
+        for (k = 1 / 13; k <= 1; k += 1 / 13) sc.push(vrot(R[0], fp, PI1 * k));                 // 둥근 시작
+        var dir = vper([-sp[n - 1].v[0], -sp[n - 1].v[1]]), s2 = [lp[0] + dir[0] * radius, lp[1] + dir[1] * radius];
+        for (k = 1 / 29; k < 1; k += 1 / 29) ec.push(vrot(s2, lp, PI1 * 3 * k));                 // 둥근 끝
+        return L.concat(ec, R.reverse(), sc);
     }
-    function shapeOf(st, ox, oy) {
-        if (st.t === "marker") return lineD(st.pts, ox, oy);
-        return outlineD(st.pts, ox, oy, st.w, st.t === "pencil" ? 0.45 : 0.62);
+    function polyPath(pts) {                                  // 테두리 점 → 2차 곡선으로 이은 닫힌 모양
+        var n = pts.length;
+        if (!n) return "";
+        if (n < 4) { var d0 = "M" + f2(pts[0][0]) + " " + f2(pts[0][1]); for (var j = 1; j < n; j++) d0 += "L" + f2(pts[j][0]) + " " + f2(pts[j][1]); return d0 + "Z"; }
+        var a = pts[0], b = pts[1], c = pts[2];
+        var d = "M" + f2(a[0]) + " " + f2(a[1]) + "Q" + f2(b[0]) + " " + f2(b[1]) + " " + f2((b[0] + c[0]) / 2) + " " + f2((b[1] + c[1]) / 2) + "T";
+        for (var i = 2; i < n - 1; i++) d += f2((pts[i][0] + pts[i + 1][0]) / 2) + " " + f2((pts[i][1] + pts[i + 1][1]) / 2) + " ";
+        return d + "Z";
+    }
+    function centerD(sp) {                                    // 마커: 매끈한 중심선 (같은 굵기)
+        var n = sp.length;
+        if (!n) return "";
+        var d = "M" + f2(sp[0].p[0]) + " " + f2(sp[0].p[1]);
+        if (n === 1) return d + "l0.01 0";
+        for (var i = 1; i < n - 1; i++) d += "Q" + f2(sp[i].p[0]) + " " + f2(sp[i].p[1]) + " " + f2((sp[i].p[0] + sp[i + 1].p[0]) / 2) + " " + f2((sp[i].p[1] + sp[i + 1].p[1]) / 2);
+        return d + "L" + f2(sp[n - 1].p[0]) + " " + f2(sp[n - 1].p[1]);
+    }
+    function flatP(pts) { for (var k = 5; k < pts.length; k += 3) if (pts[k] !== pts[2]) return false; return true; }   // 필압이 한결같음 = 마우스 · 손가락
+    function shapeOf(st, ox, oy, live) {
+        var o = FEEL[st.t] || FEEL.pen, size = st.w;
+        var sp = strokePts(st.pts, ox, oy, o.stream, st.t === "marker" ? Math.min(size, 8) : size, !live);
+        if (st.t === "marker") return centerD(sp);
+        var sim = st.sim != null ? !!st.sim : flatP(st.pts);
+        return polyPath(outlinePts(sp, size, o.thin, o.smooth, sim));
+    }
+    // 연필 종이결: 색마다 작은 무늬(점점이 옅고 진한 결)를 한 번 만들어 채움 (예전: 페이지 전체에 노이즈 필터 → 아이패드에서 버벅임)
+    var grainIds = {}, grainN = 0, defsEl = null;
+    function grainFor(col) {
+        if (grainIds[col]) return grainIds[col];
+        var id = "ink-pg" + (grainN++), S = 96;
+        try {
+            var cv = document.createElement("canvas"); cv.width = cv.height = S;
+            var cx = cv.getContext("2d");
+            cx.fillStyle = col; var rgb = cx.fillStyle;             // 어떤 색 표기든 #rrggbb 로
+            var R0 = parseInt(rgb.slice(1, 3), 16) || 0, G0 = parseInt(rgb.slice(3, 5), 16) || 0, B0 = parseInt(rgb.slice(5, 7), 16) || 0;
+            var im = cx.createImageData(S, S);
+            for (var i = 0; i < S * S; i++) {
+                var r = Math.random(), a = r < 0.16 ? 0.12 + Math.random() * 0.25 : 0.62 + Math.random() * 0.38;   // 종이 결에 걸린 곳은 옅게
+                im.data[4 * i] = R0; im.data[4 * i + 1] = G0; im.data[4 * i + 2] = B0; im.data[4 * i + 3] = Math.round(a * 255);
+            }
+            cx.putImageData(im, 0, 0);
+            var pat = document.createElementNS(NS, "pattern");
+            pat.setAttribute("id", id); pat.setAttribute("patternUnits", "userSpaceOnUse");
+            pat.setAttribute("width", S / 2); pat.setAttribute("height", S / 2);   // 무늬 한 점 = 0.5px → 레티나에서 고운 결
+            var img = document.createElementNS(NS, "image");
+            img.setAttribute("href", cv.toDataURL()); img.setAttribute("width", S / 2); img.setAttribute("height", S / 2);
+            img.setAttribute("preserveAspectRatio", "none");
+            pat.appendChild(img);
+            (defsEl || svg).appendChild(pat);
+        } catch (e) { return null; }
+        grainIds[col] = id;
+        return id;
     }
     function makeEl(st) {
         var p = document.createElementNS(NS, "path"), col = colorOf(st.c);
@@ -221,11 +305,12 @@
             p.setAttribute("fill", "none");
             p.setAttribute("stroke", col);
             p.setAttribute("stroke-width", st.w);
-            p.setAttribute("stroke-linecap", "butt");
+            p.setAttribute("stroke-linecap", "round");
             p.setAttribute("stroke-linejoin", "round");
             p.setAttribute("stroke-opacity", st.o);
         } else {
-            p.setAttribute("fill", col);
+            var g = st.t === "pencil" ? grainFor(col) : null;
+            p.setAttribute("fill", g ? "url(#" + g + ")" : col);
             p.setAttribute("fill-opacity", st.o);
         }
         return p;
@@ -321,7 +406,7 @@
             }
             return;
         }
-        startStroke(x, y, pressureOf(e));
+        startStroke(x, y, pressureOf(e), e.pointerType);
     }
     function onMove(e) {
         if (!cur && !drag) return;
@@ -379,13 +464,12 @@
     }
 
     /* ---------- 펜 · 연필 · 마커 ---------- */
-    function startStroke(x, y, p) {
+    function startStroke(x, y, p, kind) {
         var tool = P.tool, cfg = P[tool];
         var a = anchorAt(x, y);
         var ax = a ? a.b.x : 0, ay = a ? a.b.y : 0;
-        var st = { a: a ? a.key : "", fx: f1(ax), fy: f1(ay), t: tool, c: cfg.c, w: cfg.w, o: cfg.o, pts: [f1(x - ax), f1(y - ay), p] };
+        var st = { a: a ? a.key : "", fx: f1(ax), fy: f1(ay), t: tool, c: cfg.c, w: cfg.w, o: cfg.o, sim: kind === "pen" ? 0 : 1, pts: [f2(x - ax), f2(y - ay), p] };   // sim = 펜슬이 아니면 빠르기로 굵기
         var e = makeEl(st);
-        if (tool === "pencil") e.setAttribute("filter", "url(#ink-grain)");
         layerCur.appendChild(e);
         cur = { st: st, el: e, ax: ax, ay: ay, lx: x, ly: y, straight: false, plen: 0 };
         redrawCur();
@@ -398,13 +482,18 @@
             return;
         }
         var d = Math.hypot(x - c.lx, y - c.ly);
-        if (d < 0.9) return;
+        if (d < 0.6) return;
         c.plen += d;
         if (d > 2.5) armHold();
         c.lx = x; c.ly = y;
-        c.st.pts.push(f1(x - c.ax), f1(y - c.ay), p);
+        c.st.pts.push(f2(x - c.ax), f2(y - c.ay), p);
     }
-    function redrawCur() { if (cur) cur.el.setAttribute("d", shapeOf(cur.st, cur.ax, cur.ay)); }
+    var rafId = 0;
+    function redrawCur() {                                     // 그리는 중: 화면을 새로 그릴 때 한 번만 (펜슬은 1초에 240번 들어옴)
+        if (!cur || rafId) return;
+        var go = function () { rafId = 0; if (cur) cur.el.setAttribute("d", shapeOf(cur.st, cur.ax, cur.ay, true)); };
+        rafId = window.requestAnimationFrame ? window.requestAnimationFrame(go) : setTimeout(go, 16);
+    }
     function armHold() {                                       // 멈추고 꾹 → 곧은 선
         clearTimeout(holdT);
         if (!cur || cur.straight) return;
@@ -417,6 +506,7 @@
             if (Math.abs(dy) < Math.abs(dx) * 0.08) ey = pts[1];          // 거의 가로 → 수평
             else if (Math.abs(dx) < Math.abs(dy) * 0.08) ex = pts[0];     // 거의 세로 → 수직
             cur.st.pts = [pts[0], pts[1], avgP, ex, ey, avgP];
+            cur.st.sim = 0;                                    // 곧은 선은 굵기 그대로
             cur.straight = true;
             redrawCur();
             toast("곧은 선");
@@ -424,12 +514,16 @@
     }
     function endStroke() {
         clearTimeout(holdT);
-        var st = cur.st;
-        layerCur.removeChild(cur.el);
+        if (rafId) { (window.cancelAnimationFrame || clearTimeout)(rafId); rafId = 0; }
+        var c = cur, st = c.st;
         cur = null;
         snapshot();
         strokes.push(st);
-        commit();
+        // 끝낸 획 하나만 제자리에 (예전: 페이지의 모든 획을 다시 그림 → 획이 많으면 펜을 뗄 때마다 멈칫)
+        c.el.setAttribute("d", shapeOf(st, c.ax, c.ay));
+        (st.t === "marker" ? gMarker : st.t === "pencil" ? gPencil : gPen).appendChild(c.el);
+        rendered.push({ el: c.el, bb: bboxOf(st, c.ax, c.ay), ox: c.ax, oy: c.ay });
+        savePage(); syncUI();
     }
 
     /* ---------- 지우개 ---------- */
@@ -709,12 +803,10 @@
         svg.setAttribute("class", "ink-svg");
         svg.setAttribute("aria-hidden", "true");
         svg.setAttribute("data-theme-skip", "");
-        var defs = document.createElementNS(NS, "defs");                // 연필 질감 (종이 결)
-        defs.innerHTML = '<filter id="ink-grain" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="1.15" numOctaves="1" seed="7" result="n"/>' +
-            '<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.3" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>';
-        svg.appendChild(defs);
+        var defs = document.createElementNS(NS, "defs");                // 연필 종이결 무늬 (grainFor 가 색마다 넣음)
+        svg.appendChild(defs); defsEl = defs;
         gMarker = document.createElementNS(NS, "g");                    // 마커는 맨 아래 → 글씨가 위로
-        gPencil = document.createElementNS(NS, "g"); gPencil.setAttribute("filter", "url(#ink-grain)");
+        gPencil = document.createElementNS(NS, "g");
         gPen = document.createElementNS(NS, "g");
         layerCur = document.createElementNS(NS, "g");
         gSel = document.createElementNS(NS, "g");
@@ -834,10 +926,9 @@
         var t = prevEl.t, cfg = P[t], pts = [];
         for (var i = 0; i <= 40; i++) pts.push(18 + i * 6.3, 28 + Math.sin(i / 40 * Math.PI * 2) * 12, t === "marker" ? 0.5 : 0.25 + 0.6 * Math.sin(i / 40 * Math.PI));
         var st = { t: t, c: cfg.c, w: cfg.w, o: cfg.o, pts: pts };
-        prevEl.svg.innerHTML = t === "pencil" ? '<filter id="ink-grain-p"><feTurbulence type="fractalNoise" baseFrequency="1.15" numOctaves="1" seed="7" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.3" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>' : "";
+        prevEl.svg.innerHTML = "";
         var p = makeEl(st);
         p.setAttribute("d", shapeOf(st, 0, 0));
-        if (t === "pencil") p.setAttribute("filter", "url(#ink-grain-p)");
         prevEl.svg.appendChild(p);
     }
     function buildColorPop() {
