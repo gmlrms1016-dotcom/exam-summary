@@ -42,7 +42,7 @@
         + ".oq-btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0;}"
         + ".oq-btns button{font:inherit;font-size:14px;font-weight:800;border:none;border-radius:8px;padding:9px 16px;cursor:pointer;}"
         + ".oq-check{background:var(--main);color:#fff;}"
-        + ".oq-show,.oq-clear{background:#eaf2ec;color:var(--main);}"
+        + ".oq-show,.oq-clear,.oq-nl{background:#eaf2ec;color:var(--main);}"
         + ".oq-result{margin-top:10px;}"
         + ".oq-sum{font-weight:800;margin:6px 0;}"
         + ".oq-sum.ok{color:#1e7b45;}"
@@ -491,10 +491,14 @@
             if (!t.classList.contains("oq-cell") || e.key !== "Enter" || e.isComposing || e.keyCode === 229) return;   // 한글 조합 중 Enter 는 그대로
             e.preventDefault();
             var r = +t.dataset.r, c = +t.dataset.c;
-            if (e.shiftKey) { if (r > 0) cell(r - 1, c).focus(); return; }
-            if (r < M.length - 1) { cell(r + 1, c).focus(); return; }
+            if (!e.shiftKey) {                                  // Enter = 확인 (모든 과목 같게 · 2026-10-16)
+                var q = wrap.closest(".oq"), ck = q && q.querySelector(".oq-check");
+                if (ck) ck.click();
+                return;
+            }
+            if (r < M.length - 1) { cell(r + 1, c).focus(); return; }   // Shift+Enter = 다음 행
             if (M.length >= MAXR) return;
-            M.push(emptyRow(M[0].length)); draw([r + 1, c]); write();   // 마지막 줄에서 Enter = 행 하나 더
+            M.push(emptyRow(M[0].length)); draw([r + 1, c]); write();   // 마지막 행에서 Shift+Enter = 행 하나 더
         });
         wrap.querySelector(".oq-gbtns").addEventListener("click", function (e) {
             var b = e.target.closest("[data-g]");
@@ -564,14 +568,16 @@
         ta.setAttribute("autocapitalize", "off");
         ta.setAttribute("autocorrect", "off");   // 아이폰 스마트 따옴표(’ “) · 자동 고침 막기
         ta.setAttribute("aria-label", title + " — 실행 결과 입력");
+        var KEYS = "Shift+Enter = 다음 줄 · Enter = 확인";   // 2026-10-16 사용자: 엔터는 정답 버튼 · 쉬프트 엔터는 다음 줄 (모든 과목 · 모든 기기 같게)
         ta.placeholder = endFree ? "실행 결과를 그대로 입력 — 줄바꿈(\\n · println)마다 Enter · 줄 안의 띄어쓰기 개수까지 정확히 채점해요 (맨 끝 Enter 는 상관없음 · 정답은 하나)"
                        : strict ? "실행 결과를 그대로 입력 — 줄바꿈(\\n · println)마다 Enter, 마지막 줄바꿈까지 · 줄 안의 띄어쓰기 개수까지 정확히 채점해요 (정답은 하나)"
                        : table ? "결과 표를 입력 — 첫 줄은 열 이름, 그다음 한 줄에 한 행 · 칸은 띄어쓰기나 | 로 구분 · 널 값은 NULL (행 순서는 채점 안 함)"
                        : exact ? "실행 결과를 그대로 입력 — 줄마다 Enter · 이 문제는 띄어쓰기 개수까지 채점해요"
                                : "실행 결과를 그대로 입력 — 줄마다 Enter (띄어쓰기 개수·빈 줄은 채점에서 무시)";
+        ta.placeholder = KEYS + " — " + ta.placeholder.replace("줄바꿈(\\n · println)마다 Enter", "줄바꿈(\\n · println)마다 Shift+Enter").replace("줄마다 Enter", "줄마다 Shift+Enter").replace("그다음 한 줄에 한 행", "그다음 한 줄에 한 행 (Shift+Enter = 다음 행)");
         var btns = document.createElement("div");
         btns.className = "oq-btns";
-        btns.innerHTML = '<button class="oq-check" type="button">확인</button><button class="oq-show" type="button">💡 정답 보기</button><button class="oq-clear" type="button">지우기</button>';
+        btns.innerHTML = '<button class="oq-check" type="button">확인</button>' + (table ? "" : '<button class="oq-nl" type="button" title="화면 자판에서 줄 바꾸기 (Shift+Enter 와 같음)">↵ 다음 줄</button>') + '<button class="oq-show" type="button">💡 정답 보기</button><button class="oq-clear" type="button">지우기</button>';
         var box = document.createElement("div");
         box.className = "oq-result";
         expEl.parentNode.insertBefore(ta, expEl);
@@ -682,6 +688,23 @@
             if (all) { p.dataset.solved = "1"; p.dataset.wrong = ""; delete window.__examWrong[p.id]; }
             else { p.dataset.solved = ""; markWrong(); }
             updateScore();
+        }
+        ta.addEventListener("keydown", function (e) {           // Enter = 확인 · Shift+Enter = 다음 줄 (한글 조합을 끝내는 Enter 는 그대로)
+            if (e.key !== "Enter" || e.isComposing || e.keyCode === 229 || e.shiftKey) return;
+            e.preventDefault();
+            btns.querySelector(".oq-check").click();
+        });
+        var nlb = btns.querySelector(".oq-nl");
+        if (nlb) {
+            nlb.addEventListener("mousedown", function (e) { e.preventDefault(); });   // 입력칸 커서가 그대로 있게
+            nlb.addEventListener("click", function () {
+                var a = ta.selectionStart, b = ta.selectionEnd, v = ta.value;
+                if (typeof a !== "number") { a = b = v.length; }
+                ta.value = v.slice(0, a) + "\n" + v.slice(b);
+                ta.selectionStart = ta.selectionEnd = a + 1;
+                ta.focus();
+                ta.dispatchEvent(new Event("input", { bubbles: true }));
+            });
         }
         btns.querySelector(".oq-show").addEventListener("click", function () {
             var open = box.querySelector(".oq-key");
