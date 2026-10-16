@@ -68,7 +68,8 @@
         if (!keepCase) s = s.toLowerCase();
         s = s.replace(/\s+/g, "").replace(/[()]/g, "");
         s = keepQuote ? s.replace(/[“”]/g, '"').replace(/[‘’]/g, "'") : s.replace(/["'“”‘’]/g, "");
-        if (!keepCase) s = s.replace(/[.。!?]+$/, "");
+        // 끝 마침표 · 물음표는 빼고 비교 — 단, 빼고 나서 글자 · 숫자가 하나도 안 남으면(답 자체가 기호: ?? · . · ?. · ...) 그대로 (2026-10-16 '??' 가 빈칸이 돼서 무조건 오답이던 것)
+        if (!keepCase) { var t = s.replace(/[.。!?]+$/, ""); if (/[^!-\/:-@\[-`{-~]/.test(t)) s = t; }
         return s;
     }
     function esc(s) {
