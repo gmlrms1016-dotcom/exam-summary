@@ -185,10 +185,12 @@ def render_md(md):
             if para or tip:
                 flush()
             items.append((len(m_list.group(1)), "ol" if m_list.group(2)[0].isdigit() else "ul", m_list.group(3)))
-        elif re.match(r"^🔒 \[[^\]]+\]\([^)\s]+\)$", line.strip()):   # 🔒 [이름](주소) → 오른쪽의 작은 버튼 (예: 실제시험)
+        elif re.match(r"^🔒 \[[^\]]+\]\([^)\s]+\)$", line.strip()):   # 🔒 [이름](주소) → 크고 잘 보이는 입구 버튼 (예: 실제시험 · 2026-10-16 스터디원이 못 찾아서 크게)
             flush()
             m_btn = re.match(r"^🔒 \[([^\]]+)\]\(([^)\s]+)\)$", line.strip())
-            parts.append('<p class="wk-lockbtn"><a href="%s">🔒 %s</a></p>' % (html.escape(m_btn.group(2), quote=True), html.escape(m_btn.group(1), quote=False)))
+            parts.append('<p class="wk-exambtn"><a href="%s"><span class="eb-ic">📝</span>'
+                         '<span class="eb-body"><span class="eb-t">%s 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span>'
+                         '<span class="eb-go">시작하기 →</span></a></p>' % (html.escape(m_btn.group(2), quote=True), html.escape(m_btn.group(1), quote=False)))
         elif re.match(r"^🎬 \[[^\]]+\]\([^)\s]+\)$", line.strip()):   # 🎬 [이름](주소) → 애니메이션 페이지를 그 자리에 (예: 뇌인지 7주차 광수용체)
             flush()
             m_an = re.match(r"^🎬 \[([^\]]+)\]\(([^)\s]+)\)$", line.strip())
@@ -238,6 +240,18 @@ PAGE_CSS = """
 .card p{line-height:1.75;}
 .wk-lockbtn{text-align:right;margin:4px 0 10px;}
 .wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -256,10 +270,10 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202610152004"></script>
+    <script src="{asset}theme.js?v=202610161117"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="{asset}style.css?v=202610152004">
+    <link rel="stylesheet" href="{asset}style.css?v=202610161117">
     <style>{css}</style>
 </head>
 <body>
@@ -287,7 +301,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202610152004"></script>
+<script src="{asset}ink.js?v=202610161117"></script>
 </body>
 </html>
 """

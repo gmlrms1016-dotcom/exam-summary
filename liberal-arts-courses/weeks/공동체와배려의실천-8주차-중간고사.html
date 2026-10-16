@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../../theme.js?v=202610152004"></script>
+    <script src="../../theme.js?v=202610161117"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공동체와배려의실천 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../../style.css?v=202610152004">
+    <link rel="stylesheet" href="../../style.css?v=202610161117">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -23,6 +23,18 @@
 .card p{line-height:1.75;}
 .wk-lockbtn{text-align:right;margin:4px 0 10px;}
 .wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -52,9 +64,9 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <nav class="wk-pager"><a class="prev" href="공동체와배려의실천-7주차.html">‹ 이전 · <b>7주차</b><br><small>나는 문화를 주체적으로 향유하는가?</small></a><span></span></nav>
 
+<p class="wk-exambtn"><a href="../공동체와배려의실천-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <div class="tip">📢 <b>중간고사 공지</b> — <b>10월 22일(목) 10:00 ~ 10:40</b> · <b>6관 406호</b> · 필기시험 (<b>오픈북 안 됨</b>)<br>📝 <b>문제 구성 (총 20점)</b> — <b>OX</b> 1점 × 6 = 6점 · <b>객관식 + 단답형</b> 2점 × 5 = 10점 · <b>서술형</b> 4점 × 1 = 4점<br>⚠️ 책상 위에는 <b>사진이 붙은 신분증</b>과 필기도구만 · 전자제품은 모두 <b>전원을 끄고 가방 안에</b><br>📚 지금까지 배운 <b>1~7주차</b>를 반영했고(3주차는 PDF 펜 필기 2쪽 · 4주차는 필기 없음 · 6주차는 PDF 펜 필기 1쪽 · 7주차는 PDF 펜 필기 3쪽), 진도가 나가면 계속 채워집니다.</div>
 <div class="tip">🎯 <b>강의에서 ★로 강조된 것</b> — ① <b>토론 vs 토의</b>와 토론 기본절차 ② <b>하비거스트</b> 발달과업 ③ <b>프로이트</b> 성격 3체제 · 심리성적 발달단계 ④ <b>매슬로</b> 욕구 5단계 ⑤ 세 이론 한 줄 요약 ⑥ <b>실존주의 철학자 5명</b>의 핵심어 · 핵심 키워드(5주차) ⑦ ★ <b>욕구 · 욕망 · 욕심</b>의 차이와 음식 예시(6주차 PDF 2쪽) ⑧ <b>비판이론 학자 4명</b>(호르크하이머 · 아도르노 · 마르쿠제 · 하버마스)의 핵심과 연대 · ✍️ 마르쿠제 <b>허위욕구</b> · 하버마스 <b>합리적 의사소통</b> 밑줄(7주차 PDF 12쪽)</div>
-<p class="wk-lockbtn"><a href="../공동체와배려의실천-실제시험.html">🔒 실제시험</a></p>
 <section class="card">
 <h2>1주차 — 오리엔테이션 (<a href="공동체와배려의실천-1주차.html">1주차 자세히</a>)</h2>
 <h3>토론과 토의 ★시험 포인트</h3>
@@ -132,6 +144,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../../ink.js?v=202610152004"></script>
+<script src="../../ink.js?v=202610161117"></script>
 </body>
 </html>

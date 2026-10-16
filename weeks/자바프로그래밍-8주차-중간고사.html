@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610152004"></script>
+    <script src="../theme.js?v=202610161117"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>자바프로그래밍 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610152004">
+    <link rel="stylesheet" href="../style.css?v=202610161117">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -23,6 +23,18 @@
 .card p{line-height:1.75;}
 .wk-lockbtn{text-align:right;margin:4px 0 10px;}
 .wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -52,10 +64,10 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <nav class="wk-pager"><a class="prev" href="자바프로그래밍-7주차.html">‹ 이전 · <b>7주차</b><br><small>4장 클래스 실습 — 생성자 · this (🔥 시험범위 Car · Book 까지)</small></a><span></span></nav>
 
+<p class="wk-exambtn"><a href="../자바프로그래밍-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <div class="tip">📅 <b>중간고사 — 10월 20일(화) 14:00</b> · 평가: 필기평가1 30점 + 직무수행능력평가2 15점 + 직무수행능력평가3 등 (실습 중심) · 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</div>
 <div class="tip">🔥 <b>7주차 필기 — 시험범위</b> — “<b>오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위</b>” · <b>자바 데이터타입 8가지 외우기</b> · <b>조건식 출력 true / false</b> · <b>for 문 · 배열</b> · <b>if · else</b> · <b>class 와 object</b> · <b>객체지향의 특성</b></div>
 <div class="tip">🎯 <b>강의자료에 ★시험단골로 표시된 것</b> — ① <b>타입 변환</b>(자동 / 강제 캐스팅) ② <b>예외 처리</b>(try-catch-finally, 예외 클래스) ③ WORA · JVM ④ 반복문 for / while / do-while 차이 ⑤ 배열 선언과 생성</div>
-<p class="wk-lockbtn"><a href="../자바프로그래밍-실제시험.html">🔒 실제시험</a></p>
 <section class="card">
 <h2>🔥 ✍️ PDF 필기 — 시험 표시 (10/1 보충)</h2>
 <ul><li>🔥 <b>식별자 이름 사례 ★</b> — 2장 7쪽에 큰 ★ (중간고사 폴더 <code>PDF 문서.pdf</code> 에도 같은 쪽 ★) · 안 되는 것: 첫 글자 <b>숫자</b>(3Chapter) · <b>예약어</b>(if) · <b>false · true · null</b> · 특수문자(<code>%</code>) / 되는 것: <code>_</code> · <code>$</code> · 숫자(첫 글자 아님) · 한글 · 길이 제한 없음 · 대소문자 구분 (<a href="자바프로그래밍-3주차.html">3주차 자세히</a>)</li><li>🔥 <b>빈칸</b> — 2장 23쪽 CircleArea 의 <code>double</code> 세 곳에 ✍️ “빈칸” → <code>final double PI = 3.14;</code> · <code>double radius</code> · <code>double circleArea</code></li><li>✍️ final = <b>변경 X</b> · long 리터럴은 <b>L</b> · 실수 리터럴은 <b>double</b> 이 기본(D 필수 X) · 카멜 표기(클래스 대문자 · 변수/메소드 소문자 · 상수 전부 대문자)</li></ul>
@@ -113,6 +125,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610152004"></script>
+<script src="../ink.js?v=202610161117"></script>
 </body>
 </html>

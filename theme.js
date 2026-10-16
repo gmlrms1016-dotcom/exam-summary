@@ -235,6 +235,9 @@
         "html[data-theme=dark] .wk-pager a,html[data-theme=dark] .wk-pager span{background:#1c1f23;border-color:#262a2f;color:#f5f5f5}",
         "html[data-theme=dark] .wk-pager a:hover{background:#25292e}",
         "html[data-theme=dark] .wk-pager a b{color:#f5f5f5}",
+        "html[data-theme=dark] .wk-exambtn{--eb-glow:0,149,246}",
+        "html[data-theme=dark] .wk-exambtn a{background:linear-gradient(135deg,#1aa3ff,#0074d9);color:#fff}",
+        "html[data-theme=dark] .wk-exambtn .eb-go{background:#fff;color:#0074d9}",
 
         // ---- 첫 화면 (index.html) ----
         "html[data-theme=dark] .hero{background:#1c1f23;color:#f5f5f5;border:1px solid #262a2f;box-shadow:none}",

@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610152004"></script>
+    <script src="../theme.js?v=202610161117"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로그래밍언어실습 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610152004">
+    <link rel="stylesheet" href="../style.css?v=202610161117">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -23,6 +23,18 @@
 .card p{line-height:1.75;}
 .wk-lockbtn{text-align:right;margin:4px 0 10px;}
 .wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -52,6 +64,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-7주차.html">‹ 이전 · <b>7주차</b><br><small>중간고사 대비 복습 · 5장 연산자 (시험 예고)</small></a><span></span></nav>
 
+<p class="wk-exambtn"><a href="../프로그래밍언어실습-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <div class="tip">📅 <b>중간고사 — 10월 19일(월) 14:00</b> · 평가 비율: 출석 20% + <b>중간 40%</b> + 기말 40% (과제·실습은 가산점) · <b>1~7주차</b>를 모두 반영했어요 (7주차 = 시험 전 마지막 수업 · 복습 + 시험 예고).</div>
 <div class="tip">📚 <b>시험범위 · 문제 유형</b> (5 · 6 · 7주차 필기) — 교재 <b>1 ~ 7장 · 9장 (함수 — 배열 예제 제외)</b> · ✍️ 7주차: “9장도 함수에서 배열은 빼고 배열을 기말고사에” · <b>“조건문 반복문 위주”</b> · 유형 <b>괄호넣기 · 통으로 쓰기</b> · <b>마지막 문제는 통으로</b> · 기본개념 · 변수 · 연산자 · 조건 · 반복 · 함수 · ✍️ 6주차 필기: <b>4주차 = 실행결과 · 5주차 = 조건 반복 + [과제1] 소스 · 6주차 = 함수 + [과제2] 소스</b> · <b>괄호넣기 · 실행결과 · 소스코드를 보고 한글로 설명 · 실행 결과를 보고 손코딩</b> · 실행결과는 <b><code>\n</code> 이 있나 없나</b> 주의</div>
 <div class="tip">🔥 <b>교수님이 시험이라고 한 것</b> (7주차) — ✍️ <b>03whilebasic = 10점짜리!!!</b> · <b>14쪽 첫 번째 문제(06arithswitch)</b> · <b>08scoreswitch</b> · <b>x, y, z 최대 수(lab1pay)</b> · <b>04incdecop</b> · <b>continue · break 꼭</b> · <b>switch 와 for 안의 break 는 완전 다르다</b> · <b>7쪽 반복문 출력결과 맞히기</b> · <b>진수 변환</b> · 별 삼각형 <b>반대로</b> (강의자료에 없음) · ❌ 안 나옴: 6쪽 메뉴 · 10char.c · 운전면허 · 어르신 · 섭씨 화씨</div>
@@ -59,7 +72,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">🔥 <b>교수님이 시험이라고 한 것</b> (5주차) — ① <b>switch case 에 break 를 빼면?</b> → 안 멈추고 밑의 case 까지 실행 ② <b>continue · break 시험에 나옴</b> (Quiz 6 · Quiz 7)</div>
 <div class="tip">🔥 <b>교수님이 시험문제라고 한 것</b> (4주차) — ① <code>z = -x++ + ++y;</code> 실행 후 x·y·z ② <code>++x, y++;</code> 와 <code>printf("...", x++, --y, z--);</code> 에 찍히는 값 ③ 비트 연산자 <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code> (a=60, b=13) · 필기 <b>“증감연산자 시험에 많이 나옴”</b> · <b>연산자 우선순위(시험문제)</b></div>
 <div class="tip">🎯 <b>교수님이 시험문제라고 한 것</b> (3주차) — ① 강의자료 <b>23p</b> [실습 1-05] <code>sizeof</code> <b>실행결과 쓰기</b> ② 강의자료 <b>27p</b> [quiz 1-01] <b>빈칸채우기</b>(printf 서식) + <b>오류 수정</b> ③ 수업 중 "시험문제!" — <code>sizeof</code> 결과를 <code>%f</code> <code>%lf</code> <code>%c</code> 로 찍은 코드 고치기 → <b>전부 <code>%d</code></b></div>
-<p class="wk-lockbtn"><a href="../프로그래밍언어실습-실제시험.html">🔒 실제시험</a></p>
 <section class="card">
 <h2>★ 7주차 시험 예고 (<a href="프로그래밍언어실습-7주차.html">7주차 자세히</a>)</h2>
 <table class="ref">
@@ -708,6 +720,6 @@ char: 1, int: 4, float: 4, double: 8
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610152004"></script>
+<script src="../ink.js?v=202610161117"></script>
 </body>
 </html>
