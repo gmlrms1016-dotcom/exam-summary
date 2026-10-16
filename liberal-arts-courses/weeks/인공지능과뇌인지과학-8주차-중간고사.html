@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../../theme.js?v=202610161850"></script>
+    <script src="../../theme.js?v=202610162002"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>인공지능과뇌인지과학 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../../style.css?v=202610161850">
+    <link rel="stylesheet" href="../../style.css?v=202610162002">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -35,6 +35,21 @@
 @keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
 @media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
 @media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -65,8 +80,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-7주차.html">‹ 이전 · <b>7주차</b><br><small>시지각 1 · 망막 · 광수용체 · 수용장</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../인공지능과뇌인지과학-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<div class="tip">📢 <b>중간고사 공지</b> — 시험 <b>10월 22일(목) 11:00 ~ 11:50</b> · <b>1-101</b> (이어서 12:00 ~ 12:50 은 수업)<br>📝 <b>시험 유형 (총 35점)</b> — <b>OX</b> 10문제 = 10점 · <b>객관식</b> 10문제 = 10점 · <b>단답형</b> 10문제 = 10점 · <b>보너스</b> = 5점 (수업 소견 — 쓰기만 하면 모두 점수) · 문제 난이도에 따라 배점이 다름 · <b>단답형은 부분 점수 없음</b><br>⚠️ 문제지 · 답안지 <b>둘 다</b> 학과 / 학년 / 학번 / 이름 쓰기 · <b>신분증 또는 학생증</b> 꼭 지참<br>📚 지금까지 배운 <b>1~7주차</b>를 반영했고(4 · 6 · 7주차는 노션 대신 <b>PDF 펜 필기</b>로 정리 · 7주차 6장은 ✍️ <b>“여기까지 시험범위” = 1~9쪽</b>), 진도가 나가면 계속 채워집니다. 출제범위 = <b>강의자료 + 필기</b> (OT 공지)</div>
-<div class="tip">🎯 <b>강의에서 ★로 강조된 것</b> — ① 인지과학의 넓은/좁은 의미 ② <b>Donders · Wundt · Watson · Skinner · Tolman</b> 연구 ③ 인지과학 형성 배경(튜링 · 사이버네틱스 · 폰 노이만 · 섀넌) ④ <b>1956년</b> 인지과학 원년 ⑤ <b>Mind = Computer = Brain</b> ⑥ 인지심리학 <b>3대 접근</b> ⑦ 🔥 <b>신경전달물질 OX</b>(5주차 필기) ⑧ ★ <b>뉴런의 기본 구조 — “여기 시험에 나옴”</b>(4장 3쪽 PDF 필기) ⑨ ★ <b>아교세포 종류 암기</b>(4장 6쪽) ⑩ 🔥 <b>대뇌피질 4개 엽의 기능 — “시험 ★”</b>(5장 18쪽 PDF 필기) ⑪ 뇌의 구조 <b>전뇌 · 후뇌</b>(5장 13쪽) ⑫ ✍️ <b>6장 시지각 1~9쪽 “여기까지 시험범위”</b> — 간상체 vs 추상체(개수 · 색소 · 분포 · 신경절 연결) · 소세포성 vs 대세포성 · 수용장 · 중심-주변 수용장 → 대비 향상</div>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 22일(목) 11:00 ~ 11:50</span><span class="wk-exam-where">1-101 (이어서 12:00 ~ 12:50 은 수업)</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip"><b>OX</b> 10문제 = 10점</span><span class="wk-chip"><b>객관식</b> 10문제 = 10점</span><span class="wk-chip"><b>단답형</b> 10문제 = 10점</span><span class="wk-chip"><b>보너스</b> 5점 (수업 소견 — 쓰기만 하면 모두 점수)</span><span class="wk-chip">총 <b>35점</b></span><span class="wk-chip">난이도에 따라 배점이 다름</span><span class="wk-chip"><b>단답형은 부분 점수 없음</b></span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">출제범위 = <b>강의자료 + 필기</b> (OT 공지)</span><span class="wk-chip">6장 시지각은 ✍️ <b>“여기까지 시험범위” = 1~9쪽</b></span></dd><dt>🎒 준비물 · 주의</dt><dd><span class="wk-chip"><b>신분증 또는 학생증</b> 꼭 지참</span><span class="wk-chip">문제지·답안지 <b>둘 다</b> 학과/학년/학번/이름 쓰기</span></dd><dt>⭐ 강의 ★ 강조</dt><dd><ol class="wk-exam-list"><li>인지과학의 넓은/좁은 의미</li><li><b>Donders · Wundt · Watson · Skinner · Tolman</b> 연구</li><li>인지과학 형성 배경(튜링 · 사이버네틱스 · 폰 노이만 · 섀넌)</li><li><b>1956년</b> 인지과학 원년</li><li><b>Mind = Computer = Brain</b></li><li>인지심리학 <b>3대 접근</b></li><li>🔥 <b>신경전달물질 OX</b>(5주차 필기)</li><li>★ <b>뉴런의 기본 구조 — “여기 시험에 나옴”</b>(4장 3쪽 PDF 필기)</li><li>★ <b>아교세포 종류 암기</b>(4장 6쪽)</li><li>🔥 <b>대뇌피질 4개 엽의 기능 — “시험 ★”</b>(5장 18쪽 PDF 필기)</li><li>뇌의 구조 <b>전뇌 · 후뇌</b>(5장 13쪽)</li><li>✍️ <b>6장 시지각 1~9쪽 “여기까지 시험범위”</b> — 간상체 vs 추상체(개수 · 색소 · 분포 · 신경절 연결) · 소세포성 vs 대세포성 · 수용장 · 중심-주변 수용장 → 대비 향상</li></ol></dd><dd class="wk-exam-note">📌 지금까지 배운 <b>1~7주차</b>를 반영했고(4 · 6 · 7주차는 노션 대신 <b>PDF 펜 필기</b>로 정리 · 7주차 6장은 ✍️ <b>“여기까지 시험범위” = 1~9쪽</b>), 진도가 나가면 계속 채워집니다. 출제범위 = <b>강의자료 + 필기</b> (OT 공지)</dd></dl></section>
 <section class="card">
 <h2>1주차 — OT (<a href="인공지능과뇌인지과학-1주차.html">1주차 자세히</a>)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 뇌인지과학 = 인간의 마음(mind)을 과학적으로 연구 · 철학·심리학·신경과학·컴퓨터공학·AI 의 학제적 연결</li><li><span class="wk-tag star">⭐ 강조</span> — 평가: 중간 35% + 기말 35% + 학습점검·과제 10% + 출석 20%</li></ul>
@@ -179,6 +193,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../../ink.js?v=202610161850"></script>
+<script src="../../ink.js?v=202610162002"></script>
 </body>
 </html>

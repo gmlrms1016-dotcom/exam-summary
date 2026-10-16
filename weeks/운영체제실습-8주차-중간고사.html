@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610161850"></script>
+    <script src="../theme.js?v=202610162002"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610161850">
+    <link rel="stylesheet" href="../style.css?v=202610162002">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -35,6 +35,21 @@
 @keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
 @media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
 @media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -65,10 +80,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="운영체제실습-7주차.html">‹ 이전 · <b>7주차</b><br><small>프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../운영체제실습-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<div class="tip">📅 <b>중간고사 — 10월 22일(목) 14:00</b> · 지금까지 배운 <b>1~7주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다.</div>
-<div class="tip">🎯 <b>강의에서 ★암기 · ★핵심으로 표시된 것</b> — ① <code>ls</code> 옵션과 프롬프트 기호 ② 디렉터리 생성·삭제 명령 ③ <b>inode · 하드/심볼릭 링크</b> ④ <b>접근 권한 chmod</b>(기호 · 8진수) ⑤ <b>사용자 · 그룹 관리</b>와 관리 파일 3종 ⑥ <b>DNF 작동 흐름도(그림 4-111) — 4주차 수업 화면에 나온 시험문제</b> ⑦ <b>작업 예약 cron · at</b>(5주차 — crontab 칸 순서 · run-parts · 백업 스크립트) ⑧ <b>셸 스크립트</b>(6주차 · 7장 — 변수 · expr · if 조건 · case · for · while · 함수)</div>
-<div class="tip">🔥 <b>6주차 공지 (✍️ 필기)</b> — 시험범위 <b>1장 · 2장 · 3장 · 4장 · 5장 · 7장</b> (6장 빠짐) · <b>시험에 나오는 용어</b>: <b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것 · <b>노틸러스</b> = 파일탐색기 · <b>에볼루션</b> = 메일 프로그램 → <a href="운영체제실습-6주차.html">6주차 자세히</a> · 아래 6주차 칸</div>
-<div class="tip">🔥 <b>7주차 (✍️ 필기)</b> — 강의자료에 없지만 <b>시험에 나오는 것</b>: <b>백업(크론)</b> · <b>런레벨</b> · <b>심볼릭 · 하드 링크</b> · <b>포그라운드 · 백그라운드</b> · <b>호스트 / 게스트 운영체제 중 하나 설명(1문제)</b> · <b>sh 문제(출력결과 · 파일 존재 · 사이즈 체크 if문)</b> · 시험 예시: <b>1~10 객관식</b> · 포그라운드 → 백그라운드 변경 · 마스터 유저로 디렉터리 설정 · 셸 스크립트 비중 낮음 · <b>도전문제 5-4 시험 X</b> · <b>6장은 중요</b> (⚠️ 6주차엔 6장 빠짐이었음) → <a href="운영체제실습-7주차.html">7주차 자세히</a></div>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 22일(목) 14:00</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip">시험 예시 <b>1~10번 객관식</b></span><span class="wk-chip"><b>sh 문제</b> (출력결과·파일 존재·사이즈 체크 if문)</span><span class="wk-chip">호스트 / 게스트 운영체제 중 하나 <b>설명 (1문제)</b></span><span class="wk-chip">셸 스크립트 <b>비중 낮음</b></span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip"><b>1장 ~ 7장</b></span><span class="wk-chip">⚠️ 6주차엔 “6장 빠짐” → 7주차에 <b>“6장은 중요”</b></span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span>강의자료에 없지만 시험에 나옴 — <b>백업(크론)</b> · <b>런레벨</b> · <b>심볼릭 · 하드 링크</b> · <b>포그라운드 · 백그라운드</b> (포그라운드 → 백그라운드 변경)</li><li><span class="wk-exam-wk">7주차</span><b>호스트 / 게스트 운영체제 중 하나 설명 (1문제)</b> · <b>sh 문제</b> (출력결과 · 파일 존재 · 사이즈 체크 if문)</li><li><span class="wk-exam-wk">7주차</span>시험 예시 — <b>마스터 유저로 디렉터리 설정</b></li><li><span class="wk-exam-wk">6주차</span>시험에 나오는 용어 — <b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것 · <b>노틸러스</b> = 파일탐색기 · <b>에볼루션</b> = 메일 프로그램</li><li><span class="wk-exam-wk">4주차</span><b>DNF 작동 흐름도(그림 4-111)</b> — 수업 화면에 나온 시험문제</li></ol></dd><dt>⭐ 강의 ★암기 · ★핵심</dt><dd><ol class="wk-exam-list"><li><code>ls</code> 옵션과 프롬프트 기호</li><li>디렉터리 생성·삭제 명령</li><li><b>inode · 하드/심볼릭 링크</b></li><li><b>접근 권한 chmod</b>(기호 · 8진수)</li><li><b>사용자 · 그룹 관리</b>와 관리 파일 3종</li><li><b>DNF 작동 흐름도(그림 4-111) — 4주차 수업 화면에 나온 시험문제</b></li><li><b>작업 예약 cron · at</b>(5주차 — crontab 칸 순서 · run-parts · 백업 스크립트)</li><li><b>셸 스크립트</b>(6주차 · 7장 — 변수 · expr · if 조건 · case · for · while · 함수)</li></ol></dd><dt>❌ 안 나옴</dt><dd><span class="wk-chip bad">도전문제 5-4</span></dd><dd class="wk-exam-note">📌 지금까지 배운 <b>1~7주차</b>를 반영했고, 진도가 나가면 계속 채워집니다. 실습 과목이라 <b>명령어와 옵션</b>, 실행 결과 읽는 법 위주로 모았습니다 → <a href="운영체제실습-6주차.html">6주차 자세히</a> · <a href="운영체제실습-7주차.html">7주차 자세히</a></dd></dl></section>
 <section class="card">
 <h2>🎓 튜터링 — 2025년 2학기 중간고사 참고자료</h2>
 <div class="tip">자료: <code>8주차_중간고사/튜터링/</code> 의 TalkFile 2개 — <b>4지선다형 16문제</b>(정답 포함) · <b>서술형 13문제</b>(답은 마지막 1개만 있음 → 나머지는 🤖 로 채움). 작년 시험 대비 참고자료예요.<br>📌 6주차에 <code>ps</code> · <code>kill</code> · <code>cat</code> · <code>echo</code> 가 나왔어요 → 1~6주차 수업에 <b>아직 안 나온 명령</b>: <code>top</code> · <code>df</code> · <code>mv</code> · <code>man</code> — 시험 범위는 교수님 진도 기준이라, 진도에 나오면 그때 다시 확인하세요.</div>
@@ -311,6 +323,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610161850"></script>
+<script src="../ink.js?v=202610162002"></script>
 </body>
 </html>

@@ -118,6 +118,52 @@ def render_list(items, pos):
     return "".join(out), pos
 
 
+def render_exam(block):
+    """:::exam 블록 → 📋 교수님 시험 안내 카드 (2026-10-16 사용자: 교수님이 찝어 주신 시험 방식 · 범위를 더 가독성 좋게)
+    줄 모양:  일시 :: 10월 22일(목) 14:00 · 6관 406호   (맨 위에 크게)
+             🗂 범위 :: 1장 · 2장 · 3장                 (' · ' 로 나눈 조각을 칩으로)
+             🔥 찍어 준 것 ::                           (값이 비면 아래 '  - ' 줄들을 번호 목록으로 · '  - [7주차] …' 은 주차 꼬리표)
+             ❌ 안 나옴 :: …                            (빨간 칩)
+             📌 :: …                                    (키 없이 = 작은 설명 줄)"""
+    when, rows, cur = "", [], None
+    for ln in block:
+        if not ln.strip():
+            continue
+        m = re.match(r"^\s+- (?:\[([^\]]+)\]\s*)?(.*)$", ln)
+        if m and cur is not None:
+            cur["items"].append((m.group(1) or "", m.group(2)))
+            continue
+        k, _, v = ln.partition("::")
+        k, v = k.strip(), v.strip()
+        if k == "일시":
+            when = v
+            continue
+        cur = {"k": k, "v": v, "items": []}
+        rows.append(cur)
+    out = ['<section class="wk-exam" aria-label="교수님 시험 안내">',
+           '<div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span>']
+    if when:
+        bits = [b.strip() for b in when.split(" · ")]
+        out.append('<span class="wk-exam-when">%s</span>' % inline(bits[0]))
+        if len(bits) > 1:
+            out.append('<span class="wk-exam-where">%s</span>' % " · ".join(inline(b) for b in bits[1:]))
+    out.append("</div><dl class=\"wk-exam-grid\">")
+    for r in rows:
+        if r["k"] in ("", "📌"):                          # 설명 줄 (키 없음 · 📌)
+            out.append('<dd class="wk-exam-note">📌 %s</dd>' % inline(r["v"]))
+            continue
+        bad = "안 나옴" in r["k"] or "제외" in r["k"]
+        out.append("<dt>%s</dt><dd>" % inline(r["k"]))
+        if r["v"]:
+            out.append("".join('<span class="wk-chip%s">%s</span>' % (" bad" if bad else "", inline(c.strip())) for c in r["v"].split(" · ") if c.strip()))
+        if r["items"]:
+            out.append('<ol class="wk-exam-list">' + "".join(
+                "<li>%s%s</li>" % ('<span class="wk-exam-wk">%s</span>' % html.escape(t) if t else "", inline(x)) for t, x in r["items"]) + "</ol>")
+        out.append("</dd>")
+    out.append("</dl></section>")
+    return "".join(out)
+
+
 def render_md(md):
     lines = md.splitlines()
     title, parts, in_card, i = "", [], False, 0
@@ -154,6 +200,14 @@ def render_md(md):
             else:
                 cls = ' class="language-%s"' % lang if lang else ""
                 parts.append("<pre><code%s>%s</code></pre>" % (cls, body))
+        elif line.strip() == ":::exam":                  # 📋 교수님 시험 안내 카드
+            flush()
+            blk = []
+            i += 1
+            while i < len(lines) and lines[i].strip() != ":::":
+                blk.append(lines[i])
+                i += 1
+            parts.append(render_exam(blk))
         elif line.startswith("# ") and not title:
             flush()
             title = line[2:].strip()
@@ -252,6 +306,21 @@ PAGE_CSS = """
 @keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
 @media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
 @media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -270,10 +339,10 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202610161850"></script>
+    <script src="{asset}theme.js?v=202610162002"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="{asset}style.css?v=202610161850">
+    <link rel="stylesheet" href="{asset}style.css?v=202610162002">
     <style>{css}</style>
 </head>
 <body>
@@ -301,7 +370,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202610161850"></script>
+<script src="{asset}ink.js?v=202610162002"></script>
 </body>
 </html>
 """

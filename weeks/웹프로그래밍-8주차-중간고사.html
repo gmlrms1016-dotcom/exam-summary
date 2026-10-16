@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610161850"></script>
+    <script src="../theme.js?v=202610162002"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>웹프로그래밍 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610161850">
+    <link rel="stylesheet" href="../style.css?v=202610162002">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -35,6 +35,21 @@
 @keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
 @media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
 @media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -65,9 +80,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="웹프로그래밍-7주차.html">‹ 이전 · <b>7주차</b><br><small>&lt;10월 13일&gt; switch·truthy/falsy·객체 생성·spread·Rest·얕은/깊은 복사·BOM</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../웹프로그래밍-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<div class="tip">📅 <b>중간고사 — 10월 20일(화) 10:00</b> · 평가 비율: 출석 20% + <b>중간고사 30%(필기)</b> + 기말고사 30% + 과제·기타 20% · 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</div>
-<div class="tip">🔥 <b>7주차 필기</b> — “<b>코드 문법(손코딩)이나 용어는 객관식으로 출제될 예정</b>” · “<b>switch 문 시험에 나옴!</b>” · BOM “<b>다음 중 성격이 다른 것은?</b>” · <b>얕은 복사 · 깊은 복사 뜻</b> · <b>구조분해 할당 뜻</b> · “<b>수업시간에 나온 내장객체만 출제</b>”</div>
-<div class="tip">🎯 <b>교수님 시험 안내</b> — "강의시간에 말한 내용을 <b>전부 시험(100문제)</b> 으로 낸다" (1주차) · 4주차 수업에서 직접 언급: ① <b>Node.js 가 무엇인지 주관식</b> ② HTML · CSS · JS <b>주석 차이</b> ③ <code>++</code> <b>전위 · 후위 차이</b> ④ <code>||</code> 와 <code>&amp;&amp;</code> <b>차이</b> ⑤ <code>==</code> 와 <code>===</code> 차이 ⑥ <b>연산자 9가지</b> (교수님 메모)</div>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 20일(화) 10:00</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip"><b>필기</b></span><span class="wk-chip">코드 문법(손코딩)·용어 → <b>객관식</b></span><span class="wk-chip">Node.js 가 무엇인지 → <b>주관식</b></span><span class="wk-chip">“강의시간에 말한 내용을 <b>전부 시험(100문제)</b>” (1주차)</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">수업 <b>1~7주차</b></span><span class="wk-chip">내장객체는 <b>“수업시간에 나온 것만 출제”</b></span></dd><dt>📊 성적 비율</dt><dd><span class="wk-chip">출석 20%</span><span class="wk-chip"><b>중간고사 30%(필기)</b></span><span class="wk-chip">기말고사 30%</span><span class="wk-chip">과제·기타 20%</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span>“<b>switch 문 시험에 나옴!</b>”</li><li><span class="wk-exam-wk">7주차</span>BOM “<b>다음 중 성격이 다른 것은?</b>”</li><li><span class="wk-exam-wk">7주차</span><b>얕은 복사 · 깊은 복사 뜻</b> · <b>구조분해 할당 뜻</b></li><li><span class="wk-exam-wk">4주차</span><b>Node.js 가 무엇인지</b> (주관식)</li><li><span class="wk-exam-wk">4주차</span>HTML · CSS · JS <b>주석 차이</b></li><li><span class="wk-exam-wk">4주차</span><code>++</code> <b>전위 · 후위 차이</b> · <code>||</code> 와 <code>&amp;&amp;</code> <b>차이</b> · <code>==</code> 와 <code>===</code> 차이</li><li><span class="wk-exam-wk">4주차</span><b>연산자 9가지</b> (교수님 메모)</li></ol></dd><dd class="wk-exam-note">📌 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</dd></dl></section>
 <section class="card">
 <h2>7주차 — 🔥 switch · 얕은/깊은 복사 · spread · Rest · BOM (<a href="웹프로그래밍-7주차.html">7주차 자세히</a>)</h2>
 <ul><li>🔥 <span class="wk-tag note">✍️ 필기</span> — 코드 문법(손코딩) · 용어는 <b>객관식</b> 출제 예정 · <b>switch 문 시험에 나옴</b> → <code>switch (day.getDay())</code> · <code>getDay()</code> 는 <b>0 = 일요일</b> ~ 6 = 토 · <code>break</code> 가 없으면 아래 case 까지 실행</li><li>🔥 <b>얕은 복사</b> <code>let o2 = o1;</code> → 주소만 복사, 같은 객체 → <code>o1 === o2</code> <b>true</b> / <b>깊은 복사</b> <code>let o4 = {...o3};</code> → 새 객체 → <code>o3 === o4</code> <b>false</b> / <code>JSON.stringify(o3) === JSON.stringify(o4)</code> → <b>true</b> (문자열로 내용 비교)</li><li>🔥 <b>BOM “성격이 다른 것은?”</b> — window · screen · location · history · navigator → 🤖 <b>window</b>(최상위 객체 · 나머지 4개는 window 의 하위 객체)</li><li>🔥 <b>매개변수 빈칸</b> (claude야 시험문제로) — <code>function funcA( a1, a2, a3 )</code> · <code>funcA(arrayObj)</code> → <code>[ 1, '둘', true ]</code> · undefined · undefined / <code>funcA(...arrayObj)</code> → 1 · 둘 · true</li><li><b>spread</b> <code>...</code> = 배열 · 객체의 값을 <b>개별로 흩뿌림</b> (<code>[...arr, 4]</code> · <code>{...obj, c:true}</code> · <code>f(...arr)</code>) / <b>Rest</b> <code>function f(a1, ...a2)</code> = 나머지 인수를 <b>배열로 모음</b></li><li><b>구조분해 할당 뜻</b> (✍️) — 안의 데이터를 넣거나 빼려면 <b>방 번호(index, 0 부터)</b> 로 대괄호 접근 → <code>let [a1, a2, a3] = arr;</code> (순서) · <code>let {b, a} = obj;</code> (key 이름)</li><li>객체 만들기: <code>new Object()</code> · 리터럴 <code>{}</code> (✍️ 대부분 사용) · <code>new Date()</code> — ✍️ “object 를 생성할 때 <b>new</b>” · truthy/falsy: <code>if (!name)</code> 가 undefined · null · "" 를 한 번에 막음 · 내장객체는 <b>수업에 나온 것만</b> 출제 (Object · Date · JSON)</li></ul>
@@ -133,6 +146,6 @@ function getArea(width, height) {   // 선언적 함수 (호이스팅 → 위에
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610161850"></script>
+<script src="../ink.js?v=202610162002"></script>
 </body>
 </html>

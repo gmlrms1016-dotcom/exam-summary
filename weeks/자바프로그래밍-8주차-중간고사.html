@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610161850"></script>
+    <script src="../theme.js?v=202610162002"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>자바프로그래밍 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610161850">
+    <link rel="stylesheet" href="../style.css?v=202610162002">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -35,6 +35,21 @@
 @keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
 @media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
 @media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -65,9 +80,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="자바프로그래밍-7주차.html">‹ 이전 · <b>7주차</b><br><small>4장 클래스 실습 — 생성자 · this (🔥 시험범위 Car · Book 까지)</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../자바프로그래밍-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<div class="tip">📅 <b>중간고사 — 10월 20일(화) 14:00</b> · 평가: 필기평가1 30점 + 직무수행능력평가2 15점 + 직무수행능력평가3 등 (실습 중심) · 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</div>
-<div class="tip">🔥 <b>7주차 필기 — 시험범위</b> — “<b>오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위</b>” · <b>자바 데이터타입 8가지 외우기</b> · <b>조건식 출력 true / false</b> · <b>for 문 · 배열</b> · <b>if · else</b> · <b>class 와 object</b> · <b>객체지향의 특성</b></div>
-<div class="tip">🎯 <b>강의자료에 ★시험단골로 표시된 것</b> — ① <b>타입 변환</b>(자동 / 강제 캐스팅) ② <b>예외 처리</b>(try-catch-finally, 예외 클래스) ③ WORA · JVM ④ 반복문 for / while / do-while 차이 ⑤ 배열 선언과 생성</div>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 20일(화) 14:00</span></div><dl class="wk-exam-grid"><dt>📊 평가</dt><dd><span class="wk-chip">필기평가1 <b>30점</b></span><span class="wk-chip">직무수행능력평가2 <b>15점</b></span><span class="wk-chip">직무수행능력평가3 등 (실습 중심)</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">✍️ “<b>오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위</b>” (7주차)</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span><b>자바 데이터타입 8가지 외우기</b></li><li><span class="wk-exam-wk">7주차</span><b>조건식 출력 true / false</b></li><li><span class="wk-exam-wk">7주차</span><b>for 문 · 배열</b> · <b>if · else</b></li><li><span class="wk-exam-wk">7주차</span><b>class 와 object</b> · <b>객체지향의 특성</b></li></ol></dd><dt>⭐ 강의자료 ★시험단골</dt><dd><ol class="wk-exam-list"><li><b>타입 변환</b>(자동 / 강제 캐스팅)</li><li><b>예외 처리</b>(try-catch-finally, 예외 클래스)</li><li>WORA · JVM</li><li>반복문 for / while / do-while 차이</li><li>배열 선언과 생성</li></ol></dd><dd class="wk-exam-note">📌 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</dd></dl></section>
 <section class="card">
 <h2>🔥 ✍️ PDF 필기 — 시험 표시 (10/1 보충)</h2>
 <ul><li>🔥 <b>식별자 이름 사례 ★</b> — 2장 7쪽에 큰 ★ (중간고사 폴더 <code>PDF 문서.pdf</code> 에도 같은 쪽 ★) · 안 되는 것: 첫 글자 <b>숫자</b>(3Chapter) · <b>예약어</b>(if) · <b>false · true · null</b> · 특수문자(<code>%</code>) / 되는 것: <code>_</code> · <code>$</code> · 숫자(첫 글자 아님) · 한글 · 길이 제한 없음 · 대소문자 구분 (<a href="자바프로그래밍-3주차.html">3주차 자세히</a>)</li><li>🔥 <b>빈칸</b> — 2장 23쪽 CircleArea 의 <code>double</code> 세 곳에 ✍️ “빈칸” → <code>final double PI = 3.14;</code> · <code>double radius</code> · <code>double circleArea</code></li><li>✍️ final = <b>변경 X</b> · long 리터럴은 <b>L</b> · 실수 리터럴은 <b>double</b> 이 기본(D 필수 X) · 카멜 표기(클래스 대문자 · 변수/메소드 소문자 · 상수 전부 대문자)</li></ul>
@@ -125,6 +138,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610161850"></script>
+<script src="../ink.js?v=202610162002"></script>
 </body>
 </html>

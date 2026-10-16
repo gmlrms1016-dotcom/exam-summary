@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610161850"></script>
+    <script src="../theme.js?v=202610162002"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>데이터베이스관리 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610161850">
+    <link rel="stylesheet" href="../style.css?v=202610162002">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -35,6 +35,21 @@
 @keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
 @media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
 @media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -65,9 +80,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="데이터베이스관리-7주차.html">‹ 이전 · <b>7주차</b><br><small>ALTER · GRANT/REVOKE · Quiz 7-3 기본키 · 외래키 테이블 생성</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../데이터베이스관리-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<div class="tip">📅 <b>중간고사 — 10월 21일(수) 10:00</b> · 평가 비율: 출석 20% + <b>중간 30%</b> + 기말 30% + 과제 20% · 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</div>
-<div class="tip">🔥 <b>7주차 필기</b> — 범위 <b>교재 1 · 2 · 3장(중요) · 5 · 6장</b> · 수업 <b>2주차 ~ 7주차</b> · <b>중간고사는 객관식이 없음</b> · DDL · DML · DCL <b>약어도 시험</b> · <b>DML 은 시험의 70%</b> (직접 쓰는 문법) · 7주차 내용은 <b>10%</b> — <b>ALTER ADD</b> · 강의자료 <b>8 · 9쪽 Quiz 7-3</b> · GRANT · REVOKE 는 안 나옴</div>
-<div class="tip">🎯 <b>교수님이 시험에 낸다고 한 것</b> (4주차 필기 원문) — ① <b>스키마 표기법을 작성하시오</b> ② <b>FOREIGN KEY 는 참조하는 열과 데이터 형식이 같아야 한다</b> ③ 시험범위 = 강의자료4의 <b>3 · 4 · 5+25 · 7 · 21 · 24 · 32 · 34 · 41 · 42p</b> ④ (5주차 필기) <b>시험 범위 = 1장 · 2장 · 3장 · 5장 · 6장</b> ⑤ <b>차수 · 카디널리티 개수 구하기</b> ⑥ (6주차 필기) <b>“오늘 하는 실습이 다 중간고사 시험 예상문제”</b> · <b>시험범위 = 1~7주차</b> · 참조 무결성 <b>“하는 / 되는” 빈칸</b> · <b>“객체”라고 쓰면 오답(개체)</b> · 용어 <b>“같은 말 찾기 / 쓰기”</b></div>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 21일(수) 10:00</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip"><b>객관식 없음</b></span><span class="wk-chip"><b>DML 직접 쓰기 = 시험의 70%</b></span><span class="wk-chip">7주차 내용 <b>10%</b></span><span class="wk-chip">DDL·DML·DCL <b>약어도 시험</b></span><span class="wk-chip">용어 <b>“같은 말 찾기 / 쓰기”</b></span><span class="wk-chip">참조 무결성 <b>“하는 / 되는” 빈칸</b></span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">교재 <b>1·2·3장(중요)·5·6장</b></span><span class="wk-chip">수업 <b>2주차 ~ 7주차</b></span><span class="wk-chip">7주차 <b>ALTER ADD</b></span><span class="wk-chip">강의자료 <b>8·9쪽 Quiz 7-3</b></span><span class="wk-chip">(4주차) 강의자료4 <b>3·4·5+25·7·21·24·32·34·41·42쪽</b></span></dd><dt>📊 성적 비율</dt><dd><span class="wk-chip">출석 20%</span><span class="wk-chip"><b>중간 30%</b></span><span class="wk-chip">기말 30%</span><span class="wk-chip">과제 20%</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">4주차</span><b>스키마 표기법을 작성하시오</b></li><li><span class="wk-exam-wk">4주차</span><b>FOREIGN KEY 는 참조하는 열과 데이터 형식이 같아야 한다</b></li><li><b>차수 · 카디널리티 개수 구하기</b></li><li><span class="wk-exam-wk">6주차</span><b>“오늘 하는 실습이 다 중간고사 시험 예상문제”</b></li><li><span class="wk-exam-wk">6주차</span><b>“객체”라고 쓰면 오답(개체)</b></li></ol></dd><dt>❌ 안 나옴</dt><dd><span class="wk-chip bad">GRANT</span><span class="wk-chip bad">REVOKE</span></dd><dd class="wk-exam-note">📌 시험범위가 바뀐 순서 — 4주차 강의자료4 쪽 지정 → 5주차 1·2·3·5·6장 → 6주차 1~7주차 → 7주차 교재 1·2·3(중요)·5·6장 · 수업 2~7주차 · 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</dd></dl></section>
 <section class="card">
 <h2>🔴 빨간 글씨 = 암기 (강의자료에 빨간색으로 표시된 곳)</h2>
 <table class="ref">
@@ -160,6 +173,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610161850"></script>
+<script src="../ink.js?v=202610162002"></script>
 </body>
 </html>
