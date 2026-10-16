@@ -16,6 +16,10 @@
     window.__inkLoaded = true;
 
     var root = document.documentElement;
+    // 페이지 설정 (없으면 주차 · 과목 페이지와 같음) — 실제시험: { idAnchor: ".ex-q", strict: true } (2026-10-16)
+    //  idAnchor = 이 요소들은 글 내용 대신 id 에 필기를 붙임 (채점 결과 · 힌트가 나와도, 문제가 무작위로 뽑혀도 그 문제를 따라감)
+    //  strict   = 붙어 있던 블록이 지금 화면에 없으면 숨김 (대기실 · 결과 화면에 문제 필기가 떠 있지 않게)
+    var OPT = window.INK_OPTS || {};
     var PAGE_KEY = "ink:" + decodeURIComponent(location.pathname);
     var NS = "http://www.w3.org/2000/svg";
     var TOOLS = ["pen", "pencil", "marker", "eraser", "lasso"];
@@ -119,6 +123,7 @@
         for (var i = 0; i < els.length; i++) {
             var e = els[i];
             if (e.closest(".ink-ui")) continue;
+            if (OPT.idAnchor && e.id && e.matches(OPT.idAnchor)) { var ik = "id:" + e.id; if (!map[ik]) { list.push({ el: e, key: ik }); map[ik] = e; } continue; }
             var base = e.tagName.toLowerCase() + ":" + hash((e.textContent || "").replace(/\s+/g, " ").trim().slice(0, 120));
             var n = seen[base] = (seen[base] || 0) + 1;
             var key = base + ":" + n;
@@ -148,6 +153,7 @@
     function originOf(st) {
         var e = anchors().map[st.a];
         if (e) { var b = boxOf(e); return b ? { x: b.x, y: b.y } : null; }
+        if (OPT.strict) return null;                           // 실제시험: 그 블록이 지금 없으면 숨김
         return { x: st.fx, y: st.fy };                         // 블록을 못 찾으면 그릴 때 자리
     }
 
@@ -268,7 +274,7 @@
     }
 
     /* ===================== 입력 ===================== */
-    var EXEMPT = "input, textarea, select, button, label, [contenteditable], .ct-code, .oq-ans";
+    var EXEMPT = "input, textarea, select, button, label, [contenteditable], .ct-code, .oq-ans, .ex-srcref, .ex-srcview, .ex-lv, .ex-modal";   // 실제시험: 파일 이름 · 소스 창 · 화면 보기 · 결과 창 위에서는 펜슬도 원래대로
     function inUI(t) { return t && t.closest && t.closest(".ink-ui"); }
     function exempt(t) { return inUI(t) || (t && t.closest && t.closest(EXEMPT)); }
     function drawsWith(e) {
@@ -948,6 +954,15 @@
         window.addEventListener("resize", function () { relayout(); closePop(); });
         window.addEventListener("load", relayout);
         if (window.ResizeObserver) new ResizeObserver(relayout).observe(document.body);
+        if (OPT.idAnchor && window.MutationObserver) new MutationObserver(function (ms) {   // 실제시험: 문제가 나중에 들어오거나(복호화 · 시험 시작) 빠지면 다시 그림
+            for (var i = 0; i < ms.length; i++) {
+                var ns = Array.prototype.slice.call(ms[i].addedNodes).concat(Array.prototype.slice.call(ms[i].removedNodes));
+                for (var j = 0; j < ns.length; j++) {
+                    var n = ns[j];
+                    if (n.nodeType === 1 && (n.matches(OPT.idAnchor) || n.querySelector(OPT.idAnchor))) { relayout(); return; }
+                }
+            }
+        }).observe(document.body, { childList: true, subtree: true });
         new MutationObserver(function () { renderAll(); syncUI(); }).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
         document.addEventListener("keydown", function (e) {
             var k = (e.key || "").toLowerCase();
