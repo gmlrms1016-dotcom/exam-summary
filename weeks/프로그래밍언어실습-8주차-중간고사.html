@@ -696,17 +696,65 @@ char: 1, int: 4, float: 4, double: 8
 </section>
 <section class="card">
 <h2>3주차 — 변수 · 상수 · 자료형</h2>
+<ul><li>📏 자료형마다 <b>몇부터 몇까지</b> 담기는지는 이 절 맨 아래 <b>📏 자료형별 숫자 범위</b> 표 — <code>float</code> 는 소수점 아래 <b>6자리</b> 출력 · <code>double</code> 을 scanf 로 받을 땐 반드시 <code>%lf</code></li><li><span class="wk-tag star">⭐ 강조</span> — 변수 = 값이 바뀌는 <b>기억장소</b> / 상수 = 바뀌지 않음(<code>const</code>)</li><li><span class="wk-tag star">⭐ 강조</span> — 서식: <code>%d</code> 10진 · <code>%o</code> 8진 · <code>%x</code> 16진 · <code>%c</code> 문자 · <code>%s</code> 문자열 · <code>%f</code> 실수 · <code>%p</code> 주소</li><li><span class="wk-tag star">⭐ 강조</span> — <code>'A'</code> = 문자 1개 / <code>"A"</code> = 문자열 · <code>'A'</code> = 65 = <code>01000001</code> · <code>'a'</code> = 97</li><li><span class="wk-tag star">⭐ 강조</span> — <code>const</code> 는 선언과 동시에 초기화, 재대입하면 컴파일 오류 / <code>#define</code> 은 <b>전처리기</b>가 컴파일 전에 치환(끝에 <code>;</code> 없음)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>scanf("%d", &amp;age);</code> — <code>&amp;</code> 로 <b>주소</b>를 넘겨야 저장됨 · VS 는 <code>#define _CRT_SECURE_NO_WARNINGS</code></li><li>변수 이름 규칙: 숫자로 시작 X · 공백 X · 대·소문자 구별 · 예약어 X · 초기화 안 한 변수 출력은 VS 에서 C4700 오류</li></ul>
+<h3>📏 자료형별 숫자 범위 — 몇부터 몇까지 (Visual Studio 기준)</h3>
 <table class="ref">
-<tbody style="min-width:699px;">
-<tr><th>자료형</th><th>크기</th><th>서식</th><th>범위</th></tr>
-<tr><td><code>char</code></td><td>1byte</td><td><code>%c</code></td><td>-128 ~ 127 (unsigned 0 ~ 255)</td></tr>
-<tr><td><code>short</code></td><td>2byte</td><td><code>%d</code></td><td>-32,768 ~ 32,767</td></tr>
-<tr><td><code>int</code></td><td>4byte</td><td><code>%d</code></td><td>약 ±21억</td></tr>
-<tr><td><code>long</code></td><td>4byte(VS)</td><td><code>%ld</code></td><td>int 와 같음</td></tr>
-<tr><td><code>float</code></td><td>4byte</td><td><code>%f</code></td><td>소수점 6자리 출력</td></tr>
-<tr><td><code>double</code></td><td>8byte</td><td><code>%lf</code></td><td>scanf 는 반드시 <code>%lf</code></td></tr>
+<tbody style="min-width:760px;">
+<tr><th>자료형</th><th>크기</th><th>서식</th><th>최솟값 ~ 최댓값</th><th>대충</th></tr>
+<tr><td><code>char</code> (= <code>signed char</code>)</td><td>1byte</td><td><code>%c</code> · <code>%d</code></td><td><b>-128 ~ 127</b></td><td>문자 1개 · <code>'A'</code> = 65</td></tr>
+<tr><td><code>unsigned char</code></td><td>1byte</td><td><code>%u</code></td><td><b>0 ~ 255</b></td><td>음수 없음</td></tr>
+<tr><td><code>short</code></td><td>2byte</td><td><code>%d</code> (<code>%hd</code>)</td><td><b>-32,768 ~ 32,767</b></td><td>약 ±3만</td></tr>
+<tr><td><code>unsigned short</code></td><td>2byte</td><td><code>%u</code></td><td><b>0 ~ 65,535</b></td><td>약 6만 5천</td></tr>
+<tr><td><code>int</code></td><td>4byte</td><td><code>%d</code></td><td><b>-2,147,483,648 ~ 2,147,483,647</b></td><td>약 ±21억</td></tr>
+<tr><td><code>unsigned int</code></td><td>4byte</td><td><code>%u</code></td><td><b>0 ~ 4,294,967,295</b></td><td>약 42억</td></tr>
+<tr><td><code>long</code></td><td>4byte (VS)</td><td><code>%ld</code></td><td><b>-2,147,483,648 ~ 2,147,483,647</b></td><td>int 와 같음</td></tr>
+<tr><td><code>unsigned long</code></td><td>4byte (VS)</td><td><code>%lu</code></td><td><b>0 ~ 4,294,967,295</b></td><td>unsigned int 와 같음</td></tr>
+<tr><td><code>long long</code></td><td>8byte</td><td><code>%lld</code></td><td><b>-9,223,372,036,854,775,808 ~ 9,223,372,036,854,775,807</b></td><td>약 ±922경</td></tr>
+<tr><td><code>unsigned long long</code></td><td>8byte</td><td><code>%llu</code></td><td><b>0 ~ 18,446,744,073,709,551,615</b></td><td>약 1844경</td></tr>
+<tr><td><code>float</code></td><td>4byte</td><td><code>%f</code></td><td><b>±1.175494E-38 ~ ±3.402823E+38</b> (그리고 0)</td><td>정확한 자리 약 6 ~ 7자리</td></tr>
+<tr><td><code>double</code></td><td>8byte</td><td><code>%lf</code> (printf 는 <code>%f</code> 도)</td><td><b>±2.225074E-308 ~ ±1.797693E+308</b> (그리고 0)</td><td>정확한 자리 약 15자리</td></tr>
+<tr><td><code>long double</code></td><td>8byte (VS)</td><td><code>%Lf</code></td><td>double 과 같음</td><td></td></tr>
 </tbody></table>
-<ul><li><span class="wk-tag star">⭐ 강조</span> — 변수 = 값이 바뀌는 <b>기억장소</b> / 상수 = 바뀌지 않음(<code>const</code>)</li><li><span class="wk-tag star">⭐ 강조</span> — 서식: <code>%d</code> 10진 · <code>%o</code> 8진 · <code>%x</code> 16진 · <code>%c</code> 문자 · <code>%s</code> 문자열 · <code>%f</code> 실수 · <code>%p</code> 주소</li><li><span class="wk-tag star">⭐ 강조</span> — <code>'A'</code> = 문자 1개 / <code>"A"</code> = 문자열 · <code>'A'</code> = 65 = <code>01000001</code> · <code>'a'</code> = 97</li><li><span class="wk-tag star">⭐ 강조</span> — <code>const</code> 는 선언과 동시에 초기화, 재대입하면 컴파일 오류 / <code>#define</code> 은 <b>전처리기</b>가 컴파일 전에 치환(끝에 <code>;</code> 없음)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>scanf("%d", &amp;age);</code> — <code>&amp;</code> 로 <b>주소</b>를 넘겨야 저장됨 · VS 는 <code>#define _CRT_SECURE_NO_WARNINGS</code></li><li>변수 이름 규칙: 숫자로 시작 X · 공백 X · 대·소문자 구별 · 예약어 X · 초기화 안 한 변수 출력은 VS 에서 C4700 오류</li></ul>
+<ul><li>🧮 <b>범위 구하는 법</b> — 1byte = 8bit → <code>0000 0000</code> ~ <code>1111 1111</code> → 2⁸ = <b>256 가지</b><ul><li>부호 없음(unsigned) — <code>0000 0000</code> = 0 ~ <code>1111 1111</code> = 1+2+4+8+16+32+64+128 = <b>255</b> → <b>0 ~ 255</b></li><li>부호 있음(signed · 기본) — 맨 앞 1비트가 부호(0 양수 · 1 음수) → <code>0111 1111</code> = <b>127</b> 이 최대 · <code>1000 0000</code> = <b>-128</b> 이 최소 → 음수 128개(-128 ~ -1) + 0 과 양수 128개(0 ~ 127) → 0 이 양수 쪽 자리를 하나 쓰니 <b>음수 쪽이 1 더 큼</b></li><li>공식 — n비트 부호 있음 <b>-2ⁿ⁻¹ ~ 2ⁿ⁻¹ - 1</b> / 부호 없음 <b>0 ~ 2ⁿ - 1</b> → int 32비트 = -2³¹ ~ 2³¹ - 1 = -2,147,483,648 ~ 2,147,483,647</li></ul></li><li>⚠️ <b>long 은 컴퓨터마다 다름</b> — Visual Studio(Windows) 는 <b>4byte</b> = int 와 같은 범위 / Mac · Linux(gcc · clang) 는 <b>8byte</b> = long long 과 같은 범위 → 수업(VS) 기준은 4byte · 21억이 넘는 정수는 <code>long long</code></li><li>⚠️ <b>실수는 범위보다 정밀도</b> — float 은 3.4 × 10³⁸ 까지 담지만 <b>정확한 자리는 약 6 ~ 7자리</b> → <code>float f = 123456789;</code> 를 찍으면 <b>123456792.000000</b> · 표의 가장 작은 값(1.175494E-38)은 “0 에 가장 가까운 양수”이고, 음수 쪽 끝은 <b>-3.402823E+38</b></li><li>🔄 <b>범위를 넘으면(오버플로)</b> — 최댓값 + 1 → 한 바퀴 돌아 최솟값: int 2,147,483,647 + 1 → <b>-2,147,483,648</b> · unsigned char 255 + 1 → <b>0</b> · <code>char c = 128;</code> → <b>-128</b></li></ul>
+<pre><code class="language-c">// 📏 자료형별 최솟값 ~ 최댓값 — limits.h(정수) · float.h(실수) 에 상수로 들어 있음
+#include &lt;stdio.h&gt;                                // printf 쓰려고
+#include &lt;limits.h&gt;                               // 정수 범위 상수 (CHAR_MIN · INT_MAX · LLONG_MAX …)
+#include &lt;float.h&gt;                                // 실수 범위 상수 (FLT_MIN · FLT_MAX · DBL_MAX …)
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    printf("%d %d\n", CHAR_MIN, CHAR_MAX);        // char 8비트 · 부호 있음 → -2⁷ ~ 2⁷-1 → -128 127
+    printf("%d\n", UCHAR_MAX);                    // unsigned char 8비트 → 0 ~ 2⁸-1 → 255
+    printf("%d %d\n", SHRT_MIN, SHRT_MAX);        // short 16비트 → -2¹⁵ ~ 2¹⁵-1 → -32768 32767
+    printf("%d\n", USHRT_MAX);                    // unsigned short 16비트 → 2¹⁶-1 → 65535
+    printf("%d %d\n", INT_MIN, INT_MAX);          // int 32비트 → -2³¹ ~ 2³¹-1 → -2147483648 2147483647
+    printf("%u\n", UINT_MAX);                     // unsigned int 32비트 → 2³²-1 → %u(부호 없는 정수)로 → 4294967295
+    printf("%lld %lld\n", LLONG_MIN, LLONG_MAX);  // long long 64비트 → -2⁶³ ~ 2⁶³-1 → -9223372036854775808 9223372036854775807
+    printf("%llu\n", ULLONG_MAX);                 // unsigned long long 64비트 → 2⁶⁴-1 → 18446744073709551615
+    printf("%e %e\n", FLT_MIN, FLT_MAX);          // float → 0 에 가장 가까운 양수 · 가장 큰 수 → %e(지수 표기) → 1.175494e-38 3.402823e+38
+    printf("%e %e\n", DBL_MIN, DBL_MAX);          // double → 2.225074e-308 1.797693e+308
+    int i = INT_MAX;                              // i = 2147483647 (int 최댓값)
+    i = i + 1;                                    // 최댓값 + 1 → 범위를 넘음(오버플로) → 한 바퀴 돌아 최솟값
+    printf("%d\n", i);                            // → -2147483648
+    unsigned char j = 255;                        // j = 255 = 1111 1111 (unsigned char 최댓값)
+    j = j + 1;                                    // 255 + 1 = 256 = 1 0000 0000 → 9번째 비트는 1byte 에 못 담아 버림 → 0000 0000
+    printf("%d\n", j);                            // → 0
+    float f = 123456789;                          // float 은 정확한 자리가 약 7자리 → 가장 가까운 float 값 123456792 로 저장
+    printf("%f\n", f);                            // → 123456792.000000 (끝이 89 가 아니라 92)
+    return 0;                                     // 정상 종료
+}                                                 // main 끝</code></pre>
+<pre class="io"><code class="language-text">-128 127
+255
+-32768 32767
+65535
+-2147483648 2147483647
+4294967295
+-9223372036854775808 9223372036854775807
+18446744073709551615
+1.175494e-38 3.402823e+38
+2.225074e-308 1.797693e+308
+-2147483648
+0
+123456792.000000</code></pre>
 </section>
 <section class="card">
 <h2>2주차 — C 기본 실습 (<a href="프로그래밍언어실습-2주차.html">2주차 자세히</a>)</h2>

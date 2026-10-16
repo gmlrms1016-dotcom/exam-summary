@@ -166,6 +166,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td><code>"$v"</code> / <code>'$v'</code> · <code>\$v</code></td><td>값으로 바뀜 / 글자 그대로 <code>$v</code></td></tr>
 <tr><td><code>num2=$num1+200</code></td><td>계산 안 함 → <code>100+200</code></td></tr>
 <tr><td><code>`expr $num1 + 200`</code></td><td>300 · 띄어쓰기 필수 · <code>\(</code> <code>\)</code> <code>\*</code> → <code>expr \( 100 + 200 \) / 10 \* 2</code> = <b>60</b></td></tr>
+<tr><td>📏 숫자 범위</td><td>셸에는 int · double 같은 <b>자료형이 없음</b> (변수는 전부 문자열) · <code>expr</code> 는 <b>정수만</b> 계산 → <code>expr 10 / 3</code> = <b>3</b> (소수점 버림 · 3.33 X)</td></tr>
 <tr><td><code>$0</code> · <code>$1</code> · <code>$*</code></td><td>파일 이름 · 첫 번째 값 · 전체</td></tr>
 <tr><td><code>if [ 조건 ]</code> → <code>then</code> → <code>else</code> → <code>fi</code></td><td><code>[</code> 뒤 · <code>]</code> 앞 띄어쓰기 · <code>elif</code></td></tr>
 <tr><td><code>=</code> <code>!=</code> / <code>-eq</code> <code>-ne</code> <code>-gt</code> <code>-ge</code> <code>-lt</code> <code>-le</code></td><td>문자열 비교 / 숫자 비교</td></tr>

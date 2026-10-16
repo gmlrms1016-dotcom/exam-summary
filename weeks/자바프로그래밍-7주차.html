@@ -185,16 +185,16 @@ public class 연습 {                              // 원래 이름 BookMain
 <section class="card">
 <h2>4. 🔥 자바 데이터타입 8가지 · 조건식 true / false</h2>
 <table class="ref">
-<tbody style="min-width:595px;">
-<tr><th>분류</th><th>타입</th><th>크기</th><th>예</th></tr>
-<tr><td>정수</td><td><code>byte</code></td><td>1바이트</td><td><code>127</code></td></tr>
-<tr><td>정수</td><td><code>short</code></td><td>2바이트</td><td><code>32767</code></td></tr>
-<tr><td>정수</td><td><b><code>int</code></b> (정수 기본)</td><td>4바이트</td><td><code>2147483647</code></td></tr>
-<tr><td>정수</td><td><code>long</code></td><td>8바이트</td><td><code>10000000000L</code> (끝에 <b>L</b>)</td></tr>
-<tr><td>실수</td><td><code>float</code></td><td>4바이트</td><td><code>3.14F</code> (끝에 <b>F</b>)</td></tr>
-<tr><td>실수</td><td><b><code>double</code></b> (실수 기본)</td><td>8바이트</td><td><code>3.14</code></td></tr>
-<tr><td>문자</td><td><code>char</code></td><td>2바이트</td><td><code>'A'</code> (작은따옴표 · 문자 하나)</td></tr>
-<tr><td>논리</td><td><code>boolean</code></td><td>1바이트</td><td><code>true</code> · <code>false</code></td></tr>
+<tbody style="min-width:760px;">
+<tr><th>분류</th><th>타입</th><th>크기</th><th>범위 (몇부터 몇까지)</th><th>예</th></tr>
+<tr><td>정수</td><td><code>byte</code></td><td>1바이트</td><td>-128 ~ 127</td><td><code>127</code></td></tr>
+<tr><td>정수</td><td><code>short</code></td><td>2바이트</td><td>-32,768 ~ 32,767</td><td><code>32767</code></td></tr>
+<tr><td>정수</td><td><b><code>int</code></b> (정수 기본)</td><td>4바이트</td><td>-2,147,483,648 ~ 2,147,483,647 (약 ±21억)</td><td><code>2147483647</code></td></tr>
+<tr><td>정수</td><td><code>long</code></td><td>8바이트</td><td>-9,223,372,036,854,775,808 ~ 9,223,372,036,854,775,807 (약 ±922경)</td><td><code>10000000000L</code> (끝에 <b>L</b>)</td></tr>
+<tr><td>실수</td><td><code>float</code></td><td>4바이트</td><td>±1.4E-45 ~ ±3.4028235E38 · 정확한 자리 약 7자리</td><td><code>3.14F</code> (끝에 <b>F</b>)</td></tr>
+<tr><td>실수</td><td><b><code>double</code></b> (실수 기본)</td><td>8바이트</td><td>±4.9E-324 ~ ±1.7976931348623157E308 · 약 15자리</td><td><code>3.14</code></td></tr>
+<tr><td>문자</td><td><code>char</code></td><td>2바이트</td><td>0 ~ 65,535 (음수 없음)</td><td><code>'A'</code> (작은따옴표 · 문자 하나)</td></tr>
+<tr><td>논리</td><td><code>boolean</code></td><td>1바이트</td><td>true · false 두 값만</td><td><code>true</code> · <code>false</code></td></tr>
 </tbody></table>
 <div class="tip">📌 외우는 법 — 정수 4개(byte · short · int · long) + 실수 2개(float · double) + 문자 1개(char) + 논리 1개(boolean) = <b>8개</b> · <b>String 은 기본 타입이 아니라 클래스(레퍼런스 타입)</b> 라서 8가지에 안 들어가요.</div>
 <pre><code class="language-java">// 🔥 자바 데이터 타입 8가지(기본형) · 조건식 출력 true / false

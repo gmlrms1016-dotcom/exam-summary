@@ -124,6 +124,41 @@ function getArea(width, height) {   // 선언적 함수 (호이스팅 → 위에
 <section class="card">
 <h2>3주차 — 변수 · 자료형 · 형변환 (<a href="웹프로그래밍-3주차.html">3주차 자세히</a>)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 변수 선언 키워드: <code>var</code>(재선언 가능) / <code>let</code>(재선언 불가) / <code>const</code>(상수, 값 변경 불가)</li><li><span class="wk-tag star">⭐ 강조</span> — 원시형: String · Number · Boolean (+ null, undefined) / 참조형: 객체</li><li><span class="wk-tag note">✍️ 필기</span> — 기본 데이터타입 5종: 문자열 · 숫자 · 부울린 · undefined · null / null = 의도적으로 비운 값, undefined = 값을 넣지 않은 상태</li><li><span class="wk-tag star">⭐ 강조</span> — 객체 = 사용자정의 객체 + 내장 객체</li><li><span class="wk-tag star">⭐ 강조</span> — 명시적 형변환 <code>String()</code> <code>Number()</code> <code>Boolean()</code> / 묵시적 형변환 <code>"10" + 5</code> → <code>"105"</code></li><li><span class="wk-tag star">⭐ 강조</span> — 템플릿 문자열: 백틱 안에 <code>${ }</code> → <code>`273 + 52의 값은 ${273 + 52}입니다`</code></li><li><span class="wk-tag note">✍️ 필기</span> — 스택 = 원시형 값 / 힙 = 참조형(객체)</li></ul>
+<h3>📏 숫자 범위 — JS 는 숫자 타입이 Number 하나</h3>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>범위 · 값</th><th>뜻 · 예</th></tr>
+<tr><td><code>Number</code> 크기</td><td><b>8바이트</b> (64비트 실수 = C · 자바 double 과 같음)</td><td>정수 · 실수 구분 없음 → <code>10 / 3</code> = 3.3333333333333335 · <code>5 / 2</code> = 2.5</td></tr>
+<tr><td>가장 큰 수 <code>Number.MAX_VALUE</code></td><td><b>1.7976931348623157e+308</b></td><td>넘으면 <code>Infinity</code></td></tr>
+<tr><td>가장 작은 음수</td><td><b>-1.7976931348623157e+308</b></td><td>넘으면 <code>-Infinity</code></td></tr>
+<tr><td><code>Number.MIN_VALUE</code></td><td><b>5e-324</b></td><td>⚠️ 가장 작은 음수가 아니라 <b>0 에 가장 가까운 양수</b></td></tr>
+<tr><td>정확한 정수 <code>MIN_SAFE_INTEGER ~ MAX_SAFE_INTEGER</code></td><td><b>-9,007,199,254,740,991 ~ 9,007,199,254,740,991</b></td><td>±(2⁵³ - 1) = 약 ±9007조 · 넘으면 정수가 틀어짐</td></tr>
+<tr><td>비트 연산 (<code>&amp;</code> · <code>^</code> · <code>~</code> · <code>&lt;&lt;</code> · <code>&gt;&gt;</code>)</td><td><b>-2,147,483,648 ~ 2,147,483,647</b></td><td>32비트 정수로 바꿔 계산 → 넘으면 한 바퀴 돌아감</td></tr>
+<tr><td><code>BigInt</code> (참고 · 끝에 <code>n</code>)</td><td>제한 없음 (메모리만큼)</td><td><code>2n ** 64n</code> → 18446744073709551616n</td></tr>
+<tr><td><code>Boolean</code></td><td><b>true · false</b> 두 값만</td><td></td></tr>
+</tbody></table>
+<ul><li>⚠️ 실수 오차 — 2진수로 저장하는 실수라 <code>0.1 + 0.2</code> → <b>0.30000000000000004</b> (0.3 이 아님)</li><li>C · 자바와 다른 점 — int · long · float 처럼 크기별 숫자 타입이 <b>없음</b> → <code>typeof 10</code> · <code>typeof 3.14</code> 둘 다 <b>"number"</b> · 범위를 넘으면 오류 대신 <code>Infinity</code></li></ul>
+<pre><code class="language-js">// 📏 JS 숫자 범위 — Number(64비트 실수) 하나로 정수 · 실수를 다 표현
+console.log(Number.MAX_VALUE);                    // 가장 큰 수 → 1.7976931348623157e+308
+console.log(Number.MIN_VALUE);                    // 0 에 가장 가까운 양수 (가장 작은 음수 X) → 5e-324
+console.log(Number.MAX_SAFE_INTEGER);             // 정확한 정수의 끝 = 2⁵³ - 1 → 9007199254740991
+console.log(Number.MIN_SAFE_INTEGER);             // 음수 쪽 끝 = -(2⁵³ - 1) → -9007199254740991
+console.log(Number.MAX_VALUE * 2);                // 가장 큰 수를 넘음 → Infinity
+console.log(9007199254740991 + 2);                // 안전 범위 밖 → 정확히 못 담아 가장 가까운 값 → 9007199254740992 (…93 이 아님)
+console.log(10 / 3);                              // 정수 ÷ 정수도 실수 → 3.3333333333333335
+console.log(0.1 + 0.2);                           // 2진수 실수 오차 → 0.30000000000000004
+console.log((2147483647 + 1) &gt;&gt; 0);               // 비트 연산은 32비트 정수로 → 2147483648 은 범위 밖 → 한 바퀴 돌아 -2147483648
+console.log(2n ** 64n);                           // BigInt(끝에 n) 는 크기 제한 없음 → 2⁶⁴ → 18446744073709551616n</code></pre>
+<pre class="io"><code class="language-text">1.7976931348623157e+308
+5e-324
+9007199254740991
+-9007199254740991
+Infinity
+9007199254740992
+3.3333333333333335
+0.30000000000000004
+-2147483648
+18446744073709551616n</code></pre>
 </section>
 <section class="card">
 <h2>2주차 — 실행단계 · 이벤트 · 함수 · 객체 (<a href="웹프로그래밍-2주차.html">2주차 자세히</a>)</h2>

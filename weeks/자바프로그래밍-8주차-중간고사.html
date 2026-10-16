@@ -87,7 +87,50 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </section>
 <section class="card">
 <h2>7주차 — 🔥 생성자 · this · 데이터타입 8가지 (<a href="자바프로그래밍-7주차.html">7주차 자세히</a>)</h2>
-<ul><li>🔥 <span class="wk-tag note">✍️ 필기</span> — <b>Car · CarMain · Book · BookMain 까지가 시험범위</b></li><li><b>생성자</b> — 클래스 이름과 같고 반환형이 없음 · 객체가 <code>new</code> 로 생성될 때 자동 호출 · <code>Car() {}</code> = <b>기본 생성자</b> (필드는 기본값 <code>null</code> · <code>0</code>) · <code>Car(String juin, String model, int year)</code> = <b>매개변수 생성자</b> (만들면서 값 넣기) · 여러 개 = 생성자 오버로딩</li><li><b>this</b> — 지금 이 객체 자신 · <code>this.juin = juin;</code> → 왼쪽은 <b>필드</b>, 오른쪽은 <b>매개변수</b> (이름이 같을 때 구분)</li><li>Car 실행: <code>new Car("내차", "BMW M5", 2026).showInfo()</code> → <code>소유주 : 내차     모델 : BMW M5     연식 : 2026</code> · Book 객체 5개 → 같은 클래스, 객체마다 다른 제목 · 저자</li><li>🔥 <b>데이터타입 8가지</b> — 정수 <code>byte</code>(1) · <code>short</code>(2) · <code>int</code>(4) · <code>long</code>(8, 끝에 L) / 실수 <code>float</code>(4, 끝에 F) · <code>double</code>(8) / 문자 <code>char</code>(2) / 논리 <code>boolean</code> → <b>String 은 8가지가 아님</b>(클래스)</li><li>🔥 <b>조건식 출력</b> — <code>System.out.println(85 &gt;= 80);</code> → <b>true</b> · <code>85 == 100</code> → <b>false</b> (1 · 0 이 아님)</li><li>4장-1 예제: Student · Dog(<code>barking()</code> 멍멍 짖는다 · <code>hungry()</code> 배고파요 · <code>sleeping()</code> ZZzz....) · Movie(<code>print()</code>) — 객체 2개씩</li><li>📝 과제: 2장 이론 107~109쪽 + 실습 1번(110쪽) · 3장 이론 163~165쪽 + 실습 1 · 2번(166쪽) — 이론은 정답만, 실습은 실행결과 + 소스 화면캡처</li></ul>
+<ul><li>🔥 <span class="wk-tag note">✍️ 필기</span> — <b>Car · CarMain · Book · BookMain 까지가 시험범위</b></li><li><b>생성자</b> — 클래스 이름과 같고 반환형이 없음 · 객체가 <code>new</code> 로 생성될 때 자동 호출 · <code>Car() {}</code> = <b>기본 생성자</b> (필드는 기본값 <code>null</code> · <code>0</code>) · <code>Car(String juin, String model, int year)</code> = <b>매개변수 생성자</b> (만들면서 값 넣기) · 여러 개 = 생성자 오버로딩</li><li><b>this</b> — 지금 이 객체 자신 · <code>this.juin = juin;</code> → 왼쪽은 <b>필드</b>, 오른쪽은 <b>매개변수</b> (이름이 같을 때 구분)</li><li>Car 실행: <code>new Car("내차", "BMW M5", 2026).showInfo()</code> → <code>소유주 : 내차     모델 : BMW M5     연식 : 2026</code> · Book 객체 5개 → 같은 클래스, 객체마다 다른 제목 · 저자</li><li>🔥 <b>데이터타입 8가지</b> — 정수 <code>byte</code>(1) · <code>short</code>(2) · <code>int</code>(4) · <code>long</code>(8, 끝에 L) / 실수 <code>float</code>(4, 끝에 F) · <code>double</code>(8) / 문자 <code>char</code>(2) / 논리 <code>boolean</code> → <b>String 은 8가지가 아님</b>(클래스) · 몇부터 몇까지는 아래 📏 표</li><li>🔥 <b>조건식 출력</b> — <code>System.out.println(85 &gt;= 80);</code> → <b>true</b> · <code>85 == 100</code> → <b>false</b> (1 · 0 이 아님)</li><li>4장-1 예제: Student · Dog(<code>barking()</code> 멍멍 짖는다 · <code>hungry()</code> 배고파요 · <code>sleeping()</code> ZZzz....) · Movie(<code>print()</code>) — 객체 2개씩</li><li>📝 과제: 2장 이론 107~109쪽 + 실습 1번(110쪽) · 3장 이론 163~165쪽 + 실습 1 · 2번(166쪽) — 이론은 정답만, 실습은 실행결과 + 소스 화면캡처</li></ul>
+<h3>📏 데이터타입 8가지 숫자 범위 — 몇부터 몇까지</h3>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>분류</th><th>타입</th><th>크기</th><th>최솟값 ~ 최댓값</th><th>대충 · 비고</th></tr>
+<tr><td>정수</td><td><code>byte</code></td><td>1바이트</td><td><b>-128 ~ 127</b></td><td></td></tr>
+<tr><td>정수</td><td><code>short</code></td><td>2바이트</td><td><b>-32,768 ~ 32,767</b></td><td>약 ±3만</td></tr>
+<tr><td>정수</td><td><b><code>int</code></b> (정수 기본)</td><td>4바이트</td><td><b>-2,147,483,648 ~ 2,147,483,647</b></td><td>약 ±21억</td></tr>
+<tr><td>정수</td><td><code>long</code></td><td>8바이트</td><td><b>-9,223,372,036,854,775,808 ~ 9,223,372,036,854,775,807</b></td><td>약 ±922경 · 21억이 넘는 수는 끝에 <code>L</code></td></tr>
+<tr><td>실수</td><td><code>float</code></td><td>4바이트</td><td><b>±1.4E-45 ~ ±3.4028235E38</b> (그리고 0)</td><td>정확한 자리 약 7자리 · 끝에 <code>F</code></td></tr>
+<tr><td>실수</td><td><b><code>double</code></b> (실수 기본)</td><td>8바이트</td><td><b>±4.9E-324 ~ ±1.7976931348623157E308</b> (그리고 0)</td><td>정확한 자리 약 15 ~ 16자리</td></tr>
+<tr><td>문자</td><td><code>char</code></td><td>2바이트</td><td><b>0 ~ 65,535</b> (<code>'\u0000'</code> ~ <code>'￿'</code>)</td><td>음수 없음 · 유니코드 한 글자 · <code>'A'</code> = 65 · <code>'가'</code> = 44032</td></tr>
+<tr><td>논리</td><td><code>boolean</code></td><td>1바이트</td><td><b>true · false</b> 두 값만</td><td>숫자가 아님 (0 · 1 로 못 씀)</td></tr>
+</tbody></table>
+<ul><li>🧮 ✍️ <b>필기 공식 −2ⁿ ~ (2ⁿ − 1)</b> · n = 비트 수 − 1 → byte 8비트 n = 7 → -128 ~ 127 · short 16비트 n = 15 → -32,768 ~ 32,767 · int 32비트 n = 31 → -2,147,483,648 ~ 2,147,483,647 · long 64비트 n = 63<ul><li>왜 음수가 1 더 많나 — byte 8비트 = 2⁸ = 256 가지 → 맨 앞 비트가 부호 → <code>0111 1111</code> = 1+2+4+8+16+32+64 = <b>127</b> 이 최대 · <code>1000 0000</code> = <b>-128</b> 이 최소 · 0 이 양수 쪽 자리를 하나 써서 음수 쪽이 1 더 큼</li></ul></li><li>⚠️ <b><code>MIN_VALUE</code> 함정</b> — <code>Float.MIN_VALUE</code>(1.4E-45) · <code>Double.MIN_VALUE</code>(4.9E-324) 는 가장 작은 음수가 아니라 <b>0 에 가장 가까운 양수</b> → 가장 작은 음수는 <b>-Float.MAX_VALUE</b> · 정수(<code>Integer.MIN_VALUE</code> 등)는 진짜 최솟값</li><li>C 와 다른 점 — 자바는 <b>unsigned 가 없음</b>(char 만 0 부터) · <b>long 은 어느 컴퓨터든 8바이트</b>(JVM 이 정함 → 플랫폼 독립) · <b>char 가 2바이트</b>(C 는 1바이트)</li><li>⚠️ <b>범위 밖 리터럴은 컴파일 오류</b> — <code>int a = 3000000000;</code> → integer number too large → <code>long a = 3000000000L;</code> · <code>byte b = 128;</code> → 오류(127 까지) · <code>float f = 3.14;</code> → 오류(3.14 는 double) → <code>3.14F</code></li><li>🔄 <b>계산하다 넘으면(오버플로)</b> — 오류 없이 한 바퀴 돌아감: <code>Integer.MAX_VALUE + 1</code> → <b>-2147483648</b> · <code>byte b = 127; b++;</code> → <b>-128</b> · <code>(byte) 200</code> → 200 - 256 = <b>-56</b></li></ul>
+<pre><code class="language-java">// 📏 자바 데이터타입 8가지 최솟값 ~ 최댓값 — 래퍼 클래스의 MIN_VALUE · MAX_VALUE 상수
+public class 연습 {                                       // 파일 이름 연습.java
+    public static void main(String[] args) {             // 시작점
+        System.out.println(Byte.MIN_VALUE + " " + Byte.MAX_VALUE);       // byte 8비트 → -2⁷ ~ 2⁷-1 → -128 127
+        System.out.println(Short.MIN_VALUE + " " + Short.MAX_VALUE);     // short 16비트 → -2¹⁵ ~ 2¹⁵-1 → -32768 32767
+        System.out.println(Integer.MIN_VALUE + " " + Integer.MAX_VALUE); // int 32비트 → -2³¹ ~ 2³¹-1 → -2147483648 2147483647
+        System.out.println(Long.MIN_VALUE + " " + Long.MAX_VALUE);       // long 64비트 → -2⁶³ ~ 2⁶³-1 → -9223372036854775808 9223372036854775807
+        System.out.println(Float.MIN_VALUE + " " + Float.MAX_VALUE);     // float → 0 에 가장 가까운 양수 · 가장 큰 수 → 1.4E-45 3.4028235E38
+        System.out.println(Double.MIN_VALUE + " " + Double.MAX_VALUE);   // double → 4.9E-324 1.7976931348623157E308
+        System.out.println((int) Character.MIN_VALUE + " " + (int) Character.MAX_VALUE); // char 16비트 · 부호 없음 → 0 ~ 2¹⁶-1 → (int) 로 숫자로 바꿔 → 0 65535
+        int i = Integer.MAX_VALUE;                       // i = 2147483647 (int 최댓값)
+        i++;                                             // 최댓값 + 1 → 범위를 넘음(오버플로) → 한 바퀴 돌아 최솟값
+        System.out.println(i);                           // → -2147483648
+        byte j = (byte) 200;                             // 200 은 byte 범위(127) 밖 → 강제 형변환 → 200 - 256 = -56
+        System.out.println(j);                           // → -56
+        long k = 3000000000L;                            // 30억 = int 범위(약 21억) 밖 → 끝에 L 을 붙여 long 리터럴로 (L 없으면 컴파일 오류)
+        System.out.println(k);                           // → 3000000000
+    }                                                    // main 끝
+}                                                        // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">-128 127
+-32768 32767
+-2147483648 2147483647
+-9223372036854775808 9223372036854775807
+1.4E-45 3.4028235E38
+4.9E-324 1.7976931348623157E308
+0 65535
+-2147483648
+-56
+3000000000</code></pre>
 </section>
 <section class="card">
 <h2>6주차 — 배열 · 예외 실습 + 4장 클래스와 객체 (<a href="자바프로그래밍-6주차.html">6주차 자세히</a>)</h2>

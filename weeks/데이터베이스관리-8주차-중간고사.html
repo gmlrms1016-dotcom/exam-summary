@@ -158,7 +158,48 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </section>
 <section class="card">
 <h2>1~2주차 — DB 개념 · MySQL 기본 실습</h2>
-<ul><li><span class="wk-tag star">⭐ 강조</span> — 데이터베이스 = 한 조직의 여러 응용시스템이 공유할 수 있도록 <b>통합 · 저장</b>한 <b>운영 데이터</b>의 집합체</li><li><span class="wk-tag star">⭐ 강조</span> — 실습 4단계: 데이터베이스(스키마) 생성 → 테이블 생성 → 데이터 입력 → 데이터 조회</li><li>자료형: 1byte = 8bit · 문자형 1byte · 정수형 int 4byte · <code>char(n)</code> 고정 길이(주민번호) / <code>varchar(n)</code> 가변 길이(주소)</li></ul>
+<ul><li><span class="wk-tag star">⭐ 강조</span> — 데이터베이스 = 한 조직의 여러 응용시스템이 공유할 수 있도록 <b>통합 · 저장</b>한 <b>운영 데이터</b>의 집합체</li><li><span class="wk-tag star">⭐ 강조</span> — 실습 4단계: 데이터베이스(스키마) 생성 → 테이블 생성 → 데이터 입력 → 데이터 조회</li><li>자료형: 1byte = 8bit · 문자형 1byte · 정수형 int 4byte · <code>char(n)</code> 고정 길이(주민번호) / <code>varchar(n)</code> 가변 길이(주소) · 몇부터 몇까지는 아래 📏 표</li></ul>
+<h3>📏 MySQL 자료형 범위 — 몇부터 몇까지 (MySQL 8.4 에 직접 넣어 확인)</h3>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>정수 자료형</th><th>크기</th><th>기본 (SIGNED · 음수 있음)</th><th>UNSIGNED (음수 없음)</th></tr>
+<tr><td><code>TINYINT</code></td><td>1byte</td><td><b>-128 ~ 127</b></td><td><b>0 ~ 255</b></td></tr>
+<tr><td><code>SMALLINT</code></td><td>2byte</td><td><b>-32,768 ~ 32,767</b></td><td><b>0 ~ 65,535</b></td></tr>
+<tr><td><code>MEDIUMINT</code></td><td>3byte</td><td><b>-8,388,608 ~ 8,388,607</b></td><td><b>0 ~ 16,777,215</b></td></tr>
+<tr><td><b><code>INT</code></b></td><td>4byte</td><td><b>-2,147,483,648 ~ 2,147,483,647</b> (약 ±21억)</td><td><b>0 ~ 4,294,967,295</b> (약 42억)</td></tr>
+<tr><td><code>BIGINT</code></td><td>8byte</td><td><b>-9,223,372,036,854,775,808 ~ 9,223,372,036,854,775,807</b></td><td><b>0 ~ 18,446,744,073,709,551,615</b></td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>자료형</th><th>크기</th><th>범위</th><th>예 · 비고</th></tr>
+<tr><td><code>FLOAT</code></td><td>4byte</td><td><b>±1.175494351E-38 ~ ±3.402823466E+38</b> (그리고 0)</td><td>정확한 자리 약 7자리</td></tr>
+<tr><td><code>DOUBLE</code></td><td>8byte</td><td><b>±2.2250738585072014E-308 ~ ±1.7976931348623157E+308</b> (그리고 0)</td><td>정확한 자리 약 15자리</td></tr>
+<tr><td><code>DECIMAL(M, D)</code></td><td>M 에 따라</td><td>전체 <b>M 자리</b> 중 소수 <b>D 자리</b> · M 최대 <b>65</b> · D 최대 <b>30</b></td><td><code>mgpa decimal(3, 1)</code> → <b>-99.9 ~ 99.9</b></td></tr>
+<tr><td><code>CHAR(n)</code></td><td>고정</td><td>n = <b>0 ~ 255</b> 글자</td><td>주민번호 · 남는 칸은 공백으로 채워 저장</td></tr>
+<tr><td><code>VARCHAR(n)</code></td><td>가변</td><td>n = 글자 수 · utf8mb4 에서 최대 <b>16,383</b> 글자</td><td>주소 · <code>varchar(30)</code> → 한글도 <b>30 글자</b>까지</td></tr>
+<tr><td><code>DATE</code></td><td>3byte</td><td><b>1000-01-01 ~ 9999-12-31</b></td><td><code>mbirth date</code></td></tr>
+<tr><td><code>DATETIME</code></td><td>5byte</td><td><b>1000-01-01 00:00:00 ~ 9999-12-31 23:59:59</b></td><td></td></tr>
+<tr><td><code>TIMESTAMP</code></td><td>4byte</td><td><b>1970-01-01 00:00:01 ~ 2038-01-19 03:14:07</b> (UTC)</td><td>4byte 에 초를 세서 저장 → 2038년까지 · <code>DEFAULT NOW()</code></td></tr>
+<tr><td><code>YEAR</code></td><td>1byte</td><td><b>1901 ~ 2155</b></td><td></td></tr>
+</tbody></table>
+<ul><li>🧮 정수 범위는 C · 자바와 같은 공식 — TINYINT 8비트 → 2⁸ = 256 가지 → SIGNED -128 ~ 127 / UNSIGNED 0 ~ 255 (<code>INT UNSIGNED</code> = 음수 자리를 양수로 돌려서 0 ~ 약 42억)</li><li>⚠️ <b>범위 밖 값을 넣으면</b> — 기본(STRICT) 모드에서 <b>ERROR 1264 Out of range value</b> (TINYINT 에 128 · UNSIGNED 에 -1 · INT 에 2147483648 · <code>decimal(3,1)</code> 에 100) · 글자가 길면 <b>ERROR 1406 Data too long</b> (<code>varchar(30)</code> 에 31 글자) · 소수 자리만 넘으면 오류 없이 <b>반올림</b> (<code>decimal(3,1)</code> 에 12.36 → <b>12.4</b>)</li><li><code>CHAR(n)</code> · <code>VARCHAR(n)</code> 의 n 은 <b>바이트가 아니라 글자 수</b> → 한글 '가' 도 1 글자 · <code>INT(11)</code> 의 괄호 숫자는 화면 표시 폭일 뿐 범위와 상관없음</li></ul>
+<pre><code class="language-sql">-- 📏 범위 확인 — 끝값은 들어가고, 1 만 넘어도 오류
+CREATE DATABASE rangedb;                          -- 연습용 데이터베이스 만들기
+USE rangedb;                                      -- 이제부터 rangedb 사용
+CREATE TABLE t (                                  -- 범위 확인용 테이블
+    a TINYINT,                                    -- 1byte · SIGNED → -128 ~ 127
+    b TINYINT UNSIGNED,                           -- 1byte · 음수 없음 → 0 ~ 255
+    c INT,                                        -- 4byte → -2147483648 ~ 2147483647
+    d DECIMAL(3, 1)                               -- 전체 3자리 중 소수 1자리 → -99.9 ~ 99.9
+);                                                -- 테이블 정의 끝
+INSERT INTO t VALUES (127, 255, 2147483647, 99.9);   -- 전부 최댓값 → 들어감
+INSERT INTO t VALUES (128, 0, 0, 0);              -- a 에 128 → 127 을 넘음 → ERROR 1264 Out of range value for column 'a'
+INSERT INTO t VALUES (0, -1, 0, 0);               -- b 는 UNSIGNED → -1 불가 → ERROR 1264 (column 'b')
+INSERT INTO t VALUES (0, 0, 0, 12.36);            -- 소수 2자리 → 1자리로 반올림 → 12.4 로 저장 (오류 아님)
+SELECT * FROM t;                                  -- 들어간 2줄만 나옴 → 127 255 2147483647 99.9 / 0 0 0 12.4</code></pre>
+<pre class="io"><code class="language-text">a   | b   | c          | d
+127 | 255 | 2147483647 | 99.9
+0   | 0   | 0          | 12.4</code></pre>
 </section>
 <section class="card">
 <h2>✏️ 문제로 확인하기</h2>

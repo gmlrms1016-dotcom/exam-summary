@@ -185,11 +185,12 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
 <tbody style="min-width:760px;">
 <tr><th>구분</th><th>자료형</th><th>크기</th><th>printf 서식</th><th>비고</th></tr>
 <tr><td>문자형</td><td><code>char</code></td><td>1byte</td><td><code>%c</code></td><td>-128 ~ 127 (unsigned char: 0 ~ 255)</td></tr>
-<tr><td>정수형</td><td><code>short</code></td><td>2byte</td><td><code>%d</code></td><td>-32,768 ~ 32,767</td></tr>
-<tr><td>정수형</td><td><code>int</code></td><td>4byte</td><td><code>%d</code></td><td>-2,147,483,648 ~ 2,147,483,647</td></tr>
-<tr><td>정수형</td><td><code>long</code></td><td>4byte (VS) / 8byte (Mac·Linux)</td><td><code>%ld</code></td><td>강의자료 표 기준 int와 같은 범위</td></tr>
-<tr><td>실수형</td><td><code>float</code></td><td>4byte</td><td><code>%f</code></td><td>소수점 아래 6자리 출력</td></tr>
-<tr><td>실수형</td><td><code>double</code></td><td>8byte</td><td><code>%lf</code> (printf 는 <code>%f</code> 도 가능)</td><td>scanf 로 입력받을 때는 반드시 <code>%lf</code></td></tr>
+<tr><td>정수형</td><td><code>short</code></td><td>2byte</td><td><code>%d</code></td><td>-32,768 ~ 32,767 (unsigned short: 0 ~ 65,535)</td></tr>
+<tr><td>정수형</td><td><code>int</code></td><td>4byte</td><td><code>%d</code></td><td>-2,147,483,648 ~ 2,147,483,647 (약 ±21억 · unsigned int: 0 ~ 4,294,967,295)</td></tr>
+<tr><td>정수형</td><td><code>long</code></td><td>4byte (VS) / 8byte (Mac·Linux)</td><td><code>%ld</code></td><td>VS: -2,147,483,648 ~ 2,147,483,647 (int 와 같음) · Mac·Linux: long long 과 같음</td></tr>
+<tr><td>정수형</td><td><code>long long</code></td><td>8byte</td><td><code>%lld</code></td><td>-9,223,372,036,854,775,808 ~ 9,223,372,036,854,775,807 (약 ±922경)</td></tr>
+<tr><td>실수형</td><td><code>float</code></td><td>4byte</td><td><code>%f</code></td><td>±1.175494E-38 ~ ±3.402823E+38 · 정확한 자리 약 6 ~ 7자리 · 소수점 아래 6자리 출력</td></tr>
+<tr><td>실수형</td><td><code>double</code></td><td>8byte</td><td><code>%lf</code> (printf 는 <code>%f</code> 도 가능)</td><td>±2.225074E-308 ~ ±1.797693E+308 · 약 15자리 · scanf 로 입력받을 때는 반드시 <code>%lf</code></td></tr>
 </tbody></table>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — <code>signed</code>(부호 있음, 기본값) ↔ <code>unsigned</code>(부호 없음) · 예: <code>signed int n;</code> / <code>unsigned int n;</code></li><li><span class="wk-tag star">⭐ 강조</span> — 부호 비트: 맨 앞 1비트가 0이면 양수, 1이면 음수 → 1byte 부호 있음 -128 ~ 127 / 부호 없음 0 ~ 255</li><li><code>10000000</code> → 부호 있음 -128 / 부호 없음 128 · <code>11111111</code> → 부호 있음 -1 / 부호 없음 255</li><li><span class="wk-tag fix">✍️ 필기 정정</span> — <code>unsigned char (1)~(256)</code> ❌ → <b>0 ~ 255</b> ✅ · signed char 는 -128 ~ -1 음수, 0 ~ 127 양수</li></ul>
 <div class="tip">📌 sizeof 결과는 <b>정수</b> → 항상 <b>%d</b> 로 출력 · 정수 상수는 int(4) · 실수 상수는 double(8)</div>
