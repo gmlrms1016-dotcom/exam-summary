@@ -179,6 +179,7 @@ theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다. 
 - 색: 키워드·자료형 `#569cd6` · 흐름 제어(if·for·return) `#c586c0` · 클래스 `#4ec9b0` · 함수 `#dcdcaa` · 변수 `#9cdcfe` · 문자열 `#ce9178` · 숫자 `#b5cea8` · 주석 `#7ca668` · `%d` `#9cdcfe` · `\n` `#d7ba7d`
 - 언어: `<code class="language-sql">` 처럼 적으면 그 언어, 없으면 과목 기본 언어(프로그래밍언어실습 c · 자바 java · 웹 html/js/css · 데이터베이스 sql · 운영체제·Git bash · 파이썬·방법론 python)
 - 칠하지 않는 블록: 실행 결과 `pre.io` · `pre.py-output` · `language-text`, Git 로그 `pre.lqlog` · `pre.finlog`, `<code>` 없는 `pre`, 그리고 `pre.no-hl`. 블록 안 기존 `<span>`(빈칸 등)은 그대로 둡니다.
+- **나중에 생기는 코드도 칠함**(2026-10-16): 처음에 코드가 없어도 새 `pre > code` 가 들어오면 자동으로 · `window.CodeColor.run(root, done)` 로 직접 부를 수도 있음 — 실제시험(비밀번호 뒤에 나오는 문제 · 풀이 · 👁 화면 보기 · 📄 소스 창)이 이걸로 주차 페이지와 같은 색.
 
 ### 색 (CSS 변수)
 | 변수 | 값 | 용도 |

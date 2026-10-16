@@ -220,29 +220,61 @@
         pre.classList.add("hl-pre", "hl-lang-" + lang);
     }
 
-    function run() {
+    function run(root) {
         if (!window.hljs) return;
-        document.querySelectorAll("pre").forEach(function (pre) {
+        (root || document).querySelectorAll("pre").forEach(function (pre) {
             try { colorize(pre); } catch (e) { /* 한 블록이 실패해도 나머지는 계속 */ }
         });
     }
 
-    function start() {
-        if (!document.querySelector("pre > code")) return;
-        var st = document.createElement("style");
-        st.id = "codecolor-css";
-        st.setAttribute("data-theme-skip", "");
-        st.textContent = CSS;
-        document.head.appendChild(st);
-        if (window.hljs) { run(); return; }
+    // 나중에 생기는 코드도 칠함 (2026-10-16 · 실제시험: 비밀번호를 넣은 뒤에 문제가 나오고, 풀이 · 👁 화면 보기 · 📄 소스 창도 나중에 생김)
+    //  window.CodeColor.run(root, done) — CSS · 구문 분석기를 준비한 뒤 root 안의 코드를 칠함 · done(true/false) = 칠했나 (CDN 이 모두 막히면 false)
+    var state = 0, waiters = [];                               // 0 = 아직 · 1 = 불러오는 중 · 2 = 준비됨 · 3 = 실패
+    function ready(cb) {
+        if (state === 2) { cb(true); return; }
+        if (state === 3) { cb(false); return; }
+        waiters.push(cb);
+        if (state === 1) return;
+        state = 1;
+        if (!document.getElementById("codecolor-css")) {
+            var st = document.createElement("style");
+            st.id = "codecolor-css";
+            st.setAttribute("data-theme-skip", "");
+            st.textContent = CSS;
+            document.head.appendChild(st);
+        }
+        var done = function (ok) { state = ok ? 2 : 3; var w = waiters; waiters = []; w.forEach(function (f) { f(ok); }); };
+        if (window.hljs) { done(true); return; }
         (function load(i) {
-            if (i >= HLJS_URLS.length) return;                 // 모두 실패하면 색칠 없이 원래 모습
+            if (i >= HLJS_URLS.length) { done(false); return; }   // 모두 실패하면 색칠 없이 원래 모습
             var s = document.createElement("script");
             s.src = HLJS_URLS[i];
-            s.onload = function () { if (window.hljs) run(); else load(i + 1); };
+            s.onload = function () { if (window.hljs) done(true); else load(i + 1); };
             s.onerror = function () { load(i + 1); };
             document.head.appendChild(s);
         })(0);
+    }
+    window.CodeColor = {
+        run: function (root, cb) { ready(function (ok) { if (ok) run(root); if (cb) cb(ok); }); }
+    };
+
+    function start() {
+        if (document.querySelector("pre > code")) ready(function (ok) { if (ok) run(); });
+        if (!window.MutationObserver || !document.body) return;
+        var t = 0;
+        new MutationObserver(function (ms) {                   // 코드 블록(pre)이 새로 들어오면 잠깐 뒤에 한 번 칠함
+            if (t) return;
+            for (var i = 0; i < ms.length; i++) {
+                var a = ms[i].addedNodes;
+                for (var j = 0; j < a.length; j++) {
+                    var n = a[j];
+                    if (n.nodeType === 1 && (n.tagName === "PRE" || n.tagName === "CODE" || (n.querySelector && n.querySelector("pre > code")))) {
+                        t = setTimeout(function () { t = 0; ready(function (ok) { if (ok) run(); }); }, 60);
+                        return;
+                    }
+                }
+            }
+        }).observe(document.body, { childList: true, subtree: true });
     }
 
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
