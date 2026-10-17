@@ -11,6 +11,7 @@
 - `## ` 마다 카드 1개 · `### ` 소제목 · `#### ` 작은 소제목 · `> ` 안내 상자 · `- ` / `1. ` 목록(2칸 들여쓰기 = 하위 목록)
 - ``` 코드 블록 (```output = ▶ 출력 결과 상자 · ```bits = 2진수 풀이 상자) · `| a | b |` 표(첫 줄 머리글, 칸 안의 | 는 \\|) · <details> / <summary> 접기
 - `🔒 [이름](주소)` 한 줄 = 오른쪽에 작은 버튼 (실제시험 같은 숨은 페이지로 가는 입구)
+- `:::toc` 한 줄 = 그 자리에 ‘바로 가기’ 칩 (이 원고의 `## ` 절 목록 · 누르면 그 카드로 이동 · 긴 중간고사 정리용)
 - `🎬 [이름](주소)` 한 줄 = 그 자리에 애니메이션 · 데모 페이지를 끼워 넣음(iframe · 주소는 주차 페이지 기준) + 아래에 '새 창으로 크게 보기' 버튼
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
 원고 파일이 있는 주차만 과목 페이지에서 버튼이 열리고, 나머지는 잠깁니다.
@@ -168,6 +169,7 @@ def render_md(md):
     lines = md.splitlines()
     title, parts, in_card, i = "", [], False, 0
     para, tip, items = [], [], []
+    secs = []                                   # ## 절 (바로 가기용 · :::toc)
 
     def flush():
         if para:
@@ -215,8 +217,12 @@ def render_md(md):
             flush()
             if in_card:
                 parts.append("</section>")
-            parts.append('<section class="card">\n<h2>%s</h2>' % inline(line[3:].strip()))
+            secs.append(("s%d" % (len(secs) + 1), line[3:].strip()))
+            parts.append('<section class="card" id="%s">\n<h2>%s</h2>' % (secs[-1][0], inline(line[3:].strip())))
             in_card = True
+        elif line.strip() == ":::toc":                   # 바로 가기 칩 (## 절 목록 · 2026-10-17 운영체제 가독성)
+            flush()
+            parts.append("\x00TOC\x00")
         elif line.startswith("#### "):
             flush()
             parts.append("<h4>%s</h4>" % inline(line[5:].strip()))
@@ -274,7 +280,11 @@ def render_md(md):
     flush()
     if in_card:
         parts.append("</section>")
-    return title, "\n".join(parts)
+    out = "\n".join(parts)
+    if "\x00TOC\x00" in out:
+        chips = "".join('<a href="#%s">%s</a>' % (sid, inline(re.sub(r"\s*\(\[[^\]]*\]\([^)]*\)\)", "", s))) for sid, s in secs)
+        out = out.replace("\x00TOC\x00", '<nav class="wk-toc"><span class="wk-toc-t">바로 가기</span>%s</nav>' % chips)
+    return title, out
 
 
 PAGE_CSS = """
@@ -321,6 +331,11 @@ PAGE_CSS = """
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}

@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -81,7 +86,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">수업: <b>10/13(화)</b> · 자료: 수업 소스 Car · CarMain · Book · BookMain · Student · StudentMain · Dog · DogMain · Movie · MovieMain + <code>4장-1(클래스)예제.txt</code> · 노션 필기. 코드 주석과 ▶ 출력 결과는 전부 javac · java 로 직접 실행한 결과예요 (수업 파일은 <code>package test;</code> 로 두 파일씩 나뉘어 있어서, 복사해 바로 실행되게 <code>연습.java</code> 한 파일로 합쳤어요).</div>
 <div class="tip">🔥 <b>시험범위 (✍️ 필기)</b> — “<b>오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위</b>” · 그리고 시험에 볼 것: <b>자바 데이터타입 8가지 외우기</b> · <b>조건식 출력 true / false</b> · <b>for 문 · 배열</b> · <b>if · else</b> · <b>class 와 object</b> · <b>객체지향의 특성</b></div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 🔥 시험범위 한눈에</h2>
 <table class="ref">
 <tbody>
@@ -93,7 +98,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>class 와 object · 객체지향의 특성</td><td>클래스 = 설계도(틀) · 객체 = 찍어낸 실체 · 캡슐화 · 상속 · 다형성</td><td>5번 · <a href="자바프로그래밍-6주차.html">6주차</a></td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 🔥 Car + CarMain — 생성자 2개 · this</h2>
 <pre><code class="language-java">// Car.java + CarMain.java 를 한 파일로 — 🔥 시험범위 (생성자 2개 · this · showInfo)
 class Car {                                     // 자동차 설계도(클래스) · public 은 파일 이름과 같은 클래스(연습)에만
@@ -142,7 +147,7 @@ public class 연습 {                              // 원래 이름 CarMain → 
 </tbody></table>
 <div class="tip">✍️ 수업 코드는 처음에 <code>myCar.juin="내차";</code> 처럼 <b>점(.)으로 필드에 하나씩</b> 넣다가(주석으로 남김) → <b>생성자로 한 줄에</b> 넣는 방식으로 바꿨어요. 두 방법의 결과는 같아요. 마지막 <code>new Car()</code> 줄은 🤖 기본 생성자를 보여 주려고 더한 줄이에요.</div>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 🔥 Book + BookMain — 객체 5개</h2>
 <pre><code class="language-java">// Book.java + BookMain.java 를 한 파일로 — 🔥 시험범위 (여기까지)
 class Book {                                    // 책 설계도(클래스)
@@ -182,7 +187,7 @@ public class 연습 {                              // 원래 이름 BookMain
 제목 : 운영체제실습     저자 : 김현정</code></pre>
 <div class="tip">같은 설계도(Book)로 찍은 객체 5개가 <b>제목 · 저자를 각자</b> 가져요 · 클래스는 1개, 객체는 5개.</div>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 🔥 자바 데이터타입 8가지 · 조건식 true / false</h2>
 <table class="ref">
 <tbody style="min-width:760px;">
@@ -223,7 +228,7 @@ false
 true</code></pre>
 <div class="tip">자바의 조건식(관계 · 논리 연산)은 <b>true / false</b> 로 출력돼요 — C 언어처럼 1 · 0 이 아니에요.</div>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. class 와 object · 객체지향의 특성 (6주차 복습)</h2>
 <table class="ref">
 <tbody>
@@ -236,7 +241,7 @@ true</code></pre>
 </tbody></table>
 <div class="tip">자세한 설명 · 붕어빵 비유는 <a href="자바프로그래밍-6주차.html">6주차 5 · 6번</a></div>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>6. 4장-1 클래스 예제 (수업 연습 3문제)</h2>
 <div class="tip">문제(<code>4장-1(클래스)예제.txt</code>) — ① <b>Student</b>: 이름 · 학번 · 나이 · 연락처, 객체 2개 ② <b>Dog</b>: 이름 · 종 · 나이 · 색깔 + <code>barking()</code> “멍멍 짖는다” · <code>hungry()</code> “배고파요” · <code>sleeping()</code> “ZZzz....”, 객체 2개 ③ <b>Movie</b>: 제목(title) · 평점(jumsu) · 감독(gamdok) · 연도(year) + 모든 정보를 출력하는 <code>print()</code>, 객체 2개</div>
 <details class="wk-details">
@@ -360,7 +365,7 @@ public class 연습 {                              // 원래 이름 MovieMain
 </details>
 <div class="tip">⚠️ <b>정정 · 보충 (내 수업 파일 ↔ 문제)</b> — Dog 의 출력이 문제와 달라요: <code>멍멍!</code> → <b>멍멍 짖는다</b> · <code>배고프다</code> → <b>배고파요</b> · <code>Zzz...</code> → <b>ZZzz....</b> / Movie 는 문제가 필드 이름 <b>title · jumsu · gamdok · year</b> 와 메소드 <b>print()</b> 를 정했는데 수업 파일은 <code>Mname · score · Pname</code> · <code>showInfo()</code> 예요 → 위 코드는 문제대로 고쳤어요 (실행 결과 모양은 같음) · <code>double</code> 필드에 <code>10</code> 을 넣으면 <b>10.0</b> 으로 출력돼요.</div>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>7. 📝 과제 — 7주 중간고사대비 (연습문제)</h2>
 <ul><li>2장 연습문제: 이론문제 <b>107 ~ 109쪽</b>, 실습문제 <b>1번 (110쪽)</b></li><li>3장 연습문제: 이론문제 <b>163 ~ 165쪽</b>, 실습문제 <b>1번 · 2번 (166쪽)</b></li><li>이론문제는 <b>문제를 풀고 정답만</b> 적어서 제출 · 실습문제는 <b>실행결과와 소스를 동시에 화면캡쳐</b>하여 제출</li></ul>
 <div class="tip">과제 답은 제출 과제라서 사이트에는 올리지 않았어요.</div>
@@ -376,7 +381,7 @@ class 와 object
 <div class="tip">⚠️ 필기 오타 <code>flase</code> → <b>false</b></div>
 </details>
 </section>
-<section class="card">
+<section class="card" id="s8">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../자바프로그래밍.html#quiz">자바프로그래밍 과목 페이지 — 퀴즈 (7주차 생성자 · this · 데이터타입 포함)</a></li><li><a href="../자바프로그래밍.html#output">🖥️ 출력 결과 맞히기 — Car 생성자 · 데이터타입</a></li><li><a href="../자바프로그래밍.html#code">💻 코딩테스트 — Book 클래스 만들기</a></li><li><a href="자바프로그래밍-8주차-중간고사.html">중간고사 시험문제 정리</a></li></ul>
 </section>

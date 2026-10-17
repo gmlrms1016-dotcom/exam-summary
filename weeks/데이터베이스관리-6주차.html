@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,7 +85,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="데이터베이스관리-5주차.html">‹ 이전 · <b>5주차</b><br><small>키 5종 · 뷰(view) · 널 값 · INSERT</small></a><a class="next" href="데이터베이스관리-7주차.html">다음 · <b>7주차</b> ›<br><small>ALTER · GRANT/REVOKE · Quiz 7-3 기본키 · 외래키 테이블 생성</small></a></nav>
 
 <div class="tip">자료: 노션 6주차 필기 + 캡처 4장(8 · 9 · 13 · 19p) · 6주차 폴더 <code>[강의요약] 6주차.txt</code> · 실습 SQL <code>up-dy262DB1-w06-customer-ins-stu-sql.txt</code> — 원본 txt 에 없고 <b>내가 쓴 것은 ✍️</b> 로 표시했어요.</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>🔴 빨간 글씨 = 암기 (강의자료 DB-Lect06)</h2>
 <table class="ref">
 <tbody>
@@ -91,11 +96,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td><b>42 · 46p</b></td><td>[실습 6-2] 주소록 — PRIMARY KEY(<b>이름</b>)</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>0. 이번 주 공지 ★</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — <b>“오늘 하는 실습이 다 중간고사 시험 예상문제임”</b> → 실습 6-1 · Quiz 6-1 · 실습 6-2 · 실습 6-03</li><li><span class="wk-tag note">✍️ 필기</span> — <b>시험범위: 1 ~ 7주차 내용</b></li><li><span class="wk-tag note">✍️ 필기</span> — 중간고사 범위(예정) · 교재(생능): <b>1 · 2 · 3장</b> / 5장 p132~147 · p170~174 · p176 / 6장 CREATE p188~195 · ALTER p195~198 · DROP p198~199 · VIEW p207~210</li><li><span class="wk-tag star">⭐ 강조</span> — 무결성 제약조건 4가지 중 <b>개체 · 참조 무결성만 중간고사</b>, 키 · 도메인 제약조건은 <b>기말고사</b></li><li><span class="wk-tag star">⭐ 강조</span> — 용어는 <b>“같은 말 찾으시오 / 쓰시오”</b> 로 나와요 (외우는 법: <b>투레행 · 필속열</b>)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>1. 관계 연산자 · SELECT 실행 순서 ✍️</h2>
 <table class="ref">
 <tbody>
@@ -113,7 +118,7 @@ FROM   테이블명    -- ① 어느 테이블에서
 WHERE  조건절;     -- ② 조건에 맞는 행(레코드)만 남기고</code></pre>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 쓰는 순서는 SELECT → FROM → WHERE 지만 <b>실행(컴파일) 순서는 ① FROM → ② WHERE → ③ SELECT</b></div>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>2. [실습 6-1] 데이터 조회 — customer ★시험예상</h2>
 <pre><code class="language-sql">-- customer(cno, cname, city, point)
 CREATE TABLE customer (                         -- customer 테이블 만들기 시작
@@ -157,7 +162,7 @@ WHERE point&lt;=400;                               -- point 가 400 이하 → �
 </tbody></table>
 <div class="tip"><span class="wk-tag star">⭐ 강조</span> — <b>400 이하</b> = <code>&lt;=</code> 라서 point 가 <b>딱 400 인 정진우도 나와요</b> (미만 <code>&lt;</code> 이면 2명). 내 실습의 <code>"c101"</code> 큰따옴표는 MySQL 에서 되지만, 문자는 <b>작은따옴표 <code>'c101'</code></b> 가 기본이니 답안은 작은따옴표로.</div>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>3. [Quiz 6-1] SELECT 문법 — 직원 ★시험예상</h2>
 <pre><code class="language-sql">-- 직원(이름, 주소, 전화번호, 연봉)   ← 데이터 6건 (우태하 1000 ~ 고진수 6000)
 -- ✍️ 내 답
@@ -187,7 +192,7 @@ WHERE 연봉&lt;=4000;     -- 연봉 4000 이하 → 우태하 · 김선우 · �
 <tr><td>이영지</td><td>서울시 마포구</td><td>010-3333-3333</td><td>3000</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>4. [실습 6-2] 데이터 조작 — 주소록 INSERT(NULL) · UPDATE · DELETE ★시험예상</h2>
 <table class="ref">
 <tbody>
@@ -245,7 +250,7 @@ SELECT * FROM 주소록;         -- 확인 → 최용만은 없고 홍길동 · 
 </tbody></table>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — <b>DELETE 주의사항</b>: 레코드 단위(한 줄)로 하는 것이라서 <b>필드명 또는 <code>*</code> 을 안 써도 됨</b> — SELECT · UPDATE 처럼 필드 단위가 아님 (<code>DELETE * FROM …</code> ❌)<br><span class="wk-tag fix">⚠️ 정정</span> — WHERE 에 전화번호 · 주소를 써도 작동은 하지만, 그 값이 <b>여러 행에 있으면 전부 지워져요</b> (예: 2번 뒤 <code>WHERE 주소='서울'</code> → 홍길동 · 이건우 2명 삭제). 한 명만 지우려면 <b>기본키(이름)</b> 로 지정하는 게 안전해요.</div>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>5. 무결성 제약조건 4가지 ★시험 ✍️</h2>
 <div class="tip">🛡️ <b>무결성(integrity)</b> = 데이터의 <b>정확성</b> · 제약조건 = constraint</div>
 <table class="ref">
@@ -275,7 +280,7 @@ SELECT * FROM 주소록;         -- 확인 → 최용만은 없고 홍길동 · 
 </tbody></table>
 <div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 필기 표는 <b>부모 INSERT · 자식 DELETE</b> 에 O 를 쳤는데, 그 두 칸은 <b>검사할 필요가 없는(제약 없음)</b> 칸이에요. 25p 문제는 검사할 필요가 <b>“있는”</b> 항목에 O → 정답은 <b>부모 UPDATE · DELETE, 자식 INSERT · UPDATE</b>. 실제로 실행해 보면 이 4가지에서만 오류가 나요 (아래 6번).</div>
 </section>
-<section class="card">
+<section class="card" id="s8">
 <h2>6. [실습 6-03] 참조 무결성 — 부서 · 사원 (📸 8 · 9p 캡처) ★시험예상</h2>
 <pre><code class="language-sql">-- 부서(부서코드, 부서명)          ← 부모 테이블
 -- 사원(사원번호, 이름, 부서코드)    ← 자식 테이블 (부서코드 = 외래키)
@@ -318,7 +323,7 @@ insert into 사원 values('6666','신동엽','BB');       -- 신동엽 → BB</c
 </tbody></table>
 <div class="tip">🧾 <b>1451</b> Cannot delete or update a <b>parent</b> row (부모 쪽 수정 · 삭제) · <b>1452</b> Cannot add or update a <b>child</b> row (자식 쪽 입력 · 수정)</div>
 </section>
-<section class="card">
+<section class="card" id="s9">
 <h2>7. 수강 테이블의 키 (📸 19p 캡처) ✍️</h2>
 <table class="ref">
 <tbody>
@@ -336,7 +341,7 @@ insert into 사원 values('6666','신동엽','BB');       -- 신동엽 → BB</c
 <div class="tip">🤖 <b>설명</b> (필기 “claude야 여기 설명해”) — 학번 하나로는 X(1111 이 두 번) · 과목번호 하나로도 X(CS102 · CS100 이 두 번씩) → <b>(학번, 과목번호)</b> 를 합치면 모든 행이 달라 <b>유일성 O</b>, 하나라도 빼면 겹치니 <b>최소성 O</b> → <b>후보키</b>. 후보키가 <b>하나뿐</b>이라 그대로 <b>기본키</b>(복합키), 기본키로 안 뽑힌 후보키가 없으니 <b>대체키는 없다</b>. 수퍼키는 <b>유일성만</b> 있으면 돼서 성적을 붙인 것도 수퍼키 — 내 답 모두 맞아요 ✅ · 외래키: 수강.학번 → 학생.학번 · 수강.과목번호 → 과목.과목번호</div>
 <div class="tip">❓ <b>“다음은 후보키인가? 이유를 쓰시오 — (학번, 과목번호, 성적)”</b> → <b>후보키가 아니다.</b> 유일성은 있지만 성적을 빼도 (학번, 과목번호) 만으로 유일하게 구별되므로 <b>최소성을 만족하지 않는다</b> → 후보키가 아니라 <b>수퍼키</b>.<br>⚠️ <b>함정</b> — 지금 데이터만 보면 성적(98 · 88 · 90 · 92)도 안 겹치지만, 성적은 같은 점수가 나올 수 있는 값이라 키가 될 수 없어요. 키는 <b>속성의 의미</b>로 정해요.</div>
 </section>
-<section class="card">
+<section class="card" id="s10">
 <h2>8. 용어 — 같은 말 찾기 · 쓰기 (중간고사 용어문제) ✍️</h2>
 <table class="ref">
 <tbody>
@@ -349,7 +354,7 @@ insert into 사원 values('6666','신동엽','BB');       -- 신동엽 → BB</c
 </tbody></table>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 투플(행)들의 <b>모음 = 인스턴스</b> · <b>DELETE 의 삭제 단위 = 레코드(행)</b> (필기의 <code>DELECT</code> 는 DELETE 오타)<br>📸 <b>13p 캡처</b> — 릴레이션 <b>스키마</b> = <b>내포</b>(intension) · <b>정적</b> / 릴레이션 <b>인스턴스</b> = <b>외연</b>(extension) · <b>동적</b> · 예) 사원 스키마 = <code>사원번호 | 사원명 | 연락처 | 생일</code>, 인스턴스 = D001 · D002 · D003 행들</div>
 </section>
-<section class="card">
+<section class="card" id="s11">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../데이터베이스관리-실제시험.html">🔒 데이터베이스관리 실제시험 — 퀴즈 · 출력결과 · 코드 작성 문제를 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li></ul>
 </section>

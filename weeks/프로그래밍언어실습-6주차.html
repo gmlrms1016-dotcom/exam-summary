@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -82,7 +87,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">자료: 노션 필기(10/6 보강 수업) · WorkC <b>w06</b> (Project1 · 2 · 3 · 4) · C-Lect05-ch09-함수.pdf · 요약-w06-실습-stu-김희숙.pdf (교재 9장 실습 = <b>HW02 과제</b>) — 강의자료 전체가 아니라 <b>필기한 것 + 수업 코드</b>만 정리했어요. ✍️ = 강의자료에 없고 내가 쓴 것 · ⚠️ = 정정 · 🤖 = 필기의 “claude야 …” 요청. 코드 주석과 ▶ 출력 결과는 전부 직접 컴파일 · 실행한 값입니다.</div>
 <div class="tip">🔥 <b>시험 포인트</b> — ✍️ 필기 <b>“오늘 한 거 다 시험에 나온다”</b> + <b>“솔루션 밑에 Project3 시험문제(파일 3개)”</b> → 헤더파일로 나눈 <b>절대값 myAbs</b> (func.h · func.c · main.c) → 4번 · 중간고사 범위 <b>교재 1 ~ 7장 · 9장(함수 — 배열 예제 제외)</b> · 6주차 = <b>함수 + [과제2] 소스</b> → 5번 HW02</div>
 <div class="tip">📅 <b>10/5(월) 개천절 대체 휴일 → 10/6(화) 보강 수업</b> · ✍️ 오늘 진도 — 1교시 <b>문자열 입출력 · 함수</b> / 2교시 <b>반복문 + 함수</b> / 3교시 <b>헤더파일</b></div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 표준 입출력 함수 · 포맷 문자열</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — 한 개 문자 입력 <code>getchar()</code> · 한 개 문자 출력 <code>putchar()</code> · 문자열 입력 <code>gets()</code> · 문자열 출력 <code>puts()</code> · 다양한 타입 입력 <code>scanf()</code> · 출력 <code>printf()</code></p>
 <div class="tip">⚠️ <b>필기 정정</b> — 노션 필기의 <code>prinf()</code> → <b><code>printf()</code></b> (t 가 빠짐)</div>
@@ -170,7 +175,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 C 언어
 OK</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 함수 — 정의 · 호출 · return · void</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — <b>return 문</b> = ① <b>반환값(리턴값)</b> 을 돌려줌 ② <b>함수의 종료</b> · <b>void 형 = 값이 없음</b> · <b>실인수</b> / <b>가인수(형식 인수)</b> · <code>메서드()</code> ↔ <code>속성;</code> / <code>함수()</code> ↔ <code>변수;</code> (괄호가 붙으면 실행하는 것, 안 붙으면 값을 담는 것)</p>
 <table class="ref">
@@ -285,7 +290,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 16의 제곱근 : 4.000000</code></pre>
 <div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 수업 코드는 ① <code>#include &lt;math.h&gt;</code> 가 없어요 → <code>sqrt</code> 원형이 없어서 VS 에서 경고 · 다른 컴파일러에서는 오류 ② 출력 문구가 <code>제곱</code> 인데 <code>sqrt</code> 는 <b>제곱근</b> (16 → 4)</div>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 반복문 + 함수 — 구구단 (2교시 · Project4)</h2>
 <p>✍️ <b>수업 코드</b> — 같은 2단 출력을 1번(for) → 2번(for + 함수) → 3번(단을 매개변수로) → 4번(모든 단) 으로 바꿔 가며 실습했어요. 수업 코드는 <code>void main()</code> 이라 <code>int main(void)</code> 로 바꿨고 결과는 같아요.</p>
 <h3>예제 ① 2번 — 2단을 함수 showMul() 로</h3>
@@ -435,7 +440,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 3 * 1 = 33 * 2 = 63 * 3 = 93 * 4 = 123 * 5 = 153 * 6 = 183 * 7 = 213 * 8 = 243 * 9 = 27</code></pre>
 <div class="tip">⚠️ 수업 코드 5번은 안쪽 printf 에 <code>\n</code> 도 공백도 없어서 <code>2 * 1 = 22 * 2 = 4…</code> 처럼 <b>숫자가 붙어</b> 나와요 (위는 2 · 3단만 실행) · 보기 좋게 하려면 <code>"%d * %d = %2d  "</code> 처럼 공백을 넣으세요. 실행결과 문제에서 <b><code>\n</code> 있나 없나</b> 가 바로 이런 함정이에요.</div>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 🔥 헤더파일 — Project3 시험문제 (파일 3개)</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — <b>“솔루션 밑에 project3 시험문제(파일3개)”</b> · <b>“오늘 한 거 다 시험에 나온다 함”</b> · 3교시 = 헤더파일</p>
 <table class="ref">
@@ -520,7 +525,7 @@ result3: 6
 result4: 0</code></pre>
 <div class="tip">⚠️ 수업 코드는 <code>void main()</code> 안에 <code>return 0;</code> 이 있어요 — void 함수는 값을 돌려줄 수 없어서 맞지 않아요 → <code>int main(void)</code> 로 · 강의자료 19p 는 MyMath.h 에 함수 <b>몸체까지</b> 넣었지만, 수업 코드(Project2)는 헤더에 <b>원형만</b> 두고 몸체는 main.c 아래에 뒀어요.</div>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. 🔥 HW02 과제 — 교재 9장 실습 (중간고사 범위 “6주차: 함수, [과제2] 소스”)</h2>
 <p><span class="wk-tag memo">📝 교수님 메모</span> — 교재 9장 실습한 내용을 ① <b>문제</b>: 소스에 해당하는 문제 (예: <code>// 01basefunc.c 함수 정의와 호출 [Prj01]</code>) ② <b>C 소스</b> ③ <b>실행결과 화면캡처</b> 를 워드 파일에 작성해 제출 · 파일명 <code>과제02-w06-학번-이름-작성날짜.doc</code></p>
 <table class="ref">
@@ -769,7 +774,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 }                                                       // main 함수 끝</code></pre>
 </details>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../프로그래밍언어실습-실제시험.html">🔒 프로그래밍언어실습 실제시험 — 퀴즈 · 출력결과 · 코드 작성 문제를 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="../프로그래밍언어실습.html#s33">6주차 시험 포인트 · 괄호넣기 직접 풀기</a></li></ul>
 </section>

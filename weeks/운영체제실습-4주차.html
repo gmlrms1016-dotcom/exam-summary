@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,7 +85,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="운영체제실습-3주차.html">‹ 이전 · <b>3주차</b><br><small>마운트 · 링크 · 권한 · 사용자관리</small></a><a class="next" href="운영체제실습-5주차.html">다음 · <b>5주차</b> ›<br><small>작업 예약 cron · at · 월간 백업 스크립트</small></a></nav>
 
 <div class="tip">🐧 <b>운영체제실습 4주차</b> — 사용자 생성·수정·삭제 / 그룹 관리 / 사용자 전환·소유권 / rpm·dnf 패키지 설치<br>실습 터미널 기록에서 <b>오타로 실패한 명령과 똑같이 반복한 명령은 빼고</b> 주제별로 정리했습니다. 출력이 긴 명령은 <b>접어 두었어요</b>(눌러서 펼치기).<br>📌 교수님이 강의자료는 <b>중간고사 전주</b>에 올려주심 · ★ <b>시험문제는 7번 DNF 작동 흐름도</b></div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 사용자 만들기 — useradd · passwd</h2>
 <div class="tip">💡 <b>useradd</b> 로 계정을 만들면 <code>/etc/passwd</code>(계정) · <code>/etc/shadow</code>(암호) · <code>/etc/group</code>(같은 이름의 그룹)에 <b>한 줄씩 추가</b>되고 홈 디렉터리 <code>/home/사용자명</code> 이 생깁니다.<br>암호는 <b>passwd</b> 로 따로 정합니다.</div>
 <table class="ref">
@@ -229,7 +234,7 @@ user_002:x:1003:1003::/home/user_002:/bin/bash
 master:x:1004:1004::/home/master:/bin/bash</code></pre>
 <div class="tip">🔎 새 계정의 UID 는 <b>1002 → 1003 → 1004</b> 로 만든 순서대로 1씩 커집니다.</div>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 사용자 수정 — usermod · chage</h2>
 <div class="tip">💡 <b>usermod</b> = 이미 있는 계정의 정보(UID · 홈 · 이름)를 수정<br><b>chage</b> = 암호를 쓸 수 있는 기간 · 계정 만료일을 관리 (change age)</div>
 <table class="ref">
@@ -306,7 +311,7 @@ chage -l manager   # Maximum number of days 칸이 30 으로 바뀜</code></pre>
 암호 만료 예고를 하는 날 수     : 7</code></pre>
 <div class="tip">🔎 최대 날 수 99999 → <b>30</b> 이 되면서 <code>암호 만료 : 안함</code> → <b>10월 17, 2026</b> (마지막 변경 9월 17일 + 30일)</div>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 사용자 삭제 — userdel · find</h2>
 <table class="ref">
 <tbody>
@@ -324,7 +329,7 @@ grep user_001 /etc/passwd   # 아무것도 안 나오면 → 계정이 삭제된
 <pre class="io"><code class="language-text">(출력 없음)</code></pre>
 <div class="tip">💡 <code>find</code> 는 경로를 생략하면 <b>현재 디렉터리 아래</b>에서 찾고, <code>{}</code> 자리에 찾은 파일이 하나씩 들어가며 <code>\;</code> 가 -exec 명령의 끝입니다.<br><code>grep</code> 결과가 <b>아무것도 없다</b> = /etc/passwd 에서 user_001 이 완전히 지워짐</div>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 그룹 관리 — groupadd · gpasswd</h2>
 <div class="tip">💡 그룹 정보 <code>/etc/group</code> = 그룹명 : x : <b>GID</b> : 소속 사용자<br>그룹 암호 <code>/etc/gshadow</code> = 그룹명 : <b>암호</b> : 관리자 : 소속 사용자</div>
 <table class="ref">
@@ -419,7 +424,7 @@ student:$y$j9T$1xXkJ2.0Tv98rV1bFpXCD1$UughqWS16xhMM.F/KkD./Ms0auYvJqE1rYm2NUxjqN
 grep student /etc/gshadow   # 비밀번호 칸이 비었는지 확인</code></pre>
 <pre class="io"><code class="language-text">student:::</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. 사용자 전환과 소유권 — su · id · newgrp · chown</h2>
 <table class="ref">
 <tbody>
@@ -478,7 +483,7 @@ ls -l             # workspace 폴더와 scale.txt 확인</code></pre>
 -rw-r--r-- 1 sno_2023001 sno_2023001  0  9월 17일  15:30 scale.txt
 drwxr-xr-x 3 sno_2023001 sno_2023001 18  9월 17일  15:29 workspace</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>6. 패키지 설치 — rpm · dnf</h2>
 <div class="tip">💡 <b>rpm</b> = <code>.rpm</code> 파일 하나를 직접 설치 → 필요한 다른 패키지(<b>의존성</b>)는 <b>직접</b> 해결해야 함<br><b>dnf</b> = 저장소(repository)에서 찾아 설치 → <b>의존성까지 자동</b>으로 내려받아 설치</div>
 <table class="ref">
@@ -935,7 +940,7 @@ ls -l        # 백업 파일 목록 보기</code></pre>
 -rw-r--r--. 1 root root 3426 2025년  5월 25일 rocky.repo</code></pre>
 <div class="tip">🔎 dnf 는 <code>/etc/yum.repos.d/</code> 의 <b>.repo 파일</b>을 읽어 저장소 <b>URL 주소</b>를 확인합니다 (7번 흐름도 ②).<br>실습 PC 는 <code>This10.repo</code> 를 쓰고, <code>rocky.repo</code> · <code>rocky-extras.repo</code> 등 기본 repo 파일은 <code>backup/</code> 폴더에 들어 있습니다.</div>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>7. ★ 시험문제 — DNF 작동 흐름도 (그림 4-111)</h2>
 <div class="tip">📝 <b>시험문제</b> — <code>dnf install 패키지이름</code> 명령이 <b>내부적으로 작동하는 순서</b> (교재 그림 4-111 · 수업 화면 사진 <code>4주차/시험문제.jpeg</code>)</div>
 <table class="ref">
@@ -952,7 +957,7 @@ ls -l        # 백업 파일 목록 보기</code></pre>
 <div class="tip">🗄️ <b>Rocky Linux 10 패키지 저장소</b> 안에는 <b>baseos 패키지 · appstream 패키지 · 기타 패키지 · 패키지 목록</b> 이 있고, 내 컴퓨터와는 <b>인터넷</b>으로 연결됩니다.<br>교재 예시: 앞서 <b>실습 11</b> 에서 설치한 <b>mysql8.4-errmsg</b> 로 흐름을 따라가면 ① <code>dnf install mysql8.4-errmsg</code> 입력 → ② 자동으로 <code>/etc/yum.repos.d/</code> 의 repo 파일 확인 (핵심 파일은 <b>rocky.repo</b> 와 rocky-… — 사진에서 잘림)</div>
 <div class="tip">🎯 <b>외우는 요령</b> — 입력 → <b>repo 확인</b> → <b>목록 요청</b> → <b>목록만 다운</b> → <b>이름 출력</b> → <b>y 입력 · 파일 요청</b> → <b>파일 다운 · 자동 설치</b><br>요청(③⑥)은 내 컴퓨터 → 저장소, 다운로드(④⑦)는 저장소 → 내 컴퓨터. <b>목록</b>(③④)을 먼저 받고 <b>파일</b>(⑥⑦)은 y 를 누른 뒤에 받습니다.<br>실습 연결: 6-3 dnf 출력의 <code>Rocky Linux 10 - BaseOS … 23 MB</code> = ④ 목록 다운로드, <code>종속 꾸러미 설치 중:</code> 표 = ⑤, <code>꾸러미 내려받기 중:</code> → <code>설치 중</code> = ⑦<br>⑥ 은 사진에서 끝부분이 가려져 있어 <b>'요청'</b> 은 흐름(③ 요청 ↔ ④ 다운로드)에 맞춘 추정입니다.</div>
 </section>
-<section class="card">
+<section class="card" id="s8">
 <h2>8. 이번 주 명령어 총정리</h2>
 <table class="ref">
 <tbody>

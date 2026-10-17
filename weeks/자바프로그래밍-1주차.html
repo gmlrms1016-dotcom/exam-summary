@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,11 +85,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><span></span><a class="next" href="자바프로그래밍-2주차.html">다음 · <b>2주차</b> ›<br><small>1장 자바 개요</small></a></nav>
 
 <div class="tip">자료: IMG_1831(강의소개 화면) · heegeun.java</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 강의 안내</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 교재: 명품 Java Programming(개정5판), 황기태·김효수, 생능출판사</li><li><span class="wk-tag star">⭐ 강조</span> — 평가: 필기평가1 30점 + 직무수행능력평가2 15점 + 직무수행능력평가3 등 (실습 중심 평가)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 첫 자바 프로그램 (heegeun.java)</h2>
 <ul><li>package 선언 + <code>import java.util.Scanner</code> + public class(파일명과 동일)</li><li><span class="wk-tag star">⭐ 강조</span> — 자바 프로그램은 <code>public static void main(String[] args)</code> 에서 실행을 시작한다</li><li>Scanner로 키 입력, if-else 조건문, for/while 반복문 사용 실습</li></ul>
 <pre><code class="language-java">import java.util.Scanner;                      // Scanner(키보드 입력)를 쓰려고 불러옴

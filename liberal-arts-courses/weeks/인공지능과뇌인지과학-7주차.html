@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,11 +85,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-6주차.html">‹ 이전 · <b>6주차</b><br><small>인지신경과학 3 · 약물과 효과 · 신경계의 구성</small></a><a class="next" href="인공지능과뇌인지과학-8주차-중간고사.html">다음 · <b>8주차 중간고사</b> ›<br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a></nav>
 
 <div class="tip">자료: 인공지능과_뇌인지과학_6장.pdf (15쪽) · 노션 7주차는 비어 있어 <b>PDF 에 Apple Pencil 로 쓴 필기</b>(3 · 5 · 6 · 7 · 8 · 9쪽)만 정리했어요. 원본 txt 가 없어 PDF 와 대조했어요.<br>✍️ 9쪽 <b>“여기까지 시험 범위 (밑 슬라이드 X)”</b> → 6장은 <b>1~9쪽</b>이 중간고사 범위예요. 그래서 1~9쪽 슬라이드는 모두 풀어 썼고, 10쪽부터는 범위가 아니에요.<br>✍️ 6쪽 <b>“Claude야 이 페이지에 그림을 자세히 설명하고 사이트에 천천히 그리면서 알려주는 애니메이션을 만들어”</b> → 6쪽 칸 아래에 🤖 그림 설명 + 🎬 애니메이션을 넣었어요.</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>🔥 시험 포인트</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> 9쪽 <b>“여기까지 시험 범위”</b> → 6장 <b>1~9쪽</b> (서론 · 망막 · 광수용체 · 신경절세포 · 수용장)</li><li><span class="wk-tag note">✍️ 필기</span> 5쪽 간상체 = 로돕신 · <b>약한 빛에 민감</b>(형광펜) / 추상체 = 색지각 → ✍️ <b>“선명한 지각”</b> · ✍️ <b>추상체 ↔ 중심와(fovea)</b> 를 밑줄로 이음</li><li><span class="wk-tag note">✍️ 필기</span> 6쪽 간상체 : 신경절 = <b>다(多) : 1</b> → ✍️ <b>어두울 때 사용 · 선명도↓</b> / 추상체 : 신경절 = <b>소(小) : 1</b> → ✍️ <b>밝을 때 사용 · 선명도↑</b> · ✍️ <b>N:1 로 연결</b></li><li><span class="wk-tag note">✍️ 필기</span> 7쪽 신경절 세포의 종류 → ✍️ <b>“주변시: 움직임에 민감”</b> · English name 줄은 줄을 그어 지움</li><li><span class="wk-tag note">✍️ 필기</span> 9쪽 중심-주변 수용장 → <b>대비 향상</b> · ✍️ 그림에 <b>대비율↑ / 대비율↓</b></li><li><span class="wk-tag note">✍️ 필기</span> 3쪽 병렬처리에 동그라미 → <b>“참고”</b></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>서론 — 맹시 · 감각과 지각 (2 · 3쪽)</h2>
 <ul><li><b>맹시</b>(2쪽) — 의식적인 시각 자극 처리 없이 시각 능력의 일부를 보유하고 있는 현상<ul><li>우측 시각피질 손상으로 <b>좌시야장</b>의 모든 물체가 보이지 않는 Ron</li><li>그런데 좌시야장에 제시된 물체의 <b>움직임</b>을 파악할 수 있었다! → “본다”는 것의 진정한 의미가 무엇인가?</li></ul></li></ul>
 <table class="ref">
@@ -96,11 +101,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li><span class="wk-tag note">✍️ 필기</span> 병렬처리에 동그라미 + 화살표 <b>“참고”</b> · 3쪽 그림 = 나비 → 빛(Light waves) → 눈 → 신경 신호(Neural signals) → 뇌</li><li>🤖 한 줄로 — <b>감각</b> = 받아들여 <b>등록</b> · <b>지각</b> = 그것을 <b>의미 있게 조직화</b></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>망막 (4쪽)</h2>
 <ul><li>망막은 <b>눈 내벽</b>에 위치한 몇 개의 <b>신경세포 층</b>으로 구성되어 있다</li><li>우리는 눈이 빛을 받고(regist) 뇌로 정보를 전달한다고 단순하게 생각하지만, 뇌가 부분적으로 소화되고 변형된 정보를 받도록 <b>망막 자체 내에서 계산</b>이 일어난다</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>✍️ 광수용체 — 간상체 vs 추상체 (5 · 6쪽) 🔥</h2>
 <p>간상체와 추상체는 <b>빛 에너지</b>를 받아 그것을 신경계에서 사용되는 <b>전기화학적 에너지로 변형</b>한다 (5쪽).</p>
 <table class="ref">
@@ -130,7 +135,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/광수용체-연결.html" title="6쪽 그림 애니메이션 — 간상체 · 추상체와 신경절의 연결" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/광수용체-연결.html" target="_blank" rel="noopener">🎬 6쪽 그림 애니메이션 — 간상체 · 추상체와 신경절의 연결 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>✍️ 신경절세포 — 소세포성 · 대세포성 (7쪽)</h2>
 <p>간상체와 추상체가 망막의 <b>입력 단계</b>였다면, 신경절 세포는 눈으로부터의 정보를 뇌로 보내는 <b>출력 단계</b>이다.</p>
 <table class="ref">
@@ -145,11 +150,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li><span class="wk-tag note">✍️ 필기</span> 표 위에 <b>“주변시: 움직임에 민감”</b> → 망막 전체(주변까지)에 퍼져 <b>운동</b>에 반응하는 쪽 = <b>대세포성</b></li><li><span class="wk-tag note">✍️ 필기</span> English name 줄에 두 줄을 그음 → 영어 이름은 외우지 않아도 되는 것으로 보여요</li><li>🤖 외우기 — <b>소</b>세포성 = <b>소</b>(작은) 수용장 · 중심 · 색 · <b>자세히</b> / <b>대</b>세포성 = <b>대</b>(큰) 수용장 · 전체 · 색 X · <b>움직임</b></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>✍️ 수용장 (8쪽)</h2>
 <ul><li>수용장 = 특정한 세포가 반응하는 <b>시공간(visual space)의 특정한 영역</b></li><li>어느 특정 섬유에서 반응을 얻기 위해 <b>조명을 해야 하는 망막 상의 영역</b> (Hartline, 1936)</li><li>특정한 간상체 혹은 추상체의 하위집단을 자극 ⇒ <b>하나의 신경절 세포</b></li><li>서로 다른 신경절 세포는 <b>서로 다른 수용장</b>을 가진다</li><li>그러므로 신경절 세포 배열의 <b>발화 패턴</b>은 망막 전체의 <b>빛의 패턴</b>을 나타낸다</li><li><b>축구장 비유</b> — <span class="wk-tag note">✍️ 필기</span> 그림: 여러 선이 한 점(<b>신경절 세포</b>)으로 모이고, 옆에 점들이 찍힌 네모 = <b>시공간</b></li><li>🤖 축구장 비유 — 경기장(시야) 전체를 여러 구역으로 나누고 구역마다 담당 관찰자(신경절 세포)가 한 명씩 있다고 생각해요. 관찰자는 <b>자기 구역</b>(수용장)에 공(빛)이 들어올 때만 소리쳐요 → 누가 소리쳤는지를 모으면 경기장 어디에 공이 있는지(빛의 패턴)를 알 수 있어요</li><li>8쪽 그림 = 빛 자극(Light stimulus)을 눈에 비추고, 전극(Electrode)으로 <b>신경절 세포 축색의 활동전위</b>를 기록하는 실험</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>✍️ 중심-주변 수용장 (9쪽) — 여기까지 시험 범위</h2>
 <ul><li><b>중심-주변 수용장</b> — 수용장이 가운데(중심)와 바깥 고리(주변)로 나뉨</li><li><b>흥분성 중심, 억제성 주변</b> 수용장 / <b>억제성 중심, 흥분성 주변</b> 수용장</li><li>신경절 세포 수용장의 이러한 중심-주변 구조는 <b>어두운 영역과 밝은 영역 사이의 경계를 강조</b>하도록 돕는다 ⇒ <b>대비 향상</b></li><li><span class="wk-tag note">✍️ 필기</span> 9쪽 그림 위에 <b>대비율↑</b>(High contrast) · <b>대비율↓</b>(Low contrast)</li><li>9쪽 오른쪽 그림 (a)~(d) — 흥분성 중심(+) · 억제성 주변(−) 수용장에 빛을 비추는 범위를 바꿀 때의 발화<ul><li>(a) 중심 안에 <b>작은 빛 점</b> → 발화가 늘어남 · (b) <b>중심을 꽉 채운</b> 빛 → 발화가 <b>가장 많음</b> · (c) 빛이 <b>주변(−)까지 조금</b> 넘어감 → 줄어듦 · (d) <b>주변까지 전부</b> 빛 → 가장 적음</li><li>🤖 중심이 밝고 주변이 어두울 때 가장 크게 반응 → <b>경계(가장자리)</b>에서 반응이 커져 윤곽이 또렷해짐 = 대비 향상</li></ul></li><li><span class="wk-tag note">✍️ 필기</span> 슬라이드 제목 옆에 <b>“여기까지 시험범위 (밑 슬라이드 X)”</b></li></ul>
 </section>

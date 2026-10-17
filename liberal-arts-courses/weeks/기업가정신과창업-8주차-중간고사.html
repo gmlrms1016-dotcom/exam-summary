@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -81,7 +86,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <p class="wk-exambtn"><a href="../기업가정신과창업-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 19일(월) 수업 시간</span><span class="wk-exam-where">6호관 307호 · 출석체크 12시 · 시험 12:45 ~ 13:35</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip">5점 × 4문제 = 20점</span><span class="wk-chip">10점 × 1문제 = 10점</span><span class="wk-chip">총 <b>30점</b> (성적의 30%)</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">처음 ~ 기업 PPT = ✍️ <b>1강 ~ 4강</b></span><span class="wk-chip">✍️ 6주차 “<b>시험범위 1,2,3,4차 잘보기</b>”</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span>5점 문제 = ✍️ <b>회사 5종 각각 특징 3가지 외우기</b> (4강 21쪽 “시험문제(5점짜리)”)</li><li><span class="wk-exam-wk">7주차</span>10점 문제 1개 = ✍️ <b>회사 비교 or 회사의 특징 설명</b> (40쪽)</li><li><span class="wk-exam-wk">7주차</span>24쪽 “<b>4~5칸 빈칸 맞히기</b>” · 30쪽 “<b>★ 정리</b>” 비교표</li><li><span class="wk-exam-wk">6주차</span><b>1 · 2 · 3 · 4차 산업혁명</b> = 1강(2주차) · 2강(3주차) · 3강(5 · 6주차)</li></ol></dd><dt>🎒 준비물</dt><dd><span class="wk-chip"><b>실물 신분증</b></span></dd><dt>⭐ 강의 ★ 강조</dt><dd><ol class="wk-exam-list"><li>기업가정신 교육 vs 창업 교육(<b>Miller · Timmons</b>)</li><li>1차 산업혁명 <b>발생 배경 5가지</b></li><li>산업혁명 <b>용어의 유래</b></li><li>대표 기업가 <b>제임스 와트</b></li><li><b>신사문화 · 신용</b> = 기업가정신의 기초</li><li><b>산업혁명 1~4차 키워드</b>(기계화 · 대량생산 · 정보 · AI·클라우드)</li><li>4차 산업혁명 핵심 기술 <b>클라우드 · IoT</b></li><li>🔥 <b>시험범위 1~4차 산업혁명</b> · 4차 특성(초연결 · 초자동화 · 초지능화 · 초융합화) · 전망</li></ol></dd><dd class="wk-exam-note">📌 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요 (3주차는 노션 대신 <b>PDF 펜 필기 · 활동지</b>로 정리 · 4주차는 필기 없음 · 6주차는 10/6 보강 수업 · 7주차는 5주차 자료 <b>4강 기업</b>으로 수업). 중간고사는 성적의 <b>30%</b>입니다.</dd></dl></section>
-<section class="card">
+<section class="card" id="s1">
 <h2>7주차 — 🔥 4강 기업 · 기업의 형태 (<a href="기업가정신과창업-7주차.html">7주차 자세히</a>)</h2>
 <ul><li>🔥 <span class="wk-tag note">✍️ 필기</span> — 21쪽 ★ <b>시험문제(5점짜리) 각각 특징들 3가지 외우기</b> · 상법 제170조 회사 <b>5종</b>: 합명회사 · 합자회사 · 유한책임회사 · 주식회사 · 유한회사</li><li><span class="wk-tag note">✍️ 필기</span> — 22쪽 분류도: 개인기업 = <b>1인이 출자</b> · 공동기업 = <b>소수 or 다수</b> (소수공동기업 = 합명 · 합자 · 유한 · 유한책임 / 다수공동기업 = <b>주식회사</b>) · 공기업 = <b>정부가 출자</b></li></ul>
 <table class="ref">
@@ -96,11 +101,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 10쪽 CSR 사회적 책임의 범위 ① 기업의 유지 · 발전 → <b>적정한 이윤을 창출</b> · 32쪽 법인기업 단점 <b>설립절차가 복잡함</b></li><li>🤖 10점 문제 <b>답안 예시 3개</b> (합명 vs 합자 · 유한 vs 주식 · 유한책임회사 특징)는 <a href="기업가정신과창업-7주차.html">7주차 페이지 8번</a></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>6주차 — 🔥 시험범위 1~4차 · AI · AR · 전망 (<a href="기업가정신과창업-6주차.html">6주차 자세히</a>)</h2>
 <ul><li>🔥 <span class="wk-tag note">✍️ 필기</span> — <b>시험범위 1,2,3,4차 잘보기</b> (10/6 보강 · 3강 4차 산업혁명 자료로 수업)</li><li><span class="wk-tag star">⭐ 강조</span> — 4차 산업혁명 = 기존 기술들과의 <b>결합</b> · 신기술 간의 <b>융합</b>으로 사회 · 경제적 혁신 변화 (3강 4쪽)</li><li><span class="wk-tag star">⭐ 강조</span> — 4차 특성: <b>초연결</b>(실시간 연결) · <b>초자동화</b>(인간 일 대신) · <b>초지능화</b>(시공간 상관없이 AI) · <b>초융합화</b>(셋이 합쳐져 새 가치)</li><li><span class="wk-tag star">⭐ 강조</span> — AI = 사람처럼 사고 · 감지 · 행동하도록 설계된 <b>알고리즘 체계</b> · <b>딥러닝 ⊂ 머신러닝 ⊂ 인공지능</b></li><li><span class="wk-tag note">✍️ 필기</span> — 18쪽 증강현실 = <b>AR</b> (현실 세계 위에 가상 이미지를 덧입힘 · 현실을 보완) ↔ VR 가상현실 = 컴퓨터로 만든 가상 세계</li><li><span class="wk-tag note">✍️ 필기</span> — 28쪽 밑줄 <b>긍정적 전망</b>: 최적 생산시스템 · 로봇이 위험한 일 대신 · 드론 감시 · 의료비용 절감 · 자율주행차 · <b>스마트 홈</b></li><li><span class="wk-tag note">✍️ 필기</span> — 29쪽 밑줄 <b>부정적 전망</b>: 일자리 감소 · 한국 63% 고위험군 · 실업 · <b>빈익빈 부익부 가속화</b></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>5주차 — 4차 산업혁명 · 대항문화 · 클라우드 · IoT (<a href="기업가정신과창업-5주차.html">5주차 자세히</a>)</h2>
 <table class="ref">
 <tbody>
@@ -112,7 +117,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — IT 사이클: 1980년대 말~1999 PC · 윈도우 · 인터넷 → 2000~2019 <b>스마트폰 · 소셜미디어</b> → 2020~ 인공지능 · 로봇 · 빅데이터 · 사물인터넷 …</li><li><span class="wk-tag star">⭐ 강조</span> — 1960년대 미국: IT 기술 성장 · 서부 급부상 · <b>대항문화</b> 탄생(여성운동 · 히피문화 · 언론자유운동 · 소비자운동 · 베트남 참전 반대) · Stay hungry, Stay foolish</li><li><span class="wk-tag star">⭐ 강조</span> — <b>클라우드 컴퓨팅</b> = 필요할 때 인터넷으로 서버 · 스토리지 · 네트워크 서비스를 받는 환경 (저렴 · 빠름 · 확장/축소 쉬움 · 언제 어디서나) · 한국: 네이버 · kt · 삼성</li><li><span class="wk-tag star">⭐ 강조</span> — <b>IoT(사물인터넷)</b> = 사물을 센서 · 통신 기능으로 인터넷과 연결하는 기술</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>3주차 — 2차와 3차 산업혁명 시기의 기업가정신 (<a href="기업가정신과창업-3주차.html">3주차 자세히</a>)</h2>
 <table class="ref">
 <tbody>
@@ -123,11 +128,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <b>유니콘</b> = 기업 가치 <b>10억 달러(약 1조 원)</b> 를 넘는 <b>비상장 스타트업</b> · ✍️ 토스(비바리퍼블리카) · 업비트(두나무) · 빗썸</li><li><span class="wk-tag star">⭐ 강조</span> — <b>사내 기업가정신</b> = 기존 조직 안에서 발현 · 3M ‘2017년 혁신기업 1위’</li><li>록펠러: 정제 · 운송 · 시장까지 산업 전체 효율을 높이는 사업 시스템 · 일론 머스크: Zip2(1995) 동생과 공동 창업</li><li><span class="wk-tag note">✍️ 필기</span> — 기업가정신 요소(활동지): 혁신성 · 진취성 · 위험감수성 · 기회포착능력 · 실행력 · 자율성 · 가치창출</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>1주차 — 강의소개 (<a href="기업가정신과창업-1주차.html">1주차 자세히</a>)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 성적: 출석 20% + 과제 20% + 중간 30% + 기말 30%</li><li><span class="wk-tag star">⭐ 강조</span> — 2015년 「창업일반」(창업 + 기업가정신 한 단원) → 2025년 「청소년기업가정신」(정규 교과서 최초 · 학점 인정)</li><li>강의 목차: 기업가정신의 이해 → 1~4차 산업혁명과 기업가정신 → 창업의 이해 → 아이템 선정 → 사업성 분석 → 자금 조달 → 상권·입지 분석 → 사업계획서 → 창업 마케팅</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>2주차 — 1차 산업혁명 (<a href="기업가정신과창업-2주차.html">2주차 자세히</a>)</h2>
 <ul><li>🔥 <span class="wk-tag note">✍️ 필기</span> — <b>시험 문제: 화폐 인물</b> — 1강 18쪽 ★ “우리 나라 화폐 인물 / 시험 문제” · 영국 <b>50파운드</b> 지폐 = <b>매튜 볼턴 · 제임스 와트</b></li></ul>
 <h3>기업가정신 교육과 창업 교육 ★핵심</h3>

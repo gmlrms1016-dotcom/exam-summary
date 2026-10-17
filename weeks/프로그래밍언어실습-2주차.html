@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,11 +85,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-1주차.html">‹ 이전 · <b>1주차</b><br><small>강의소개 / C 개요</small></a><a class="next" href="프로그래밍언어실습-3주차.html">다음 · <b>3주차</b> ›<br><small>변수·상수·자료형 (ch03)</small></a></nav>
 
 <div class="tip">자료: C-Lect02-ch02-기본실습.pdf · 필기(260907).txt · workC 실습 코드</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. C 프로그램 빌드 과정 ★핵심</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 소스 작성 → 전처리(preprocessor) → 빌드(컴파일+링크) → 실행</li><li><span class="wk-tag star">⭐ 강조</span> — 소스파일(.c) → [컴파일] → 목적파일(.obj) → [링크] → 실행파일(.exe)</li><li><span class="wk-tag note">✍️ 필기</span> — 1.소스작성 2.컴파일 3.링크 4.실행결과 확인</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 출력 함수</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>printf("...")</code> : 서식 출력 (자동 줄바꿈 없음, <code>\n</code> 필요)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>puts("...")</code> : 문자열을 출력하고 자동으로 줄바꿈</li><li><code>putc()</code> : 문자 하나 출력</li></ul>
 <pre><code class="language-c">// P02-PutString/02put.c
@@ -141,7 +146,7 @@ kotlin
 3. 빌드
 4. 실행</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 함수와 프로그램 구조 ★핵심</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — C언어는 함수들로 구성된다</li><li><span class="wk-tag note">✍️ 필기</span> — C언어는 main() 함수로 시작된다 (자동 실행), 다른 함수는 호출해야 실행됨</li><li>표준 라이브러리 함수 vs 사용자 정의 함수</li></ul>
 <pre><code class="language-c">#include &lt;stdio.h&gt;                  // printf · scanf 를 쓰기 위한 표준 입출력 헤더
@@ -208,7 +213,7 @@ void func2(void) { printf("제 이름은 "); }         // 실행 순서는 main 
 제 이름은 gdhong 입니다. 
 gdhong 입니다. </code></pre>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 디버깅 &amp; 퀴즈</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 오류 예: <code>printf("...")</code> 뒤 세미콜론(;) 누락, 닫는 따옴표 누락 → 컴파일 오류</li><li>Quiz: printf 한 번으로 여러 줄 출력 / 함수(func1,func2)를 사용해 출력 순서 맞추기</li></ul>
 <pre><code class="language-c">// 마지막 퀴즈 정답

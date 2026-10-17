@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -83,7 +88,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">🔥 <b>시험 예고 (✍️ 필기)</b> — 유형 <b>괄호넣기 · 통으로 쓰기</b> · <b>마지막 문제는 통으로 낸다</b> · <b>03whilebasic = 10점짜리 문제!!!</b> · 나오는 것: <b>14쪽 첫 번째 문제(06arithswitch)</b> · <b>08scoreswitch</b> · <b>x, y, z 최대 수(lab1pay)</b> · <b>04incdecop</b> · <b>continue · break 꼭 나옴</b> · <b>7쪽 반복문 출력결과 맞히기</b> · 별 삼각형을 <b>반대로</b> 찍는 것도 나올 가능성 (강의자료에는 없음)</div>
 <div class="tip">📚 <b>범위 (✍️)</b> — “1부터 9장까지 … 9장도 함수에서 배열은 빼고 배열을 기말고사에” → 교재 <b>1 ~ 7장 · 9장 (함수)</b> · 8장 배열과 함수 속 배열은 <b>기말</b> · 주차로는 w02 · w03 변수 · 자료형 / w04 연산자 / w05 조건문 · 반복문 / w06 함수 — ✍️ <b>“조건문 반복문 위주”</b></div>
 <div class="tip">❌ <b>시험에 안 나옴 (✍️)</b> — 6쪽 메뉴(switch) · 10쪽 10char.c · 13쪽 운전면허(04nestedif) · 어르신 판별(05ageifelse) · 섭씨 화씨(01cel2far3 · 07forcel2far3)</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 🔥 시험 예고 한눈에</h2>
 <table class="ref">
 <tbody style="min-width:760px;">
@@ -100,7 +105,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">🤖 <b>시험 유형 대비</b> — <b>괄호넣기</b> = 조건식 · <code>break</code> · <code>continue</code> · <code>%d</code> 같은 한 조각 / <b>통으로 쓰기</b> = 코드 전체를 손으로 → 위 🔥 코드는 <code>#include</code> 부터 <code>return 0;</code> 까지 <b>안 보고 쓸 수 있게</b> · 과목 페이지 🔒 실제시험에 같은 유형으로 넣어 두었어요.</div>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. [복습] 1 ~ 7쪽 — 반복 · 조건 · 진수 · 증감</h2>
 <h3>① 구구단(for문) — 입력: 2</h3>
 <pre><code class="language-c">// 구구단(for문)                                   // 단을 입력받아 1 ~ 9 를 곱해 출력
@@ -597,7 +602,7 @@ int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방�
 i: 11, result: 11</code></pre>
 <div class="tip"><b>후위</b> <code>i++</code> = 지금 값을 <b>먼저 쓰고</b> 나중에 1 증가 → result 10 · <b>전위</b> <code>++i</code> = <b>먼저 1 증가</b>하고 씀 → result 11 · 두 경우 모두 i 는 11.</div>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 🔥 시험 예고 문제 — 6 · 7장 HW01 + 5장</h2>
 <h3>① 🔥 03whilebasic.c — ✍️ “10점짜리 문제임!!!!!!” (17쪽)</h3>
 <pre><code class="language-c">// 03whilebasic.c                                  // 문자열을 3 번 반복 출력 · 끝난 뒤 count 는?
@@ -759,7 +764,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 </tbody></table>
 <div class="tip"><span class="wk-tag fix">⚠️ 정정</span> (강의자료) — 24쪽 셋째 printf 가 <code>printf("%d %d\n", m--, --n)</code> 으로 <b>끝의 <code>;</code> 가 빠져</b> 있어요 → 그대로면 컴파일 오류 · 위 코드는 <code>;</code> 를 넣어 실행했어요.</div>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 5장 연산자 실습 (23 ~ 27쪽)</h2>
 <h3>01arithop.c — 산술 연산자 <code>/</code> 몫 · <code>%</code> 나머지</h3>
 <pre><code class="language-c">// 01arithop.c                                     // 나눗셈 / = 몫 · % = 나머지
@@ -964,7 +969,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 12 12
 15 10</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. 6 · 7 · 9장 실습 파일 — 시험에 나오나? (8 ~ 23쪽)</h2>
 <div class="tip">코드 · 실행 결과는 <b>5주차</b>(6 · 7장 = HW01) · <b>6주차</b>(9장 = HW02) 페이지에 있어요. 🔥 = 시험에 나온다고 한 것 · ❌ = 안 나온다고 한 것 · 표시 없음 = 범위 안 (따로 말은 없음)</div>
 <table class="ref">
@@ -982,7 +987,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 <tr><td>5장 연산자</td><td>01arithop ~ 14opassociation (23 ~ 27쪽)</td><td>범위 · <b>04incdecop 🔥</b> → 4번</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>6. 🔎 정정 · 보충 모음</h2>
 <ul><li>⚠️ <b>04incdecop.c (24쪽)</b> — 셋째 printf 끝 <code>;</code> 빠짐 → 컴파일 오류 → <code>printf("%d %d\n", m--, --n);</code></li><li>⚠️ <b>10inputgrade (26쪽)</b> — 주석 <code>정수 65536</code> → <b>65535</b> (<code>0xffff</code>)</li><li>⚠️ <b>7쪽 <code>void main()</code></b> — Visual Studio 는 실행되지만 표준은 <code>int main(void)</code> + <code>return 0;</code> (clang · gcc 는 경고 또는 오류)</li><li>⚠️ <b>진수 필기 <code>1010 → A</code></b> — 손 변환은 A, <code>printf("%x")</code> 출력은 소문자 <b>a</b></li><li>🤖 <b>06logicop</b> — <code>int grade = 4.21;</code> 은 소수점이 버려져 <b>4</b></li><li>⚠️ <b>필기 오타</b> — <code>무한루ㅠㅡ</code> → <b>무한루프</b></li></ul>
 <details class="wk-details">
@@ -1031,7 +1036,7 @@ num이 5보다 크다면 break;
 0001 0000→ 000 010 000 →20</code></pre>
 </details>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../프로그래밍언어실습-실제시험.html">🔒 프로그래밍언어실습 실제시험 — 7주차 🔥 문제(출력결과 · 코드 작성)까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="../프로그래밍언어실습.html#s35">7주차 시험 예고 · 괄호넣기 직접 풀기</a></li><li><a href="프로그래밍언어실습-8주차-중간고사.html">중간고사 시험문제 정리</a></li></ul>
 </section>

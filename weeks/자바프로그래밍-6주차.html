@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -81,7 +86,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">자료: 3장.pdf(4주차 자료) 예제 3-7 ~ 3-11 · 3-15 · 4장.pdf p2 ~ 18 (예제 4-1 · 4-2) · 수업 소스 14개 (ArrayEx1 · ArrayAccess · ArrayLength · ArrayScore · foreachEx · foreachEx2 · ScoreAverrage · IrregularArray · DevideByZeroHandling · Circle · CircleMain · Rectangle · FishBread · Main) · 노션 필기</div>
 <div class="tip">⭐ <b>수업 중 중요 표시</b> — ✍️ "<b>클래스(중요!)</b> 객체를 만들어내기 위한 설계도 혹은 틀" · 4장 첫 시간 주제: <b>객체 · 캡슐화 · 상속</b></div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 배열 실습 — 생성 · 인덱스 · 최댓값 · length 로 평균</h2>
 <div class="tip">📂 <b>6주차 (9/29)</b> — 앞부분은 3장 배열 예제(3-7 ~ 3-11)와 예외 처리(3-15)를 실습하고, 뒤에서 <b>4장 클래스와 객체</b>(p2 ~ 18, 예제 4-1 · 4-2)를 시작했어요. 코드 주석과 ▶ 출력 결과는 전부 직접 컴파일·실행한 결과예요.</div>
 <h3>ArrayEx1 — new 로 만들고 인덱스로 넣기 (int · String 배열)</h3>
@@ -175,7 +180,7 @@ public class 연습 {   // 원래 이름 ArrayScore → 파일 이름도 연습.
 4번 학생의 점수는 100점 입니다.
 5번 학생의 점수는 95점 입니다.</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. for-each 문 (예제 3-9)</h2>
 <div class="tip">📌 <b>for-each 문</b> = 배열이나 나열(enumeration)의 원소를 <b>처음부터 끝까지 차례로</b> 꺼내 쓰는 for 문 · <code>for (int k : n)</code> → 반복할 때마다 k 는 n[0], n[1], … n[4] (인덱스가 아니라 <b>원소 값</b>)</div>
 <table class="ref">
@@ -233,7 +238,7 @@ public class 연습 {   // 원래 이름 foreachEx2 → 파일 이름도 연습.
 88점</code></pre>
 <div class="tip">💡 파일 이름은 foreachEx2 지만 수업 코드는 <b>일반 for</b> 예요. for-each 로 바꾸면 <code>for (int p : points) { if (p &gt;= 80) System.out.println(p + "점"); }</code> — 결과는 같아요.</div>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 2차원 배열 · 비정방형 배열 (예제 3-10 · 3-11)</h2>
 <table class="ref">
 <tbody>
@@ -293,7 +298,7 @@ public class 연습 {   // 원래 이름 IrregularArray → 파일 이름도 연
 30 31 32 
 40 41 </code></pre>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 예외 처리 실습 — 0으로 나누기 (예제 3-15) ★시험단골</h2>
 <pre><code class="language-java">// DevideByZeroHandling.java (예제 3-15) — 0 으로 나누면 다시 입력받기
 import java.util.Scanner;                       // Scanner(키보드 입력)를 쓰려고 불러옴
@@ -336,7 +341,7 @@ java.lang.ArithmeticException: / by zero
 </tbody></table>
 <div class="tip">📌 try 안에서 예외가 나면 그 <b>아래 문장(break)은 건너뛰고</b> catch 로 간다 → while(true) 가 다시 돌아 입력을 받는다 · 정상이면 break 로 반복 탈출 (예외 처리 이론 → 4주차)</div>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. 객체지향 특성 — 캡슐화 · 상속 · 다형성 (4장 p2 ~ 9)</h2>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 4장 첫 시간에 배운 것: <b>객체, 캡슐화, 상속</b> · 세상 모든 것이 객체 — 객체마다 고유한 <b>특성(state)</b> 과 <b>행동(behavior)</b> 을 가짐 (예: 테트리스의 블록, 한글 프로그램의 메뉴·버튼)</div>
 <table class="ref">
@@ -353,7 +358,7 @@ java.lang.ArithmeticException: / by zero
 </tbody></table>
 <div class="tip">📌 객체지향 언어의 목적 — ① <b>소프트웨어 생산성 향상</b> (상속·다형성·캡슐화로 재사용, 부분 수정이 빠름) ② <b>실세계에 대한 쉬운 모델링</b> (절차보다 객체들의 상호작용으로 묘사)</div>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>6. 클래스와 객체 ★중요 (4장 p10 ~ 16)</h2>
 <div class="tip"><span class="wk-tag star">⭐ 강조</span> — ✍️ <b>클래스(중요!) = 객체를 만들어내기 위한 설계도 혹은 틀</b></div>
 <table class="ref">
@@ -397,7 +402,7 @@ public class 연습 {                              // 클래스 시작 — 파�
 }                                              // 클래스 끝</code></pre>
 <div class="tip">📌 객체는 반드시 <b>new</b> 로 생성 (레퍼런스 변수 선언 → 객체 생성 → 메모리 할당 → 생성자 실행) · 멤버 접근은 <code>객체레퍼런스.멤버</code></div>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>7. 클래스 실습 — Circle (예제 4-1) · Rectangle (예제 4-2) · 붕어빵</h2>
 <h3>Circle + CircleMain (예제 4-1 을 두 파일로)</h3>
 <pre><code class="language-java">// Circle.java — 원의 설계도(클래스) · 아래 연습 클래스의 main 에서 써 봄
@@ -552,7 +557,7 @@ public class 연습 {   // 원래 이름 Main → 파일 이름도 연습.java
 클래스(중요!) 객체를 만들어내기 위한 설계도 혹은 틀</code></pre>
 </details>
 </section>
-<section class="card">
+<section class="card" id="s8">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../자바프로그래밍.html#quiz">자바프로그래밍 과목 페이지 — 퀴즈(객관식 20 · 주관식 20)</a></li><li><a href="../자바프로그래밍.html#output">🖥️ 출력 결과 맞히기 — for-each · 비정방형 배열 · Circle 객체</a></li><li><a href="../자바프로그래밍.html#code">💻 코딩테스트 — Rectangle 클래스 · 붕어빵 클래스</a></li></ul>
 </section>

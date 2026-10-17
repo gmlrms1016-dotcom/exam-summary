@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,23 +85,23 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><span></span><a class="next" href="운영체제실습-2주차.html">다음 · <b>2주차</b> ›<br><small>리눅스 명령어 실습</small></a></nav>
 
 <div class="tip">자료: 스크린샷.png · 자료링크.txt</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>0. 참고 자료</h2>
 <ul><li>리눅스 학습 카페: cafe.naver.com/thisislinux</li><li>실습 환경: VMware 가상머신 위에 Rocky Linux</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>1. 네트워크 설정 분석 (ipconfig /all)</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 두 번의 ipconfig /all 결과를 비교하여 변경된 네트워크 어댑터 설정을 분석<ul><li>VMnet1: 임대 만료 시간이 갱신됨</li><li>VMnet8: DHCP가 비활성화되면서 수동 IP(192.168.111.1)로 변경, 기존 임대·DHCP 서버 정보가 사라짐</li></ul></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>2. 파일 목록 확인 (ls) ★암기</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>ls -l</code> : 상세 정보(권한·크기·수정일 등) 표시, 숨김 파일 제외</li><li><span class="wk-tag star">⭐ 강조</span> — <code>ls -al</code> : 상세 정보 + 마침표(.)로 시작하는 숨김 파일까지 모두 표시</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>3. 터미널 프롬프트 기호 ★암기</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>$</code> (일반 사용자): 시스템 권한이 제한된 일반 계정</li><li><span class="wk-tag star">⭐ 강조</span> — <code>#</code> (관리자/Root): 시스템의 모든 권한을 가진 최고 관리자 계정</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>4. 기본 시스템 명령어</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>whoami</code> : 현재 로그인한 사용자 계정 이름 확인</li><li><span class="wk-tag star">⭐ 강조</span> — <code>pwd</code> : 현재 작업 중인 폴더의 절대 경로 확인</li></ul>
 </section>

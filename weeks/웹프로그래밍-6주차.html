@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -81,7 +86,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">자료: 수업 필기(노션) · 0929_01.html · 0929_03.js · 0929_04.js (강의자료 없음 · 0929_03_builtlnFunc.js 는 빈 파일) · 출력 결과는 전부 node 로 직접 실행한 값</div>
 <div class="tip">🎯 <b>시험 포인트</b> — 🔥 <b>매개변수 구조분해 "중괄호를 빼면 출력되는 결과"</b> (0929_04.js 시험문제) · 🔥 <b><code>new Date()</code> 안에 <code>2026-01-01</code> 을 쓰면 출력결과는?</b> (0929_03.js "시험에 나올 수 있음") · <b>동기화 뜻</b> · <b>setTimeout = 비동기로 동작하는 내장함수</b> (필기)</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 수업 시작 복습 · 형변환(캐스팅)</h2>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 데이터타입 복습: NUMBER · STRING · BOOLEAN TYPE · NULL · UNDEFINED TYPE · OBJECT TYPE / 함수 선언 방법 복습: 선언적 · 표현적 · 화살표 / 호이스팅 복습 / 콜백 복습</div>
 <table class="ref">
@@ -101,7 +106,7 @@ console.log(typeof parseInt("1"), typeof Number("1"));   // parseInt("1") → 1 
 1
 number number</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 동기 vs 비동기 · 단일 스레드 vs 멀티 스레드</h2>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 클라이언트에서 백엔드까지 답이 오기까지 <b>아무것도 못 하는 것</b>을 <b>"동기화"</b> 라고 함 · <b>setTimeout 은 비동기화로 선언되는 내장함수</b></div>
 <div class="tip">🤖 필기에 적은 요청 — "비동기화와 동기화 차이를 표로 · 멀티스레드, 단일스레드 차이도 표로" — 대로 정리한 표예요.</div>
@@ -124,7 +129,7 @@ number number</code></pre>
 <tr><td>단점</td><td>오래 걸리는 일이 있으면 뒤의 일이 모두 기다린다 → <b>그래서 JS 는 비동기를 쓴다</b></td><td>스레드끼리 데이터가 꼬이지 않게 관리하기 어렵다</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. setTimeout · clearTimeout — 한 번 예약 ★</h2>
 <div class="tip">📌 <code>setTimeout(함수, 밀리초)</code> = 정해진 시간(1000 = 1초) <b>뒤에 한 번</b> 실행하는 <b>내장함수</b> · 기다리는 동안 아래 코드가 먼저 실행된다 (비동기)</div>
 <h3>예제 ① 0929_03.js — "끝" 이 먼저 찍힌다</h3>
@@ -165,7 +170,7 @@ let b = () =&gt; { console.log("b 실행"); };   // let 에 담은 화살표 함
 <pre class="io"><code class="language-text">시작
 ReferenceError: Cannot access 'b' before initialization</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. setInterval · clearInterval — 반복 예약</h2>
 <table class="ref">
 <tbody>
@@ -205,7 +210,7 @@ const intervalId = setInterval(() =&gt; {   // setInterval 도 번호를 돌려�
 카운트다운: 5초
 카운트 종료!</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. Date 로 시계 만들기 · 🔥 new Date(2026-01-01)</h2>
 <h3>예제 0929_03.js — 1초마다 현재 시간</h3>
 <pre><code class="language-javascript">// 0929_03.js 시간출력 코드 — 1초마다 현재 시간을 찍는다
@@ -240,7 +245,7 @@ console.log(d2.toLocaleTimeString());    // UTC 0시 + 9시간(한국) → 오�
 <div class="tip">🔥 <b>정답 포인트</b> — ① 따옴표 없이 <code>2026-01-01</code> → <b>2024</b> (숫자 빼기) → <code>new Date(2024)</code> 는 1970년 1월 1일에서 2024밀리초 지난 시각 → 날짜 <code>1970. 1. 1.</code> · 시간 <code>오전 9:00:02</code> ② 따옴표로 <code>"2026-01-01"</code> → <code>2026. 1. 1.</code> · <code>오전 9:00:00</code> ③ 어느 쪽이든 날짜가 <b>고정</b>돼서 1초마다 <b>같은 줄이 계속</b> 찍히고, <code>"오전 8:58:00"</code> 이 절대 안 돼서 <b>clearInterval 이 실행되지 않는다</b> (영원히 반복)</div>
 <div class="tip">📌 한국 시간(KST) · 한국어 윈도우 · 크롬 기준 결과예요. Node 24 이상 일부 버전은 <code>AM 9:00:02</code> 처럼 영어로 찍히기도 해요.</div>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>6. 구조분해 할당 — 배열 · 객체 ★</h2>
 <div class="tip">📌 <b>구조분해 할당</b> = 배열·객체 안의 값을 꺼내 <b>여러 변수에 한 번에</b> 나눠 담는 문법 · <span class="wk-tag note">✍️ 필기</span> — 배열이 100개이면 코드를 100줄 쳐야 하니 구조분해를 한다 · <b>index 번호(순서)가 중요하다</b></div>
 <table class="ref">
@@ -298,7 +303,7 @@ console.log(`이름 : ${n}\n나이 : ${a}살\n취미 : ${h}`);   // 이름 : 윤
 나이 : 23살
 취미 : 테니스</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>7. 🔥 매개변수 구조분해 — "중괄호를 빼면?" ★시험</h2>
 <h3>예제 0929_04.js — 매개변수 자리에서 바로 구조분해</h3>
 <pre><code class="language-javascript">// 0929_04.js 매개변수를 { } 로 받으면 → 넘겨받은 객체를 그 자리에서 구조분해
@@ -318,7 +323,7 @@ func(person);   // 인수는 person 하나 → name = 객체 통째로 · age ·
 <pre class="io"><code class="language-text">{ name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code></pre>
 <div class="tip">🔥 <b>정답</b> — <code>{ name: '윤희근', age: 23, hobby: '테니스' } undefined undefined undefined</code> (수업 파일 주석과 같음). 중괄호가 있으면 객체에서 <b>속성을 꺼내고</b>, 없으면 첫 번째 매개변수 name 에 <b>객체가 통째로</b> 들어가고 age · hobby · extra 는 넘겨받은 인수가 없어서 <b>undefined</b> (4주차 매개변수 · 인수). 객체는 node 에서 <code>{ key: '값' }</code> 모양으로 찍혀요 (크롬 콘솔은 모양이 조금 달라요).</div>
 </section>
-<section class="card">
+<section class="card" id="s8">
 <h2>8. DOM — 클릭으로 색 바꾸기 (0929_01.html)</h2>
 <pre><code class="language-html">&lt;!-- 0929_01.html --&gt;
 &lt;style&gt;                                         &lt;!-- CSS 시작 --&gt;
@@ -420,7 +425,7 @@ let h = person.hobby;
 console.log(`이름 : ${n}\n나이 : ${a}살\n취미 : ${h}`);</code></pre>
 </details>
 </section>
-<section class="card">
+<section class="card" id="s9">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../웹프로그래밍-실제시험.html">🔒 웹프로그래밍 실제시험 — 퀴즈 · 출력결과 · 코드 작성 문제를 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li></ul>
 </section>

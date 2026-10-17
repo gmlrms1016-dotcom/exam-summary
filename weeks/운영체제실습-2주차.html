@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,19 +85,19 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="운영체제실습-1주차.html">‹ 이전 · <b>1주차</b><br><small>리눅스 환경 / 기본 명령어</small></a><a class="next" href="운영체제실습-3주차.html">다음 · <b>3주차</b> ›<br><small>마운트 · 링크 · 권한 · 사용자관리</small></a></nav>
 
 <div class="tip">자료: 명령어 정리 스크립트(txt)</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 기본 정보 및 시스템 탐색</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>whoami</code>(사용자명) · <code>pwd</code>(절대경로) · <code>tree</code>(디렉토리 트리, <code>tree / -L 4</code> 로 깊이 제한)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>ls</code>(목록) · <code>ls -l</code>(상세) · <code>ls -al</code>(숨김 포함) · <code>ls -i</code>(inode 번호)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 디렉토리 이동 (cd)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>cd ..</code> (상위) · <code>cd /home</code> (절대경로) · <code>cd rocky</code> (상대경로) · <code>cd ~</code> (홈 디렉토리)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 디렉토리 생성·삭제</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>mkdir 이름</code> (생성) · <code>mkdir a b c</code> (여러 개) · <code>mkdir -p a/b/c</code> (상위까지 계층 생성)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>rmdir 이름</code> (빈 디렉토리 삭제) · <code>rmdir -p a/b/c</code> (계층적 빈 디렉토리 삭제)</li><li><span class="wk-tag note">✍️ 필기</span> — <code>rm -rf 이름</code> : 비어있지 않은 디렉토리도 강제 삭제 (주의! 되돌릴 수 없음)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 시스템 종료</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>poweroff</code> : 시스템 종료 및 전원 차단</li></ul>
 </section>

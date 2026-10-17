@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,15 +85,15 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><span></span><a class="next" href="데이터베이스관리-2주차.html">다음 · <b>2주차</b> ›<br><small>DB 정의·특징 / MySQL 실습</small></a></nav>
 
 <div class="tip">자료: DB-Lect01-강의소개.pdf · TalkMedia(강의소개 화면)</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 강의 안내</h2>
 <ul><li>담당: 김희숙 교수 · 카카오 오픈채팅(본인 한글이름으로 변경)</li><li><span class="wk-tag star">⭐ 강조</span> — 교재: 'SQL과 NoSQL 기반의 데이터베이스 입문', 박성진 저, 생능출판사, 2023.2</li><li><span class="wk-tag star">⭐ 강조</span> — 평가: 출석 20% + 중간 30% + 기말 30% + 과제 20% (결석 4회 F, 지각 3회=결석 1회)</li><li><span class="wk-tag note">✍️ 필기</span> — 프로그램: MySQL 8.0, MongoDB — 설치 시 사용자 계정은 반드시 영문(한글 금지)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 데이터베이스 개념 ★핵심</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 데이터베이스: 한 조직의 여러 응용시스템이 데이터를 공유할 수 있도록 통합·저장한 운영 데이터의 집합체</li><li>테이블(릴레이션): 행과 열로 구성된 2차원 표 형태 (예: 학생(번호,이름,학년,분반,학과번호))</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 첫 SQL 실습</h2>
 <pre><code class="language-sql">-- 데이터 조회
 select * from 학생;                  -- 학생 테이블의 모든 열 · 모든 행

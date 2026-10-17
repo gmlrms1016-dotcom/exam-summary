@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,15 +85,15 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><span></span><a class="next" href="프로그래밍언어실습-2주차.html">다음 · <b>2주차</b> ›<br><small>C 기본 실습 (ch02)</small></a></nav>
 
 <div class="tip">자료: C-Lect01-강의소개.pdf · 실습-w01-C 설치.pdf · 교재.pdf</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 강의 안내</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 교재: Perfect C(3판), 강환수·강환일·이동규, 인피니티북스, 2021.8</li><li><span class="wk-tag star">⭐ 강조</span> — 평가: 출석 20% + 중간 40% + 기말 40% (과제·실습은 가산점), 결석 4회 F</li><li><span class="wk-tag note">✍️ 필기</span> — 프로그램: Visual Studio C++ Community 2022 — 사용자 계정은 반드시 영문</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. C 언어 특징 ★암기</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 절차지향 언어(procedural) — 함수 중심의 구조적 프로그래밍</li><li>간결하고 효율적, 다양한 시스템 라이브러리 제공</li><li>이식성이 좋음 — 다양한 CPU·플랫폼의 컴파일러 지원</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. C 프로그램 실행 과정 ★핵심</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — ① 소스코드 작성(.c) → ② 컴파일(→ 오브젝트 .obj/.o) → ③ 링킹(→ 실행파일 .exe/a.out) → ④ 실행</li></ul>
 <pre><code class="language-c">// hello.c

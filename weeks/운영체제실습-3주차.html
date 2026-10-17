@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,7 +85,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="운영체제실습-2주차.html">‹ 이전 · <b>2주차</b><br><small>리눅스 명령어 실습</small></a><a class="next" href="운영체제실습-4주차.html">다음 · <b>4주차</b> ›<br><small>사용자·그룹 관리 · rpm·dnf 패키지 설치</small></a></nav>
 
 <div class="tip">🐧 <b>운영체제실습 3주차</b> — 마운트 / inode·링크 / 접근 권한 / 사용자·그룹 관리. 실습 터미널 기록을 주제별로 재정리했습니다. (명령·출력 원본 로그 전체는 노션 페이지 토글에 보존)</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 마운트(mount)와 저장장치</h2>
 <div class="tip">💡 <b>mount</b> = 저장장치(디스크·DVD·USB)를 디렉터리 트리의 특정 위치에 연결하는 것. 연결을 끊을 때는 <b>umount</b>. 리눅스는 마운트해야 장치에 접근할 수 있습니다.</div>
 <h3>1-1. 마운트 목록 확인</h3>
@@ -115,7 +120,7 @@ drwxr-xr-x 1 root root 2048 2025년  6월  1일 images   # ← 설치 이미지 
 root@localhost:~# umount /dev/cdrom     # 사용 후 마운트 해제</code></pre>
 <div class="tip">💾 <b>리눅스 USB 포맷 호환</b> — <b>FAT</b>(File Allocation Table) : <b>O</b> (인식 가능) · <b>NTFS</b> : <b>X</b> (기본 상태에서는 인식 불가)</div>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. inode와 링크</h2>
 <div class="tip">💡 <b>inode</b> = 파일의 정보(크기·소유자·권한·데이터 위치)를 담은 고유 번호표. 파일 1개당 1개. <b>이름이 달라도 inode가 같으면 같은 파일</b>입니다. → <code>ls -i</code> 로 확인</div>
 <h3>2-1. 하드 링크 vs 심볼릭 링크</h3>
@@ -142,7 +147,7 @@ rm ex_data                   # 원본 삭제 → 링크 상태 비교
 touch ex_data                # 원본 재생성 → 심볼릭 링크 복구</code></pre>
 <div class="tip">✅ <b>핵심 결과</b> — 원본(<code>ex_data</code>)을 지우면 <code>ex_data.ln</code>(하드) 은 <b>384바이트 그대로 살아있고</b>, <code>ex_data.sl</code>(심볼릭) 은 <code>ex_data</code> 를 가리키지만 <b>대상이 없어 깨진 링크</b>가 됩니다. 다시 <code>touch ex_data</code> 로 만들면 심볼릭 링크가 <b>되살아납니다</b>.</div>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 파일·디렉터리 기본 작업</h2>
 <pre><code class="language-bash">mkdir chap_05        # 실습 디렉터리 생성
 cd chap_05           # 이동
@@ -153,7 +158,7 @@ cp /etc/hosts centos_cp.txt    # 실습용 파일 복사
 ls -l                # 상세 목록</code></pre>
 <div class="tip">⭐ <b>[내가 표시한 중요]</b> <code>ls -l</code> 결과 <code>-rw-r--r-- 1 root root 384 9월 10일 15:06 centos_cp.txt</code> → 권한 변경 실습의 <b>출발점</b>이 되는 기본 권한 <code>rw-r--r--</code> (644)</div>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 접근 권한 (chmod) ★핵심</h2>
 <h3>4-1. 기호 모드 (심볼릭 모드)</h3>
 <div class="tip">🔑 <b>대상</b> — <code>u</code> 소유자 · <code>g</code> 그룹 · <code>o</code> 기타 사용자 · <code>a</code> 전체 사용자 / <b>연산</b> — <code>+</code> 권한 추가 · <code>-</code> 권한 제거 · <code>=</code> 권한 지정 / <b>권한</b> — <code>r</code> 읽기 · <code>w</code> 쓰기 · <code>x</code> 실행</div>
@@ -174,7 +179,7 @@ chmod u-x,go-w story.txt       # 원상복구</code></pre>
 chmod 775 yesterday.txt   # yesterday.txt 도 rwxrwxr-x 로
 rm -i yesterday.txt            # -i : 삭제 전 하나씩 확인(대화식)</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. 사용자와 그룹 관리 ★핵심</h2>
 <h3>5-1. 명령어</h3>
 <table class="ref">
@@ -199,7 +204,7 @@ rm -i yesterday.txt            # -i : 삭제 전 하나씩 확인(대화식)</co
 <div class="tip">⚠️ <code>passwd</code> 실행 시 <b>8자 미만이면 경고</b>가 뜨고, 두 번 입력이 다르면 <code>죄송하지만, 비밀번호가 일치하지 않습니다</code> 오류가 납니다.</div>
 <div class="tip">🔒 <b>/etc/shadow 필드 읽는 법</b> — <code>사용자명 : 암호화된비밀번호 : 최종변경일 : 최소 : 최대 : 경고 : 비활성 : 만료</code>. 해시의 <code>$y$</code> 는 <b>yescrypt</b> 알고리즘, <code>$j9T$</code> 는 파라미터, 그 다음이 <b>salt$해시</b>입니다. <code>!</code> 또는 <code>*</code> 로 시작하면(dnsmasq, tcpdump 등) <b>로그인 불가 계정</b>이라는 뜻입니다.</div>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>6. 이번 주 명령어 총정리</h2>
 <table class="ref">
 <tbody>
@@ -220,7 +225,7 @@ rm -i yesterday.txt            # -i : 삭제 전 하나씩 확인(대화식)</co
 <tr><td>확인</td><td><code>head</code> / <code>tail</code> / <code>tail -5</code></td><td>파일 앞·뒤 내용 보기</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>7. 과제 연계 (교재 221~229쪽)</h2>
 <div class="tip">📘 이번 주 과제는 교재 <b>Chapter 04 실습 8·9</b> 입니다. <b>실습 8</b> (221~225쪽) — 파일 허가권·소유권: <code>chmod</code> <code>chown</code> <code>chgrp</code> <code>su</code> / <b>실습 9</b> (227~229쪽) — 하드/심볼릭 링크: <code>ln</code> <code>ln -s</code> <code>ls -il</code> / 특수 권한 <b>setuid(4) · setgid(2) · sticky(1)</b> 는 226쪽 참고</div>
 </section>

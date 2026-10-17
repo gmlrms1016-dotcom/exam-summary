@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,15 +85,15 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-3주차.html">‹ 이전 · <b>3주차</b><br><small>인지과학의 출범</small></a><a class="next" href="인공지능과뇌인지과학-5주차.html">다음 · <b>5주차</b> ›<br><small>인지신경과학 2 · 뉴런</small></a></nav>
 
 <div class="tip">자료: 인공지능과_뇌인지과학_3장.pdf · 노션 필기는 비어 있고 <b>PDF 에 Apple Pencil 로 쓴 필기</b>(1 · 4 · 6 · 7쪽)로 정리했어요. 4주차 폴더의 hwp · docx 는 과제라 뺐어요.</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>🔥 시험 포인트</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 4쪽 네모 칸 <b>“시험”</b>: <b>피니어스 게이지(Phineas Gage)</b> · <b>브로카(Broca)</b> ← “더 편함” · <b>베르니케(Wernicke)</b></li><li><span class="wk-tag note">✍️ 필기</span> — 6쪽 <b>EEG = “시험 X”</b> (시험에 안 나옴)</li><li><span class="wk-tag note">✍️ 필기</span> — 7쪽 <b>뇌자도 == MEG</b></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>1. 인지신경과학 연구 방법 (3쪽)</h2>
 <ul><li>손상법 · 자극법과 기록법 · 뇌 영상기법(CT · MRI · PET · fMRI)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>2. 손상법 (4쪽) 🔥</h2>
 <ul><li>사람 또는 동물에게 가해진 <b>뇌 손상</b>을 통해 관련된 기능을 연구<ul><li>손상된 뇌 부위 – <b>행동 평가</b>를 통해 그 영역의 기능을 추론</li></ul></li><li>뇌의 각 영역이 어떤 기능을 수행하며, 특정 행동을 위해 기능들이 어떻게 조합되는가를 밝힘</li><li><span class="wk-tag note">✍️ 필기</span> — “불안이 꼭 나쁜 것은 아니다.”</li><li><span class="wk-tag note">✍️ 필기</span> — 쥐 실험 그림 옆: “술 == <b>전두엽</b> 역할을 통제” (전두엽에 형광펜)</li></ul>
 <table class="ref">
@@ -100,11 +105,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li>외우기: <b>브로카 = 말하기(표현)</b> · <b>베르니케 = 이해하기(수용)</b> · 게이지 = 전두엽 · 성격</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>3. 자극법 (5쪽)</h2>
 <ul><li>뇌를 <b>미세전극</b>으로 직접 자극하여 반응을 보고하게 함</li><li>W. Penfield(1959): 통각 수용기가 없는 뇌 조직에 직접 전기자극 → 각 피질 영역의 기능 규명</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>4. 전극 기록법 — EEG (6쪽 · ✍️ 시험 X) · MEG (7쪽)</h2>
 <ul><li><b>EEG</b>(electroencephalogram) — ✍️ <b>시험 X</b>: 뇌에서 자발적으로 일어나는 뇌전위 변화 측정 · 의식 상태에 따라 다른 모양 · 주기 · 간질 · 종양 등 뇌 손상 · 정신질환 진단 · 주로 <b>수면 연구</b></li><li><b>MEG 뇌자도</b>(magnetoencephalography) — ✍️ <b>뇌자도 == MEG</b><ul><li>여러 개의 <b>SQUID</b> 로 구성된 신경자기기록기가 활동전위 · 시냅스 후 전위에 의해 생기는 <b>자기장의 변화</b>를 측정</li><li><b>fMRI 에 비해 시간적 해상도가 높다</b>는 장점</li></ul></li></ul>
 </section>

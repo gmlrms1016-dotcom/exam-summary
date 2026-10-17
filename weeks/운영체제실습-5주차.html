@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,7 +85,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="운영체제실습-4주차.html">‹ 이전 · <b>4주차</b><br><small>사용자·그룹 관리 · rpm·dnf 패키지 설치</small></a><a class="next" href="운영체제실습-6주차.html">다음 · <b>6주차</b> ›<br><small>셸 스크립트 프로그래밍 · 프로세스 · 작업 제어</small></a></nav>
 
 <div class="tip">🐧 <b>운영체제실습 5주차</b> — dnf 로 내려받은 rpm 설치(openrdate) / <b>cron</b> 으로 매월 백업(/etc/crontab · /etc/cron.monthly · tar) / <b>date</b> 로 시계를 바꿔 테스트 / <b>at</b> 으로 한 번만 예약 / rdate 로 시간 맞추기<br>노션 실습 기록(GUI 서버 · 한국어 화면)과 노션 캡처(Server(B) · 텍스트 모드 · 영어 화면) 기준입니다. 출력이 긴 명령은 <b>접어 두었어요</b>(눌러서 펼치기).<br><span class="wk-tag note">✍️ 필기</span> 수업 주제로 적어 둔 것: <b>DNF 작동 방식</b> · <b>파일 묶기 명령(tar)</b> · 맨 처음에 못 친 명령어 { } (비어 있음)</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 오늘 실습 흐름 한눈에</h2>
 <table class="ref">
 <tbody>
@@ -94,7 +99,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>7</td><td>내일 새벽 한 번만 예약 → 취소</td><td><code>at 4:00 am tomorrow</code> · <code>at -l</code> · <code>atrm 1</code></td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 내려받은 rpm 파일을 dnf 로 설치 — openrdate</h2>
 <pre><code class="language-bash">cd /root/다운로드   # root 의 다운로드 폴더로 이동
 ls -l           # 내려받은 파일 확인</code></pre>
@@ -143,7 +148,7 @@ Rocky Linux 10 - CRB            168 kB/s | 536 kB     00:03
 </details>
 <div class="tip">🔁 <b>DNF 작동 방식</b>(4주차 ★시험문제 흐름도)과 맞춰 보기 — <a href="운영체제실습-4주차.html">4주차 7번</a><br>- <code>Rocky Linux 10 - BaseOS … 23 MB</code> 처럼 저장소마다 받는 것 → ③ 목록 요청 · ④ <b>전체 패키지 목록 파일만</b> 다운로드<br>- <code>종속성이 해결되었습니다.</code> 아래 표 → ⑤ 설치할 패키지와 관련 패키지 이름 출력<br>- <code>-y</code> → ⑥ 에서 물어볼 'y' 를 미리 넣은 것<br>- 저장소 칸의 <code>@commandline</code> → 명령줄에 준 <b>내 컴퓨터의 파일</b>이라 ⑦ 에서 패키지 파일을 다시 받지 않고 바로 설치</div>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. cron — 정해진 시각에 반복 실행</h2>
 <div class="tip">💡 <b>crond</b> 서비스가 1분마다 <code>/etc/crontab</code> 을 보고, 시각이 맞는 줄의 명령을 실행합니다.</div>
 <h3>3-1. /etc/crontab 열어 보기</h3>
@@ -228,7 +233,7 @@ drwxr-xr-x. 2 root root   40 2025년  8월 31일 state</code></pre>
 <tr><td><code>systemctl restart crond</code></td><td>다시 시작 (crontab 을 고친 뒤)</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 월간 백업 스크립트 — mybackup.sh</h2>
 <pre><code class="language-bash">cd /etc/cron.monthly            # 매월 실행할 스크립트를 넣는 폴더로 이동
 gnome-text-editor mybackup.sh   # mybackup.sh 를 만들어 편집 (새 파일이면 빈 창)</code></pre>
@@ -256,7 +261,7 @@ ls -l   # 권한이 -rwxr-xr-x 로 바뀐 것 확인</code></pre>
 systemctl restart crond   # cron 서비스 다시 시작 (바뀐 설정 반영)</code></pre>
 <ul><li><span class="wk-tag note">✍️ 필기</span> <code>cannot access '/backup' : No such file or directory</code> → /backup 폴더가 아직 없어서 나온 오류 → <code>mkdir /backup</code> 으로 해결 (Server(B) 캡처에서도 같은 오류 → mkdir 뒤 <code>total 0</code>)</li><li><span class="wk-tag fix">⚠️ 정정</span> GPT 질문 기록에는 "run-parts 는 <code>.sh</code> 처럼 확장자가 붙은 파일을 건너뛸 수 있다"고 되어 있지만, 그건 Debian · Ubuntu 의 run-parts 이야기입니다. 이번 Rocky Linux 실습에서는 <code>mybackup.sh</code> 그대로 백업 파일이 만들어졌어요 (아래 5번).</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. date 로 시계를 바꿔서 테스트</h2>
 <table class="ref">
 <tbody>
@@ -285,7 +290,7 @@ ls -l /backup           # 2월 15일 03:01 에 만들어진 백업이 먼저 보
 <ul><li><code>systemctl restart crond</code> 는 서비스를 다시 켜는 것이지 <b>백업을 바로 실행하지 않습니다</b> → 시계를 03:00 으로 맞추고 <b>1분 기다리면</b> 03:01 에 cron 이 실행</li><li>1월 백업 시각이 <code>03:01</code> → crontab 의 <code>01 3</code> (3시 1분) 그대로</li><li>바로 테스트하고 싶으면 <code>run-parts /etc/cron.monthly</code> 를 직접 실행 (GPT 질문 기록)</li></ul>
 <div class="tip">📸 노션 캡처 (Server(B) · 영어 화면) — <code>date 021503002035</code> · <code>date 011503002035</code> → <code>systemctl restart crond</code> → <code>ls -l /backup</code> 이 처음엔 <code>No such file or directory</code> → <code>mkdir /backup</code> → <code>total 0</code>. 시계를 뒤로 돌리자 <code>systemd-journald … Time jumped backwards</code> 메시지도 보입니다.</div>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>6. at — 딱 한 번만 예약</h2>
 <pre><code class="language-bash">rdate -s time.bora.net     # 시간 서버 time.bora.net 의 시각으로 시스템 시계를 맞춤 (2035년 → 오늘로 되돌리기) · 2번에서 설치한 openrdate
 at 4:00 am tomorrow        # 내일 새벽 4시에 한 번 실행할 명령 입력 시작</code></pre>
@@ -309,7 +314,7 @@ at -l       # 아무것도 안 나옴 → 취소됨</code></pre>
 </tbody></table>
 <ul><li><span class="wk-tag note">✍️ 필기</span> CRON과 AT은 백업을 받는 명령어이다.</li><li><span class="wk-tag fix">⚠️ 정정</span> cron · at 은 <b>작업을 예약하는</b> 명령입니다. 백업은 오늘 예약한 작업의 예일 뿐이고, 같은 방법으로 업데이트(<code>dnf -y update</code>) · 재부팅(<code>reboot</code>) 같은 어떤 명령이든 예약할 수 있어요.</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>7. 이번 주 명령어 총정리</h2>
 <table class="ref">
 <tbody>

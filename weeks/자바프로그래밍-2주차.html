@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,27 +85,27 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="자바프로그래밍-1주차.html">‹ 이전 · <b>1주차</b><br><small>강의소개 / 첫 프로그램</small></a><a class="next" href="자바프로그래밍-3주차.html">다음 · <b>3주차</b> ›<br><small>2장 자료형·연산자·조건문</small></a></nav>
 
 <div class="tip">자료: 1장.pdf · 2장.pdf(도입) · 필기.png</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 프로그래밍 언어와 자바의 태동</h2>
 <ul><li>기계어(0·1) → 어셈블리어(니모닉) → 고급언어(C/C++, Java, C#)</li><li>자바: 1991년 선마이크로시스템즈 제임스 고슬링의 그린 프로젝트, 1995년 발표 (초기명 오크 OAK)</li><li><span class="wk-tag star">⭐ 강조</span> — 자바 개발 목적 = 플랫폼 독립성 (기존 언어의 플랫폼 종속성 문제 해결)</li><li>2009년 오라클이 선마이크로시스템즈 인수</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. WORA와 JVM ★핵심</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — WORA(Write Once Run Anywhere): 한 번 작성한 코드가 모든 플랫폼에서 실행</li><li><span class="wk-tag star">⭐ 강조</span> — 바이트코드(byte code): 자바 소스를 컴파일한 CPU 중립적 목적코드 (.class에 저장)</li><li><span class="wk-tag star">⭐ 강조</span> — JVM(Java Virtual Machine): 바이트코드를 인터프리터 방식으로 해석·실행하는 가상기계</li><li><span class="wk-tag note">✍️ 필기</span> — JVM 자체는 플랫폼에 종속적(OS마다 별도) 이지만, 바이트코드는 플랫폼 독립적<ul><li>컴파일: 자바 .java → .class / C : .c → .obj → .exe</li></ul></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 자바 vs C/C++ 실행 환경</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 자바는 링크 과정이 없다 — 필요한 클래스를 실행 중 동적 로딩(클래스로더)</li><li>C/C++: 컴파일→링크로 하나의 실행파일(.exe) 생성, 플랫폼마다 다시 컴파일 필요</li><li>느린 실행 개선: JIT(Just In Time) 컴파일러가 바이트코드를 해당 CPU 기계어로 변환</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. JDK / JRE / API</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — JDK(개발 키트) = 개발도구 + JRE / JRE(실행 환경) = JVM + 표준 라이브러리</li><li>주요 도구: javac(컴파일러), java(실행기), javadoc, jar, javap(디어셈블러), jdb(디버거)</li><li>자바 API = JDK에 포함된 클래스 라이브러리, 패키지(package) 단위로 제공 (import하여 사용)</li><li>Java 9부터 모듈(module) 프로그래밍 도입 (플랫폼 모듈화, jmods)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. 자바의 특성 ★암기</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 플랫폼 독립성 · 객체지향(상속·다형성·캡슐화) · 멀티스레드 자체 지원</li><li><span class="wk-tag star">⭐ 강조</span> — 가비지 컬렉션: 메모리 반환 기능 없이 new(할당)만 있고 JVM이 자동 회수 (실시간 시스템엔 부적합)</li><li>포인터 개념 없음 → 안전하고 작성이 쉬움, 타입 체크 엄격</li><li><span class="wk-tag note">✍️ 필기</span> — 소스(.java)당 public 클래스는 1개만 가능하고, 파일명 = public 클래스명이어야 한다</li><li>IDE: 이클립스(Eclipse), IntelliJ IDEA</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>✍️ PDF 필기 (Apple Pencil · 1장) — 10/1 보충</h2>
 <ul><li>5쪽 컴파일 — ✍️ “<b>소스를 컴파일해서 기계어로 번역한다</b>” · 확장자: 자바 <code>.java → .class</code> · C <code>.c → .obj → .exe</code> · C++ <code>.cpp → .obj → .exe</code></li><li>10쪽 바이트 코드 — ✍️ “<b>자바(.JAVA)를 실행하면 바이트(.class)로 바뀐다</b>” · 형광펜: 바이트 코드(.class) · JVM = <b>동일한 자바 실행 환경 제공</b> (JVM 자체는 플랫폼마다 따로)</li><li>42쪽 자바의 특성 — 동그라미: <b>플랫폼 독립성</b> · <b>소스(.java)와 클래스(.class) 파일</b><ul><li>하나의 소스 파일에 여러 클래스 가능 · <b>public 클래스는 하나만</b> · 소스 파일 이름 = public 클래스 이름 · 클래스마다 별도의 <code>.class</code> 생성</li></ul></li></ul>
 </section>

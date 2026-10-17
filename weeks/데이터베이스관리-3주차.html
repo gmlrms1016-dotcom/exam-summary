@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,7 +85,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="데이터베이스관리-2주차.html">‹ 이전 · <b>2주차</b><br><small>DB 정의·특징 / MySQL 실습</small></a><a class="next" href="데이터베이스관리-4주차.html">다음 · <b>4주차</b> ›<br><small>관계형 데이터 모델·기본키/외래키·스키마</small></a></nav>
 
 <div class="tip">자료: DB-Lect03-DBMS·기본키.pdf · 강의필기.txt(원본 대조) · SQL실습코드.txt</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>🔴 빨간 글씨 = 암기 (강의자료 DB-Lect03)</h2>
 <p>강의자료에서 교수님이 <b>빨간 글씨</b>로 표시한 부분입니다. 그대로 외우세요.</p>
 <table class="ref">
@@ -96,28 +101,28 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td><b>32p</b></td><td><b>기본키</b> (기본키 찾기 퀴즈)</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>0. 원본 대조 — 내가 직접 필기한 부분</h2>
 <p>교수님이 준 '강의필기 원본.txt'는 소제목만 있는 빈 골격이었고, '강의필기.txt'에서 아래 내용을 직접 채워 넣었습니다.</p>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 데이터베이스 정의 4가지: 공유(shared)·통합(integrated, 중복 최소화)·저장(stored)·운영(operational)</li><li><span class="wk-tag note">✍️ 필기</span> — 파일시스템 단점: ① 중복성 ② 종속성(프로그램이 변경되면 데이터도 변경)</li><li><span class="wk-tag note">✍️ 필기</span> — DBMS 장점: 데이터 독립성(프로그램이 변경돼도 데이터는 안 변함) → 논리적/물리적</li><li><span class="wk-tag note">✍️ 필기</span> — DBMS 단점: 비용, 교육</li><li><span class="wk-tag note">✍️ 필기</span> — 데이터언어 담당자: DDL=DBA, DML=일반사용자, DCL=DBA / DCL에 DENY까지 적음</li><li><span class="wk-tag note">✍️ 필기</span> — 키: 기본키(중복불가·필수입력)=PRIMARY KEY, 외래키=FOREIGN KEY</li><li><span class="wk-tag note">✍️ 필기</span> — 제품 테이블 CREATE문 + [실습 3-2] 검색 문제 + 32페이지 '기본키 찾기' 정답 직접 작성</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>1. 파일시스템 vs DBMS</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — DBMS = 데이터베이스를 관리하는 시스템 소프트웨어. 사용자·응용프로그램과 DB 사이의 인터페이스 역할</li><li>파일시스템 단점: ① 데이터 중복성 ② 데이터 종속성(프로그램 변경 시 데이터도 변경)</li><li><span class="wk-tag star">⭐ 강조</span> — DBMS 장점: ① 중복 최소화 ② 데이터 독립성</li><li><span class="wk-tag note">✍️ 필기</span> — DBMS 단점: 비용, 교육</li><li>대표 DBMS: MySQL, Oracle, MS SQL, DB2, MariaDB, CUBRID, PostgreSQL</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>2. 데이터베이스 개념 — 정의와 특성</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — DB 정의 4가지: 공유(shared) · 통합(integrated) · 저장(stored) · 운영(operational)</li><li><span class="wk-tag star">⭐ 강조</span> — DB 특성 4가지: 실시간 접근 · 계속 변화 · 동시 공유 · 내용으로 참조<ul><li>한 조직의 여러 응용시스템이 데이터를 공유할 수 있도록 통합·저장한 운영 데이터의 집합체</li></ul></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>3. 데이터베이스 시스템 구성요소 · 사용자</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 구성요소: 데이터(데이터베이스) · 하드웨어(HW) · DBMS · 사용자 · (데이터언어)</li><li><span class="wk-tag star">⭐ 강조</span> — 사용자 3종: 데이터베이스 관리자(DBA) · 응용프로그래머 · 일반사용자(end user)</li><li>DBA = 슈퍼유저: DB를 구축하고 시스템을 자체적으로 운영·통제<ul><li>DBA 역할: 구조 정의, 무결성 제약조건, 보안·접근권한, 백업·회복, 성능 감시·재구성</li></ul></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>4. 데이터 언어 (SQL) ★핵심</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — DDL(데이터 정의어): CREATE · ALTER · DROP [담당: DBA]</li><li><span class="wk-tag star">⭐ 강조</span> — DML(데이터 조작어): INSERT · SELECT · UPDATE · DELETE [담당: 일반사용자]</li><li><span class="wk-tag star">⭐ 강조</span> — DCL(데이터 제어어): GRANT · REVOKE (+DENY) [담당: DBA]</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>5. 키(Key) ★핵심</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 기본키(Primary Key): 각 투플을 유일하게 구별하는 하나 이상의 속성 집합 — 중복 불가 · 필수 입력</li><li>외래키(Foreign Key): 다른 테이블을 참조하는 키</li><li><span class="wk-tag star">⭐ 강조</span> — 복합키 예 — 수강 테이블 기본키 = {학번, 과목번호}</li></ul>
 <pre><code class="language-sql">CREATE TABLE 수강(   -- 수강 테이블 만들기 시작
@@ -128,7 +133,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 );                 -- CREATE TABLE 끝</code></pre>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — [Quiz 32p 기본키 찾기 — 내 답] 인사기록: 사원번호 / 가족관계: {사원번호, 이름} / 거래처: {사원명, 거래처}</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s8">
 <h2>6. MySQL 실습 (제품 · customer)</h2>
 <pre><code class="language-sql">USE testdb;                                     -- testdb 사용
 DROP TABLE if exists 제품;                        -- 제품 테이블이 있으면 지움

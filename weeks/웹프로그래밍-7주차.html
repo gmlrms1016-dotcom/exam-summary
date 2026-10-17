@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -82,7 +87,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">자료: 수업 필기(노션) · 1013_01.html · 1013_02.js (강의자료 없음) · 출력 결과는 전부 node 로 직접 실행한 값 (브라우저의 prompt · alert 는 node 에 없어서 입력값을 고정하고 console.log 로 바꿨어요)</div>
 <div class="tip">🔥 <b>시험 예고 (✍️ 필기)</b> — “<b>코드 문법(손코딩)이나 용어는 객관식으로 시험에 출제될 예정</b>” · “<b>switch 문 시험에 나옴!</b>” · <b>BOM 시험문제 “다음 중 성격이 다른 것은?”</b> (window · screen · location · history · navigator) · <b>얕은 복사 · 깊은 복사 뜻 알기</b> · <b>구조분해 할당 뜻</b> · 1013_02.js “<b>claude야 여기 시험문제로 정리해</b>” (매개변수 빈칸 a1, a2, a3) · “<b>수업시간에 나온 내장객체는 시험에 나오고, 수업시간에 언급이 없는 내장객체는 미출제</b>”</div>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 교수님도 AI 를 활용하시니 <b>우리도 AI 로 문제를 만들어서 풀어 보는 것도 좋은 공부법</b>이라고 하심 → 과목 페이지 🔒 실제시험에 7주차 문제를 넣어 두었어요.</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 🔥 switch 문 — 요일 번호로 요일 이름 (1013_01.html)</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — “<b>switch문 시험에 나옴!</b>”</p>
 <pre><code class="language-javascript">// 1013_01.html switch — 요일 번호(getDay)로 요일 이름 고르기 · 날짜를 수업 날(2026-10-13)로 고정
@@ -110,7 +115,7 @@ switch (day.getDay()) {                         // 2 와 같은 case 를 찾음 
 <tr><td><code>default:</code></td><td>어느 case 에도 안 맞을 때</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. if ~ else if ~ else — 나이 확인 (1013_01.html)</h2>
 <pre><code class="language-javascript">// 1013_01.html 나이 확인 — prompt 대신 입력값 3개를 차례로 넣어 봄 (브라우저에서는 prompt · alert)
 let inputs = ["17", "25", "abc"];               // prompt 로 받았다고 치는 문자열 3개
@@ -130,7 +135,7 @@ for (let i = 0; i &lt; inputs.length; i++) {       // i = 0 · 1 · 2 → 입력
 유효한 나이를 입력해주세요!</code></pre>
 <div class="tip"><code>parseInt("abc")</code> → <b>NaN</b> · NaN 은 어떤 비교도 <b>false</b> 라서 <code>age &lt; 20</code> · <code>age &gt;= 20</code> 둘 다 거짓 → 마지막 else 로 가요. 브라우저 수업 코드는 <code>prompt("나이 입력!")</code> 으로 받고 <code>alert</code> 로 보여 줘요.</div>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. truthy · falsy 로 짧게 — printName (1013_01.html)</h2>
 <pre><code class="language-javascript">// 1013_01.html truthy · falsy — 이름이 없을 때 처리 (두 함수를 이름만 바꿔 같이 비교)
 function printName1(name) {                     // 활용하기 전: undefined · null 만 직접 검사
@@ -158,7 +163,7 @@ console.log(printName2("윤희근"));              // "윤희근" → truthy →
 <div class="tip"><b>falsy</b> = <code>false</code> · <code>0</code> · <code>""</code>(빈 문자열) · <code>null</code> · <code>undefined</code> · <code>NaN</code> — 나머지는 전부 truthy · <code>!name</code> 하나가 <code>name === undefined || name === null</code> 보다 더 넓게 막아요 (빈 문자열 <code>""</code> 까지) · 🤖 <code>printName1("")</code> 줄은 차이를 보이려고 더한 줄이에요.</div>
 <div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 수업 파일은 두 함수를 <b>같은 이름 <code>printName</code></b> 으로 두 번 선언했어요. 선언적 함수는 호이스팅되고 <b>뒤에 쓴 것이 앞의 것을 덮어써서</b>, <code>console.log(printName());</code> 은 실제로 두 번째(<code>!name</code>) 함수로 실행돼요 (결과는 둘 다 <code>사람이 없네요.</code>).</div>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 객체를 만드는 방법 — new · { } · 내장객체 (1013_01.html)</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — “<b>object 를 생성할 때 new 라는 것을 쓰고 생성을 한다</b> · obj 를 만들 때, class 가 일을 하는 게 아니라 <b>obj 가 일을 해서</b> 만드는 거다”</p>
 <pre><code class="language-javascript">// 1013_01.html 객체 만드는 3가지 — new 생성자 · 리터럴 { } · 내장객체 Date
@@ -183,7 +188,7 @@ object object object
 </tbody></table>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 수업 시간에 나온 <b>내장객체</b>만 시험에 나와요 → 지금까지 수업 파일 · 필기에 나온 것: <b>Object</b> · <b>Date</b>(<code>getDay</code> · <code>getFullYear</code> …) · <b>JSON</b>(<code>JSON.stringify</code>) · (6주차) Date 시계</div>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. 🔥 얕은 복사 vs 깊은 복사 (노션 필기 코드)</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — <code>let o2=o1; //얕은 복사(뜻 알기)</code> · <code>let o4={...o3}; //깊은 복사(뜻 알기)</code></p>
 <pre><code class="language-javascript">// 노션 필기 — 얕은 복사 vs 깊은 복사 · === 비교 · JSON.stringify 로 내용 비교
@@ -212,7 +217,7 @@ true
 </tbody></table>
 <div class="tip">🤖 <b>참고</b> — 시험은 수업 용어(위 표)대로 답하면 돼요. 다만 <code>{...o3}</code> 는 <b>한 단계만</b> 새로 만들어서, 객체 안에 또 객체가 있으면 안쪽은 같이 쓰게 돼요 (그래서 교재에 따라서는 spread 도 “얕은 복사”라고 부르기도 해요) · <code>let o2 = o1</code> 은 “참조 복사”라고도 해요.</div>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>6. 🔥 매개변수 빈칸 — “claude야 여기 시험문제로 정리해” (1013_02.js)</h2>
 <pre><code class="language-javascript">let arrayObj=[1,"둘",true];
 function funcA(/*시험문제 빈칸          정답:a1,a2,a3*/){
@@ -241,7 +246,7 @@ undefined
 true</code></pre>
 <div class="tip">node 는 배열을 <code>[ 1, '둘', true ]</code> 로, 브라우저 콘솔은 <code>(3) [1, '둘', true]</code> 로 보여 줘요.</div>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>7. Rest 매개변수 (...a2) · spread 연산자 (...) (1013_02.js)</h2>
 <pre><code class="language-javascript">// 1013_02.js Rest 매개변수 (...a2) — 나머지 인수를 배열로 모음
 let arrayObj = [1, "둘", true];                 // 배열 3칸
@@ -302,7 +307,7 @@ funcA(...arrayObj);                             // spread → funcA(1, "둘", tr
 1
 [ '둘', true ]</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s8">
 <h2>8. 🔥 BOM — 브라우저 객체 모델 · “다음 중 성격이 다른 것은?”</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — 브라우저 객체모델(BOM) { // 시험문제 <b>다음 중 성격이 다른 것은?</b> window 객체 · screen 객체 · location 객체 · history 객체 · navigator 객체 }</p>
 <table class="ref">
@@ -316,7 +321,7 @@ funcA(...arrayObj);                             // spread → funcA(1, "둘", tr
 </tbody></table>
 <div class="tip">🤖 <b>답 (추론)</b> — 성격이 다른 것 = <b>window 객체</b>: 나머지 4개는 모두 <b>window 의 하위 객체</b>(window 의 속성)인데, window 는 그것들을 담고 있는 <b>최상위 객체</b>예요. 수업에서 다른 기준을 말씀하셨으면 노션에 적어 두세요 — 반영할게요.</div>
 </section>
-<section class="card">
+<section class="card" id="s9">
 <h2>9. 복습 — 이벤트</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — 복습 { <b>마우스 클릭: 이벤트</b> } → 사용자가 클릭 · 키 입력처럼 무언가를 했을 때 일어나는 일 = <b>이벤트</b> · <a href="웹프로그래밍-2주차.html">2주차 이벤트</a> · <a href="웹프로그래밍-6주차.html">6주차 DOM 클릭</a></p>
 <details class="wk-details">
@@ -349,7 +354,7 @@ console.log(JSON.stringify(o3)===JSON.stringify(o4)); //true, 객체를 문자�
 <div class="tip">⚠️ 필기 오타 <code>locaiton</code> → <b>location</b> · <code>뺴고</code> → <b>빼고</b></div>
 </details>
 </section>
-<section class="card">
+<section class="card" id="s10">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../웹프로그래밍-실제시험.html">🔒 웹프로그래밍 실제시험 — 7주차 🔥 문제(객관식 · 주관식 · 출력결과 · 코드)까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="웹프로그래밍-8주차-중간고사.html">중간고사 시험문제 정리</a></li></ul>
 </section>

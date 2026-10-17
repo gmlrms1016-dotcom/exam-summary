@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -82,7 +87,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">자료: 노션 7주차 필기 + 수업 화면 사진 1장 · 7주차 폴더 <code>필기(원본).txt</code>(교수님 실습 원본) · DB-Lect07-alter-grant-stu-pdf.pdf (PDF 펜 필기 없음) — 원본 txt 에 없고 <b>내가 쓴 것은 ✍️</b> 로 표시했어요. 결과 표는 사이트 채점기(sql.js = 브라우저 SQLite, 수업 MySQL 처럼 맞춤)로 실행한 값이에요.</div>
 <div class="tip">🔥 <b>시험 (✍️ 필기)</b> — “<b>오늘 나오는 것은 시험에서 10%가 나온다</b>” · <b>ALTER ADD (시험에 나옴)</b> — “<b>추가하는 게 시험문제임</b>” · 강의자료 <b>8 · 9쪽(Quiz 7-3) = 시험에 나오는 페이지</b> · DDL · DML · DCL <b>약어도 시험에 나옴</b> · DML 은 <b>시험의 70%</b> (직접 쓰는 문법이 나올 수 있음) · <b>GRANT · REVOKE 는 중간고사에 안 나옴</b></div>
 <div class="tip">📚 <b>중간고사 범위 (✍️)</b> — 교재 <b>1 · 2 · 3장(중요) · 5 · 6장</b> · 수업은 <b>2주차 ~ 7주차</b> · <b>중간고사는 객관식이 없음</b> → SQL 을 직접 쓰고 빈칸을 채우는 연습이 중요해요.</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 🔥 데이터베이스 언어(SQL) 3가지 — 약어도 시험 ✍️</h2>
 <table class="ref">
 <tbody style="min-width:760px;">
@@ -93,7 +98,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">📌 DDL = 테이블 <b>구조(틀)</b> 를 만들고 · 바꾸고 · 없앰 / DML = 테이블 안의 <b>데이터(행)</b> 를 조회 · 입력 · 수정 · 삭제 / DCL = 사용자 <b>권한</b>을 주고 · 뺏음</div>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 데이터베이스 사용자 ✍️</h2>
 <table class="ref">
 <tbody>
@@ -103,7 +108,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>3. <b>일반 사용자 (최종 사용자)</b></td><td>만들어진 프로그램으로 데이터를 조회 · 입력하는 사람</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 🔥 [실습 7-2] ALTER — 필드 추가 · 수정 · 삭제 (6쪽)</h2>
 <div class="tip"><b>ALTER</b> = 테이블의 <b>구조를 변경</b> (필드 추가 / 수정 / 삭제) — 강의자료 6쪽 · 문제: 1) budget 필드를 추가하라(int) 2) projname 필드의 데이터형식을 수정하라(varchar) 3) budget 필드를 삭제하라</div>
 <h3>① 🔥 필드 추가 — ADD (✍️ “추가하는 게 시험문제임”)</h3>
@@ -171,7 +176,7 @@ SELECT * FROM project;                          -- 처음처럼 projno · projna
 </tbody></table>
 <div class="tip">⚠️ <b>정정 (내 필기)</b> — 첫 필기의 <code>ADD budget char(20)</code> → 문제는 <b>int</b> · <code>MODIFY budget int</code> / 실습 코드의 <code>MODIFY budget varchar(20)</code> → 문제 2번은 <b>projname</b> 을 varchar 로 · 첫 필기의 <code>DROP COLUMN budget;</code> 앞에 <b><code>ALTER TABLE project</code></b> 가 빠졌어요 (ALTER 는 세 가지 모두 <code>ALTER TABLE 테이블명</code> 으로 시작). ALTER(DDL)는 <b>구조</b>를, UPDATE(DML)는 <b>값</b>을 바꿔요.</div>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 🔥 [Quiz 7-3] 테이블 2개 — dept · dmember (8 · 9쪽 = 시험에 나오는 페이지)</h2>
 <h3>8쪽 — 기본키 · 외래키 주의사항 · 테이블명세서</h3>
 <table class="ref">
@@ -259,7 +264,7 @@ COMMIT;                                         -- 확정 (MySQL)</code></pre>
 <tr><td><code>insert into dmember values('홍길동','999');</code> (999 학과 없음)</td><td>❌ Error <b>1452</b> Cannot add or update a child row: a foreign key constraint fails</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. [실습 7-1] GRANT · REVOKE — 사용자 권한 관리 (✍️ 중간고사엔 안 나옴)</h2>
 <div class="tip">원본 실습은 <b>학과</b> 테이블, 수업은 ✍️ <b>project 테이블</b>로 했어요 (사진 · 필기). 4 · 5쪽.</div>
 <pre><code class="language-sql">-- (root) 1. 데이터베이스 생성
@@ -473,7 +478,7 @@ select * from dmember;
 COMMIT;</code></pre>
 </details>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../데이터베이스관리-실제시험.html">🔒 데이터베이스관리 실제시험 — 7주차 🔥 ALTER ADD · Quiz 7-3 문제까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="데이터베이스관리-8주차-중간고사.html">중간고사 시험문제 정리</a></li></ul>
 </section>

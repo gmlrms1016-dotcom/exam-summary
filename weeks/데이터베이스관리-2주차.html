@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -80,15 +85,15 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="데이터베이스관리-1주차.html">‹ 이전 · <b>1주차</b><br><small>강의소개 / DB 개념</small></a><a class="next" href="데이터베이스관리-3주차.html">다음 · <b>3주차</b> ›<br><small>DBMS·데이터언어·기본키</small></a></nav>
 
 <div class="tip">자료: DB-Lect02-기본실습.pdf · 스크립트.txt · 참고실습-MySQL 설치.pdf</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 데이터베이스 정의 4대 특징 ★핵심암기</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 공유(shared data): 여러 응용시스템이 함께 사용</li><li><span class="wk-tag star">⭐ 강조</span> — 통합(integrated data): 중복의 최소화</li><li><span class="wk-tag star">⭐ 강조</span> — 저장(stored data): 저장장치에 저장</li><li><span class="wk-tag star">⭐ 강조</span> — 운영(operational data): 조직 운영에 필요한 데이터</li><li>DBMS: 데이터베이스를 관리하는 시스템 소프트웨어 (MySQL, Oracle, MS SQL, MariaDB, PostgreSQL 등)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. 자료형 (필기 정리)</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 1 byte = 8 bit / 문자형 = 1 byte / 정수형 = 4 byte = 32bit</li><li><span class="wk-tag note">✍️ 필기</span> — 문자형: 고정문자열 char(n) (예 주민번호) · 가변문자열 varchar(n) (예 주소·영화제목)</li><li>숫자형: 정수 / 실수</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. MySQL 실습 4단계 ★핵심</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 1단계 데이터베이스(스키마) 생성 → 2단계 테이블 생성 → 3단계 데이터 입력 → 4단계 데이터 조회</li><li><span class="wk-tag note">✍️ 필기</span> — 주의: 들여쓰기는 Tab 말고 Spacebar 4번</li></ul>
 <pre><code class="language-sql">CREATE DATABASE testdb DEFAULT CHARACTER SET utf8mb4;   -- testdb 데이터베이스 만들기 (utf8mb4 = 한글 · 이모지 저장)

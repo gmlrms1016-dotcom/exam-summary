@@ -50,6 +50,11 @@
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
@@ -81,11 +86,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">자료: 원격수업 교수님 메모 · 수업 필기(노션) · 0915_01.html · 0915_02.js · 0915_03.js · 0915_04.html</div>
 <div class="tip">🎯 <b>시험 포인트</b> — ① Node.js 가 무엇인지 <b>주관식</b> ② HTML·CSS·JS <b>주석 차이</b> ③ <code>++</code> <b>전위·후위 차이</b> ④ <code>||</code> 와 <code>&amp;&amp;</code> <b>차이 설명</b> ⑤ <code>==</code> 와 <code>===</code> 차이 ⑥ 연산자 9가지 (교수님 메모)</div>
-<section class="card">
+<section class="card" id="s1">
 <h2>1. 복습: Node.js ★시험(주관식)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — Node.js = 자바스크립트를 <b>브라우저 밖에서도 단독으로 실행</b>할 수 있게 해 주는 런타임(실행 환경)</li><li><span class="wk-tag note">✍️ 필기</span> — JS 로 할 수 있는 일이 많다: 웹 클라이언트 · 서버(Node.js) · 모바일 앱 · 데스크톱 앱 등</li><li><span class="wk-tag fix">✍️ 필기 정정</span> — TypeScript = JS 에 <b>타입(정적 타입 검사)을 추가한</b> 언어(JS 의 상위 집합). Next.js 는 TypeScript 의 "다음 단계"가 아니라 <b>React 기반 웹 프레임워크</b>(TypeScript 와 함께 자주 쓰일 뿐)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s2">
 <h2>2. HTML · CSS · JS 주석 ★시험</h2>
 <table class="ref">
 <tbody>
@@ -95,15 +100,15 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>JavaScript</td><td><code>// 한 줄</code> · <code>/* 여러 줄 */</code></td><td>script 태그 안이나 .js 파일</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s3">
 <h2>3. 변수 · 상수 · 이름 규칙</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 변수를 선언만 하고 값을 넣지 않으면 <code>undefined</code>, 값이 없음을 <b>일부러</b> 표시하고 싶으면 <code>null</code> 을 대입</li><li>이름 규칙: <code>$</code> · <code>_</code> 외의 기호 금지 / 숫자로 시작 금지 / 키워드 금지</li><li><span class="wk-tag note">✍️ 필기</span> — 관례: <b>상수는 모두 대문자</b>(<code>const PI = 3.14;</code>) · 변수·객체 이름은 <b>소문자로 시작</b>(카멜 표기법 <code>myName</code>)</li><li><code>var</code> 는 같은 이름으로 다시 선언 가능(<code>var tel2 = 20; var tel2 = 30;</code>) · <code>let</code> 은 재선언 불가</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s4">
 <h2>4. 자료형 보충</h2>
 <ul><li>Number: 정수·실수·음수 모두 number · <code>Infinity</code> / <code>-Infinity</code> · 계산할 수 없으면 <code>NaN</code> (<code>10 * "hi"</code> → NaN)</li><li>String: 백틱(템플릿 리터럴) 안에 <code>${변수}</code> 를 넣으면 값이 들어간 문자열이 된다</li><li>Boolean <code>true</code> / <code>false</code> · Null <code>null</code> · Undefined: <code>let none; console.log(none);</code> → <code>undefined</code> 출력</li><li><span class="wk-tag note">✍️ 필기</span> — 시스템(브라우저·JS)이 미리 만들어 제공하는 객체 = <b>내장 객체</b> (예: <code>document</code> · <code>window</code> · <code>Math</code> · <code>Date</code>)</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s5">
 <h2>5. 형변환(캐스팅) ★필수암기</h2>
 <ul><li><span class="wk-tag fix">✍️ 필기 정정</span> — 문자열 + 숫자는 덧셈이 아니라 숫자가 <b>문자열로 바뀌어 이어 붙는다</b>: <code>10 + "20"</code> → <code>"1020"</code></li></ul>
 <table class="ref">
@@ -123,11 +128,11 @@ resultObj.innerHTML = num1 + num2;                   // prompt 는 문자열을 
 resultObj.innerHTML = Number(num1) + Number(num2);   // Number("3") → 3 · Number("4") → 4 → 3 + 4 숫자 덧셈 → 7
 resultObj.innerHTML = `결과값은 ${Number(num1) + Number(num2)}`;   // 백틱(템플릿 리터럴): ${ } 안을 먼저 계산 → 3 + 4 → 7 → "결과값은 7"</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s6">
 <h2>6. 요소 선택과 속성 쓰임새</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> — 기존에 배운 것 <code>document.getElementById("result")</code> → 이번에 배운 것 <code>document.querySelector("#result")</code></li><li><code>querySelector()</code> 는 <b>CSS 선택자</b>(<code>#아이디</code> · <code>.클래스</code> · <code>태그</code>)로 <b>첫 번째</b> 요소를 찾는다</li><li><span class="wk-tag note">✍️ 필기</span> — <code>id</code> → <b>JS</b> 에서 요소 하나를 선택할 때 / <code>class</code> → <b>CSS</b> 로 여러 요소를 꾸밀 때 / <code>name</code> → <b>백엔드(서버)</b> 로 폼 값을 보낼 때의 이름표</li><li><span class="wk-tag fix">✍️ 필기 정정</span> — <b>리플로우</b>(Reflow) = 레이아웃(크기·위치)을 <b>다시 계산</b> / <b>리페인트</b>(Repaint) = 색상 등 화면을 <b>다시 그리기</b></li></ul>
 </section>
-<section class="card">
+<section class="card" id="s7">
 <h2>7. 연산자 9가지 ★필수암기</h2>
 <ul><li><span class="wk-tag memo">📝 교수님 메모</span> — 연산자 : 대입 연산자 / 산술 연산자 / 복합 대입 연산자 / 증감 연산자 / 논리 연산자 / 비교 연산자 / null 병합 연산자 / typeof 연산자 / 삼항 연산자</li></ul>
 <table class="ref">
@@ -144,18 +149,18 @@ resultObj.innerHTML = `결과값은 ${Number(num1) + Number(num2)}`;   // 백틱
 <tr><td>삼항</td><td><code>조건 ? A : B</code></td><td><code>var8 % 2 === 0 ? "짝수" : "홀수"</code> → "짝수" (→ 11장)</td></tr>
 </tbody></table>
 </section>
-<section class="card">
+<section class="card" id="s8">
 <h2>8. 증감 연산자: 전위 vs 후위 ★시험</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <b>전위</b> <code>++num8</code>: 먼저 1 증가 → 증가된 값을 사용 / <b>후위</b> <code>num8++</code>: 현재 값을 먼저 사용 → 그다음 1 증가</li></ul>
 <pre><code class="language-javascript">let num8 = 10;   // num8 = 10
 console.log(num8++);   // 후위 ++: 지금 값 10 을 먼저 출력 → 그다음 num8 = 10 + 1 = 11 → 출력 10
 console.log(++num8);   // 전위 ++: 먼저 num8 = 11 + 1 = 12 → 그 값을 출력 → 12</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s9">
 <h2>9. 비교 연산자: == vs === ★시험</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>==</code> 는 타입이 달라도 <b>형변환 후 값만</b> 비교 / <code>===</code> 는 <b>값과 타입 모두</b> 비교(엄격)</li><li><code>"10" == 10</code> → <code>true</code> · <code>"10" === 10</code> → <code>false</code> · <code>1 !== 2</code> → <code>true</code></li><li><span class="wk-tag fix">✍️ 필기 정정</span> — 필기의 <code>ture</code> 는 <code>true</code> 오타</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s10">
 <h2>10. 논리 연산자 · truthy/falsy · 단락 평가 ★시험</h2>
 <ul><li><span class="wk-tag fix">✍️ 필기 정정</span> — <code>&amp;</code> 는 JS 에서 <b>비트 연산자</b>: 양쪽을 <b>항상 둘 다 계산</b>하고 결과는 숫자(<code>true &amp; false</code> → 0) / <code>&amp;&amp;</code> 는 <b>논리 연산자</b>: 왼쪽이 false 로 확정되면 <b>오른쪽은 계산하지 않고</b> 바로 결과를 돌려준다 = <b>단락 평가</b></li><li><span class="wk-tag memo">📝 교수님 메모</span> — <b>Truthy와 Falsy</b>: 참·거짓(boolean)이 아닌 값도 <b>조건문 안에서는 참 또는 거짓으로 판단</b>되는 값 · <b>단락평가</b>: <code>&amp;&amp;</code> <code>||</code></li><li><span class="wk-tag star">⭐ 강조</span> — <b>falsy</b>(거짓으로 취급) 8가지: <code>false</code> · <code>0</code> · <code>-0</code> · <code>0n</code> · <code>""</code> · <code>null</code> · <code>undefined</code> · <code>NaN</code> → 이것들을 뺀 나머지는 모두 <b>truthy</b>(참으로 취급). <code>"0"</code>, <code>"false"</code>, <code>[]</code>, <code>{}</code> 도 truthy</li><li><span class="wk-tag star">⭐ 강조</span> — <code>A || B</code> : A 가 falsy 면 <b>B</b>, truthy 면 <b>A</b> / <code>A &amp;&amp; B</code> : A 가 truthy 면 <b>B</b>, falsy 면 <b>A</b></li></ul>
 <table class="ref">
@@ -354,7 +359,7 @@ changeVar = changeVar &amp; "입력없음";                     // ❌ 양쪽을
 </tbody></table>
 <div class="tip"><b>정리</b> — <b>||</b> 는 값이 없을 때(falsy) 대신 쓸 <b>기본값</b>을 넣을 때, <b>&amp;&amp;</b> 는 앞의 값이 있을 때(truthy)만 뒤를 쓸 때. <b>&amp; |</b> 는 숫자 비트 계산이라 이런 데 쓰면 항상 0 이 됩니다. truthy/falsy + 단락 평가를 쓰면 값이 없을 때 날 오류를 <b>미리 막고</b> if 문을 <b>짧게</b> 쓸 수 있어요 (prompt 에서 취소한 <code>null</code> 까지 한 번에 처리).</div>
 </section>
-<section class="card">
+<section class="card" id="s11">
 <h2>11. null 병합 · typeof · 삼항 연산자</h2>
 <ul><li><code>??</code> (null 병합): 왼쪽이 <b>null·undefined 일 때만</b> 오른쪽 → <code>undefined ?? 10</code> 은 10, <code>0 ?? 5</code> 는 <b>0</b> (<code>0 || 5</code> 는 5)</li><li><code>typeof</code>: 값의 타입을 문자열로 반환 → <code>typeof true</code> 는 "boolean", <code>typeof null</code> 은 "object"</li><li><span class="wk-tag note">✍️ 필기</span> — 삼항 연산자 = if 문을 짧게 줄인 연산자: <code>조건 ? 참일 때 : 거짓일 때</code> → 조건이 true 면 <b>콜론 앞</b>, false 면 <b>콜론 뒤</b></li></ul>
 <pre><code class="language-javascript">let var8 = 7;                                   // 짝 · 홀을 판정할 수 7
@@ -369,7 +374,7 @@ changeVar = changeVar || "입력없음";   // "" · 취소 null → 거짓 → �
 console.log(changeVar);                         // "" 를 넣었다면 → 입력없음</code></pre>
 <ul><li>⚠️ 0915_04.html 은 <code>querySelector("#result")</code> 인데 태그 id 가 <code>content</code> 라서 <b>null 오류</b>가 났다 → <code>#content</code> 로 맞춰야 화면에 출력된다 (4주차 폴더 파일은 <code>#content</code> 로 고침). prompt 에서 <b>취소</b>하면 <code>null</code> 이 들어와 <code>== ""</code> 검사로는 못 거른다</li></ul>
 </section>
-<section class="card">
+<section class="card" id="s12">
 <h2>12. 매개변수(parameter)와 인수(argument)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <b>매개변수</b> = 함수를 <b>정의</b>할 때 값을 받으려고 괄호 안에 적는 변수(<code>person</code>) / <b>인수</b> = 함수를 <b>호출</b>할 때 실제로 넘기는 값(<code>{ name: "홍길동" }</code>)</li></ul>
 <pre><code class="language-javascript">function printName(person) {     // person = 매개변수(파라미터)
@@ -383,7 +388,7 @@ let person = { name: "홍길동" };           // name 속성이 있는 객체를
 printName(person);               // person 전달 → !person 은 false → if 건너뜀 → person.name → 홍길동
 printName();                     // 인수 없음 → person = undefined → !undefined 는 true → "person의 값이 없음" 출력 후 return</code></pre>
 </section>
-<section class="card">
+<section class="card" id="s13">
 <h2>13. 복습: 함수 선언 3가지</h2>
 <ul><li>① 선언적 함수 <code>function btnClick() { ... }</code> ② 표현적(익명) 함수 <code>let btnClick = function() { ... };</code> ③ 화살표 함수 <code>let btnClick = () =&gt; { ... };</code> → 호출은 모두 <code>btnClick();</code></li><li><span class="wk-tag fix">✍️ 필기 정정</span> — 필기에서 화살표 함수 번호가 1로 되어 있던 것 → 3번</li></ul>
 <details class="wk-details">
