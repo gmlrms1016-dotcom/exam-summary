@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610162002"></script>
+    <script src="../theme.js?v=202610182111"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운영체제실습 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610162002">
+    <link rel="stylesheet" href="../style.css?v=202610182111">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -43,6 +43,18 @@
 .wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
 .wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
 .wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
 .wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
 .wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
 .wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
@@ -85,7 +97,19 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="운영체제실습-7주차.html">‹ 이전 · <b>7주차</b><br><small>프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../운영체제실습-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 22일(목) 14:00</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip">시험 예시 <b>1~10번 객관식</b></span><span class="wk-chip"><b>sh 문제</b> (출력결과·파일 존재·사이즈 체크 if문)</span><span class="wk-chip">호스트 / 게스트 운영체제 중 하나 <b>설명 (1문제)</b></span><span class="wk-chip">셸 스크립트 <b>비중 낮음</b></span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip"><b>1장 ~ 7장</b></span><span class="wk-chip">⚠️ 6주차엔 “6장 빠짐” → 7주차에 <b>“6장은 중요”</b></span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span>강의자료에 없지만 시험에 나옴 — <b>백업(크론)</b> · <b>런레벨</b> · <b>심볼릭 · 하드 링크</b> · <b>포그라운드 · 백그라운드</b> (포그라운드 → 백그라운드 변경)</li><li><span class="wk-exam-wk">7주차</span><b>호스트 / 게스트 운영체제 중 하나 설명 (1문제)</b> · <b>sh 문제</b> (출력결과 · 파일 존재 · 사이즈 체크 if문)</li><li><span class="wk-exam-wk">7주차</span>시험 예시 — <b>마스터 유저로 디렉터리 설정</b></li><li><span class="wk-exam-wk">6주차</span>시험에 나오는 용어 — <b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것 · <b>노틸러스</b> = 파일탐색기 · <b>에볼루션</b> = 메일 프로그램</li><li><span class="wk-exam-wk">4주차</span><b>DNF 작동 흐름도(그림 4-111)</b> — 수업 화면에 나온 시험문제</li></ol></dd><dt>❌ 안 나옴</dt><dd><span class="wk-chip bad">도전문제 5-4</span></dd><dd class="wk-exam-note">📌 <b>1~7주차</b> 반영 · 이 과목은 명령어 · 옵션이 많아서 <b>주차 순서가 아니라 주제별</b>로 묶었어요 → 맨 위 🔥 9개를 먼저 외우고, 아래 주제별 표로 넓히세요.</dd></dl></section>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 22일(목) 14:00</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip">시험 예시 <b>1~10번 객관식</b></span><span class="wk-chip"><b>sh 문제</b> (출력결과·파일 존재·사이즈 체크 if문)</span><span class="wk-chip">호스트 / 게스트 운영체제 중 하나 <b>설명 (1문제)</b></span><span class="wk-chip">셸 스크립트 <b>비중 낮음</b></span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip"><b>1장 ~ 7장</b></span><span class="wk-chip">⚠️ 6주차엔 “6장 빠짐” → 7주차에 <b>“6장은 중요”</b></span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span>강의자료에 없지만 시험에 나옴 — <b>백업(크론)</b> · <b>런레벨</b> · <b>심볼릭 · 하드 링크</b> · <b>포그라운드 · 백그라운드</b> (포그라운드 → 백그라운드 변경)</li><li><span class="wk-exam-wk">7주차</span><b>호스트 / 게스트 운영체제 중 하나 설명 (1문제)</b> · <b>sh 문제</b> (출력결과 · 파일 존재 · 사이즈 체크 if문)</li><li><span class="wk-exam-wk">7주차</span>시험 예시 — <b>마스터 유저로 디렉터리 설정</b></li><li><span class="wk-exam-wk">6주차</span>시험에 나오는 용어 — <b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것 · <b>노틸러스</b> = 파일탐색기 · <b>에볼루션</b> = 메일 프로그램</li><li><span class="wk-exam-wk">4주차</span><b>DNF 작동 흐름도(그림 4-111)</b> — 수업 화면에 나온 시험문제</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 9개 — 꼭 외울 답</span></summary><div class="wm-body"><table class="ref">
+<tbody>
+<tr><th>#</th><th>찍어 준 것</th><th>꼭 외울 답</th></tr>
+<tr><td>1</td><td><b>백업 (크론)</b></td><td><code>/etc/crontab</code> 한 줄 = <b>분 시 일 월 요일 사용자 명령</b> → <code>01 3 15 * * root run-parts /etc/cron.monthly</code> = <b>매월 15일 03:01</b></td></tr>
+<tr><td>2</td><td><b>런레벨</b></td><td><b>0</b> 종료 · <b>1</b> 단일 사용자(복구) · <b>3</b> 텍스트(CLI) 다중 사용자 · <b>5</b> 그래픽(GUI) · <b>6</b> 재부팅</td></tr>
+<tr><td>3</td><td><b>심볼릭 · 하드 링크</b></td><td>하드 <code>ln 원본 링크</code> = <b>같은 inode</b> · 원본을 지워도 내용 남음 / 심볼릭 <code>ln -s 원본 링크</code> = <b>새 inode</b> · 원본을 지우면 <b>깨짐</b></td></tr>
+<tr><td>4</td><td><b>포그라운드 → 백그라운드</b></td><td><b>Ctrl+Z</b> (멈춤) → <b><code>bg</code></b> (뒤에서 계속) · <code>jobs</code> 목록 · <code>fg 1</code> 다시 앞으로 · 처음부터 뒤로 <code>명령 &amp;</code></td></tr>
+<tr><td>5</td><td><b>호스트 / 게스트 OS</b> (서술 1문제)</td><td>호스트 = <b>실제 PC</b> 에 설치되어 VMware · VirtualBox 같은 <b>가상화 프로그램을 돌리는</b> OS / 게스트 = <b>가상 머신 안</b>에 설치한 OS (Rocky Linux)</td></tr>
+<tr><td>6</td><td><b>sh 문제</b></td><td>출력결과 읽기 · <code>[ -e 파일 ]</code> 있으면 · <code>[ -s 파일 ]</code> 크기 &gt; 0 · <code>[ -f ]</code> 일반 파일 · <code>[ -d ]</code> 디렉터리 · <code>&amp;&amp;</code> 둘 다 참 · <code>'$v'</code> 글자 / <code>"$v"</code> 값 · <code>expr</code> 로만 계산</td></tr>
+<tr><td>7</td><td><b>마스터 유저로 디렉터리 설정</b></td><td>만들 때 <code>useradd -d /work_06 master</code> · 바꿀 때 <code>usermod -d /home/workspace_06 master</code> · 확인 <code>grep master /etc/passwd</code> (도전 6-1 · 6-2)</td></tr>
+<tr><td>8</td><td><b>시험 용어</b></td><td><b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 <b>활성화된 것</b> · <b>노틸러스</b> = 파일탐색기 · <b>에볼루션</b> = 메일</td></tr>
+<tr><td>9</td><td><b>DNF 작동 흐름도</b> (그림 4-111)</td><td>① dnf install → ② repo 파일의 <b>URL</b> 확인 → ③ <b>목록</b> 요청 → ④ 목록 다운로드 → ⑤ 관련 패키지 이름 출력 → ⑥ <b>y</b> → 파일 요청 → ⑦ 다운로드 · 자동 설치</td></tr>
+</tbody></table></div></details></dd><dt>❌ 안 나옴</dt><dd><span class="wk-chip bad">도전문제 5-4</span></dd><dd class="wk-exam-note">📌 <b>1~7주차</b> 반영 · 이 과목은 명령어 · 옵션이 많아서 <b>주차 순서가 아니라 주제별</b>로 묶었어요 → 맨 위 🔥 9개를 먼저 외우고, 아래 주제별 표로 넓히세요.</dd></dl></section>
 <nav class="wk-toc"><span class="wk-toc-t">바로 가기</span><a href="#s1">🔥 교수님이 찍어 준 것 — 시험 직전 이것만 (9개)</a><a href="#s2">① 기본 명령 · 디렉터리 (1 · 2주차)</a><a href="#s3">② 마운트 · inode · 링크 (3주차)</a><a href="#s4">③ 접근 권한 chmod (3주차)</a><a href="#s5">④ 사용자 · 그룹 관리 (3 · 4주차)</a><a href="#s6">⑤ 패키지 rpm · dnf (4주차)</a><a href="#s7">⑥ 작업 예약 cron · at · 백업 (5주차)</a><a href="#s8">⑦ 프로세스 · 서비스 · 작업 제어 (6 · 7주차)</a><a href="#s9">⑧ 셸 스크립트 (6주차 · 7장)</a><a href="#s10">⚠️ 헷갈리는 짝 — 한 번에 비교</a><a href="#s11">📎 참고 — 작년(2025) 튜터링 자료</a><a href="#s12">✏️ 문제로 확인하기</a></nav>
 <section class="card" id="s1">
 <h2>🔥 교수님이 찍어 준 것 — 시험 직전 이것만 (9개)</h2>
@@ -357,6 +381,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610162002"></script>
+<script src="../ink.js?v=202610182111"></script>
 </body>
 </html>

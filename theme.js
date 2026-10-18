@@ -242,6 +242,10 @@
         "html[data-theme=dark] .wk-chip{background:#25292e;color:#f5f5f5}",
         "html[data-theme=dark] .wk-chip.bad{background:#3a1a1e;color:#ff9aa2}",
         "html[data-theme=dark] .wk-exam-wk{background:#0095f6;color:#fff}",
+        "html[data-theme=dark] .wk-exam-more .wm-open{background:#0095f6;color:#fff;box-shadow:none}",
+        "html[data-theme=dark] .wk-exam-more .wm-close{background:#25292e;color:#f5f5f5}",
+        "html[data-theme=dark] .wk-exam-more .wm-sub{color:#a8a8a8}",
+        "html[data-theme=dark] .wk-exam-more .wm-body{background:#0c1014;border-color:#262a2f}",
         "html[data-theme=dark] .wk-exambtn{--eb-glow:0,149,246}",
         "html[data-theme=dark] .wk-exambtn a{background:linear-gradient(135deg,#1aa3ff,#0074d9);color:#fff}",
         "html[data-theme=dark] .wk-exambtn .eb-go{background:#fff;color:#0074d9}",
@@ -591,7 +595,49 @@
         });
     }
 
+    // ---- 시험 글자 빨갛게 (2026-10-18 사용자: 전공 · 교양 사이트의 '시험' '시험범위' 등 시험에 관한 글자를 빨간색으로) ----
+    //  글 조각만 <span class="exam-word"> 로 감쌈 (textContent 는 그대로 → 필기 앵커 · 채점에 영향 없음) · 코드 · 입력칸 · 버튼 · 색 배경 머리글 · 실제시험 페이지는 건드리지 않음
+    var EXAM_RE = /[가-힣]*(?:시험|중간고사|기말고사|출제)[가-힣]*(?:\s(?:꼭\s)?나(?:옴|온다|와요|옵니다|오는|올|왔)[가-힣]*)?/g;
+    var EXAM_SKIP = "pre,code,kbd,textarea,input,select,option,button,script,style,svg,title,.page-head,.hero,.wk-exambtn,.wk-exam-wk,.exam-word,.theme-toggle,.ink-ui,[contenteditable],[data-no-examred]";
+    function markExamWords(box) {
+        if (/-실제시험\.html$|\/_t_[^\/]*\.html$/.test(decodeURIComponent(location.pathname))) return;
+        if (!document.getElementById("exam-word-css")) {
+            var css = document.createElement("style");
+            css.id = "exam-word-css";
+            css.setAttribute("data-theme-skip", "");
+            css.textContent = ".exam-word{color:#e03131!important;font-weight:800}html[data-theme=dark] .exam-word{color:#ff6b6b!important}";
+            document.head.appendChild(css);
+        }
+        var w = document.createTreeWalker(box || document.body, NodeFilter.SHOW_TEXT, {
+            acceptNode: function (n) {
+                var v = n.nodeValue;
+                if (!v || !/시험|중간고사|기말고사|출제/.test(v)) return NodeFilter.FILTER_REJECT;
+                var p = n.parentElement;
+                return p && !p.closest(EXAM_SKIP) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+            }
+        });
+        var list = [], n;
+        while ((n = w.nextNode())) list.push(n);
+        list.forEach(function (t) {
+            var s = t.nodeValue, last = 0, frag = document.createDocumentFragment(), m;
+            EXAM_RE.lastIndex = 0;
+            while ((m = EXAM_RE.exec(s))) {
+                if (m.index > last) frag.appendChild(document.createTextNode(s.slice(last, m.index)));
+                var sp = document.createElement("span");
+                sp.className = "exam-word";
+                sp.textContent = m[0];
+                frag.appendChild(sp);
+                last = m.index + m[0].length;
+            }
+            if (!last) return;
+            if (last < s.length) frag.appendChild(document.createTextNode(s.slice(last)));
+            t.parentNode.replaceChild(frag, t);
+        });
+    }
+
     function start() {
+        try { markExamWords(); } catch (e) { }
+        window.addEventListener("load", function () { setTimeout(function () { try { markExamWords(); } catch (e) { } }, 800); });   // 뒤늦게 그려지는 글(일정 · 첫 화면)도 한 번 더
         var st = document.createElement("style");
         st.id = "theme-dark-css";
         st.setAttribute("data-theme-skip", "");

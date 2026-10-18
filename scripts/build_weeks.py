@@ -124,11 +124,23 @@ def render_exam(block):
     줄 모양:  일시 :: 10월 22일(목) 14:00 · 6관 406호   (맨 위에 크게)
              🗂 범위 :: 1장 · 2장 · 3장                 (' · ' 로 나눈 조각을 칩으로)
              🔥 찍어 준 것 ::                           (값이 비면 아래 '  - ' 줄들을 번호 목록으로 · '  - [7주차] …' 은 주차 꼬리표)
+             🔎 자세히 :: 부제                          (바로 위 칸 밑에 '자세히 보기' 버튼 · 아래 2칸 들여쓴 줄 = 펼치면 보이는 원고)
              ❌ 안 나옴 :: …                            (빨간 칩)
              📌 :: …                                    (키 없이 = 작은 설명 줄)"""
-    when, rows, cur = "", [], None
+    when, rows, cur, more = "", [], None, None
     for ln in block:
+        if more is not None:                              # 🔎 자세히 :: 아래 2칸 들여쓴 줄 = 펼치면 보이는 원고 (표 · 목록 · 코드 그대로)
+            if ln.startswith("  ") or not ln.strip():
+                more["raw"].append(ln[2:] if ln.startswith("  ") else "")
+                continue
+            more = None
         if not ln.strip():
+            continue
+        if ln.lstrip().startswith("🔎") and "::" in ln:
+            k, _, v = ln.partition("::")
+            more = {"k": k.strip(), "v": v.strip(), "items": [], "raw": []}
+            rows.append(more)
+            cur = None
             continue
         m = re.match(r"^\s+- (?:\[([^\]]+)\]\s*)?(.*)$", ln)
         if m and cur is not None:
@@ -150,6 +162,11 @@ def render_exam(block):
             out.append('<span class="wk-exam-where">%s</span>' % " · ".join(inline(b) for b in bits[1:]))
     out.append("</div><dl class=\"wk-exam-grid\">")
     for r in rows:
+        if "raw" in r:                                    # 🔎 자세히 보기 — 바로 위 칸(찍어 준 것 · 강조)의 내용 정리를 접어 둠 (2026-10-18 사용자: 찝어 준 것을 일일이 찾기 힘듦)
+            body = render_md("\n".join(r["raw"]))[1]
+            out.append('<dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span>'
+                       '<span class="wm-sub">%s</span></summary><div class="wm-body">%s</div></details></dd>' % (inline(r["v"]), body))
+            continue
         if r["k"] in ("", "📌"):                          # 설명 줄 (키 없음 · 📌)
             out.append('<dd class="wk-exam-note">📌 %s</dd>' % inline(r["v"]))
             continue
@@ -324,6 +341,18 @@ PAGE_CSS = """
 .wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
 .wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
 .wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
 .wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
 .wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
 .wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
@@ -354,10 +383,10 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202610162002"></script>
+    <script src="{asset}theme.js?v=202610182111"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="{asset}style.css?v=202610162002">
+    <link rel="stylesheet" href="{asset}style.css?v=202610182111">
     <style>{css}</style>
 </head>
 <body>
@@ -385,7 +414,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202610162002"></script>
+<script src="{asset}ink.js?v=202610182111"></script>
 </body>
 </html>
 """

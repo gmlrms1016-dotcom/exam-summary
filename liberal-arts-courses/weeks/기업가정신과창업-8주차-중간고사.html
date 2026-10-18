@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../../theme.js?v=202610162002"></script>
+    <script src="../../theme.js?v=202610182111"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>기업가정신과창업 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../../style.css?v=202610162002">
+    <link rel="stylesheet" href="../../style.css?v=202610182111">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -43,6 +43,18 @@
 .wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
 .wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
 .wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
 .wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
 .wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
 .wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
@@ -85,7 +97,48 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="기업가정신과창업-7주차.html">‹ 이전 · <b>7주차</b><br><small>기업 — 기업의 형태 ★ (4강 · 시험범위 마지막)</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../기업가정신과창업-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 19일(월) 수업 시간</span><span class="wk-exam-where">6호관 307호 · 출석체크 12시 · 시험 12:45 ~ 13:35</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip">5점 × 4문제 = 20점</span><span class="wk-chip">10점 × 1문제 = 10점</span><span class="wk-chip">총 <b>30점</b> (성적의 30%)</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">처음 ~ 기업 PPT = ✍️ <b>1강 ~ 4강</b></span><span class="wk-chip">✍️ 6주차 “<b>시험범위 1,2,3,4차 잘보기</b>”</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span>5점 문제 = ✍️ <b>회사 5종 각각 특징 3가지 외우기</b> (4강 21쪽 “시험문제(5점짜리)”)</li><li><span class="wk-exam-wk">7주차</span>10점 문제 1개 = ✍️ <b>회사 비교 or 회사의 특징 설명</b> (40쪽)</li><li><span class="wk-exam-wk">7주차</span>24쪽 “<b>4~5칸 빈칸 맞히기</b>” · 30쪽 “<b>★ 정리</b>” 비교표</li><li><span class="wk-exam-wk">6주차</span><b>1 · 2 · 3 · 4차 산업혁명</b> = 1강(2주차) · 2강(3주차) · 3강(5 · 6주차)</li></ol></dd><dt>🎒 준비물</dt><dd><span class="wk-chip"><b>실물 신분증</b></span></dd><dt>⭐ 강의 ★ 강조</dt><dd><ol class="wk-exam-list"><li>기업가정신 교육 vs 창업 교육(<b>Miller · Timmons</b>)</li><li>1차 산업혁명 <b>발생 배경 5가지</b></li><li>산업혁명 <b>용어의 유래</b></li><li>대표 기업가 <b>제임스 와트</b></li><li><b>신사문화 · 신용</b> = 기업가정신의 기초</li><li><b>산업혁명 1~4차 키워드</b>(기계화 · 대량생산 · 정보 · AI·클라우드)</li><li>4차 산업혁명 핵심 기술 <b>클라우드 · IoT</b></li><li>🔥 <b>시험범위 1~4차 산업혁명</b> · 4차 특성(초연결 · 초자동화 · 초지능화 · 초융합화) · 전망</li></ol></dd><dd class="wk-exam-note">📌 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요 (3주차는 노션 대신 <b>PDF 펜 필기 · 활동지</b>로 정리 · 4주차는 필기 없음 · 6주차는 10/6 보강 수업 · 7주차는 5주차 자료 <b>4강 기업</b>으로 수업). 중간고사는 성적의 <b>30%</b>입니다.</dd></dl></section>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 19일(월) 수업 시간</span><span class="wk-exam-where">6호관 307호 · 출석체크 12시 · 시험 12:45 ~ 13:35</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip">5점 × 4문제 = 20점</span><span class="wk-chip">10점 × 1문제 = 10점</span><span class="wk-chip">총 <b>30점</b> (성적의 30%)</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">처음 ~ 기업 PPT = ✍️ <b>1강 ~ 4강</b></span><span class="wk-chip">✍️ 6주차 “<b>시험범위 1,2,3,4차 잘보기</b>”</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span>5점 문제 = ✍️ <b>회사 5종 각각 특징 3가지 외우기</b> (4강 21쪽 “시험문제(5점짜리)”)</li><li><span class="wk-exam-wk">7주차</span>10점 문제 1개 = ✍️ <b>회사 비교 or 회사의 특징 설명</b> (40쪽)</li><li><span class="wk-exam-wk">7주차</span>24쪽 “<b>4~5칸 빈칸 맞히기</b>” · 30쪽 “<b>★ 정리</b>” 비교표</li><li><span class="wk-exam-wk">6주차</span><b>1 · 2 · 3 · 4차 산업혁명</b> = 1강(2주차) · 2강(3주차) · 3강(5 · 6주차)</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 5점 · 10점 문제 대비 정리</span></summary><div class="wm-body"><h4>① 5점 — 회사 5종 각각 특징 3가지 (4강 21쪽)</h4>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>회사</th><th>사원 (정의)</th><th>특징 ①</th><th>특징 ②</th><th>특징 ③</th></tr>
+<tr><td>합명회사</td><td><b>2인 이상 무한책임사원만</b></td><td>설립의 자유성</td><td>채무에 대한 <b>무한 연대책임</b></td><td>전사원 동의 → <b>유연성 부족</b> · 자금조달 한계</td></tr>
+<tr><td>합자회사</td><td><b>1인 이상 무한 + 유한</b>책임사원</td><td>무한 = <b>출자 + 경영</b> · 유한 = <b>출자만</b></td><td>이탈리아 <b>코멘다</b>에서 기원</td><td>합명보다 <b>넓은 범위에서 자본</b> 모음</td></tr>
+<tr><td>유한회사</td><td><b>1인 이상 유한책임사원만</b></td><td><b>주식회사의 축소형</b> · 중소 규모</td><td><b>증권발행 불가능</b></td><td>타인에 대한 <b>지분양도 제한</b></td></tr>
+<tr><td>유한책임회사</td><td>1인 이상 · 사원 <b>유한책임</b></td><td><b>경영 · 이익분배가 자유로움</b> (내부는 조합)</td><td>주주총회 · 이사 · 감사 필요 없음 · 자본금 제한 없음</td><td><b>다국적 기업 · 스타트업 선호</b> · 커지면 <b>의사결정 비효율</b></td></tr>
+<tr><td>주식회사</td><td><b>유한책임사원만</b> (다수공동기업)</td><td><b>자본의 증권화</b> · 자본조달 용이</td><td><b>소유와 경영 분리</b></td><td>대규모경영 적합 · 주주총회 · 이사회 · 감사</td></tr>
+</tbody></table>
+<h4>② 10점 — 회사 비교 또는 회사의 특징 설명 (40쪽) · ③ 30쪽 ★ 정리표</h4>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>구분</th><th>합명</th><th>합자</th><th>유한</th><th>유한책임</th><th>주식</th></tr>
+<tr><td>책임 범위</td><td>전원 <b>무한</b></td><td>무한 + 유한 <b>혼합</b></td><td>전원 유한</td><td>전원 유한</td><td>전원 유한</td></tr>
+<tr><td>경영 참여</td><td>전원 직접</td><td><b>무한책임사원</b></td><td>사원이 직접</td><td>사원 · <b>지정 경영자</b></td><td><b>이사회 · 대표이사</b></td></tr>
+<tr><td>주식 발행</td><td>불가</td><td>불가</td><td>불가</td><td>불가</td><td><b>가능</b></td></tr>
+<tr><td>주요 활용</td><td>소규모 동업</td><td>투자 + 경영 분리형</td><td>가족회사 · 소기업</td><td>스타트업 · 벤처</td><td>대기업 · 상장기업</td></tr>
+</tbody></table>
+<ul><li>10점 서술은 이 <b>4가지 기준</b>(책임 · 경영 · 주식 · 활용)으로 쓰면 빠짐없음 · 예) 유한 vs 주식 = 둘 다 전원 유한책임 · 유한은 주식 발행 X · 지분양도 제한 · 중소 규모 / 주식은 자본의 증권화 · 소유와 경영 분리 · 대기업</li></ul>
+<h4>④ 24쪽 합명회사 — 4~5칸 빈칸 후보</h4>
+<ul><li>정의 = <b>(2인 이상)</b> 의 <b>무한책임사원</b>만으로 조직 · 특징 = <b>설립의 자유</b>성 · 채무에 대한 <b>무한 연대책임</b> · 전사원 동의로 <b>유연성 부족</b> · <b>자금조달</b>에 한계</li></ul>
+<h4>⑤ 1 · 2 · 3 · 4차 산업혁명 (6주차 “시험범위 1,2,3,4차 잘보기”)</h4>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>산업혁명</th><th>키워드</th><th>시기</th><th>덧붙임</th></tr>
+<tr><td>1차</td><td><b>기계화</b></td><td>18세기 후반 ~ 19세기 중반</td><td>에너지 석탄 · 부자 나라 영국 · 제임스 와트 증기기관</td></tr>
+<tr><td>2차</td><td><b>대량생산</b></td><td>19세기 후반 ~ 20세기 초</td><td>에너지 전기 · 석유 · 미국 · 독일</td></tr>
+<tr><td>3차</td><td><b>정보</b></td><td>1970년대 이후</td><td>제레미 리프킨 『제3차 산업혁명』</td></tr>
+<tr><td>4차</td><td><b>AI · 클라우드</b></td><td>2020년 ~</td><td>특성 <b>초연결 · 초자동화 · 초지능화 · 초융합화</b></td></tr>
+</tbody></table></div></details></dd><dt>🎒 준비물</dt><dd><span class="wk-chip"><b>실물 신분증</b></span></dd><dt>⭐ 강의 ★ 강조</dt><dd><ol class="wk-exam-list"><li>기업가정신 교육 vs 창업 교육(<b>Miller · Timmons</b>)</li><li>1차 산업혁명 <b>발생 배경 5가지</b></li><li>산업혁명 <b>용어의 유래</b></li><li>대표 기업가 <b>제임스 와트</b></li><li><b>신사문화 · 신용</b> = 기업가정신의 기초</li><li><b>산업혁명 1~4차 키워드</b>(기계화 · 대량생산 · 정보 · AI·클라우드)</li><li>4차 산업혁명 핵심 기술 <b>클라우드 · IoT</b></li><li>🔥 <b>시험범위 1~4차 산업혁명</b> · 4차 특성(초연결 · 초자동화 · 초지능화 · 초융합화) · 전망</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">강의 ★ 강조 — 한 줄씩</span></summary><div class="wm-body"><table class="ref">
+<tbody>
+<tr><th>★ 강조</th><th>한 줄 정리</th></tr>
+<tr><td>기업가정신 교육 vs 창업 교육</td><td><b>Miller</b>(스탠퍼드) = 기업가정신 ≈ 창업 · <b>Timmons</b>(1994) = 창업만이 아니라 <b>어디서나</b> 발생</td></tr>
+<tr><td>1차 산업혁명 발생 배경 5가지</td><td>① 영국 농업혁명 ② 정치적 안정(1689 권리장전) ③ 풍부한 석탄 ④ 기술혁신 ⑤ 자본주의 체계(아담 스미스 『국부론』)</td></tr>
+<tr><td>산업혁명 용어의 유래</td><td><b>1844 엥겔스</b> 처음 사용 → <b>1884 토인비</b> 개념 확립 → <b>1906 망뚜</b> 보급</td></tr>
+<tr><td>대표 기업가 제임스 와트</td><td>뉴커먼 증기기관 개량(외부 냉각) → <b>1769 특허</b> · 영국 50파운드 지폐 = 매튜 볼턴 · 제임스 와트</td></tr>
+<tr><td>신사문화 · 신용</td><td>신사문화(= 기업가문화) = 일관성 · 성실성 · 의무에 대한 책임 → 신뢰 · 명예 → 기업가정신의 기초 · 18세기 <b>신용거래</b> 정착</td></tr>
+<tr><td>1 ~ 4차 키워드</td><td>기계화 · 대량생산 · 정보 · AI · 클라우드</td></tr>
+<tr><td>클라우드 · IoT</td><td>클라우드 = 필요할 때 인터넷으로 서버 · 스토리지 · 네트워크를 받는 환경 · IoT = 사물을 센서 · 통신으로 인터넷에 연결</td></tr>
+<tr><td>4차 특성 · 전망</td><td>초연결 · 초자동화 · 초지능화 · 초융합화 · 긍정 = 스마트 홈 · 자율주행 · 의료비 절감 / 부정 = 일자리 감소 · <b>빈익빈 부익부 가속화</b></td></tr>
+</tbody></table></div></details></dd><dd class="wk-exam-note">📌 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요 (3주차는 노션 대신 <b>PDF 펜 필기 · 활동지</b>로 정리 · 4주차는 필기 없음 · 6주차는 10/6 보강 수업 · 7주차는 5주차 자료 <b>4강 기업</b>으로 수업). 중간고사는 성적의 <b>30%</b>입니다.</dd></dl></section>
 <section class="card" id="s1">
 <h2>7주차 — 🔥 4강 기업 · 기업의 형태 (<a href="기업가정신과창업-7주차.html">7주차 자세히</a>)</h2>
 <ul><li>🔥 <span class="wk-tag note">✍️ 필기</span> — 21쪽 ★ <b>시험문제(5점짜리) 각각 특징들 3가지 외우기</b> · 상법 제170조 회사 <b>5종</b>: 합명회사 · 합자회사 · 유한책임회사 · 주식회사 · 유한회사</li><li><span class="wk-tag note">✍️ 필기</span> — 22쪽 분류도: 개인기업 = <b>1인이 출자</b> · 공동기업 = <b>소수 or 다수</b> (소수공동기업 = 합명 · 합자 · 유한 · 유한책임 / 다수공동기업 = <b>주식회사</b>) · 공기업 = <b>정부가 출자</b></li></ul>
@@ -165,6 +218,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../../ink.js?v=202610162002"></script>
+<script src="../../ink.js?v=202610182111"></script>
 </body>
 </html>

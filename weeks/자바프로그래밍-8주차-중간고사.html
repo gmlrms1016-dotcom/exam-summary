@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610162002"></script>
+    <script src="../theme.js?v=202610182111"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>자바프로그래밍 8주차 · 중간고사 시험문제 정리 (1~7주차 반영)</title>
-    <link rel="stylesheet" href="../style.css?v=202610162002">
+    <link rel="stylesheet" href="../style.css?v=202610182111">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -43,6 +43,18 @@
 .wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
 .wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
 .wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
 .wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
 .wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
 .wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
@@ -85,7 +97,24 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="자바프로그래밍-7주차.html">‹ 이전 · <b>7주차</b><br><small>4장 클래스 실습 — 생성자 · this (🔥 시험범위 Car · Book 까지)</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../자바프로그래밍-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 20일(화) 14:00</span></div><dl class="wk-exam-grid"><dt>📊 평가</dt><dd><span class="wk-chip">필기평가1 <b>30점</b></span><span class="wk-chip">직무수행능력평가2 <b>15점</b></span><span class="wk-chip">직무수행능력평가3 등 (실습 중심)</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">✍️ “<b>오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위</b>” (7주차)</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span><b>자바 데이터타입 8가지 외우기</b></li><li><span class="wk-exam-wk">7주차</span><b>조건식 출력 true / false</b></li><li><span class="wk-exam-wk">7주차</span><b>for 문 · 배열</b> · <b>if · else</b></li><li><span class="wk-exam-wk">7주차</span><b>class 와 object</b> · <b>객체지향의 특성</b></li></ol></dd><dt>⭐ 강의자료 ★시험단골</dt><dd><ol class="wk-exam-list"><li><b>타입 변환</b>(자동 / 강제 캐스팅)</li><li><b>예외 처리</b>(try-catch-finally, 예외 클래스)</li><li>WORA · JVM</li><li>반복문 for / while / do-while 차이</li><li>배열 선언과 생성</li></ol></dd><dd class="wk-exam-note">📌 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</dd></dl></section>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">10월 20일(화) 14:00</span></div><dl class="wk-exam-grid"><dt>📊 평가</dt><dd><span class="wk-chip">필기평가1 <b>30점</b></span><span class="wk-chip">직무수행능력평가2 <b>15점</b></span><span class="wk-chip">직무수행능력평가3 등 (실습 중심)</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">✍️ “<b>오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위</b>” (7주차)</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">7주차</span><b>자바 데이터타입 8가지 외우기</b></li><li><span class="wk-exam-wk">7주차</span><b>조건식 출력 true / false</b></li><li><span class="wk-exam-wk">7주차</span><b>for 문 · 배열</b> · <b>if · else</b></li><li><span class="wk-exam-wk">7주차</span><b>class 와 object</b> · <b>객체지향의 특성</b></li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것을 하나씩 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
+<tbody>
+<tr><th>찍어 준 것</th><th>핵심 · 답</th></tr>
+<tr><td><b>데이터타입 8가지</b></td><td>정수 <code>byte</code> 1 · <code>short</code> 2 · <code>int</code> 4 · <code>long</code> 8 (끝에 L) / 실수 <code>float</code> 4 (끝에 F) · <code>double</code> 8 / 문자 <code>char</code> 2 / 논리 <code>boolean</code> → <b>String 은 클래스</b>라 8가지가 아님 · 정수 기본 int · 실수 기본 double</td></tr>
+<tr><td><b>조건식 출력 true / false</b></td><td><code>System.out.println(85 &gt;= 80);</code> → <b>true</b> · <code>85 == 100</code> → <b>false</b> · C 처럼 1 · 0 이 아님 · <code>score &gt; 80 &amp;&amp; score &lt; 90</code> → true</td></tr>
+<tr><td><b>for 문 · 배열</b></td><td><code>for (int i = 0; i &lt; arr.length; i++)</code> · 선언 <code>int a[] = new int[5];</code> / <code>int[] a = {1, 2, 3};</code> · 선언할 때 크기 X (<code>int a[10];</code> 오류) · 마지막 인덱스 = length - 1 · for-each <code>for (int k : n)</code></td></tr>
+<tr><td><b>if · else</b></td><td>조건식은 boolean 만 · <code>if … else if … else</code> → 위에서부터 <b>처음 참인 것 하나만</b> 실행</td></tr>
+<tr><td><b>class 와 object</b></td><td>클래스 = 객체를 만들어내기 위한 <b>설계도 혹은 틀</b> (붕어빵틀) · 객체(인스턴스) = 클래스 모양대로 찍어낸 실체 (붕어빵) · <code>new Car(…)</code> · 생성자 = 클래스 이름 · 반환형 없음 · <code>this.juin = juin;</code> (왼쪽 필드 · 오른쪽 매개변수)</td></tr>
+<tr><td><b>객체지향의 특성</b></td><td><b>캡슐화</b> = 객체를 캡슐로 싸서 내부를 볼 수 없게 · 외부 접근으로부터 보호 / <b>상속</b> = 상위 속성을 물려받음 (클래스 다중 상속 없음) / <b>다형성</b> = 같은 이름 다른 동작 (오버로딩 · 오버라이딩)</td></tr>
+</tbody></table></div></details></dd><dt>⭐ 강의자료 ★시험단골</dt><dd><ol class="wk-exam-list"><li><b>타입 변환</b>(자동 / 강제 캐스팅)</li><li><b>예외 처리</b>(try-catch-finally, 예외 클래스)</li><li>WORA · JVM</li><li>반복문 for / while / do-while 차이</li><li>배열 선언과 생성</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">시험단골 5개 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
+<tbody>
+<tr><th>단골</th><th>핵심 · 답</th></tr>
+<tr><td><b>타입 변환</b></td><td>자동 = 작은 → 큰 (int → double) · 강제 = 큰 → 작은 <code>(int)2.9</code> → <b>2</b> (반올림 X · 버림) · <code>(int)2.9 + 1.8</code> → 3.8 · <code>(int)(2.9 + 1.8)</code> → 4 · <code>(double)(7 / 2)</code> → 3.0 · <code>(double)7 / 2</code> → 3.5</td></tr>
+<tr><td><b>예외 처리</b></td><td><code>try { } catch (예외타입 e) { } finally { }</code> → 예외가 나면 try 의 나머지는 건너뛰고 catch · finally 는 <b>항상</b> 실행 · 0 으로 나누기 <code>ArithmeticException</code> · 배열 범위 <code>ArrayIndexOutOfBoundsException</code> · null 사용 <code>NullPointerException</code> · 입력 타입 <code>InputMismatchException</code></td></tr>
+<tr><td><b>WORA · JVM</b></td><td>WORA = Write Once Run Anywhere (<b>플랫폼 독립</b>) · .java → javac → <b>바이트코드 .class</b> → 각 OS 의 JVM 이 실행 · ✍️ <b>JVM 자체는 플랫폼 종속</b> · 링크 과정 없음 · JDK = 개발도구 + JRE / JRE = JVM + 라이브러리</td></tr>
+<tr><td><b>반복문 차이</b></td><td>for = 횟수가 정해짐 · while = 조건 먼저 (0번도 가능) · <b>do-while = 먼저 실행 → 최소 1번</b> (조건 생략하면 오류) · break = 빠져나옴 · continue = 다음 반복</td></tr>
+<tr><td><b>배열 선언과 생성</b></td><td><code>int intArray[];</code> 선언 → <code>intArray = new int[5];</code> 생성 · <code>int[] a = {1, 2, 3};</code> · 기본값 int 0 · double 0.0 · String null · 2차원 <code>new int[4][]</code> (비정방형) · 크기 <code>intArray.length</code></td></tr>
+</tbody></table></div></details></dd><dd class="wk-exam-note">📌 시험 전 수업 <b>1~7주차</b>를 모두 반영했어요.</dd></dl></section>
 <section class="card" id="s1">
 <h2>🔥 ✍️ PDF 필기 — 시험 표시 (10/1 보충)</h2>
 <ul><li>🔥 <b>식별자 이름 사례 ★</b> — 2장 7쪽에 큰 ★ (중간고사 폴더 <code>PDF 문서.pdf</code> 에도 같은 쪽 ★) · 안 되는 것: 첫 글자 <b>숫자</b>(3Chapter) · <b>예약어</b>(if) · <b>false · true · null</b> · 특수문자(<code>%</code>) / 되는 것: <code>_</code> · <code>$</code> · 숫자(첫 글자 아님) · 한글 · 길이 제한 없음 · 대소문자 구분 (<a href="자바프로그래밍-3주차.html">3주차 자세히</a>)</li><li>🔥 <b>빈칸</b> — 2장 23쪽 CircleArea 의 <code>double</code> 세 곳에 ✍️ “빈칸” → <code>final double PI = 3.14;</code> · <code>double radius</code> · <code>double circleArea</code></li><li>✍️ final = <b>변경 X</b> · long 리터럴은 <b>L</b> · 실수 리터럴은 <b>double</b> 이 기본(D 필수 X) · 카멜 표기(클래스 대문자 · 변수/메소드 소문자 · 상수 전부 대문자)</li></ul>
@@ -103,7 +132,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>정수</td><td><code>long</code></td><td>8바이트</td><td><b>-9,223,372,036,854,775,808 ~ 9,223,372,036,854,775,807</b></td><td>약 ±922경 · 21억이 넘는 수는 끝에 <code>L</code></td></tr>
 <tr><td>실수</td><td><code>float</code></td><td>4바이트</td><td><b>±1.4E-45 ~ ±3.4028235E38</b> (그리고 0)</td><td>정확한 자리 약 7자리 · 끝에 <code>F</code></td></tr>
 <tr><td>실수</td><td><b><code>double</code></b> (실수 기본)</td><td>8바이트</td><td><b>±4.9E-324 ~ ±1.7976931348623157E308</b> (그리고 0)</td><td>정확한 자리 약 15 ~ 16자리</td></tr>
-<tr><td>문자</td><td><code>char</code></td><td>2바이트</td><td><b>0 ~ 65,535</b> (<code>'\u0000'</code> ~ <code>'￿'</code>)</td><td>음수 없음 · 유니코드 한 글자 · <code>'A'</code> = 65 · <code>'가'</code> = 44032</td></tr>
+<tr><td>문자</td><td><code>char</code></td><td>2바이트</td><td><b>0 ~ 65,535</b> (<code>'\u0000'</code> ~ <code>'\uffff'</code>)</td><td>음수 없음 · 유니코드 한 글자 · <code>'A'</code> = 65 · <code>'가'</code> = 44032</td></tr>
 <tr><td>논리</td><td><code>boolean</code></td><td>1바이트</td><td><b>true · false</b> 두 값만</td><td>숫자가 아님 (0 · 1 로 못 씀)</td></tr>
 </tbody></table>
 <ul><li>🧮 ✍️ <b>필기 공식 −2ⁿ ~ (2ⁿ − 1)</b> · n = 비트 수 − 1 → byte 8비트 n = 7 → -128 ~ 127 · short 16비트 n = 15 → -32,768 ~ 32,767 · int 32비트 n = 31 → -2,147,483,648 ~ 2,147,483,647 · long 64비트 n = 63<ul><li>왜 음수가 1 더 많나 — byte 8비트 = 2⁸ = 256 가지 → 맨 앞 비트가 부호 → <code>0111 1111</code> = 1+2+4+8+16+32+64 = <b>127</b> 이 최대 · <code>1000 0000</code> = <b>-128</b> 이 최소 · 0 이 양수 쪽 자리를 하나 써서 음수 쪽이 1 더 큼</li></ul></li><li>⚠️ <b><code>MIN_VALUE</code> 함정</b> — <code>Float.MIN_VALUE</code>(1.4E-45) · <code>Double.MIN_VALUE</code>(4.9E-324) 는 가장 작은 음수가 아니라 <b>0 에 가장 가까운 양수</b> → 가장 작은 음수는 <b>-Float.MAX_VALUE</b> · 정수(<code>Integer.MIN_VALUE</code> 등)는 진짜 최솟값</li><li>C 와 다른 점 — 자바는 <b>unsigned 가 없음</b>(char 만 0 부터) · <b>long 은 어느 컴퓨터든 8바이트</b>(JVM 이 정함 → 플랫폼 독립) · <b>char 가 2바이트</b>(C 는 1바이트)</li><li>⚠️ <b>범위 밖 리터럴은 컴파일 오류</b> — <code>int a = 3000000000;</code> → integer number too large → <code>long a = 3000000000L;</code> · <code>byte b = 128;</code> → 오류(127 까지) · <code>float f = 3.14;</code> → 오류(3.14 는 double) → <code>3.14F</code></li><li>🔄 <b>계산하다 넘으면(오버플로)</b> — 오류 없이 한 바퀴 돌아감: <code>Integer.MAX_VALUE + 1</code> → <b>-2147483648</b> · <code>byte b = 127; b++;</code> → <b>-128</b> · <code>(byte) 200</code> → 200 - 256 = <b>-56</b></li></ul>
@@ -186,6 +215,6 @@ public class 연습 {                                       // 파일 이름 연
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610162002"></script>
+<script src="../ink.js?v=202610182111"></script>
 </body>
 </html>
