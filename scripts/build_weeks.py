@@ -11,6 +11,7 @@
 - `## ` 마다 카드 1개 · `### ` 소제목 · `#### ` 작은 소제목 · `> ` 안내 상자 · `- ` / `1. ` 목록(2칸 들여쓰기 = 하위 목록)
 - ``` 코드 블록 (```output = ▶ 출력 결과 상자 · ```bits = 2진수 풀이 상자) · `| a | b |` 표(첫 줄 머리글, 칸 안의 | 는 \\|) · <details> / <summary> 접기
 - `🔒 [이름](주소)` 한 줄 = 오른쪽에 작은 버튼 (실제시험 같은 숨은 페이지로 가는 입구)
+- 표 칸에 `{빈칸}` = 손으로 써 보는 빈 칸 (높이 넉넉 · 줄 2개)
 - `:::toc` 한 줄 = 그 자리에 ‘바로 가기’ 칩 (이 원고의 `## ` 절 목록 · 누르면 그 카드로 이동 · 긴 중간고사 정리용)
 - `🎬 [이름](주소)` 한 줄 = 그 자리에 애니메이션 · 데모 페이지를 끼워 넣음(iframe · 주소는 주차 페이지 기준) + 아래에 '새 창으로 크게 보기' 버튼
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
@@ -92,7 +93,7 @@ def render_table(rows):
     widths = [0] * cols
     for r in [head] + body:
         for i, c in enumerate(r[:cols]):
-            plain = re.sub(r"[`*]", "", c)
+            plain = "x" * 9 if c.strip() == "{빈칸}" else re.sub(r"[`*]", "", c)
             widths[i] = max(widths[i], min(len(plain), 34))
     tbody = "<tbody>"
     if cols >= 4:
@@ -100,7 +101,7 @@ def render_table(rows):
     out = ['<table class="ref">', tbody, "<tr>" + "".join("<th>%s</th>" % inline(c) for c in head) + "</tr>"]
     for r in body:
         r = (r + [""] * cols)[:cols]
-        out.append("<tr>" + "".join("<td>%s</td>" % inline(c) for c in r) + "</tr>")
+        out.append("<tr>" + "".join('<td class="wk-blank"></td>' if c.strip() == "{빈칸}" else "<td>%s</td>" % inline(c) for c in r) + "</tr>")   # {빈칸} = 손으로 써 보는 빈 칸
     out.append("</tbody></table>")
     return "\n".join(out)
 
@@ -360,6 +361,7 @@ PAGE_CSS = """
 .wk-exam-list li{margin:5px 0;line-height:1.65;}
 .wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
 @media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
 .wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
 .wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
 .wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
@@ -383,10 +385,10 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202610182111"></script>
+    <script src="{asset}theme.js?v=202610182129"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="{asset}style.css?v=202610182111">
+    <link rel="stylesheet" href="{asset}style.css?v=202610182129">
     <style>{css}</style>
 </head>
 <body>
@@ -414,7 +416,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202610182111"></script>
+<script src="{asset}ink.js?v=202610182129"></script>
 </body>
 </html>
 """
