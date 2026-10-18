@@ -3516,7 +3516,7 @@ int main(void) {
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <pre><code class="language-c">// 역삼각형 — 입력 4 → **** / *** / ** / *
+        <pre><code class="language-c">// 삼각형 (강의자료 4쪽) — 입력 4 → * / ** / *** / ****
 #define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 
@@ -3533,14 +3533,31 @@ int main(void) {
     }
     return 0;
 }</code></pre>
-        <div class="quiz-item" data-answers="step - i + 1|step-i+1|step + 1 - i|step+1-i|1 + step - i" data-explain="i = 1 → 4개 · i = 2 → 3개 … → step - i + 1">
-            <p class="quiz-q"><span class="quiz-cat">④</span>역삼각형이 되려면 안쪽 for 의 <code>j &lt;= ( ④ )</code> 는?</p>
+        <div class="quiz-item" data-answers="i" data-explain="i = 1 → 1개 · i = 2 → 2개 … → i 번째 줄에 별 i 개 → j &lt;= i">
+            <p class="quiz-q"><span class="quiz-cat">④</span>삼각형이 되려면 안쪽 for 의 <code>j &lt;= ( ④ )</code> 는?</p>
             <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
-        <div class="quiz-item" data-answers="j &lt;= i|j&lt;=i|i &gt;= j" data-explain="강의자료 삼각형은 i 번째 줄에 별 i 개">
-            <p class="quiz-q"><span class="quiz-cat">⑤</span>강의자료(4쪽) 삼각형 <b>*</b> / <b>**</b> / <b>***</b> / <b>****</b> 의 안쪽 for 조건은? (<code>for (j = 1; ( ⑤ ); j++)</code>)</p>
+        <pre><code class="language-c">// 역삼각형 — 입력 4 → **** / *** / ** / *
+#define _CRT_SECURE_NO_WARNINGS
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    int step, i, j;
+    printf("숫자를 입력하세요: ");
+    scanf("%d", &amp;step);
+
+    for (i = 1; i &lt;= step; i++) {
+        for (j = 1; j &lt;= ( ⑤ ); j++) {
+            printf("*");
+        }
+        printf("\n");
+    }
+    return 0;
+}</code></pre>
+        <div class="quiz-item" data-answers="step - i + 1|step-i+1|step + 1 - i|step+1-i|1 + step - i" data-explain="i = 1 → 4개 · i = 2 → 3개 … → step - i + 1">
+            <p class="quiz-q"><span class="quiz-cat">⑤</span>역삼각형이 되려면 안쪽 for 의 <code>j &lt;= ( ⑤ )</code> 는?</p>
             <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
