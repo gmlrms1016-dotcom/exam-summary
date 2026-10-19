@@ -12,6 +12,7 @@
  *  - 자: 한 손가락 · 마우스로 끌어 옮기고, 두 손가락 · 휠 · 손잡이로 돌림(각도 표시 · 0 · 45 · 90° 에 착 붙음) → 자 가장자리를 따라 그으면 곧은 선
  *  - 모양 인식: 그리다가 멈추고 꾹 → 선 · 원(타원) · 사각형 · 삼각형으로 바뀜
  *  - 펜슬을 화면 가까이 대면(호버) 촉 크기 · 색 미리보기 · 손가락으로 그리기 · 마우스로 그리기 · 필기 숨기기
+ *  - 필기 켜기 · 끄기 (막대 맨 앞 펜 버튼 · 2026-10-19 '애플펜슬로 스크롤하고 싶은 사람') → 끄면 펜슬도 손가락처럼 스크롤 · 쓴 필기는 그대로 보임
  *  - 필기는 그 기기 브라우저(IndexedDB `study-ink`)에 페이지 주소별로 저장 · 설정은 localStorage `ink:prefs2`
  *  - 획 · 넣은 것마다 그 자리의 글 블록(문단 · 코드 · 표 · 접기 …)에 붙여 저장 → 스크롤 · 접기 열고 닫기에 같이 움직임
  */
@@ -40,7 +41,7 @@
 
     /* ===================== 설정 (모든 페이지 공통) ===================== */
     var DEF = {
-        tool: "pen", lastDraw: "pen", open: true, finger: false, mouse: false, hidden: false, autoMin: false,
+        tool: "pen", lastDraw: "pen", open: true, finger: false, mouse: false, hidden: false, autoMin: false, off: false,
         dock: "bottom", ruler: false, rul: { cx: 0, cy: 0, ang: 0 },
         pen: { c: "#ff3b30", w: 1.8, o: 1 }, monoline: { c: "auto", w: 2, o: 1 }, fountain: { c: "#0a84ff", w: 3.5, o: 1 },
         marker: { c: "#ffcc00", w: 18, o: 0.35 }, pencil: { c: "auto", w: 2, o: 0.85 }, crayon: { c: "#34c759", w: 8, o: 0.9 },
@@ -582,7 +583,7 @@
     function onRuler(t) { return t && t.closest && t.closest(".ink-ruler"); }
     function exempt(t) { return inUI(t) || (t && t.closest && t.closest(EXEMPT)); }
     function drawsWith(e) {
-        if (P.hidden || exempt(e.target)) return false;
+        if (P.hidden || P.off || exempt(e.target)) return false;   // 필기 끔 → 펜슬 · 손가락 · 마우스 모두 스크롤 · 클릭
         if (e.pointerType === "pen") return true;              // 펜슬은 언제나
         if (onRuler(e.target)) return false;                   // 자 위의 손가락 · 마우스 = 자 옮기기
         if (e.pointerType === "mouse") return P.open && P.mouse && e.button === 0;
@@ -631,7 +632,7 @@
         if (picking && !inUI(e.target)) { e.preventDefault(); pickAt(docX(e), docY(e)); return; }
         var x = docX(e), y = docY(e);
         var drawIn = drawsWith(e);
-        if (!inUI(e.target) && !onRuler(e.target) && !P.hidden && (!exempt(e.target) || (e.target.closest && e.target.closest(".ink-text")))) {
+        if (!inUI(e.target) && !onRuler(e.target) && !P.hidden && !P.off && (!exempt(e.target) || (e.target.closest && e.target.closest(".ink-text")))) {
             var h = handleAt(x, y);                              // 고른 것의 손잡이 · 몸통 → 옮기기 · 크기 (어떤 입력이든)
             if (h) { e.preventDefault(); startObjDrag("handle", x, y, h); return; }
             var hit = objAt(x, y);
@@ -721,7 +722,7 @@
         return n;
     }
     function blockTouch(e) {                                  // 펜슬 터치는 스크롤 · 확대 · 길게 누르기 막기
-        if (P.hidden || exempt(e.target)) return;
+        if (P.hidden || P.off || exempt(e.target)) return;      // 필기 끔 → 펜슬로 스크롤
         var t = e.touches && e.touches[0];
         if (!t) return;
         if (drag && (drag.kind === "omove" || drag.kind === "handle")) { e.preventDefault(); return; }
@@ -731,7 +732,7 @@
     /* ---------- 펜슬 호버 미리보기 (아이패드: 펜슬을 화면 가까이 대면 촉 미리보기) ---------- */
     var hoverEl = null, hoverT = 0;
     function hover(e) {
-        if (P.hidden || exempt(e.target) || P.tool === "lasso") return;
+        if (P.hidden || P.off || exempt(e.target) || P.tool === "lasso") return;
         if (!hoverEl) { hoverEl = document.createElement("div"); hoverEl.className = "ink-hover"; hoverEl.setAttribute("data-theme-skip", ""); document.body.appendChild(hoverEl); }
         var t = P.tool, w = t === "eraser" ? P.eraser.w : P[t].w;
         var sz = Math.max(4, t === "eraser" ? w : LINE_T[t] ? w : w * 1.1);
@@ -1260,7 +1261,7 @@
     }
     function placeRuler() {
         if (!rulerEl) return;
-        rulerEl.style.display = P.ruler && !P.hidden ? "block" : "none";
+        rulerEl.style.display = P.ruler && !P.hidden && !P.off ? "block" : "none";
         if (!P.ruler) return;
         if (!P.rul.cx || P.rul.cx > innerWidth || P.rul.cy > innerHeight) { P.rul.cx = innerWidth / 2; P.rul.cy = innerHeight * 0.45; }
         rulerEl.style.transform = "translate(" + f1(P.rul.cx - 470) + "px," + f1(P.rul.cy - 34) + "px) rotate(" + P.rul.ang + "deg)";
@@ -1371,6 +1372,7 @@
             paste: '<rect x="6" y="5" width="12" height="15" rx="2"/><path d="M9 5V3.8h6V5M9 10h6M9 13.5h6M9 17h4"/>',
             drop: '<path d="M14.6 4.6a2.4 2.4 0 0 1 3.4 3.4l-1.7 1.7-3.4-3.4Z"/><path d="M12.9 6.3l3.4 3.4-8.5 8.5-3.7.9.9-3.7Z"/>',
             nib: '<path d="M4.5 19.5l1.2-4.6L15.6 5a2.1 2.1 0 0 1 3 3L8.7 17.9Z"/><path d="M13.8 6.8l3 3"/>',
+            nibOff: '<path d="M4.5 19.5l1.2-4.6L15.6 5a2.1 2.1 0 0 1 3 3L8.7 17.9Z" opacity=".55"/><path d="M3.5 3.5l17 17" stroke-width="2.1"/>',
             close: '<path d="M7 7l10 10M17 7 7 17"/>',
             rect: '<rect x="4" y="6" width="16" height="12" rx="1"/>', oval: '<ellipse cx="12" cy="12" rx="8.5" ry="6.5"/>',
             bubble: '<path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v7.5A1.5 1.5 0 0 1 19 16H10l-4 3.5V16H5a1.5 1.5 0 0 1-1.5-1.5V7A1.5 1.5 0 0 1 5 5.5Z"/>',
@@ -1412,6 +1414,10 @@
         ".ink-ib{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;align-self:center;margin-bottom:6px!important}",
         ".ink-dock.d-top .ink-ib{margin:6px 0 0!important} .ink-dock.d-left .ink-ib,.ink-dock.d-right .ink-ib{margin:0 0 0 0!important;align-self:center}",
         ".ink-ib:active{background:var(--ink-hair)} .ink-ib:disabled{opacity:.3} .ink-ib.on{background:rgba(10,132,255,.16);color:var(--ink-accent)}",
+        // 필기 켜기 · 끄기 — 켜짐 = 파란 펜 · 꺼짐 = 빨간 빗금 + 도구가 흐려짐
+        ".ink-pow.on{background:rgba(10,132,255,.16);color:var(--ink-accent)} .ink-pow.off{background:rgba(255,59,48,.14);color:#ff3b30}",
+        ".ink-dock.off .ink-tool,.ink-dock.off .ink-quick,.ink-dock.off .ink-swatch{opacity:.35}",
+        ".ink-fab.off::after{content:'';position:absolute;left:9px;right:9px;top:50%;height:3px;margin-top:-1.5px;border-radius:2px;background:#ff3b30;transform:rotate(-45deg);box-shadow:0 0 0 1.5px var(--ink-panel)}",
         ".ink-ic{width:22px;height:22px}",
         ".ink-tool{width:36px;height:54px;position:relative;overflow:hidden}",
         ".ink-tool .ink-tool-svg{width:27px;height:45px;position:absolute;left:4.5px;top:17px;transition:top .18s cubic-bezier(.2,.8,.2,1),left .18s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 1px 1.2px rgba(0,0,0,.22))}",
@@ -1551,11 +1557,17 @@
 
         dock = el("div", "ink-dock ink-ui");
         dock.setAttribute("role", "toolbar"); dock.setAttribute("aria-label", "필기 도구");
+        B.pow = button("ink-ib ink-pow", "", "필기 켜기 · 끄기 (끄면 펜슬로 스크롤)", function () { setOff(!P.off); });
+        dock.appendChild(B.pow); dock.appendChild(el("span", "ink-sep"));
         B.undo = button("ink-ib", icon("undo"), "되돌리기 (⌘Z)", doUndo);
         B.redo = button("ink-ib", icon("redo"), "다시 하기 (⇧⌘Z)", doRedo);
         dock.appendChild(B.undo); dock.appendChild(B.redo); dock.appendChild(el("span", "ink-sep"));
         TOOLS.concat(["ruler"]).forEach(function (t) {
             B[t] = button("ink-tool", "", t === "ruler" ? "자 — 보이기 · 숨기기" : NAMES[t] + " — 한 번 더 누르면 설정", function () {
+                if (P.off) {                                   // 꺼진 채 도구를 누르면 다시 켜짐 (자는 켜고 이어서 보이기 · 숨기기)
+                    setOff(false);
+                    if (t !== "ruler") { if (P.tool !== t) { P.tool = t; if (INK.indexOf(t) >= 0) P.lastDraw = t; savePrefs(); syncUI(); } return; }
+                }
                 if (t === "ruler") { P.ruler = !P.ruler; savePrefs(); placeRuler(); syncUI(); toast(P.ruler ? "자 — 끌어서 옮기고 두 손가락 · 휠 · ⟳ 로 돌려요" : "자를 숨겼어요"); return; }
                 if (P.tool === t) togglePop("tool");
                 else { P.tool = t; if (INK.indexOf(t) >= 0) P.lastDraw = t; savePrefs(); closePop(); syncUI(); }
@@ -1871,6 +1883,7 @@
             });
             m.appendChild(b);
         }
+        sw("nibOff", "필기 끄기 (펜슬로 스크롤)", "off", function () { P.off = !P.off; setOff(!P.off); });
         sw("finger", "손가락으로 그리기", "finger", function () { toast(P.finger ? "손가락으로도 써요 — 스크롤하려면 막대를 최소화하세요" : "손가락은 스크롤 · 펜슬만 써요"); });
         sw("mouse", "마우스로 그리기 (맥)", "mouse");
         sw("mini", "자동으로 최소화", "autoMin", function () { toast(P.autoMin ? "펜슬로 쓰기 시작하면 막대가 작아져요" : "막대를 그대로 둬요"); });
@@ -1878,7 +1891,7 @@
         m.appendChild(el("hr"));
         m.appendChild(button("ink-danger", icon("trash") + "<span>이 페이지 필기 모두 지우기</span>", "모두 지우기", function () { closePop(); doClear(); }));
         pop.appendChild(m);
-        pop.appendChild(el("p", "ink-note", "펜슬은 막대를 최소화해도 계속 써져요 · 그리다 멈추고 꾹 → 선 · 원 · 사각형 · 삼각형 · 도구를 한 번 더 누르면 굵기 · 막대 빈 곳을 끌면 위 · 아래 · 왼쪽 · 오른쪽에 붙어요 · 필기는 이 기기 브라우저에 저장돼요"));
+        pop.appendChild(el("p", "ink-note", "펜슬로 스크롤하려면 막대 맨 앞 펜 버튼으로 필기를 끄세요 (도구를 누르면 다시 켜짐) · 펜슬은 막대를 최소화해도 계속 써져요 · 그리다 멈추고 꾹 → 선 · 원 · 사각형 · 삼각형 · 도구를 한 번 더 누르면 굵기 · 막대 빈 곳을 끌면 위 · 아래 · 왼쪽 · 오른쪽에 붙어요 · 필기는 이 기기 브라우저에 저장돼요"));
     }
 
     /* ---------- 상태 반영 ---------- */
@@ -1894,10 +1907,14 @@
         B.quick.querySelectorAll(".ink-qc").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-c") === dc.c); });
         B.undo.disabled = !undoS.length;
         B.redo.disabled = !redoS.length;
-        dock.className = "ink-dock ink-ui d-" + P.dock;
-        fab.className = "ink-fab ink-ui d-" + P.dock;
+        dock.className = "ink-dock ink-ui d-" + P.dock + (P.off ? " off" : "");
+        fab.className = "ink-fab ink-ui d-" + P.dock + (P.off ? " off" : "");
+        B.pow.innerHTML = icon(P.off ? "nibOff" : "nib");
+        B.pow.classList.toggle("on", !P.off); B.pow.classList.toggle("off", P.off);
+        B.pow.setAttribute("aria-pressed", P.off ? "false" : "true");
+        fab.title = P.off ? "필기 도구 펼치기 (필기 꺼짐)" : "필기 도구 펼치기";
         root.classList.toggle("ink-min", !P.open);
-        root.classList.toggle("ink-finger", P.open && P.finger && !P.hidden);
+        root.classList.toggle("ink-finger", P.open && P.finger && !P.hidden && !P.off);
         var ft = P.tool;
         fab.innerHTML = toolIcon(ft, P[ft] && P[ft].c ? colorOf(P[ft].c) : "#8e8e93");
         svg.style.display = P.hidden ? "none" : "";
@@ -1905,8 +1922,21 @@
     }
     function setOpen(v) {
         P.open = v; savePrefs(); closePop();
-        if (!v) toast("막대를 최소화했어요 — 펜슬 필기는 계속 돼요");
+        if (!v) toast(P.off ? "막대를 최소화했어요 — 필기는 꺼져 있어요 (펜슬로 스크롤)" : "막대를 최소화했어요 — 펜슬 필기는 계속 돼요");
         syncUI();
+    }
+    function setOff(v) {                                       // 필기 켜기 · 끄기 — 끄면 펜슬 · 손가락 · 마우스 모두 스크롤 · 클릭만
+        P.off = v; savePrefs(); closePop();
+        if (v) {
+            if (editing) endEdit();
+            cur = null; drag = null; layerCur.innerHTML = ""; lassoPath.style.display = "none";
+            root.classList.remove("ink-drawing");
+            if (hoverEl) hoverEl.style.display = "none";
+            if (sel.length || osel) { sel = []; osel = null; }
+            if (picking) { picking = false; root.classList.remove("ink-picking"); }
+        }
+        renderAll(); placeRuler(); syncUI();
+        toast(v ? "필기 꺼짐 — 펜슬로 스크롤할 수 있어요 (도구를 누르면 다시 켜져요)" : "필기 켜짐 — 펜슬로 써요");
     }
 
     /* ===================== 시작 ===================== */
