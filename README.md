@@ -44,6 +44,7 @@ theme.js            ★ 전 페이지 공용 — 다크모드(기본) / 화이�
 codecolor.js        전 페이지 공용 — 소스코드 색칠(VS Code 고대비 색) · theme.js 가 자동으로 불러옴
 motion.js           전 페이지 공용 — 애니메이션·인터랙션(화면 전환·스크롤 등장·퀴즈 반응·맨 위로 버튼) · theme.js 가 자동으로 불러옴
 outview.js          전 페이지 공용 — ▶ 출력 결과 상자(pre.io): 줄 번호 · ⌨️ 키보드 입력 강조 · 오류 줄 빨강 · [␣ 공백] 버튼 · 줄마다 💡 설명(앞 코드의 출력문 · 들어간 값 · 주석 · 반복 N번째 / 리눅스 passwd·group·shadow·ls -l·chage·id 칸 풀이) · theme.js 가 자동으로 불러옴
+termclick.js        전 페이지 공용 — 🖥️ 명령을 한 줄씩 누르면 출력이 펼쳐지는 터미널(.tclick · 닫기 · 긴 출력은 앞 6줄 + … N줄 더 · 💡 설명 · 🪟 윈도우 예시) · 원고는 ```term · theme.js 가 자동으로 불러옴
 scripts/bump_assets.py  ★ 공용 파일(theme.js·style.css·quiz.js…)을 고친 뒤 실행 — 모든 페이지 주소의 ?v= 버전을 올려 브라우저 캐시를 끊음
 review.js           과목 페이지 공용 — 틀린 문제 모아 복사 + 코드블록 복사 버튼
 quiz.js             2학기 과목 페이지 공용 퀴즈 — 객관식(.mcq)·주관식(.quiz-item) 채점 + 복습 모드
@@ -121,7 +122,7 @@ window.isExamFinished("X.html")                      // → true/false
 - **새 페이지**: `<head>` 의 `<meta charset>` 바로 다음 줄에 `<script src="theme.js"></script>` (weeks/ 안은 `../theme.js`). 다크 전용 CSS 는 페이지에 따로 쓰지 말고 화이트 기준으로만 작성하세요. 새 공용 부품의 다크 색을 정확히 맞추고 싶으면 `DARK_CSS` 에 `html[data-theme=dark] .클래스{…}` 한 줄을 추가합니다.
 - 오른쪽 위(`top:14px; right:14px`, 44px)는 전환 버튼 자리라 고정 UI 를 두지 않습니다. 변환에서 빼고 싶은 요소는 `data-theme-skip` 속성.
 - 전환 버튼을 누르면 버튼 자리에서 **원이 퍼지며** 모드가 바뀝니다(View Transitions 지원 브라우저, 나머지는 바로 전환).
-- ⚠️ **캐시 주의**: GitHub Pages 는 JS·CSS 를 10분 캐시하고 크롬은 새로고침해도 HTML 만 새로 받습니다. `theme.js`·`codecolor.js`·`motion.js`·`outview.js`·`style.css`·`quiz.js`·`review.js`·`weeks.js`·`schedule.js`·`codetest.js`·`outquiz.js`·`ink.js` 를 고쳤으면 커밋 전에 **`python3 scripts/bump_assets.py`** 를 실행하세요(모든 페이지의 `?v=` 를 갱신, codecolor.js·motion.js·outview.js 는 theme.js 의 버전을 이어받음).
+- ⚠️ **캐시 주의**: GitHub Pages 는 JS·CSS 를 10분 캐시하고 크롬은 새로고침해도 HTML 만 새로 받습니다. `theme.js`·`codecolor.js`·`motion.js`·`outview.js`·`style.css`·`quiz.js`·`review.js`·`weeks.js`·`schedule.js`·`codetest.js`·`outquiz.js`·`ink.js`·`termclick.js` 를 고쳤으면 커밋 전에 **`python3 scripts/bump_assets.py`** 를 실행하세요(모든 페이지의 `?v=` 를 갱신, codecolor.js·motion.js·outview.js 는 theme.js 의 버전을 이어받음).
 
 ### ✏️ 페이지 위 필기 — `ink.js` (2026-10-13 · 아이패드 미리보기 PDF 마크업처럼)
 - 쓰는 곳: **주차 페이지**(전공 `weeks/*.html` · 교양 `liberal-arts-courses/weeks/*.html` — `build_weeks.py` 의 `PAGE` 틀) + **과목 「완전 정리」 페이지 9개**(각 html 끝 `<script src="(../)ink.js?v=…">`). 새 과목 페이지를 만들면 이 줄도 넣는다.
@@ -305,6 +306,20 @@ theme.js 가 자동으로 불러오니 페이지에 따로 넣지 않습니다. 
 </div>
 ```
 정규화 `norm`: 소문자 + 공백 제거 + 괄호 제거.
+
+### 🖥️ 누르면 출력이 펼쳐지는 터미널 — `.tclick` (termclick.js · 2026-10-20 운영체제 링크)
+CLI 가 낯선 사람용 — 명령을 **한 줄씩 누르면** 그 명령의 실제 출력이 펼쳐지고, 아래 💡 설명 · 🪟 윈도우로 치면 · **닫기**. 출력이 8줄보다 길면 앞 6줄 + `… N줄 더`(누르면 전부), 칸보다 넓으면 `↔ 옆으로 밀면` 안내. `-> 대상`(심볼릭 링크)은 하늘색, `cat: x: 그런 파일이나 …` 오류 줄은 빨강.
+```html
+<div class="tclick" data-prompt="root@localhost:~/linktest#" data-title="교재 실습 9"><script type="text/plain" class="tc-src">
+$ ln basefile hardlink  ## 💡 설명  ## 🪟 윈도우로 치면 …
+$ ls -il
+합계 8
+1106188 -rw-r--r-- 2 root root 61  9월 11일  10:06 basefile
+</script></div>
+```
+- `$ ` 로 시작하는 줄 = 명령(버튼 하나) · 그 아래 줄 = 그 명령의 출력(칸 그대로, 없으면 "결과 없음") · 명령 뒤 `  ## ` = 펼쳤을 때 보이는 설명(여러 개면 한 줄씩, `코드` 가능)
+- 주차 원고: ` ```term 프롬프트 ` … ` ``` ` → build_weeks.py 가 위 마크업으로 · 출력은 **실제 실행 화면(교재 · 강의자료 캡처 포함)을 그대로** — 지어내지 않기
+- 표는 주차 페이지에서 **첫 칸이 줄바꿈 없이** 나오니 첫 칸 이름은 짧게(4~5글자) — 길면 폰에서 표 전체가 옆으로 밀림
 
 ### 여러 줄 명령 — `.quiz-item[data-lines]` (운영체제 도전문제 · 2026-10-15)
 ```html

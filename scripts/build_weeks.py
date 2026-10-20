@@ -9,7 +9,7 @@
 - 파일 이름: <과목>-<N>주차.md · 8주차 중간고사는 <과목>-8주차-중간고사.md · 15주차 기말고사는 <과목>-15주차-기말고사.md
 - 첫 줄 `# 제목` = 버튼과 페이지에 보이는 주차 제목
 - `## ` 마다 카드 1개 · `### ` 소제목 · `#### ` 작은 소제목 · `> ` 안내 상자 · `- ` / `1. ` 목록(2칸 들여쓰기 = 하위 목록)
-- ``` 코드 블록 (```output = ▶ 출력 결과 상자 · ```bits = 2진수 풀이 상자) · `| a | b |` 표(첫 줄 머리글, 칸 안의 | 는 \\|) · <details> / <summary> 접기
+- ``` 코드 블록 (```output = ▶ 출력 결과 상자 · ```bits = 2진수 풀이 상자 · ```term 프롬프트 = 명령을 누르면 출력이 펼쳐지는 터미널 — `$ 명령  ## 설명` 다음 줄부터 그 명령의 출력) · `| a | b |` 표(첫 줄 머리글, 칸 안의 | 는 \\|) · <details> / <summary> 접기
 - `🔒 [이름](주소)` 한 줄 = 오른쪽에 작은 버튼 (실제시험 같은 숨은 페이지로 가는 입구)
 - 표 칸에 `{빈칸}` = 손으로 써 보는 빈 칸 (높이 넉넉 · 줄 2개)
 - `:::toc` 한 줄 = 그 자리에 ‘바로 가기’ 칩 (이 원고의 `## ` 절 목록 · 누르면 그 카드로 이동 · 긴 중간고사 정리용)
@@ -215,7 +215,11 @@ def render_md(md):
                 code.append(lines[i])
                 i += 1
             body = html.escape("\n".join(code), quote=False)
-            if lang in ("output", "bits"):   # 실행 결과 · 2진수 풀이 상자 (코드 색칠 안 함)
+            if lang == "term" or lang.startswith("term "):   # 🖥️ 명령을 누르면 출력이 펼쳐지는 터미널 (termclick.js)
+                prompt = lang[4:].strip() or "$"
+                raw = "\n".join(code).replace("</", "<\\/")      # <script> 안이라 </ 만 막아 둠 (termclick.js 가 되돌림)
+                parts.append('<div class="tclick" data-prompt="%s"><script type="text/plain" class="tc-src">\n%s\n</script></div>' % (html.escape(prompt, quote=True), raw))
+            elif lang in ("output", "bits"):   # 실행 결과 · 2진수 풀이 상자 (코드 색칠 안 함)
                 parts.append('<pre class="io%s"><code class="language-text">%s</code></pre>' % (" bits" if lang == "bits" else "", body))
             else:
                 cls = ' class="language-%s"' % lang if lang else ""
@@ -385,10 +389,10 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202610191809"></script>
+    <script src="{asset}theme.js?v=202610201712"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="{asset}style.css?v=202610191809">
+    <link rel="stylesheet" href="{asset}style.css?v=202610201712">
     <style>{css}</style>
 </head>
 <body>
@@ -416,7 +420,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202610191809"></script>
+<script src="{asset}ink.js?v=202610201712"></script>
 </body>
 </html>
 """

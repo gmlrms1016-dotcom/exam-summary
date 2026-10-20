@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202610191809"></script>
+    <script src="theme.js?v=202610201712"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운영체제실습 · 완전 정리</title>
     <style>
@@ -10,8 +10,8 @@
         .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
         .ref.wrap1 td:first-child{white-space:normal;}   /* 명령이 긴 표(14 · 15번) — 폰에서 첫 칸도 줄바꿈해 설명 칸이 눌리지 않게 */
     </style>
-    <link rel="stylesheet" href="style.css?v=202610191809">
-    <script src="schedule.js?v=202610191809"></script>
+    <link rel="stylesheet" href="style.css?v=202610201712">
+    <script src="schedule.js?v=202610201712"></script>
 </head>
 <body>
 <div class="wrap">
@@ -152,6 +152,111 @@ rm ex_data                # 원본 삭제
   ex_data.sl  → ex_data 를 가리키지만 대상이 없어 깨짐
 touch ex_data             # 재생성하면 심볼릭 링크 복구</code></pre>
         <div class="tip">심볼릭 링크는 Windows의 <b>바로 가기</b>와 같은 개념입니다.</div>
+        <h3>🔗 하드 링크 vs 심볼릭 링크 — 차이 한눈에 (🔥 7주차 필기: 강의자료엔 없지만 시험에 나옴)</h3>
+        <div class="tip">🪟 <b>GUI 세대용</b> — 터미널은 마우스 대신 <b>글자로 탐색기를 조작하는 창</b>이에요. 아래 표 오른쪽 칸에 윈도우로 치면 무엇인지 같이 적었고, 🖥️ 터미널에서 명령을 누르면 출력 아래에 💡 설명과 🪟 윈도우 예시가 나와요.</div>
+        <table class="ref">
+            <tr><th>구분</th><th>하드 링크</th><th>심볼릭 링크 (소프트 링크)</th></tr>
+            <tr><td>명령</td><td><code>ln 원본 링크</code></td><td><code>ln -s 원본 링크</code></td></tr>
+            <tr><td>정체</td><td>같은 파일(같은 데이터)에 <b>이름을 하나 더</b> 붙인 것</td><td>원본의 <b>경로(이름)만 적어 둔 작은 파일</b></td></tr>
+            <tr><td>inode</td><td><code>ls -i</code> → 원본과 <b>같음</b> (1106188 = 1106188)</td><td><b>새 번호</b> (1106189)</td></tr>
+            <tr><td>종류 표시</td><td><code>ls -l</code> 맨 앞 <code>-</code> — 일반 파일과 똑같이 보임</td><td>맨 앞 <code>l</code> (<code>lrwxrwxrwx</code>)</td></tr>
+            <tr><td>이름 옆</td><td>표시 없음</td><td><code>softlink -&gt; basefile</code> (가리키는 원본)</td></tr>
+            <tr><td>링크 수</td><td><code>ls -l</code> 둘째 칸 — 원본 · 링크 <b>둘 다 2</b> (1 → 2)</td><td><b>1</b> · 원본의 링크 수도 그대로</td></tr>
+            <tr><td>크기</td><td>원본과 같음 — <b>61바이트</b> (같은 데이터)</td><td><b>8바이트</b> = 경로 <code>basefile</code> 의 글자 수</td></tr>
+            <tr><td>원본 수정</td><td>링크에도 바로 보임 (같은 파일)</td><td>링크로 열어도 고친 내용 (원본을 따라감)</td></tr>
+            <tr><td>원본 삭제</td><td>원본을 지우거나 옮겨도 <b>내용 그대로</b> 읽힘</td><td><b>깨짐</b> → <code>그런 파일이나 디렉터리가 없습니다</code></td></tr>
+            <tr><td>원본 복귀</td><td>—</td><td>제자리에 되돌리면 다시 <b>복구</b></td></tr>
+            <tr><td>링크 삭제</td><td>원본은 그대로 (링크 수만 2 → 1)</td><td>원본은 그대로 (강의자료)</td></tr>
+            <tr><td>디렉터리</td><td>거의 안 됨 (<code>-d</code> 옵션도 root 라도 실패 가능성 높음 — 강의자료)</td><td>됨</td></tr>
+            <tr><td>다른 디스크</td><td>🤖 안 됨 (파티션 · USB 처럼 다른 파일 시스템 — inode 번호는 그 안에서만 통함)</td><td>됨</td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>리눅스에서</th><th>🪟 윈도우로 치면</th></tr>
+            <tr><td>터미널</td><td>마우스 대신 <b>글자로 탐색기를 조작하는 창</b> · 명령 한 줄 = 탐색기에서 한 번 클릭 · 메뉴 선택</td></tr>
+            <tr><td><code>. .. ~</code></td><td>지금 폴더 · 위 폴더 · 내 폴더 (디렉터리 = 폴더 · root 의 <code>/root</code> ↔ 윈도우 <code>C:\Users\이름</code>)</td></tr>
+            <tr><td><code>cat</code></td><td>메모장으로 열어 내용 보기</td></tr>
+            <tr><td><code>ls -l</code></td><td>탐색기 <b>‘자세히’ 보기</b> (이름 · 크기 · 수정한 날짜) · <code>-i</code> 를 붙이면 inode 번호까지 — inode · 링크 수 칸은 탐색기에 없음</td></tr>
+            <tr><td><code>mv</code></td><td><b>잘라내기</b>(Ctrl+X) → 다른 폴더에 <b>붙여넣기</b>(Ctrl+V)</td></tr>
+            <tr><td><code>ln -s</code></td><td>심볼릭 링크 = 오른쪽 클릭 → <b>바로 가기 만들기</b> · 아이콘에 작은 화살표 · [속성] 의 <b>대상</b> 칸 = <code>-&gt; basefile</code></td></tr>
+            <tr><td>깨진 링크</td><td>원본을 옮긴 뒤 바로 가기를 더블클릭 → <b>‘바로 가기 문제’</b> 창</td></tr>
+            <tr><td><code>ln</code></td><td>하드 링크 — 탐색기 메뉴엔 없음 (명령 프롬프트 <code>mklink /H 링크 원본</code>) · 같은 파일이 두 이름으로 보이고 <b>한쪽을 고치면 다른 쪽도</b> 바뀜 · 복사(Ctrl+C → Ctrl+V)는 따로 노는 두 파일이라 다름</td></tr>
+            <tr><td>⚠️ 순서</td><td>리눅스 <code>ln 원본 링크</code> (<b>원본이 앞</b>) ↔ 윈도우 <code>mklink 링크 원본</code> (<b>링크가 앞</b> · 심볼릭은 관리자 권한)</td></tr>
+        </table>
+        <h3>🖥️ 교재 실습 9 (227 ~ 229쪽) — 명령을 한 줄씩 눌러 보세요</h3>
+        <div class="tip">📖 교재 그림 4-95 ~ 4-98 의 실제 실행 화면 그대로예요 · 원본을 <b>옮겼다가(mv)</b> 되돌리면서 하드 링크는 멀쩡하고 심볼릭 링크만 끊어졌다 살아나는 걸 확인해요.</div>
+        <div class="tclick" data-prompt="root@localhost:~/linktest#" data-title="교재 실습 9"><script type="text/plain" class="tc-src">
+$ pwd  ## 💡 지금 있는 위치 → `/root/linktest` (Step 1 에서 홈에 `mkdir linktest` → `cd linktest/` 로 들어온 상태)  ## 🪟 탐색기 위쪽 주소창에 보이는 현재 폴더 경로
+/root/linktest
+$ nano basefile  ## 💡 편집기를 열어 ‘파일 링크를 실습하기 위한 원본 파일입니다.’ 를 쓰고 Ctrl+X → Y → Enter 로 저장 → 터미널에는 아무것도 안 남아요  ## 🪟 메모장으로 새 파일을 만들어 저장
+$ cat basefile  ## 💡 파일 내용 출력 → 한글 1글자 = 3바이트라 이 한 줄 + 줄바꿈 = 61바이트  ## 🪟 메모장으로 열어 내용 보기
+파일 링크를 실습하기 위한 원본 파일입니다.
+$ ln basefile hardlink  ## 💡 하드 링크 만들기 — 원본(basefile)과 같은 파일에 이름(hardlink)을 하나 더 붙임 → 성공하면 출력 없음  ## 🪟 탐색기 메뉴에는 없음 · 명령 프롬프트로는 `mklink /H hardlink basefile` (윈도우는 링크 이름이 앞)
+$ ln -s basefile softlink  ## 💡 심볼릭(소프트) 링크 만들기 — ‘basefile’ 이라는 경로만 적어 둔 작은 파일을 새로 만듦 → 성공하면 출력 없음  ## 🪟 basefile 오른쪽 클릭 → 바로 가기 만들기 (명령 프롬프트로는 `mklink softlink basefile`)
+$ ls -il  ## 💡 `-i` = 맨 앞에 inode 번호 · `-l` = 자세히 → basefile · hardlink 는 1106188 로 같고 softlink 만 1106189 (새 번호)  ## 💡 둘째 칸 2 = 링크 수(같은 파일에 이름이 2개) · softlink 는 맨 앞이 l · 크기 8 = ‘basefile’ 8글자 · `->` 뒤가 가리키는 원본  ## 🪟 탐색기 ‘자세히’ 보기 (이름 · 크기 · 수정한 날짜) — inode 번호 · 링크 수 칸은 탐색기에 없음
+합계 8
+1106188 -rw-r--r-- 2 root root 61  9월 11일  10:06 basefile
+1106188 -rw-r--r-- 2 root root 61  9월 11일  10:06 hardlink
+1106189 lrwxrwxrwx 1 root root  8  9월 11일  10:09 softlink -> basefile
+$ cat hardlink  ## 💡 하드 링크 = 원본과 같은 파일 → 내용도 똑같음  ## 🪟 같은 파일을 다른 이름으로 연 것
+파일 링크를 실습하기 위한 원본 파일입니다.
+$ cat softlink  ## 💡 softlink 가 ‘basefile’ 경로를 따라가서 원본 내용을 보여 줌  ## 🪟 바로 가기를 더블클릭하면 원본이 열림
+파일 링크를 실습하기 위한 원본 파일입니다.
+$ mv basefile ../  ## 💡 원본을 위 디렉터리(`..` = /root)로 옮김 → 이 폴더에서는 원본이 없어진 것과 같음 · 출력 없음  ## 🪟 basefile 을 잘라내기(Ctrl+X) → 위 폴더에 붙여넣기(Ctrl+V)
+$ ls -il  ## 💡 basefile 이 목록에서 빠짐 · hardlink 는 그대로 (1106188 · 61바이트 · 링크 수 2 = 위 폴더로 옮겨진 basefile 도 아직 같은 파일이라서)  ## 💡 softlink 는 가리킬 basefile 이 이 폴더에 없음 → 깨진 링크 (실제 터미널에서는 빨간 글씨)  ## 🪟 원본을 옮겨도 바로 가기 아이콘은 그 자리에 그대로 남아 있음
+합계 4
+1106188 -rw-r--r-- 2 root root 61  9월 11일  10:06 hardlink
+1106189 lrwxrwxrwx 1 root root  8  9월 11일  10:09 softlink -> basefile
+$ cat hardlink  ## 💡 하드 링크는 데이터(inode)를 직접 가리켜서, 원본 이름이 없어져도 그대로 읽힘  ## 🪟 같은 파일에 붙은 다른 이름이라 원본 이름을 옮기거나 지워도 열림 (탐색기에는 없는 기능)
+파일 링크를 실습하기 위한 원본 파일입니다.
+$ cat softlink  ## 💡 심볼릭 링크는 ‘basefile’ 이라는 경로만 기억 → 그 자리에 파일이 없어서 오류 = 연결이 끊어짐  ## 🪟 원본을 옮긴 뒤 바로 가기를 더블클릭 → ‘바로 가기 문제’ 창 (가리키는 항목이 바뀌거나 옮겨짐)
+cat: softlink: 그런 파일이나 디렉터리가 없습니다
+$ mv ../basefile .  ## 💡 원본을 다시 지금 디렉터리(`.`)로 가져옴 · 출력 없음  ## 🪟 원본을 원래 폴더로 다시 옮겨 놓기
+$ ls -il  ## 💡 처음과 똑같이 돌아옴 — basefile 이 다시 생겨서 softlink -> basefile 연결이 살아남
+합계 8
+1106188 -rw-r--r-- 2 root root 61  9월 11일  10:06 basefile
+1106188 -rw-r--r-- 2 root root 61  9월 11일  10:06 hardlink
+1106189 lrwxrwxrwx 1 root root  8  9월 11일  10:09 softlink -> basefile
+$ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 링크 복구  ## 🪟 원본을 제자리에 두면 바로 가기도 다시 열림
+파일 링크를 실습하기 위한 원본 파일입니다.
+</script></div>
+        <h3>🖥️ 강의자료 예제 3-53 ~ 3-55 (ex_data) — 링크 수 1 → 2</h3>
+        <div class="tclick" data-prompt="[cskisa@localhost section_05]$" data-title="강의자료 예제 3-53 ~ 3-55"><script type="text/plain" class="tc-src">
+$ ls -l  ## 💡 하드 링크를 만들기 전 (예제 3-54 Step 01) — ex_data 의 둘째 칸(링크 수) = 1 · 크기 670293  ## 🪟 탐색기 ‘자세히’ 보기 — 링크 수 칸은 탐색기에 없음
+합계 672
+-rw-r--r--. 1 cskisa cskisa 670293  4월 28 18:47 ex_data
+drwxrwxr-x. 3 cskisa cskisa     50  4월 28 19:07 temp
+drwxrwxr-x. 3 cskisa cskisa     50  4월 28 19:19 temp_cp
+-rw-r--r--. 1 cskisa cskisa    148  4월 28 18:17 test.txt
+-rw-rw-r--. 1 cskisa cskisa      0 10월 31  2019 test_file
+-rw-r--r--. 1 cskisa cskisa    158  4월 28 17:44 text_01
+-rw-r--r--. 1 cskisa cskisa    158  4월 28 17:51 text_02
+-rw-r--r--. 1 cskisa cskisa    158  4월 28 17:44 tmp
+$ ln ex_data ex_data.ln  ## 💡 하드 링크 만들기 (예제 3-54 Step 02) — 성공하면 출력 없음  ## 🪟 명령 프롬프트 `mklink /H ex_data.ln ex_data`
+$ ls -l  ## 💡 ex_data · ex_data.ln 둘 다 링크 수 1 → 2 · 크기 670293 같음 (같은 파일)  ## 💡 🤖 맨 위 합계 672 → 1328 = 이름마다 블록 수를 더해서 ex_data 몫(656)이 한 번 더 더해진 것 — 실제 디스크는 한 번만 씀
+합계 1328
+-rw-r--r--. 2 cskisa cskisa 670293  4월 28 18:47 ex_data
+-rw-r--r--. 2 cskisa cskisa 670293  4월 28 18:47 ex_data.ln
+drwxrwxr-x. 3 cskisa cskisa     50  4월 28 19:07 temp
+drwxrwxr-x. 3 cskisa cskisa     50  4월 28 19:19 temp_cp
+-rw-r--r--. 1 cskisa cskisa    148  4월 28 18:17 test.txt
+-rw-rw-r--. 1 cskisa cskisa      0 10월 31  2019 test_file
+-rw-r--r--. 1 cskisa cskisa    158  4월 28 17:44 text_01
+-rw-r--r--. 1 cskisa cskisa    158  4월 28 17:51 text_02
+-rw-r--r--. 1 cskisa cskisa    158  4월 28 17:44 tmp
+$ ls -i  ## 💡 예제 3-55 Step 01 — ex_data · ex_data.ln 둘 다 inode 52075475 (같은 파일)
+52075475 ex_data      849804 temp        52075390 test.txt   849806 text_01
+52074120 tmp        52075475 ex_data.ln  849807 temp_cp    52074088 test_file
+52074119 text_02
+$ ln -s ex_data ex_data.sl  ## 💡 심볼릭 링크 만들기 (예제 3-55 Step 02) — 성공하면 출력 없음  ## 🪟 ex_data 오른쪽 클릭 → 바로 가기 만들기
+$ ls -l ex_data.sl  ## 💡 맨 앞 l = 링크 파일 · 링크 수 1 · 크기 7 = ‘ex_data’ 7글자 · `-> ex_data` = 가리키는 원본  ## 🪟 바로 가기 [속성] → 대상 칸
+lrwxrwxrwx. 1 cskisa cskisa 7  4월 28 20:07 ex_data.sl -> ex_data
+$ ls -i  ## 💡 예제 3-55 Step 03 — 원본 ex_data 는 52075475, 심볼릭 링크 ex_data.sl 은 52075459 (새 번호)  ## 💡 tx_data.sl(52075457) 은 강의자료 캡처에만 있는 다른 파일 — 예제와 상관없음
+52075475 ex_data       849804 temp       52074088 test_file  52074120 tmp
+52075475 ex_data.ln    849807 temp_cp    849806 text_01      52075457 tx_data.sl
+52075459 ex_data.sl  52075390 test.txt   52074119 text_02
+</script></div>
+        <div class="tip">⚠️ <b>강의자료 헷갈림 주의</b> — 강의자료 ‘링크 파일’ 쪽의 “하드 링크 = 원본 파일을 <b>복사</b>하여 … 다른 <b>사본</b> 파일” → 🤖 실제로는 <b>복사가 아니에요</b>: 같은 I-node(같은 데이터)에 이름만 하나 더 붙는 것이라 크기가 같고, 원본을 고치면 링크도 자동으로 바뀌어요 (같은 쪽의 “원본 파일의 내용이 변경되면 링크 파일은 자동으로 변경됨” 이 이 뜻) · <code>cp</code> 로 만든 사본은 고쳐도 따로 놀아요.</div>
+        <div class="tip">⚠️ <b>정정</b> — 강의자료 예제 3-54 ‘여기서 잠깐’ 의 “같은 <b>I-node 번호 2</b>를 부여받은 것” → <code>ls -l</code> 둘째 칸 <b>2 는 링크 수</b>(같은 파일에 붙은 이름 개수)예요. I-node 번호는 <code>ls -i</code> 로 보는 <b>52075475</b> (예제 3-55).</div>
     </section>
 
     <section class="card" id="s6">
@@ -1433,8 +1538,8 @@ exit 0                                    # 정상 종료</code></pre>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="quiz.js?v=202610191809"></script>
-<script src="weeks.js?v=202610191809"></script>
-<script src="ink.js?v=202610191809"></script>
+<script src="quiz.js?v=202610201712"></script>
+<script src="weeks.js?v=202610201712"></script>
+<script src="ink.js?v=202610201712"></script>
 </body>
 </html>

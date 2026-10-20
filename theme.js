@@ -13,6 +13,7 @@
    - 소스코드 색칠 codecolor.js 도 여기서 함께 불러옴 (VS Code 고대비 색)
    - 애니메이션 · 인터랙션 motion.js 도 여기서 함께 불러옴 (자세한 건 motion.js 맨 위 설명)
    - 출력 결과 상자 outview.js 도 여기서 함께 불러옴 (줄 번호 · 키보드 입력 표시 · 줄마다 설명)
+   - 명령을 누르면 출력이 펼쳐지는 터미널 termclick.js 도 여기서 함께 불러옴 (.tclick)
    - 전환 버튼을 누르면 버튼 자리에서 원이 퍼지며 모드가 바뀜 (View Transitions 지원 브라우저)
    ===================================================================== */
 (function () {
@@ -34,6 +35,7 @@
     loadSibling("motion-js", "motion.js");
     loadSibling("outview-js", "outview.js");      // ▶ 출력 결과 상자: 줄 번호 · 입력 표시 · 줄마다 설명
     loadSibling("codecopy-js", "codecopy.js");    // ⧉ 복사 — 모든 코드블록 (주차 페이지 · 나중에 생기는 코드 포함)
+    loadSibling("termclick-js", "termclick.js");  // 🖥️ 명령을 누르면 출력이 펼쳐지는 터미널 (.tclick · 원고 ```term)
 
     // ---- 전공 과목 로고 — 과목 이름 왼쪽에 (2026-10-09 사용자 요청) ----
     //  과목 페이지 · 주차 페이지 · 중간고사 페이지 · 실제시험의 제목(h1, 앞의 이모지는 로고로 바꿈) + 첫 화면 과목 카드 아이콘
