@@ -442,7 +442,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 <tr><td><code>변수=값</code> · <code>$변수</code></td><td><code>=</code> 좌우 띄어쓰기 X · 모든 변수는 <b>문자열</b></td></tr>
 <tr><td><code>"$v"</code> / <code>'$v'</code> · <code>\$v</code></td><td>큰따옴표 = <b>값</b> / 작은따옴표 · <code>\</code> = 글자 그대로 <code>$v</code></td></tr>
 <tr><td><code>num2=$num1+200</code></td><td>계산 안 함 → <b><code>100+200</code></b> (글자)</td></tr>
-<tr><td><code>`expr $num1 + 200`</code></td><td><b>300</b> · 띄어쓰기 필수 · <code>\(</code> <code>\)</code> <code>\*</code> → <code>expr \( 100 + 200 \) / 10 \* 2</code> = <b>60</b></td></tr>
+<tr><td><code>`expr $num1 + 200`</code></td><td><b>300</b> · 띄어쓰기 필수 (붙여 쓴 <code>expr $num1+200</code> 은 오류 없이 <b>100+200</b> 글자 그대로 — 실행 확인) · <code>\(</code> <code>\)</code> <code>\*</code> → <code>expr \( 100 + 200 \) / 10 \* 2</code> = <b>60</b></td></tr>
 <tr><td>📏 숫자</td><td>자료형이 없음 · <code>expr</code> 는 <b>정수만</b> → <code>expr 10 / 3</code> = <b>3</b></td></tr>
 <tr><td><code>$0</code> · <code>$1</code> · <code>$*</code></td><td>파일 이름 · 첫 번째 값 · 전체</td></tr>
 <tr><td><code>if [ 조건 ]</code> → <code>then</code> → <code>elif</code> → <code>else</code> → <code>fi</code></td><td><code>[</code> 뒤 · <code>]</code> 앞 <b>띄어쓰기</b> 필수</td></tr>
