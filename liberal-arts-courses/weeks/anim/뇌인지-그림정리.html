@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>뇌인지 그림 정리</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --cell:#7c6ae6;--myelin:#e0a838;--astro:#e0862b;--oligo:#0f9f74;--micro:#d9363e;--schwann:#2b8fd1;--vessel:#d9363e;
+          --ex:#16a34a;--inh:#2563eb;--ap:#e5484d;--fore:#e0862b;--mid:#c9b48a;--hind:#a0522d;
+          --fr:#8b7cf6;--pa:#ec5f9e;--te:#22b07d;--oc:#e9b52c;--light:#f5a524;--eye:#eef4fb;--nerve:#e8a3a3;--hl:#f59e0b;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --cell:#a596f5;--myelin:#f0c35a;--astro:#f5a04a;--oligo:#34d399;--micro:#ff6369;--schwann:#5ab8f0;--vessel:#ff6369;
+          --ex:#4cc38a;--inh:#6b9cff;--ap:#ff6369;--fore:#f5a04a;--mid:#d9c79c;--hind:#d07a4f;
+          --fr:#a596f5;--pa:#f27db3;--te:#4cc38a;--oc:#f5c84a;--light:#ffb547;--eye:#1c2733;--nerve:#c97878;--hl:#ffb547;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+    .box{max-width:780px;margin:0 auto;padding:10px 12px 14px;}
+    .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0 0 8px;}
+    .tabs button{min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 4px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;}
+    .tabs button[aria-pressed=true]{border-color:var(--main);color:var(--main);box-shadow:inset 0 0 0 1px var(--main);}
+    .src{margin:0 0 6px;font-size:13px;color:var(--ink2);}
+    .src b{color:var(--main);}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;}
+    svg{display:block;width:100%;height:auto;}
+    svg[hidden]{display:none;}
+    svg text{fill:var(--ink);font-family:inherit;font-size:19px;}
+    svg text.s{font-size:15px;fill:var(--ink2);}
+    svg text.b{font-weight:800;}
+    svg text.w{fill:#fff;}
+    svg .ln{stroke:var(--ink2);stroke-width:1.6;fill:none;}
+    svg .ax{stroke:var(--ink2);stroke-width:2;fill:none;}
+    svg .dash{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:6 5;fill:none;}
+    svg [data-s]{transition:opacity .45s ease;}
+    svg [data-s].off{opacity:0;}
+    svg [data-s].dim{opacity:.28;}
+    svg [data-s].hl{filter:drop-shadow(0 0 5px var(--hl));}
+    .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;}
+    .ctl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+    .ctl button.main{border-color:var(--main);color:var(--main);}
+    .ctl .pos{margin-left:auto;font-size:13px;color:var(--ink2);}
+    ol.cap{margin:8px 0 0;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:14.5px;line-height:1.65;}
+    ol.cap li{margin:2px 0;padding:1px 4px;border-radius:6px;cursor:pointer;}
+    ol.cap li b{color:var(--main);}
+    ol.cap li.cur{background:color-mix(in srgb,var(--hl) 22%,transparent);}
+    ol.cap li.later{opacity:.45;}
+    .note{margin:6px 0 0;font-size:13px;color:var(--ink2);line-height:1.6;}
+    .note a{color:var(--main);}
+    @media (max-width:560px){ .tabs{grid-template-columns:repeat(3,minmax(0,1fr));} .tabs button{font-size:12px;} ol.cap{font-size:14px;padding-left:28px;}
+        /* 폰: 그림이 작아지니 그림 속 글자를 키움 (긴 줄도 600 폭 안에 들어가는 크기까지만) */
+        svg text{font-size:22px;} svg text.s{font-size:17px;} .stage{padding:3px;} }
+</style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="tabs" id="tabs" role="group" aria-label="그림 고르기"></div>
+    <p class="src" id="src"></p>
+    <div class="stage">
+
+<!-- ① 뉴런의 기본 구조 (4장 3쪽 ★ 여기 시험에 나옴) -->
+<svg data-fig="neuron" viewBox="0 0 600 360" role="img" aria-label="뉴런의 기본 구조" hidden>
+  <g data-s="1" style="stroke:var(--cell);stroke-width:5;stroke-linecap:round;fill:none">
+    <path class="d" d="M100,150 L62,98 L42,72 M62,98 L36,106"/>
+    <path class="d" d="M112,138 L106,82 L96,52 M106,82 L126,60"/>
+    <path class="d" d="M88,172 L46,180 L22,166 M46,180 L26,202"/>
+    <path class="d" d="M104,198 L72,240 L58,266 M72,240 L92,266"/>
+    <path class="d" d="M138,138 L158,92 L172,70"/>
+    <path class="d" d="M136,204 L150,248 L140,276"/>
+  </g>
+  <g data-s="1"><path class="ln" d="M172,48 L120,72"/><text x="176" y="52" class="b">수상돌기</text><text x="176" y="74" class="s">정보를 받음</text></g>
+  <g data-s="2">
+    <circle cx="120" cy="170" r="36" style="fill:var(--cell);opacity:.9"/>
+    <circle cx="120" cy="170" r="12" style="fill:#fff;opacity:.85"/>
+    <path class="ln" d="M206,232 L148,194"/><text x="210" y="238" class="b">세포체</text><text x="210" y="260" class="s">생명 유지 · 정보 통합</text>
+  </g>
+  <g data-s="3">
+    <path class="d" d="M156,170 L470,170" style="stroke:var(--cell);stroke-width:6;fill:none"/>
+    <g style="fill:var(--myelin)"><rect x="182" y="160" width="44" height="20" rx="10"/><rect x="237" y="160" width="44" height="20" rx="10"/><rect x="292" y="160" width="44" height="20" rx="10"/><rect x="347" y="160" width="44" height="20" rx="10"/><rect x="402" y="160" width="44" height="20" rx="10"/></g>
+    <text x="314" y="146" text-anchor="middle" class="b">축색</text>
+    <path class="ln" d="M424,140 L424,160"/><text x="424" y="134" text-anchor="middle" class="s">수초 (myelin)</text>
+  </g>
+  <g data-s="4">
+    <path class="d" d="M470,170 L503,131 M470,170 L512,170 M470,170 L503,209" style="stroke:var(--cell);stroke-width:4;fill:none;stroke-linecap:round"/>
+    <g style="fill:var(--cell)"><circle cx="508" cy="127" r="9"/><circle cx="518" cy="170" r="9"/><circle cx="508" cy="213" r="9"/></g>
+    <path class="ln" d="M480,262 L503,224"/><text x="470" y="282" text-anchor="middle" class="b">축색 종말</text>
+  </g>
+  <g data-s="5">
+    <path class="d" d="M600,140 C575,150 556,162 538,170 M600,200 C578,190 560,178 538,172" style="stroke:var(--cell);stroke-width:5;fill:none;stroke-linecap:round;opacity:.6"/>
+    <g style="fill:var(--hl)"><circle cx="530" cy="164" r="2.6"/><circle cx="532" cy="174" r="2.6"/><circle cx="529" cy="170" r="2.2"/></g>
+    <path class="ln" d="M552,96 L532,160"/><text x="556" y="92" text-anchor="middle" class="b">시냅스</text>
+    <text x="582" y="232" text-anchor="middle" class="s">다음</text><text x="582" y="250" text-anchor="middle" class="s">뉴런</text>
+  </g>
+  <g data-s="6">
+    <path class="d" d="M40,322 L556,322" style="stroke:var(--main);stroke-width:3;fill:none"/>
+    <path d="M556,314 L572,322 L556,330 Z" style="fill:var(--main)"/>
+    <text x="300" y="350" text-anchor="middle" class="s">수상돌기 → 세포체 → 축색 → 축색 종말 → 시냅스 → 다음 뉴런</text>
+  </g>
+</svg>
+
+<!-- ② 아교세포 (4장 6쪽 ★ 종류 암기) -->
+<svg data-fig="glia" viewBox="0 0 600 420" role="img" aria-label="아교세포의 종류" hidden>
+  <g data-s="1"><text x="300" y="28" text-anchor="middle" class="b">아교세포 = 뇌 세포의 85% (뉴런 &lt; 아교)</text></g>
+  <g>
+    <path d="M326,210 L588,210" style="stroke:var(--cell);stroke-width:6;fill:none"/>
+    <path d="M286,196 L262,170 M284,224 L262,250 M300,184 L304,150" style="stroke:var(--cell);stroke-width:4;fill:none;stroke-linecap:round"/>
+    <circle cx="300" cy="210" r="26" style="fill:var(--cell)"/>
+    <text x="300" y="276" text-anchor="middle" class="s">뉴런</text>
+  </g>
+  <g data-s="2">
+    <rect x="20" y="48" width="250" height="28" rx="14" style="fill:var(--vessel);opacity:.8"/>
+    <text x="145" y="68" text-anchor="middle" class="s w" style="fill:#fff">혈관</text>
+    <path class="d" d="M150,170 L145,78 M150,170 L92,128 M150,170 L96,214 M150,170 L128,240 M150,170 L274,206 M150,170 L204,118" style="stroke:var(--astro);stroke-width:4;fill:none;stroke-linecap:round"/>
+    <circle cx="150" cy="170" r="17" style="fill:var(--astro)"/>
+    <text x="150" y="268" text-anchor="middle" class="b">별아교세포</text><text x="150" y="288" text-anchor="middle" class="s">(성상세포)</text>
+  </g>
+  <g data-s="3">
+    <g style="fill:var(--oligo)"><rect x="372" y="199" width="64" height="22" rx="11"/><rect x="456" y="199" width="64" height="22" rx="11"/></g>
+    <path class="d" d="M470,118 L404,199 M470,118 L488,199" style="stroke:var(--oligo);stroke-width:4;fill:none;stroke-linecap:round"/>
+    <circle cx="470" cy="112" r="16" style="fill:var(--oligo)"/>
+    <text x="470" y="68" text-anchor="middle" class="b">성긴돌기아교세포</text><text x="470" y="88" text-anchor="middle" class="s">(희소돌기아교세포)</text>
+  </g>
+  <g data-s="4">
+    <path class="d" d="M100,352 L86,340 M100,352 L88,368 M100,352 L112,338 M100,352 L114,368 M100,352 L100,334" style="stroke:var(--micro);stroke-width:3;fill:none;stroke-linecap:round"/>
+    <circle cx="100" cy="352" r="9" style="fill:var(--micro)"/>
+    <g style="fill:var(--ink2);opacity:.7"><circle cx="150" cy="346" r="4"/><circle cx="162" cy="360" r="3"/><circle cx="146" cy="364" r="3.5"/><path d="M168,340 l6,4 -5,5 z"/></g>
+    <text x="100" y="398" text-anchor="middle" class="b">미세아교세포</text><text x="158" y="330" text-anchor="middle" class="s">잔해</text>
+  </g>
+  <g data-s="5">
+    <rect x="320" y="300" width="262" height="108" rx="12" class="dash"/>
+    <text x="451" y="322" text-anchor="middle" class="s">말초 신경계</text>
+    <path d="M334,358 L568,358" style="stroke:var(--cell);stroke-width:6;fill:none"/>
+    <g style="fill:var(--schwann)"><rect x="370" y="346" width="76" height="24" rx="12"/><rect x="458" y="346" width="76" height="24" rx="12"/></g>
+    <text x="451" y="398" text-anchor="middle" class="b">슈반세포 = 수초</text>
+  </g>
+</svg>
+
+<!-- ③ 활동전위 (4장 17쪽) -->
+<svg data-fig="ap" viewBox="0 0 600 400" role="img" aria-label="축색의 전위 변화 그래프" hidden>
+  <g>
+    <path class="ax" d="M70,40 L70,350 L575,350"/>
+    <text x="74" y="30" class="s">막전위 (mV)</text><text x="575" y="378" text-anchor="end" class="s">시간 (ms) →</text>
+    <path class="dash" d="M70,300 L570,300"/><text x="64" y="305" text-anchor="end" class="s">−70</text>
+  </g>
+  <g data-s="1"><path class="d" d="M70,300 L170,300" style="stroke:var(--ap);stroke-width:4;fill:none"/>
+    <circle cx="120" cy="300" r="13" style="fill:var(--ap)"/><text x="120" y="306" text-anchor="middle" class="s w b" style="fill:#fff">1</text>
+    <text x="150" y="332" text-anchor="middle" class="s">분극화 · 안정 전위</text></g>
+  <g data-s="2"><path class="dash" d="M70,267 L570,267"/><text x="64" y="272" text-anchor="end" class="s">−55</text>
+    <path class="d" d="M170,300 C200,300 215,285 230,267" style="stroke:var(--ap);stroke-width:4;fill:none"/>
+    <circle cx="230" cy="267" r="13" style="fill:var(--ap)"/><text x="230" y="273" text-anchor="middle" class="s w b" style="fill:#fff">2</text>
+    <text x="500" y="260" text-anchor="middle" class="s">역치 −55mV</text></g>
+  <g data-s="3"><path class="d" d="M230,267 C245,240 265,90 290,60" style="stroke:var(--ap);stroke-width:4;fill:none"/>
+    <path class="dash" d="M70,60 L330,60"/><text x="64" y="65" text-anchor="end" class="s">+40</text>
+    <circle cx="246" cy="170" r="13" style="fill:var(--ap)"/><text x="246" y="176" text-anchor="middle" class="s w b" style="fill:#fff">3</text>
+    <text x="196" y="140" text-anchor="end" class="b">탈분극</text><text x="196" y="160" text-anchor="end" class="s">활동전위 +40mV</text></g>
+  <g data-s="4"><path class="d" d="M290,60 C310,40 325,200 345,290" style="stroke:var(--ap);stroke-width:4;fill:none"/>
+    <circle cx="330" cy="170" r="13" style="fill:var(--ap)"/><text x="330" y="176" text-anchor="middle" class="s w b" style="fill:#fff">4</text>
+    <text x="352" y="150" class="b">재분극</text></g>
+  <g data-s="5"><path class="d" d="M345,290 C355,320 375,325 395,322 C430,318 450,300 480,300 L570,300" style="stroke:var(--ap);stroke-width:4;fill:none"/>
+    <circle cx="395" cy="322" r="13" style="fill:var(--ap)"/><text x="395" y="328" text-anchor="middle" class="s w b" style="fill:#fff">5</text>
+    <text x="425" y="345" class="b">과분극</text><text x="510" y="345" class="s">→ −70 복귀</text></g>
+</svg>
+
+<!-- ④ 시냅스 · EPSP / IPSP (4장 20 ~ 23쪽) -->
+<svg data-fig="synapse" viewBox="0 0 600 460" role="img" aria-label="시냅스에서의 화학적 전달과 EPSP IPSP" hidden>
+  <g>
+    <path d="M285,0 L285,50 C230,70 215,150 245,178 L355,178 C385,150 370,70 315,50 L315,0 Z" style="fill:var(--cell);opacity:.35;stroke:var(--cell);stroke-width:2"/>
+    <path d="M200,208 C260,214 340,214 400,208 L400,244 L200,244 Z" style="fill:var(--cell);opacity:.35;stroke:var(--cell);stroke-width:2"/>
+    <text x="300" y="236" text-anchor="middle" class="s">시냅스 후 뉴런</text>
+    <path class="ln" d="M430,64 L372,92"/><text x="434" y="68" class="b">축색 종말</text>
+  </g>
+  <g data-s="1"><path class="d" d="M300,4 L300,40" style="stroke:var(--ap);stroke-width:4;fill:none"/><path d="M292,36 L300,50 L308,36 Z" style="fill:var(--ap)"/>
+    <text x="160" y="24" class="s" style="fill:var(--ap)">활동전위 도착 ↓</text></g>
+  <g data-s="2">
+    <g style="fill:var(--card);stroke:var(--myelin);stroke-width:3"><circle cx="266" cy="108" r="13"/><circle cx="302" cy="94" r="13"/><circle cx="336" cy="114" r="13"/><circle cx="284" cy="146" r="13"/><circle cx="324" cy="150" r="13"/></g>
+    <g style="fill:var(--hl)"><circle cx="262" cy="105" r="2.5"/><circle cx="270" cy="111" r="2.5"/><circle cx="298" cy="92" r="2.5"/><circle cx="306" cy="97" r="2.5"/><circle cx="332" cy="111" r="2.5"/><circle cx="340" cy="117" r="2.5"/><circle cx="280" cy="143" r="2.5"/><circle cx="288" cy="149" r="2.5"/><circle cx="320" cy="147" r="2.5"/><circle cx="328" cy="153" r="2.5"/></g>
+    <path class="ln" d="M432,124 L352,118"/><text x="436" y="128" class="b">시냅스 소낭</text>
+    <g style="fill:var(--hl)"><circle cx="258" cy="190" r="3"/><circle cx="276" cy="196" r="3"/><circle cx="296" cy="188" r="3"/><circle cx="318" cy="197" r="3"/><circle cx="340" cy="190" r="3"/></g>
+    <path class="ln" d="M432,180 L346,190"/><text x="436" y="184" class="b">신경전달물질</text>
+  </g>
+  <g data-s="3">
+    <g style="fill:none;stroke:var(--ex);stroke-width:3"><path d="M238,206 v-7 h5 v5 h8 v-5 h5 v7"/><path d="M276,208 v-7 h5 v5 h8 v-5 h5 v7"/><path d="M316,208 v-7 h5 v5 h8 v-5 h5 v7"/><path d="M352,206 v-7 h5 v5 h8 v-5 h5 v7"/></g>
+    <path class="ln" d="M130,212 L234,204"/><text x="126" y="218" text-anchor="end" class="b">수용기</text>
+    <path class="ln" d="M130,184 L212,193"/><text x="126" y="188" text-anchor="end" class="b">시냅스 틈</text>
+  </g>
+  <g>
+    <path class="ax" d="M60,282 L60,446 L575,446"/>
+    <path class="dash" d="M60,410 L570,410"/><text x="54" y="415" text-anchor="end" class="s">−70</text>
+    <path class="dash" d="M60,360 L570,360"/><text x="566" y="352" text-anchor="end" class="s">역치</text>
+  </g>
+  <g data-s="4"><path class="d" d="M60,410 L110,410 C120,410 125,388 135,388 C145,388 150,410 165,410 L190,410" style="stroke:var(--ex);stroke-width:4;fill:none"/>
+    <text x="135" y="378" text-anchor="middle" class="b" style="fill:var(--ex)">EPSP ↑</text></g>
+  <g data-s="5"><path class="d" d="M190,410 C200,410 205,432 215,432 C225,432 230,410 245,410 L270,410" style="stroke:var(--inh);stroke-width:4;fill:none"/>
+    <text x="226" y="398" text-anchor="middle" class="b" style="fill:var(--inh)">IPSP ↓</text></g>
+  <g data-s="6"><path class="d" d="M270,410 C280,410 285,392 293,390 C300,388 302,398 310,396 C318,393 322,380 330,374 C336,370 338,364 342,360 C345,330 348,292 352,288 C356,292 360,380 368,424 C375,430 390,416 400,410 L570,410" style="stroke:var(--ap);stroke-width:4;fill:none"/>
+    <path class="ln" d="M420,312 L358,300"/><text x="424" y="306" class="b" style="fill:var(--ap)">EPSP 가 모여</text><text x="424" y="332" class="b" style="fill:var(--ap)">역치 → 활동전위</text></g>
+</svg>
+
+<!-- ⑤ 뇌의 구조 (5장 13쪽 · ✍️ 전뇌 · 후뇌 ○ · 중뇌 X) -->
+<svg data-fig="brain" viewBox="0 0 600 420" role="img" aria-label="뇌의 구조 전뇌 중뇌 후뇌" hidden>
+  <text x="18" y="236" class="s">◀ 앞</text>
+  <g data-s="1">
+    <path class="d" d="M110,250 C78,170 120,70 250,56 C380,42 500,90 520,180 C530,232 500,252 460,252 L340,252 C300,258 170,272 110,250 Z" style="fill:var(--fore);fill-opacity:.32;stroke:var(--fore);stroke-width:3"/>
+    <ellipse cx="300" cy="206" rx="32" ry="19" style="fill:var(--fore);opacity:.75"/>
+    <text x="300" y="118" text-anchor="middle" class="b" style="font-size:24px">전뇌</text>
+    <text x="300" y="146" text-anchor="middle" class="s">시상 · 시상하부 · 변연계(편도체 · 해마)</text>
+    <text x="300" y="168" text-anchor="middle" class="s">기저핵 · 대뇌피질</text>
+  </g>
+  <g data-s="2">
+    <path d="M286,226 C298,220 326,220 334,230 L330,254 L292,254 Z" style="fill:var(--mid);stroke:var(--ink2);stroke-width:1.5"/>
+    <path class="ln" d="M200,300 L296,244"/><text x="196" y="306" text-anchor="end" class="b">중뇌</text><text x="196" y="328" text-anchor="end" class="s">✍️ X (범위 아님)</text>
+  </g>
+  <g data-s="3">
+    <ellipse cx="318" cy="276" rx="26" ry="20" style="fill:var(--hind);opacity:.85"/>
+    <path d="M304,294 L334,294 L327,362 L311,362 Z" style="fill:var(--hind);opacity:.85"/>
+    <path d="M319,362 L319,404" style="stroke:var(--hind);stroke-width:10;opacity:.5"/>
+    <ellipse cx="428" cy="292" rx="62" ry="38" style="fill:var(--hind);opacity:.85"/>
+    <path d="M378,286 C405,276 450,276 480,288 M380,300 C410,292 450,292 482,302" style="stroke:#fff;stroke-width:1.5;fill:none;opacity:.6"/>
+    <text x="428" y="300" text-anchor="middle" class="b w" style="fill:#fff">소뇌</text>
+    <text x="276" y="282" text-anchor="end" class="s">교</text><text x="300" y="342" text-anchor="end" class="s">연수</text>
+    <text x="470" y="380" text-anchor="middle" class="b">후뇌 = 연수 · 교 · 소뇌</text>
+  </g>
+</svg>
+
+<!-- ⑥ 대뇌피질 4개 엽 + 언어 영역 (5장 18쪽 시험 ★ · 3장 4쪽 시험) -->
+<svg data-fig="lobes" viewBox="0 0 600 400" role="img" aria-label="대뇌피질 4개 엽과 브로카 베르니케 영역" hidden>
+  <defs><clipPath id="cpBrain"><path d="M90,232 C70,150 130,60 250,50 C380,40 500,80 530,170 C545,222 522,258 482,264 C450,268 432,262 420,272 C398,292 340,300 290,292 C240,285 200,272 168,264 C130,258 100,252 90,232 Z"/></clipPath></defs>
+  <text x="20" y="186" class="s">◀ 앞</text>
+  <g clip-path="url(#cpBrain)">
+    <polygon data-s="1" points="0,0 290,0 262,120 252,202 168,222 0,262" style="fill:var(--fr);opacity:.8"/>
+    <polygon data-s="2" points="290,0 448,0 446,122 420,182 360,192 252,202 262,120" style="fill:var(--pa);opacity:.8"/>
+    <polygon data-s="3" points="168,222 252,202 360,192 420,182 434,400 150,400" style="fill:var(--te);opacity:.8"/>
+    <polygon data-s="4" points="448,0 600,0 600,400 434,400 420,182 446,122" style="fill:var(--oc);opacity:.85"/>
+  </g>
+  <path d="M90,232 C70,150 130,60 250,50 C380,40 500,80 530,170 C545,222 522,258 482,264 C450,268 432,262 420,272 C398,292 340,300 290,292 C240,285 200,272 168,264 C130,258 100,252 90,232 Z" style="fill:none;stroke:var(--ink2);stroke-width:2.5"/>
+  <ellipse cx="452" cy="296" rx="54" ry="27" style="fill:var(--ink2);opacity:.45"/><text x="452" y="302" text-anchor="middle" class="s">소뇌</text>
+  <path d="M352,284 L382,284 L378,360 L358,360 Z" style="fill:var(--ink2);opacity:.35"/>
+  <g data-s="1"><text x="200" y="134" text-anchor="middle" class="b w" style="fill:#fff">전두엽</text><text x="200" y="156" text-anchor="middle" class="s w" style="fill:#fff">계획 · 실행</text></g>
+  <g data-s="2"><text x="356" y="104" text-anchor="middle" class="b w" style="fill:#fff">두정엽</text><text x="356" y="126" text-anchor="middle" class="s w" style="fill:#fff">감각 / 주의</text></g>
+  <g data-s="3"><text x="318" y="236" text-anchor="middle" class="b w" style="fill:#fff">측두엽</text><text x="318" y="258" text-anchor="middle" class="s w" style="fill:#fff">언어 / 청각</text></g>
+  <g data-s="4"><text x="488" y="164" text-anchor="middle" class="b">후두엽</text><text x="488" y="186" text-anchor="middle" class="s" style="fill:var(--ink)">시각</text></g>
+  <g data-s="5">
+    <circle cx="214" cy="206" r="13" style="fill:none;stroke:#fff;stroke-width:3;stroke-dasharray:4 3"/>
+    <circle cx="398" cy="212" r="13" style="fill:none;stroke:#fff;stroke-width:3;stroke-dasharray:4 3"/>
+    <path class="ln" d="M214,219 L200,334"/><text x="200" y="354" text-anchor="middle" class="b">브로카 = 말하기</text>
+    <path class="ln" d="M398,225 L520,334"/><text x="520" y="354" text-anchor="middle" class="b">베르니케 = 이해</text>
+  </g>
+  <g data-s="6">
+    <path class="d" d="M118,300 L150,62" style="stroke:var(--ink);stroke-width:5;fill:none;stroke-linecap:round"/>
+    <text x="20" y="392" class="s">✍️ 피니어스 게이지: 쇠막대 → 전두엽 손상 → 성격 변화</text>
+    <path class="ln" d="M110,372 L117,306"/>
+  </g>
+</svg>
+
+<!-- ⑦ 눈 · 망막 (6장 4 · 5 · 7쪽) -->
+<svg data-fig="eye" viewBox="0 0 600 350" role="img" aria-label="눈의 구조와 망막" hidden>
+  <g data-s="1">
+    <circle cx="44" cy="150" r="13" style="fill:var(--light)"/><path d="M44,163 L44,206" style="stroke:var(--te);stroke-width:4"/>
+    <polygon points="62,136 62,190 172,184 172,156" style="fill:var(--light);opacity:.32"/>
+    <circle class="d" cx="260" cy="170" r="88" style="fill:var(--eye);stroke:var(--ink2);stroke-width:2.5"/>
+    <polygon points="190,150 190,190 334,184 334,170" style="fill:var(--light);opacity:.32"/>
+    <path class="d" d="M178,128 C156,150 156,190 178,212" style="fill:none;stroke:var(--schwann);stroke-width:3"/>
+    <ellipse cx="192" cy="170" rx="11" ry="32" style="fill:var(--schwann);opacity:.45"/>
+    <path class="ln" d="M150,96 L168,132"/><text x="150" y="88" text-anchor="middle" class="b">각막</text>
+    <path class="ln" d="M196,262 L194,204"/><text x="196" y="282" text-anchor="middle" class="b">수정체</text>
+    <text x="262" y="236" text-anchor="middle" class="s">유리체</text>
+  </g>
+  <g data-s="2">
+    <path class="d" d="M300,101 A80,80 0 0 1 300,239" style="fill:none;stroke:var(--ap);stroke-width:7;stroke-linecap:round"/>
+    <circle cx="334" cy="183" r="5" style="fill:var(--light)"/><path d="M334,178 L334,160" style="stroke:var(--te);stroke-width:3"/>
+    <path class="ln" d="M426,124 L338,140"/><text x="430" y="128" class="b">망막</text><text x="430" y="148" class="s">상이 거꾸로 맺힘</text>
+  </g>
+  <g data-s="3">
+    <path class="ln" d="M420,62 L306,104"/><text x="424" y="60" class="b">주변부 = 간상체</text><text x="424" y="80" class="s">약한 빛 · 로돕신</text>
+    <path class="ln" d="M424,192 L344,172"/><text x="428" y="196" class="b">중심와 = 추상체</text><text x="428" y="216" class="s">색 · 선명</text>
+  </g>
+  <g data-s="4">
+    <path class="d" d="M326,214 C360,244 400,252 462,252" style="fill:none;stroke:var(--nerve);stroke-width:14;stroke-linecap:round"/>
+    <ellipse cx="520" cy="262" rx="46" ry="36" style="fill:var(--nerve);opacity:.55"/>
+    <path d="M490,256 C505,240 520,276 535,250 C545,236 552,260 558,266" style="fill:none;stroke:#fff;stroke-width:2;opacity:.7"/>
+    <text x="520" y="318" text-anchor="middle" class="b">뇌</text><text x="390" y="290" text-anchor="middle" class="s">시각 신경</text>
+    <text x="300" y="340" text-anchor="middle" class="s">광수용체(입력) → 신경절 세포(출력) → 시각 신경 → 뇌</text>
+  </g>
+</svg>
+
+<!-- ⑧ 중심-주변 수용장 (6장 9쪽 · ✍️ 대비 향상) -->
+<svg data-fig="rf" viewBox="0 0 600 380" role="img" aria-label="중심 주변 수용장과 발화" hidden>
+  <g data-s="1">
+    <text x="80" y="38" text-anchor="middle" class="s">(a) 구조</text>
+    <circle cx="80" cy="118" r="55" class="dash"/><circle cx="80" cy="118" r="20" style="fill:none;stroke:var(--ink2);stroke-width:2"/>
+    <text x="80" y="125" text-anchor="middle" class="b" style="fill:var(--ex)">+</text>
+    <g class="b" style="fill:var(--inh)"><text x="80" y="84" text-anchor="middle" class="b" style="fill:var(--inh)">−</text><text x="80" y="164" text-anchor="middle" class="b" style="fill:var(--inh)">−</text><text x="42" y="125" text-anchor="middle" class="b" style="fill:var(--inh)">−</text><text x="118" y="125" text-anchor="middle" class="b" style="fill:var(--inh)">−</text></g>
+    <path class="ax" d="M22,236 L138,236"/><g style="stroke:var(--ink);stroke-width:2.5"><path d="M32,236 v-22 M56,236 v-22 M80,236 v-22 M104,236 v-22 M128,236 v-22"/></g>
+    <text x="80" y="262" text-anchor="middle" class="s">평소 발화</text>
+  </g>
+  <g data-s="2">
+    <text x="225" y="38" text-anchor="middle" class="s">(b) 가운데만 빛</text>
+    <circle cx="225" cy="118" r="55" class="dash"/><circle cx="225" cy="118" r="20" style="fill:var(--light)"/>
+    <path class="ax" d="M167,236 L283,236"/><g style="stroke:var(--ap);stroke-width:2.5"><path d="M171,236 v-22 M178,236 v-22 M185,236 v-22 M192,236 v-22 M199,236 v-22 M206,236 v-22 M213,236 v-22 M220,236 v-22 M227,236 v-22 M234,236 v-22 M241,236 v-22 M248,236 v-22 M255,236 v-22 M262,236 v-22 M269,236 v-22 M276,236 v-22"/></g>
+    <text x="225" y="262" text-anchor="middle" class="b" style="fill:var(--ap)">발화 최대</text>
+  </g>
+  <g data-s="3">
+    <text x="370" y="38" text-anchor="middle" class="s">(c) 주변까지 조금</text>
+    <circle cx="370" cy="118" r="55" class="dash"/><circle cx="370" cy="118" r="36" style="fill:var(--light)"/><circle cx="370" cy="118" r="20" style="fill:none;stroke:var(--ink2);stroke-width:2"/>
+    <path class="ax" d="M312,236 L428,236"/><g style="stroke:var(--ink);stroke-width:2.5"><path d="M318,236 v-22 M332,236 v-22 M346,236 v-22 M360,236 v-22 M374,236 v-22 M388,236 v-22 M402,236 v-22 M416,236 v-22"/></g>
+    <text x="370" y="262" text-anchor="middle" class="s">줄어듦</text>
+  </g>
+  <g data-s="4">
+    <text x="515" y="38" text-anchor="middle" class="s">(d) 전체에 빛</text>
+    <circle cx="515" cy="118" r="55" style="fill:var(--light);opacity:.9"/><circle cx="515" cy="118" r="20" style="fill:none;stroke:var(--ink2);stroke-width:2"/>
+    <path class="ax" d="M457,236 L573,236"/><g style="stroke:var(--ink);stroke-width:2.5"><path d="M467,236 v-22 M491,236 v-22 M515,236 v-22 M539,236 v-22 M563,236 v-22"/></g>
+    <text x="515" y="262" text-anchor="middle" class="s">거의 평소</text>
+  </g>
+  <g data-s="5">
+    <text x="300" y="306" text-anchor="middle" class="b">흥분성 중심(+) · 억제성 주변(−)</text>
+    <text x="300" y="332" text-anchor="middle" class="s">밝은 곳 ↔ 어두운 곳 경계에서 반응 차이가 커짐</text>
+    <text x="300" y="360" text-anchor="middle" class="b" style="fill:var(--main)">⇒ 대비 향상</text>
+  </g>
+</svg>
+
+<!-- ⑨ 인지과학 역사 (1 · 2장) -->
+<svg data-fig="history" viewBox="0 0 600 512" role="img" aria-label="인지과학 형성 역사 연표" hidden>
+  <path class="ax" d="M150,34 L150,494"/>
+  <g data-s="1">
+    <text x="136" y="56" text-anchor="end" class="b">1868</text><circle cx="150" cy="50" r="7" style="fill:var(--main)"/><text x="166" y="56" class="b">Donders ★</text><text x="166" y="76" class="s">최초 인지심리학 실험 · 반응시간</text>
+    <text x="136" y="104" text-anchor="end" class="b">1879</text><circle cx="150" cy="98" r="7" style="fill:var(--main)"/><text x="166" y="104" class="b">Wundt ★</text><text x="166" y="124" class="s">최초 심리학 실험실 · 구성주의 · 분석적 내성법</text>
+  </g>
+  <g data-s="2">
+    <text x="136" y="152" text-anchor="end" class="b">1885</text><circle cx="150" cy="146" r="7" style="fill:var(--main)"/><text x="166" y="152" class="b">Ebbinghaus</text><text x="166" y="172" class="s">기억 · 망각 — 절약법 · 망각곡선</text>
+    <text x="136" y="200" text-anchor="end" class="b">1890</text><circle cx="150" cy="194" r="7" style="fill:var(--main)"/><text x="166" y="200" class="b">William James</text><text x="166" y="220" class="s">기능주의 · 『심리학의 원리』</text>
+  </g>
+  <g data-s="3">
+    <circle cx="150" cy="242" r="7" style="fill:var(--ap)"/><text x="166" y="248" class="b">Watson ★ — 행동주의</text><text x="166" y="268" class="s">고전적 조건형성 · 외적 행동만 (S → Black Box → R)</text>
+    <circle cx="150" cy="290" r="7" style="fill:var(--ap)"/><text x="166" y="296" class="b">Skinner ★</text><text x="166" y="316" class="s">조작적 조건형성 · 강화와 처벌 · Skinner Box</text>
+  </g>
+  <g data-s="4">
+    <text x="136" y="344" text-anchor="end" class="b">1948</text><circle cx="150" cy="338" r="7" style="fill:var(--main)"/><text x="166" y="344" class="b">Tolman ★</text><text x="166" y="364" class="s">인지도 · 잠재학습 (S → Mind → R)</text>
+  </g>
+  <g data-s="5">
+    <text x="136" y="392" text-anchor="end" class="b">1953</text><circle cx="150" cy="386" r="7" style="fill:var(--main)"/><text x="166" y="392" class="b">Cherry</text><text x="166" y="412" class="s">주의 실험 — ✍️ 양분 청취 과제</text>
+    <text x="136" y="440" text-anchor="end" class="b" style="fill:var(--ap)">1956</text><circle cx="150" cy="434" r="9" style="fill:var(--ap)"/><text x="166" y="440" class="b">인지과학 원년 ★</text><text x="166" y="460" class="s">AI 용어 최초 · Miller 7 ± 2 (✍️ chunk)</text>
+    <text x="136" y="488" text-anchor="end" class="b">1958</text><circle cx="150" cy="482" r="7" style="fill:var(--main)"/><text x="166" y="488" class="b">Broadbent</text><text x="166" y="506" class="s">주의 여과기(필터) 모형</text>
+  </g>
+</svg>
+
+<!-- ⑩ 행동주의 vs 인지주의 · Tolman & Honzik (1장 20 · 22쪽) -->
+<svg data-fig="tolman" viewBox="0 0 600 512" role="img" aria-label="행동주의와 인지주의, 톨만 잠재학습 그래프" hidden>
+  <g data-s="1">
+    <text x="70" y="58" text-anchor="middle" class="b" style="font-size:26px;fill:var(--light)">S</text>
+    <path class="d" d="M96,50 L200,50" style="stroke:var(--ink2);stroke-width:3;fill:none"/><path d="M196,43 L210,50 L196,57 Z" style="fill:var(--ink2)"/>
+    <rect x="214" y="28" width="172" height="44" rx="8" style="fill:#111;stroke:var(--ink2)"/><text x="300" y="57" text-anchor="middle" class="b w" style="fill:#fff">Black Box</text>
+    <path class="d" d="M390,50 L494,50" style="stroke:var(--ink2);stroke-width:3;fill:none"/><path d="M490,43 L504,50 L490,57 Z" style="fill:var(--ink2)"/>
+    <text x="530" y="58" text-anchor="middle" class="b" style="font-size:26px;fill:var(--light)">R</text>
+    <text x="300" y="96" text-anchor="middle" class="s">행동주의(Watson) — 마음은 블랙박스 · 자극(S)과 반응(R)만</text>
+  </g>
+  <g data-s="2">
+    <text x="70" y="140" text-anchor="middle" class="b" style="font-size:26px;fill:var(--light)">S</text>
+    <path class="d" d="M96,132 L200,132" style="stroke:var(--ink2);stroke-width:3;fill:none"/><path d="M196,125 L210,132 L196,139 Z" style="fill:var(--ink2)"/>
+    <rect x="214" y="110" width="172" height="44" rx="8" style="fill:var(--main)"/><text x="300" y="139" text-anchor="middle" class="b w" style="fill:#fff">Mind</text>
+    <path class="d" d="M390,132 L494,132" style="stroke:var(--ink2);stroke-width:3;fill:none"/><path d="M490,125 L504,132 L490,139 Z" style="fill:var(--ink2)"/>
+    <text x="530" y="140" text-anchor="middle" class="b" style="font-size:26px;fill:var(--light)">R</text>
+    <text x="300" y="178" text-anchor="middle" class="s">인지주의(Tolman) — 마음 개념을 다시 도입 · Mind = Computer = Brain</text>
+  </g>
+  <g data-s="3">
+    <path class="ax" d="M70,250 L70,460 L560,460"/>
+    <text x="64" y="268" text-anchor="end" class="s">오류</text><text x="560" y="506" text-anchor="end" class="s">미로 경험 일(day) →</text>
+    <text x="70" y="482" text-anchor="middle" class="s">1</text><text x="370" y="482" text-anchor="middle" class="s">11</text><text x="550" y="482" text-anchor="middle" class="s">17</text>
+    <rect x="76" y="210" width="14" height="14" style="fill:var(--ink2)"/><text x="96" y="223" class="s">보상 없음</text>
+    <rect x="222" y="210" width="14" height="14" style="fill:var(--inh)"/><text x="242" y="223" class="s">항상 보상</text>
+    <rect x="368" y="210" width="14" height="14" style="fill:var(--ap)"/><text x="388" y="223" class="s">11일째부터 보상</text>
+    <path class="d" d="M70,265 L130,285 L190,298 L250,304 L310,311 L370,317 L430,324 L490,330 L550,330" style="stroke:var(--ink2);stroke-width:3.5;fill:none"/>
+    <path class="d" d="M70,265 L130,304 L190,343 L250,376 L310,395 L370,408 L430,415 L490,421 L550,428" style="stroke:var(--inh);stroke-width:3.5;fill:none"/>
+  </g>
+  <g data-s="4">
+    <path class="dash" d="M370,240 L370,460"/><text x="376" y="252" class="s" style="fill:var(--ap)">보상 시작</text>
+    <path class="d" d="M70,265 L130,285 L190,298 L250,304 L310,311 L370,317 L400,402 L430,434 L490,440 L550,440" style="stroke:var(--ap);stroke-width:4;fill:none"/>
+    <text x="440" y="400" class="b" style="fill:var(--ap)">확 줄어듦</text>
+  </g>
+</svg>
+
+
+<!-- ⑪ 3대 접근 · 여과기 모형 (2장 5 · 12 ~ 15쪽) -->
+<svg data-fig="approach" viewBox="0 0 600 430" role="img" aria-label="인지심리학 3대 접근과 Broadbent 여과기 모형" hidden>
+  <g data-s="1"><rect x="8" y="18" width="186" height="188" rx="12" style="fill:var(--fr);fill-opacity:.18;stroke:var(--fr);stroke-width:2"/>
+    <text x="101" y="46" text-anchor="middle" class="b">① 실험인지적</text>
+    <text x="101" y="80" text-anchor="middle" class="s">통제된 실험실</text><text x="101" y="104" text-anchor="middle" class="s">자극 → 반응 측정</text>
+    <text x="101" y="128" text-anchor="middle" class="s">심리시간분석법</text><text x="101" y="152" text-anchor="middle" class="s">(반응시간)</text><text x="101" y="176" text-anchor="middle" class="s">예: Stroop 과제</text></g>
+  <g data-s="2"><rect x="207" y="18" width="186" height="188" rx="12" style="fill:var(--te);fill-opacity:.18;stroke:var(--te);stroke-width:2"/>
+    <text x="300" y="46" text-anchor="middle" class="b">② 신경인지적</text>
+    <text x="300" y="80" text-anchor="middle" class="s">뇌 · 신경계 연구</text><text x="300" y="104" text-anchor="middle" class="s">손상 연구</text>
+    <text x="300" y="128" text-anchor="middle" class="s">자극 · 기록 (EEG · ERP)</text><text x="300" y="152" text-anchor="middle" class="s">영상 (CT · MRI</text><text x="300" y="176" text-anchor="middle" class="s">PET · fMRI)</text></g>
+  <g data-s="3"><rect x="406" y="18" width="186" height="188" rx="12" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="499" y="46" text-anchor="middle" class="b">③ 계산적</text>
+    <text x="499" y="80" text-anchor="middle" class="s">마음 · 인지 과정을</text><text x="499" y="104" text-anchor="middle" class="s">컴퓨터로 모델링</text>
+    <text x="499" y="128" text-anchor="middle" class="s">컴퓨터 시뮬레이션</text><text x="499" y="152" text-anchor="middle" class="s">(모의실험)</text></g>
+  <g data-s="4"><text x="20" y="238" class="s b" style="fill:var(--ink)">초기 컴퓨터 정보처리 흐름</text>
+    <text x="20" y="278" class="s">입력</text>
+    <path class="d" d="M58,272 L88,272" style="stroke:var(--te);stroke-width:2.5;fill:none"/>
+    <rect x="92" y="250" width="118" height="44" rx="6" style="fill:var(--te);fill-opacity:.25;stroke:var(--te)"/><text x="151" y="278" text-anchor="middle" class="s" style="fill:var(--ink)">입력 처리기</text>
+    <path class="d" d="M212,272 L244,272" style="stroke:var(--te);stroke-width:2.5;fill:none"/>
+    <rect x="248" y="250" width="104" height="44" rx="6" style="fill:var(--te);fill-opacity:.25;stroke:var(--te)"/><text x="300" y="278" text-anchor="middle" class="s" style="fill:var(--ink)">기억 단위</text>
+    <path class="d" d="M354,272 L386,272" style="stroke:var(--te);stroke-width:2.5;fill:none"/>
+    <rect x="390" y="250" width="104" height="44" rx="6" style="fill:var(--te);fill-opacity:.25;stroke:var(--te)"/><text x="442" y="278" text-anchor="middle" class="s" style="fill:var(--ink)">연산 단위</text>
+    <path class="d" d="M496,272 L528,272" style="stroke:var(--te);stroke-width:2.5;fill:none"/><text x="534" y="278" class="s">출력</text></g>
+  <g data-s="5"><text x="20" y="330" class="s b" style="fill:var(--ink)">Broadbent(1958) 주의의 여과기(필터) 모형</text>
+    <text x="20" y="378" class="s">입력</text>
+    <path class="d" d="M58,350 L128,350 M58,362 L128,362 M58,374 L128,374 M58,386 L128,386" style="stroke:var(--te);stroke-width:2.5;fill:none"/>
+    <rect x="132" y="344" width="118" height="48" rx="6" style="fill:var(--ap);fill-opacity:.2;stroke:var(--ap);stroke-width:2"/><text x="191" y="374" text-anchor="middle" class="b">여과기</text>
+    <path class="d" d="M252,368 L300,368" style="stroke:var(--te);stroke-width:2.5;fill:none"/>
+    <rect x="304" y="344" width="118" height="48" rx="6" style="fill:var(--te);fill-opacity:.25;stroke:var(--te)"/><text x="363" y="374" text-anchor="middle" class="b">탐지기</text>
+    <path class="d" d="M424,368 L470,368" style="stroke:var(--te);stroke-width:2.5;fill:none"/><text x="476" y="374" class="s">기억으로</text>
+    <text x="300" y="420" text-anchor="middle" class="s">여러 입력 중 여과기를 통과한 하나만 → 마음의 흐름도(flow diagram)</text></g>
+</svg>
+
+<!-- ⑫ 인지신경과학 연구 방법 (3장 4 ~ 14쪽) -->
+<svg data-fig="methods" viewBox="0 0 600 470" role="img" aria-label="인지신경과학 연구 방법" hidden>
+  <g data-s="1"><rect x="10" y="10" width="580" height="78" rx="12" style="fill:var(--ap);fill-opacity:.12;stroke:var(--ap);stroke-width:2"/>
+    <text x="28" y="40" class="b">손상법 🔥</text><text x="150" y="40" class="s" style="fill:var(--ink)">손상된 뇌 부위 ↔ 행동 평가 → 그 영역의 기능 추론</text>
+    <text x="150" y="70" class="s">피니어스 게이지 · 브로카 · 베르니케 (✍️ 4쪽 “시험”)</text></g>
+  <g data-s="2"><rect x="10" y="98" width="580" height="78" rx="12" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/>
+    <text x="28" y="128" class="b">자극법</text><text x="150" y="128" class="s" style="fill:var(--ink)">미세전극으로 뇌를 직접 자극 → 반응 보고</text>
+    <text x="150" y="158" class="s">Penfield(1959) — 통각 수용기가 없는 뇌 조직을 자극</text></g>
+  <g data-s="3"><rect x="10" y="186" width="580" height="96" rx="12" style="fill:var(--schwann);fill-opacity:.14;stroke:var(--schwann);stroke-width:2"/>
+    <text x="28" y="216" class="b">전극 기록법</text>
+    <text x="150" y="216" class="s" style="fill:var(--ink)">EEG — 뇌전위 변화 · 수면 연구 (✍️ 시험 X)</text>
+    <text x="150" y="244" class="s" style="fill:var(--ink)">MEG(뇌자도) — SQUID 로 자기장 변화</text>
+    <text x="150" y="268" class="s">→ fMRI 보다 시간적 해상도가 높음</text></g>
+  <g data-s="4"><text x="28" y="314" class="b">뇌 영상기법</text>
+    <rect x="10" y="326" width="285" height="64" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te)"/>
+    <text x="24" y="352" class="b">CT</text><text x="24" y="378" class="s">X선 · 수평단면만 · 구조</text>
+    <rect x="305" y="326" width="285" height="64" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te)"/>
+    <text x="319" y="352" class="b">MRI</text><text x="319" y="378" class="s">수소원자 · 시상 · 전두단면도</text>
+    <rect x="10" y="398" width="285" height="64" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te)"/>
+    <text x="24" y="424" class="b">PET</text><text x="24" y="450" class="s">양전자 → 감마선 · 비쌈 · 침습적</text>
+    <rect x="305" y="398" width="285" height="64" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te)"/>
+    <text x="319" y="424" class="b">fMRI</text><text x="319" y="450" class="s">혈중 산소(BOLD) · 구조 + 기능</text></g>
+</svg>
+
+<!-- ⑬ 뉴런의 종류 (4장 5쪽 · 📝 교수님 메모) -->
+<svg data-fig="ntype" viewBox="0 0 600 470" role="img" aria-label="뉴런의 종류 다극성 양극성 단극성" hidden>
+  <g data-s="1" style="stroke:var(--cell);stroke-width:4;fill:none;stroke-linecap:round">
+    <path class="d" d="M100,110 L64,70 L52,48 M100,110 L100,58 L92,34 M100,110 L138,70 L150,50 M100,110 L60,118 L40,104 M100,110 L140,120 L160,106 M100,110 L100,300 M100,300 L82,322 M100,300 L100,326 M100,300 L118,322"/>
+  </g>
+  <g data-s="1"><circle cx="100" cy="110" r="16" style="fill:var(--cell)"/><text x="100" y="362" text-anchor="middle" class="b">다극성</text><text x="100" y="384" text-anchor="middle" class="s">운동뉴런</text></g>
+  <g data-s="2" style="stroke:var(--inh);stroke-width:4;fill:none;stroke-linecap:round">
+    <path class="d" d="M300,155 L300,70 M300,70 L280,40 M300,70 L320,40 M300,95 L282,78 M300,185 L300,300 M300,300 L284,322 M300,300 L316,322"/>
+  </g>
+  <g data-s="2"><ellipse cx="300" cy="170" rx="15" ry="20" style="fill:var(--inh)"/><text x="300" y="362" text-anchor="middle" class="b">양극성</text><text x="300" y="384" text-anchor="middle" class="s">개재(연합)뉴런</text></g>
+  <g data-s="3" style="stroke:var(--te);stroke-width:4;fill:none;stroke-linecap:round">
+    <path class="d" d="M500,40 L500,300 M500,40 L486,22 M500,40 L514,22 M500,300 L486,322 M500,300 L514,322 M486,170 L500,170"/>
+  </g>
+  <g data-s="3"><circle cx="472" cy="170" r="14" style="fill:var(--te)"/><text x="500" y="362" text-anchor="middle" class="b">(유사)단극성</text><text x="500" y="384" text-anchor="middle" class="s">감각뉴런</text></g>
+  <g data-s="4">
+    <text x="76" y="440" text-anchor="middle" class="b" style="fill:var(--te)">감각뉴런</text>
+    <path class="d" d="M126,434 L160,434" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M158,428 L168,434 L158,440 Z" style="fill:var(--ink2)"/>
+    <text x="246" y="440" text-anchor="middle" class="b" style="fill:var(--inh)">연합(개재)뉴런</text>
+    <path class="d" d="M330,434 L364,434" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M362,428 L372,434 L362,440 Z" style="fill:var(--ink2)"/>
+    <text x="420" y="440" text-anchor="middle" class="b" style="fill:var(--cell)">운동뉴런</text>
+    <path class="d" d="M470,434 L504,434" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M502,428 L512,434 L502,440 Z" style="fill:var(--ink2)"/>
+    <text x="548" y="440" text-anchor="middle" class="b">근육</text>
+  </g>
+</svg>
+
+<!-- ⑭ 신경계의 구성 (5장 10 ~ 12쪽) -->
+<svg data-fig="ns" viewBox="0 0 600 400" role="img" aria-label="신경계의 구성" hidden>
+  <g><rect x="225" y="14" width="150" height="44" rx="10" style="fill:var(--main);opacity:.9"/><text x="300" y="42" text-anchor="middle" class="b w" style="fill:#fff">신경계</text>
+    <text x="386" y="42" class="s">신경 = 축색의 다발</text></g>
+  <g data-s="1"><path class="d" d="M260,58 L150,118" style="stroke:var(--ink2);stroke-width:2;fill:none"/>
+    <rect x="50" y="118" width="200" height="44" rx="10" style="fill:var(--fr);opacity:.9"/><text x="150" y="146" text-anchor="middle" class="b w" style="fill:#fff">중추신경계</text>
+    <text x="150" y="196" text-anchor="middle" class="b">뇌 = 신경계의 최고 중추</text>
+    <text x="150" y="226" text-anchor="middle" class="b">척수</text>
+    <text x="150" y="250" text-anchor="middle" class="s">뇌의 운동 명령 → 말초</text>
+    <text x="150" y="272" text-anchor="middle" class="s">말초의 감각 정보 → 뇌</text></g>
+  <g data-s="2"><path class="d" d="M340,58 L430,118" style="stroke:var(--ink2);stroke-width:2;fill:none"/>
+    <rect x="340" y="118" width="180" height="44" rx="10" style="fill:var(--te);opacity:.9"/><text x="430" y="146" text-anchor="middle" class="b w" style="fill:#fff">말초신경계</text>
+    <path class="d" d="M400,162 L345,200 M460,162 L515,200" style="stroke:var(--ink2);stroke-width:2;fill:none"/>
+    <rect x="275" y="200" width="140" height="40" rx="10" style="fill:var(--te);fill-opacity:.2;stroke:var(--te)"/><text x="345" y="226" text-anchor="middle" class="b">체성</text>
+    <text x="345" y="262" text-anchor="middle" class="s">의식적 조절</text><text x="345" y="284" text-anchor="middle" class="s">골격근 (감각 / 운동)</text>
+    <rect x="445" y="200" width="140" height="40" rx="10" style="fill:var(--te);fill-opacity:.2;stroke:var(--te)"/><text x="515" y="226" text-anchor="middle" class="b">자율</text>
+    <text x="515" y="262" text-anchor="middle" class="s">의식적 조절 X</text><text x="515" y="284" text-anchor="middle" class="s">내장 (소화 · 폐 · 심장)</text></g>
+  <g data-s="3"><path class="d" d="M490,292 L462,322 M540,292 L568,322" style="stroke:var(--ink2);stroke-width:2;fill:none"/>
+    <rect x="410" y="322" width="96" height="62" rx="10" style="fill:var(--ap);fill-opacity:.2;stroke:var(--ap)"/><text x="458" y="348" text-anchor="middle" class="b">교감</text><text x="458" y="372" text-anchor="middle" class="s">흥분 상태</text>
+    <rect x="514" y="322" width="84" height="62" rx="10" style="fill:var(--inh);fill-opacity:.2;stroke:var(--inh)"/><text x="556" y="348" text-anchor="middle" class="b">부교감</text><text x="556" y="372" text-anchor="middle" class="s">안정 상태</text></g>
+</svg>
+    </div>
+    <div class="ctl">
+        <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
+        <button type="button" id="prev" title="이전 단계">◀ 이전</button>
+        <button type="button" id="next" title="다음 단계">다음 ▶</button>
+        <button type="button" id="all" title="모두 보기">전체</button>
+        <span class="pos" id="pos"></span>
+    </div>
+    <ol class="cap" id="cap"></ol>
+    <p class="note" id="note"></p>
+</div>
+<script>
+(function () {
+    "use strict";
+    // 그림마다: 탭 이름 · 강의자료 출처 · 단계 설명 (단계 번호 = SVG 의 data-s) · 아래 메모
+    var FIGS = [
+        { id: "history", tab: "① 역사 연표", src: "1 · 2장 — 인지과학 형성 역사",
+          steps: [
+            "<b>1868 Donders</b> 반응시간 · <b>1879 Wundt</b> 최초 심리학 실험실",
+            "<b>1885 Ebbinghaus</b> 망각곡선 · <b>1890 William James</b> 기능주의",
+            "<b>행동주의</b> — Watson(고전적 조건형성) · Skinner(조작적 조건형성)",
+            "<b>1948 Tolman</b> — 인지도 · 잠재학습 → 마음의 재출현",
+            "<b>1953 Cherry</b> 양분 청취 · <b>1956 인지과학 원년</b>(Miller 7 ± 2) · <b>1958 Broadbent</b> 여과기 모형" ],
+          note: "★ = 강의 강조 · ✍️ 튜링 · 폰 노이만 ‘저장 프로그램’ 은 PDF 필기에 <b>“시험 미출제”</b> 라 연표에서 뺐어요 · Watson · Skinner 는 강의자료에 연도가 없어 연도 없이" },
+        { id: "tolman", tab: "② 잠재학습", src: "1장 20 · 22쪽 — ✍️ S → Black Box → R · Tolman & Honzik(1930)",
+          steps: [
+            "<b>행동주의</b>(Watson) — 마음은 <b>블랙박스</b>로 두고 자극과 반응만 연구",
+            "<b>인지주의</b>(Tolman) — S 와 R 사이에 <b>Mind</b> 를 다시 넣음 · 핵심 가정 <b>Mind = Computer = Brain</b>",
+            "Tolman & Honzik(1930) 쥐 미로 — 보상 없음 vs 항상 보상",
+            "<b>11일째부터 보상</b>을 준 쥐는 오류가 <b>확 줄어</b> 항상 보상 받은 쥐만큼 잘함 → 보상 없이도 이미 배워 두었음 = <b>잠재학습</b> (학습 ≠ 수행)" ],
+          note: "그래프는 강의자료 그림의 모양만 따라 그렸어요 (값은 대략)" }
+,
+        { id: "approach", tab: "③ 3대 접근", src: "2장 5 · 12 ~ 15쪽 — 인지심리학 접근 방법 · 정보처리 접근",
+          steps: [
+            "<b>실험인지적</b> 접근 — 통제된 실험실에서 자극을 주고 반응을 측정 · <b>심리시간분석법</b>(반응시간 차이로 인지 구조 추론) · 예 <b>Stroop 과제</b>",
+            "<b>신경인지적</b> 접근 — 뇌 · 신경계 연구: <b>손상 연구</b> · 자극 및 기록법(<b>EEG · ERP</b>) · 뇌영상(<b>CT · MRI · PET · fMRI</b>)",
+            "<b>계산적</b> 접근 — 마음과 인지 과정을 컴퓨터 과학의 계산 방법으로 <b>모델링</b> · <b>컴퓨터 시뮬레이션</b>",
+            "디지털 컴퓨터 등장 → 컴퓨터의 정보처리(입력 처리기 → 기억 단위 → 연산 단위)와 마음의 정보처리가 비슷 = <b>정보처리 접근</b>",
+            "<b>Broadbent(1958) 여과기(필터) 모형</b> — 여러 입력 중 <b>여과기</b>를 통과한 것만 <b>탐지기</b> → 기억 · 마음의 흐름도(flow diagram)" ],
+          note: "✍️ Cherry(1953) 주의 실험 = <b>양분 청취 과제</b>(두 귀에 서로 다른 말 · 한쪽만 따라 말하기) · 3대 접근에 ‘행동조건적 접근’ 같은 건 없어요" },
+        { id: "methods", tab: "④ 연구 방법", src: "3장 4 ~ 14쪽 — 인지신경과학 연구 방법",
+          steps: [
+            "🔥 <b>손상법</b> — 사람 · 동물의 뇌 손상 부위 ↔ 행동 평가 → 그 영역의 기능 추론 (게이지 · 브로카 · 베르니케)",
+            "<b>자극법</b> — 뇌를 미세전극으로 직접 자극 · <b>Penfield(1959)</b>: 통각 수용기가 없는 뇌 조직에 전기자극 → 피질 영역의 기능 규명",
+            "<b>전극 기록법</b> — <b>EEG</b>(뇌전위 변화 · 수면 연구 · ✍️ <b>시험 X</b>) · <b>MEG 뇌자도</b>(SQUID · 자기장 변화 · fMRI 보다 <b>시간적 해상도↑</b>)",
+            "<b>뇌 영상기법</b> — <b>CT</b>(X선 · 수평단면만) · <b>MRI</b>(수소원자 · 시상 · 전두단면 · 회백질/백질 구분) · <b>PET</b>(양전자 · 감마선 · 비쌈 · 침습적) · <b>fMRI</b>(혈중 산소 농도 BOLD · 구조와 기능 동시 · PET 보다 비침습적 · 빠름)" ],
+          note: "⚠️ 슬라이드 13쪽 “BLOD” 는 <b>BOLD</b>(blood oxygen level dependent) 오타 · 🤖 팩트체크: 슬라이드는 fMRI 가 “산소원자로부터의 방사를 감지” 라고 쓰지만, 실제로는 MRI 처럼 수소 신호를 재고 그 신호가 <b>혈중 산소 농도에 따라 달라지는 것</b>(BOLD)을 이용해요 — 시험은 슬라이드 표현대로" },
+        { id: "neuron", tab: "⑤ 뉴런", src: "4장 3쪽 — ✍️ ★ <b>“여기 시험에 나옴”</b>",
+          steps: [
+            "<b>수상돌기</b>(dendrite) — 다른 뉴런으로부터 정보를 <b>받아들이는</b> 수용부",
+            "<b>세포체</b>(soma) — 세포의 <b>생명을 유지</b> · 정보처리 과제를 <b>통합</b>",
+            "<b>축색</b>(axon) — 정보를 다른 뉴런 · 근육 · 내분비선에 <b>전달</b> · 둘레의 <b>수초</b>(myelin)",
+            "<b>축색 종말</b>(terminal button) — 축색 끝의 둥글게 부푼 부분",
+            "<b>시냅스</b>(synapse) — 축색 종말이 다른 뉴런의 수상돌기 · 세포체와 접촉하는 곳 · 이 틈으로 <b>신경전달물질</b>이 건너감",
+            "정보 흐름: 수상돌기 → 세포체 → 축색 → 축색 종말 → 시냅스 → 다음 뉴런" ],
+          note: "📝 교수님 메모 — 뉴런이 반으로 잘리면 <b>세포체 없는 쪽이 죽음</b>(핵이 없어 단백질을 못 만듦)" },
+        { id: "ntype", tab: "⑥ 뉴런 종류", src: "4장 4 · 5쪽 — 뉴런의 종류 · 📝 교수님 메모",
+          steps: [
+            "<b>다극성</b> 뉴런 — 세포체에 <b>수상돌기가 여러 개</b> · 중추신경계에서 가장 일반적 (그림: 운동뉴런)",
+            "<b>양극성</b> 뉴런 — 세포체에서 <b>수상돌기 하나</b> · 주로 감각뉴런 또는 개재뉴런 · 수상돌기가 외부 환경 탐지 (그림: 개재뉴런)",
+            "<b>(유사)단극성</b> 뉴런 — 세포체에서 줄기 <b>하나</b>가 나와 <b>두 가지</b>로 뻗음 · 촉각 · 온도 · 관절 · 근육 · 내장 정보 (그림: 감각뉴런)",
+            "📝 기능으로 나누면 — <b>감각뉴런</b>(→ 중추신경계) → <b>연합뉴런</b>(개재 뉴런 · 뉴런끼리) → <b>운동뉴런</b>(→ 근육 → 움직임)" ],
+          note: "✍️ 5쪽 “유사” 단극성 · ⚠️ 슬라이드 “개<b>제</b>뉴런” → 개<b>재</b>(介在) 뉴런 · 4쪽: 소뇌의 <b>퍼킨제 세포</b> · 망막의 <b>양극세포</b> · 대뇌겉질 운동영역의 <b>피라미드 세포</b>" },
+        { id: "glia", tab: "⑦ 아교세포", src: "4장 6쪽 — ✍️ ★ <b>“종류 암기”</b>",
+          steps: [
+            "<b>아교세포 = 뇌 세포의 85%</b> · 하는 일 5가지: 뉴런 고정 · 영양분 공급 · 신경전달물질 공급 조절 · 뉴런 사이 절연체 · 죽은 뉴런 잔해 제거",
+            "<b>별아교세포</b>(성상세포) — 별 모양 · 🤖 혈관과 뉴런 사이에서 영양 공급 · 지지",
+            "<b>성긴돌기아교세포</b>(희소돌기아교세포) — 🤖 뇌 · 척수에서 축색을 감싸 <b>수초</b>를 만듦(절연체)",
+            "<b>미세아교세포</b> — 🤖 가장 작음 · 죽은 뉴런 잔해를 파괴 · 제거",
+            "<b>슈반세포</b> — <b>말초 신경계</b>에 분포 · 수초 역할" ],
+          note: "✍️ 종류 암기 = <b>별 · 성긴돌기 · 미세</b> (+ 말초는 슈반) · 🤖 표시 = 세포별 역할 짝은 강의자료에 없어 일반 지식으로 붙였어요 (강의자료는 5가지 역할을 아교세포 전체로 설명)" },
+        { id: "ap", tab: "⑧ 활동전위", src: "4장 17쪽 — 축색에서의 정보전달 : 전위의 변화",
+          steps: [
+            "<b>분극화</b> — 안정 전위 <b>−70mV</b>",
+            "<b>역치</b> — <b>−55mV</b> 를 넘으면 활동전위가 시작됨",
+            "<b>탈분극</b> — 활동전위 <b>+40mV</b> 까지 솟음",
+            "<b>재분극</b> — 다시 내려옴",
+            "<b>과분극</b> — −70 보다 더 내려갔다가 안정 전위로 돌아옴" ],
+          note: "순서 외우기: <b>분극화 → (역치) → 탈분극 → 재분극 → 과분극</b> · 숫자 −70 / −55 / +40 · 그래프 모양은 강의자료 그림을 따라 그렸어요" },
+        { id: "synapse", tab: "⑨ 시냅스", src: "4장 20 · 21 · 23쪽 — 뉴런 간 정보 전달",
+          steps: [
+            "<b>활동전위</b>가 축색 종말에 도달",
+            "<b>시냅스 소낭</b>에서 수백 ~ 수백만 개의 <b>신경전달물질</b>이 방출 (20쪽 개구리 심장 실험 → 전기가 아닌 <b>화학 물질</b>로 전달)",
+            "신경전달물질이 <b>시냅스 틈</b>을 건너 다음 뉴런의 <b>수용기</b>에 붙음",
+            "<b>EPSP</b>(흥분성 시냅스 후 전위) — 막전위를 <b>역치 쪽으로 올림</b> (✍️ 몸을 움직이는)",
+            "<b>IPSP</b>(억제성 시냅스 후 전위) — 막전위를 <b>내려</b> 역치에서 멀어지게 함 (✍️ 몸은 가만히 있는)",
+            "EPSP 가 모여 <b>역치</b>에 닿으면 축색에서 <b>활동전위</b> 발생 · IPSP 는 EPSP 를 상쇄" ],
+          note: "🔥 신경전달물질 OX — 아세틸콜린(기억 · 운동, 작아서 축색 종말에서 합성) · 노르에피네프린(각성) · 도파민(부족 → 파킨슨) · 세로토닌(섭식 · 수면 · 기분, Prozac = 재흡수 차단) · <b>GABA = 주요 억제성</b> · <b>글루타메이트 = 주요 흥분성</b>" },
+        { id: "ns", tab: "⑩ 신경계", src: "5장 10 · 11 · 12쪽 — 신경계의 구성",
+          steps: [
+            "<b>중추신경계</b> — <b>뇌</b>(신경계의 최고 중추) · <b>척수</b>(뇌의 운동 명령을 말초로 · 말초의 감각 정보를 뇌로)",
+            "<b>말초신경계</b> — <b>체성</b>(의식적으로 조절 · 감각중추 · 골격근 연결) / <b>자율</b>(의식적으로 조절 X · 내장기관 연결)",
+            "자율신경계 = <b>교감</b>(흥분 상태) · <b>부교감</b>(안정 상태)" ],
+          note: "신경 = 신경섬유(축색돌기)의 다발" },
+        { id: "brain", tab: "⑪ 뇌의 구조", src: "5장 13쪽 — ✍️ <b>전뇌 · 후뇌 ○ · 중뇌 X</b>",
+          steps: [
+            "<b>전뇌</b> — 시상(감각정보 → 대뇌피질) · 시상하부(욕구 · 자율신경 · 호르몬) · 변연계(편도체 = 정서 · 해마 = 학습과 기억) · 기저핵(느리고 순차적인 운동) · 대뇌피질",
+            "<b>중뇌</b> — ✍️ X 표시 (중간고사 범위 아님)",
+            "<b>후뇌</b> — 연수(생명 유지) · 교(뇌교 · 수면과 각성) · <b>소뇌</b>(움직임 협응)" ],
+          note: "왼쪽이 얼굴(앞) 쪽인 뇌를 가운데로 자른 모양 · 부위 위치는 이해를 돕는 간단한 그림이에요" },
+        { id: "lobes", tab: "⑫ 4개 엽", src: "5장 18쪽 — ✍️ <b>“시험 ★”</b> · 3장 4쪽 네모 <b>“시험”</b>",
+          steps: [
+            "<b>전두엽</b> — 복잡한 과제 처리 (계획 · 실행 등 다양한 기능)",
+            "<b>두정엽</b> — 감각 / 주의",
+            "<b>측두엽</b> — 언어 / 청각",
+            "<b>후두엽</b> — 시각 정보 처리",
+            "🔥 <b>브로카</b> 영역(왼쪽 전두엽) = 손상되면 이해는 하지만 <b>말하기</b>가 어려움 · <b>베르니케</b> 영역(왼쪽 측두엽) = 손상되면 말은 하지만 <b>이해</b>가 어려움",
+            "🔥 <b>피니어스 게이지</b> — 쇠막대가 머리를 관통 → <b>전두엽</b> 손상 → 성격이 크게 바뀜 (손상법의 사례)" ],
+          note: "왼쪽 뇌를 옆에서 본 모습(왼쪽 = 앞) · 대뇌피질 = 두께 3mm · 6개 층 · 회백질 = 세포체 / 백질 = 축색 · ✍️ EEG 는 “시험 X”" },
+        { id: "eye", tab: "⑬ 눈 · 망막", src: "6장 4 · 5 · 7쪽 — ✍️ “여기까지 시험범위” = 1 ~ 9쪽",
+          steps: [
+            "빛 → <b>각막</b> → <b>수정체</b> → <b>유리체</b>",
+            "<b>망막</b>(눈 안쪽 벽의 신경세포 층)에 상이 거꾸로 맺힘",
+            "망막 <b>주변부 = 간상체</b>(1억 2천만 개 · 로돕신 · 약한 빛) · <b>중심와 = 추상체</b>(6백만 개 · S · M · L · 색 · 선명)",
+            "<b>광수용체 = 입력 단계</b> → <b>신경절 세포 = 출력 단계</b> → 시각 신경 → 뇌 · 망막 <b>자체 안에서 계산</b>이 일어나 뇌는 소화 · 변형된 정보를 받음" ],
+          note: "간상체 · 추상체가 신경절 세포에 어떻게 연결되는지(다 : 1 · 소 : 1)는 <a href=\"광수용체-연결.html\" target=\"_top\">🎬 광수용체 연결 애니메이션</a>으로" },
+        { id: "rf", tab: "⑭ 수용장", src: "6장 9쪽 — 중심-주변 수용장 · ✍️ 대비율↑ / ↓",
+          steps: [
+            "<b>흥분성 중심(+) · 억제성 주변(−)</b> 수용장 · 빛이 없으면 평소만큼 발화",
+            "<b>가운데만</b> 빛 → 발화 <b>최대</b>",
+            "빛이 <b>주변까지</b> 넘침 → 억제가 섞여 발화가 <b>줄어듦</b>",
+            "<b>전체</b>에 빛 → 흥분과 억제가 상쇄 → 거의 평소",
+            "그래서 밝은 곳과 어두운 곳의 <b>경계</b>에서 반응 차이가 커짐 ⇒ <b>대비 향상</b>" ],
+          note: "수용장 = 특정한 세포가 반응하는 시공간의 특정한 영역(Hartline, 1936) · 반대 모양(억제성 중심 · 흥분성 주변)도 있어요" }
+    ];
+
+    var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
+        note = document.getElementById("note"), pos = document.getElementById("pos"), box = document.getElementById("box");
+    var S = { fig: 0, step: 0, timers: [] };   // step 0 = 전체
+
+    function svgOf(i) { return document.querySelector('svg[data-fig="' + FIGS[i].id + '"]'); }
+    function parts(svgEl) { return Array.prototype.slice.call(svgEl.querySelectorAll("[data-s]")); }
+    function clearTimers() { S.timers.forEach(clearTimeout); S.timers = []; }
+
+    function drawIn(root) {                       // 선이 그려지듯이 (stroke-dashoffset)
+        var list = root.matches && root.matches(".d") ? [root] : [];
+        list = list.concat(Array.prototype.slice.call(root.querySelectorAll(".d")));
+        list.forEach(function (p) {
+            if (!p.getTotalLength) return;
+            var L; try { L = p.getTotalLength(); } catch (e) { return; }
+            if (!L) return;
+            p.style.transition = "none"; p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+            p.getBoundingClientRect();
+            p.style.transition = "stroke-dashoffset 0.9s ease"; p.style.strokeDashoffset = 0;
+            setTimeout(function () { p.style.strokeDasharray = ""; }, 1000);
+        });
+    }
+
+    function renderCap() {
+        var f = FIGS[S.fig];
+        cap.innerHTML = "";
+        f.steps.forEach(function (t, i) {
+            var li = document.createElement("li"); li.innerHTML = t;
+            if (S.step && i + 1 === S.step) li.className = "cur";
+            else if (S.step && i + 1 > S.step) li.className = "later";
+            li.addEventListener("click", function () { go(i + 1); });
+            cap.appendChild(li);
+        });
+        pos.textContent = S.step ? S.step + " / " + f.steps.length + " 단계" : "전체 " + f.steps.length + " 단계";
+    }
+
+    function apply(animateNew) {                  // 지금 단계에 맞게 보이기 · 숨기기
+        var svgEl = svgOf(S.fig);
+        parts(svgEl).forEach(function (g) {
+            var k = +g.getAttribute("data-s");
+            var wasOff = g.classList.contains("off");
+            var show = !S.step || k <= S.step;
+            g.classList.toggle("off", !show);
+            g.classList.toggle("hl", !!S.step && k === S.step);
+            if (show && wasOff && animateNew) drawIn(g);
+        });
+        renderCap();
+    }
+
+    function drawAll() {                          // 전체를 단계 순서대로 그리면서 보여 주기
+        clearTimers();
+        var svgEl = svgOf(S.fig), n = FIGS[S.fig].steps.length;
+        S.step = 0;
+        parts(svgEl).forEach(function (g) { g.classList.add("off"); g.classList.remove("hl"); });
+        drawIn(svgEl);
+        renderCap();
+        for (var k = 1; k <= n; k++) (function (k) {
+            S.timers.push(setTimeout(function () {
+                parts(svgEl).forEach(function (g) { if (+g.getAttribute("data-s") === k) { g.classList.remove("off"); drawIn(g); } });
+            }, 350 + (k - 1) * 650));
+        })(k);
+    }
+
+    function go(step) {
+        clearTimers();
+        var n = FIGS[S.fig].steps.length;
+        S.step = Math.max(1, Math.min(n, step));
+        apply(true);
+    }
+
+    function show(i, draw) {
+        clearTimers();
+        S.fig = i; S.step = 0;
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (s) {   // SVG 는 .hidden 속성이 없어서 attribute 로
+            if (s.getAttribute("data-fig") === FIGS[i].id) s.removeAttribute("hidden"); else s.setAttribute("hidden", "");
+        });
+        Array.prototype.forEach.call(tabsBox.children, function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+        src.innerHTML = "📄 " + FIGS[i].src;
+        note.innerHTML = FIGS[i].note || "";
+        if (draw) drawAll(); else { parts(svgOf(i)).forEach(function (g) { g.classList.remove("off", "hl"); }); renderCap(); }
+        tell();
+    }
+
+    FIGS.forEach(function (f, i) {
+        var b = document.createElement("button"); b.type = "button"; b.textContent = f.tab;
+        b.addEventListener("click", function () { show(i, true); try { history.replaceState(null, "", "#" + f.id); } catch (e) {} });
+        tabsBox.appendChild(b);
+    });
+    document.getElementById("redraw").addEventListener("click", function () { drawAll(); });
+    document.getElementById("all").addEventListener("click", function () { clearTimers(); S.step = 0; apply(false); });
+    document.getElementById("prev").addEventListener("click", function () { go(S.step ? S.step - 1 : 1); });
+    document.getElementById("next").addEventListener("click", function () { go(S.step ? S.step + 1 : 1); });
+    document.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(S.step + 1); else if (e.key === "ArrowLeft") go(S.step ? S.step - 1 : 1); });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) {} }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    var start = 0, h = (location.hash || "").slice(1);
+    FIGS.forEach(function (f, i) { if (f.id === h) start = i; });
+    show(start, false);
+    // 처음 화면에 보일 때 한 번 그리면서 보여 주기
+    if (window.IntersectionObserver) {
+        var done = false;
+        new IntersectionObserver(function (es) { if (!done && es[0].isIntersecting) { done = true; drawAll(); } }, { threshold: 0.3 }).observe(document.querySelector(".stage"));
+    }
+})();
+</script>
+</body>
+</html>
