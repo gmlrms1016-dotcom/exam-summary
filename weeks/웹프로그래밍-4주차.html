@@ -115,7 +115,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </section>
 <section class="card" id="s3">
 <h2>3. 변수 · 상수 · 이름 규칙</h2>
-<ul><li><span class="wk-tag note">✍️ 필기</span> — 변수를 선언만 하고 값을 넣지 않으면 <code>undefined</code>, 값이 없음을 <b>일부러</b> 표시하고 싶으면 <code>null</code> 을 대입</li><li>이름 규칙: <code>$</code> · <code>_</code> 외의 기호 금지 / 숫자로 시작 금지 / 키워드 금지</li><li><span class="wk-tag note">✍️ 필기</span> — 관례: <b>상수는 모두 대문자</b>(<code>const PI = 3.14;</code>) · 변수·객체 이름은 <b>소문자로 시작</b>(카멜 표기법 <code>myName</code>)</li><li><code>var</code> 는 같은 이름으로 다시 선언 가능(<code>var tel2 = 20; var tel2 = 30;</code>) · <code>let</code> 은 재선언 불가</li></ul>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 변수를 선언만 하고 값을 넣지 않으면 <code>undefined</code>, 값이 없음을 <b>일부러</b> 표시하고 싶으면 <code>null</code> 을 대입</li><li>이름 규칙: <code>$</code> · <code>_</code> 외의 기호 금지 / 숫자로 시작 금지 / 키워드 금지</li><li><span class="wk-tag note">✍️ 필기</span> — 관례: <b>상수는 모두 대문자</b>(<code>const PI = 3.14;</code>) · 변수·객체 이름은 <b>소문자로 시작</b>(카멜 표기법 <code>myName</code>)</li><li>⚠️ <b>팩트체크</b> — 대문자는 <b>관례(권장)일 뿐 필수가 아니에요</b>: <code>const pi = 3.14;</code> 처럼 소문자로 써도 오류 없이 동작 (node 로 실행 확인) · <code>const</code> 의 진짜 규칙은 <b>값을 다시 넣을 수 없다</b>는 것 → <code>pi = 3;</code> 은 <code>TypeError: Assignment to constant variable.</code> · “상수는 반드시 대문자로 써야 한다” 는 <b>X</b></li><li><code>var</code> 는 같은 이름으로 다시 선언 가능(<code>var tel2 = 20; var tel2 = 30;</code>) · <code>let</code> 은 재선언 불가</li></ul>
 </section>
 <section class="card" id="s4">
 <h2>4. 자료형 보충</h2>

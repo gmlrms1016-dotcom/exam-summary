@@ -164,7 +164,7 @@ public class 연습 {   // 파일명 = public 클래스명 (원래 이름 heegeu
             <tr><td>가능</td><td><b>_</b> 와 <b>$</b> · 한글 · 길이 제한 없음</td></tr>
             <tr><td>주의</td><td><b>대소문자 구별</b> (Test ≠ test)</td></tr>
         </table>
-        <div class="tip"><b>카멜 표기법</b> — 클래스=첫 글자 <b>대문자</b> / 변수·메서드=첫 글자 <b>소문자</b> / 상수=<b>모두 대문자</b></div>
+        <div class="tip"><b>카멜 표기법</b> — 클래스=첫 글자 <b>대문자</b> / 변수·메서드=첫 글자 <b>소문자</b> / 상수=<b>모두 대문자</b> · ⚠️ 모두 <b>관례(권장)</b>일 뿐 <b>필수 아님</b> — <code>final double pi = 3.14;</code> · 소문자 클래스 이름도 컴파일 · 실행됨 (javac 로 확인) → “반드시 대문자” 는 X</div>
         <pre><code>public class 연습 {                              // 클래스 시작 — 파일 이름은 연습.java
     public static void main(String[] args) {   // 프로그램이 시작되는 main 메소드
         int n = 15;      // 10진수
@@ -1181,7 +1181,7 @@ public class 연습 {   // 원래 이름 Main → 파일 이름도 연습.java
         System.out.println(circleArea);       // 314.0
     }                                          // main 끝 → 프로그램 종료
 }                                              // 클래스 끝</code></pre>
-        <div class="tip">✍️ 카멜 표기: 클래스 첫 글자 <b>대문자</b> · 변수 · 메소드 첫 글자 <b>소문자</b> · 상수 <b>전부 대문자</b> · byte 범위 −2ⁿ ~ (2ⁿ − 1) (n = 7 → −128 ~ 127) · int 는 4바이트 · long 은 L 을 붙여야 해서 int 를 선호 · 실수는 double 을 많이 씀(D 필수 X) · main() = “메서드 필수”<br>1장: “소스를 컴파일해서 기계어로 번역한다” · “자바(.java)를 실행하면 바이트(.class)로 바뀐다” · JVM = 동일한 자바 실행 환경 · 플랫폼 독립성 · public 클래스는 하나 · 자세히는 <a href="weeks/자바프로그래밍-3주차.html" target="_blank" rel="noopener">3주차</a> · <a href="weeks/자바프로그래밍-2주차.html" target="_blank" rel="noopener">2주차</a></div>
+        <div class="tip">✍️ 카멜 표기: 클래스 첫 글자 <b>대문자</b> · 변수 · 메소드 첫 글자 <b>소문자</b> · 상수 <b>전부 대문자</b> (⚠️ <b>관례</b>일 뿐 필수 아님 — 소문자로 써도 컴파일 오류 X) · byte 범위 −2ⁿ ~ (2ⁿ − 1) (n = 7 → −128 ~ 127) · int 는 4바이트 · long 은 L 을 붙여야 해서 int 를 선호 · 실수는 double 을 많이 씀(D 필수 X) · main() = “메서드 필수”<br>1장: “소스를 컴파일해서 기계어로 번역한다” · “자바(.java)를 실행하면 바이트(.class)로 바뀐다” · JVM = 동일한 자바 실행 환경 · 플랫폼 독립성 · public 클래스는 하나 · 자세히는 <a href="weeks/자바프로그래밍-3주차.html" target="_blank" rel="noopener">3주차</a> · <a href="weeks/자바프로그래밍-2주차.html" target="_blank" rel="noopener">2주차</a></div>
     </section>
 
     <section class="card" id="s30">

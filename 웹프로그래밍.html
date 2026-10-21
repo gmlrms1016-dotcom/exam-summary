@@ -297,7 +297,7 @@ Number("10") + 5   ===&gt;  15      // 명시적 형변환: Number("10") → 10 
             <tr><th>항목</th><th>설명</th></tr>
             <tr><td>undefined vs null</td><td>선언만 하고 값을 안 넣으면 <b>undefined</b> · 값이 없음을 <b>일부러</b> 표시할 때 <b>null</b> 대입</td></tr>
             <tr><td>이름 규칙</td><td><b>$ · _</b> 외의 기호 금지 · 숫자로 시작 금지 · 키워드 금지</td></tr>
-            <tr><td>이름 관례</td><td>상수는 <b>모두 대문자</b>(<code>const PI = 3.14;</code>) · 변수·객체는 <b>소문자로 시작</b>(카멜 표기법)</td></tr>
+            <tr><td>이름 관례</td><td>상수는 <b>대문자로 쓰는 게 관례</b>(<code>const PI = 3.14;</code>) · 변수·객체는 <b>소문자로 시작</b>(카멜 표기법) — ⚠️ <b>필수 아님</b>: <code>const pi = 3.14;</code> 처럼 소문자로 써도 오류 없이 동작 (const 의 규칙은 <b>값을 다시 넣을 수 없다</b>는 것뿐 → <code>pi = 3;</code> 은 TypeError)</td></tr>
             <tr><td>var 재선언</td><td><code>var tel2 = 20; var tel2 = 30;</code> 가능 (let 은 불가)</td></tr>
             <tr><td>Number</td><td>정수·실수·음수 모두 number · <b>Infinity / -Infinity</b> · 계산 불가면 <b>NaN</b> (<code>10 * "hi"</code> → NaN)</td></tr>
             <tr><td>내장 객체</td><td>시스템이 미리 만들어 제공하는 객체 (예: document · window · Math · Date)</td></tr>
