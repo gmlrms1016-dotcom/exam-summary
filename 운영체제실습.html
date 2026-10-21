@@ -72,6 +72,7 @@
             <tr><td>VMnet1</td><td>임대 만료 시간이 갱신됨</td></tr>
             <tr><td>VMnet8</td><td>DHCP 비활성화 → 수동 IP(192.168.111.1)로 변경, 기존 임대·DHCP 서버 정보 사라짐</td></tr>
         </table>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#vm" title="그림 — 호스트 / 게스트 OS" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#vm" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 호스트 / 게스트 OS — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s2">
@@ -107,6 +108,7 @@ mkdir -p tem/data/guest     # 중간 디렉터리까지 한 번에
 rmdir tem                   # '빈' 디렉터리만 삭제
 rm -rf test_dir             # 비어있지 않아도 강제 삭제 (주의!)
 poweroff                    # 시스템 종료 및 전원 차단</code></pre>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#tree" title="그림 — 디렉터리 구조 · 경로 · 마운트" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#tree" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 디렉터리 구조 · 경로 · 마운트 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s4">
@@ -257,6 +259,7 @@ $ ls -i  ## 💡 예제 3-55 Step 03 — 원본 ex_data 는 52075475, 심볼릭 
 </script></div>
         <div class="tip">⚠️ <b>강의자료 헷갈림 주의</b> — 강의자료 ‘링크 파일’ 쪽의 “하드 링크 = 원본 파일을 <b>복사</b>하여 … 다른 <b>사본</b> 파일” → 🤖 실제로는 <b>복사가 아니에요</b>: 같은 I-node(같은 데이터)에 이름만 하나 더 붙는 것이라 크기가 같고, 원본을 고치면 링크도 자동으로 바뀌어요 (같은 쪽의 “원본 파일의 내용이 변경되면 링크 파일은 자동으로 변경됨” 이 이 뜻) · <code>cp</code> 로 만든 사본은 고쳐도 따로 놀아요.</div>
         <div class="tip">⚠️ <b>정정</b> — 강의자료 예제 3-54 ‘여기서 잠깐’ 의 “같은 <b>I-node 번호 2</b>를 부여받은 것” → <code>ls -l</code> 둘째 칸 <b>2 는 링크 수</b>(같은 파일에 붙은 이름 개수)예요. I-node 번호는 <code>ls -i</code> 로 보는 <b>52075475</b> (예제 3-55).</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#link" title="그림 — 하드 링크 vs 심볼릭 링크" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#link" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 하드 링크 vs 심볼릭 링크 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s6">
@@ -281,6 +284,7 @@ chmod u-x,go-w story.txt     # 원상복구</code></pre>
         <div class="tip">각 자리는 <b>r=4, w=2, x=1</b> 의 합 → <b>755</b>=rwxr-xr-x · <b>644</b>=rw-r--r-- · <b>777</b>=rwxrwxrwx</div>
         <pre><code>chmod 775 centos_cp.txt      # -rwxrwxr-x
 rm -i yesterday.txt          # -i : 삭제 전 하나씩 확인(대화식)</code></pre>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#perm" title="그림 — ls -l 한 줄 · 권한 비트" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#perm" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — ls -l 한 줄 · 권한 비트 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s7">
@@ -309,6 +313,7 @@ user100:x:1001:1001::/home/user100:/bin/bash   # ← /etc/passwd 의 user100 줄
 user200:x:1002:1001::/home/user200:/bin/bash   # ← user200 줄
                  ↑ UID는 다르지만 GID는 1001로 같다 = 같은 그룹</code></pre>
         <div class="tip"><b>passwd 주의</b> — 8자 미만이면 경고가 뜨고, 두 번 입력이 다르면 <b>일치하지 않습니다</b> 오류가 납니다.<br><b>/etc/shadow</b> 에서 <b>!</b> 나 <b>*</b> 로 시작하면 <b>로그인 불가 계정</b>입니다.</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#passwd" title="그림 — /etc/passwd 7칸 · 옵션" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#passwd" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — /etc/passwd 7칸 · 옵션 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s8">
@@ -893,6 +898,7 @@ ls -l        # 백업 파일 목록 보기</code></pre>
             <tr><td>⑦</td><td>설치할 <b>패키지 파일을 다운로드</b>해서 <b>자동 설치</b> (저장소 → 내 컴퓨터)</td></tr>
         </table>
         <div class="tip"><b>외우는 요령</b> — 입력 → <b>repo 확인</b> → <b>목록 요청</b> → <b>목록만 다운</b> → <b>이름 출력</b> → <b>y 입력 · 파일 요청</b> → <b>파일 다운 · 자동 설치</b><br>요청(③⑥)은 내 컴퓨터 → 저장소, 다운로드(④⑦)는 저장소 → 내 컴퓨터 · <b>목록</b>(③④)을 먼저 받고 <b>파일</b>(⑥⑦)은 y 를 누른 뒤<br>저장소 = <b>baseos · appstream · 기타 패키지 · 패키지 목록</b> (인터넷으로 연결) · 교재 예시는 실습 11 의 <b>mysql8.4-errmsg</b>, 핵심 repo 파일은 <b>rocky.repo</b><br>⑥ 의 끝 단어는 사진에서 가려져 있어 '요청' 은 추정입니다.</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#dnf" title="그림 — DNF 작동 흐름도" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#dnf" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — DNF 작동 흐름도 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s13">
@@ -943,6 +949,7 @@ job 1 at Fri Oct  2 04:00:00 2026</code></pre>
             <tr><td>확인 · 취소</td><td>파일에서 줄 지우기</td><td>at -l · atrm 번호</td></tr>
         </table>
         <div class="tip">✍️ 필기 "CRON과 AT은 백업을 받는 명령어이다" → ⚠️ cron · at 은 <b>작업 예약</b> 명령 — 백업은 예약한 작업의 예이고, <code>dnf -y update</code> · <code>reboot</code> 같은 어떤 명령이든 예약할 수 있어요 · 자세한 터미널 기록은 <a href="weeks/운영체제실습-5주차.html" target="_blank" rel="noopener">5주차 페이지</a></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#cron" title="그림 — crontab 칸 · cron vs at" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#cron" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — crontab 칸 · cron vs at — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s14">
@@ -977,6 +984,7 @@ fg 1              # 1번 작업을 앞으로 → Ctrl+C 로 종료</code></pre>
 yes &gt; /dev/null
 ^C</code></pre>
         <div class="tip">🤖 <code>sh andor.sh &amp;</code> 처럼 <code>read</code> 가 있는 스크립트를 백그라운드로 보내면 <code>[3]+  멈춤</code> — 백그라운드 작업은 키보드 입력을 읽을 수 없어서 멈춤 → <code>fg 3</code> 으로 가져와 입력 · <code>ls -l &gt; list.txt</code> 의 list.txt 가 <b>0바이트</b>로 보이는 건 셸이 파일을 먼저 비워서 만든 뒤 ls 를 실행하기 때문</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#jobs" title="그림 — 포그라운드 ↔ 백그라운드 · 파이프" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#jobs" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 포그라운드 ↔ 백그라운드 · 파이프 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s15">
@@ -1071,6 +1079,7 @@ exit 0                                 # 정상 종료</code></pre>
         <pre><code class="language-output">10 더하기 20을 실행합니다
 30</code></pre>
         <div class="tip">if4.sh 원본은 <code>cron.service</code> → Rocky 에는 <b>crond.service</b> 라 else (<code>cron 서버가 설치되지 않았습니다.</code>) → 수업에서 <b>sshd.service</b> 로 바꿔 앞 5줄 출력<br>⚠️ PPT 14쪽 if5.sh 는 끝 따옴표가 둥근 <code>“</code> → 문자열이 안 닫혀 <code>ls</code> 대신 코드가 글자로 찍힘 → <code>"</code> 로 고치기</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#sh" title="그림 — sh if 문 흐름" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#sh" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — sh if 문 흐름 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s16">
@@ -1096,6 +1105,7 @@ exit 0                                 # 정상 종료</code></pre>
             <tr><td><code>systemctl</code> start · stop · restart · en??</td><td>⚠️ en?? = <b>enable</b> (부팅할 때 자동 시작) · 반대 disable</td></tr>
         </table>
         <div class="tip">자세히는 <a href="weeks/운영체제실습-7주차.html" target="_blank" rel="noopener">7주차 페이지</a></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#runlevel" title="그림 — 런레벨 · 프로세스" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#runlevel" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 런레벨 · 프로세스 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="s17">
@@ -1541,5 +1551,6 @@ exit 0                                    # 정상 종료</code></pre>
 <script src="quiz.js?v=202610201712"></script>
 <script src="weeks.js?v=202610201712"></script>
 <script src="ink.js?v=202610201712"></script>
+<script>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 </body>
 </html>

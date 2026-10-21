@@ -112,7 +112,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>9</td><td><b>DNF 작동 흐름도</b> (그림 4-111)</td><td>① dnf install → ② repo 파일의 <b>URL</b> 확인 → ③ <b>목록</b> 요청 → ④ 목록 다운로드 → ⑤ 관련 패키지 이름 출력 → ⑥ <b>y</b> → 파일 요청 → ⑦ 다운로드 · 자동 설치</td></tr>
 <tr><td>10</td><td><b>PPT 4 · 5 · 7장</b></td><td>종료 <code>init 0</code> / 재부팅 <code>init 6</code> · tar <b>c 묶기 · x 풀기 · J xz · z gzip · j bzip2</b> · <code>which</code> / <code>whereis</code> / <code>locate</code> · RPM 이름 · SELinux 3모드 · LibreOffice 4개 · bash · 🖍 <code>systemctl enable --now gdm</code> · PrintScreen</td></tr>
 </tbody></table></div></details></dd><dt>❌ 안 나옴</dt><dd><span class="wk-chip bad">도전문제 5-4</span></dd><dd class="wk-exam-note">📌 <b>1~7주차</b> 반영 · 이 과목은 명령어 · 옵션이 많아서 <b>주차 순서가 아니라 주제별</b>로 묶었어요 → 맨 위 🔥 10개를 먼저 외우고, 📑 PPT 칸 → 아래 주제별 표로 넓히세요.</dd></dl></section>
-<nav class="wk-toc"><span class="wk-toc-t">바로 가기</span><a href="#s1">🔥 교수님이 찍어 준 것 — 시험 직전 이것만 (10개)</a><a href="#s2">📑 교수님이 찍어 준 PPT — 4장 · 5장 · 7장</a><a href="#s3">① 기본 명령 · 디렉터리 (1 · 2주차)</a><a href="#s4">② 마운트 · inode · 링크 (3주차)</a><a href="#s5">③ 접근 권한 chmod (3주차)</a><a href="#s6">④ 사용자 · 그룹 관리 (3 · 4주차)</a><a href="#s7">⑤ 패키지 rpm · dnf (4주차)</a><a href="#s8">⑥ 작업 예약 cron · at · 백업 (5주차)</a><a href="#s9">⑦ 프로세스 · 서비스 · 작업 제어 (6 · 7주차)</a><a href="#s10">⑧ 셸 스크립트 (6주차 · 7장)</a><a href="#s11">⚠️ 헷갈리는 짝 — 한 번에 비교</a><a href="#s12">📎 참고 — 작년(2025) 튜터링 자료</a><a href="#s13">✏️ 문제로 확인하기</a></nav>
+<nav class="wk-toc"><span class="wk-toc-t">바로 가기</span><a href="#s1">🔥 교수님이 찍어 준 것 — 시험 직전 이것만 (10개)</a><a href="#s2">🎨 그림으로 정리 — 리눅스 그림 14개</a><a href="#s3">📑 교수님이 찍어 준 PPT — 4장 · 5장 · 7장</a><a href="#s4">① 기본 명령 · 디렉터리 (1 · 2주차)</a><a href="#s5">② 마운트 · inode · 링크 (3주차)</a><a href="#s6">③ 접근 권한 chmod (3주차)</a><a href="#s7">④ 사용자 · 그룹 관리 (3 · 4주차)</a><a href="#s8">⑤ 패키지 rpm · dnf (4주차)</a><a href="#s9">⑥ 작업 예약 cron · at · 백업 (5주차)</a><a href="#s10">⑦ 프로세스 · 서비스 · 작업 제어 (6 · 7주차)</a><a href="#s11">⑧ 셸 스크립트 (6주차 · 7장)</a><a href="#s12">⚠️ 헷갈리는 짝 — 한 번에 비교</a><a href="#s13">📎 참고 — 작년(2025) 튜터링 자료</a><a href="#s14">✏️ 문제로 확인하기</a></nav>
 <section class="card" id="s1">
 <h2>🔥 교수님이 찍어 준 것 — 시험 직전 이것만 (10개)</h2>
 <div class="tip">📝 이 10개는 🔒 실제시험 <b>맨 위 🔥 칸</b>에 문제로 모두 들어 있어요 (61문제 — 1 ~ 9번 15문제 + 📑 PPT 46문제) — 먼저 풀어 보고 틀린 것만 아래에서 찾아보세요.</div>
@@ -132,6 +132,12 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 </section>
 <section class="card" id="s2">
+<h2>🎨 그림으로 정리 — 리눅스 그림 14개</h2>
+<div class="tip">🔥 찍어 준 것 그림 — ① 호스트 · 게스트(5번 서술) · ④ 링크(3번) · ⑤ /etc/passwd(7번 마스터 유저 디렉터리) · ⑥ DNF 흐름(9번) · ⑦ 크론(1번) · ⑧ 런레벨(2번) · ⑨ 프로세스(8번) · ⑩ 앞 ↔ 뒤(4번) · ⑫ sh if 문(6번) · PPT 는 ② 디렉터리 · ③ 권한 · ⑪ 파이프 · ⑬ vi · ⑭ tar<br>탭을 누르면 선이 그려지면서 나타나고 <b>다음 ▶</b> 으로 한 단계씩 · 그림 위 📄 줄 = 어느 수업 · PPT 쪽인지 · 🤖 = 강의자료에 없어 일반 지식으로 붙인 것</div>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/리눅스-그림정리.html#vm" title="리눅스 그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/리눅스-그림정리.html#vm" target="_blank" rel="noopener">🎬 리눅스 그림 정리 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s3">
 <h2>📑 교수님이 찍어 준 PPT — 4장 · 5장 · 7장</h2>
 <div class="tip">📌 <b>Rocky10 강의자료 PPT 3개</b> (<code>8주차_중간고사/OS/</code>) — 4장 필수 개념과 명령어 (72쪽) · 5장 그래픽 환경 사용법 (26쪽) · 7장 셸 스크립트 프로그래밍 (30쪽) · 칸 안의 ✅ = 아래 ①~⑧ 에 이미 자세히 · 나머지는 여기서 처음 정리 · 🖍 = PPT 에 <b>형광펜</b>이 칠해진 곳 (2곳)</div>
 <h3>4장 필수 개념과 명령어</h3>
@@ -230,7 +236,7 @@ test1.txt  test2.txt  test3.txt  test4.txt  test5.txt
 </script></div>
 <div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — PPT 7장 Lab1 의 <code>echo "실습용 … 생성합니다.“</code> · <code>touch "test${i}.txt“</code> 처럼 <b>닫는 따옴표가 둥근 따옴표 <code>“</code></b> 라 문자열이 안 닫혀요 (if4 · if5 와 같은 실수) → 위처럼 곧은 따옴표 <code>"</code> 로 써야 실행돼요.</div>
 </section>
-<section class="card" id="s3">
+<section class="card" id="s4">
 <h2>① 기본 명령 · 디렉터리 (1 · 2주차)</h2>
 <div class="tip">📌 <b>시험 포인트</b> — 프롬프트 <code>$</code> / <code>#</code> · <code>ls</code> 옵션 · <code>rmdir</code> 은 <b>빈</b> 디렉터리만 · <code>mkdir -p</code></div>
 <table class="ref">
@@ -247,7 +253,7 @@ test1.txt  test2.txt  test3.txt  test4.txt  test5.txt
 <tr><td><code>poweroff</code></td><td>시스템 종료</td></tr>
 </tbody></table>
 </section>
-<section class="card" id="s4">
+<section class="card" id="s5">
 <h2>② 마운트 · inode · 링크 (3주차)</h2>
 <div class="tip">📌 <b>시험 포인트</b> — 하드 링크 = 같은 inode · 심볼릭 = 새 inode (🔥 3번) · 해제는 <code>umount</code></div>
 <h3>🔗 하드 링크 vs 심볼릭 링크 — 차이 한눈에 (🔥 3번)</h3>
@@ -324,7 +330,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 <h3>그 밖의 3주차</h3>
 <ul><li><b>inode</b> = 파일 정보(크기 · 소유자 · 권한 · 데이터 위치)의 번호표 · 파일 1개당 1개 → <b>이름이 달라도 inode 가 같으면 같은 파일</b> (<code>ls -i</code> 로 확인)</li><li><b>마운트</b> <code>mount</code> = 저장장치를 디렉터리 트리에 연결 · 해제 <b><code>umount /dev/cdrom</code></b> · DVD 를 넣으면 <code>/dev/sr0 … type iso9660 (ro, …)</code> → <code>ro</code> = 읽기 전용 · USB 포맷 <b>FAT O / NTFS X</b></li></ul>
 </section>
-<section class="card" id="s5">
+<section class="card" id="s6">
 <h2>③ 접근 권한 chmod (3주차)</h2>
 <div class="tip">📌 <b>시험 포인트</b> — r = 4 · w = 2 · x = 1 · 한 자리 = 3비트 · 기호 모드 u g o a</div>
 <table class="ref">
@@ -337,7 +343,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 </tbody></table>
 <ul><li><b>기호 모드</b> — 대상 <code>u</code> 소유자 · <code>g</code> 그룹 · <code>o</code> 기타 · <code>a</code> 전체 / 연산 <code>+</code> <code>-</code> <code>=</code> / 권한 <code>r</code> <code>w</code> <code>x</code> → <code>chmod u+x,go+w story.txt</code> (쉼표 뒤 띄어쓰기 X)</li><li>권한은 <b>chmod</b> · 소유자는 <b>chown</b> → <code>chown rocky 파일</code> = 소유자만 · <code>chown rocky:rocky 파일</code> = 소유자 + <b>그룹까지</b></li></ul>
 </section>
-<section class="card" id="s6">
+<section class="card" id="s7">
 <h2>④ 사용자 · 그룹 관리 (3 · 4주차)</h2>
 <div class="tip">📌 <b>시험 포인트</b> — 관리 파일 3종의 칸 · <code>usermod -l 새이름 기존이름</code> (새 이름이 <b>앞</b>) · 마스터 유저 디렉터리 (🔥 7번)</div>
 <table class="ref">
@@ -365,7 +371,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 </tbody></table>
 <ul><li><code>user100:x:1001:1001</code> / <code>user200:x:1002:1001</code> → <b>UID 는 다르고 GID 는 같다</b> = 같은 그룹 · 새 계정 UID 는 만든 순서대로 1씩 증가</li><li><code>chage -M 30 manager</code> → <code>암호 만료 : 안함</code> 이 <b>마지막 변경일 + 30일</b> 로 바뀜</li></ul>
 </section>
-<section class="card" id="s7">
+<section class="card" id="s8">
 <h2>⑤ 패키지 rpm · dnf (4주차)</h2>
 <div class="tip">📌 <b>시험 포인트</b> — DNF 흐름도 ①~⑦ 순서 (🔥 9번) · rpm 은 의존성 X / dnf 는 의존성 자동</div>
 <table class="ref">
@@ -389,7 +395,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 </tbody></table>
 <ul><li><code>rpm -Uvh mysql8.4-*</code> → <b>실패한 의존성</b>으로 설치 안 됨 → <code>dnf -y install mysql8.4-*</code> 는 필요한 패키지를 <b>알아서 받아</b> 9개 설치 · DVD 패키지 위치 BaseOS · AppStream 의 <code>Packages/첫글자/</code></li></ul>
 </section>
-<section class="card" id="s8">
+<section class="card" id="s9">
 <h2>⑥ 작업 예약 cron · at · 백업 (5주차)</h2>
 <div class="tip">📌 <b>시험 포인트</b> — crontab 칸 순서 (🔥 1번) · cron = <b>반복</b> / at = <b>한 번만</b></div>
 <table class="ref">
@@ -415,7 +421,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 <tr><td><code>at -l</code> (<code>atq</code>) · <code>atrm 1</code></td><td>예약 목록 · 1번 예약 취소</td></tr>
 </tbody></table>
 </section>
-<section class="card" id="s9">
+<section class="card" id="s10">
 <h2>⑦ 프로세스 · 서비스 · 작업 제어 (6 · 7주차)</h2>
 <div class="tip">📌 <b>시험 포인트</b> — 프로세스 정의 (🔥 8번) · Ctrl+Z → bg (🔥 4번) · 프로세스 상태 5개 · 서비스 = 데몬</div>
 <ul><li><b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 활성화된 것 · 상태 = <b>생성 → 실행 → 준비 → 대기 → 종료</b></li><li><b>서비스(service)</b> = 서버 프로세스 = <b>데몬</b> (거의 백그라운드) · <code>systemctl start · stop · restart · enable</code>(부팅 때 자동 시작)</li></ul>
@@ -432,7 +438,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 </tbody></table>
 <ul><li><b>PID</b>(프로세스 번호 · <code>kill</code> 에 씀) ≠ <b>작업 번호</b>(한 터미널 안 · <code>jobs</code> · <code>fg 1</code> 에 씀)</li><li>GNOME 프로그램 이름 — <b>노틸러스</b> = 파일탐색기 · <b>에볼루션</b> = 메일</li></ul>
 </section>
-<section class="card" id="s10">
+<section class="card" id="s11">
 <h2>⑧ 셸 스크립트 (6주차 · 7장)</h2>
 <div class="tip">📌 <b>시험 포인트</b> — 비중은 낮지만 <b>sh 문제</b> (출력결과 · 파일 존재 · 사이즈 체크 if문 · 🔥 6번) · 코드를 읽고 출력결과를 알면 됨</div>
 <table class="ref">
@@ -457,7 +463,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 </tbody></table>
 <ul><li><b>andor.sh</b> (파일 존재 + 사이즈) — <code>if [ -f $fname ] &amp;&amp; [ -s $fname ]</code> → 일반 파일이고 <b>크기가 0 이 아니면</b> <code>head -5</code> · 아니면 <code>파일이 없거나, 크기가 0입니다.</code> → <b>빈 파일</b>은 -s 가 거짓이라 else</li><li><b>if4.sh</b> — 원본 <code>cron.service</code> 는 Rocky 에서 <b>crond.service</b> 라 else · 수업에서 <b>sshd.service</b> 로 바꿔 앞 5줄 출력</li><li><span class="wk-tag fix">⚠️ 정정</span> PPT 14쪽 <b>if5.sh</b> 의 둥근 따옴표 <code>“</code> → 문자열이 안 닫혀 코드가 글자로 찍힘 → 곧은 따옴표 <code>"</code> 로</li></ul>
 </section>
-<section class="card" id="s11">
+<section class="card" id="s12">
 <h2>⚠️ 헷갈리는 짝 — 한 번에 비교</h2>
 <table class="ref">
 <tbody>
@@ -482,7 +488,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 <tr><td>호스트 OS = 실제 PC (가상화 프로그램을 돌림)</td><td>게스트 OS = 가상 머신 안</td></tr>
 </tbody></table>
 </section>
-<section class="card" id="s12">
+<section class="card" id="s13">
 <h2>📎 참고 — 작년(2025) 튜터링 자료</h2>
 <div class="tip">자료: <code>8주차_중간고사/튜터링/</code> 의 TalkFile 2개 — <b>4지선다형 16문제</b>(정답 포함) · <b>서술형 13문제</b>(답은 마지막 1개만 있음 → 나머지는 🤖 로 채움). 작년 시험 대비 참고자료라 접어 두었어요.</div>
 <details class="wk-details">
@@ -536,7 +542,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 </tbody></table>
 </details>
 </section>
-<section class="card" id="s13">
+<section class="card" id="s14">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../운영체제실습-실제시험.html">🔒 운영체제실습 실제시험 — 맨 위 🔥 교수님이 찍어 준 61문제 (📑 PPT 4 · 5 · 7장 46문제 포함) → 객관식 · 주관식(도전문제) · sh 출력결과 · 서술형 (관리자가 없으면 혼자 풀기)</a></li><li>주차별 자세한 정리 — <a href="운영체제실습-1주차.html">1주차</a> · <a href="운영체제실습-2주차.html">2주차</a> · <a href="운영체제실습-3주차.html">3주차</a> · <a href="운영체제실습-4주차.html">4주차</a> · <a href="운영체제실습-5주차.html">5주차</a> · <a href="운영체제실습-6주차.html">6주차</a> · <a href="운영체제실습-7주차.html">7주차</a></li><li>도전문제 33개(2 · 3 · 5 · 6 · 10장) + 셸 스크립트 5개(11장) → <a href="../운영체제실습.html#s17">과목 페이지 17 · 18번</a></li></ul>
 </section>

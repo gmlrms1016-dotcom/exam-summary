@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>리눅스 그림 정리</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --cell:#7c6ae6;--myelin:#e0a838;--astro:#e0862b;--oligo:#0f9f74;--micro:#d9363e;--schwann:#2b8fd1;--vessel:#d9363e;
+          --ex:#16a34a;--inh:#2563eb;--ap:#e5484d;--fore:#e0862b;--mid:#c9b48a;--hind:#a0522d;
+          --fr:#8b7cf6;--pa:#ec5f9e;--te:#22b07d;--oc:#e9b52c;--light:#f5a524;--eye:#eef4fb;--nerve:#e8a3a3;--hl:#f59e0b;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --cell:#a596f5;--myelin:#f0c35a;--astro:#f5a04a;--oligo:#34d399;--micro:#ff6369;--schwann:#5ab8f0;--vessel:#ff6369;
+          --ex:#4cc38a;--inh:#6b9cff;--ap:#ff6369;--fore:#f5a04a;--mid:#d9c79c;--hind:#d07a4f;
+          --fr:#a596f5;--pa:#f27db3;--te:#4cc38a;--oc:#f5c84a;--light:#ffb547;--eye:#1c2733;--nerve:#c97878;--hl:#ffb547;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+    .box{max-width:780px;margin:0 auto;padding:10px 12px 14px;}
+    .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0 0 8px;}
+    .tabs button{min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 4px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;}
+    .tabs button[aria-pressed=true]{border-color:var(--main);color:var(--main);box-shadow:inset 0 0 0 1px var(--main);}
+    .src{margin:0 0 6px;font-size:13px;color:var(--ink2);}
+    .src b{color:var(--main);}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;}
+    svg{display:block;width:100%;height:auto;}
+    svg[hidden]{display:none;}
+    svg text{fill:var(--ink);font-family:inherit;font-size:19px;}
+    svg text.s{font-size:15px;fill:var(--ink2);}
+    svg text.b{font-weight:800;}
+    svg text.w{fill:#fff;}
+    svg text.m{font-family:Menlo,Consolas,"D2Coding",monospace;}
+    svg .ln{stroke:var(--ink2);stroke-width:1.6;fill:none;}
+    svg .ax{stroke:var(--ink2);stroke-width:2;fill:none;}
+    svg .dash{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:6 5;fill:none;}
+    svg [data-s]{transition:opacity .45s ease;}
+    svg [data-s].off{opacity:0;}
+    svg [data-s].dim{opacity:.28;}
+    svg [data-s].hl{filter:drop-shadow(0 0 5px var(--hl));}
+    .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;}
+    .ctl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+    .ctl button.main{border-color:var(--main);color:var(--main);}
+    .ctl .pos{margin-left:auto;font-size:13px;color:var(--ink2);}
+    ol.cap{margin:8px 0 0;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:14.5px;line-height:1.65;}
+    ol.cap li{margin:2px 0;padding:1px 4px;border-radius:6px;cursor:pointer;}
+    ol.cap li b{color:var(--main);}
+    ol.cap li.cur{background:color-mix(in srgb,var(--hl) 22%,transparent);}
+    ol.cap li.later{opacity:.45;}
+    .note{margin:6px 0 0;font-size:13px;color:var(--ink2);line-height:1.6;}
+    .note a{color:var(--main);}
+    @media (max-width:560px){ .tabs{grid-template-columns:repeat(3,minmax(0,1fr));} .tabs button{font-size:12px;} ol.cap{font-size:14px;padding-left:28px;}
+        /* 폰: 그림이 작아지니 그림 속 글자를 키움 (긴 줄도 600 폭 안에 들어가는 크기까지만) */
+        svg text{font-size:22px;} svg text.s{font-size:17px;} .stage{padding:3px;} }
+</style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="tabs" id="tabs" role="group" aria-label="그림 고르기"></div>
+    <p class="src" id="src"></p>
+    <div class="stage">
+
+<!-- ① 호스트 / 게스트 OS 🔥 -->
+<svg data-fig="vm" viewBox="0 0 600 430" role="img" aria-label="호스트 운영체제와 게스트 운영체제" hidden>
+  <g data-s="1"><rect x="110" y="360" width="380" height="56" rx="10" style="fill:var(--ink2);fill-opacity:.22;stroke:var(--ink2);stroke-width:2"/>
+    <text x="300" y="384" text-anchor="middle" class="b">하드웨어 (실제 PC)</text><text x="300" y="406" text-anchor="middle" class="s">CPU · 메모리 · 디스크</text></g>
+  <g data-s="2"><rect x="110" y="292" width="380" height="58" rx="10" style="fill:var(--inh);fill-opacity:.2;stroke:var(--inh);stroke-width:2"/>
+    <text x="300" y="317" text-anchor="middle" class="b">호스트 OS</text><text x="300" y="339" text-anchor="middle" class="s">내 PC 에 설치된 Windows · macOS</text></g>
+  <g data-s="3"><rect x="110" y="224" width="380" height="58" rx="10" style="fill:var(--oc);fill-opacity:.25;stroke:var(--oc);stroke-width:2"/>
+    <text x="300" y="249" text-anchor="middle" class="b">가상화 프로그램</text><text x="300" y="271" text-anchor="middle" class="s">VMware · VirtualBox</text></g>
+  <g data-s="4"><rect x="110" y="18" width="380" height="196" rx="12" class="dash"/>
+    <text x="300" y="42" text-anchor="middle" class="s">가상 머신 = 가상의 CPU · 메모리 · 디스크</text>
+    <rect x="140" y="56" width="320" height="54" rx="10" style="fill:var(--te);fill-opacity:.12;stroke:var(--te)"/><text x="300" y="89" text-anchor="middle" class="s">리눅스 명령 · 프로그램 (ls · dnf …)</text>
+    <rect x="140" y="124" width="320" height="76" rx="10" style="fill:var(--te);fill-opacity:.25;stroke:var(--te);stroke-width:2"/>
+    <text x="300" y="156" text-anchor="middle" class="b">게스트 OS</text><text x="300" y="182" text-anchor="middle" class="s">실습한 Rocky Linux</text></g>
+  <g data-s="5">
+    <path class="ln" d="M100,226 L88,226 L88,414 L100,414"/><text x="46" y="314" text-anchor="middle" class="b" style="fill:var(--inh)">호스트</text><text x="46" y="338" text-anchor="middle" class="s">실제 PC</text>
+    <path class="ln" d="M500,20 L512,20 L512,212 L500,212"/><text x="554" y="104" text-anchor="middle" class="b" style="fill:var(--te)">게스트</text><text x="554" y="128" text-anchor="middle" class="s">가상</text><text x="554" y="148" text-anchor="middle" class="s">머신 안</text></g>
+</svg>
+
+<!-- ② 디렉터리 구조 · 경로 · 마운트 -->
+<svg data-fig="tree" viewBox="0 0 600 480" role="img" aria-label="리눅스 디렉터리 구조와 마운트" hidden>
+  <g data-s="1">
+    <rect x="270" y="10" width="60" height="34" rx="8" style="fill:var(--main)"/><text x="300" y="35" text-anchor="middle" class="b" style="fill:#fff;font-size:24px">/</text>
+    <text x="340" y="33" class="s">루트 (최상위)</text>
+    <path class="d" d="M300,44 L44,86 M300,44 L116,86 M300,44 L188,86 M300,44 L260,86 M300,44 L332,86 M300,44 L404,86 M300,44 L476,86 M300,44 L548,86" style="stroke:var(--ink2);stroke-width:1.5;fill:none"/>
+    <g style="fill:var(--card);stroke:var(--main);stroke-width:2"><rect x="13" y="86" width="62" height="30" rx="7"/><rect x="85" y="86" width="62" height="30" rx="7"/><rect x="157" y="86" width="62" height="30" rx="7"/><rect x="229" y="86" width="62" height="30" rx="7"/><rect x="301" y="86" width="62" height="30" rx="7"/><rect x="373" y="86" width="62" height="30" rx="7"/><rect x="445" y="86" width="62" height="30" rx="7"/><rect x="517" y="86" width="62" height="30" rx="7"/></g>
+    <g class="m"><text x="44" y="107" text-anchor="middle" class="m" style="font-size:15px">boot</text><text x="116" y="107" text-anchor="middle" class="m" style="font-size:15px">dev</text><text x="188" y="107" text-anchor="middle" class="m" style="font-size:15px">etc</text><text x="260" y="107" text-anchor="middle" class="m" style="font-size:15px">home</text><text x="332" y="107" text-anchor="middle" class="m" style="font-size:15px">root</text><text x="404" y="107" text-anchor="middle" class="m" style="font-size:15px">run</text><text x="476" y="107" text-anchor="middle" class="m" style="font-size:15px">usr</text><text x="548" y="107" text-anchor="middle" class="m" style="font-size:15px">tmp</text></g>
+    <text x="44" y="138" text-anchor="middle" class="s">부팅</text><text x="116" y="138" text-anchor="middle" class="s">장치</text><text x="188" y="138" text-anchor="middle" class="s">설정</text><text x="260" y="138" text-anchor="middle" class="s">사용자</text><text x="332" y="138" text-anchor="middle" class="s">관리자</text><text x="404" y="138" text-anchor="middle" class="s">실행중</text><text x="476" y="138" text-anchor="middle" class="s">프로그램</text><text x="548" y="138" text-anchor="middle" class="s">임시</text>
+  </g>
+  <g data-s="2"><rect x="10" y="160" width="290" height="158" rx="12" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/>
+    <text x="24" y="188" class="b">/etc — 설정 파일</text>
+    <text x="24" y="216" class="s" style="fill:var(--ink)">passwd · shadow · group</text>
+    <text x="24" y="240" class="s" style="fill:var(--ink)">crontab (작업 예약)</text>
+    <text x="24" y="264" class="s" style="fill:var(--ink)">yum.repos.d/ (dnf 저장소)</text>
+    <text x="24" y="288" class="s" style="fill:var(--ink)">resolv.conf (DNS) · hosts</text></g>
+  <g data-s="3"><rect x="310" y="160" width="280" height="158" rx="12" style="fill:var(--inh);fill-opacity:.12;stroke:var(--inh);stroke-width:2"/>
+    <text x="324" y="188" class="b">경로</text>
+    <text x="324" y="216" class="s" style="fill:var(--ink)">절대: /home/user100</text>
+    <text x="324" y="240" class="s">→ / 부터 전체 경로</text>
+    <text x="324" y="264" class="s" style="fill:var(--ink)">상대: user100 (지금 위치부터)</text>
+    <text x="324" y="290" class="s" style="fill:var(--ink)">. 지금 · .. 위 · ~ 내 홈</text></g>
+  <g data-s="4"><rect x="10" y="330" width="580" height="140" rx="12" style="fill:var(--te);fill-opacity:.12;stroke:var(--te);stroke-width:2"/>
+    <text x="24" y="356" class="b">마운트 — 장치를 디렉터리 트리에 연결</text>
+    <rect x="24" y="370" width="150" height="52" rx="8" style="fill:var(--card);stroke:var(--te)"/><text x="99" y="394" text-anchor="middle" class="m" style="font-size:16px">/dev/sr0</text><text x="99" y="414" text-anchor="middle" class="s">DVD 장치</text>
+    <path class="d" d="M178,396 L240,396" style="stroke:var(--te);stroke-width:3;fill:none"/><path d="M236,389 L250,396 L236,403 Z" style="fill:var(--te)"/><text x="212" y="386" text-anchor="middle" class="s b" style="fill:var(--te)">mount</text>
+    <rect x="256" y="366" width="322" height="60" rx="8" style="fill:var(--card);stroke:var(--te)"/><text x="417" y="391" text-anchor="middle" class="m" style="font-size:15px">/run/media/root/</text><text x="417" y="414" text-anchor="middle" class="m" style="font-size:15px">Rocky-10-0-x86_64-dvd</text>
+    <text x="300" y="454" text-anchor="middle" class="s">iso9660 = CD 형식 · ro = 읽기 전용 · 해제는 umount /dev/cdrom</text></g>
+</svg>
+
+<!-- ③ 권한 · ls -l 한 줄 -->
+<svg data-fig="perm" viewBox="0 0 600 440" role="img" aria-label="ls -l 한 줄과 권한 비트" hidden>
+  <g data-s="1"><text x="20" y="28" class="s">ls -l 한 줄 (실습 9 basefile)</text>
+    <text x="30" y="72" class="m" style="font-size:24px">-</text>
+    <text x="50" y="72" class="m b" style="font-size:24px;fill:var(--ap)">rwx</text>
+    <text x="104" y="72" class="m b" style="font-size:24px;fill:var(--te)">r-x</text>
+    <text x="158" y="72" class="m b" style="font-size:24px;fill:var(--inh)">r-x</text>
+    <text x="224" y="72" class="m" style="font-size:24px">2</text>
+    <text x="254" y="72" class="m" style="font-size:24px">root</text>
+    <text x="330" y="72" class="m" style="font-size:24px">root</text>
+    <text x="406" y="72" class="m" style="font-size:24px">61</text>
+    <text x="452" y="72" class="m" style="font-size:24px">basefile</text>
+    <text x="37" y="104" text-anchor="middle" class="s">종류</text>
+    <text x="72" y="128" text-anchor="middle" class="s" style="fill:var(--ap)">소유자 u</text>
+    <text x="126" y="104" text-anchor="middle" class="s" style="fill:var(--te)">그룹 g</text>
+    <text x="180" y="128" text-anchor="middle" class="s" style="fill:var(--inh)">기타 o</text>
+    <text x="231" y="104" text-anchor="middle" class="s">링크 수</text>
+    <text x="283" y="128" text-anchor="middle" class="s">소유자</text>
+    <text x="359" y="104" text-anchor="middle" class="s">그룹</text>
+    <text x="420" y="128" text-anchor="middle" class="s">크기</text>
+    <text x="509" y="104" text-anchor="middle" class="s">이름</text>
+    <text x="20" y="160" class="s">맨 앞: - 파일 · d 디렉터리 · l 심볼릭 링크</text></g>
+  <g data-s="2">
+    <text x="120" y="196" text-anchor="middle" class="b" style="fill:var(--ap)">소유자 u</text><text x="300" y="196" text-anchor="middle" class="b" style="fill:var(--te)">그룹 g</text><text x="480" y="196" text-anchor="middle" class="b" style="fill:var(--inh)">기타 o</text>
+    <g style="stroke:var(--ink2);stroke-width:1.5"><rect x="60" y="208" width="40" height="40" style="fill:var(--ap);fill-opacity:.25"/><rect x="100" y="208" width="40" height="40" style="fill:var(--ap);fill-opacity:.25"/><rect x="140" y="208" width="40" height="40" style="fill:var(--ap);fill-opacity:.25"/>
+      <rect x="240" y="208" width="40" height="40" style="fill:var(--te);fill-opacity:.25"/><rect x="280" y="208" width="40" height="40" style="fill:var(--card)"/><rect x="320" y="208" width="40" height="40" style="fill:var(--te);fill-opacity:.25"/>
+      <rect x="420" y="208" width="40" height="40" style="fill:var(--inh);fill-opacity:.25"/><rect x="460" y="208" width="40" height="40" style="fill:var(--card)"/><rect x="500" y="208" width="40" height="40" style="fill:var(--inh);fill-opacity:.25"/></g>
+    <g class="m"><text x="80" y="236" text-anchor="middle" class="m b">r</text><text x="120" y="236" text-anchor="middle" class="m b">w</text><text x="160" y="236" text-anchor="middle" class="m b">x</text>
+      <text x="260" y="236" text-anchor="middle" class="m b">r</text><text x="300" y="236" text-anchor="middle" class="m" style="fill:var(--ink2)">-</text><text x="340" y="236" text-anchor="middle" class="m b">x</text>
+      <text x="440" y="236" text-anchor="middle" class="m b">r</text><text x="480" y="236" text-anchor="middle" class="m" style="fill:var(--ink2)">-</text><text x="520" y="236" text-anchor="middle" class="m b">x</text></g>
+    <text x="80" y="272" text-anchor="middle" class="s">4</text><text x="120" y="272" text-anchor="middle" class="s">2</text><text x="160" y="272" text-anchor="middle" class="s">1</text>
+    <text x="260" y="272" text-anchor="middle" class="s">4</text><text x="300" y="272" text-anchor="middle" class="s">0</text><text x="340" y="272" text-anchor="middle" class="s">1</text>
+    <text x="440" y="272" text-anchor="middle" class="s">4</text><text x="480" y="272" text-anchor="middle" class="s">0</text><text x="520" y="272" text-anchor="middle" class="s">1</text>
+    <text x="120" y="300" text-anchor="middle" class="s">111 → 4+2+1</text><text x="300" y="300" text-anchor="middle" class="s">101 → 4+1</text><text x="480" y="300" text-anchor="middle" class="s">101 → 4+1</text>
+    <text x="120" y="330" text-anchor="middle" class="b" style="font-size:26px;fill:var(--ap)">7</text><text x="300" y="330" text-anchor="middle" class="b" style="font-size:26px;fill:var(--te)">5</text><text x="480" y="330" text-anchor="middle" class="b" style="font-size:26px;fill:var(--inh)">5</text>
+    <text x="300" y="364" text-anchor="middle" class="b">→ chmod 755 파일 = rwxr-xr-x</text></g>
+  <g data-s="3"><text x="300" y="398" text-anchor="middle" class="s">chmod 644 = rw-r--r-- · chmod u+x 파일 = 소유자에게 x 더하기</text>
+    <text x="300" y="424" text-anchor="middle" class="s">chown rocky:rocky 파일 = 소유자 + 그룹 바꾸기</text></g>
+</svg>
+
+<!-- ④ 하드 링크 vs 심볼릭 링크 🔥 -->
+<svg data-fig="link" viewBox="0 0 600 440" role="img" aria-label="하드 링크와 심볼릭 링크의 inode" hidden>
+  <g data-s="1">
+    <rect x="40" y="44" width="100" height="34" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="90" y="67" text-anchor="middle" class="m" style="font-size:16px">basefile</text>
+    <rect x="160" y="44" width="100" height="34" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="210" y="67" text-anchor="middle" class="m" style="font-size:16px">hardlink</text>
+    <path class="d" d="M90,78 L140,128 M210,78 L160,128" style="stroke:var(--ap);stroke-width:3;fill:none"/>
+    <rect x="60" y="128" width="180" height="50" rx="10" style="fill:var(--ap);fill-opacity:.18;stroke:var(--ap);stroke-width:2"/><text x="150" y="150" text-anchor="middle" class="m" style="font-size:16px">inode 1106188</text><text x="150" y="171" text-anchor="middle" class="s">링크 수 2</text>
+    <path class="d" d="M150,178 L150,210" style="stroke:var(--ap);stroke-width:3;fill:none"/>
+    <rect x="60" y="210" width="180" height="46" rx="10" style="fill:var(--myelin);fill-opacity:.25;stroke:var(--myelin);stroke-width:2"/><text x="150" y="239" text-anchor="middle" class="s" style="fill:var(--ink)">파일 내용 (61바이트)</text>
+    <text x="150" y="288" text-anchor="middle" class="b">하드 링크 · ln</text><text x="150" y="310" text-anchor="middle" class="s">같은 inode 에 이름이 2개</text></g>
+  <g data-s="2">
+    <rect x="400" y="44" width="100" height="34" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="450" y="67" text-anchor="middle" class="m" style="font-size:16px">softlink</text>
+    <path class="d" d="M450,78 L450,128" style="stroke:var(--inh);stroke-width:3;fill:none"/>
+    <rect x="360" y="128" width="180" height="50" rx="10" style="fill:var(--inh);fill-opacity:.18;stroke:var(--inh);stroke-width:2"/><text x="450" y="150" text-anchor="middle" class="m" style="font-size:16px">inode 1106189</text><text x="450" y="171" text-anchor="middle" class="s">새 번호 · 맨 앞 l</text>
+    <path class="d" d="M450,178 L450,210" style="stroke:var(--inh);stroke-width:3;fill:none"/>
+    <rect x="360" y="210" width="180" height="46" rx="10" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2"/><text x="450" y="239" text-anchor="middle" class="s" style="fill:var(--ink)">‘basefile’ 경로 (8바이트)</text>
+    <path class="d" d="M360,226 C318,200 300,24 140,30" style="stroke:var(--inh);stroke-width:2.5;stroke-dasharray:7 5;fill:none"/><path d="M146,22 L132,30 L146,38 Z" style="fill:var(--inh)"/>
+    <text x="300" y="20" text-anchor="middle" class="s" style="fill:var(--inh)">이름을 따라감</text>
+    <text x="450" y="288" text-anchor="middle" class="b">심볼릭 링크 · ln -s</text><text x="450" y="310" text-anchor="middle" class="s">원본의 경로만 적은 작은 파일</text></g>
+  <g data-s="3">
+    <path d="M40,44 L140,78 M140,44 L40,78" style="stroke:var(--ap);stroke-width:4"/>
+    <text x="300" y="350" text-anchor="middle" class="b" style="fill:var(--ap)">원본 basefile 을 지우거나 옮기면?</text>
+    <text x="150" y="384" text-anchor="middle" class="s" style="fill:var(--ink)">hardlink → inode → 내용 ✓</text><text x="150" y="408" text-anchor="middle" class="s">그대로 읽힘 (링크 수 2 → 1)</text>
+    <text x="450" y="384" text-anchor="middle" class="s" style="fill:var(--ink)">softlink → ‘basefile’ 없음 ✗</text><text x="450" y="408" text-anchor="middle" class="s">깨짐 · 윈도우 바로 가기처럼</text></g>
+</svg>
+
+<!-- ⑤ /etc/passwd 7칸 · 마스터 유저 디렉터리 🔥 -->
+<svg data-fig="passwd" viewBox="0 0 600 430" role="img" aria-label="/etc/passwd 의 칸과 바꾸는 명령" hidden>
+  <g data-s="1"><text x="20" y="28" class="s">/etc/passwd 한 줄 (: 로 7칸)</text>
+    <g style="font-size:20px">
+      <text x="36" y="68" class="m b" style="font-size:20px;fill:var(--fr)">user100</text><text x="120" y="68" class="m" style="font-size:20px;fill:var(--ink2)">:</text>
+      <text x="132" y="68" class="m b" style="font-size:20px;fill:var(--oc)">x</text><text x="144" y="68" class="m" style="font-size:20px;fill:var(--ink2)">:</text>
+      <text x="156" y="68" class="m b" style="font-size:20px;fill:var(--ap)">1001</text><text x="204" y="68" class="m" style="font-size:20px;fill:var(--ink2)">:</text>
+      <text x="216" y="68" class="m b" style="font-size:20px;fill:var(--te)">1001</text><text x="264" y="68" class="m" style="font-size:20px;fill:var(--ink2)">:</text><text x="276" y="68" class="m" style="font-size:20px;fill:var(--ink2)">:</text>
+      <text x="288" y="68" class="m b" style="font-size:20px;fill:var(--inh)">/home/user100</text><text x="444" y="68" class="m" style="font-size:20px;fill:var(--ink2)">:</text>
+      <text x="456" y="68" class="m b" style="font-size:20px">/bin/bash</text></g>
+    <text x="78" y="100" text-anchor="middle" class="s" style="fill:var(--fr)">이름</text>
+    <text x="138" y="124" text-anchor="middle" class="s" style="fill:var(--oc)">암호 x</text>
+    <text x="180" y="100" text-anchor="middle" class="s" style="fill:var(--ap)">UID</text>
+    <text x="240" y="124" text-anchor="middle" class="s" style="fill:var(--te)">GID</text>
+    <text x="282" y="100" text-anchor="middle" class="s">설명</text>
+    <text x="366" y="124" text-anchor="middle" class="s" style="fill:var(--inh)">홈 디렉터리</text>
+    <text x="510" y="100" text-anchor="middle" class="s">셸</text></g>
+  <g data-s="2"><text x="590" y="262" text-anchor="end" class="s">↑ 이 칸을 바꾸는 옵션</text>
+    <path class="ln" d="M78,104 L78,172"/><text x="78" y="190" text-anchor="middle" class="b" style="fill:var(--fr)">-l</text><text x="78" y="212" text-anchor="middle" class="s">usermod</text>
+    <path class="ln" d="M180,104 L180,172"/><text x="180" y="190" text-anchor="middle" class="b" style="fill:var(--ap)">-u</text><text x="180" y="212" text-anchor="middle" class="s">UID</text>
+    <path class="ln" d="M240,128 L240,226"/><text x="240" y="244" text-anchor="middle" class="b" style="fill:var(--te)">-g</text><text x="240" y="266" text-anchor="middle" class="s">그룹</text>
+    <path class="ln" d="M366,128 L366,172"/><text x="366" y="190" text-anchor="middle" class="b" style="fill:var(--inh)">-d 🔥</text><text x="366" y="212" text-anchor="middle" class="s">홈 디렉터리</text>
+    <path class="ln" d="M510,104 L510,172"/><text x="510" y="190" text-anchor="middle" class="b">-s</text><text x="510" y="212" text-anchor="middle" class="s">셸</text></g>
+  <g data-s="3"><rect x="10" y="284" width="580" height="88" rx="12" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2"/>
+    <text x="24" y="310" class="s b" style="fill:var(--ink)">🔥 마스터 유저 디렉터리</text>
+    <text x="24" y="336" class="m" style="font-size:15px">만들 때 useradd -d /work_06 master</text>
+    <text x="24" y="360" class="m" style="font-size:15px">바꿀 때 usermod -d /home/workspace_06 master</text></g>
+  <g data-s="4"><text x="20" y="398" class="s" style="fill:var(--ink)">/etc/shadow = 이름 : 암호 해시 : … (! · * 로 시작 = 로그인 불가)</text>
+    <text x="20" y="422" class="s" style="fill:var(--ink)">/etc/group = 그룹명 : x : GID : 소속 사용자(쉼표)</text></g>
+</svg>
+
+<!-- ⑥ DNF 작동 흐름도 🔥 (그림 4-111) -->
+<svg data-fig="dnf" viewBox="0 0 600 470" role="img" aria-label="DNF 작동 흐름도" hidden>
+  <g><rect x="20" y="10" width="250" height="34" rx="8" style="fill:var(--inh);fill-opacity:.9"/><text x="145" y="33" text-anchor="middle" class="b" style="fill:#fff">내 컴퓨터</text>
+    <rect x="330" y="10" width="250" height="34" rx="8" style="fill:var(--te);fill-opacity:.9"/><text x="455" y="33" text-anchor="middle" class="b" style="fill:#fff">저장소 (인터넷 · DVD)</text>
+    <path class="dash" d="M145,44 L145,462 M455,44 L455,462"/></g>
+  <g data-s="1"><rect x="30" y="58" width="230" height="38" rx="8" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="145" y="83" text-anchor="middle" class="s" style="fill:var(--ink)">① dnf install 패키지</text></g>
+  <g data-s="2"><rect x="30" y="108" width="230" height="52" rx="8" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="145" y="130" text-anchor="middle" class="s" style="fill:var(--ink)">② repo 파일을 열어</text><text x="145" y="152" text-anchor="middle" class="s" style="fill:var(--ink)">URL 주소 확인</text></g>
+  <g data-s="3"><path class="d" d="M150,192 L444,192" style="stroke:var(--inh);stroke-width:3;fill:none"/><path d="M440,185 L454,192 L440,199 Z" style="fill:var(--inh)"/><text x="300" y="182" text-anchor="middle" class="s" style="fill:var(--ink)">③ 전체 패키지 목록 파일 요청</text></g>
+  <g data-s="4"><path class="d" d="M450,240 L156,240" style="stroke:var(--te);stroke-width:3;fill:none"/><path d="M160,233 L146,240 L160,247 Z" style="fill:var(--te)"/><text x="300" y="230" text-anchor="middle" class="s" style="fill:var(--ink)">④ 목록 파일만 다운로드</text></g>
+  <g data-s="5"><rect x="30" y="258" width="230" height="52" rx="8" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="145" y="280" text-anchor="middle" class="s" style="fill:var(--ink)">⑤ 관련 패키지 이름</text><text x="145" y="302" text-anchor="middle" class="s" style="fill:var(--ink)">화면에 출력</text></g>
+  <g data-s="6"><rect x="70" y="322" width="150" height="36" rx="8" style="fill:var(--oc);fill-opacity:.25;stroke:var(--oc);stroke-width:2"/><text x="145" y="346" text-anchor="middle" class="b">⑥ ‘y’ 입력</text>
+    <path class="d" d="M150,382 L444,382" style="stroke:var(--inh);stroke-width:3;fill:none"/><path d="M440,375 L454,382 L440,389 Z" style="fill:var(--inh)"/><text x="300" y="374" text-anchor="middle" class="s" style="fill:var(--ink)">패키지 파일 요청</text></g>
+  <g data-s="7"><path class="d" d="M450,420 L156,420" style="stroke:var(--te);stroke-width:3;fill:none"/><path d="M160,413 L146,420 L160,427 Z" style="fill:var(--te)"/><text x="300" y="410" text-anchor="middle" class="s" style="fill:var(--ink)">⑦ 패키지 파일 다운로드</text>
+    <rect x="70" y="430" width="150" height="34" rx="8" style="fill:var(--te);fill-opacity:.9"/><text x="145" y="453" text-anchor="middle" class="b" style="fill:#fff">자동 설치 ✓</text></g>
+</svg>
+
+<!-- ⑦ crontab · at 🔥 -->
+<svg data-fig="cron" viewBox="0 0 600 480" role="img" aria-label="crontab 칸과 cron at 비교" hidden>
+  <g data-s="1">
+    <text x="38" y="40" text-anchor="middle" class="b">분</text><text x="100" y="40" text-anchor="middle" class="b">시</text><text x="162" y="40" text-anchor="middle" class="b">일</text><text x="224" y="40" text-anchor="middle" class="b">월</text><text x="286" y="40" text-anchor="middle" class="b">요일</text><text x="355" y="40" text-anchor="middle" class="b">사용자</text><text x="495" y="40" text-anchor="middle" class="b">명령</text>
+    <g style="fill:var(--card);stroke:var(--main);stroke-width:2"><rect x="10" y="52" width="56" height="50" rx="7"/><rect x="72" y="52" width="56" height="50" rx="7"/><rect x="134" y="52" width="56" height="50" rx="7"/><rect x="196" y="52" width="56" height="50" rx="7"/><rect x="258" y="52" width="56" height="50" rx="7"/><rect x="320" y="52" width="70" height="50" rx="7"/><rect x="396" y="52" width="196" height="50" rx="7"/></g>
+    <text x="38" y="84" text-anchor="middle" class="m b" style="font-size:20px">01</text><text x="100" y="84" text-anchor="middle" class="m b" style="font-size:20px">3</text><text x="162" y="84" text-anchor="middle" class="m b" style="font-size:20px">15</text><text x="224" y="84" text-anchor="middle" class="m b" style="font-size:20px">*</text><text x="286" y="84" text-anchor="middle" class="m b" style="font-size:20px">*</text><text x="355" y="84" text-anchor="middle" class="m" style="font-size:17px">root</text>
+    <text x="494" y="73" text-anchor="middle" class="m" style="font-size:14px">run-parts</text><text x="494" y="93" text-anchor="middle" class="m" style="font-size:14px">/etc/cron.monthly</text>
+    <text x="38" y="124" text-anchor="middle" class="s">0~59</text><text x="100" y="124" text-anchor="middle" class="s">0~23</text><text x="162" y="124" text-anchor="middle" class="s">1~31</text><text x="224" y="124" text-anchor="middle" class="s">1~12</text><text x="286" y="124" text-anchor="middle" class="s">0~6</text><text x="494" y="124" text-anchor="middle" class="s">폴더의 실행 파일 모두</text></g>
+  <g data-s="2"><text x="300" y="166" text-anchor="middle" class="b" style="fill:var(--ap)">→ 매월 15일 03시 01분 에 실행 (* = 매번)</text>
+    <text x="300" y="194" text-anchor="middle" class="s">⚠️ 순서를 바꾼 01 15 3 이면 매월 3일 15:01</text></g>
+  <g data-s="3">
+    <g style="fill:var(--card);stroke:var(--oc);stroke-width:2"><rect x="10" y="226" width="130" height="50" rx="8"/><rect x="160" y="226" width="130" height="50" rx="8"/><rect x="310" y="226" width="130" height="50" rx="8"/><rect x="460" y="226" width="130" height="50" rx="8"/></g>
+    <text x="75" y="256" text-anchor="middle" class="s" style="fill:var(--ink)">crond 서비스</text><text x="225" y="256" text-anchor="middle" class="s" style="fill:var(--ink)">03:01 이 되면</text><text x="375" y="256" text-anchor="middle" class="s" style="fill:var(--ink)">백업 스크립트</text><text x="525" y="248" text-anchor="middle" class="m" style="font-size:13px">tar cfJ</text><text x="525" y="266" text-anchor="middle" class="s">/home 을 묶음</text>
+    <path d="M142,251 L156,251 M292,251 L306,251 M442,251 L456,251" style="stroke:var(--oc);stroke-width:3"/>
+    <text x="300" y="306" text-anchor="middle" class="s">crontab 을 고쳤으면 systemctl restart crond</text></g>
+  <g data-s="4">
+    <text x="20" y="352" class="b">cron</text><path class="ax" d="M90,346 L580,346"/>
+    <g style="fill:var(--ap)"><circle cx="130" cy="346" r="7"/><circle cx="230" cy="346" r="7"/><circle cx="330" cy="346" r="7"/><circle cx="430" cy="346" r="7"/><circle cx="530" cy="346" r="7"/></g>
+    <text x="330" y="378" text-anchor="middle" class="s">정해진 시각마다 반복</text>
+    <text x="20" y="420" class="b">at</text><path class="ax" d="M90,414 L580,414"/><circle cx="330" cy="414" r="9" style="fill:var(--inh)"/>
+    <text x="330" y="444" text-anchor="middle" class="s">한 번만 — at 4:00 am tomorrow → at&gt; 명령 → Ctrl + D</text>
+    <text x="330" y="468" text-anchor="middle" class="s">목록 at -l · 취소 atrm 1</text></g>
+</svg>
+
+<!-- ⑧ 런레벨 🔥 -->
+<svg data-fig="runlevel" viewBox="0 0 600 380" role="img" aria-label="런레벨 0 부터 6" hidden>
+  <g data-s="1">
+    <rect x="10" y="40" width="76" height="96" rx="10" style="fill:var(--ap);fill-opacity:.2;stroke:var(--ap);stroke-width:2"/><text x="48" y="82" text-anchor="middle" class="b" style="font-size:32px">0</text><text x="48" y="112" text-anchor="middle" class="s" style="fill:var(--ink)">종료</text>
+    <rect x="514" y="40" width="76" height="96" rx="10" style="fill:var(--ap);fill-opacity:.2;stroke:var(--ap);stroke-width:2"/><text x="552" y="82" text-anchor="middle" class="b" style="font-size:32px">6</text><text x="552" y="112" text-anchor="middle" class="s" style="fill:var(--ink)">재부팅</text></g>
+  <g data-s="2"><rect x="94" y="40" width="76" height="96" rx="10" style="fill:var(--oc);fill-opacity:.25;stroke:var(--oc);stroke-width:2"/><text x="132" y="82" text-anchor="middle" class="b" style="font-size:32px">1</text><text x="132" y="106" text-anchor="middle" class="s" style="fill:var(--ink)">단일</text><text x="132" y="126" text-anchor="middle" class="s">(복구)</text></g>
+  <g data-s="3">
+    <rect x="262" y="40" width="76" height="96" rx="10" style="fill:var(--te);fill-opacity:.25;stroke:var(--te);stroke-width:2"/><text x="300" y="82" text-anchor="middle" class="b" style="font-size:32px">3</text><text x="300" y="106" text-anchor="middle" class="s" style="fill:var(--ink)">텍스트</text><text x="300" y="126" text-anchor="middle" class="s">(CLI)</text>
+    <rect x="430" y="40" width="76" height="96" rx="10" style="fill:var(--inh);fill-opacity:.22;stroke:var(--inh);stroke-width:2"/><text x="468" y="82" text-anchor="middle" class="b" style="font-size:32px">5</text><text x="468" y="106" text-anchor="middle" class="s" style="fill:var(--ink)">그래픽</text><text x="468" y="126" text-anchor="middle" class="s">(GUI)</text>
+    <text x="384" y="160" text-anchor="middle" class="s">3 · 5 = 다중 사용자</text></g>
+  <g data-s="4">
+    <rect x="178" y="40" width="76" height="96" rx="10" class="dash"/><text x="216" y="82" text-anchor="middle" class="b" style="font-size:32px;fill:var(--ink2)">2</text><text x="216" y="106" text-anchor="middle" class="s">🤖</text><text x="216" y="126" text-anchor="middle" class="s">3 과 같음</text>
+    <rect x="346" y="40" width="76" height="96" rx="10" class="dash"/><text x="384" y="82" text-anchor="middle" class="b" style="font-size:32px;fill:var(--ink2)">4</text><text x="384" y="106" text-anchor="middle" class="s">🤖</text><text x="384" y="126" text-anchor="middle" class="s">3 과 같음</text></g>
+  <g data-s="5">
+    <text x="20" y="206" class="b">init 0 = 종료</text><text x="190" y="206" class="m" style="font-size:15px">shutdown -P now · halt -p</text>
+    <text x="20" y="242" class="b">init 6 = 재부팅</text><text x="190" y="242" class="m" style="font-size:15px">shutdown -r now · reboot</text>
+    <text x="20" y="278" class="b">init 3 · init 5</text><text x="190" y="278" class="s" style="fill:var(--ink)">텍스트 모드 · 그래픽 모드로</text>
+    <text x="20" y="320" class="s">확인 파일</text><text x="190" y="320" class="m" style="font-size:15px">/lib/systemd/system/runlevel?.target</text>
+    <text x="300" y="360" text-anchor="middle" class="s">✍️ 강의자료에 없지만 시험에 나옴 (7주차)</text></g>
+</svg>
+
+<!-- ⑨ 프로세스 🔥 -->
+<svg data-fig="process" viewBox="0 0 600 510" role="img" aria-label="프로세스의 정의와 상태" hidden>
+  <g data-s="1">
+    <path d="M30,40 L30,112 A70,14 0 0 0 170,112 L170,40" style="fill:var(--ink2);fill-opacity:.2;stroke:var(--ink2);stroke-width:2"/>
+    <ellipse cx="100" cy="40" rx="70" ry="14" style="fill:var(--ink2);fill-opacity:.35;stroke:var(--ink2);stroke-width:2"/>
+    <text x="100" y="86" text-anchor="middle" class="b">하드디스크</text><text x="100" y="150" text-anchor="middle" class="s">실행 파일 (프로그램)</text>
+    <path class="d" d="M182,80 L366,80" style="stroke:var(--main);stroke-width:3;fill:none"/><path d="M362,73 L376,80 L362,87 Z" style="fill:var(--main)"/>
+    <text x="276" y="68" text-anchor="middle" class="s" style="fill:var(--ink)">메모리에 로딩</text>
+    <rect x="382" y="34" width="200" height="92" rx="10" style="fill:var(--te);fill-opacity:.2;stroke:var(--te);stroke-width:2"/>
+    <text x="482" y="60" text-anchor="middle" class="s">메모리</text><text x="482" y="90" text-anchor="middle" class="b">프로세스</text><text x="482" y="114" text-anchor="middle" class="s">= 활성화된 것</text>
+    <text x="300" y="182" text-anchor="middle" class="s">🔥 교수님 시험 용어 — 하드디스크의 실행코드가 메모리에 로딩되어 활성화된 것</text></g>
+  <g data-s="2">
+    <g style="fill:var(--card);stroke-width:2">
+      <rect x="10" y="236" width="96" height="42" rx="10" style="stroke:var(--ink2)"/><rect x="164" y="236" width="96" height="42" rx="10" style="stroke:var(--oc)"/><rect x="334" y="236" width="96" height="42" rx="10" style="stroke:var(--te)"/><rect x="494" y="236" width="96" height="42" rx="10" style="stroke:var(--ink2)"/><rect x="250" y="368" width="96" height="42" rx="10" style="stroke:var(--inh)"/></g>
+    <text x="58" y="263" text-anchor="middle" class="b">생성</text><text x="212" y="263" text-anchor="middle" class="b">준비</text><text x="382" y="263" text-anchor="middle" class="b">실행</text><text x="542" y="263" text-anchor="middle" class="b">종료</text><text x="298" y="395" text-anchor="middle" class="b">대기</text>
+    <g style="stroke:var(--ink2);stroke-width:2.2;fill:none">
+      <path class="d" d="M108,257 L160,257"/><path class="d" d="M262,248 L330,248"/><path class="d" d="M330,268 L262,268"/><path class="d" d="M432,257 L490,257"/><path class="d" d="M368,280 L320,364"/><path class="d" d="M268,366 L224,282"/></g>
+    <g style="fill:var(--ink2)"><path d="M156,251 L166,257 L156,263 Z"/><path d="M326,242 L336,248 L326,254 Z"/><path d="M266,262 L256,268 L266,274 Z"/><path d="M486,251 L496,257 L486,263 Z"/><path d="M318,354 L316,368 L327,359 Z"/><path d="M222,294 L222,280 L232,290 Z"/></g>
+    <text x="296" y="232" text-anchor="middle" class="s">CPU 받음</text><text x="296" y="296" text-anchor="middle" class="s">차례 끝</text>
+    <text x="352" y="330" class="s">입출력 기다림</text><text x="232" y="330" text-anchor="end" class="s">입출력 끝</text></g>
+  <g data-s="3"><text x="300" y="444" text-anchor="middle" class="s" style="fill:var(--ink)">✍️ 필기: 상태 = 생성 · 실행 · 준비 · 대기 · 종료 (5가지) · CPU 는 한 번에 하나만</text>
+    <text x="300" y="472" text-anchor="middle" class="s" style="fill:var(--ink)">PID = 시스템 전체 번호 (ps -ef 2번째 칸 · kill -9 PID)</text>
+    <text x="300" y="498" text-anchor="middle" class="s" style="fill:var(--ink)">작업 번호 = jobs 의 [1] (이 터미널 안 · fg 1)</text></g>
+</svg>
+
+<!-- ⑩ 포그라운드 ↔ 백그라운드 🔥 -->
+<svg data-fig="jobs" viewBox="0 0 600 450" role="img" aria-label="포그라운드와 백그라운드 전환" hidden>
+  <g data-s="1"><text x="125" y="36" text-anchor="middle" class="m" style="font-size:16px">yes &gt; /dev/null</text>
+    <path class="d" d="M125,44 L125,144" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M118,140 L125,152 L132,140 Z" style="fill:var(--ink2)"/>
+    <rect x="30" y="152" width="190" height="62" rx="12" style="fill:var(--ap);fill-opacity:.2;stroke:var(--ap);stroke-width:2"/>
+    <text x="125" y="180" text-anchor="middle" class="b">앞에서 실행</text><text x="125" y="202" text-anchor="middle" class="s">포그라운드 (화면 차지)</text></g>
+  <g data-s="2"><rect x="380" y="40" width="190" height="62" rx="12" style="fill:var(--oc);fill-opacity:.25;stroke:var(--oc);stroke-width:2"/>
+    <text x="475" y="68" text-anchor="middle" class="b">멈춤</text><text x="475" y="90" text-anchor="middle" class="s">Stopped</text>
+    <path class="d" d="M222,160 L374,92" style="stroke:var(--oc);stroke-width:3;fill:none"/><path d="M366,87 L380,90 L370,99 Z" style="fill:var(--oc)"/>
+    <text x="276" y="108" text-anchor="middle" class="b" style="fill:var(--oc)">Ctrl + Z</text></g>
+  <g data-s="3"><rect x="380" y="256" width="190" height="62" rx="12" style="fill:var(--te);fill-opacity:.22;stroke:var(--te);stroke-width:2"/>
+    <text x="475" y="284" text-anchor="middle" class="b">뒤에서 실행</text><text x="475" y="306" text-anchor="middle" class="s">백그라운드</text>
+    <path class="d" d="M475,104 L475,248" style="stroke:var(--te);stroke-width:3;fill:none"/><path d="M468,244 L475,256 L482,244 Z" style="fill:var(--te)"/>
+    <text x="490" y="186" class="b" style="fill:var(--te)">bg</text><text x="490" y="208" class="s">뒤에서 계속</text></g>
+  <g data-s="4"><path class="d" d="M376,282 L228,206" style="stroke:var(--inh);stroke-width:3;fill:none"/><path d="M236,203 L222,202 L230,214 Z" style="fill:var(--inh)"/>
+    <text x="300" y="268" text-anchor="middle" class="b" style="fill:var(--inh)">fg 1</text><text x="300" y="290" text-anchor="middle" class="s">다시 앞으로</text></g>
+  <g data-s="5"><text x="548" y="368" text-anchor="middle" class="m" style="font-size:15px">명령 &amp;</text>
+    <path class="d" d="M540,354 L520,326" style="stroke:var(--te);stroke-width:2.5;fill:none"/><path d="M516,334 L516,320 L527,328 Z" style="fill:var(--te)"/>
+    <text x="548" y="390" text-anchor="middle" class="s">처음부터 뒤로</text></g>
+  <g data-s="6"><rect x="180" y="374" width="200" height="46" rx="12" style="fill:var(--ink2);fill-opacity:.2;stroke:var(--ink2);stroke-width:2"/><text x="280" y="403" text-anchor="middle" class="b">종료</text>
+    <path class="d" d="M110,216 L196,370" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><text x="96" y="306" text-anchor="middle" class="b" style="fill:var(--ap)">Ctrl + C</text>
+    <path class="d" d="M420,320 L360,372" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><text x="430" y="356" class="s" style="fill:var(--ap)">kill -9 PID</text>
+    <text x="300" y="442" text-anchor="middle" class="s">목록 jobs → [1]+ 실행중 yes &gt; /dev/null &amp;</text></g>
+</svg>
+
+<!-- ⑪ 파이프 · 리디렉션 -->
+<svg data-fig="pipe" viewBox="0 0 600 430" role="img" aria-label="파이프와 리디렉션" hidden>
+  <g data-s="1"><text x="20" y="22" class="s">파이프 | = 앞 명령의 출력 → 뒤 명령의 입력</text>
+    <rect x="20" y="36" width="170" height="44" rx="8" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="105" y="64" text-anchor="middle" class="m" style="font-size:16px">ls -l /etc</text>
+    <path class="d" d="M192,58 L256,58" style="stroke:var(--inh);stroke-width:3;fill:none"/><text x="224" y="52" text-anchor="middle" class="b" style="font-size:24px;fill:var(--inh)">|</text>
+    <rect x="260" y="36" width="110" height="44" rx="8" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="315" y="64" text-anchor="middle" class="m" style="font-size:16px">more</text>
+    <path class="d" d="M372,58 L430,58" style="stroke:var(--inh);stroke-width:3;fill:none"/>
+    <rect x="434" y="36" width="146" height="44" rx="8" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh)"/><text x="507" y="64" text-anchor="middle" class="s" style="fill:var(--ink)">한 화면씩</text></g>
+  <g data-s="2"><rect x="20" y="114" width="170" height="44" rx="8" style="fill:var(--card);stroke:var(--te);stroke-width:2"/><text x="105" y="142" text-anchor="middle" class="m" style="font-size:16px">ps -ef</text>
+    <path class="d" d="M192,136 L256,136" style="stroke:var(--te);stroke-width:3;fill:none"/><text x="224" y="130" text-anchor="middle" class="b" style="font-size:24px;fill:var(--te)">|</text>
+    <rect x="260" y="114" width="110" height="44" rx="8" style="fill:var(--card);stroke:var(--te);stroke-width:2"/><text x="315" y="142" text-anchor="middle" class="m" style="font-size:16px">grep bash</text>
+    <path class="d" d="M372,136 L430,136" style="stroke:var(--te);stroke-width:3;fill:none"/>
+    <rect x="434" y="114" width="146" height="44" rx="8" style="fill:var(--te);fill-opacity:.15;stroke:var(--te)"/><text x="507" y="142" text-anchor="middle" class="s" style="fill:var(--ink)">bash 줄만</text>
+    <text x="315" y="180" text-anchor="middle" class="s">필터 = grep · sort · wc · tail</text></g>
+  <g data-s="3"><text x="20" y="220" class="s">리디렉션 = 입출력 방향 바꾸기</text>
+    <rect x="20" y="234" width="170" height="44" rx="8" style="fill:var(--card);stroke:var(--oc);stroke-width:2"/><text x="105" y="262" text-anchor="middle" class="m" style="font-size:16px">ls -l</text>
+    <path class="d" d="M192,256 L256,256" style="stroke:var(--oc);stroke-width:3;fill:none"/><text x="224" y="250" text-anchor="middle" class="b" style="font-size:22px;fill:var(--oc)">&gt;</text>
+    <rect x="260" y="234" width="150" height="44" rx="8" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc)"/><text x="335" y="262" text-anchor="middle" class="m" style="font-size:16px">list.txt</text>
+    <text x="420" y="262" class="s">화면 대신 파일에</text></g>
+  <g data-s="4"><rect x="20" y="314" width="130" height="44" rx="8" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc)"/><text x="85" y="342" text-anchor="middle" class="m" style="font-size:16px">list.txt</text>
+    <path class="d" d="M152,336 L206,336" style="stroke:var(--oc);stroke-width:3;fill:none"/><text x="179" y="330" text-anchor="middle" class="b" style="font-size:22px;fill:var(--oc)">&lt;</text>
+    <rect x="210" y="314" width="100" height="44" rx="8" style="fill:var(--card);stroke:var(--oc);stroke-width:2"/><text x="260" y="342" text-anchor="middle" class="m" style="font-size:16px">sort</text>
+    <path class="d" d="M312,336 L366,336" style="stroke:var(--oc);stroke-width:3;fill:none"/><text x="339" y="330" text-anchor="middle" class="b" style="font-size:22px;fill:var(--oc)">&gt;</text>
+    <rect x="370" y="314" width="130" height="44" rx="8" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc)"/><text x="435" y="342" text-anchor="middle" class="m" style="font-size:16px">out.txt</text>
+    <text x="300" y="388" text-anchor="middle" class="m" style="font-size:15px">sort &lt; list.txt &gt; out.txt</text></g>
+  <g data-s="5"><text x="300" y="420" text-anchor="middle" class="s">yes &gt; /dev/null = 출력을 버림 (실습용) · 🤖 &gt;&gt; = 이어 쓰기</text></g>
+</svg>
+
+<!-- ⑫ sh if 문 (andor.sh) 🔥 -->
+<svg data-fig="sh" viewBox="0 0 600 520" role="img" aria-label="셸 스크립트 if 문 흐름" hidden>
+  <g data-s="1">
+    <rect x="170" y="10" width="260" height="40" rx="8" style="fill:var(--card);stroke:var(--main);stroke-width:2"/><text x="300" y="36" text-anchor="middle" class="m" style="font-size:16px">read fname</text>
+    <path class="d" d="M300,50 L300,70" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/>
+    <polygon points="180,110 300,70 420,110 300,150" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="300" y="106" text-anchor="middle" class="m" style="font-size:16px">[ -f $fname ]</text><text x="300" y="128" text-anchor="middle" class="s">일반 파일?</text>
+    <path class="d" d="M300,150 L300,190" style="stroke:var(--te);stroke-width:2.5;fill:none"/><text x="312" y="176" class="s" style="fill:var(--te)">예</text>
+    <polygon points="180,230 300,190 420,230 300,270" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="300" y="226" text-anchor="middle" class="m" style="font-size:16px">[ -s $fname ]</text><text x="300" y="248" text-anchor="middle" class="s">크기 &gt; 0 ?</text>
+    <path class="d" d="M300,270 L300,300" style="stroke:var(--te);stroke-width:2.5;fill:none"/><text x="312" y="292" class="s" style="fill:var(--te)">예</text>
+    <rect x="160" y="300" width="280" height="44" rx="8" style="fill:var(--te);fill-opacity:.22;stroke:var(--te);stroke-width:2"/><text x="300" y="328" text-anchor="middle" class="m" style="font-size:16px">head -5 $fname</text>
+    <path class="d" d="M420,110 L530,110 L530,196" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><text x="476" y="100" text-anchor="middle" class="s" style="fill:var(--ap)">아니요</text>
+    <path class="d" d="M420,230 L468,230" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><text x="444" y="256" text-anchor="middle" class="s" style="fill:var(--ap)">아니요</text>
+    <rect x="468" y="196" width="124" height="78" rx="8" style="fill:var(--ap);fill-opacity:.18;stroke:var(--ap);stroke-width:2"/><text x="530" y="222" text-anchor="middle" class="s" style="fill:var(--ink)">else</text><text x="530" y="244" text-anchor="middle" class="s" style="fill:var(--ink)">파일이 없거나,</text><text x="530" y="264" text-anchor="middle" class="s" style="fill:var(--ink)">크기가 0입니다.</text>
+    <text x="90" y="230" text-anchor="middle" class="b" style="fill:var(--oc)">&amp;&amp;</text><text x="90" y="252" text-anchor="middle" class="s">둘 다 참</text></g>
+  <g data-s="2"><text x="20" y="380" class="s" style="fill:var(--ink)">case2.sh (내용 있음) → 앞 5줄 출력</text>
+    <text x="20" y="404" class="s" style="fill:var(--ink)">empty.txt (빈 파일) → -s 거짓 → else</text>
+    <text x="20" y="428" class="s" style="fill:var(--ink)">nofile.txt (없음) → -f 거짓 → else</text></g>
+  <g data-s="3"><rect x="10" y="444" width="580" height="70" rx="10" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh)"/>
+    <text x="300" y="470" text-anchor="middle" class="m" style="font-size:14px">echo "$myvar" → Hi Woo · echo '$myvar' → $myvar</text>
+    <text x="300" y="498" text-anchor="middle" class="m" style="font-size:14px">num2=$num1+200 → 100+200 · `expr $num1 + 200` → 300</text></g>
+</svg>
+
+<!-- ⑬ vi 모드 -->
+<svg data-fig="vi" viewBox="0 0 600 420" role="img" aria-label="vi 에디터의 세 가지 모드" hidden>
+  <g data-s="1"><text x="300" y="30" text-anchor="middle" class="m" style="font-size:16px">vi 파일</text>
+    <path class="d" d="M300,38 L300,84" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M293,80 L300,92 L307,80 Z" style="fill:var(--ink2)"/>
+    <circle cx="300" cy="172" r="80" style="fill:var(--main);fill-opacity:.18;stroke:var(--main);stroke-width:2.5"/>
+    <text x="300" y="166" text-anchor="middle" class="b">명령 모드</text><text x="300" y="190" text-anchor="middle" class="s">처음 시작</text></g>
+  <g data-s="2"><circle cx="110" cy="172" r="70" style="fill:var(--te);fill-opacity:.2;stroke:var(--te);stroke-width:2.5"/>
+    <text x="110" y="166" text-anchor="middle" class="b">입력 모드</text><text x="110" y="190" text-anchor="middle" class="s">글자 입력</text>
+    <path class="d" d="M244,116 C224,84 168,84 148,108" style="stroke:var(--te);stroke-width:2.5;fill:none"/><text x="196" y="80" text-anchor="middle" class="m b" style="font-size:16px;fill:var(--te)">i · a · o</text>
+    <path class="d" d="M148,236 C168,262 224,262 244,230" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><text x="196" y="280" text-anchor="middle" class="m b" style="font-size:16px">Esc</text></g>
+  <g data-s="3"><circle cx="490" cy="172" r="70" style="fill:var(--oc);fill-opacity:.22;stroke:var(--oc);stroke-width:2.5"/>
+    <text x="490" y="166" text-anchor="middle" class="b">마지막 행</text><text x="490" y="190" text-anchor="middle" class="s">: 명령</text>
+    <path class="d" d="M356,116 C376,84 432,84 452,108" style="stroke:var(--oc);stroke-width:2.5;fill:none"/><text x="404" y="80" text-anchor="middle" class="m b" style="font-size:20px;fill:var(--oc)">:</text>
+    <path class="d" d="M452,236 C432,262 376,262 356,230" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><text x="404" y="280" text-anchor="middle" class="s">Enter · Esc</text></g>
+  <g data-s="4">
+    <text x="110" y="318" text-anchor="middle" class="m" style="font-size:15px">i 커서 앞</text><text x="110" y="342" text-anchor="middle" class="m" style="font-size:15px">a 커서 뒤</text><text x="110" y="366" text-anchor="middle" class="m" style="font-size:15px">o 아래 새 줄</text>
+    <text x="300" y="318" text-anchor="middle" class="m" style="font-size:15px">dd 줄 삭제</text><text x="300" y="342" text-anchor="middle" class="m" style="font-size:15px">/hello 찾기</text><text x="300" y="366" text-anchor="middle" class="m" style="font-size:15px">n 다음 · N 거꾸로</text>
+    <text x="490" y="318" text-anchor="middle" class="m" style="font-size:15px">:wq 저장 · 끝</text><text x="490" y="342" text-anchor="middle" class="m" style="font-size:15px">:q! 저장 안 함</text><text x="490" y="366" text-anchor="middle" class="m" style="font-size:15px">:set number</text><text x="490" y="390" text-anchor="middle" class="m" style="font-size:15px">:%s/기존/새/g</text></g>
+</svg>
+
+<!-- ⑭ tar · 압축 -->
+<svg data-fig="tar" viewBox="0 0 600 440" role="img" aria-label="tar 로 묶기와 압축" hidden>
+  <g data-s="1">
+    <g style="fill:var(--card);stroke:var(--ink2);stroke-width:2"><path d="M30,40 h28 l12,12 v40 h-40 z"/><path d="M80,40 h28 l12,12 v40 h-40 z"/><path d="M130,40 h28 l12,12 v40 h-40 z"/></g>
+    <text x="100" y="116" text-anchor="middle" class="s">파일 여러 개</text>
+    <path class="d" d="M180,66 L408,66" style="stroke:var(--oc);stroke-width:3;fill:none"/><path d="M404,59 L418,66 L404,73 Z" style="fill:var(--oc)"/>
+    <text x="294" y="56" text-anchor="middle" class="m b" style="font-size:16px">tar cvf my.tar …</text><text x="294" y="88" text-anchor="middle" class="s">c 묶기 · f 파일 이름</text>
+    <rect x="420" y="30" width="160" height="72" rx="10" style="fill:var(--oc);fill-opacity:.22;stroke:var(--oc);stroke-width:2"/><text x="500" y="62" text-anchor="middle" class="m b" style="font-size:17px">my.tar</text><text x="500" y="86" text-anchor="middle" class="s">한 덩어리 (크기 그대로)</text></g>
+  <g data-s="2">
+    <path class="d" d="M500,104 L500,148" style="stroke:var(--ap);stroke-width:3;fill:none"/><path d="M493,144 L500,158 L507,144 Z" style="fill:var(--ap)"/>
+    <text x="490" y="134" text-anchor="end" class="s" style="fill:var(--ap)">xz 압축 (J)</text>
+    <rect x="440" y="158" width="120" height="56" rx="10" style="fill:var(--ap);fill-opacity:.2;stroke:var(--ap);stroke-width:2"/><text x="500" y="184" text-anchor="middle" class="m b" style="font-size:16px">my.tar.xz</text><text x="500" y="204" text-anchor="middle" class="s">작아짐</text>
+    <text x="20" y="166" class="s" style="fill:var(--ink)">한 번에 묶기 + 압축</text><text x="20" y="190" class="m" style="font-size:15px">tar cvfJ my.tar.xz /etc/sysconfig/</text></g>
+  <g data-s="3">
+    <path class="d" d="M436,196 C330,250 220,250 150,262" style="stroke:var(--te);stroke-width:3;fill:none;stroke-dasharray:8 5"/><path d="M158,255 L144,263 L158,270 Z" style="fill:var(--te)"/>
+    <g style="fill:var(--card);stroke:var(--te);stroke-width:2"><path d="M30,240 h28 l12,12 v40 h-40 z"/><path d="M80,240 h28 l12,12 v40 h-40 z"/></g>
+    <text x="300" y="282" text-anchor="middle" class="m b" style="font-size:16px;fill:var(--te)">tar xvfJ my.tar.xz</text><text x="300" y="304" text-anchor="middle" class="s">압축 풀고 묶음도 풀기 (x)</text></g>
+  <g data-s="4"><rect x="10" y="326" width="580" height="106" rx="10" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh)"/>
+    <text x="24" y="352" class="s" style="fill:var(--ink)">동작 c 묶기 · x 풀기 · t 목록 확인 / 옵션 f 파일 이름 · v 과정</text>
+    <text x="24" y="378" class="s" style="fill:var(--ink)">압축 J = xz · z = gzip · j = bzip2 (압축률 xz · bz2 좋음)</text>
+    <text x="24" y="404" class="s" style="fill:var(--ink)">압축만: gzip 파일 · gzip -d (= gunzip) · bzip2 -d (= bunzip2)</text>
+    <text x="24" y="426" class="s">윈도우와 호환되는 압축은 zip / unzip</text></g>
+</svg>
+
+    </div>
+    <div class="ctl">
+        <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
+        <button type="button" id="prev" title="이전 단계">◀ 이전</button>
+        <button type="button" id="next" title="다음 단계">다음 ▶</button>
+        <button type="button" id="all" title="모두 보기">전체</button>
+        <span class="pos" id="pos"></span>
+    </div>
+    <ol class="cap" id="cap"></ol>
+    <p class="note" id="note"></p>
+</div>
+<script>
+(function () {
+    "use strict";
+    // 그림마다: 탭 이름 · 강의자료 출처 · 단계 설명 (단계 번호 = SVG 의 data-s) · 아래 메모
+    var FIGS = [
+        { id: "vm", tab: "① 호스트·게스트", src: "🔥 7주차 — <b>호스트 / 게스트 운영체제 중 하나 설명 (1문제)</b>",
+          steps: [
+            "<b>하드웨어</b> — 실제 PC 의 CPU · 메모리 · 디스크",
+            "<b>호스트 OS</b> — 실제 PC 에 설치된 운영체제 (내 PC 의 Windows · macOS)",
+            "<b>가상화 프로그램</b> — 호스트 OS 위에서 돌아가는 VMware · VirtualBox",
+            "<b>게스트 OS</b> — 가상화 프로그램이 만든 <b>가상 머신 안</b>에 설치한 운영체제 (실습한 Rocky Linux)",
+            "정리: <b>호스트 = 실제 PC · 가상화 프로그램을 돌리는 쪽</b> / <b>게스트 = 가상 머신 안</b>" ],
+          note: "✍️ 서술 답 예시 — “호스트 운영체제는 실제 컴퓨터에 설치되어 VMware 같은 가상화 프로그램을 실행하는 운영체제이다 (예: 내 PC 의 Windows). 게스트 운영체제는 가상화 프로그램이 만든 가상 머신 안에 설치되어 실행되는 운영체제이다 (예: 실습한 Rocky Linux).” — 둘 중 하나만 써도 됨" },
+        { id: "tree", tab: "② 디렉터리", src: "1 · 2 · 3주차 · 4장 PPT 3쪽 — 디렉터리 구조 · 마운트",
+          steps: [
+            "<b>/</b> = 루트 디렉터리(최상위) · 그 아래 폴더들 (윈도우는 C:\\ 처럼 드라이브 · 경로 구분은 \\)",
+            "<b>/etc</b> = 설정 파일 — passwd · shadow · group (사용자) · crontab (예약) · yum.repos.d (dnf) · resolv.conf (DNS) · hosts",
+            "<b>절대 경로</b> = / 부터 (<code>cd /home</code>) · <b>상대 경로</b> = 지금 위치부터 (<code>cd rocky</code>) · <b>.</b> 지금 · <b>..</b> 위 · <b>~</b> 내 홈",
+            "<b>마운트</b> = 장치를 디렉터리 트리에 연결 — DVD(/dev/sr0) 가 /run/media/root/… 에 iso9660 · ro(읽기 전용)로 · 해제 <code>umount /dev/cdrom</code>" ],
+          note: "숨김 파일 = 이름이 . 으로 시작 (<code>ls -al</code> 로 보임) · 🤖 폴더 아래 짧은 설명(부팅 · 장치 …)은 이해를 돕는 일반 지식이에요" },
+        { id: "perm", tab: "③ 권한", src: "3주차 · 4장 PPT 24 ~ 26쪽 — 파일 허가권 · 소유권",
+          steps: [
+            "<code>ls -l</code> 한 줄 = 종류 · <b>권한 9글자</b>(소유자 u · 그룹 g · 기타 o 로 3개씩) · 링크 수 · 소유자 · 그룹 · 크기 · 날짜 · 이름",
+            "r = 4 · w = 2 · x = 1 → <b>rwx = 111 = 7</b> · <b>r-x = 101 = 5</b> → <code>chmod 755</code> = rwxr-xr-x",
+            "<code>chmod 644</code> = rw-r--r-- (기본) · 기호 모드 <code>chmod u+x 파일</code> · 소유자는 <code>chown</code> (권한은 chmod)" ],
+          note: "진수 풀이: 6 = 110 = 4+2 → rw- · 4 = 100 → r-- · 7 = 111 = 4+2+1 → rwx" },
+        { id: "link", tab: "④ 링크", src: "🔥 3주차 · 4장 PPT 28쪽 · 교재 실습 9 (227 ~ 229쪽)",
+          steps: [
+            "<b>하드 링크</b> <code>ln basefile hardlink</code> — 같은 inode(1106188)에 이름이 하나 더 → 링크 수 2 · 크기 61 (같은 내용)",
+            "<b>심볼릭 링크</b> <code>ln -s basefile softlink</code> — <b>새 inode</b>(1106189) · 안에는 원본의 <b>경로</b>만 (8바이트 = ‘basefile’ 8글자) · 이름을 따라가 원본을 엶",
+            "원본을 지우거나 옮기면 → 하드 링크는 내용 그대로 · 심볼릭 링크는 <b>깨짐</b> (<code>그런 파일이나 디렉터리가 없습니다</code>)" ],
+          note: "<code>ls -i</code> = inode 번호 · 심볼릭 = 윈도우의 <b>바로 가기</b> · ⚠️ 하드 링크는 ‘복사’ 가 아님 (같은 파일이라 한쪽을 고치면 다른 쪽도)" },
+        { id: "passwd", tab: "⑤ /etc/passwd", src: "🔥 3 · 4주차 · 4장 PPT 18 ~ 20쪽 · 도전 6-1 · 6-2 (마스터 유저 디렉터리)",
+          steps: [
+            "<b>/etc/passwd 7칸</b> — 이름 : 암호(x → shadow) : <b>UID</b> : <b>GID</b> : 설명 : <b>홈</b> : 셸",
+            "옵션이 바꾸는 칸 — <code>usermod -l 새이름 기존이름</code> 이름 · <code>-u</code> UID · <code>-g</code> 그룹 · <code>-d</code> 홈 · <code>-s</code> 셸",
+            "🔥 마스터 유저 디렉터리 — 만들 때 <code>useradd -d /work_06 master</code> · 바꿀 때 <code>usermod -d /home/workspace_06 master</code> · 확인 <code>grep master /etc/passwd</code>",
+            "<b>/etc/shadow</b> = 암호 해시 (! · * 로 시작하면 로그인 불가) · <b>/etc/group</b> = 그룹명 : x : GID : 소속 사용자" ],
+          note: "삭제 <code>userdel -r 이름</code> = 홈까지 · <code>passwd 이름</code> = 암호 · <code>chage -M 30</code> = 암호 최대 사용 날 수 · 🤖 UID 1001 은 예시 값" },
+        { id: "dnf", tab: "⑥ DNF 흐름", src: "🔥 4주차 수업 화면 — 그림 4-111 DNF 작동 흐름도 (시험문제)",
+          steps: [
+            "① <code>dnf install 패키지</code> 입력",
+            "② <code>/etc/yum.repos.d/</code> 의 <b>repo 파일</b>을 열어 <b>URL 주소</b> 확인",
+            "③ 저장소에 <b>전체 패키지 목록 파일</b> 요청 (내 컴퓨터 → 저장소)",
+            "④ <b>목록 파일만</b> 다운로드 (저장소 → 내 컴퓨터)",
+            "⑤ 설치할 패키지와 <b>관련된 패키지의 이름</b>을 화면에 출력",
+            "⑥ <b>‘y’</b> 를 입력하면 설치에 필요한 <b>패키지 파일</b> 요청",
+            "⑦ 패키지 파일을 다운로드해서 <b>자동 설치</b>" ],
+          note: "외우는 법: <b>목록(③④) 먼저, 파일(⑥⑦)은 y 를 누른 뒤</b> · rpm = 의존성을 직접 해결 / dnf = 의존성까지 <b>자동</b>" },
+        { id: "cron", tab: "⑦ 크론 · at", src: "🔥 5주차 · 4장 PPT 46 · 47쪽 — 백업(크론) · 실습 13",
+          steps: [
+            "<code>/etc/crontab</code> 한 줄 = <b>분 시 일 월 요일 사용자 명령</b> (🤖 값의 범위는 일반 지식)",
+            "<code>01 3 15 * *</code> = <b>매월 15일 03:01</b> · * = 매번",
+            "백업 흐름 — crond 서비스가 정해진 시각에 스크립트 실행 → <code>tar cfJ /backup/… /home</code> · crontab 을 고치면 <code>systemctl restart crond</code>",
+            "<b>cron = 반복</b> / <b>at = 한 번만</b> — <code>at 4:00 am tomorrow</code> → <code>at&gt;</code> 에 명령 → Ctrl + D · 목록 <code>at -l</code> · 취소 <code>atrm 1</code>" ],
+          note: "<code>run-parts /etc/cron.monthly</code> = 그 폴더의 <b>실행 권한 있는</b> 파일을 모두 실행 → 스크립트에 chmod 755" },
+        { id: "runlevel", tab: "⑧ 런레벨", src: "🔥 7주차 — 강의자료에 없지만 시험에 나옴 · 4장 PPT 8쪽",
+          steps: [
+            "<b>0 = 종료</b> · <b>6 = 재부팅</b>",
+            "<b>1 = 단일 사용자</b> (복구 모드)",
+            "<b>3 = 텍스트(CLI) 다중 사용자</b> · <b>5 = 그래픽(GUI) 다중 사용자</b>",
+            "🤖 2 · 4 는 Rocky 에서 3 과 같은 모드(multi-user)",
+            "<code>init</code> 뒤의 숫자 = 런레벨 · 종료 <code>shutdown -P now</code> · <code>halt -p</code> · <code>init 0</code> / 재부팅 <code>shutdown -r now</code> · <code>reboot</code> · <code>init 6</code> · 확인 <code>/lib/systemd/system/runlevel?.target</code>" ],
+          note: "외우기: <b>0 끄기 · 1 혼자(복구) · 3 글자 · 5 그림 · 6 다시</b>" },
+        { id: "process", tab: "⑨ 프로세스", src: "🔥 6주차 시험 용어 · 7주차 필기 · 4장 PPT 59 · 60쪽",
+          steps: [
+            "🔥 <b>프로세스</b> = 하드디스크에 저장된 실행코드(프로그램)가 <b>메모리에 로딩되어 활성화된 것</b>",
+            "상태 5가지 — 생성 · 준비 · 실행 · 대기 · 종료 · 🤖 화살표: CPU 를 받으면 실행 · 차례가 끝나면 준비 · 입출력을 기다리면 대기 → 끝나면 준비",
+            "<b>PID</b> = 시스템 전체의 프로세스 번호 (<code>ps -ef</code> 2번째 칸 · <code>kill -9 PID</code>) / <b>작업 번호</b> = 이 터미널의 <code>jobs</code> [1] (<code>fg 1</code>)" ],
+          note: "✍️ 필기 순서 = 생성 → 실행 → (<b>준비</b>) → 대기 → 종료 · service = <b>데몬</b>(서버 프로세스 · 거의 백그라운드) · 부모를 kill 하면 자식도 kill · <code>pstree</code>" },
+        { id: "jobs", tab: "⑩ 앞 ↔ 뒤", src: "🔥 6 · 7주차 — 포그라운드 → 백그라운드 변경 (시험 예시)",
+          steps: [
+            "명령을 그냥 실행 → <b>포그라운드</b>(앞) — 끝날 때까지 터미널을 차지",
+            "<b>Ctrl + Z</b> → 작업을 <b>멈춤</b> (종료 아님)",
+            "<b>bg</b> → 멈춘 작업을 <b>뒤(백그라운드)에서 계속</b> 실행",
+            "<b>fg 1</b> → 1번 작업을 다시 <b>앞</b>으로",
+            "<b>명령 &amp;</b> → 처음부터 백그라운드로 실행",
+            "끝내기 — 앞 작업은 <b>Ctrl + C</b> · 뒤 작업은 <code>ps -ef | grep yes</code> 로 PID 를 찾아 <b>kill -9 PID</b> · <code>jobs</code> = 작업 목록" ],
+          note: "헷갈리는 짝: <b>Ctrl + Z = 멈춤</b> ↔ <b>Ctrl + C = 종료</b> · <b>bg = 뒤에서 계속</b> ↔ <b>fg = 앞으로</b>" },
+        { id: "pipe", tab: "⑪ 파이프", src: "6주차 · 4장 PPT 58쪽 — 파이프 · 필터 · 리디렉션",
+          steps: [
+            "<b>파이프 |</b> — 앞 명령의 출력을 뒤 명령의 입력으로: <code>ls -l /etc | more</code> = 한 화면씩",
+            "<b>필터</b> — 필요한 것만 걸러 줌: <code>ps -ef | grep bash</code> (grep · sort · wc · tail · awk · sed)",
+            "<b>&gt;</b> 출력 리디렉션 — <code>ls -l &gt; list.txt</code> 화면 대신 파일에",
+            "<b>&lt;</b> 입력 리디렉션 — <code>sort &lt; list.txt &gt; out.txt</code>",
+            "<code>yes &gt; /dev/null</code> = 출력을 버림 (프로세스 실습용)" ],
+          note: "🤖 <code>&gt;</code> 는 파일을 새로 덮어쓰고, <code>&gt;&gt;</code> 는 뒤에 이어 써요" },
+        { id: "sh", tab: "⑫ sh if 문", src: "🔥 7주차 — sh 문제 (출력결과 · 파일 존재 · 사이즈 체크 if문) · 6주차 andor.sh",
+          steps: [
+            "andor.sh — <code>[ -f $fname ]</code> 일반 파일이고 <b>&amp;&amp;</b> <code>[ -s $fname ]</code> 크기가 0 보다 크면 <code>head -5</code> · 하나라도 거짓이면 else",
+            "내용 있는 파일 → 앞 5줄 · <b>빈 파일</b> → -s 거짓 → else · 없는 파일 → -f 거짓 → else",
+            "따옴표 — <code>\"$v\"</code> = 값 · <code>'$v'</code> · <code>\\$v</code> = 글자 그대로 / 변수는 모두 문자열 → <code>expr</code> 로만 계산 (띄어쓰기 필수)" ],
+          note: "조건: <code>-e</code> 있으면 · <code>-f</code> 일반 파일 · <code>-d</code> 디렉터리 · <code>-s</code> 크기 &gt; 0 · <code>[</code> 뒤 · <code>]</code> 앞 띄어쓰기 필수 · if → then → else → <b>fi</b> (출력값은 직접 실행해서 확인)" },
+        { id: "vi", tab: "⑬ vi 모드", src: "3주차 · 4장 PPT 12 ~ 15쪽 · 작년 튜터링 서술형",
+          steps: [
+            "<code>vi 파일</code> → <b>명령 모드</b>로 시작 (커서 이동 · 삭제 · 복사)",
+            "<b>i · a · o</b> → 입력 모드 (글자 입력) · <b>Esc</b> → 명령 모드로",
+            "<b>:</b> → 마지막 행 모드 (<code>:wq</code> 저장하고 끝 · <code>:q!</code> 저장 안 하고 끝)",
+            "명령 모드 <code>dd</code> 줄 삭제 · <code>/hello</code> 찾기 / 마지막 행 <code>:set number</code> 행 번호 · <code>:%s/기존/새/g</code> 전체 바꾸기" ],
+          note: "nano 는 Ctrl + X → Y → Enter = 저장하고 나가기 (3주차 필기)" },
+        { id: "tar", tab: "⑭ tar 압축", src: "4장 PPT 42 · 43쪽 — 파일의 압축과 묶기",
+          steps: [
+            "<b>묶기</b> <code>tar cvf my.tar 파일들</code> — 여러 파일을 한 덩어리로 (압축은 아님)",
+            "<b>압축</b> — xz · bzip2 · gzip · 한 번에 <code>tar cvfJ my.tar.xz /etc/sysconfig/</code> (J = xz)",
+            "<b>풀기</b> <code>tar xvfJ my.tar.xz</code> — 압축 풀고 묶음도 풀기",
+            "글자 정리 — 동작 <b>c x t</b> · 옵션 <b>f v</b> · 압축 <b>J z j</b> · 압축만 <code>gzip -d</code> = gunzip" ],
+          note: "리눅스는 묶기(tar)와 압축(xz · gzip · bzip2)이 원래 별개 프로그램 · 백업 스크립트의 <code>tar cfJ</code> 도 같은 뜻" }
+    ];
+
+    var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
+        note = document.getElementById("note"), pos = document.getElementById("pos"), box = document.getElementById("box");
+    var S = { fig: 0, step: 0, timers: [] };   // step 0 = 전체
+
+    function svgOf(i) { return document.querySelector('svg[data-fig="' + FIGS[i].id + '"]'); }
+    function parts(svgEl) { return Array.prototype.slice.call(svgEl.querySelectorAll("[data-s]")); }
+    function clearTimers() { S.timers.forEach(clearTimeout); S.timers = []; }
+
+    function drawIn(root) {                       // 선이 그려지듯이 (stroke-dashoffset)
+        var list = root.matches && root.matches(".d") ? [root] : [];
+        list = list.concat(Array.prototype.slice.call(root.querySelectorAll(".d")));
+        list.forEach(function (p) {
+            if (!p.getTotalLength) return;
+            var L; try { L = p.getTotalLength(); } catch (e) { return; }
+            if (!L) return;
+            p.style.transition = "none"; p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+            p.getBoundingClientRect();
+            p.style.transition = "stroke-dashoffset 0.9s ease"; p.style.strokeDashoffset = 0;
+            setTimeout(function () { p.style.strokeDasharray = ""; }, 1000);
+        });
+    }
+
+    function renderCap() {
+        var f = FIGS[S.fig];
+        cap.innerHTML = "";
+        f.steps.forEach(function (t, i) {
+            var li = document.createElement("li"); li.innerHTML = t;
+            if (S.step && i + 1 === S.step) li.className = "cur";
+            else if (S.step && i + 1 > S.step) li.className = "later";
+            li.addEventListener("click", function () { go(i + 1); });
+            cap.appendChild(li);
+        });
+        pos.textContent = S.step ? S.step + " / " + f.steps.length + " 단계" : "전체 " + f.steps.length + " 단계";
+    }
+
+    function apply(animateNew) {                  // 지금 단계에 맞게 보이기 · 숨기기
+        var svgEl = svgOf(S.fig);
+        parts(svgEl).forEach(function (g) {
+            var k = +g.getAttribute("data-s");
+            var wasOff = g.classList.contains("off");
+            var show = !S.step || k <= S.step;
+            g.classList.toggle("off", !show);
+            g.classList.toggle("hl", !!S.step && k === S.step);
+            if (show && wasOff && animateNew) drawIn(g);
+        });
+        renderCap();
+    }
+
+    function drawAll() {                          // 전체를 단계 순서대로 그리면서 보여 주기
+        clearTimers();
+        var svgEl = svgOf(S.fig), n = FIGS[S.fig].steps.length;
+        S.step = 0;
+        parts(svgEl).forEach(function (g) { g.classList.add("off"); g.classList.remove("hl"); });
+        drawIn(svgEl);
+        renderCap();
+        for (var k = 1; k <= n; k++) (function (k) {
+            S.timers.push(setTimeout(function () {
+                parts(svgEl).forEach(function (g) { if (+g.getAttribute("data-s") === k) { g.classList.remove("off"); drawIn(g); } });
+            }, 350 + (k - 1) * 650));
+        })(k);
+    }
+
+    function go(step) {
+        clearTimers();
+        var n = FIGS[S.fig].steps.length;
+        S.step = Math.max(1, Math.min(n, step));
+        apply(true);
+    }
+
+    function show(i, draw) {
+        clearTimers();
+        S.fig = i; S.step = 0;
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (s) {   // SVG 는 .hidden 속성이 없어서 attribute 로
+            if (s.getAttribute("data-fig") === FIGS[i].id) s.removeAttribute("hidden"); else s.setAttribute("hidden", "");
+        });
+        Array.prototype.forEach.call(tabsBox.children, function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+        src.innerHTML = "📄 " + FIGS[i].src;
+        note.innerHTML = FIGS[i].note || "";
+        if (draw) drawAll(); else { parts(svgOf(i)).forEach(function (g) { g.classList.remove("off", "hl"); }); renderCap(); }
+        tell();
+    }
+
+    FIGS.forEach(function (f, i) {
+        var b = document.createElement("button"); b.type = "button"; b.textContent = f.tab;
+        b.addEventListener("click", function () { show(i, true); try { history.replaceState(null, "", "#" + f.id); } catch (e) {} });
+        tabsBox.appendChild(b);
+    });
+    document.getElementById("redraw").addEventListener("click", function () { drawAll(); });
+    document.getElementById("all").addEventListener("click", function () { clearTimers(); S.step = 0; apply(false); });
+    document.getElementById("prev").addEventListener("click", function () { go(S.step ? S.step - 1 : 1); });
+    document.getElementById("next").addEventListener("click", function () { go(S.step ? S.step + 1 : 1); });
+    document.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(S.step + 1); else if (e.key === "ArrowLeft") go(S.step ? S.step - 1 : 1); });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) {} }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    var start = 0, h = (location.hash || "").slice(1);
+    FIGS.forEach(function (f, i) { if (f.id === h) start = i; });
+    show(start, false);
+    // 처음 화면에 보일 때 한 번 그리면서 보여 주기
+    if (window.IntersectionObserver) {
+        var done = false;
+        new IntersectionObserver(function (es) { if (!done && es[0].isIntersecting) { done = true; drawAll(); } }, { threshold: 0.3 }).observe(document.querySelector(".stage"));
+    }
+})();
+</script>
+</body>
+</html>
