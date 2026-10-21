@@ -110,12 +110,12 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>7</td><td><b>마스터 유저로 디렉터리 설정</b></td><td>만들 때 <code>useradd -d /work_06 master</code> · 바꿀 때 <code>usermod -d /home/workspace_06 master</code> · 확인 <code>grep master /etc/passwd</code> (도전 6-1 · 6-2)</td></tr>
 <tr><td>8</td><td><b>시험 용어</b></td><td><b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 <b>활성화된 것</b> · <b>노틸러스</b> = 파일탐색기 · <b>에볼루션</b> = 메일</td></tr>
 <tr><td>9</td><td><b>DNF 작동 흐름도</b> (그림 4-111)</td><td>① dnf install → ② repo 파일의 <b>URL</b> 확인 → ③ <b>목록</b> 요청 → ④ 목록 다운로드 → ⑤ 관련 패키지 이름 출력 → ⑥ <b>y</b> → 파일 요청 → ⑦ 다운로드 · 자동 설치</td></tr>
-<tr><td>10</td><td><b>PPT 4 · 5 · 7장</b></td><td>종료 <code>init 0</code> / 재부팅 <code>init 6</code> · tar <b>c 묶기 · x 풀기 · J xz · z gzip · j bzip2</b> · <code>which</code> / <code>whereis</code> / <code>locate</code> · RPM 이름 · SELinux 3모드 · LibreOffice 4개 · bash · 🖍 <code>systemctl enable --now gdm</code> · PrintScreen</td></tr>
+<tr><td>10</td><td><b>PPT 4 · 5 · 7장</b> (수업에서 안 다룬 내용 포함)</td><td>종료 <code>init 0</code> / 재부팅 <code>init 6</code> · tar <b>c 묶기 · x 풀기 · J xz · z gzip · j bzip2</b> · <code>which</code> / <code>whereis</code> / <code>locate</code> · RPM 이름 · SELinux 3모드 · LibreOffice 4개 · bash · 🖍 <code>systemctl enable --now gdm</code> · PrintScreen</td></tr>
 </tbody></table></div></details></dd><dt>❌ 안 나옴</dt><dd><span class="wk-chip bad">도전문제 5-4</span></dd><dd class="wk-exam-note">📌 <b>1~7주차</b> 반영 · 이 과목은 명령어 · 옵션이 많아서 <b>주차 순서가 아니라 주제별</b>로 묶었어요 → 맨 위 🔥 10개를 먼저 외우고, 📑 PPT 칸 → 아래 주제별 표로 넓히세요.</dd></dl></section>
 <nav class="wk-toc"><span class="wk-toc-t">바로 가기</span><a href="#s1">🔥 교수님이 찍어 준 것 — 시험 직전 이것만 (10개)</a><a href="#s2">🎨 그림으로 정리 — 리눅스 그림 14개</a><a href="#s3">📑 교수님이 찍어 준 PPT — 4장 · 5장 · 7장</a><a href="#s4">① 기본 명령 · 디렉터리 (1 · 2주차)</a><a href="#s5">② 마운트 · inode · 링크 (3주차)</a><a href="#s6">③ 접근 권한 chmod (3주차)</a><a href="#s7">④ 사용자 · 그룹 관리 (3 · 4주차)</a><a href="#s8">⑤ 패키지 rpm · dnf (4주차)</a><a href="#s9">⑥ 작업 예약 cron · at · 백업 (5주차)</a><a href="#s10">⑦ 프로세스 · 서비스 · 작업 제어 (6 · 7주차)</a><a href="#s11">⑧ 셸 스크립트 (6주차 · 7장)</a><a href="#s12">⚠️ 헷갈리는 짝 — 한 번에 비교</a><a href="#s13">📎 참고 — 작년(2025) 튜터링 자료</a><a href="#s14">✏️ 문제로 확인하기</a></nav>
 <section class="card" id="s1">
 <h2>🔥 교수님이 찍어 준 것 — 시험 직전 이것만 (10개)</h2>
-<div class="tip">📝 이 10개는 🔒 실제시험 <b>맨 위 🔥 칸</b>에 문제로 모두 들어 있어요 (61문제 — 1 ~ 9번 15문제 + 📑 PPT 46문제) — 먼저 풀어 보고 틀린 것만 아래에서 찾아보세요.</div>
+<div class="tip">📝 🔒 실제시험 <b>맨 위 🔥 칸 = 1 ~ 9번</b>(수업에서 교수님이 짚은 것 · 15문제) · 바로 아래 <b>📑 PPT 칸 = 10번</b>(교수님이 준 PPT 3개 · 46문제 — 수업에서 안 다룬 내용도 있음) — 먼저 풀어 보고 틀린 것만 아래에서 찾아보세요.</div>
 <table class="ref">
 <tbody>
 <tr><th>#</th><th>찍어 준 것</th><th>꼭 외울 답</th></tr>
@@ -128,7 +128,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>7</td><td><b>마스터 유저로 디렉터리 설정</b></td><td>만들 때 <code>useradd -d /work_06 master</code> · 바꿀 때 <code>usermod -d /home/workspace_06 master</code> · 확인 <code>grep master /etc/passwd</code> (도전 6-1 · 6-2)</td></tr>
 <tr><td>8</td><td><b>시험 용어</b></td><td><b>프로세스</b> = 하드디스크에 저장된 실행코드가 메모리에 로딩되어 <b>활성화된 것</b> · <b>노틸러스</b> = 파일탐색기 (노파) · <b>에볼루션</b> = 메일 (에메)</td></tr>
 <tr><td>9</td><td><b>DNF 작동 흐름도</b> (그림 4-111)</td><td>① dnf install → ② repo 파일의 <b>URL</b> 확인 → ③ <b>목록</b> 요청 → ④ 목록 다운로드 → ⑤ 관련 패키지 이름 출력 → ⑥ <b>y</b> → 파일 요청 → ⑦ 다운로드 · 자동 설치</td></tr>
-<tr><td>10</td><td><b>PPT 4 · 5 · 7장</b> (📑 바로 아래)</td><td>종료 <code>init 0</code> / 재부팅 <code>init 6</code> · tar <b>c 묶기 · x 풀기 · J xz · z gzip · j bzip2</b> · <code>which</code> / <code>whereis</code> / <code>locate</code> · RPM 이름 · SELinux 3모드 · LibreOffice 4개 · bash · 🖍 <code>systemctl enable --now gdm</code> · PrintScreen</td></tr>
+<tr><td>10</td><td><b>PPT 4 · 5 · 7장</b> (📑 바로 아래 · 수업에서 안 다룬 내용 포함)</td><td>종료 <code>init 0</code> / 재부팅 <code>init 6</code> · tar <b>c 묶기 · x 풀기 · J xz · z gzip · j bzip2</b> · <code>which</code> / <code>whereis</code> / <code>locate</code> · RPM 이름 · SELinux 3모드 · LibreOffice 4개 · bash · 🖍 <code>systemctl enable --now gdm</code> · PrintScreen</td></tr>
 </tbody></table>
 </section>
 <section class="card" id="s2">
@@ -544,7 +544,7 @@ $ cat softlink  ## 💡 경로 자리에 원본이 다시 있으니 심볼릭 �
 </section>
 <section class="card" id="s14">
 <h2>✏️ 문제로 확인하기</h2>
-<ul><li><a href="../운영체제실습-실제시험.html">🔒 운영체제실습 실제시험 — 맨 위 🔥 교수님이 찍어 준 61문제 (📑 PPT 4 · 5 · 7장 46문제 포함) → 객관식 · 주관식(도전문제) · sh 출력결과 · 서술형 (관리자가 없으면 혼자 풀기)</a></li><li>주차별 자세한 정리 — <a href="운영체제실습-1주차.html">1주차</a> · <a href="운영체제실습-2주차.html">2주차</a> · <a href="운영체제실습-3주차.html">3주차</a> · <a href="운영체제실습-4주차.html">4주차</a> · <a href="운영체제실습-5주차.html">5주차</a> · <a href="운영체제실습-6주차.html">6주차</a> · <a href="운영체제실습-7주차.html">7주차</a></li><li>도전문제 33개(2 · 3 · 5 · 6 · 10장) + 셸 스크립트 5개(11장) → <a href="../운영체제실습.html#s17">과목 페이지 17 · 18번</a></li></ul>
+<ul><li><a href="../운영체제실습-실제시험.html">🔒 운영체제실습 실제시험 — 맨 위 🔥 교수님이 수업에서 짚은 15문제 → 📑 교수님이 준 PPT 46문제 → 객관식 · 주관식(도전문제) · sh 출력결과 · 서술형 (관리자가 없으면 혼자 풀기)</a></li><li>주차별 자세한 정리 — <a href="운영체제실습-1주차.html">1주차</a> · <a href="운영체제실습-2주차.html">2주차</a> · <a href="운영체제실습-3주차.html">3주차</a> · <a href="운영체제실습-4주차.html">4주차</a> · <a href="운영체제실습-5주차.html">5주차</a> · <a href="운영체제실습-6주차.html">6주차</a> · <a href="운영체제실습-7주차.html">7주차</a></li><li>도전문제 33개(2 · 3 · 5 · 6 · 10장) + 셸 스크립트 5개(11장) → <a href="../운영체제실습.html#s17">과목 페이지 17 · 18번</a></li></ul>
 </section>
 
     <nav class="wk-pager"><a class="prev" href="운영체제실습-7주차.html">‹ 이전 · <b>7주차</b><br><small>프로세스 · 서비스 · 도전문제 총정리 (중간고사 대비)</small></a><span></span></nav>
