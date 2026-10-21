@@ -99,18 +99,24 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">자료: 명령어 정리 스크립트(txt)</div>
 <section class="card" id="s1">
+<h2>🎨 2주차 그림으로 보기</h2>
+<div class="tip">강의자료 그림을 다시 그린 것 · 탭을 누르면 선이 그려지며 나타나고 <b>다음 ▶</b> 으로 한 단계씩 · 모든 주차 그림은 중간고사 정리 · 완전정리에</div>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/리눅스-그림정리.html?week=2" title="2주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/리눅스-그림정리.html?week=2" target="_blank" rel="noopener">🎬 2주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
 <h2>1. 기본 정보 및 시스템 탐색</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>whoami</code>(사용자명) · <code>pwd</code>(절대경로) · <code>tree</code>(디렉토리 트리, <code>tree / -L 4</code> 로 깊이 제한)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>ls</code>(목록) · <code>ls -l</code>(상세) · <code>ls -al</code>(숨김 포함) · <code>ls -i</code>(inode 번호)</li></ul>
 </section>
-<section class="card" id="s2">
+<section class="card" id="s3">
 <h2>2. 디렉토리 이동 (cd)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>cd ..</code> (상위) · <code>cd /home</code> (절대경로) · <code>cd rocky</code> (상대경로) · <code>cd ~</code> (홈 디렉토리)</li></ul>
 </section>
-<section class="card" id="s3">
+<section class="card" id="s4">
 <h2>3. 디렉토리 생성·삭제</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>mkdir 이름</code> (생성) · <code>mkdir a b c</code> (여러 개) · <code>mkdir -p a/b/c</code> (상위까지 계층 생성)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>rmdir 이름</code> (빈 디렉토리 삭제) · <code>rmdir -p a/b/c</code> (계층적 빈 디렉토리 삭제)</li><li><span class="wk-tag note">✍️ 필기</span> — <code>rm -rf 이름</code> : 비어있지 않은 디렉토리도 강제 삭제 (주의! 되돌릴 수 없음)</li></ul>
 </section>
-<section class="card" id="s4">
+<section class="card" id="s5">
 <h2>4. 시스템 종료</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — <code>poweroff</code> : 시스템 종료 및 전원 차단</li></ul>
 </section>

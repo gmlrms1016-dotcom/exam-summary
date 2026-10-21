@@ -435,7 +435,7 @@
     "use strict";
     // 그림마다: 탭 이름 · 강의자료 출처 · 단계 설명 (단계 번호 = SVG 의 data-s) · 아래 메모
     var FIGS = [
-        { id: "vm", tab: "① 호스트·게스트", src: "🔥 7주차 — <b>호스트 / 게스트 운영체제 중 하나 설명 (1문제)</b>",
+        { id: "vm", week: [1, 7], tab: "① 호스트·게스트", src: "🔥 7주차 — <b>호스트 / 게스트 운영체제 중 하나 설명 (1문제)</b>",
           steps: [
             "<b>하드웨어</b> — 실제 PC 의 CPU · 메모리 · 디스크",
             "<b>호스트 OS</b> — 실제 PC 에 설치된 운영체제 (내 PC 의 Windows · macOS)",
@@ -443,33 +443,33 @@
             "<b>게스트 OS</b> — 가상화 프로그램이 만든 <b>가상 머신 안</b>에 설치한 운영체제 (실습한 Rocky Linux)",
             "정리: <b>호스트 = 실제 PC · 가상화 프로그램을 돌리는 쪽</b> / <b>게스트 = 가상 머신 안</b>" ],
           note: "✍️ 서술 답 예시 — “호스트 운영체제는 실제 컴퓨터에 설치되어 VMware 같은 가상화 프로그램을 실행하는 운영체제이다 (예: 내 PC 의 Windows). 게스트 운영체제는 가상화 프로그램이 만든 가상 머신 안에 설치되어 실행되는 운영체제이다 (예: 실습한 Rocky Linux).” — 둘 중 하나만 써도 됨" },
-        { id: "tree", tab: "② 디렉터리", src: "1 · 2 · 3주차 · 4장 PPT 3쪽 — 디렉터리 구조 · 마운트",
+        { id: "tree", week: [1, 2, 3], tab: "② 디렉터리", src: "1 · 2 · 3주차 · 4장 PPT 3쪽 — 디렉터리 구조 · 마운트",
           steps: [
             "<b>/</b> = 루트 디렉터리(최상위) · 그 아래 폴더들 (윈도우는 C:\\ 처럼 드라이브 · 경로 구분은 \\)",
             "<b>/etc</b> = 설정 파일 — passwd · shadow · group (사용자) · crontab (예약) · yum.repos.d (dnf) · resolv.conf (DNS) · hosts",
             "<b>절대 경로</b> = / 부터 (<code>cd /home</code>) · <b>상대 경로</b> = 지금 위치부터 (<code>cd rocky</code>) · <b>.</b> 지금 · <b>..</b> 위 · <b>~</b> 내 홈",
             "<b>마운트</b> = 장치를 디렉터리 트리에 연결 — DVD(/dev/sr0) 가 /run/media/root/… 에 iso9660 · ro(읽기 전용)로 · 해제 <code>umount /dev/cdrom</code>" ],
           note: "숨김 파일 = 이름이 . 으로 시작 (<code>ls -al</code> 로 보임) · 🤖 폴더 아래 짧은 설명(부팅 · 장치 …)은 이해를 돕는 일반 지식이에요" },
-        { id: "perm", tab: "③ 권한", src: "3주차 · 4장 PPT 24 ~ 26쪽 — 파일 허가권 · 소유권",
+        { id: "perm", week: 3, tab: "③ 권한", src: "3주차 · 4장 PPT 24 ~ 26쪽 — 파일 허가권 · 소유권",
           steps: [
             "<code>ls -l</code> 한 줄 = 종류 · <b>권한 9글자</b>(소유자 u · 그룹 g · 기타 o 로 3개씩) · 링크 수 · 소유자 · 그룹 · 크기 · 날짜 · 이름",
             "r = 4 · w = 2 · x = 1 → <b>rwx = 111 = 7</b> · <b>r-x = 101 = 5</b> → <code>chmod 755</code> = rwxr-xr-x",
             "<code>chmod 644</code> = rw-r--r-- (기본) · 기호 모드 <code>chmod u+x 파일</code> · 소유자는 <code>chown</code> (권한은 chmod)" ],
           note: "진수 풀이: 6 = 110 = 4+2 → rw- · 4 = 100 → r-- · 7 = 111 = 4+2+1 → rwx" },
-        { id: "link", tab: "④ 링크", src: "🔥 3주차 · 4장 PPT 28쪽 · 교재 실습 9 (227 ~ 229쪽)",
+        { id: "link", week: 3, tab: "④ 링크", src: "🔥 3주차 · 4장 PPT 28쪽 · 교재 실습 9 (227 ~ 229쪽)",
           steps: [
             "<b>하드 링크</b> <code>ln basefile hardlink</code> — 같은 inode(1106188)에 이름이 하나 더 → 링크 수 2 · 크기 61 (같은 내용)",
             "<b>심볼릭 링크</b> <code>ln -s basefile softlink</code> — <b>새 inode</b>(1106189) · 안에는 원본의 <b>경로</b>만 (8바이트 = ‘basefile’ 8글자) · 이름을 따라가 원본을 엶",
             "원본을 지우거나 옮기면 → 하드 링크는 내용 그대로 · 심볼릭 링크는 <b>깨짐</b> (<code>그런 파일이나 디렉터리가 없습니다</code>)" ],
           note: "<code>ls -i</code> = inode 번호 · 심볼릭 = 윈도우의 <b>바로 가기</b> · ⚠️ 하드 링크는 ‘복사’ 가 아님 (같은 파일이라 한쪽을 고치면 다른 쪽도)" },
-        { id: "passwd", tab: "⑤ /etc/passwd", src: "🔥 3 · 4주차 · 4장 PPT 18 ~ 20쪽 · 도전 6-1 · 6-2 (마스터 유저 디렉터리)",
+        { id: "passwd", week: [3, 4], tab: "⑤ /etc/passwd", src: "🔥 3 · 4주차 · 4장 PPT 18 ~ 20쪽 · 도전 6-1 · 6-2 (마스터 유저 디렉터리)",
           steps: [
             "<b>/etc/passwd 7칸</b> — 이름 : 암호(x → shadow) : <b>UID</b> : <b>GID</b> : 설명 : <b>홈</b> : 셸",
             "옵션이 바꾸는 칸 — <code>usermod -l 새이름 기존이름</code> 이름 · <code>-u</code> UID · <code>-g</code> 그룹 · <code>-d</code> 홈 · <code>-s</code> 셸",
             "🔥 마스터 유저 디렉터리 — 만들 때 <code>useradd -d /work_06 master</code> · 바꿀 때 <code>usermod -d /home/workspace_06 master</code> · 확인 <code>grep master /etc/passwd</code>",
             "<b>/etc/shadow</b> = 암호 해시 (! · * 로 시작하면 로그인 불가) · <b>/etc/group</b> = 그룹명 : x : GID : 소속 사용자" ],
           note: "삭제 <code>userdel -r 이름</code> = 홈까지 · <code>passwd 이름</code> = 암호 · <code>chage -M 30</code> = 암호 최대 사용 날 수 · 🤖 UID 1001 은 예시 값" },
-        { id: "dnf", tab: "⑥ DNF 흐름", src: "🔥 4주차 수업 화면 — 그림 4-111 DNF 작동 흐름도 (시험문제)",
+        { id: "dnf", week: 4, tab: "⑥ DNF 흐름", src: "🔥 4주차 수업 화면 — 그림 4-111 DNF 작동 흐름도 (시험문제)",
           steps: [
             "① <code>dnf install 패키지</code> 입력",
             "② <code>/etc/yum.repos.d/</code> 의 <b>repo 파일</b>을 열어 <b>URL 주소</b> 확인",
@@ -479,14 +479,14 @@
             "⑥ <b>‘y’</b> 를 입력하면 설치에 필요한 <b>패키지 파일</b> 요청",
             "⑦ 패키지 파일을 다운로드해서 <b>자동 설치</b>" ],
           note: "외우는 법: <b>목록(③④) 먼저, 파일(⑥⑦)은 y 를 누른 뒤</b> · rpm = 의존성을 직접 해결 / dnf = 의존성까지 <b>자동</b>" },
-        { id: "cron", tab: "⑦ 크론 · at", src: "🔥 5주차 · 4장 PPT 46 · 47쪽 — 백업(크론) · 실습 13",
+        { id: "cron", week: 5, tab: "⑦ 크론 · at", src: "🔥 5주차 · 4장 PPT 46 · 47쪽 — 백업(크론) · 실습 13",
           steps: [
             "<code>/etc/crontab</code> 한 줄 = <b>분 시 일 월 요일 사용자 명령</b> (🤖 값의 범위는 일반 지식)",
             "<code>01 3 15 * *</code> = <b>매월 15일 03:01</b> · * = 매번",
             "백업 흐름 — crond 서비스가 정해진 시각에 스크립트 실행 → <code>tar cfJ /backup/… /home</code> · crontab 을 고치면 <code>systemctl restart crond</code>",
             "<b>cron = 반복</b> / <b>at = 한 번만</b> — <code>at 4:00 am tomorrow</code> → <code>at&gt;</code> 에 명령 → Ctrl + D · 목록 <code>at -l</code> · 취소 <code>atrm 1</code>" ],
           note: "<code>run-parts /etc/cron.monthly</code> = 그 폴더의 <b>실행 권한 있는</b> 파일을 모두 실행 → 스크립트에 chmod 755" },
-        { id: "runlevel", tab: "⑧ 런레벨", src: "🔥 7주차 — 강의자료에 없지만 시험에 나옴 · 4장 PPT 8쪽",
+        { id: "runlevel", week: 7, tab: "⑧ 런레벨", src: "🔥 7주차 — 강의자료에 없지만 시험에 나옴 · 4장 PPT 8쪽",
           steps: [
             "<b>0 = 종료</b> · <b>6 = 재부팅</b>",
             "<b>1 = 단일 사용자</b> (복구 모드)",
@@ -494,13 +494,13 @@
             "🤖 2 · 4 는 Rocky 에서 3 과 같은 모드(multi-user)",
             "<code>init</code> 뒤의 숫자 = 런레벨 · 종료 <code>shutdown -P now</code> · <code>halt -p</code> · <code>init 0</code> / 재부팅 <code>shutdown -r now</code> · <code>reboot</code> · <code>init 6</code> · 확인 <code>/lib/systemd/system/runlevel?.target</code>" ],
           note: "외우기: <b>0 끄기 · 1 혼자(복구) · 3 글자 · 5 그림 · 6 다시</b>" },
-        { id: "process", tab: "⑨ 프로세스", src: "🔥 6주차 시험 용어 · 7주차 필기 · 4장 PPT 59 · 60쪽",
+        { id: "process", week: [6, 7], tab: "⑨ 프로세스", src: "🔥 6주차 시험 용어 · 7주차 필기 · 4장 PPT 59 · 60쪽",
           steps: [
             "🔥 <b>프로세스</b> = 하드디스크에 저장된 실행코드(프로그램)가 <b>메모리에 로딩되어 활성화된 것</b>",
             "상태 5가지 — 생성 · 준비 · 실행 · 대기 · 종료 · 🤖 화살표: CPU 를 받으면 실행 · 차례가 끝나면 준비 · 입출력을 기다리면 대기 → 끝나면 준비",
             "<b>PID</b> = 시스템 전체의 프로세스 번호 (<code>ps -ef</code> 2번째 칸 · <code>kill -9 PID</code>) / <b>작업 번호</b> = 이 터미널의 <code>jobs</code> [1] (<code>fg 1</code>)" ],
           note: "✍️ 필기 순서 = 생성 → 실행 → (<b>준비</b>) → 대기 → 종료 · service = <b>데몬</b>(서버 프로세스 · 거의 백그라운드) · 부모를 kill 하면 자식도 kill · <code>pstree</code>" },
-        { id: "jobs", tab: "⑩ 앞 ↔ 뒤", src: "🔥 6 · 7주차 — 포그라운드 → 백그라운드 변경 (시험 예시)",
+        { id: "jobs", week: [6, 7], tab: "⑩ 앞 ↔ 뒤", src: "🔥 6 · 7주차 — 포그라운드 → 백그라운드 변경 (시험 예시)",
           steps: [
             "명령을 그냥 실행 → <b>포그라운드</b>(앞) — 끝날 때까지 터미널을 차지",
             "<b>Ctrl + Z</b> → 작업을 <b>멈춤</b> (종료 아님)",
@@ -509,7 +509,7 @@
             "<b>명령 &amp;</b> → 처음부터 백그라운드로 실행",
             "끝내기 — 앞 작업은 <b>Ctrl + C</b> · 뒤 작업은 <code>ps -ef | grep yes</code> 로 PID 를 찾아 <b>kill -9 PID</b> · <code>jobs</code> = 작업 목록" ],
           note: "헷갈리는 짝: <b>Ctrl + Z = 멈춤</b> ↔ <b>Ctrl + C = 종료</b> · <b>bg = 뒤에서 계속</b> ↔ <b>fg = 앞으로</b>" },
-        { id: "pipe", tab: "⑪ 파이프", src: "6주차 · 4장 PPT 58쪽 — 파이프 · 필터 · 리디렉션",
+        { id: "pipe", week: 6, tab: "⑪ 파이프", src: "6주차 · 4장 PPT 58쪽 — 파이프 · 필터 · 리디렉션",
           steps: [
             "<b>파이프 |</b> — 앞 명령의 출력을 뒤 명령의 입력으로: <code>ls -l /etc | more</code> = 한 화면씩",
             "<b>필터</b> — 필요한 것만 걸러 줌: <code>ps -ef | grep bash</code> (grep · sort · wc · tail · awk · sed)",
@@ -517,20 +517,20 @@
             "<b>&lt;</b> 입력 리디렉션 — <code>sort &lt; list.txt &gt; out.txt</code>",
             "<code>yes &gt; /dev/null</code> = 출력을 버림 (프로세스 실습용)" ],
           note: "🤖 <code>&gt;</code> 는 파일을 새로 덮어쓰고, <code>&gt;&gt;</code> 는 뒤에 이어 써요" },
-        { id: "sh", tab: "⑫ sh if 문", src: "🔥 7주차 — sh 문제 (출력결과 · 파일 존재 · 사이즈 체크 if문) · 6주차 andor.sh",
+        { id: "sh", week: [6, 7], tab: "⑫ sh if 문", src: "🔥 7주차 — sh 문제 (출력결과 · 파일 존재 · 사이즈 체크 if문) · 6주차 andor.sh",
           steps: [
             "andor.sh — <code>[ -f $fname ]</code> 일반 파일이고 <b>&amp;&amp;</b> <code>[ -s $fname ]</code> 크기가 0 보다 크면 <code>head -5</code> · 하나라도 거짓이면 else",
             "내용 있는 파일 → 앞 5줄 · <b>빈 파일</b> → -s 거짓 → else · 없는 파일 → -f 거짓 → else",
             "따옴표 — <code>\"$v\"</code> = 값 · <code>'$v'</code> · <code>\\$v</code> = 글자 그대로 / 변수는 모두 문자열 → <code>expr</code> 로만 계산 (띄어쓰기 필수)" ],
           note: "조건: <code>-e</code> 있으면 · <code>-f</code> 일반 파일 · <code>-d</code> 디렉터리 · <code>-s</code> 크기 &gt; 0 · <code>[</code> 뒤 · <code>]</code> 앞 띄어쓰기 필수 · if → then → else → <b>fi</b> (출력값은 직접 실행해서 확인)" },
-        { id: "vi", tab: "⑬ vi 모드", src: "3주차 · 4장 PPT 12 ~ 15쪽 · 작년 튜터링 서술형",
+        { id: "vi", week: 3, tab: "⑬ vi 모드", src: "3주차 · 4장 PPT 12 ~ 15쪽 · 작년 튜터링 서술형",
           steps: [
             "<code>vi 파일</code> → <b>명령 모드</b>로 시작 (커서 이동 · 삭제 · 복사)",
             "<b>i · a · o</b> → 입력 모드 (글자 입력) · <b>Esc</b> → 명령 모드로",
             "<b>:</b> → 마지막 행 모드 (<code>:wq</code> 저장하고 끝 · <code>:q!</code> 저장 안 하고 끝)",
             "명령 모드 <code>dd</code> 줄 삭제 · <code>/hello</code> 찾기 / 마지막 행 <code>:set number</code> 행 번호 · <code>:%s/기존/새/g</code> 전체 바꾸기" ],
           note: "nano 는 Ctrl + X → Y → Enter = 저장하고 나가기 (3주차 필기)" },
-        { id: "tar", tab: "⑭ tar 압축", src: "4장 PPT 42 · 43쪽 — 파일의 압축과 묶기",
+        { id: "tar", week: 5, tab: "⑭ tar 압축", src: "4장 PPT 42 · 43쪽 — 파일의 압축과 묶기",
           steps: [
             "<b>묶기</b> <code>tar cvf my.tar 파일들</code> — 여러 파일을 한 덩어리로 (압축은 아님)",
             "<b>압축</b> — xz · bzip2 · gzip · 한 번에 <code>tar cvfJ my.tar.xz /etc/sysconfig/</code> (J = xz)",
@@ -621,6 +621,31 @@
         tell();
     }
 
+    // 주차로 골라 보기 — ?week=5 = 그 주차 그림만 · ?weeks=1-7 = 그 범위 (주차 페이지 · 중간고사 · 기말고사 · 완전정리가 같은 그림 파일을 나눠 씀 · README 🎨)
+    (function () {
+        var q = location.search, m1 = /[?&]week=(\d+)/.exec(q), m2 = /[?&]weeks=(\d+)-(\d+)/.exec(q);
+        if (!m1 && !m2) return;
+        var lo = m1 ? +m1[1] : +m2[1], hi = m1 ? +m1[1] : +m2[2];
+        var keep = FIGS.filter(function (f) { return [].concat(f.week).some(function (w) { return w >= lo && w <= hi; }); });
+        if (keep.length) FIGS = keep;
+    })();
+
+    // 그림 검사 — 콘솔에서 figCheck() → 글자끼리 겹침 · 600 폭 밖으로 넘침 목록 (없으면 [] · 폰 폭에서도 한 번 더)
+    window.figCheck = function () {
+        var out = [];
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (sv) {
+            var wasHidden = sv.hasAttribute("hidden"); sv.removeAttribute("hidden");
+            var vb = sv.viewBox.baseVal, ts = Array.prototype.map.call(sv.querySelectorAll("text"), function (t) { return { t: t, b: t.getBBox() }; });
+            ts.forEach(function (o) { if (o.b.x < -1 || o.b.x + o.b.width > vb.width + 1) out.push(sv.getAttribute("data-fig") + " 넘침: " + o.t.textContent.slice(0, 24)); });
+            for (var i = 0; i < ts.length; i++) for (var j = i + 1; j < ts.length; j++) {
+                var a = ts[i].b, c = ts[j].b, ox = Math.min(a.x + a.width, c.x + c.width) - Math.max(a.x, c.x), oy = Math.min(a.y + a.height, c.y + c.height) - Math.max(a.y, c.y);
+                if (ox > 2 && oy > 3) out.push(sv.getAttribute("data-fig") + " 겹침: " + ts[i].t.textContent.slice(0, 16) + " × " + ts[j].t.textContent.slice(0, 16));
+            }
+            if (wasHidden) sv.setAttribute("hidden", "");
+        });
+        return out;
+    };
+
     FIGS.forEach(function (f, i) {
         var b = document.createElement("button"); b.type = "button"; b.textContent = f.tab;
         b.addEventListener("click", function () { show(i, true); try { history.replaceState(null, "", "#" + f.id); } catch (e) {} });
@@ -647,5 +672,6 @@
     }
 })();
 </script>
+<script src="../../figink.js?v=1"></script>
 </body>
 </html>

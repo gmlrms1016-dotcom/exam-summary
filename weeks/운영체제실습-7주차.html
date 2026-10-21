@@ -99,6 +99,12 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">🐧 <b>운영체제실습 7주차 (10/15)</b> — 앞부분: <b>프로세스의 개념과 상태</b> · 포그라운드 / 백그라운드 · <code>ps</code> 옵션 · 서비스(데몬) · <code>systemctl</code> / 뒷부분: <b>강의시간에 도전문제를 쭉 풀었어요</b> (2 · 3 · 5 · 6 · 10 · 11장)<br>노션 7주차 필기 + 7주차 폴더(도전문제 PDF 8개 · 2 · 3 · 5 · 6 · 11장 PPT) 기준이에요. 정답은 <b>문제 지시문 그대로</b>예요 — 교수님 PPT 의 도전 문제 정답 슬라이드는 참고만 했고, 문제와 다르거나 틀린 곳(오타 · 계산 실수 · ‘자세하게’ 인데 -l 빠짐 · 문제와 다른 디렉터리 이름)은 ⚠️ 로 적었어요. 셸 스크립트 모범답안은 전부 실제로 실행한 결과예요.<br>⌨️ <b>직접 풀기</b> — <a href="../운영체제실습.html#s17">과목 페이지 17번</a> 에서 명령을 <b>한 줄에 하나씩</b> 쓰고 채점 (Shift+Enter = 다음 줄 · Enter = 확인) · 같은 문제가 🔒 실제시험에도 있어요.</div>
 <section class="card" id="s1">
+<h2>🎨 7주차 그림으로 보기</h2>
+<div class="tip">강의자료 그림을 다시 그린 것 · 탭을 누르면 선이 그려지며 나타나고 <b>다음 ▶</b> 으로 한 단계씩 · 모든 주차 그림은 중간고사 정리 · 완전정리에</div>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/리눅스-그림정리.html?week=7" title="7주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/리눅스-그림정리.html?week=7" target="_blank" rel="noopener">🎬 7주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
 <h2>🔥 1. 시험에 나오는 것 — 강의자료에는 없음 (✍️ 필기)</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> 오늘은 강의시간에 <b>도전문제</b> 쭉 풀음 · <b>도전문제 5-4 는 안 배움 → 시험에 안 나옴</b> · <b>6장은 중요</b><ul><li>⚠️ 6주차 필기는 “시험범위 1 · 2 · 3 · 4 · 5 · 7장 (6장 빠짐)” 이었는데 오늘은 <b>“6장은 중요”</b> → 6장(관리자 권한 실행 — 사용자 · 그룹 관리)도 꼭 공부하기</li></ul></li><li><span class="wk-tag note">✍️ 필기</span> 강의자료에는 없지만 <b>시험에 나오는 것들</b></li></ul>
 <table class="ref">
@@ -113,7 +119,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li><span class="wk-tag note">✍️ 필기</span> <b>시험 예시</b> — <b>1 ~ 10 객관식</b> · 어떤 작업을 <b>포그라운드에서 백그라운드로 변경</b> · <b>마스터 유저로 디렉터리 설정</b> … · <b>셸 스크립트 비중은 낮음</b> (코드를 읽고 출력결과만 알면 괜찮음)</li><li><span class="wk-tag fix">⚠️ 정정</span> — 필기의 “심봉일링크” → <b>심볼릭 링크</b></li></ul>
 </section>
-<section class="card" id="s2">
+<section class="card" id="s3">
 <h2>2. 프로세스 — 개념과 상태 (✍️ 필기)</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> 프로세스의 상태 = <b>생성 · 실행 · 준비 · 대기 · 종료</b></li><li><span class="wk-tag note">✍️ 필기</span> 상태가 있는 이유 — “CPU 는 멀티가 안 되고 순차적으로 처리를 하니 하나씩 <b>생성 → 실행 → 준비 → 대기 → 종료</b> 라는 절차를 거침”<ul><li>🤖 보충 — CPU(코어 하나)는 한 순간에 프로세스 <b>하나만</b> 실행해요. 그래서 여러 프로세스가 번갈아 쓰려면 CPU 차례를 기다리는 <b>준비</b>, 입출력(키보드 입력 · 파일 읽기)이 끝나길 기다리는 <b>대기</b> 상태가 필요해요</li></ul></li></ul>
 <table class="ref">
@@ -132,7 +138,7 @@ systemctl start sshd.service       # 서비스 시작
 systemctl restart sshd.service     # 서비스 다시 시작 (stop + start)
 systemctl enable sshd.service      # 부팅할 때 자동으로 시작되게</code></pre>
 </section>
-<section class="card" id="s3">
+<section class="card" id="s4">
 <h2>3. 도전문제 — 명령 여러 줄 (2 · 3 · 5 · 6 · 10장)</h2>
 <div class="tip">문제는 7주차 폴더 PDF 그대로 · 정답 명령은 접어 두었어요 (먼저 풀어 보기). $ = 일반 사용자 · # = root. <a href="../운영체제실습.html#s17">과목 페이지 17번</a> 에서 바로 채점할 수 있어요.</div>
 <h3>2장 리눅스 명령어 입문</h3>
@@ -503,7 +509,7 @@ $ ls -l</code></pre>
 <ul><li>🤖 PPT 정답 슬라이드가 없어 6주차 수업(서비스 파일 ls -l *.service · ps -ef | grep)과 7주차 필기(systemctl start · stop · restart)로 만든 답 · 2번 ‘정보 확인’ = 자세히(ls -l) · 4번은 stop + status 두 줄 → 명령 7줄 · ps -ef 의 PID · PPID 칸</li></ul>
 </details>
 </section>
-<section class="card" id="s4">
+<section class="card" id="s5">
 <h2>4. 도전문제 — 11장 셸 스크립트</h2>
 <div class="tip">✍️ 시험에서 셸 스크립트는 <b>비중이 낮고 코드를 읽고 출력결과만 알면 괜찮다</b>고 했어요. 모범답안은 교수님 PPT 정답 슬라이드 기준(오류는 ⚠️ 로 고침) · 실행 결과는 직접 실행한 것 (터미널에서는 입력한 값도 화면에 보여요).</div>
 <h4>도전 11-1 · 다음 항목에서 주어진 지시사항을 수행하시오.</h4>
