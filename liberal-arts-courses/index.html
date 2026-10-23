@@ -193,8 +193,19 @@
         .cheer-in svg { width:16px; height:16px; flex:0 0 auto; opacity:.7; }
         .cheer-t { transition:opacity .45s var(--ease); }
         .cheer.is-fading .cheer-t { opacity:0; }
+        .cheer.is-quick .cheer-t { transition-duration:.16s; }
+        /* 누르면 카드 · 하트가 살짝 커졌다 돌아오고 문구가 바뀜 (2026-10-23) */
+        .cheer-in { cursor:pointer; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none;
+                    transition:box-shadow .2s var(--ease); touch-action:manipulation; }
+        .cheer-in svg { transform-origin:50% 55%; }
+        @media (hover:hover){ .cheer-in:hover { box-shadow:var(--sh-2); } }
+        .cheer-in:focus-visible { outline:2px solid var(--main); outline-offset:3px; }
+        .cheer-in.pop { animation:cheer-pop .46s cubic-bezier(.34,1.56,.64,1); }
+        .cheer-in.pop svg { animation:cheer-heart .56s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes cheer-pop { 0% { transform:scale(1); } 38% { transform:scale(1.055); } 100% { transform:scale(1); } }
+        @keyframes cheer-heart { 0% { transform:scale(1); } 32% { transform:scale(1.42); } 58% { transform:scale(.92); } 100% { transform:scale(1); } }
         @media (max-width:480px){ .cheer-in { font-size:12.5px; padding:10px 15px; } }
-        @media (prefers-reduced-motion:reduce){ .cheer-t { transition:none; } }
+        @media (prefers-reduced-motion:reduce){ .cheer-t { transition:none; } .cheer-in.pop, .cheer-in.pop svg { animation:none; } }
 
         /* ───── 학사일정 (haksa.json 목록 · 전체 달력은 접어 둔 iframe) ───── */
         .haksa { margin:0 0 22px; background:var(--card); border:1px solid var(--line);
@@ -365,9 +376,9 @@
         </div>
         <!-- 응원 한마디 · 7.777777초마다 랜덤 교체 (문구·로직은 파일 하단 script 참고) -->
         <div class="cheer" id="cheer">
-            <p class="cheer-in">
+            <p class="cheer-in" role="button" tabindex="0" title="눌러서 다른 응원 보기">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 20.3s-7.4-4.6-7.4-9.5A4.1 4.1 0 0 1 12 8.2a4.1 4.1 0 0 1 7.4 2.6c0 4.9-7.4 9.5-7.4 9.5Z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-                <span class="cheer-t" id="cheer-text">오늘 하루도 수고했어요.</span>
+                <span class="cheer-t" id="cheer-text" aria-live="polite">오늘 하루도 수고했어요.</span>
             </p>
         </div>
         <p class="foot">COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
@@ -1696,12 +1707,33 @@
     }
     /* setInterval 은 밀리초 정수만 받아 7777.777 이 7777 로 잘리고 조금씩 밀린다 →
        시작 시각 + n × 7777.777ms 를 매번 다시 계산해서 예약 (한 번 한 번은 1ms 안쪽, 오래 켜 둬도 어긋나지 않음) */
-    var t0 = performance.now(), n = 0;
-    (function schedule() {
+    var t0 = performance.now(), n = 0, timer = 0;
+    function schedule() {
         var now = performance.now();
         n = Math.max(n + 1, Math.floor((now - t0) / INTERVAL) + 1);   // 백그라운드에서 오래 멈췄다 돌아오면 밀린 차례는 건너뜀
-        setTimeout(function () { swap(); schedule(); }, t0 + n * INTERVAL - now);
-    })();
+        timer = setTimeout(function () { swap(); schedule(); }, t0 + n * INTERVAL - now);
+    }
+    schedule();
+
+    /* 누르면(클릭 · 탭 · Enter · Space) 카드와 하트가 살짝 커졌다 돌아오고 새 문구로 바뀜 (2026-10-23)
+       → 바로 다음 자동 교체가 겹치지 않게 7.777777초 타이머도 처음부터 다시 */
+    var card = box.querySelector(".cheer-in"), pokeT = 0;
+    function poke() {
+        card.classList.remove("pop"); void card.offsetWidth; card.classList.add("pop");   // 연달아 눌러도 매번 처음부터
+        box.classList.add("is-quick", "is-fading");
+        clearTimeout(pokeT);
+        pokeT = setTimeout(function () {
+            el.textContent = next();
+            box.classList.remove("is-fading");
+            setTimeout(function () { box.classList.remove("is-quick"); }, 170);
+        }, 160);
+        clearTimeout(timer); t0 = performance.now(); n = 0; schedule();
+    }
+    if (card) {
+        card.addEventListener("click", poke);
+        card.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); poke(); } });
+        card.addEventListener("animationend", function (e) { if (e.target === card) card.classList.remove("pop"); });
+    }
 })();
 </script>
 </body>
