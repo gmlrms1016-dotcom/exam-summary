@@ -12,7 +12,13 @@
  *  - 자: 한 손가락 · 마우스로 끌어 옮기고, 두 손가락 · 휠 · 손잡이로 돌림(각도 표시 · 0 · 45 · 90° 에 착 붙음) → 자 가장자리를 따라 그으면 곧은 선
  *  - 모양 인식: 그리다가 멈추고 꾹 → 선 · 원(타원) · 사각형 · 삼각형으로 바뀜
  *  - 펜슬을 화면 가까이 대면(호버) 촉 크기 · 색 미리보기 · 손가락으로 그리기 · 마우스로 그리기 · 필기 숨기기
- *  - 필기 켜기 · 끄기 (막대 맨 앞 펜 버튼 · 2026-10-19 '애플펜슬로 스크롤하고 싶은 사람') → 끄면 펜슬도 손가락처럼 스크롤 · 쓴 필기는 그대로 보임
+ *  - 필기 켜기 · 끄기 (2026-10-19 '애플펜슬로 스크롤하고 싶은 사람') → 끄면 펜슬도 손가락처럼 스크롤 · 쓴 필기는 그대로 보임
+ *  - v4 (2026-10-23 사용자: 'UI · UX 구분이 안 갈 정도로 똑같이') — 맥의 아이패드 시뮬레이터(iPadOS 27 미리보기)를 띄워 실제 화면을 보고 맞춤
+ *    · 오른쪽 위 ⓐ 마크업 버튼 = 필기 켜기 · 끄기 (켜면 파란 동그라미 + 아래에서 막대가 올라옴 · 끄면 막대가 사라지고 펜슬로 스크롤)
+ *    · 알약 모양 유리 막대: 실행 취소 · 실행 복귀 | 펜 · 파인라이너 · 마커 · 지우개 · 연필 · 자 (옆으로 밀면 수채화 · 크레용 · 만년필 · 올가미) | 색 2 × 3 (검정 · 파랑 · 초록 / 노랑 · 빨강 · 색상환) | + · ⋯
+ *    · 도구 한 번 더 → 손글씨 견본 굵기 5단계 + 체크무늬 불투명도 · 지우개 = 픽셀 지우개 | 대상 지우개 + 크기 5
+ *    · + = 스티커 · 텍스트 · 서명 · 모양 · 확대경 추가 · ⋯ = 자동 최소화 · 손가락으로 그리기 · 펜슬 설정…
+ *    · 위 손잡이를 끌어 위 · 아래로 · 모서리로 끌면 지금 도구가 든 유리 동그라미로 작게 (누르면 다시 펼침)
  *  - 필기는 그 기기 브라우저(IndexedDB `study-ink`)에 페이지 주소별로 저장 · 설정은 localStorage `ink:prefs2`
  *  - 획 · 넣은 것마다 그 자리의 글 블록(문단 · 코드 · 표 · 접기 …)에 붙여 저장 → 스크롤 · 접기 열고 닫기에 같이 움직임
  */
@@ -42,9 +48,9 @@
     /* ===================== 설정 (모든 페이지 공통) ===================== */
     var DEF = {
         tool: "pen", lastDraw: "pen", open: true, finger: false, mouse: false, hidden: false, autoMin: false, off: false,
-        dock: "bottom", ruler: false, rul: { cx: 0, cy: 0, ang: 0 },
-        pen: { c: "#ff3b30", w: 1.8, o: 1 }, monoline: { c: "auto", w: 2, o: 1 }, fountain: { c: "#0a84ff", w: 3.5, o: 1 },
-        marker: { c: "#ffcc00", w: 18, o: 0.35 }, pencil: { c: "auto", w: 2, o: 0.85 }, crayon: { c: "#34c759", w: 8, o: 0.9 },
+        dock: "bottom", corner: "bl", ruler: false, rul: { cx: 0, cy: 0, ang: 0 },
+        pen: { c: "auto", w: 1.8, o: 1 }, monoline: { c: "auto", w: 2, o: 1 }, fountain: { c: "auto", w: 3.5, o: 1 },
+        marker: { c: "#ffcc00", w: 18, o: 0.35 }, pencil: { c: "auto", w: 2, o: 0.85 }, crayon: { c: "#ff3b30", w: 8, o: 0.9 },
         watercolor: { c: "#0a84ff", w: 22, o: 0.5 },
         eraser: { mode: "pixel", w: 22 },
         recent: [], saved: [], cpTab: "grid"
@@ -65,8 +71,9 @@
         if (TOOLS.indexOf(out.tool) < 0) out.tool = "pen";
         if (INK.indexOf(out.lastDraw) < 0) out.lastDraw = "pen";
         if (out.eraser.mode === "stroke") out.eraser.mode = "object";
-        if (!/^(bottom|top|left|right)$/.test(out.dock)) out.dock = "bottom";
-        if (!out.saved.length && out.recent.length) out.saved = out.recent.slice(0, 10);
+        if (!/^(bottom|top)$/.test(out.dock)) out.dock = "bottom";          // v4: 위 · 아래에만 붙음 (예전 왼쪽 · 오른쪽은 아래로)
+        if (!/^(tl|tr|bl|br)$/.test(out.corner)) out.corner = "bl";
+        if (!out.saved.length) out.saved = out.recent.length ? out.recent.slice(0, 10) : ["#0a84ff", "#34c759", "#ffcc00", "#ff3b30"];   // 내 색 기본 = Apple 처럼 파랑 · 초록 · 노랑 · 빨강
         return out;
     }
     function savePrefs() { try { localStorage.setItem("ink:prefs2", JSON.stringify(P)); } catch (e) {} }
@@ -1302,78 +1309,72 @@
         snapshot(); strokes = []; sel = []; osel = null; commit();
     }
 
-    /* ===================== 아이콘 (직접 그림 · 아이패드 도구처럼 세워 둔 모양) ===================== */
-    var BODY = 'fill="var(--ink-body)" stroke="var(--ink-edge)" stroke-width=".9" stroke-linejoin="round"';
-    function toolIcon(t, tip) {                                // 촉 색 = 지금 색
-        var o = '<svg viewBox="0 0 24 40" class="ink-tool-svg" aria-hidden="true">';
+    /* ===================== 도구 그림 — iPadOS 27 미리보기 도구 막대 (2026-10-23 · 아이패드 시뮬레이터 실제 화면을 보고 맞춤) =====================
+       라이트 = 흰 몸통 · 다크 = 검은 몸통 (Apple 과 같음) · 촉 · 띠 = 지금 색 · 마커 · 수채화는 몸통에 불투명도 숫자
+       몸통은 막대 아래 가장자리 밖까지 이어져 잘려 보임 · 고른 도구는 위로 쑥 올라옴 */
+    function isDark() { return root.getAttribute("data-theme") === "dark"; }
+    function toolArt(t, tip, op) {
+        var D = isDark(), bd = D ? "#1d1d20" : "#fbfbfc", bd2 = D ? "#2a2a2e" : "#ededf0", ed = D ? "rgba(255,255,255,.16)" : "rgba(0,0,0,.13)";
+        var mt = D ? "#46464b" : "#d8d8dd", lab = D ? "#8e8e93" : "#8e8e93", hi = D ? "rgba(255,255,255,.07)" : "rgba(255,255,255,.85)";
+        var B2 = 'fill="' + bd + '" stroke="' + ed + '" stroke-width=".8"';
+        var shine = '<rect x="10.4" y="40" width="2.2" height="56" fill="' + hi + '"/>';
+        var o = '<svg viewBox="0 0 32 96" class="ink-art" aria-hidden="true">';
+        var pct = op != null ? '<text x="16" y="56" text-anchor="middle" font-size="7.4" font-weight="600" fill="' + lab + '" font-family="-apple-system,sans-serif">' + Math.round(op * 100) + "</text>" : "";
         if (t === "pen") return o +
-            '<path d="M7.6 15.5 12 3.2l4.4 12.3Z" fill="' + tip + '" stroke="var(--ink-edge)" stroke-width=".7" stroke-linejoin="round"/>' +
-            '<path d="M12 7.2v5.2" stroke="var(--ink-body)" stroke-width=".9" stroke-linecap="round"/><circle cx="12" cy="12.6" r=".9" fill="var(--ink-body)"/>' +
-            '<path d="M7.2 15.5h9.6v3.6H7.2Z" fill="var(--ink-metal)" stroke="var(--ink-edge)" stroke-width=".7"/>' +
-            '<path d="M6.8 19.1h10.4V40H6.8Z" ' + BODY + "/></svg>";
+            '<path d="M16 3.5 23.2 38H8.8Z" ' + B2 + ' stroke-linejoin="round"/><path d="M16 3.5 18.1 13.4H13.9Z" fill="' + tip + '"/>' +
+            '<path d="M8.8 38H23.2V96H8.8Z" ' + B2 + "/>" + shine + '<rect x="8.8" y="47" width="14.4" height="3.2" fill="' + tip + '"/></svg>';
         if (t === "monoline") return o +
-            '<path d="M9.2 12.5 11 4.4h2l1.8 8.1Z" fill="var(--ink-metal)" stroke="var(--ink-edge)" stroke-width=".7" stroke-linejoin="round"/>' +
-            '<path d="M11.1 4.6h1.8v-1.6a.9.9 0 0 0-1.8 0Z" fill="' + tip + '"/>' +
-            '<path d="M7.4 12.5h9.2v3.2H7.4Z" fill="' + tip + '" stroke="var(--ink-edge)" stroke-width=".7"/>' +
-            '<path d="M7.4 15.7h9.2V40H7.4Z" ' + BODY + "/></svg>";
-        if (t === "fountain") return o +
-            '<path d="M12 2.6c2.6 3.4 4.4 7.6 4.4 12.4H7.6C7.6 10.2 9.4 6 12 2.6Z" fill="' + tip + '" stroke="var(--ink-edge)" stroke-width=".7" stroke-linejoin="round"/>' +
-            '<path d="M12 6.4v5.4" stroke="var(--ink-body)" stroke-width=".8" stroke-linecap="round"/><circle cx="12" cy="12.4" r="1" fill="var(--ink-body)"/>' +
-            '<path d="M7.2 15h9.6v4.2H7.2Z" fill="var(--ink-metal)" stroke="var(--ink-edge)" stroke-width=".7"/>' +
-            '<path d="M6.6 19.2h10.8V40H6.6Z" ' + BODY + "/></svg>";
-        if (t === "pencil") return o +
-            '<path d="M7.4 15.2 12 3.4l4.6 11.8Z" fill="#e2c296" stroke="var(--ink-edge)" stroke-width=".7" stroke-linejoin="round"/>' +
-            '<path d="M10.6 7 12 3.4 13.4 7Z" fill="' + tip + '"/>' +
-            '<path d="M7.4 15.2h9.2V40H7.4Z" ' + BODY + "/>" +
-            '<path d="M10.5 15.2V40M13.5 15.2V40" stroke="var(--ink-edge)" stroke-width=".45" opacity=".6"/>' +
-            '<path d="M7.4 15.2h9.2v2.6H7.4Z" fill="' + tip + '" opacity=".9"/></svg>';
-        if (t === "crayon") return o +
-            '<path d="M8 13.5c0-4.6 1.6-8.6 4-10.4 2.4 1.8 4 5.8 4 10.4Z" fill="' + tip + '" stroke="var(--ink-edge)" stroke-width=".7" stroke-linejoin="round"/>' +
-            '<path d="M7.2 13.5h9.6V40H7.2Z" fill="' + tip + '" stroke="var(--ink-edge)" stroke-width=".7"/>' +
-            '<path d="M7.2 17h9.6v17H7.2Z" fill="var(--ink-body)" opacity=".85"/>' +
-            '<path d="M7.2 20h9.6M7.2 31h9.6" stroke="' + tip + '" stroke-width="1.2"/></svg>';
-        if (t === "watercolor") return o +
-            '<path d="M12 2.2c1.9 2.6 3.2 5.6 3.2 8.4 0 1.8-1.4 3-3.2 3s-3.2-1.2-3.2-3c0-2.8 1.3-5.8 3.2-8.4Z" fill="' + tip + '" stroke="var(--ink-edge)" stroke-width=".7" stroke-linejoin="round"/>' +
-            '<path d="M8.4 13.4h7.2l-.6 4H9Z" fill="var(--ink-metal)" stroke="var(--ink-edge)" stroke-width=".7" stroke-linejoin="round"/>' +
-            '<path d="M9 17.4h6l.6 22.6H8.4Z" ' + BODY + "/></svg>";
+            '<rect x="15" y="6" width="2" height="10" rx=".6" fill="' + tip + '"/><path d="M12.6 16h6.8v7h-6.8Z" fill="' + mt + '" stroke="' + ed + '" stroke-width=".6"/>' +
+            '<path d="M11.2 23h9.6l2.4 15H8.8Z" ' + B2 + ' stroke-linejoin="round"/><path d="M8.8 38H23.2V96H8.8Z" ' + B2 + "/>" + shine +
+            '<rect x="8.8" y="50" width="14.4" height="3" fill="' + tip + '"/></svg>';
         if (t === "marker") return o +
-            '<path d="M8.6 6.4 15.4 3v10H8.6Z" fill="' + tip + '" stroke="var(--ink-edge)" stroke-width=".7" stroke-linejoin="round"/>' +
-            '<path d="M7.8 13h8.4l1.1 4.4H6.7Z" fill="var(--ink-metal)" stroke="var(--ink-edge)" stroke-width=".7" stroke-linejoin="round"/>' +
-            '<path d="M6.2 17.4h11.6V40H6.2Z" ' + BODY + "/>" +
-            '<path d="M6.2 23h11.6v3.2H6.2Z" fill="' + tip + '" opacity=".9"/></svg>';
+            '<path d="M11 24 21 12.5V24Z" fill="' + tip + '"/><path d="M10.2 24h11.6v10H10.2Z" fill="' + bd2 + '" stroke="' + ed + '" stroke-width=".7"/>' +
+            '<path d="M8 38a3 3 0 0 1 3-4h10a3 3 0 0 1 3 4V96H8Z" ' + B2 + "/>" + shine.replace('x="10.4"', 'x="9.6"') +
+            '<rect x="8" y="39" width="16" height="7" fill="' + tip + '"/>' + pct + "</svg>";
         if (t === "eraser") return o +
-            '<path d="M7 7.4A3.6 3.6 0 0 1 10.6 3.8h2.8A3.6 3.6 0 0 1 17 7.4v6.4H7Z" fill="#f0a3ad" stroke="var(--ink-edge)" stroke-width=".7"/>' +
-            '<path d="M7 13.8h10v3.3H7Z" fill="var(--ink-metal)" stroke="var(--ink-edge)" stroke-width=".7"/>' +
-            '<path d="M7 17.1h10V40H7Z" ' + BODY + "/></svg>";
-        if (t === "ruler") return o +
-            '<path d="M5.6 4.4h12.8V40H5.6Z" fill="var(--ink-body)" stroke="var(--ink-edge)" stroke-width=".8"/>' +
-            '<path d="M5.6 8h4M5.6 11.5h2.6M5.6 15h4M5.6 18.5h2.6M5.6 22h4M5.6 25.5h2.6M5.6 29h4M5.6 32.5h2.6M5.6 36h4" stroke="var(--ink-edge)" stroke-width=".8"/></svg>';
+            '<path d="M9 30V13a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v17Z" fill="#f0a3a8" stroke="' + ed + '" stroke-width=".8"/>' +
+            '<path d="M9 30H23V96H9Z" ' + B2 + "/>" + shine + "</svg>";
+        if (t === "pencil") return o +
+            '<path d="M16 6 23.2 40H8.8Z" fill="' + bd2 + '" stroke="' + ed + '" stroke-width=".8" stroke-linejoin="round"/>' +
+            '<path d="M12.2 22 19.6 14M10.8 30 21.2 19.4M9.8 37 22.4 24.8M13.8 39.6 23 30.6" stroke="' + (D ? "rgba(255,255,255,.16)" : "rgba(0,0,0,.14)") + '" stroke-width="1.6"/>' +
+            '<path d="M16 6 17.9 15H14.1Z" fill="' + tip + '"/><path d="M8.8 40H23.2V96H8.8Z" ' + B2 + "/>" + shine + "</svg>";
+        if (t === "ruler") {
+            var tk = "";
+            for (var y = 14; y < 96; y += 5) tk += "M7 " + y + "h" + ((y - 14) % 25 === 0 ? 6 : 3.4);
+            return o + '<path d="M6.5 9H25.5V96H6.5Z" ' + B2 + '/><path d="' + tk + '" stroke="' + (D ? "#9a9aa0" : "#6e6e73") + '" stroke-width=".8"/></svg>';
+        }
+        if (t === "watercolor") return o +
+            '<path d="M16 3c3.6 7 5 14 3.6 25H12.4C11 17 12.4 10 16 3Z" fill="' + tip + '"/><path d="M12.2 28h7.6v10h-7.6Z" fill="' + mt + '" stroke="' + ed + '" stroke-width=".6"/>' +
+            '<path d="M10 38H22V96H10Z" ' + B2 + "/>" + shine.replace('x="10.4"', 'x="11.4"') + pct + "</svg>";
+        if (t === "crayon") return o +
+            '<path d="M16 8 22 26H10Z" fill="' + tip + '"/><path d="M10 26H22V96H10Z" ' + B2 + "/>" + shine.replace('x="10.4"', 'x="11.4"') +
+            '<rect x="10" y="34" width="12" height="6" fill="' + tip + '"/><rect x="10" y="70" width="12" height="3" fill="' + tip + '"/></svg>';
+        if (t === "fountain") return o +
+            '<path d="M16 4 22 22V34H10V22Z" fill="' + mt + '" stroke="' + ed + '" stroke-width=".7" stroke-linejoin="round"/><path d="M16 9V23" stroke="' + (D ? "#1d1d20" : "#555") + '" stroke-width=".8"/>' +
+            '<circle cx="16" cy="23" r="1.3" fill="' + (D ? "#1d1d20" : "#555") + '"/><path d="M8.8 34H23.2V96H8.8Z" ' + B2 + "/>" + shine +
+            '<rect x="8.8" y="40" width="14.4" height="3" fill="' + tip + '"/></svg>';
         return o +                                             // 올가미
-            '<ellipse cx="12" cy="9.6" rx="8" ry="5" fill="none" stroke="var(--ink-lasso)" stroke-width="1.3" stroke-dasharray="2.4 2"/>' +
-            '<path d="M8.4 14.2c-1.5 1.6-1.1 3.4.5 4.1" fill="none" stroke="var(--ink-lasso)" stroke-width="1.3" stroke-linecap="round"/>' +
-            '<path d="M8.6 20.4h6.8V40H8.6Z" ' + BODY + "/></svg>";
+            '<ellipse cx="16" cy="15" rx="9" ry="6.2" fill="none" stroke="' + (D ? "#e5e5ea" : "#3a3a3c") + '" stroke-width="1.4" stroke-dasharray="2.6 2.2"/>' +
+            '<path d="M12 20.6c-1.6 2-1 4.2 1.4 5" fill="none" stroke="' + (D ? "#e5e5ea" : "#3a3a3c") + '" stroke-width="1.4" stroke-linecap="round"/>' +
+            '<path d="M10.5 30H21.5V96H10.5Z" ' + B2 + "/>" + shine.replace('x="10.4"', 'x="12"') + "</svg>";
     }
     function icon(name) {
-        var s = '<svg viewBox="0 0 24 24" class="ink-ic" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">';
+        var s = '<svg viewBox="0 0 24 24" class="ink-ic" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">';
         var d = {
-            undo: '<path d="M9 7 4.5 11.5 9 16"/><path d="M5 11.5h9.5a5 5 0 0 1 0 10H12"/>',
-            redo: '<path d="M15 7l4.5 4.5L15 16"/><path d="M19 11.5H9.5a5 5 0 0 0 0 10H12"/>',
-            more: '<circle cx="5.5" cy="12" r="1.35" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.35" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.35" fill="currentColor" stroke="none"/>',
-            plus: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v9M7.5 12h9"/>',
-            down: '<path d="M6 9.5 12 15.5 18 9.5"/>',
-            finger: '<path d="M9.5 12.5V5.8a1.6 1.6 0 0 1 3.2 0V11"/><path d="M12.7 10.6V9.3a1.6 1.6 0 0 1 3.2 0v2"/><path d="M15.9 11.1a1.6 1.6 0 0 1 3.2.2v3.2a6.7 6.7 0 0 1-6.7 6.7h-.6a6.4 6.4 0 0 1-5.3-2.8l-2.3-3.5a1.6 1.6 0 0 1 2.6-1.8l2 2.4"/>',
-            mouse: '<rect x="6.5" y="3.5" width="11" height="17" rx="5.5"/><path d="M12 7.2v3.3"/>',
-            eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.8"/>',
-            mini: '<rect x="4" y="13" width="16" height="6" rx="3"/><path d="M12 4v6M9 7.5l3 3 3-3"/>',
-            trash: '<path d="M4.5 7h15"/><path d="M9.5 7V4.8h5V7"/><path d="M6.5 7l.9 12.2a1.8 1.8 0 0 0 1.8 1.6h5.6a1.8 1.8 0 0 0 1.8-1.6L17.5 7"/><path d="M10.3 10.8v6M13.7 10.8v6"/>',
-            text: '<path d="M5 6.5V5h14v1.5M12 5v14M9 19h6"/>',
-            sig: '<path d="M3.5 16.5c2.4-.4 3.6-6.4 5.3-6.4 1.4 0 .1 5.2 1.6 5.2 1.3 0 2-3.1 3.2-3.1.9 0 .8 2 1.9 2 .9 0 1.6-1 2.4-1.6"/><path d="M3.5 20h17"/>',
-            mag: '<circle cx="10.5" cy="10.5" r="6.2"/><path d="M15 15l5 5"/><path d="M8 10.5h5M10.5 8v5"/>',
-            paste: '<rect x="6" y="5" width="12" height="15" rx="2"/><path d="M9 5V3.8h6V5M9 10h6M9 13.5h6M9 17h4"/>',
+            undo: '<path d="M9.5 6.5 5 11l4.5 4.5"/><path d="M5.5 11H14a5 5 0 0 1 0 10h-2.5"/>',
+            redo: '<path d="M14.5 6.5 19 11l-4.5 4.5"/><path d="M18.5 11H10a5 5 0 0 0 0 10h2.5"/>',
+            more: '<circle cx="5.5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.6" fill="currentColor" stroke="none"/>',
+            plus: '<path d="M12 5v14M5 12h14" stroke-width="2"/>',
+            markup: '<circle cx="12" cy="12" r="9.2"/><path d="M8.6 16.4l.9-3.4 5.6-5.6a1.4 1.4 0 0 1 2 2l-5.6 5.6Z"/><path d="M14 8.5l1.9 1.9"/>',
+            sticker: '<path d="M20.5 12A8.5 8.5 0 1 1 12 3.5"/><path d="M20.5 12c-4.6 0-8.5-3.9-8.5-8.5"/><path d="M12 3.5c0 4.7 3.8 8.5 8.5 8.5"/>',
+            text: '<rect x="3" y="5.5" width="18" height="13" rx="2" stroke-dasharray="2.4 2.1"/><text x="12" y="15.6" text-anchor="middle" font-size="8.6" font-weight="600" stroke="none" fill="currentColor" font-family="-apple-system,sans-serif">가</text>',
+            sig: '<path d="M4 18h16"/><path d="M4.5 14.5l2 2m0-2-2 2"/><path d="M9 15.5c1.5-.6 2.8-8.6 4.5-8.6 1.4 0-.3 7 1.4 7 1.2 0 1.8-2.8 3-2.8.9 0 .8 1.7 1.7 1.7"/>',
+            shape: '<circle cx="9.5" cy="9.5" r="5.5"/><rect x="10" y="10" width="10" height="10" rx="1.6" fill="var(--ink-bg-solid)"/>',
+            mag: '<path d="M9.5 4.5h-3a3 3 0 0 0-3 3v1"/><circle cx="13" cy="13" r="6.5"/><path d="M13 9.5v7M9.5 13h7"/><path d="M3.5 13.5 2 15"/>',
             drop: '<path d="M14.6 4.6a2.4 2.4 0 0 1 3.4 3.4l-1.7 1.7-3.4-3.4Z"/><path d="M12.9 6.3l3.4 3.4-8.5 8.5-3.7.9.9-3.7Z"/>',
-            nib: '<path d="M4.5 19.5l1.2-4.6L15.6 5a2.1 2.1 0 0 1 3 3L8.7 17.9Z"/><path d="M13.8 6.8l3 3"/>',
-            nibOff: '<path d="M4.5 19.5l1.2-4.6L15.6 5a2.1 2.1 0 0 1 3 3L8.7 17.9Z" opacity=".55"/><path d="M3.5 3.5l17 17" stroke-width="2.1"/>',
-            close: '<path d="M7 7l10 10M17 7 7 17"/>',
+            trash: '<path d="M4.5 7h15"/><path d="M9.5 7V4.8h5V7"/><path d="M6.5 7l.9 12.2a1.8 1.8 0 0 0 1.8 1.6h5.6a1.8 1.8 0 0 0 1.8-1.6L17.5 7"/>',
+            paste: '<rect x="6" y="5" width="12" height="15" rx="2"/><path d="M9 5V3.8h6V5M9 10h6M9 13.5h6"/>',
+            chev: '<path d="M9 6l6 6-6 6"/>', close: '<path d="M7 7l10 10M17 7 7 17"/>',
             rect: '<rect x="4" y="6" width="16" height="12" rx="1"/>', oval: '<ellipse cx="12" cy="12" rx="8.5" ry="6.5"/>',
             bubble: '<path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v7.5A1.5 1.5 0 0 1 19 16H10l-4 3.5V16H5a1.5 1.5 0 0 1-1.5-1.5V7A1.5 1.5 0 0 1 5 5.5Z"/>',
             star: '<path d="M12 3.6l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8Z"/>',
@@ -1381,11 +1382,13 @@
         }[name] || "";
         return s + d + "</svg>";
     }
+    /* 굵기 고르기 견본 — Apple 굵기 창의 손글씨 모양 */
+    var SQUIG = "M6.5 26.5c.4-6.6 1.2-13.4 3-19.4M8.4 19.6c1.7-4.6 4.3-7.6 6.8-7.6 2.2 0 2.1 3.4 1 7.6-.7 2.8.6 4.4 3.6 3.4";
 
     /* ===================== 화면 ===================== */
     var CSS = [
-        ":root{--ink-body:#f7f7f9;--ink-edge:rgba(0,0,0,.34);--ink-metal:#c9ccd2;--ink-lasso:#3a3a3c;--ink-panel:rgba(250,250,252,.94);--ink-text:#1c1c1e;--ink-sub:#6e6e73;--ink-hair:rgba(0,0,0,.12);--ink-accent:#0a84ff}",
-        "html[data-theme=dark]{--ink-body:#3c3c40;--ink-edge:rgba(255,255,255,.3);--ink-metal:#8e9096;--ink-lasso:#e5e5ea;--ink-panel:rgba(38,38,42,.94);--ink-text:#f2f2f7;--ink-sub:#a1a1a6;--ink-hair:rgba(255,255,255,.14)}",
+        ":root{--ink-glass:rgba(250,250,252,.66);--ink-glass-2:rgba(255,255,255,.78);--ink-edge2:rgba(255,255,255,.75);--ink-text:#1c1c1e;--ink-sub:#6e6e73;--ink-hair:rgba(60,60,67,.18);--ink-btn:rgba(120,120,128,.16);--ink-accent:#0a84ff;--ink-bg-solid:#f6f6f8;--ink-sel:#000;--ink-sel-fg:#fff;--ink-grab:rgba(60,60,67,.3)}",
+        "html[data-theme=dark]{--ink-glass:rgba(40,40,44,.66);--ink-glass-2:rgba(52,52,56,.82);--ink-edge2:rgba(255,255,255,.14);--ink-text:#f2f2f7;--ink-sub:#98989f;--ink-hair:rgba(235,235,245,.16);--ink-btn:rgba(235,235,245,.14);--ink-bg-solid:#2c2c30;--ink-sel:#fff;--ink-sel-fg:#000;--ink-grab:rgba(235,235,245,.34)}",
         ".ink-svg{position:absolute;left:0;top:0;pointer-events:none;z-index:9980;overflow:visible}",
         ".ink-svg .ink-selrect{fill:rgba(10,132,255,.06);stroke:#0a84ff;stroke-width:1.5;stroke-dasharray:6 5}",
         ".ink-svg .ink-objframe{fill:none;stroke:#0a84ff;stroke-width:1.2;stroke-dasharray:4 4}",
@@ -1400,88 +1403,93 @@
         ".ink-hover{position:fixed;z-index:10006;border-radius:50%;pointer-events:none;display:none;box-shadow:0 0 0 1px rgba(255,255,255,.75),0 0 0 2px rgba(0,0,0,.25)} .ink-hover.er{box-shadow:0 0 0 1.5px rgba(127,127,127,.9)}",
         "html.ink-drawing body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}",
         "html.ink-finger{touch-action:none} html.ink-picking,html.ink-picking *{cursor:crosshair!important}",
-        ".ink-ui{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard',sans-serif;color:var(--ink-text);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}",
-        // 도구 팔레트 — 아래(기본) · 위 · 왼쪽 · 오른쪽에 붙음 (빈 곳을 끌어 옮김)
-        ".ink-dock{position:fixed;z-index:10003;display:flex;align-items:flex-end;gap:2px;padding:6px 8px 0;touch-action:pan-x;",
-        "border-radius:20px;background:var(--ink-panel);border:1px solid var(--ink-hair);box-shadow:0 10px 30px rgba(0,0,0,.26),0 1px 3px rgba(0,0,0,.16);",
-        "-webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);max-width:calc(100vw - 20px);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;cursor:grab}",
-        ".ink-dock::-webkit-scrollbar{display:none} .ink-dock.dragging{cursor:grabbing;transition:none;opacity:.92}",
-        ".ink-dock.d-bottom{left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%)}",
-        ".ink-dock.d-top{left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);align-items:flex-start;padding:0 8px 6px}",
-        ".ink-dock.d-left,.ink-dock.d-right{flex-direction:column;align-items:flex-start;top:50%;transform:translateY(-50%);padding:8px 0 8px 6px;max-height:calc(100vh - 20px);max-width:none;overflow-y:auto;overflow-x:hidden}",
-        ".ink-dock.d-left{left:calc(10px + env(safe-area-inset-left,0px))} .ink-dock.d-right{right:calc(10px + env(safe-area-inset-right,0px));align-items:flex-end;padding:8px 6px 8px 0}",
-        ".ink-dock button{flex:0 0 auto;border:0;background:transparent;color:inherit;cursor:pointer;padding:0;margin:0;font:inherit}",
-        ".ink-ib{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;align-self:center;margin-bottom:6px!important}",
-        ".ink-dock.d-top .ink-ib{margin:6px 0 0!important} .ink-dock.d-left .ink-ib,.ink-dock.d-right .ink-ib{margin:0 0 0 0!important;align-self:center}",
-        ".ink-ib:active{background:var(--ink-hair)} .ink-ib:disabled{opacity:.3} .ink-ib.on{background:rgba(10,132,255,.16);color:var(--ink-accent)}",
-        // 필기 켜기 · 끄기 — 켜짐 = 파란 펜 · 꺼짐 = 빨간 빗금 + 도구가 흐려짐
-        ".ink-pow.on{background:rgba(10,132,255,.16);color:var(--ink-accent)} .ink-pow.off{background:rgba(255,59,48,.14);color:#ff3b30}",
-        ".ink-dock.off .ink-tool,.ink-dock.off .ink-quick,.ink-dock.off .ink-swatch{opacity:.35}",
-        ".ink-fab.off::after{content:'';position:absolute;left:9px;right:9px;top:50%;height:3px;margin-top:-1.5px;border-radius:2px;background:#ff3b30;transform:rotate(-45deg);box-shadow:0 0 0 1.5px var(--ink-panel)}",
-        ".ink-ic{width:22px;height:22px}",
-        ".ink-tool{width:36px;height:54px;position:relative;overflow:hidden}",
-        ".ink-tool .ink-tool-svg{width:27px;height:45px;position:absolute;left:4.5px;top:17px;transition:top .18s cubic-bezier(.2,.8,.2,1),left .18s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 1px 1.2px rgba(0,0,0,.22))}",
-        ".ink-tool.on .ink-tool-svg{top:3px}",
-        ".ink-dock.d-top .ink-tool .ink-tool-svg{transform:rotate(180deg);top:-8px} .ink-dock.d-top .ink-tool.on .ink-tool-svg{top:6px}",
-        ".ink-dock.d-left .ink-tool,.ink-dock.d-right .ink-tool{width:54px;height:36px}",
-        ".ink-dock.d-left .ink-tool .ink-tool-svg{transform:rotate(90deg);top:-4.5px;left:-9px} .ink-dock.d-left .ink-tool.on .ink-tool-svg{left:5px}",
-        ".ink-dock.d-right .ink-tool .ink-tool-svg{transform:rotate(-90deg);top:-4.5px;left:18px} .ink-dock.d-right .ink-tool.on .ink-tool-svg{left:4px}",
-        ".ink-sep{flex:0 0 1px;width:1px;height:26px;background:var(--ink-hair);margin:0 5px 12px;align-self:center}",
-        ".ink-dock.d-top .ink-sep{margin:12px 5px 0} .ink-dock.d-left .ink-sep,.ink-dock.d-right .ink-sep{width:26px;height:1px;flex:0 0 1px;margin:5px 0;align-self:center}",
-        ".ink-quick{display:flex;align-items:center;gap:7px;align-self:center;margin:0 4px 6px} .ink-dock.d-top .ink-quick{margin:6px 4px 0} .ink-dock.d-left .ink-quick,.ink-dock.d-right .ink-quick{flex-direction:column;margin:4px 0}",
-        ".ink-qc{width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(127,127,127,.45);position:relative}",
-        ".ink-qc.on::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2.5px solid var(--ink-accent)}",
-        ".ink-qc.auto{background:conic-gradient(#1c1c1e 0 50%,#f2f2f7 0 100%)}",
-        ".ink-swatch{width:32px;height:32px;border-radius:50%;margin:0 5px 9px!important;align-self:center;position:relative;background:conic-gradient(#ff3b30,#ff9500,#ffcc00,#34c759,#00c7be,#0a84ff,#5856d6,#af52de,#ff2d55,#ff3b30)}",
-        ".ink-swatch i{position:absolute;inset:5px;border-radius:50%;box-shadow:0 0 0 2px var(--ink-panel)}",
-        ".ink-dock.d-top .ink-swatch{margin:9px 5px 0!important} .ink-dock.d-left .ink-swatch,.ink-dock.d-right .ink-swatch{margin:5px 0!important}",
-        "@media (max-width:900px){.ink-quick{display:none}} .ink-dock.d-left .ink-quick,.ink-dock.d-right .ink-quick{display:none}",
-        ".ink-fab{position:fixed;z-index:10003;width:52px;height:52px;border-radius:50%;border:1px solid var(--ink-hair);overflow:hidden;",
-        "background:var(--ink-panel);box-shadow:0 8px 24px rgba(0,0,0,.26);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);display:none;align-items:center;justify-content:center;cursor:pointer;padding:0;color:var(--ink-text)}",
-        ".ink-fab .ink-tool-svg{width:24px;height:40px;position:absolute;left:13px;top:8px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}",
-        ".ink-fab.d-bottom{left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px))} .ink-fab.d-top{left:50%;transform:translateX(-50%);top:calc(12px + env(safe-area-inset-top,0px))}",
-        ".ink-fab.d-left{left:12px;top:50%;transform:translateY(-50%)} .ink-fab.d-right{right:12px;top:50%;transform:translateY(-50%)}",
-        "html.ink-min .ink-dock{display:none} html.ink-min .ink-fab{display:flex}",
-        ".ink-pop{position:fixed;z-index:10004;width:min(320px,calc(100vw - 20px));max-height:calc(100vh - 40px);overflow:auto;padding:14px 14px 12px;border-radius:18px;",
-        "background:var(--ink-panel);border:1px solid var(--ink-hair);box-shadow:0 16px 40px rgba(0,0,0,.3);-webkit-backdrop-filter:saturate(1.6) blur(20px);backdrop-filter:saturate(1.6) blur(20px);display:none}",
-        ".ink-pop.show{display:block} .ink-pop h4{margin:2px 0 10px;font-size:12.5px;font-weight:700;color:var(--ink-sub);letter-spacing:.02em}",
-        ".ink-pop .ink-row{display:flex;align-items:center;gap:8px;margin:10px 0}",
-        ".ink-pop .ink-lab{font-size:12.5px;color:var(--ink-sub);min-width:46px;line-height:1.5}",
-        ".ink-widths{display:flex;justify-content:space-between;align-items:center;gap:6px;margin:4px 0 8px}",
-        ".ink-widths button{flex:1;height:40px;border-radius:12px;border:1px solid var(--ink-hair);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-text)}",
-        ".ink-widths button.on{border-color:var(--ink-accent);background:rgba(10,132,255,.12)}",
-        ".ink-widths span{display:block;border-radius:50%;background:currentColor}",
-        ".ink-pop input[type=range]{flex:1;accent-color:var(--ink-accent)}",
-        ".ink-pop .ink-val{font-size:12px;color:var(--ink-sub);min-width:40px;text-align:right;font-variant-numeric:tabular-nums}",
-        ".ink-prev{width:100%;height:56px;border-radius:12px;background:var(--ink-hair);display:block;margin-top:6px}",
-        ".ink-seg{display:flex;background:var(--ink-hair);border-radius:10px;padding:2px;gap:2px;flex:1}",
-        ".ink-seg button{flex:1;height:32px;border:0;border-radius:8px;background:transparent;color:var(--ink-text);font-size:13px;font-weight:600;cursor:pointer;padding:0 8px}",
-        ".ink-seg button.on{background:var(--ink-panel);box-shadow:0 1px 3px rgba(0,0,0,.2)}",
-        // 색상 선택기 — 격자 · 스펙트럼 · 슬라이더
-        ".ink-cphead{display:flex;align-items:center;gap:8px;margin-bottom:10px} .ink-cphead b{flex:1;text-align:center;font-size:15px}",
-        ".ink-cpx{width:30px;height:30px;border-radius:50%;border:0;background:var(--ink-hair);color:var(--ink-text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}",
-        ".ink-cpx.on{background:var(--ink-accent);color:#fff} .ink-cpx .ink-ic{width:18px;height:18px}",
-        ".ink-grid{display:grid;grid-template-columns:repeat(12,1fr);border-radius:10px;overflow:hidden;margin:10px 0 4px}",
-        ".ink-grid button{aspect-ratio:1;border:0;padding:0;cursor:pointer;position:relative;border-radius:0} .ink-grid button.on{box-shadow:inset 0 0 0 2.5px #fff,0 0 0 1px #000;z-index:1;border-radius:3px}",
-        ".ink-spec{width:100%;height:190px;border-radius:10px;display:block;touch-action:none;cursor:crosshair;margin:10px 0 4px}",
-        ".ink-rgb{display:flex;align-items:center;gap:8px;margin:8px 0} .ink-rgb b{width:16px;font-size:12px;color:var(--ink-sub)} .ink-rgb input[type=range]{flex:1}",
-        ".ink-rgb input[type=number],.ink-hex{width:58px;padding:5px 6px;border-radius:8px;border:1px solid var(--ink-hair);background:transparent;color:var(--ink-text);font:13px ui-monospace,Menlo,monospace}",
-        ".ink-hex{width:96px;text-transform:uppercase}",
-        ".ink-saved{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:6px} .ink-saved button{width:30px;height:30px;border-radius:50%;border:0;cursor:pointer;padding:0;position:relative;box-shadow:inset 0 0 0 1px rgba(127,127,127,.4)}",
-        ".ink-saved button.on::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2.5px solid var(--ink-accent)}",
-        ".ink-saved .ink-add{background:var(--ink-hair);color:var(--ink-text);font-size:20px;line-height:30px} .ink-saved .auto{background:conic-gradient(#1c1c1e 0 50%,#f2f2f7 0 100%)}",
-        ".ink-op{display:flex;align-items:center;gap:8px;margin-top:10px} .ink-op input{flex:1}",
-        ".ink-menu button{display:flex;align-items:center;gap:12px;width:100%;padding:10px 6px;border:0;background:transparent;color:var(--ink-text);font-size:14.5px;cursor:pointer;border-radius:10px;text-align:left}",
-        ".ink-menu button:active{background:var(--ink-hair)} .ink-menu .ink-ic{width:21px;height:21px;color:var(--ink-sub);flex:0 0 auto}",
-        ".ink-menu .ink-sw{margin-left:auto;width:42px;height:25px;border-radius:13px;background:var(--ink-hair);position:relative;flex:0 0 auto;transition:background .15s}",
-        ".ink-menu .ink-sw::after{content:'';position:absolute;top:2.5px;left:2.5px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .15s}",
-        ".ink-menu .on .ink-sw{background:#34c759} .ink-menu .on .ink-sw::after{left:19.5px}",
-        ".ink-menu .ink-danger,.ink-menu .ink-danger .ink-ic{color:#ff3b30}",
-        ".ink-menu hr{border:0;border-top:1px solid var(--ink-hair);margin:4px 0}",
-        ".ink-shapes{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:2px 0 6px} .ink-shapes button{height:42px;border-radius:10px;border:1px solid var(--ink-hair);background:transparent;color:var(--ink-text);cursor:pointer;display:flex;align-items:center;justify-content:center}",
-        ".ink-sigs{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 6px} .ink-sigs button{width:88px;height:42px;border-radius:10px;border:1px solid var(--ink-hair);background:transparent;cursor:pointer;padding:3px}",
-        ".ink-sigs svg{width:100%;height:100%}",
-        ".ink-note{font-size:12px;color:var(--ink-sub);line-height:1.55;margin:8px 4px 2px}",
+        ".ink-ui{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Apple SD Gothic Neo','Pretendard',sans-serif;color:var(--ink-text);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-font-smoothing:antialiased}",
+        ".ink-ui button{border:0;background:transparent;color:inherit;cursor:pointer;padding:0;margin:0;font:inherit}",
+        // Liquid Glass — 반투명 · 흐림 · 가장자리 빛 · 부드러운 그림자
+        ".ink-glass{background:var(--ink-glass);-webkit-backdrop-filter:blur(26px) saturate(1.9);backdrop-filter:blur(26px) saturate(1.9);border:1px solid var(--ink-edge2);",
+        "box-shadow:0 12px 34px rgba(0,0,0,.16),0 2px 6px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(0,0,0,.04)}",
+        "html[data-theme=dark] .ink-glass{box-shadow:0 12px 34px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.1)}",
+        // 필기 켜기 버튼 (미리보기 위 막대의 마크업 버튼)
+        ".ink-mk{position:fixed;top:14px;right:66px;z-index:10002;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s,transform .15s}",
+        ".ink-mk .ink-ic{width:26px;height:26px} .ink-mk:active{transform:scale(.92)}",
+        ".ink-mk.on{background:#0a84ff;color:#fff;border-color:#0a84ff;box-shadow:0 6px 18px rgba(10,132,255,.38)}",
+        // 도구 막대 (알약 모양)
+        ".ink-dock{position:fixed;z-index:10003;left:50%;transform:translateX(-50%);width:min(720px,calc(100vw - 24px));height:106px;border-radius:53px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 16px;overflow:hidden;box-sizing:border-box;transition:transform .32s cubic-bezier(.2,.9,.25,1.1),opacity .2s}",
+        ".ink-dock.d-bottom{bottom:calc(16px + env(safe-area-inset-bottom,0px))} .ink-dock.d-top{top:calc(70px + env(safe-area-inset-top,0px))}",
+        ".ink-dock.enter{transform:translateX(-50%) translateY(140%);opacity:0} .ink-dock.d-top.enter{transform:translateX(-50%) translateY(-160%)}",
+        ".ink-dock.dragging{transition:none;cursor:grabbing}",
+        ".ink-grab{position:absolute;left:50%;top:0;width:90px;height:20px;transform:translateX(-50%);cursor:grab;touch-action:none;z-index:2} .ink-grab::after{content:'';position:absolute;left:28px;right:28px;top:7px;height:5px;border-radius:3px;background:var(--ink-grab)}",
+        ".ink-cb{flex:0 0 auto;width:34px;height:34px;border-radius:50%!important;background:var(--ink-btn)!important;display:flex;align-items:center;justify-content:center;transition:opacity .15s,transform .12s}",
+        ".ink-cb:active{transform:scale(.9)} .ink-cb:disabled{opacity:.32} .ink-cb .ink-ic{width:20px;height:20px} .ink-cb.r{margin-right:8px}",
+        ".ink-tools{flex:0 1 316px;min-width:0;height:100%;display:flex;align-items:flex-end;gap:2px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:0 6px;scroll-snap-type:x proximity;",
+        "-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)}",
+        ".ink-tools::-webkit-scrollbar{display:none}",
+        ".ink-tool{flex:0 0 49px;width:49px;height:100%;position:relative;scroll-snap-align:start}",
+        ".ink-tool .ink-art{position:absolute;left:2.5px;width:44px;height:132px;bottom:-54px;transition:bottom .22s cubic-bezier(.25,1.3,.4,1);filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.18))}",
+        ".ink-tool.on .ink-art{bottom:-40px}",
+        ".ink-dock.d-top .ink-tool .ink-art{bottom:auto;top:-54px;transform:rotate(180deg);transition:top .22s cubic-bezier(.25,1.3,.4,1)} .ink-dock.d-top .ink-tool.on .ink-art{top:-40px}",
+        ".ink-cols{flex:0 0 auto;display:grid;grid-template-columns:repeat(3,31px);grid-auto-rows:31px;gap:10px 12px;margin:0 14px 0 12px}",
+        ".ink-qc{width:31px;height:31px;border-radius:50%!important;position:relative;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.12)}",
+        ".ink-qc.on{box-shadow:0 0 0 3px var(--ink-glass-2),0 0 0 5.5px var(--ring,#000)}",
+        ".ink-qc.wheel{background:conic-gradient(from 90deg,#ff3b30,#ff9500,#ffcc00,#34c759,#00c7be,#0a84ff,#5856d6,#af52de,#ff2d55,#ff3b30)!important}",
+        ".ink-qc.wheel::after{content:'';position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 72%)}",
+        ".ink-cw{display:none}",
+        ".ink-pm{flex:0 0 auto;display:flex;gap:8px} .ink-ur{flex:0 0 auto;display:flex;gap:8px}",
+        "@media (max-width:640px){.ink-dock{height:88px;border-radius:44px;padding:0 10px;gap:4px;width:calc(100vw - 16px)} .ink-tools{flex:1 1 auto} .ink-ur{gap:4px} .ink-cb{width:32px;height:32px} .ink-cb .ink-ic{width:18px;height:18px} .ink-cb.r{margin-right:2px}",
+        ".ink-cols{display:none} .ink-cw{display:block;flex:0 0 auto;width:32px;height:32px;margin:0 4px} .ink-tool{flex-basis:44px;width:44px} .ink-tool .ink-art{left:3px;width:38px;height:114px;bottom:-50px} .ink-tool.on .ink-art{bottom:-38px} .ink-pm{gap:4px}}",
+        // 최소화 = 지금 도구가 든 유리 동그라미 (모서리에 붙음)
+        ".ink-fab{position:fixed;z-index:10003;width:64px;height:64px;border-radius:50%;display:none;overflow:hidden;cursor:pointer;touch-action:none}",
+        ".ink-fab .ink-art{position:absolute;left:14px;width:36px;height:108px;top:6px;filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.2))}",
+        ".ink-fab.c-bl{left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px))} .ink-fab.c-br{right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px))}",
+        ".ink-fab.c-tl{left:calc(16px + env(safe-area-inset-left,0px));top:calc(70px + env(safe-area-inset-top,0px))} .ink-fab.c-tr{right:calc(16px + env(safe-area-inset-right,0px));top:calc(70px + env(safe-area-inset-top,0px))}",
+        ".ink-fab.pop{animation:ink-fabin .32s cubic-bezier(.2,1.4,.4,1)} @keyframes ink-fabin{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}",
+        "html.ink-min .ink-dock{display:none} html.ink-min .ink-fab{display:block} html.ink-mkoff .ink-dock,html.ink-mkoff .ink-fab{display:none!important}",
+        // 팝업 (굵기 · 색 · + · ⋯)
+        ".ink-pop{position:fixed;z-index:10004;border-radius:24px;padding:12px;display:none;max-height:calc(100vh - 40px);overflow:auto;transform-origin:50% 100%}",
+        ".ink-pop.show{display:block;animation:ink-popin .2s cubic-bezier(.2,1.2,.4,1)} @keyframes ink-popin{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}",
+        ".ink-wrow{display:flex;gap:8px;padding:2px 2px 10px}",
+        ".ink-wb{width:52px;height:52px;border-radius:14px!important;display:flex;align-items:center;justify-content:center;color:var(--ink-text)}",
+        ".ink-wb svg{width:34px;height:34px} .ink-wb.on{background:var(--ink-sel)!important;color:var(--ink-sel-fg)}",
+        ".ink-op{-webkit-appearance:none;appearance:none;display:block;width:100%;height:32px;border-radius:16px;margin:0;cursor:pointer;",
+        "background:linear-gradient(90deg,rgba(0,0,0,0),var(--opc,#000)),repeating-conic-gradient(#c7c7cc 0 25%,#f2f2f7 0 50%) 0 0/12px 12px;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.12)}",
+        ".ink-op::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;border-radius:50%;background:var(--opc,#000);border:3.5px solid #fff;box-shadow:0 0 0 .5px rgba(0,0,0,.2),0 2px 6px rgba(0,0,0,.3)}",
+        ".ink-op::-moz-range-thumb{width:25px;height:25px;border-radius:50%;background:var(--opc,#000);border:3.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3)}",
+        ".ink-seg{display:flex;background:var(--ink-btn);border-radius:999px;padding:3px;gap:2px;margin-bottom:12px}",
+        ".ink-seg button{flex:1;height:34px;border-radius:999px!important;font-size:14px;font-weight:500;padding:0 12px;white-space:nowrap}",
+        ".ink-seg button.on{background:var(--ink-bg-solid)!important;box-shadow:0 1px 4px rgba(0,0,0,.14);font-weight:600}",
+        ".ink-erow{display:flex;gap:8px;align-items:center}",
+        ".ink-eb{width:52px;height:52px;border-radius:14px!important;display:flex;align-items:center;justify-content:center}",
+        ".ink-eb i{display:block;border-radius:50%;border:1.5px solid var(--ink-text);opacity:.85} .ink-eb.on{background:var(--ink-sel)!important} .ink-eb.on i{border-color:var(--ink-sel-fg);opacity:1}",
+        // 색상 선택기
+        ".ink-cp{width:300px}",
+        ".ink-cphead{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;margin:0 0 12px} .ink-cphead b{text-align:center;font-size:17px;font-weight:600}",
+        ".ink-cpx{width:44px;height:44px;border-radius:50%!important;background:var(--ink-btn)!important;display:flex;align-items:center;justify-content:center} .ink-cpx.on{background:var(--ink-accent)!important;color:#fff}",
+        ".ink-grid{display:grid;grid-template-columns:repeat(12,1fr);border-radius:12px;overflow:hidden}",
+        ".ink-grid button{aspect-ratio:1;border-radius:0!important;position:relative} .ink-grid button.on{box-shadow:inset 0 0 0 2.5px #fff,0 0 0 1px rgba(0,0,0,.6);z-index:1;border-radius:4px!important}",
+        ".ink-spec{width:100%;height:220px;border-radius:12px;display:block;touch-action:none;cursor:crosshair}",
+        ".ink-rgb{display:grid;grid-template-columns:1fr 64px;gap:8px 10px;align-items:center;margin:2px 0 10px} .ink-rgb label{grid-column:1/3;font-size:12.5px;color:var(--ink-sub);margin-bottom:-4px;text-transform:uppercase}",
+        ".ink-rgb input[type=range]{width:100%;accent-color:var(--ink-accent)} .ink-num{height:34px;border-radius:999px;border:0;background:var(--ink-bg-solid);color:var(--ink-text);font:15px -apple-system,sans-serif;text-align:center;width:100%;box-sizing:border-box}",
+        ".ink-oplab{font-size:12.5px;color:var(--ink-sub);margin:14px 0 6px}",
+        ".ink-oprow{display:grid;grid-template-columns:1fr 76px;gap:10px;align-items:center}",
+        ".ink-pct{height:40px;border-radius:999px;background:var(--ink-bg-solid);display:flex;align-items:center;justify-content:center;font-size:17px;font-variant-numeric:tabular-nums}",
+        ".ink-cphr{height:1px;background:var(--ink-hair);margin:14px 0}",
+        ".ink-saved{display:grid;grid-template-columns:76px 1fr;gap:14px;align-items:start}",
+        ".ink-big{width:76px;height:76px;border-radius:18px;background:repeating-conic-gradient(#c7c7cc 0 25%,#f2f2f7 0 50%) 0 0/12px 12px;overflow:hidden} .ink-big i{display:block;width:100%;height:100%}",
+        ".ink-sw{display:flex;flex-wrap:wrap;gap:10px} .ink-sw button{width:30px;height:30px;border-radius:50%!important;position:relative;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.15)}",
+        ".ink-sw button.on{box-shadow:0 0 0 2.5px var(--ink-glass-2),0 0 0 4.5px var(--ring,#000)} .ink-sw .ink-add{background:var(--ink-btn)!important;display:flex;align-items:center;justify-content:center} .ink-sw .ink-add .ink-ic{width:18px;height:18px}",
+        // 메뉴 (+ · ⋯ · 펜슬 설정)
+        ".ink-pop.menu{padding:6px;min-width:250px;border-radius:22px}",
+        ".ink-mi{display:flex;align-items:center;gap:14px;width:100%;min-height:44px;padding:0 14px!important;border-radius:14px!important;font-size:17px!important;text-align:left;color:var(--ink-text)}",
+        ".ink-mi:active,.ink-mi:hover{background:var(--ink-btn)!important} .ink-mi .ink-ic{width:24px;height:24px;flex:0 0 auto} .ink-mi .sp{flex:1}",
+        ".ink-mi.danger{color:#ff3b30} .ink-mhr{height:1px;background:var(--ink-hair);margin:5px 14px}",
+        ".ink-mh{font-size:13px;color:var(--ink-sub);padding:8px 14px 2px}",
+        ".ink-tog{width:51px;height:31px;border-radius:16px;background:rgba(120,120,128,.32);position:relative;flex:0 0 auto;transition:background .2s}",
+        ".ink-tog::after{content:'';position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:left .2s cubic-bezier(.3,1.4,.5,1)}",
+        ".ink-mi.on .ink-tog{background:#34c759} .ink-mi.on .ink-tog::after{left:22px}",
+        ".ink-shapes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:4px} .ink-shapes button{height:52px;border-radius:14px!important;display:flex;align-items:center;justify-content:center} .ink-shapes button:hover{background:var(--ink-btn)!important} .ink-shapes .ink-ic{width:28px;height:28px}",
+        ".ink-stk{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:4px} .ink-stk button{font-size:30px;height:50px;border-radius:12px!important} .ink-stk button:hover{background:var(--ink-btn)!important}",
+        ".ink-sigs{display:flex;gap:8px;flex-wrap:wrap;padding:4px 8px 8px} .ink-sigs button{width:100px;height:46px;border-radius:12px!important;background:var(--ink-bg-solid)!important;padding:4px!important} .ink-sigs svg{width:100%;height:100%}",
+        ".ink-note{font-size:12.5px;color:var(--ink-sub);line-height:1.5;margin:6px 14px 8px}",
         // 고른 것 위 메뉴 (아이패드 말풍선 메뉴처럼 검은 막대)
         ".ink-selbar{position:fixed;z-index:10004;display:none;align-items:center;padding:0 4px;height:38px;border-radius:10px;background:rgba(30,30,32,.94);box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none}",
         ".ink-selbar::-webkit-scrollbar{display:none}",
@@ -1496,23 +1504,23 @@
         ".ink-ruler-rot{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(10,132,255,.85);color:#fff;font-size:17px;line-height:30px;text-align:center;cursor:grab}",
         // 서명 창
         ".ink-modal-bg{position:fixed;inset:0;z-index:10010;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}",
-        ".ink-sigbox{width:min(560px,calc(100vw - 24px));border-radius:16px;background:var(--ink-panel);box-shadow:0 20px 50px rgba(0,0,0,.4);overflow:hidden}",
-        ".ink-sighead{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--ink-hair)} .ink-sighead b{font-size:15px}",
-        ".ink-sigbtn{border:0;background:transparent;color:var(--ink-accent);font-size:15px;cursor:pointer;padding:6px 8px;font-family:inherit} .ink-sigbtn.strong{font-weight:700}",
+        ".ink-sigbox{width:min(560px,calc(100vw - 24px));border-radius:22px;background:var(--ink-glass-2);-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px);box-shadow:0 20px 50px rgba(0,0,0,.4);overflow:hidden}",
+        ".ink-sighead{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--ink-hair)} .ink-sighead b{font-size:17px}",
+        ".ink-sigbtn{border:0;background:transparent;color:var(--ink-accent);font-size:17px;cursor:pointer;padding:6px 8px;font-family:inherit} .ink-sigbtn.strong{font-weight:600}",
         ".ink-sigwrap{position:relative;height:220px} .ink-sigpad{position:absolute;inset:0;width:100%;height:100%}",
         ".ink-sigline{position:absolute;left:24px;right:24px;bottom:46px;border-bottom:1.5px solid var(--ink-hair);color:var(--ink-sub);font-size:13px;padding-bottom:6px;pointer-events:none}",
         ".ink-sigfoot{display:flex;justify-content:flex-start;padding:6px 10px;border-top:1px solid var(--ink-hair)}",
-        ".ink-toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:10005;background:rgba(28,28,30,.86);color:#fff;",
-        "font-size:13px;padding:8px 14px;border-radius:12px;max-width:86vw;text-align:center;pointer-events:none;opacity:0;transition:opacity .18s}",
+        ".ink-toast{position:fixed;left:50%;bottom:calc(124px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:10005;background:rgba(28,28,30,.86);color:#fff;",
+        "font-size:13px;padding:8px 14px;border-radius:14px;max-width:86vw;text-align:center;pointer-events:none;opacity:0;transition:opacity .18s}",
         ".ink-toast.show{opacity:1}",
-        "@media print{.ink-dock,.ink-fab,.ink-pop,.ink-selbar,.ink-toast,.ink-ruler,.ink-hover{display:none!important}}"
+        "@media print{.ink-dock,.ink-fab,.ink-pop,.ink-selbar,.ink-toast,.ink-ruler,.ink-hover,.ink-mk{display:none!important}}"
     ].join("\n");
 
-    var dock, fab, pop, selBar, toastEl, B = {};
+    var dock, fab, pop, selBar, toastEl, mkBtn, B = {};
     function el(tag, cls, html) {
         var e = document.createElement(tag);
         if (cls) e.className = cls;
-        if (cls && /ink-(dock|fab|pop|selbar|toast|modal-bg)/.test(cls)) e.setAttribute("data-theme-skip", "");
+        if (cls && /ink-(dock|fab|pop|selbar|toast|modal-bg|mk)/.test(cls)) e.setAttribute("data-theme-skip", "");
         if (html != null) e.innerHTML = html;
         return e;
     }
@@ -1532,6 +1540,8 @@
         toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 1800);
     }
 
+    /* 도구 막대 순서 = Apple 미리보기 (펜 · 파인라이너 · 마커 · 지우개 · 연필 · 자 → 옆으로 밀면 수채화 · 크레용 · 만년필 · 올가미) */
+    var BAR = ["pen", "monoline", "marker", "eraser", "pencil", "ruler", "watercolor", "crayon", "fountain", "lasso"];
     function buildUI() {
         var st = el("style"); st.setAttribute("data-theme-skip", ""); st.textContent = CSS; document.head.appendChild(st);
 
@@ -1555,71 +1565,81 @@
         objLayer.setAttribute("data-theme-skip", "");
         document.body.appendChild(objLayer);
 
-        dock = el("div", "ink-dock ink-ui");
+        // 위: 필기(마크업) 켜기 · 끄기 — 미리보기 위 막대의 ⓐ 버튼 (켜면 파란 동그라미)
+        mkBtn = button("ink-mk ink-ui ink-glass", icon("markup"), "필기 (마크업) 켜기 · 끄기", function () { setOff(!P.off); });
+        document.body.appendChild(mkBtn);
+
+        dock = el("div", "ink-dock ink-ui ink-glass");
         dock.setAttribute("role", "toolbar"); dock.setAttribute("aria-label", "필기 도구");
-        B.pow = button("ink-ib ink-pow", "", "필기 켜기 · 끄기 (끄면 펜슬로 스크롤)", function () { setOff(!P.off); });
-        dock.appendChild(B.pow); dock.appendChild(el("span", "ink-sep"));
-        B.undo = button("ink-ib", icon("undo"), "되돌리기 (⌘Z)", doUndo);
-        B.redo = button("ink-ib", icon("redo"), "다시 하기 (⇧⌘Z)", doRedo);
-        dock.appendChild(B.undo); dock.appendChild(B.redo); dock.appendChild(el("span", "ink-sep"));
-        TOOLS.concat(["ruler"]).forEach(function (t) {
-            B[t] = button("ink-tool", "", t === "ruler" ? "자 — 보이기 · 숨기기" : NAMES[t] + " — 한 번 더 누르면 설정", function () {
-                if (P.off) {                                   // 꺼진 채 도구를 누르면 다시 켜짐 (자는 켜고 이어서 보이기 · 숨기기)
-                    setOff(false);
-                    if (t !== "ruler") { if (P.tool !== t) { P.tool = t; if (INK.indexOf(t) >= 0) P.lastDraw = t; savePrefs(); syncUI(); } return; }
-                }
-                if (t === "ruler") { P.ruler = !P.ruler; savePrefs(); placeRuler(); syncUI(); toast(P.ruler ? "자 — 끌어서 옮기고 두 손가락 · 휠 · ⟳ 로 돌려요" : "자를 숨겼어요"); return; }
-                if (P.tool === t) togglePop("tool");
+        var grab = el("div", "ink-grab"); grab.title = "끌어서 옮기기 · 모서리로 끌면 작게";
+        dock.appendChild(grab);
+        B.undo = button("ink-cb", icon("undo"), "실행 취소 (⌘Z)", doUndo);
+        B.redo = button("ink-cb", icon("redo"), "실행 복귀 (⇧⌘Z)", doRedo);
+        var ur = el("div", "ink-ur"); ur.appendChild(B.undo); ur.appendChild(B.redo); dock.appendChild(ur);
+        var tools = el("div", "ink-tools");
+        BAR.forEach(function (t) {
+            B[t] = button("ink-tool", "", t === "ruler" ? "자" : NAMES[t] + (t === "lasso" ? "" : " — 한 번 더 누르면 설정"), function () {
+                if (t === "ruler") { P.ruler = !P.ruler; savePrefs(); placeRuler(); syncUI(); return; }
+                if (P.tool === t && t !== "lasso") togglePop("tool");
                 else { P.tool = t; if (INK.indexOf(t) >= 0) P.lastDraw = t; savePrefs(); closePop(); syncUI(); }
                 if (t !== "lasso" && sel.length) { sel = []; drawSelection(); }
             });
-            dock.appendChild(B[t]);
-            if (t === "lasso") dock.appendChild(el("span", "ink-sep"));
+            tools.appendChild(B[t]);
         });
-        dock.appendChild(el("span", "ink-sep"));
-        B.quick = el("div", "ink-quick");
+        dock.appendChild(tools);
+        B.cols = el("div", "ink-cols");
         QUICK.forEach(function (c) {
-            var b = button("ink-qc" + (c === "auto" ? " auto" : ""), "", c === "auto" ? "검정 (테마 따라 글자색)" : c, function () { pickColor(c, false, true); });
-            if (c !== "auto") b.style.background = c;
+            var b = button("ink-qc", "", c === "auto" ? "검정" : c, function () { pickColor(c, false, true); });
             b.setAttribute("data-c", c);
-            B.quick.appendChild(b);
+            B.cols.appendChild(b);
         });
-        dock.appendChild(B.quick);
-        B.swatch = button("ink-swatch", "<i></i>", "색상 선택기", function () { togglePop("color"); });
-        dock.appendChild(B.swatch);
-        B.plus = button("ink-ib", icon("plus"), "추가 — 텍스트 · 서명 · 도형 · 돋보기", function () { togglePop("plus"); });
-        B.more = button("ink-ib", icon("more"), "더보기", function () { togglePop("more"); });
-        B.min = button("ink-ib", icon("down"), "도구 막대 최소화 (펜슬 필기는 계속 돼요)", function () { setOpen(false); });
-        dock.appendChild(B.plus); dock.appendChild(B.more); dock.appendChild(B.min);
+        B.wheel = button("ink-qc wheel", "", "색상", function () { togglePop("color"); });
+        B.cols.appendChild(B.wheel);
+        dock.appendChild(B.cols);
+        B.cw = button("ink-qc wheel ink-cw", "", "색상", function () { togglePop("color"); });   // 좁은 화면: 색 격자 대신 색상환 하나
+        dock.appendChild(B.cw);
+        var pm = el("div", "ink-pm");
+        B.plus = button("ink-cb", icon("plus"), "추가", function () { togglePop("plus"); });
+        B.more = button("ink-cb", icon("more"), "더 보기", function () { togglePop("more"); });
+        pm.appendChild(B.plus); pm.appendChild(B.more);
+        dock.appendChild(pm);
         document.body.appendChild(dock);
-        dockDrag();
+        dockDrag(grab);
 
-        fab = button("ink-fab ink-ui", "", "필기 도구 펼치기", function () { setOpen(true); });
+        fab = el("div", "ink-fab ink-ui ink-glass");
+        fab.setAttribute("role", "button"); fab.title = "필기 도구 펼치기"; fab.setAttribute("aria-label", "필기 도구 펼치기");
         document.body.appendChild(fab);
+        fabDrag();
 
-        pop = el("div", "ink-pop ink-ui");
+        pop = el("div", "ink-pop ink-ui ink-glass");
         document.body.appendChild(pop);
 
         selBar = el("div", "ink-selbar ink-ui");
         document.body.appendChild(selBar);
         buildRuler();
     }
-    function dockDrag() {                                      // 팔레트 빈 곳을 끌어 가장자리에 붙이기
+    function nearCorner(x, y) {                                // 화면 모서리 가까이면 그 모서리 (최소화)
+        var W = innerWidth, H = innerHeight, m = 150;
+        var l = x < m, r = x > W - m, t = y < m + 40, b = y > H - m;
+        return (t && l) ? "tl" : (t && r) ? "tr" : (b && l) ? "bl" : (b && r) ? "br" : null;
+    }
+    function dockDrag(grab) {                                  // 손잡이(또는 빈 곳)를 끌어 위 · 아래에 붙이기 · 모서리로 끌면 동그라미로 작게
         var st = null;
-        dock.addEventListener("pointerdown", function (e) {
-            if (e.target.closest("button")) return;
-            e.preventDefault();
-            cap(dock, e);
+        function down(e) {
+            if (e.target !== grab && (e.target !== dock)) return;
+            e.preventDefault(); cap(dock, e);
             var r = dock.getBoundingClientRect();
             st = { x: e.clientX, y: e.clientY, l: r.left, t: r.top, moved: false };
-        });
+        }
+        dock.addEventListener("pointerdown", down);
         dock.addEventListener("pointermove", function (e) {
             if (!st) return;
             var dx = e.clientX - st.x, dy = e.clientY - st.y;
             if (!st.moved && Math.hypot(dx, dy) < 6) return;
+            if (!st.moved) closePop();
             st.moved = true;
             dock.classList.add("dragging");
-            dock.style.cssText = "left:" + (st.l + dx) + "px;top:" + (st.t + dy) + "px;right:auto;bottom:auto;transform:none";
+            dock.style.cssText = "left:" + (st.l + dx) + "px;top:" + (st.t + dy) + "px;bottom:auto;transform:none";
         });
         function end(e) {
             if (!st) return;
@@ -1627,104 +1647,108 @@
             dock.classList.remove("dragging");
             dock.style.cssText = "";
             if (!moved) return;
-            var x = e.clientX, y = e.clientY, W = innerWidth, H = innerHeight;
-            var dists = { bottom: H - y, top: y, left: x, right: W - x };
-            P.dock = Object.keys(dists).sort(function (a, b) { return dists[a] - dists[b]; })[0];
-            savePrefs(); closePop(); syncUI();
+            var c = nearCorner(e.clientX, e.clientY);
+            if (c) { P.corner = c; setOpen(false); return; }
+            P.dock = e.clientY < innerHeight / 2 ? "top" : "bottom";
+            savePrefs(); syncUI();
         }
         dock.addEventListener("pointerup", end);
         dock.addEventListener("pointercancel", end);
     }
+    function fabDrag() {                                       // 동그라미: 누르면 펼치기 · 끌면 가까운 모서리로
+        var st = null;
+        fab.addEventListener("pointerdown", function (e) { e.preventDefault(); cap(fab, e); var r = fab.getBoundingClientRect(); st = { x: e.clientX, y: e.clientY, l: r.left, t: r.top, moved: false }; });
+        fab.addEventListener("pointermove", function (e) {
+            if (!st) return;
+            var dx = e.clientX - st.x, dy = e.clientY - st.y;
+            if (!st.moved && Math.hypot(dx, dy) < 6) return;
+            st.moved = true;
+            fab.style.cssText = "left:" + (st.l + dx) + "px;top:" + (st.t + dy) + "px;right:auto;bottom:auto;transition:none";
+        });
+        function end(e) {
+            if (!st) return;
+            var moved = st.moved; st = null;
+            fab.style.cssText = "";
+            if (!moved) { setOpen(true); return; }
+            var W = innerWidth, H = innerHeight;
+            P.corner = (e.clientY < H / 2 ? "t" : "b") + (e.clientX < W / 2 ? "l" : "r");
+            savePrefs(); syncUI();
+        }
+        fab.addEventListener("pointerup", end);
+        fab.addEventListener("pointercancel", end);
+        fab.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen(true); } });
+    }
 
-    /* ---------- 팝업 (도구 설정 · 색 · + · 더보기) ---------- */
-    var popKind = "", prevEl = null;
-    function closePop() { if (pop) pop.classList.remove("show"); popKind = ""; }
-    function togglePop(kind) {
+    /* ---------- 팝업 (굵기 · 색 · + · ⋯ · 펜슬 설정) ---------- */
+    var popKind = "", prevEl = null, popAnchor = null;
+    function closePop() { if (pop) { pop.classList.remove("show"); pop.classList.remove("menu"); } popKind = ""; }
+    function togglePop(kind, anchor) {
         if (popKind === kind) { closePop(); return; }
         popKind = kind;
         pop.innerHTML = "";
+        pop.className = "ink-pop ink-ui ink-glass";
         prevEl = null;
         if (kind === "tool") buildToolPop();
         else if (kind === "color") buildColorPop();
         else if (kind === "plus") buildPlusPop();
+        else if (kind === "shapes") buildShapesPop();
+        else if (kind === "stickers") buildStickerPop();
+        else if (kind === "sigs") buildSigPop();
+        else if (kind === "pencil") buildPencilPop();
         else buildMorePop();
+        void pop.offsetWidth;
         pop.classList.add("show");
-        placePop(kind === "tool" ? B[P.tool] : kind === "color" ? B.swatch : kind === "plus" ? B.plus : B.more);
+        popAnchor = anchor || (kind === "tool" ? B[P.tool] : kind === "color" ? (getComputedStyle(B.cols).display === "none" ? B.cw : B.wheel) : /^(plus|shapes|stickers|sigs)$/.test(kind) ? B.plus : B.more);
+        placePop(popAnchor);
     }
     function placePop(anchor) {
+        if (!anchor) return;
         var r = anchor.getBoundingClientRect(), d = dock.getBoundingClientRect();
         var w = pop.offsetWidth, h = pop.offsetHeight, W = innerWidth, H = innerHeight, x, y;
-        if (P.dock === "left") { x = d.right + 10; y = r.top + r.height / 2 - h / 2; }
-        else if (P.dock === "right") { x = d.left - w - 10; y = r.top + r.height / 2 - h / 2; }
-        else if (P.dock === "top") { x = r.left + r.width / 2 - w / 2; y = d.bottom + 10; }
-        else { x = r.left + r.width / 2 - w / 2; y = d.top - h - 10; }
+        x = r.left + r.width / 2 - w / 2;
+        if (P.dock === "top") { y = d.bottom + 10; pop.style.transformOrigin = "50% 0"; }
+        else { y = d.top - h - 10; pop.style.transformOrigin = "50% 100%"; }
         pop.style.left = Math.min(Math.max(10, x), W - w - 10) + "px";
         pop.style.top = Math.min(Math.max(10, y), H - h - 10) + "px";
     }
-    function refreshPop() { var k = popKind; popKind = ""; togglePop(k); syncUI(); }
+    function refreshPop() { var k = popKind, a = popAnchor; popKind = ""; togglePop(k, a); syncUI(); }
+    function squig(w) { return '<svg viewBox="0 0 28 32" aria-hidden="true"><path d="' + SQUIG + '" fill="none" stroke="currentColor" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+    function opSlider(cfg, onSet) {                            // 불투명도: 체크무늬 위 색 그라데이션 + 동그란 손잡이
+        var r = el("input", "ink-op"); r.type = "range"; r.min = 5; r.max = 100; r.step = 1; r.value = Math.round(cfg.o * 100);
+        r.setAttribute("aria-label", "불투명도");
+        r.style.setProperty("--opc", colorOf(cfg.c));
+        r.addEventListener("input", function () { cfg.o = r.value / 100; savePrefs(); syncUI(); if (onSet) onSet(r.value); });
+        return r;
+    }
     function buildToolPop() {
-        var t = P.tool;
-        if (t === "lasso") {
-            pop.appendChild(el("h4", "", "올가미"));
-            pop.appendChild(el("p", "ink-note", "필기를 빙 둘러 그리면 골라져요. 고른 안쪽을 끌면 옮겨지고, 위에 뜨는 메뉴에서 잘라내기 · 복사 · 복제 · 색 바꾸기 · 삭제 (Delete 키로도 삭제)."));
-            return;
-        }
-        var cfg = P[t];
-        pop.appendChild(el("h4", "", t === "eraser" ? "지우개" : NAMES[t] + " — 굵기 · 불투명도"));
+        var t = P.tool, cfg = P[t];
         if (t === "eraser") {
             var seg = el("div", "ink-seg");
-            [["pixel", "픽셀 지우개"], ["object", "개체 지우개"]].forEach(function (m) {
+            [["pixel", "픽셀 지우개"], ["object", "대상 지우개"]].forEach(function (m) {
                 seg.appendChild(button(cfg.mode === m[0] ? "on" : "", m[1], m[1], function () { cfg.mode = m[0]; savePrefs(); refreshPop(); }));
             });
-            var row0 = el("div", "ink-row"); row0.appendChild(seg); pop.appendChild(row0);
-            if (cfg.mode === "object") { pop.appendChild(el("p", "ink-note", "닿은 획을 통째로 지워요. (넣은 텍스트 · 도형은 고른 뒤 삭제)")); return; }
+            pop.appendChild(seg);
+            if (cfg.mode === "pixel") {
+                var er = el("div", "ink-erow");
+                WIDTHS.eraser.forEach(function (w, i) {
+                    var s = [10, 13, 17, 21, 26][i];
+                    er.appendChild(button("ink-eb" + (Math.abs(cfg.w - w) < 0.01 ? " on" : ""), '<i style="width:' + s + "px;height:" + s + 'px"></i>', "크기 " + (i + 1), function () { cfg.w = w; savePrefs(); refreshPop(); }));
+                });
+                pop.appendChild(er);
+            }
+            return;
         }
-        var ws = el("div", "ink-widths");
-        WIDTHS[t].forEach(function (w) {
-            var dsz = Math.max(3, Math.min(22, t === "marker" || t === "watercolor" ? w * 0.55 : t === "eraser" ? w * 0.42 : t === "crayon" ? w * 1.2 : w * 2.4));
-            ws.appendChild(button(Math.abs(cfg.w - w) < 0.01 ? "on" : "", '<span style="width:' + f1(dsz) + "px;height:" + f1(dsz) + 'px"></span>', "굵기 " + w, function () { cfg.w = w; savePrefs(); refreshPop(); }));
+        var wr = el("div", "ink-wrow");
+        WIDTHS[t].forEach(function (w, i) {
+            var sw = [1.4, 2.4, 3.6, 5, 6.6][i];
+            wr.appendChild(button("ink-wb" + (Math.abs(cfg.w - w) < 0.01 ? " on" : ""), squig(sw), "굵기 " + (i + 1), function () { cfg.w = w; savePrefs(); refreshPop(); }));
         });
-        pop.appendChild(ws);
-        var ints = /^(marker|eraser|watercolor|crayon)$/.test(t);
-        pop.appendChild(slider("굵기", RANGE[t][0], RANGE[t][1], ints ? 1 : 0.1, cfg.w, function (v) { cfg.w = v; }, function (v) { return ints ? String(Math.round(v)) : v.toFixed(1); }));
-        if (t !== "eraser") {
-            pop.appendChild(slider("불투명도", 10, 100, 1, Math.round(cfg.o * 100), function (v) { cfg.o = v / 100; }, function (v) { return Math.round(v) + "%"; }));
-            pop.appendChild(previewSvg(t));
-        } else pop.appendChild(el("p", "ink-note", "문지른 부분만 지워요."));
+        pop.appendChild(wr);
+        pop.appendChild(opSlider(cfg));
     }
-    function slider(label, min, max, step, val, set, fmt) {
-        var row = el("div", "ink-row");
-        row.appendChild(el("span", "ink-lab", label));
-        var r = el("input"); r.type = "range"; r.min = min; r.max = max; r.step = step; r.value = val;
-        var out = el("span", "ink-val", fmt(+val));
-        r.addEventListener("input", function () { set(+r.value); out.textContent = fmt(+r.value); savePrefs(); updatePreview(); syncUI(); syncWidthBtns(); });
-        row.appendChild(r); row.appendChild(out);
-        return row;
-    }
-    function syncWidthBtns() {
-        var t = P.tool;
-        if (!WIDTHS[t]) return;
-        pop.querySelectorAll(".ink-widths button").forEach(function (b, i) { b.classList.toggle("on", Math.abs(P[t].w - WIDTHS[t][i]) < 0.01); });
-    }
-    function previewSvg(t) {
-        var s = document.createElementNS(NS, "svg");
-        s.setAttribute("class", "ink-prev"); s.setAttribute("viewBox", "0 0 290 56");
-        prevEl = { svg: s, t: t };
-        updatePreview();
-        return s;
-    }
-    function updatePreview() {
-        if (!prevEl) return;
-        var t = prevEl.t, cfg = P[t], pts = [];
-        for (var i = 0; i <= 40; i++) pts.push(18 + i * 6.3, 28 + Math.sin(i / 40 * Math.PI * 2) * 12, LINE_T[t] ? 0.5 : 0.25 + 0.6 * Math.sin(i / 40 * Math.PI));
-        var st = { t: t, c: cfg.c, w: cfg.w, o: cfg.o, pts: pts, sim: 0 };
-        prevEl.svg.innerHTML = "";
-        var p = makeEl(st);
-        setD(p, shapeOf(st, 0, 0));
-        prevEl.svg.appendChild(p);
-    }
+    function updatePreview() {}
 
-    /* ---------- 색상 선택기 ---------- */
+    /* ---------- 색상 선택기 (Apple UIColorPicker 처럼) ---------- */
     function hexOf(r, g, b) { return "#" + [r, g, b].map(function (v) { return ("0" + Math.max(0, Math.min(255, Math.round(v))).toString(16)).slice(-2); }).join(""); }
     function rgbOf(hex) {
         var c = colorOf(hex), m = /^#?([0-9a-f]{6})$/i.exec(c);
@@ -1747,12 +1771,13 @@
     }
     function buildColorPop() {
         var t = P.lastDraw, cfg = P[t];
+        pop.classList.add("ink-cp");
         var head = el("div", "ink-cphead");
-        head.appendChild(button("ink-cpx" + (picking ? " on" : ""), icon("drop"), "스포이드 — 필기를 누르면 그 색", function () {
+        head.appendChild(button("ink-cpx" + (picking ? " on" : ""), icon("drop"), "스포이드", function () {
             picking = true; root.classList.add("ink-picking"); closePop(); toast("가져올 색의 필기를 누르세요");
         }));
         head.appendChild(el("b", "", "색상"));
-        head.appendChild(button("ink-cpx", icon("close"), "닫기", closePop));
+        head.appendChild(el("span"));
         pop.appendChild(head);
         var seg = el("div", "ink-seg");
         [["grid", "격자"], ["spec", "스펙트럼"], ["slider", "슬라이더"]].forEach(function (m) {
@@ -1769,16 +1794,16 @@
             });
             pop.appendChild(g);
         } else if (P.cpTab === "spec") {
-            var cv = el("canvas", "ink-spec"); cv.width = 292; cv.height = 190;
+            var cv = el("canvas", "ink-spec"); cv.width = 300; cv.height = 220;
             pop.appendChild(cv);
             var cx = cv.getContext("2d");
-            for (var x = 0; x < 292; x++) {
-                var gr = cx.createLinearGradient(0, 0, 0, 190), h = x / 292 * 360;
-                gr.addColorStop(0, hsl(h, 100, 92)); gr.addColorStop(0.5, hsl(h, 100, 50)); gr.addColorStop(1, hsl(h, 100, 8));
-                cx.fillStyle = gr; cx.fillRect(x, 0, 1, 190);
+            for (var x = 0; x < 300; x++) {
+                var gr = cx.createLinearGradient(0, 0, 0, 220), h = x / 300 * 360;
+                gr.addColorStop(0, hsl(h, 100, 94)); gr.addColorStop(0.5, hsl(h, 100, 50)); gr.addColorStop(1, hsl(h, 100, 8));
+                cx.fillStyle = gr; cx.fillRect(x, 0, 1, 220);
             }
             var pick = function (e) {
-                var r = cv.getBoundingClientRect(), px = Math.max(0, Math.min(291, (e.clientX - r.left) / r.width * 292)), py = Math.max(0, Math.min(189, (e.clientY - r.top) / r.height * 190));
+                var r = cv.getBoundingClientRect(), px = Math.max(0, Math.min(299, (e.clientX - r.left) / r.width * 300)), py = Math.max(0, Math.min(219, (e.clientY - r.top) / r.height * 220));
                 var d = cx.getImageData(px | 0, py | 0, 1, 1).data;
                 pickColor(hexOf(d[0], d[1], d[2]), true, false, true);
             };
@@ -1787,43 +1812,41 @@
             cv.addEventListener("pointermove", function (e) { if (down) pick(e); });
             cv.addEventListener("pointerup", function () { down = false; refreshPop(); });
         } else {
-            var rgb = rgbOf(cfg.c), ins = [];
-            ["R", "G", "B"].forEach(function (n, i) {
-                var row = el("div", "ink-rgb");
-                row.appendChild(el("b", "", n));
+            var rgb = rgbOf(cfg.c), box = el("div", "ink-rgb");
+            ["빨간색", "초록색", "파란색"].forEach(function (n, i) {
+                box.appendChild(el("label", "", n));
                 var r = el("input"); r.type = "range"; r.min = 0; r.max = 255; r.value = rgb[i];
-                var num = el("input"); num.type = "number"; num.min = 0; num.max = 255; num.value = rgb[i];
-                var on = function (v) { rgb[i] = +v; r.value = num.value = v; hx.value = hexOf(rgb[0], rgb[1], rgb[2]).slice(1); pickColor(hexOf(rgb[0], rgb[1], rgb[2]), true, false, true); };
+                var num = el("input", "ink-num"); num.type = "number"; num.min = 0; num.max = 255; num.value = rgb[i];
+                var on = function (v) { rgb[i] = +v; r.value = num.value = v; hx.value = hexOf(rgb[0], rgb[1], rgb[2]).slice(1).toUpperCase(); pickColor(hexOf(rgb[0], rgb[1], rgb[2]), true, false, true); };
                 r.addEventListener("input", function () { on(r.value); });
                 num.addEventListener("change", function () { on(Math.max(0, Math.min(255, +num.value || 0))); });
-                row.appendChild(r); row.appendChild(num);
-                pop.appendChild(row); ins.push(r);
+                box.appendChild(r); box.appendChild(num);
             });
-            var hrow = el("div", "ink-rgb"); hrow.appendChild(el("b", "", "#"));
-            var hx = el("input", "ink-hex"); hx.value = hexOf(rgb[0], rgb[1], rgb[2]).slice(1); hx.maxLength = 6;
-            hx.addEventListener("change", function () { if (/^[0-9a-f]{6}$/i.test(hx.value)) { pickColor("#" + hx.value.toLowerCase(), true); } });
-            hrow.appendChild(el("span", "ink-lab", "16진수")); hrow.appendChild(hx);
-            pop.appendChild(hrow);
+            box.appendChild(el("label", "", "디스플레이 P3 16진수 색상 #"));
+            var hx = el("input", "ink-num"); hx.value = hexOf(rgb[0], rgb[1], rgb[2]).slice(1).toUpperCase(); hx.maxLength = 6; hx.style.gridColumn = "2";
+            hx.addEventListener("change", function () { if (/^[0-9a-f]{6}$/i.test(hx.value)) pickColor("#" + hx.value.toLowerCase(), true); });
+            box.appendChild(el("span")); box.appendChild(hx);
+            pop.appendChild(box);
         }
-        var op = el("div", "ink-op");
-        op.appendChild(el("span", "ink-lab", "불투명도"));
-        var orng = el("input"); orng.type = "range"; orng.min = 10; orng.max = 100; orng.value = Math.round(cfg.o * 100);
-        var oval = el("span", "ink-val", Math.round(cfg.o * 100) + "%");
-        orng.addEventListener("input", function () { cfg.o = orng.value / 100; oval.textContent = orng.value + "%"; savePrefs(); syncUI(); });
-        op.appendChild(orng); op.appendChild(oval);
-        pop.appendChild(op);
-        pop.appendChild(el("h4", "", "내 색"));
-        var sv = el("div", "ink-saved");
+        pop.appendChild(el("div", "ink-oplab", "불투명도"));
+        var row = el("div", "ink-oprow"), pct = el("div", "ink-pct", Math.round(cfg.o * 100) + "%");
+        row.appendChild(opSlider(cfg, function (v) { pct.textContent = v + "%"; big.querySelector("i").style.opacity = v / 100; }));
+        row.appendChild(pct);
+        pop.appendChild(row);
+        pop.appendChild(el("div", "ink-cphr"));
+        var sv = el("div", "ink-saved"), big = el("div", "ink-big", "<i></i>"), sw = el("div", "ink-sw");
+        big.querySelector("i").style.cssText = "background:" + colorOf(cfg.c) + ";opacity:" + cfg.o;
+        sv.appendChild(big);
         ["auto"].concat(P.saved).forEach(function (c) {
-            var b = button(c === "auto" ? "auto" : "", "", c === "auto" ? "글자색 (테마 따라)" : c, function () { pickColor(c, false); });
-            if (c !== "auto") b.style.background = c;
-            if (cfg.c === c) b.classList.add("on");
-            sv.appendChild(b);
+            var b = button(cfg.c === c ? "on" : "", "", c === "auto" ? "검정" : c, function () { pickColor(c, false); });
+            b.style.background = colorOf(c); b.style.setProperty("--ring", colorOf(c));
+            sw.appendChild(b);
         });
-        sv.appendChild(button("ink-add", "+", "지금 색을 내 색에 저장", function () {
-            if (cfg.c !== "auto" && P.saved.indexOf(cfg.c) < 0) { P.saved = P.saved.concat([cfg.c]).slice(-12); savePrefs(); }
+        sw.appendChild(button("ink-add", icon("plus"), "지금 색을 저장", function () {
+            if (cfg.c !== "auto" && P.saved.indexOf(cfg.c) < 0) { P.saved = P.saved.concat([cfg.c]).slice(-15); savePrefs(); }
             refreshPop();
         }));
+        sv.appendChild(sw);
         pop.appendChild(sv);
     }
     function pickColor(c, custom, quick, live) {
@@ -1837,15 +1860,42 @@
         if (quick || live) { syncUI(); if (popKind === "color" && !live) refreshPop(); return; }
         if (popKind === "color") refreshPop(); else syncUI();
     }
+
+    /* ---------- + 메뉴 (스티커 · 텍스트 · 서명 · 모양 · 확대경) ---------- */
+    function mi(ic, label, fn, cls) { return button("ink-mi" + (cls ? " " + cls : ""), icon(ic) + '<span class="sp">' + label + "</span>", label, fn); }
     function buildPlusPop() {
-        var m = el("div", "ink-menu");
-        m.appendChild(button("", icon("text") + "<span>텍스트 추가</span>", "텍스트", addText));
-        m.appendChild(el("hr"));
-        pop.appendChild(m);
-        pop.appendChild(el("h4", "", "서명"));
+        pop.classList.add("menu");
+        pop.appendChild(mi("sticker", "스티커 추가", function () { togglePop("stickers", B.plus); }));
+        pop.appendChild(mi("text", "텍스트 추가", function () { closePop(); addText(); }));
+        pop.appendChild(mi("sig", "서명 추가", function () { if (SIGS.length) togglePop("sigs", B.plus); else openSigPad(); }));
+        pop.appendChild(mi("shape", "모양 추가", function () { togglePop("shapes", B.plus); }));
+        pop.appendChild(mi("mag", "확대경 추가", function () { closePop(); addMag(); }));
+        if (clip.length) { pop.appendChild(el("div", "ink-mhr")); pop.appendChild(mi("paste", "붙여넣기", function () { closePop(); doPaste(); })); }
+    }
+    function buildShapesPop() {
+        pop.classList.add("menu");
+        var g = el("div", "ink-shapes");
+        [["rect", "사각형"], ["oval", "원"], ["bubble", "말풍선"], ["star", "별"], ["arrow", "화살표"], ["line", "선"]].forEach(function (s) {
+            g.appendChild(button("", icon(s[0]), s[1], function () { closePop(); addShape(s[0]); }));
+        });
+        pop.appendChild(g);
+    }
+    var STICKERS = ["⭐️", "❤️", "👍", "✅", "❌", "❓", "❗️", "💡", "🔥", "📌", "✏️", "⚠️", "🎯", "📝", "⏰", "😀", "😭", "💯"];
+    function buildStickerPop() {
+        pop.classList.add("menu");
+        var g = el("div", "ink-stk");
+        STICKERS.forEach(function (s) { g.appendChild(button("", s, "스티커", function () { closePop(); addSticker(s); })); });
+        pop.appendChild(g);
+    }
+    function addSticker(s) {                                   // 스티커 = 크게 넣은 이모지 (텍스트처럼 옮기기 · 크기)
+        var c = viewCenter(), an = anchored(c.x, c.y);
+        addObj({ k: "text", a: an.a, fx: an.fx, fy: an.fy, x: f1(c.x - 40 - an.ax), y: f1(c.y - 40 - an.ay), w: 84, fs: 60, c: "auto", al: "center", txt: s });
+    }
+    function buildSigPop() {
+        pop.classList.add("menu");
         var sg = el("div", "ink-sigs");
         SIGS.forEach(function (s, i) {
-            var b = button("", "", "서명 " + (i + 1) + " 넣기", function () { addSig(s); });
+            var b = button("", "", "서명 " + (i + 1) + " 넣기", function () { closePop(); addSig(s); });
             var mini = document.createElementNS(NS, "svg");
             mini.setAttribute("viewBox", "-6 -6 112 " + f1(100 * s.ar + 12));
             s.sg.forEach(function (pts) {
@@ -1858,74 +1908,76 @@
             sg.appendChild(b);
         });
         pop.appendChild(sg);
-        var m2 = el("div", "ink-menu");
-        m2.appendChild(button("", icon("sig") + "<span>" + (SIGS.length ? "새 서명 추가" : "서명 추가") + "</span>", "서명", openSigPad));
-        if (SIGS.length) m2.appendChild(button("ink-danger", icon("trash") + "<span>저장한 서명 모두 지우기</span>", "서명 지우기", function () { if (confirm("저장한 서명을 모두 지울까요?")) { SIGS = []; saveSigs(); refreshPop(); } }));
-        m2.appendChild(el("hr"));
-        pop.appendChild(m2);
-        pop.appendChild(el("h4", "", "도형"));
-        var sh = el("div", "ink-shapes");
-        [["rect", "사각형"], ["oval", "원"], ["bubble", "말풍선"], ["star", "별"], ["arrow", "화살표"], ["line", "선"]].forEach(function (s) {
-            sh.appendChild(button("", icon(s[0]), s[1], function () { addShape(s[0]); }));
+        pop.appendChild(mi("plus", "서명 추가", function () { openSigPad(); }));
+        pop.appendChild(mi("trash", "서명 지우기", function () { if (confirm("저장한 서명을 모두 지울까요?")) { SIGS = []; saveSigs(); closePop(); } }, "danger"));
+    }
+
+    /* ---------- ⋯ 메뉴 (자동 최소화 · 손가락으로 그리기 · 펜슬 설정…) ---------- */
+    function tog(label, key, after) {
+        var b = button("ink-mi" + (P[key] ? " on" : ""), '<span class="sp">' + label + '</span><span class="ink-tog"></span>', label, function () {
+            P[key] = !P[key]; savePrefs(); b.classList.toggle("on", P[key]); if (after) after(); syncUI();
         });
-        pop.appendChild(sh);
-        var m3 = el("div", "ink-menu");
-        m3.appendChild(el("hr"));
-        m3.appendChild(button("", icon("mag") + "<span>돋보기</span>", "돋보기", addMag));
-        if (clip.length) m3.appendChild(button("", icon("paste") + "<span>붙여넣기</span>", "붙여넣기", function () { closePop(); doPaste(); }));
-        pop.appendChild(m3);
+        b.setAttribute("role", "switch"); b.setAttribute("aria-checked", P[key] ? "true" : "false");
+        return b;
     }
     function buildMorePop() {
-        var m = el("div", "ink-menu");
-        function sw(ic, label, key, after) {
-            var b = button(P[key] ? "on" : "", icon(ic) + "<span>" + label + '</span><span class="ink-sw"></span>', label, function () {
-                P[key] = !P[key]; savePrefs(); b.classList.toggle("on", P[key]); if (after) after(); syncUI();
-            });
-            m.appendChild(b);
-        }
-        sw("nibOff", "필기 끄기 (펜슬로 스크롤)", "off", function () { P.off = !P.off; setOff(!P.off); });
-        sw("finger", "손가락으로 그리기", "finger", function () { toast(P.finger ? "손가락으로도 써요 — 스크롤하려면 막대를 최소화하세요" : "손가락은 스크롤 · 펜슬만 써요"); });
-        sw("mouse", "마우스로 그리기 (맥)", "mouse");
-        sw("mini", "자동으로 최소화", "autoMin", function () { toast(P.autoMin ? "펜슬로 쓰기 시작하면 막대가 작아져요" : "막대를 그대로 둬요"); });
-        sw("eye", "필기 숨기기", "hidden", function () { renderAll(); placeRuler(); });
-        m.appendChild(el("hr"));
-        m.appendChild(button("ink-danger", icon("trash") + "<span>이 페이지 필기 모두 지우기</span>", "모두 지우기", function () { closePop(); doClear(); }));
-        pop.appendChild(m);
-        pop.appendChild(el("p", "ink-note", "펜슬로 스크롤하려면 막대 맨 앞 펜 버튼으로 필기를 끄세요 (도구를 누르면 다시 켜짐) · 펜슬은 막대를 최소화해도 계속 써져요 · 그리다 멈추고 꾹 → 선 · 원 · 사각형 · 삼각형 · 도구를 한 번 더 누르면 굵기 · 막대 빈 곳을 끌면 위 · 아래 · 왼쪽 · 오른쪽에 붙어요 · 필기는 이 기기 브라우저에 저장돼요"));
+        pop.classList.add("menu");
+        pop.appendChild(tog("자동 최소화", "autoMin"));
+        pop.appendChild(tog("손가락으로 그리기", "finger"));
+        pop.appendChild(el("div", "ink-mhr"));
+        pop.appendChild(button("ink-mi", '<span class="sp">펜슬 설정…</span>', "펜슬 설정", function () { togglePop("pencil", B.more); }));
+    }
+    function buildPencilPop() {                                // 사이트에만 있는 설정 (아이패드 '펜슬 설정' 자리)
+        pop.classList.add("menu");
+        pop.appendChild(el("div", "ink-mh", "펜슬 설정"));
+        pop.appendChild(tog("마우스로 그리기 (맥)", "mouse"));
+        pop.appendChild(tog("필기 숨기기", "hidden", function () { renderAll(); placeRuler(); }));
+        pop.appendChild(el("div", "ink-mhr"));
+        pop.appendChild(mi("trash", "이 페이지 필기 모두 지우기", function () { closePop(); doClear(); }, "danger"));
+        pop.appendChild(el("p", "ink-note", "위 ⓐ 버튼으로 필기를 끄면 펜슬로 스크롤돼요 · 그리다 멈추고 꾹 → 선 · 원 · 사각형 · 손잡이를 모서리로 끌면 작게 · 필기는 이 기기 브라우저에 저장돼요"));
     }
 
     /* ---------- 상태 반영 ---------- */
     function syncUI() {
         if (!dock) return;
-        TOOLS.concat(["ruler"]).forEach(function (t) {
-            var cfg = P[t];
-            B[t].innerHTML = toolIcon(t, cfg && cfg.c ? colorOf(cfg.c) : "#8e8e93");
+        BAR.forEach(function (t) {
+            var cfg = P[t], tip = cfg && cfg.c ? colorOf(cfg.c) : "#8e8e93";
+            var key = t + "|" + tip + "|" + (cfg && cfg.o) + "|" + isDark();
+            if (B[t].getAttribute("data-k") !== key) { B[t].innerHTML = toolArt(t, tip, /^(marker|watercolor)$/.test(t) ? cfg.o : null); B[t].setAttribute("data-k", key); }
             B[t].classList.toggle("on", t === "ruler" ? !!P.ruler : P.tool === t);
         });
-        var dc = P[P.lastDraw];
-        B.swatch.querySelector("i").style.background = colorOf(dc.c);
-        B.quick.querySelectorAll(".ink-qc").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-c") === dc.c); });
+        var dc = P[P.lastDraw], showSel = P.tool !== "eraser" && P.tool !== "lasso";
+        B.cols.querySelectorAll(".ink-qc[data-c]").forEach(function (b) {
+            var c = b.getAttribute("data-c"), cc = colorOf(c);
+            b.style.background = cc; b.style.setProperty("--ring", cc);
+            b.classList.toggle("on", showSel && c === dc.c);
+        });
+        var custom = QUICK.indexOf(dc.c) < 0;
+        B.wheel.classList.toggle("on", showSel && custom); B.wheel.style.setProperty("--ring", colorOf(dc.c));
+        B.cw.style.boxShadow = "0 0 0 3px var(--ink-glass-2),0 0 0 5.5px " + colorOf(dc.c);
         B.undo.disabled = !undoS.length;
         B.redo.disabled = !redoS.length;
-        dock.className = "ink-dock ink-ui d-" + P.dock + (P.off ? " off" : "");
-        fab.className = "ink-fab ink-ui d-" + P.dock + (P.off ? " off" : "");
-        B.pow.innerHTML = icon(P.off ? "nibOff" : "nib");
-        B.pow.classList.toggle("on", !P.off); B.pow.classList.toggle("off", P.off);
-        B.pow.setAttribute("aria-pressed", P.off ? "false" : "true");
-        fab.title = P.off ? "필기 도구 펼치기 (필기 꺼짐)" : "필기 도구 펼치기";
-        root.classList.toggle("ink-min", !P.open);
-        root.classList.toggle("ink-finger", P.open && P.finger && !P.hidden && !P.off);
+        dock.className = "ink-dock ink-ui ink-glass d-" + (P.dock === "top" ? "top" : "bottom");
+        fab.className = "ink-fab ink-ui ink-glass c-" + (/^(tl|tr|bl|br)$/.test(P.corner) ? P.corner : "bl");
         var ft = P.tool;
-        fab.innerHTML = toolIcon(ft, P[ft] && P[ft].c ? colorOf(P[ft].c) : "#8e8e93");
+        var fk = ft + "|" + (P[ft] && P[ft].c) + "|" + isDark();
+        if (fab.getAttribute("data-k") !== fk) { fab.innerHTML = toolArt(ft, P[ft] && P[ft].c ? colorOf(P[ft].c) : "#8e8e93", null); fab.setAttribute("data-k", fk); }
+        root.classList.toggle("ink-min", !P.open);
+        root.classList.toggle("ink-mkoff", !!P.off);
+        root.classList.toggle("ink-finger", P.open && P.finger && !P.hidden && !P.off);
+        mkBtn.classList.toggle("on", !P.off);
+        mkBtn.setAttribute("aria-pressed", P.off ? "false" : "true");
         svg.style.display = P.hidden ? "none" : "";
         objLayer.style.display = P.hidden ? "none" : "";
     }
     function setOpen(v) {
+        var was = P.open;
         P.open = v; savePrefs(); closePop();
-        if (!v) toast(P.off ? "막대를 최소화했어요 — 필기는 꺼져 있어요 (펜슬로 스크롤)" : "막대를 최소화했어요 — 펜슬 필기는 계속 돼요");
         syncUI();
+        if (v && !was) { dock.classList.add("enter"); void dock.offsetWidth; requestAnimationFrame(function () { dock.classList.remove("enter"); }); }
+        if (!v && was) { fab.classList.remove("pop"); void fab.offsetWidth; fab.classList.add("pop"); }
     }
-    function setOff(v) {                                       // 필기 켜기 · 끄기 — 끄면 펜슬 · 손가락 · 마우스 모두 스크롤 · 클릭만
+    function setOff(v) {                                       // 필기(마크업) 켜기 · 끄기 — 끄면 막대가 사라지고 펜슬 · 손가락 · 마우스는 스크롤 · 클릭만
         P.off = v; savePrefs(); closePop();
         if (v) {
             if (editing) endEdit();
@@ -1936,7 +1988,11 @@
             if (picking) { picking = false; root.classList.remove("ink-picking"); }
         }
         renderAll(); placeRuler(); syncUI();
-        toast(v ? "필기 꺼짐 — 펜슬로 스크롤할 수 있어요 (도구를 누르면 다시 켜져요)" : "필기 켜짐 — 펜슬로 써요");
+        if (!v) {
+            var el2 = P.open ? dock : fab;
+            el2.classList.add(P.open ? "enter" : "pop"); void el2.offsetWidth;
+            requestAnimationFrame(function () { dock.classList.remove("enter"); });
+        }
     }
 
     /* ===================== 시작 ===================== */
