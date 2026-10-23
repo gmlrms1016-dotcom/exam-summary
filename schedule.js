@@ -1,6 +1,8 @@
 /* =====================================================================
    schedule.js  ·  전 과목 공통 시험 일정 + 자동 '시험 완료(복습)' 전환
-   - 시험 시작 시각 + 3시간이 지나면(EXAM_GRACE_MS) 그 과목은 '시험 완료'로 간주
+   - 시험 시작 시각 + 1시간(EXAM_GRACE_MS = 시험 시간)이 지나면 그 과목은 '시험 완료'로 간주
+     → 학사일정(시험 주간 월~금)이 아니라 내 시간표 기준: 그 화면 과목 중 마지막 시험이 끝나면 시험 기간도 끝
+       (2026-10-23 사용자: '운영체제 목 14:00 시험이 15시에 끝나면 시험 끝 · 금요일은 공강' · 교양은 교양 과목끼리)
    - 과목 페이지에서 이 파일을 <head>에 넣으면, 시험 종료 시 자동으로
      ?done=1 (복습 모드)로 전환됨 → 각 페이지의 기존 done 처리(정답 공개)가 동작
    - index.html 은 EXAM_SCHEDULE / isExamFinished 를 읽어 카드 상태를 자동 계산
@@ -29,14 +31,14 @@
         "인공지능과뇌인지과학.html": "2026-10-22T11:00:00"
     };
 
-    // 시험 시작 + 3시간 → '완료(복습)'로 전환
-    window.EXAM_GRACE_MS = 3 * 60 * 60 * 1000;
+    // 시험 시간 1시간 (운영체제 14:00 시작 → 15:00 끝) — 시작 + 1시간이 지나면 '완료(복습)'로 전환
+    window.EXAM_GRACE_MS = 60 * 60 * 1000;
 
     window.examStartMs = function (file) {
         var iso = window.EXAM_SCHEDULE[file];
         return iso ? new Date(iso).getTime() : NaN;
     };
-    // 시험 시작 + 3시간이 지났는가?
+    // 시험 시작 + 1시간(시험 끝)이 지났는가?
     window.isExamFinished = function (file) {
         var start = window.examStartMs(file);
         return !isNaN(start) && Date.now() >= start + window.EXAM_GRACE_MS;

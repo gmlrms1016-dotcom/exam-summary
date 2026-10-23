@@ -288,6 +288,7 @@
         "html[data-theme=dark] .pill.wk,html[data-theme=dark] .cd.wk{background:#25292e;color:#f5f5f5;border-color:#25292e}",
         "html[data-theme=dark] .pill.live,html[data-theme=dark] .cd.live{background:#ed4956;color:#fff;border-color:#ed4956}",
         "html[data-theme=dark] .pill.fin{background:#25292e;color:#a8a8a8;border-color:#25292e}",
+        "html[data-theme=dark] .cd.fin{background:#25292e;color:#a8a8a8;border-color:#25292e}",   // 시험 기간 끝 (복습 칩과 같은 색)
         // 1주일 이내 여유 칩(.wk.urgent · index.html) — 다크: 흰 글자가 순간 빨개지고 빨간 링 (동작 줄이기면 빨간 글자 · 테두리만)
         "@keyframes urg-flash-d{0%,14%{color:#ff4d5e}26%,100%{color:#f5f5f5}}",
         "@keyframes urg-ring-d{0%{box-shadow:0 0 0 0 rgba(237,73,86,.55);border-color:#ed4956}30%,100%{box-shadow:0 0 0 9px rgba(237,73,86,0);border-color:#25292e}}",
@@ -311,6 +312,7 @@
         "html[data-theme=dark] .haksa-d,html[data-theme=dark] .haksa-more{color:#a8a8a8}",
         "html[data-theme=dark] .haksa-more:hover{color:#f5f5f5}",
         "html[data-theme=dark] .haksa-now{background:#0095f6;color:#fff}",
+        "html[data-theme=dark] .haksa-now.fin{background:#25292e;color:#a8a8a8}",   // 학사일정 · 내 시험 끝
         "html[data-theme=dark] .haksa-list li.haksa-empty{color:#737373}",
         "html[data-theme=dark] .haksa-foot{background:#16191d;border-top-color:#262a2f}",
         "html[data-theme=dark] .haksa-open{background:#25292e;color:#f5f5f5}",
