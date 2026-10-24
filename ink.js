@@ -42,7 +42,7 @@
         watercolor: [8, 14, 22, 32, 46], eraser: [8, 14, 22, 34, 50]
     };
     var RANGE = { pen: [0.5, 12], monoline: [0.5, 14], fountain: [1, 18], marker: [4, 48], pencil: [0.6, 12], crayon: [2, 28], watercolor: [4, 64], eraser: [4, 80] };
-    var QUICK = ["auto", "#0a84ff", "#34c759", "#ffcc00", "#ff3b30"];          // 막대의 색 5개 (아이패드 기본: 검정 · 파랑 · 초록 · 노랑 · 빨강)
+    var QUICK = ["auto", "#157efb", "#53d769", "#fed030", "#fc3142"];   // 미리보기 막대 색을 화면에서 그대로 뽑음          // 막대의 색 5개 (아이패드 기본: 검정 · 파랑 · 초록 · 노랑 · 빨강)
     var GRID_HUES = [190, 210, 228, 262, 288, 318, 0, 18, 36, 52, 72, 110];   // 격자 12열 (하늘 · 파랑 · 남색 · 보라 · 자주 · 분홍 · 빨강 · 주황 · 귤 · 노랑 · 연두 · 초록)
 
     /* ===================== 설정 (모든 페이지 공통) ===================== */
@@ -50,8 +50,8 @@
         tool: "pen", lastDraw: "pen", open: true, finger: false, mouse: false, hidden: false, autoMin: false, off: false,
         dock: "bottom", corner: "bl", ruler: false, rul: { cx: 0, cy: 0, ang: 0 },
         pen: { c: "auto", w: 1.8, o: 1 }, monoline: { c: "auto", w: 2, o: 1 }, fountain: { c: "auto", w: 3.5, o: 1 },
-        marker: { c: "#ffcc00", w: 18, o: 0.35 }, pencil: { c: "auto", w: 2, o: 0.85 }, crayon: { c: "#ff3b30", w: 8, o: 0.9 },
-        watercolor: { c: "#0a84ff", w: 22, o: 0.5 },
+        marker: { c: "#fed030", w: 18, o: 0.35 }, pencil: { c: "auto", w: 2, o: 0.85 }, crayon: { c: "#fc3142", w: 8, o: 0.9 },
+        watercolor: { c: "#157efb", w: 22, o: 0.5 },
         eraser: { mode: "pixel", w: 22 },
         recent: [], saved: [], cpTab: "grid"
     };
@@ -73,7 +73,7 @@
         if (out.eraser.mode === "stroke") out.eraser.mode = "object";
         if (!/^(bottom|top)$/.test(out.dock)) out.dock = "bottom";          // v4: 위 · 아래에만 붙음 (예전 왼쪽 · 오른쪽은 아래로)
         if (!/^(tl|tr|bl|br)$/.test(out.corner)) out.corner = "bl";
-        if (!out.saved.length) out.saved = out.recent.length ? out.recent.slice(0, 10) : ["#0a84ff", "#34c759", "#ffcc00", "#ff3b30"];   // 내 색 기본 = Apple 처럼 파랑 · 초록 · 노랑 · 빨강
+        if (!out.saved.length) out.saved = out.recent.length ? out.recent.slice(0, 10) : ["#157efb", "#53d769", "#fed030", "#fc3142"];   // 내 색 기본 = Apple 처럼 파랑 · 초록 · 노랑 · 빨강
         return out;
     }
     function savePrefs() { try { localStorage.setItem("ink:prefs2", JSON.stringify(P)); } catch (e) {} }
@@ -473,7 +473,7 @@
     var strokes = [];              // 획 { a, fx, fy, t, c, w, o, pts:[x,y,p…] } · 넣은 것 { k: text|shape|sig|mag, … } — 바꿀 때는 새 객체로
     var undoS = [], redoS = [];
     var rendered = [];             // strokes 와 같은 순서 { el, bb, ox, oy }
-    var svg, gMarker, gPencil, gPen, gObj, gSel, layerCur, lassoPath, objLayer;
+    var svg, gHalo, gMarker, gPencil, gPen, gObj, gSel, layerCur, lassoPath, objLayer;
     var sel = [];                  // 올가미로 고른 획
     var osel = null;               // 고른 넣은 것 하나
     var clip = [];                 // 잘라내기 · 복사한 것
@@ -710,7 +710,7 @@
             drag.dx = x - drag.sx; drag.dy = y - drag.sy;
             var tf = "translate(" + f1(drag.dx) + " " + f1(drag.dy) + ")";
             sel.forEach(function (s) { var r = rendered[strokes.indexOf(s)]; if (r && r.el) r.el.setAttribute("transform", tf); });
-            gSel.setAttribute("transform", tf);
+            gSel.setAttribute("transform", tf); gHalo.setAttribute("transform", tf);
             placeSelBar();
         } else if (drag.kind === "omove" || drag.kind === "handle") objDragMove(x, y);
     }
@@ -726,7 +726,7 @@
             lassoPath.style.display = "none";
             selectIn(d.pts);
         } else if (d.kind === "move") {
-            gSel.removeAttribute("transform");
+            gSel.removeAttribute("transform"); gHalo.removeAttribute("transform");
             if (Math.abs(d.dx) + Math.abs(d.dy) > 0.5) {
                 snapshot();
                 var moved = sel.map(function (s) { return shifted(s, d.dx, d.dy); });
@@ -1162,15 +1162,22 @@
         while (gSel.firstChild) gSel.removeChild(gSel.firstChild);
         sel = sel.filter(function (s) { return strokes.indexOf(s) >= 0; });
         if (osel && strokes.indexOf(osel) < 0) osel = null;
-        var b = selBox();
-        if (b) {
-            var r = document.createElementNS(NS, "rect");
-            r.setAttribute("x", f1(b.x1 - 6)); r.setAttribute("y", f1(b.y1 - 6));
-            r.setAttribute("width", f1(b.x2 - b.x1 + 12)); r.setAttribute("height", f1(b.y2 - b.y1 + 12));
-            r.setAttribute("rx", 8);
-            r.setAttribute("class", "ink-selrect");
-            gSel.appendChild(r);
-        }
+        while (gHalo.firstChild) gHalo.removeChild(gHalo.firstChild);
+        var hc = isDark() ? "#4a4a4e" : "#ffffff";                // 고른 획: 같은 모양을 굵게 한 겹 아래에 깔아 떠 보이게 (스티커처럼)
+        sel.forEach(function (st) {
+            var R = rendered[strokes.indexOf(st)];
+            if (!R || !R.el) return;
+            var cl = R.el.cloneNode(true);
+            cl.removeAttribute("transform"); cl.removeAttribute("class");
+            [cl].concat(Array.prototype.slice.call(cl.querySelectorAll ? cl.querySelectorAll("path") : [])).forEach(function (p) {
+                if (p.tagName !== "path") return;
+                var sw = parseFloat(p.getAttribute("stroke-width")) || 0, filled = p.getAttribute("fill") && p.getAttribute("fill") !== "none";
+                p.setAttribute("stroke", hc); p.setAttribute("stroke-opacity", "1"); p.setAttribute("stroke-linejoin", "round"); p.setAttribute("stroke-linecap", "round");
+                p.setAttribute("stroke-width", f1((filled ? 0 : sw) + 7));
+                if (filled) { p.setAttribute("fill", hc); p.setAttribute("fill-opacity", "1"); }
+            });
+            gHalo.appendChild(cl);
+        });
         if (osel) {
             var R = rendered[strokes.indexOf(osel)];
             if (R && R.bb && osel.k !== "text" && osel.k !== "mag" && !(osel.k === "shape" && /^(line|arrow)$/.test(osel.sh))) {
@@ -1243,7 +1250,7 @@
         selBar.innerHTML = "";
         var items = [];
         if (sel.length) {
-            items = [["잘라내기", selCut], ["복사", selCopy], ["복제", selDuplicate], ["색 바꾸기", selRecolor], ["삭제", selDelete]];
+            items = [["잘라내기", selCut], ["복사", selCopy], ["삭제", selDelete], ["복제", selDuplicate], ["색 바꾸기", selRecolor]];   // PencilKit 편집 메뉴 순서
         } else if (osel) {
             var k = osel.k;
             if (k === "text") items = [["편집", function () { startEdit(osel); }], ["가 −", function () { objSet({ fs: Math.max(10, osel.fs - 2) }); }], ["가 +", function () { objSet({ fs: Math.min(72, osel.fs + 2) }); }],
@@ -1257,7 +1264,7 @@
         if (!items.length) { selBar.style.display = "none"; return; }
         items.forEach(function (it, i) {
             if (i) selBar.appendChild(el("span", "ink-sbsep"));
-            selBar.appendChild(button(/삭제|잘라내기/.test(it[0]) ? "danger" : "", it[0], it[0], it[1]));
+            selBar.appendChild(button("", it[0], it[0], it[1]));
         });
         selBar.style.display = "flex";
         placeSelBar();
@@ -1342,7 +1349,7 @@
     }
     function addSig(sig) {
         var c = viewCenter(), an = anchored(c.x, c.y), w = 220, h = f1(220 * sig.ar);
-        addObj({ k: "sig", a: an.a, fx: an.fx, fy: an.fy, x: f1(c.x - w / 2 - an.ax), y: f1(c.y - h / 2 - an.ay), w: w, h: h, c: P[P.lastDraw].c === "#ffcc00" ? "auto" : P[P.lastDraw].c, lw: 2.2, sg: sig.sg });
+        addObj({ k: "sig", a: an.a, fx: an.fx, fy: an.fy, x: f1(c.x - w / 2 - an.ax), y: f1(c.y - h / 2 - an.ay), w: w, h: h, c: /^#f(fcc00|ed030)$/.test(P[P.lastDraw].c) ? "auto" : P[P.lastDraw].c, lw: 2.2, sg: sig.sg });
     }
 
     /* ---------- 서명 그리기 창 ---------- */
@@ -1502,54 +1509,68 @@
         snapshot(); strokes = []; sel = []; osel = null; commit();
     }
 
-    /* ===================== 도구 그림 — iPadOS 27 미리보기 도구 막대 (2026-10-23 · 아이패드 시뮬레이터 실제 화면을 보고 맞춤) =====================
-       라이트 = 흰 몸통 · 다크 = 검은 몸통 (Apple 과 같음) · 촉 · 띠 = 지금 색 · 마커 · 수채화는 몸통에 불투명도 숫자
-       몸통은 막대 아래 가장자리 밖까지 이어져 잘려 보임 · 고른 도구는 위로 쑥 올라옴 */
+    /* ===================== 도구 그림 — iPadOS 27 미리보기 도구 막대를 시뮬레이터 화면에서 재서 그대로 (2026-10-24) =====================
+       단위 = pt · 도구 칸 40 × 90 (위 70pt 가 막대 안에 보이고 아래 20pt 는 막대 밖으로 잘림) · 몸통 폭 19pt · 고르면 17.5pt 위로
+       몸통 = 원통처럼 왼쪽 · 오른쪽이 살짝 어두운 그라데이션 (라이트 흰색 · 다크 검정) · 촉 · 띠 = 지금 색 */
     function isDark() { return root.getAttribute("data-theme") === "dark"; }
+    var ART_DEFS = '<svg width="0" height="0" style="position:absolute" aria-hidden="true" data-theme-skip><defs>' +
+        '<linearGradient id="ink-bL" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#dcdce1"/><stop offset=".14" stop-color="#f4f4f6"/><stop offset=".34" stop-color="#ffffff"/><stop offset=".66" stop-color="#fafafb"/><stop offset=".9" stop-color="#e9e9ed"/><stop offset="1" stop-color="#d2d2d7"/></linearGradient>' +
+        '<linearGradient id="ink-bD" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#08080a"/><stop offset=".18" stop-color="#262629"/><stop offset=".38" stop-color="#3a3a3e"/><stop offset=".7" stop-color="#202023"/><stop offset="1" stop-color="#0b0b0d"/></linearGradient>' +
+        '<linearGradient id="ink-pk" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#de8589"/><stop offset=".3" stop-color="#f7a9ab"/><stop offset=".7" stop-color="#f3a0a3"/><stop offset="1" stop-color="#d97f83"/></linearGradient>' +
+        '<linearGradient id="ink-mt" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#7d7d82"/><stop offset=".38" stop-color="#e3e3e8"/><stop offset=".62" stop-color="#b9b9be"/><stop offset="1" stop-color="#6f6f74"/></linearGradient>' +
+        '<linearGradient id="ink-fdg" x1="0" x2="0" y1="0" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".22" stop-color="#fff"/><stop offset=".6" stop-color="#000"/></linearGradient>' +
+        '<mask id="ink-fade" maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="90"><rect width="40" height="90" fill="url(#ink-fdg)"/></mask>' +
+        '<clipPath id="ink-pcone" clipPathUnits="userSpaceOnUse"><path d="M20 .4 29.5 35H10.5Z"/></clipPath>' +
+        '<filter id="ink-lift" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1.2" stdDeviation="2.2" flood-color="#000" flood-opacity=".26"/></filter>' +
+        "</defs></svg>";
     function toolArt(t, tip, op) {
-        var D = isDark(), bd = D ? "#1d1d20" : "#fbfbfc", bd2 = D ? "#2a2a2e" : "#ededf0", ed = D ? "rgba(255,255,255,.16)" : "rgba(0,0,0,.13)";
-        var mt = D ? "#46464b" : "#d8d8dd", lab = D ? "#8e8e93" : "#8e8e93", hi = D ? "rgba(255,255,255,.07)" : "rgba(255,255,255,.85)";
-        var B2 = 'fill="' + bd + '" stroke="' + ed + '" stroke-width=".8"';
-        var shine = '<rect x="10.4" y="40" width="2.2" height="56" fill="' + hi + '"/>';
-        var o = '<svg viewBox="0 0 32 96" class="ink-art" aria-hidden="true">';
-        var pct = op != null ? '<text x="16" y="56" text-anchor="middle" font-size="7.4" font-weight="600" fill="' + lab + '" font-family="-apple-system,sans-serif">' + Math.round(op * 100) + "</text>" : "";
+        var D = isDark(), B = D ? "url(#ink-bD)" : "url(#ink-bL)", ed = D ? "rgba(255,255,255,.07)" : "rgba(0,0,0,.09)";
+        var body = function (y, x, w) { x = x == null ? 10.5 : x; w = w || 19; return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + (91 - y) + '" fill="' + B + '"/>'; };
+        var band = function (y, h, x, w) { return '<rect x="' + (x == null ? 10.5 : x) + '" y="' + y + '" width="' + (w || 19) + '" height="' + h + '" fill="' + tip + '"/>'; };
+        var o = '<svg viewBox="0 0 40 90" class="ink-art" aria-hidden="true">';
+        var pct = op != null ? '<text x="20" y="66.6" text-anchor="middle" font-size="7.8" font-weight="500" letter-spacing=".5" fill="' + (D ? "#98989f" : "#8e8e93") + '" font-family="-apple-system,\'SF Pro Text\',sans-serif">' + Math.round(op * 100) + "</text>" : "";
         if (t === "pen") return o +
-            '<path d="M16 3.5 23.2 38H8.8Z" ' + B2 + ' stroke-linejoin="round"/><path d="M16 3.5 18.1 13.4H13.9Z" fill="' + tip + '"/>' +
-            '<path d="M8.8 38H23.2V96H8.8Z" ' + B2 + "/>" + shine + '<rect x="8.8" y="47" width="14.4" height="3.2" fill="' + tip + '"/></svg>';
+            '<path d="M20 .6Q20.8 .6 22.4 7.6Q29.5 27 29.5 35.5V91H10.5V35.5Q10.5 27 17.6 7.6Q19.2 .6 20 .6Z" fill="' + B + '"/>' +
+            '<path d="M20 .6C20.9 .6 22.1 4.6 22.6 7.6H17.4C17.9 4.6 19.1 .6 20 .6Z" fill="' + tip + '"/>' + band(40.6, 3.4) + "</svg>";
         if (t === "monoline") return o +
-            '<rect x="15" y="6" width="2" height="10" rx=".6" fill="' + tip + '"/><path d="M12.6 16h6.8v7h-6.8Z" fill="' + mt + '" stroke="' + ed + '" stroke-width=".6"/>' +
-            '<path d="M11.2 23h9.6l2.4 15H8.8Z" ' + B2 + ' stroke-linejoin="round"/><path d="M8.8 38H23.2V96H8.8Z" ' + B2 + "/>" + shine +
-            '<rect x="8.8" y="50" width="14.4" height="3" fill="' + tip + '"/></svg>';
+            '<rect x="19.1" y="0" width="1.8" height="6.6" rx=".9" fill="' + tip + '"/><rect x="19.1" y="6" width="1.8" height="6.6" fill="' + (D ? "#6e6e73" : "#d1d1d6") + '"/>' +
+            '<rect x="14" y="12.3" width="12" height="6.6" rx=".8" fill="' + B + '"/>' +
+            '<rect x="12" y="18.6" width="16" height="17.2" fill="' + B + '"/>' +
+            '<rect x="12" y="18.6" width="16" height=".6" fill="' + (D ? "rgba(255,255,255,.05)" : "rgba(0,0,0,.06)") + '"/>' + body(35.5, 10.25, 19.5) +
+            '<rect x="10.25" y="35.5" width="19.5" height=".6" fill="' + (D ? "rgba(255,255,255,.05)" : "rgba(0,0,0,.06)") + '"/>' + band(49.3, 2.6, 10.25, 19.5) + "</svg>";
         if (t === "marker") return o +
-            '<path d="M11 24 21 12.5V24Z" fill="' + tip + '"/><path d="M10.2 24h11.6v10H10.2Z" fill="' + bd2 + '" stroke="' + ed + '" stroke-width=".7"/>' +
-            '<path d="M8 38a3 3 0 0 1 3-4h10a3 3 0 0 1 3 4V96H8Z" ' + B2 + "/>" + shine.replace('x="10.4"', 'x="9.6"') +
-            '<rect x="8" y="39" width="16" height="7" fill="' + tip + '"/>' + pct + "</svg>";
+            '<path d="M15.2 10.4V5.6L23.6 .6Q24.9-.1 24.9 1.4V10.4Z" fill="' + tip + '"/>' +
+            '<path d="M14 10H26V19.6C26 25 29.75 26.4 29.75 31.4V91H10.25V31.4C10.25 26.4 14 25 14 19.6Z" fill="' + B + '"/>' +
+            band(41, 7.8, 10.25, 19.5) + pct + "</svg>";
         if (t === "eraser") return o +
-            '<path d="M9 30V13a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v17Z" fill="#f0a3a8" stroke="' + ed + '" stroke-width=".8"/>' +
-            '<path d="M9 30H23V96H9Z" ' + B2 + "/>" + shine + "</svg>";
-        if (t === "pencil") return o +
-            '<path d="M16 6 23.2 40H8.8Z" fill="' + bd2 + '" stroke="' + ed + '" stroke-width=".8" stroke-linejoin="round"/>' +
-            '<path d="M12.2 22 19.6 14M10.8 30 21.2 19.4M9.8 37 22.4 24.8M13.8 39.6 23 30.6" stroke="' + (D ? "rgba(255,255,255,.16)" : "rgba(0,0,0,.14)") + '" stroke-width="1.6"/>' +
-            '<path d="M16 6 17.9 15H14.1Z" fill="' + tip + '"/><path d="M8.8 40H23.2V96H8.8Z" ' + B2 + "/>" + shine + "</svg>";
-        if (t === "ruler") {
-            var tk = "";
-            for (var y = 14; y < 96; y += 5) tk += "M7 " + y + "h" + ((y - 14) % 25 === 0 ? 6 : 3.4);
-            return o + '<path d="M6.5 9H25.5V96H6.5Z" ' + B2 + '/><path d="' + tk + '" stroke="' + (D ? "#9a9aa0" : "#6e6e73") + '" stroke-width=".8"/></svg>';
+            '<path d="M10.5 17.4V4.4Q10.5 .5 14.4 .5H25.6Q29.5 .5 29.5 4.4V17.4Z" fill="url(#ink-pk)"/>' + body(17.2) +
+            '<rect x="10.5" y="33.3" width="19" height=".7" fill="' + (D ? "rgba(255,255,255,.06)" : "rgba(0,0,0,.07)") + '"/></svg>';
+        if (t === "pencil") {
+            var sp = ""; for (var k = -18; k < 40; k += 6.6) sp += "M" + k + " 36L" + (k + 15) + " -1";
+            return o + '<path d="M20 .4 29.5 35H10.5Z" fill="' + B + '"/>' +
+                '<path d="' + sp + '" stroke="' + (D ? "#5c5c61" : "#c9c9ce") + '" stroke-width="3" clip-path="url(#ink-pcone)"/>' + body(34.8) + "</svg>";
         }
-        if (t === "watercolor") return o +
-            '<path d="M16 3c3.6 7 5 14 3.6 25H12.4C11 17 12.4 10 16 3Z" fill="' + tip + '"/><path d="M12.2 28h7.6v10h-7.6Z" fill="' + mt + '" stroke="' + ed + '" stroke-width=".6"/>' +
-            '<path d="M10 38H22V96H10Z" ' + B2 + "/>" + shine.replace('x="10.4"', 'x="11.4"') + pct + "</svg>";
+        if (t === "ruler") {
+            var tk = "", y = 3.2, i = 0;
+            for (; y < 90; y += 4.6, i++) tk += '<path d="M5.6 ' + y.toFixed(1) + "h" + (i % 5 ? 3.3 : 8.6) + '" stroke="' + (D ? "#aeaeb2" : "#6e6e73") + '" stroke-width="' + (i % 5 ? .9 : 1.2) + '"/>';
+            return o + '<rect x="4.25" y=".4" width="31.5" height="91" rx=".8" fill="' + (D ? "#2a2a2d" : "#fbfbfc") + '" stroke="' + ed + '" stroke-width=".5"/>' +
+                '<rect x="4.25" y=".4" width="11.5" height="91" fill="' + (D ? "#222225" : "#f0f0f3") + '"/>' + tk + "</svg>";
+        }
         if (t === "crayon") return o +
-            '<path d="M16 8 22 26H10Z" fill="' + tip + '"/><path d="M10 26H22V96H10Z" ' + B2 + "/>" + shine.replace('x="10.4"', 'x="11.4"') +
-            '<rect x="10" y="34" width="12" height="6" fill="' + tip + '"/><rect x="10" y="70" width="12" height="3" fill="' + tip + '"/></svg>';
+            '<path d="M18 .8Q20-.2 22 .8L28.6 22.6H11.4Z" fill="' + tip + '"/>' + band(22.4, 5) + body(27.2) + band(45, 5.5) + "</svg>";
         if (t === "fountain") return o +
-            '<path d="M16 4 22 22V34H10V22Z" fill="' + mt + '" stroke="' + ed + '" stroke-width=".7" stroke-linejoin="round"/><path d="M16 9V23" stroke="' + (D ? "#1d1d20" : "#555") + '" stroke-width=".8"/>' +
-            '<circle cx="16" cy="23" r="1.3" fill="' + (D ? "#1d1d20" : "#555") + '"/><path d="M8.8 34H23.2V96H8.8Z" ' + B2 + "/>" + shine +
-            '<rect x="8.8" y="40" width="14.4" height="3" fill="' + tip + '"/></svg>';
-        return o +                                             // 올가미
-            '<ellipse cx="16" cy="15" rx="9" ry="6.2" fill="none" stroke="' + (D ? "#e5e5ea" : "#3a3a3c") + '" stroke-width="1.4" stroke-dasharray="2.6 2.2"/>' +
-            '<path d="M12 20.6c-1.6 2-1 4.2 1.4 5" fill="none" stroke="' + (D ? "#e5e5ea" : "#3a3a3c") + '" stroke-width="1.4" stroke-linecap="round"/>' +
-            '<path d="M10.5 30H21.5V96H10.5Z" ' + B2 + "/>" + shine.replace('x="10.4"', 'x="12"') + "</svg>";
+            '<path d="M20 .6C22.4 5.5 27.4 15 27.4 26V38.6H12.6V26C12.6 15 17.6 5.5 20 .6Z" fill="url(#ink-mt)"/>' +
+            '<path d="M20 3.5V22.4" stroke="#3a3a3c" stroke-width=".7"/><circle cx="20" cy="23.8" r="1.5" fill="#f2f2f7" stroke="#6e6e73" stroke-width=".4"/>' +
+            '<rect x="11.4" y="38.4" width="17.2" height="2.8" rx=".6" fill="' + (D ? "#48484a" : "#e5e5ea") + '"/>' + body(41) + band(52.5, 3) + "</svg>";
+        if (t === "watercolor") return o +                     // 붓 (미리보기의 수채화 붓)
+            '<path d="M12.8 40C12.8 26 15.6 8 16.4 1H23.6C24.4 8 27.2 26 27.2 40Z" fill="' + (D ? "#d8d1c2" : "#f3eee3") + '"/>' +
+            '<path d="M12.8 40C12.8 26 15.6 8 16.4 1H23.6C24.4 8 27.2 26 27.2 40Z" fill="' + tip + '" mask="url(#ink-fade)"/>' +
+            '<path d="M16.6 6V28M20 3V30M23.4 6V28" stroke="rgba(0,0,0,.08)" stroke-width=".6"/>' +
+            '<rect x="10.5" y="39.6" width="19" height="14.4" fill="' + (D ? "#0b0b0c" : "#1c1c1e") + '"/>' + body(54) + "</svg>";
+        return o +                                             // 올가미 (미리보기 막대에는 없어 같은 그림체로)
+            '<ellipse cx="20" cy="7.2" rx="9" ry="5.6" fill="none" stroke="#8e8e93" stroke-width="1.3" stroke-dasharray="2.4 2"/>' +
+            '<path d="M15.2 11.6C13.6 14 15.4 15.6 18 15.2" fill="none" stroke="#8e8e93" stroke-width="1.3" stroke-linecap="round"/>' +
+            '<path d="M20 15C21 15 29.5 28 29.5 35H10.5C10.5 28 19 15 20 15Z" fill="' + B + '" stroke="' + ed + '" stroke-width=".5"/>' + body(34.8) + band(41, 3.3).replace(tip, "#8e8e93") + "</svg>";
     }
     function icon(name) {
         var s = '<svg viewBox="0 0 24 24" class="ink-ic" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">';
@@ -1586,7 +1607,8 @@
         ".ink-svg .ink-selrect{fill:rgba(10,132,255,.06);stroke:#0a84ff;stroke-width:1.5;stroke-dasharray:6 5}",
         ".ink-svg .ink-objframe{fill:none;stroke:#0a84ff;stroke-width:1.2;stroke-dasharray:4 4}",
         ".ink-svg .ink-handle{fill:#fff;stroke:#0a84ff;stroke-width:2} .ink-svg .ink-handle.blue{fill:#0a84ff;stroke:#fff} .ink-svg .ink-handle.green{fill:#34c759;stroke:#fff}",
-        ".ink-svg .ink-lasso{fill:rgba(10,132,255,.05);stroke:#0a84ff;stroke-width:1.4;stroke-dasharray:5 4}",
+        ".ink-svg .ink-lasso{fill:none;stroke:#8e8e93;stroke-width:1.6;stroke-dasharray:5 4;stroke-linecap:round;animation:ink-ants .6s linear infinite} @keyframes ink-ants{to{stroke-dashoffset:-9}}",
+        "html[data-theme=dark] .ink-svg .ink-lasso{stroke:#aeaeb2}",
         "html[data-theme=light] .ink-svg .ink-wc{mix-blend-mode:multiply} html[data-theme=dark] .ink-svg .ink-wc{mix-blend-mode:screen}",
         ".ink-objs{position:absolute;left:0;top:0;width:0;height:0;z-index:9981;pointer-events:none}",
         ".ink-text{position:absolute;min-height:1.4em;line-height:1.35;white-space:pre-wrap;word-break:break-word;font-family:-apple-system,'Apple SD Gothic Neo',sans-serif;padding:2px 4px;border-radius:4px;outline:none;pointer-events:none}",
@@ -1607,34 +1629,34 @@
         ".ink-mk .ink-ic{width:26px;height:26px} .ink-mk:active{transform:scale(.92)}",
         ".ink-mk.on{background:#0a84ff;color:#fff;border-color:#0a84ff;box-shadow:0 6px 18px rgba(10,132,255,.38)}",
         // 도구 막대 (알약 모양)
-        ".ink-dock{position:fixed;z-index:10003;left:50%;transform:translateX(-50%);width:min(720px,calc(100vw - 24px));height:106px;border-radius:53px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 16px;overflow:hidden;box-sizing:border-box;transition:transform .32s cubic-bezier(.2,.9,.25,1.1),opacity .2s}",
-        ".ink-dock.d-bottom{bottom:calc(16px + env(safe-area-inset-bottom,0px))} .ink-dock.d-top{top:calc(70px + env(safe-area-inset-top,0px))}",
+        ".ink-dock{position:fixed;z-index:10003;left:50%;transform:translateX(-50%);width:min(700px,calc(100vw - 24px));height:106px;border-radius:53px;display:flex;align-items:center;gap:0;padding:0 23px 0 22px;overflow:hidden;box-sizing:border-box;transition:transform .32s cubic-bezier(.2,.9,.25,1.1),opacity .2s}",
+        ".ink-dock.d-bottom{bottom:calc(21px + env(safe-area-inset-bottom,0px))} .ink-dock.d-top{top:calc(70px + env(safe-area-inset-top,0px))}",
         ".ink-dock.enter{transform:translateX(-50%) translateY(140%);opacity:0} .ink-dock.d-top.enter{transform:translateX(-50%) translateY(-160%)}",
         ".ink-dock.dragging{transition:none;cursor:grabbing}",
         ".ink-grab{position:absolute;left:50%;top:0;width:90px;height:20px;transform:translateX(-50%);cursor:grab;touch-action:none;z-index:2} .ink-grab::after{content:'';position:absolute;left:28px;right:28px;top:7px;height:5px;border-radius:3px;background:var(--ink-grab)}",
-        ".ink-cb{flex:0 0 auto;width:34px;height:34px;border-radius:50%!important;background:var(--ink-btn)!important;display:flex;align-items:center;justify-content:center;transition:opacity .15s,transform .12s}",
+        ".ink-cb{flex:0 0 auto;width:32px;height:32px;border-radius:50%!important;background:var(--ink-btn)!important;display:flex;align-items:center;justify-content:center;transition:opacity .15s,transform .12s}",
         ".ink-cb:active{transform:scale(.9)} .ink-cb:disabled{opacity:.32} .ink-cb .ink-ic{width:20px;height:20px} .ink-cb.r{margin-right:8px}",
-        ".ink-tools{flex:0 1 316px;min-width:0;height:100%;display:flex;align-items:flex-end;gap:2px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:0 6px;scroll-snap-type:x proximity;",
-        "-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)}",
+        ".ink-tools{flex:0 1 302px;min-width:0;height:100%;margin-left:23px;display:flex;align-items:flex-end;gap:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:0 1px;scroll-snap-type:x proximity;",
+        "-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 10px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 10px),transparent 100%)}",
         ".ink-tools::-webkit-scrollbar{display:none}",
-        ".ink-tool{flex:0 0 49px;width:49px;height:100%;position:relative;scroll-snap-align:start}",
-        ".ink-tool .ink-art{position:absolute;left:2.5px;width:44px;height:132px;bottom:-54px;transition:bottom .22s cubic-bezier(.25,1.3,.4,1);filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.18))}",
-        ".ink-tool.on .ink-art{bottom:-40px}",
-        ".ink-dock.d-top .ink-tool .ink-art{bottom:auto;top:-54px;transform:rotate(180deg);transition:top .22s cubic-bezier(.25,1.3,.4,1)} .ink-dock.d-top .ink-tool.on .ink-art{top:-40px}",
-        ".ink-cols{flex:0 0 auto;display:grid;grid-template-columns:repeat(3,31px);grid-auto-rows:31px;gap:10px 12px;margin:0 14px 0 12px}",
+        ".ink-tool{flex:0 0 49.5px;width:49.5px;height:100%;position:relative;scroll-snap-align:start}",
+        ".ink-tool .ink-art{position:absolute;left:4.75px;width:40px;height:90px;bottom:-20px;transition:transform .24s cubic-bezier(.25,1.35,.4,1);filter:drop-shadow(0 .8px 1.2px rgba(0,0,0,.16))}",
+        ".ink-tool.on .ink-art{transform:translateY(-17.5px)}",
+        ".ink-dock.d-top .ink-tool .ink-art{bottom:auto;top:-20px;transform:rotate(180deg)} .ink-dock.d-top .ink-tool.on .ink-art{transform:rotate(180deg) translateY(-17.5px)}",
+        ".ink-cols{flex:0 0 auto;display:grid;grid-template-columns:repeat(3,31px);grid-auto-rows:31px;gap:10px 12px;margin:0 13px 0 auto}",
         ".ink-qc{width:31px;height:31px;border-radius:50%!important;position:relative;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.12)}",
-        ".ink-qc.on{box-shadow:0 0 0 3px var(--ink-glass-2),0 0 0 5.5px var(--ring,#000)}",
+        ".ink-qc.on{box-shadow:inset 0 0 0 2.6px var(--ring,#000),inset 0 0 0 5.4px #fff}",   // Apple: 크기는 그대로 · 바깥 테 + 흰 틈 + 가운데 색
         ".ink-qc.wheel{background:conic-gradient(from 90deg,#ff3b30,#ff9500,#ffcc00,#34c759,#00c7be,#0a84ff,#5856d6,#af52de,#ff2d55,#ff3b30)!important}",
         ".ink-qc.wheel::after{content:'';position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 72%)}",
         ".ink-cw{display:none}",
-        ".ink-pm{flex:0 0 auto;display:flex;gap:8px} .ink-ur{flex:0 0 auto;display:flex;gap:8px}",
-        "@media (max-width:640px){.ink-dock{height:88px;border-radius:44px;padding:0 10px;gap:4px;width:calc(100vw - 16px)} .ink-tools{flex:1 1 auto} .ink-ur{gap:4px} .ink-cb{width:32px;height:32px} .ink-cb .ink-ic{width:18px;height:18px} .ink-cb.r{margin-right:2px}",
-        ".ink-cols{display:none} .ink-cw{display:block;flex:0 0 auto;width:32px;height:32px;margin:0 4px} .ink-tool{flex-basis:44px;width:44px} .ink-tool .ink-art{left:3px;width:38px;height:114px;bottom:-50px} .ink-tool.on .ink-art{bottom:-38px} .ink-pm{gap:4px}}",
+        ".ink-pm{flex:0 0 auto;display:flex;gap:10px} .ink-pm .ink-cb{background:rgba(120,120,128,.3)!important} .ink-ur{flex:0 0 auto;display:flex;gap:10px}",
+        "@media (max-width:640px){.ink-dock{height:88px;border-radius:44px;padding:0 10px;gap:4px;width:calc(100vw - 16px)} .ink-tools{flex:1 1 auto;margin-left:6px} .ink-ur{gap:4px} .ink-cb{width:32px;height:32px} .ink-cb .ink-ic{width:18px;height:18px} .ink-cb.r{margin-right:2px}",
+        ".ink-cols{display:none} .ink-cw{display:block;flex:0 0 auto;width:32px;height:32px;margin:0 4px} .ink-tool{flex-basis:42px;width:42px} .ink-tool .ink-art{left:1px;width:40px;height:90px;bottom:-30px} .ink-tool.on .ink-art{transform:translateY(-14px)} .ink-pm{gap:4px}}",
         // 최소화 = 지금 도구가 든 유리 동그라미 (모서리에 붙음)
-        ".ink-fab{position:fixed;z-index:10003;width:64px;height:64px;border-radius:50%;display:none;overflow:hidden;cursor:pointer;touch-action:none}",
-        ".ink-fab .ink-art{position:absolute;left:14px;width:36px;height:108px;top:6px;filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.2))}",
-        ".ink-fab.c-bl{left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px))} .ink-fab.c-br{right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px))}",
-        ".ink-fab.c-tl{left:calc(16px + env(safe-area-inset-left,0px));top:calc(70px + env(safe-area-inset-top,0px))} .ink-fab.c-tr{right:calc(16px + env(safe-area-inset-right,0px));top:calc(70px + env(safe-area-inset-top,0px))}",
+        ".ink-fab{position:fixed;z-index:10003;width:75px;height:75px;border-radius:50%;display:none;overflow:hidden;cursor:pointer;touch-action:none}",
+        ".ink-fab .ink-art{position:absolute;left:17.5px;width:40px;height:90px;top:15px;filter:drop-shadow(0 .8px 1.2px rgba(0,0,0,.18))}",
+        ".ink-fab.c-bl{left:calc(20px + env(safe-area-inset-left,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px))} .ink-fab.c-br{right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px))}",
+        ".ink-fab.c-tl{left:calc(20px + env(safe-area-inset-left,0px));top:calc(70px + env(safe-area-inset-top,0px))} .ink-fab.c-tr{right:calc(20px + env(safe-area-inset-right,0px));top:calc(70px + env(safe-area-inset-top,0px))}",
         ".ink-fab.pop{animation:ink-fabin .32s cubic-bezier(.2,1.4,.4,1)} @keyframes ink-fabin{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}",
         "html.ink-min .ink-dock{display:none} html.ink-min .ink-fab{display:block} html.ink-mkoff .ink-dock,html.ink-mkoff .ink-fab{display:none!important}",
         // 팝업 (굵기 · 색 · + · ⋯)
@@ -1684,10 +1706,10 @@
         ".ink-sigs{display:flex;gap:8px;flex-wrap:wrap;padding:4px 8px 8px} .ink-sigs button{width:100px;height:46px;border-radius:12px!important;background:var(--ink-bg-solid)!important;padding:4px!important} .ink-sigs svg{width:100%;height:100%}",
         ".ink-note{font-size:12.5px;color:var(--ink-sub);line-height:1.5;margin:6px 14px 8px}",
         // 고른 것 위 메뉴 (아이패드 말풍선 메뉴처럼 검은 막대)
-        ".ink-selbar{position:fixed;z-index:10004;display:none;align-items:center;padding:0 4px;height:38px;border-radius:10px;background:rgba(30,30,32,.94);box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none}",
+        ".ink-selbar{position:fixed;z-index:10004;display:none;align-items:center;padding:0 6px;height:44px;border-radius:22px;background:var(--ink-glass-2);-webkit-backdrop-filter:blur(24px) saturate(1.8);backdrop-filter:blur(24px) saturate(1.8);border:1px solid var(--ink-edge2);box-shadow:0 10px 30px rgba(0,0,0,.18),0 1px 4px rgba(0,0,0,.08);max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none}",
         ".ink-selbar::-webkit-scrollbar{display:none}",
-        ".ink-selbar button{height:38px;padding:0 11px;border:0;background:transparent;color:#fff;font-size:13.5px;cursor:pointer;white-space:nowrap;font-family:inherit}",
-        ".ink-selbar button.danger{color:#ff6b6b} .ink-selbar button:active{background:rgba(255,255,255,.12)} .ink-sbsep{width:1px;height:20px;background:rgba(255,255,255,.22);flex:0 0 1px}",
+        ".ink-selbar button{height:36px;padding:0 13px;border:0;border-radius:18px;background:transparent;color:var(--ink-text);font-size:15px;cursor:pointer;white-space:nowrap;font-family:inherit}",
+        ".ink-selbar button:active,.ink-selbar button:hover{background:var(--ink-btn)} .ink-sbsep{width:1px;height:18px;background:var(--ink-hair);flex:0 0 1px}",
         // 자
         ".ink-ruler{position:fixed;left:0;top:0;width:940px;height:68px;z-index:9990;transform-origin:470px 34px;display:none;touch-action:none;cursor:move;",
         "background:linear-gradient(rgba(240,240,244,.62),rgba(220,220,226,.62));border-top:1px solid rgba(0,0,0,.18);border-bottom:1px solid rgba(0,0,0,.18);box-shadow:0 4px 16px rgba(0,0,0,.18);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:rgba(0,0,0,.55)}",
@@ -1751,7 +1773,9 @@
         layerCur = document.createElementNS(NS, "g");
         gSel = document.createElementNS(NS, "g");
         lassoPath = document.createElementNS(NS, "path"); lassoPath.setAttribute("class", "ink-lasso"); lassoPath.style.display = "none";
-        [gMarker, gPencil, gPen, gObj, layerCur, gSel, lassoPath].forEach(function (g) { svg.appendChild(g); });
+        gHalo = document.createElementNS(NS, "g"); gHalo.setAttribute("filter", "url(#ink-lift)");   // 올가미로 고른 획의 흰 테두리 (획 아래)
+        [gHalo, gMarker, gPencil, gPen, gObj, layerCur, gSel, lassoPath].forEach(function (g) { svg.appendChild(g); });
+        var defsHost = document.createElement("div"); defsHost.innerHTML = ART_DEFS; document.body.appendChild(defsHost.firstChild);
         document.body.appendChild(svg);
         objLayer = document.createElement("div");
         objLayer.className = "ink-objs";
@@ -2147,7 +2171,7 @@
         });
         var custom = QUICK.indexOf(dc.c) < 0;
         B.wheel.classList.toggle("on", showSel && custom); B.wheel.style.setProperty("--ring", colorOf(dc.c));
-        B.cw.style.boxShadow = "0 0 0 3px var(--ink-glass-2),0 0 0 5.5px " + colorOf(dc.c);
+        B.cw.style.boxShadow = "inset 0 0 0 2.6px " + colorOf(dc.c) + ",inset 0 0 0 5.4px #fff";
         B.undo.disabled = !undoS.length;
         B.redo.disabled = !redoS.length;
         dock.className = "ink-dock ink-ui ink-glass d-" + (P.dock === "top" ? "top" : "bottom");
