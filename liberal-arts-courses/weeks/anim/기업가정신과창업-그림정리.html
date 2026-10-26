@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기업가정신과창업 그림 정리</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --cell:#7c6ae6;--myelin:#e0a838;--astro:#e0862b;--oligo:#0f9f74;--micro:#d9363e;--schwann:#2b8fd1;--vessel:#d9363e;
+          --ex:#16a34a;--inh:#2563eb;--ap:#e5484d;--fore:#e0862b;--mid:#c9b48a;--hind:#a0522d;
+          --fr:#8b7cf6;--pa:#ec5f9e;--te:#22b07d;--oc:#e9b52c;--light:#f5a524;--eye:#eef4fb;--nerve:#e8a3a3;--hl:#f59e0b;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --cell:#a596f5;--myelin:#f0c35a;--astro:#f5a04a;--oligo:#34d399;--micro:#ff6369;--schwann:#5ab8f0;--vessel:#ff6369;
+          --ex:#4cc38a;--inh:#6b9cff;--ap:#ff6369;--fore:#f5a04a;--mid:#d9c79c;--hind:#d07a4f;
+          --fr:#a596f5;--pa:#f27db3;--te:#4cc38a;--oc:#f5c84a;--light:#ffb547;--eye:#1c2733;--nerve:#c97878;--hl:#ffb547;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+    .box{max-width:780px;margin:0 auto;padding:10px 12px 14px;}
+    .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0 0 8px;}
+    .tabs button{min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 4px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;}
+    .tabs button[aria-pressed=true]{border-color:var(--main);color:var(--main);box-shadow:inset 0 0 0 1px var(--main);}
+    .src{margin:0 0 6px;font-size:13px;color:var(--ink2);}
+    .src b{color:var(--main);}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;}
+    svg{display:block;width:100%;height:auto;}
+    svg[hidden]{display:none;}
+    svg text{fill:var(--ink);font-family:inherit;font-size:19px;}
+    svg text.s{font-size:15px;fill:var(--ink2);}
+    svg text.b{font-weight:800;}
+    svg text.w{fill:#fff;}
+    svg .ln{stroke:var(--ink2);stroke-width:1.6;fill:none;}
+    svg .ax{stroke:var(--ink2);stroke-width:2;fill:none;}
+    svg .dash{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:6 5;fill:none;}
+    svg [data-s]{transition:opacity .45s ease;}
+    svg [data-s].off{opacity:0;}
+    svg [data-s].dim{opacity:.28;}
+    svg [data-s].hl{filter:drop-shadow(0 0 5px var(--hl));}
+    .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;}
+    .ctl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+    .ctl button.main{border-color:var(--main);color:var(--main);}
+    .ctl .pos{margin-left:auto;font-size:13px;color:var(--ink2);}
+    ol.cap{margin:8px 0 0;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:14.5px;line-height:1.65;}
+    ol.cap li{margin:2px 0;padding:1px 4px;border-radius:6px;cursor:pointer;}
+    ol.cap li b{color:var(--main);}
+    ol.cap li.cur{background:color-mix(in srgb,var(--hl) 22%,transparent);}
+    ol.cap li.later{opacity:.45;}
+    .note{margin:6px 0 0;font-size:13px;color:var(--ink2);line-height:1.6;}
+    .note a{color:var(--main);}
+    @media (max-width:560px){ .tabs{grid-template-columns:repeat(3,minmax(0,1fr));} .tabs button{font-size:12px;} ol.cap{font-size:14px;padding-left:28px;}
+        /* 폰: 그림이 작아지니 그림 속 글자를 키움 (긴 줄도 600 폭 안에 들어가는 크기까지만) */
+        svg text{font-size:22px;} svg text.s{font-size:17px;} .stage{padding:3px;} }
+</style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="tabs" id="tabs" role="group" aria-label="그림 고르기"></div>
+    <p class="src" id="src"></p>
+    <div class="stage">
+
+<!-- ① 창업의 4대 필수요소 -->
+<svg data-fig="four" viewBox="0 0 600 330" role="img" aria-label="창업의 4대 필수요소" hidden>
+  <g><circle cx="300" cy="165" r="58" style="fill:var(--main);fill-opacity:.15;stroke:var(--main);stroke-width:2"/><text x="300" y="160" text-anchor="middle" class="b">창업</text><text x="300" y="186" text-anchor="middle" class="s">4대 필수요소</text></g>
+  <g data-s="1"><rect x="14" y="14" width="250" height="92" rx="10" style="fill:var(--inh);fill-opacity:.18;stroke:var(--inh);stroke-width:2"/><text x="139.0" y="56.0" text-anchor="middle" class="b">① 창업자 (사람)</text><text x="139.0" y="80.0" text-anchor="middle" class="s">자질 · 사업수행능력</text></g>
+  <g data-s="2"><rect x="336" y="14" width="250" height="92" rx="10" style="fill:var(--oc);fill-opacity:.18;stroke:var(--oc);stroke-width:2"/><text x="461.0" y="56.0" text-anchor="middle" class="b">② 창업자금 (자본)</text><text x="461.0" y="80.0" text-anchor="middle" class="s">초기 자금은 최소화</text></g>
+  <g data-s="3"><rect x="14" y="224" width="250" height="92" rx="10" style="fill:var(--te);fill-opacity:.18;stroke:var(--te);stroke-width:2"/><text x="139.0" y="266.0" text-anchor="middle" class="b">③ 업종 (아이템)</text><text x="139.0" y="290.0" text-anchor="middle" class="s">성장가능성 · 내 경험</text></g>
+  <g data-s="4"><rect x="336" y="224" width="250" height="92" rx="10" style="fill:var(--fr);fill-opacity:.18;stroke:var(--fr);stroke-width:2"/><text x="461.0" y="266.0" text-anchor="middle" class="b">④ 사업장 (장소)</text><text x="461.0" y="290.0" text-anchor="middle" class="s">점포는 입지가 더 중요</text></g>
+</svg>
+
+<!-- ② 개인기업의 설립절차 -->
+<svg data-fig="solo" viewBox="0 0 600 452" role="img" aria-label="개인기업의 설립절차" hidden>
+  <g data-s="1"><rect x="110" y="12" width="380" height="64" rx="10" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/><text x="300.0" y="40.0" text-anchor="middle" class="b">사업 아이템 선정</text><text x="300.0" y="64.0" text-anchor="middle" class="s">사업타당성 조사</text></g>
+  <g data-s="2"><path class="d" d="M300,78 L300,96" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M293,90 L300,102 L307,90 Z" style="fill:var(--ink2)"/><rect x="110" y="102" width="380" height="64" rx="10" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/><text x="300.0" y="130.0" text-anchor="middle" class="b">사업계획 수립</text><text x="300.0" y="154.0" text-anchor="middle" class="s">사업 규모 · 기업 형태 등 결정</text></g>
+  <g data-s="3"><path class="d" d="M300,168 L300,186" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M293,180 L300,192 L307,180 Z" style="fill:var(--ink2)"/><rect x="110" y="192" width="380" height="64" rx="10" style="fill:var(--ap);fill-opacity:.2;stroke:var(--ap);stroke-width:2"/><text x="300.0" y="220.0" text-anchor="middle" class="b">인 · 허가 취득</text><text x="300.0" y="244.0" text-anchor="middle" class="s">업종 주관부처 · 지방자치단체</text></g>
+  <g data-s="4"><path class="d" d="M300,258 L300,276" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M293,270 L300,282 L307,270 Z" style="fill:var(--ink2)"/><rect x="110" y="282" width="380" height="64" rx="10" style="fill:var(--inh);fill-opacity:.2;stroke:var(--inh);stroke-width:2"/><text x="300.0" y="310.0" text-anchor="middle" class="b">사업자등록</text><text x="300.0" y="334.0" text-anchor="middle" class="s">개시일부터 20일 이내 · 관할 세무서</text></g>
+  <g data-s="5"><path class="d" d="M300,348 L300,366" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M293,360 L300,372 L307,360 Z" style="fill:var(--ink2)"/><rect x="110" y="372" width="380" height="64" rx="10" style="fill:var(--te);fill-opacity:.2;stroke:var(--te);stroke-width:2"/><text x="300.0" y="400.0" text-anchor="middle" class="b">사업 개시</text><text x="300.0" y="424.0" text-anchor="middle" class="s">등록증은 7일(14일) 안에 교부</text></g>
+</svg>
+
+<!-- ③ 법인기업(주식회사)의 설립절차 -->
+<svg data-fig="corp" viewBox="0 0 600 560" role="img" aria-label="주식회사의 설립절차 발기설립과 모집설립" hidden>
+  <g data-s="1"><rect x="180" y="10" width="240" height="40" rx="10" style="fill:var(--oc);fill-opacity:.25;stroke:var(--oc);stroke-width:2"/><text x="300.0" y="36.0" text-anchor="middle" class="s b">발기인 구성</text><path class="d" d="M300,52 L300,60" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M293,54 L300,66 L307,54 Z" style="fill:var(--ink2)"/><rect x="180" y="66" width="240" height="40" rx="10" style="fill:var(--oc);fill-opacity:.25;stroke:var(--oc);stroke-width:2"/><text x="300.0" y="92.0" text-anchor="middle" class="s b">정관 작성</text><path class="d" d="M300,108 L300,116" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M293,110 L300,122 L307,110 Z" style="fill:var(--ink2)"/><rect x="180" y="122" width="240" height="40" rx="10" style="fill:var(--oc);fill-opacity:.25;stroke:var(--oc);stroke-width:2"/><text x="300.0" y="148.0" text-anchor="middle" class="s b">주식발행사항 결정</text></g>
+  <g data-s="2"><path class="ln" d="M240,164 L150,192"/><text x="150" y="208" text-anchor="middle" class="b" style="fill:var(--inh)">발기 설립</text><rect x="30" y="222" width="240" height="40" rx="10" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><text x="150.0" y="248.0" text-anchor="middle" class="s b">발기인 주식 인수</text><path class="d" d="M150,262 L150,270" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M143,264 L150,276 L157,264 Z" style="fill:var(--ink2)"/><rect x="30" y="276" width="240" height="40" rx="10" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><text x="150.0" y="302.0" text-anchor="middle" class="s b">주금납입 · 임원 선임</text><path class="d" d="M150,316 L150,324" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M143,318 L150,330 L157,318 Z" style="fill:var(--ink2)"/><rect x="30" y="330" width="240" height="40" rx="10" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><text x="150.0" y="356.0" text-anchor="middle" class="s b">설립 경과 조사</text></g>
+  <g data-s="3"><path class="ln" d="M360,164 L450,192"/><text x="450" y="208" text-anchor="middle" class="b" style="fill:var(--te)">모집 설립</text><rect x="330" y="222" width="240" height="40" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/><text x="450.0" y="248.0" text-anchor="middle" class="s b">발기인 주식 인수</text><path class="d" d="M450,262 L450,270" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M443,264 L450,276 L457,264 Z" style="fill:var(--ink2)"/><rect x="330" y="276" width="240" height="40" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/><text x="450.0" y="302.0" text-anchor="middle" class="s b">주주 모집 · 주식청약</text><path class="d" d="M450,316 L450,324" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M443,318 L450,330 L457,318 Z" style="fill:var(--ink2)"/><rect x="330" y="330" width="240" height="40" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/><text x="450.0" y="356.0" text-anchor="middle" class="s b">주식배정 · 인수</text><path class="d" d="M450,370 L450,378" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M443,372 L450,384 L457,372 Z" style="fill:var(--ink2)"/><rect x="330" y="384" width="240" height="40" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/><text x="450.0" y="410.0" text-anchor="middle" class="s b">주금납입 (출자)</text><path class="d" d="M450,424 L450,432" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M443,426 L450,438 L457,426 Z" style="fill:var(--ink2)"/><rect x="330" y="438" width="240" height="40" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/><text x="450.0" y="464.0" text-anchor="middle" class="s b">창립총회 · 임원 선임</text><path class="d" d="M450,478 L450,486" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M443,480 L450,492 L457,480 Z" style="fill:var(--ink2)"/><rect x="330" y="492" width="240" height="40" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/><text x="450.0" y="518.0" text-anchor="middle" class="s b">설립 경과 조사</text></g>
+  <g data-s="4"><path class="d" d="M150,364 L150,394" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M143,388 L150,400 L157,388 Z" style="fill:var(--ink2)"/><rect x="30" y="400" width="240" height="40" rx="10" style="fill:var(--ap);fill-opacity:.18;stroke:var(--ap);stroke-width:2"/><text x="150.0" y="426.0" text-anchor="middle" class="s b">법인설립 등기</text><path class="d" d="M150,442 L150,464" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M143,458 L150,470 L157,458 Z" style="fill:var(--ink2)"/><rect x="30" y="470" width="240" height="52" rx="10" style="fill:var(--ap);fill-opacity:.18;stroke:var(--ap);stroke-width:2"/><text x="150.0" y="492.0" text-anchor="middle" class="s b">설립 신고 · 사업자등록</text><text x="150.0" y="516.0" text-anchor="middle" class="s">등기 후 20일 이내 · 세무서</text><path class="d" d="M328,512 L284,432" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M280,442 L282,426 L294,436 Z" style="fill:var(--ink2)"/></g>
+</svg>
+
+<!-- ④ 영업허가 · 영업등록 · 영업신고 -->
+<svg data-fig="permit" viewBox="0 0 600 414" role="img" aria-label="영업허가 영업등록 영업신고" hidden>
+  <g data-s="1"><rect x="10" y="8" width="580" height="122" rx="12" style="fill:var(--ap);fill-opacity:.1;stroke:var(--ap);stroke-width:2"/><text x="34" y="44" class="b" style="fill:var(--ap)">영업허가</text><text x="34" y="76" class="s">금지된 영업을 특정 경우에</text><text x="34" y="102" class="s">금지 해제 → 적법하게 영업</text><text x="318" y="44" class="s b">예)</text><text x="318" y="76" class="s">단란 · 유흥주점</text><text x="318" y="102" class="s">신용정보업 · 의약품 도매상</text></g>
+  <g data-s="2"><rect x="10" y="144" width="580" height="122" rx="12" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2"/><text x="34" y="180" class="b" style="fill:var(--inh)">영업등록</text><text x="34" y="212" class="s">전문 자격요건을 갖춘</text><text x="34" y="238" class="s">경우에만 영업 가능</text><text x="318" y="180" class="s b">예)</text><text x="318" y="212" class="s">공인중개사 · 약국</text><text x="318" y="238" class="s">학원 · 독서실</text></g>
+  <g data-s="3"><rect x="10" y="280" width="580" height="122" rx="12" style="fill:var(--te);fill-opacity:.1;stroke:var(--te);stroke-width:2"/><text x="34" y="316" class="b" style="fill:var(--te)">영업신고</text><text x="34" y="348" class="s">법령의 요건을 갖추어</text><text x="34" y="374" class="s">신고증을 받아야 영업</text><text x="318" y="316" class="s b">예)</text><text x="318" y="348" class="s">일반 · 휴게음식점</text><text x="318" y="374" class="s">미용실 · 스크린골프장</text></g>
+</svg>
+
+<!-- ⑤ 사회적 기업의 유형 -->
+<svg data-fig="social" viewBox="0 0 600 430" role="img" aria-label="사회적 기업의 정의와 유형" hidden>
+  <g data-s="1"><rect x="40" y="8" width="520" height="70" rx="10" style="fill:var(--main);fill-opacity:.15;stroke:var(--main);stroke-width:2"/><text x="300.0" y="39.0" text-anchor="middle" class="b">사회적 기업</text><text x="300.0" y="63.0" text-anchor="middle" class="s">사회적 목적을 위해 경제활동 (이윤만 X)</text></g>
+  <g data-s="2"><rect x="10" y="98" width="280" height="76" rx="10" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><text x="150.0" y="132.0" text-anchor="middle" class="b">① 일자리 제공형</text><text x="150.0" y="156.0" text-anchor="middle" class="s">취약계층에게 일자리</text></g>
+  <g data-s="2"><rect x="310" y="98" width="280" height="76" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/><text x="450.0" y="132.0" text-anchor="middle" class="b">② 사회서비스 제공형</text><text x="450.0" y="156.0" text-anchor="middle" class="s">취약계층에게 돌봄 · 교육</text></g>
+  <g data-s="2"><rect x="10" y="190" width="280" height="76" rx="10" style="fill:var(--oc);fill-opacity:.15;stroke:var(--oc);stroke-width:2"/><text x="150.0" y="224.0" text-anchor="middle" class="b">③ 혼합형</text><text x="150.0" y="248.0" text-anchor="middle" class="s">일자리 + 사회서비스</text></g>
+  <g data-s="3"><rect x="310" y="190" width="280" height="76" rx="10" style="fill:var(--fr);fill-opacity:.15;stroke:var(--fr);stroke-width:2"/><text x="450.0" y="224.0" text-anchor="middle" class="b">④ 기타형</text><text x="450.0" y="248.0" text-anchor="middle" class="s">새 모델 · 혁신적 사업</text></g>
+  <g data-s="3"><rect x="10" y="282" width="280" height="76" rx="10" style="fill:var(--pa);fill-opacity:.15;stroke:var(--pa);stroke-width:2"/><text x="150.0" y="316.0" text-anchor="middle" class="b">⑤ 지역사회 공헌형</text><text x="150.0" y="340.0" text-anchor="middle" class="s">지역 문제 · 지역 경제</text></g>
+  <g data-s="4"><rect x="310" y="282" width="280" height="76" rx="10" style="fill:var(--ap);fill-opacity:.12;stroke:var(--ap);stroke-width:2"/><text x="450.0" y="316.0" text-anchor="middle" class="b">인증을 받으면</text><text x="450.0" y="340.0" text-anchor="middle" class="s">정부 지원 사업 참여 자격</text><text x="300" y="400" text-anchor="middle" class="s">인증요건: 매출 ≥ 노무비 30% · 이윤 2/3 이상 재투자</text></g>
+</svg>
+
+    </div>
+    <div class="ctl">
+        <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
+        <button type="button" id="prev" title="이전 단계">◀ 이전</button>
+        <button type="button" id="next" title="다음 단계">다음 ▶</button>
+        <button type="button" id="all" title="모두 보기">전체</button>
+        <span class="pos" id="pos"></span>
+    </div>
+    <ol class="cap" id="cap"></ol>
+    <p class="note" id="note"></p>
+</div>
+<script>
+(function () {
+    "use strict";
+    // 그림마다: 탭 이름 · 강의자료 출처 · 단계 설명 (단계 번호 = SVG 의 data-s) · 아래 메모
+    var FIGS = [
+        { id: "four", week: 9, tab: "① 4대 요소", src: "9주차 수업 · 5강 창업 PDF 4 · 5쪽 — 창업의 4대 필수요소",
+          steps: [
+            "<b>창업자 (사람)</b> — 성패는 창업자의 기업가 자질과 사업수행능력 · 경험 · 집념 · 리더십 · 체력",
+            "<b>창업자금 (자본)</b> — 사업 규모에 맞는 자금 · 초기 자금은 <b>최소화</b> · 운전자금(개업준비 운영자금)과 고정자금(시설자금)으로 나눠 계획",
+            "<b>창업업종 선택 (아이템)</b> — 정보 수집 · 종사자 면담 · 정밀 분석 · 성장가능성과 내 경험을 살릴 수 있는지",
+            "<b>창업사업장 (장소)</b> — 제조업은 제품이, 점포 사업(소매 · 서비스 · 음식업)은 <b>입지</b>가 더 중요할 수 있음" ],
+          note: "창업 = 개인이나 법인이 돈을 버는 것을 목적으로 기업을 새로 만드는 일 (3쪽)" },
+        { id: "solo", week: 9, tab: "② 개인기업 설립", src: "9주차 수업 · 5강 창업 PDF 11 · 12쪽 — 개인기업의 설립절차",
+          steps: [
+            "<b>사업 아이템 선정</b> 및 사업타당성 조사",
+            "<b>사업계획 수립</b> — 사업 규모 및 기업 형태 등 결정",
+            "<b>인 · 허가 취득</b> — 인허가 · 등록 · 신고가 필요한 업종은 주무관청 · 지방자치단체를 통해 미리 (정부24 에서 검색 · 신청)",
+            "<b>사업자등록</b> — 사업 개시일부터 <b>20일 이내</b> 사업장 소재지 <b>관할 세무서</b> (신청서 · 인허가증 사본 · 임대차 계약서 · 주민등록등본)",
+            "<b>사업 개시</b> — 세무서는 신청일부터 7일(또는 14일) 안에 사업자등록증 교부" ],
+          note: "📄 강의자료 그림의 “부관부처” 는 문맥상 업종을 맡은 주관 부처 (12쪽: 주무관청 또는 지방자치단체)" },
+        { id: "corp", week: 9, tab: "③ 주식회사 설립", src: "9주차 수업 · 5강 창업 PDF 13 ~ 15쪽 — 법인기업(주식회사)의 설립절차",
+          steps: [
+            "공통 — <b>발기인 구성 → 정관 작성 → 주식발행사항 결정</b>",
+            "<b>발기 설립</b> — 발기인이 주식을 모두 인수 → 주금납입 · 임원 선임 → 설립 경과 조사",
+            "<b>모집 설립</b> — 발기인 주식 인수 → 주주 모집 · 주식청약 → 주식배정 · 인수 → 주금납입(출자) → 창립총회 · 임원 선임 → 설립 경과 조사",
+            "<b>법인설립 등기</b> → 등기한 날부터 <b>20일 이내</b> 관할 세무서에 <b>법인설립 신고 및 사업자등록 신청서</b>" ],
+          note: "주식회사 = 출자(인수한 주식 금액)만큼만 책임지는 <b>유한책임</b> · 소유와 경영 분리 · 주식 · 사채로 자본 조달 → 예비 창업자가 가장 많이 고르는 법인 형태 (14쪽)" },
+        { id: "permit", week: 9, tab: "④ 허가·등록·신고", src: "9주차 수업 · 5강 창업 PDF 18 ~ 20쪽 — 자유 · 허가 · 등록 · 신고",
+          steps: [
+            "<b>영업허가</b> — 일반적으로 금지된 영업을 특정한 경우에 금지를 해제해 적법하게 영업하게 하는 행정행위 · 예) 단란주점 · 유흥주점 · 신용정보업 · 의약품 도매상",
+            "<b>영업등록</b> — 전문적인 자격요건을 갖춘 경우에만 영업이 가능한 업종 (대인 · 대물 등록업종) · 예) 공인중개사사무소 · 약국 · 학원 · 독서실",
+            "<b>영업신고</b> — 법령의 일정한 요건을 갖추어 관할관청에서 영업신고증을 받아야 사업자등록 · 영업이 가능 · 예) 일반 · 휴게음식점 · 미용실 · 스크린골프장" ],
+          note: "21 · 22쪽 = 국세청 홈택스 사업자등록 신청 화면 (인허가사업 제출서류 조회)" },
+        { id: "social", week: 9, tab: "⑤ 사회적 기업", src: "9주차 수업 · 5강 창업 PDF 32 · 33쪽 — 사회적 기업",
+          steps: [
+            "<b>정의</b> — 이윤추구만 하는 일반 기업과 달리 <b>사회적 목적</b>을 실현하기 위해 경제활동 (사회 문제 해결 · 취약계층 지원 · 지역 발전)",
+            "유형 <b>① 일자리 제공형</b> · <b>② 사회서비스 제공형</b> (돌봄 · 교육) · <b>③ 혼합형</b> (① + ②)",
+            "유형 <b>④ 기타형</b> (새 모델 · 혁신) · <b>⑤ 지역사회 공헌형</b> (지역 문제 · 지역 경제)",
+            "<b>인증</b>을 받으면 정부 지원 사업 참여 자격 · 인증요건 중 영업 수입 = 매출액이 <b>노무비의 30% 이상</b> · 상법상 회사는 이윤의 <b>2/3 이상</b>을 사회적 목적에 재투자" ],
+          note: "법률 = 사회적기업 육성법 · 주요 지원 기관 = 한국사회적기업진흥원 · 지방자치단체 · 고용노동부 · 중소벤처기업부" }
+    ];
+
+    var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
+        note = document.getElementById("note"), pos = document.getElementById("pos"), box = document.getElementById("box");
+    var S = { fig: 0, step: 0, timers: [] };   // step 0 = 전체
+
+    function svgOf(i) { return document.querySelector('svg[data-fig="' + FIGS[i].id + '"]'); }
+    function parts(svgEl) { return Array.prototype.slice.call(svgEl.querySelectorAll("[data-s]")); }
+    function clearTimers() { S.timers.forEach(clearTimeout); S.timers = []; }
+
+    function drawIn(root) {                       // 선이 그려지듯이 (stroke-dashoffset)
+        var list = root.matches && root.matches(".d") ? [root] : [];
+        list = list.concat(Array.prototype.slice.call(root.querySelectorAll(".d")));
+        list.forEach(function (p) {
+            if (!p.getTotalLength) return;
+            var L; try { L = p.getTotalLength(); } catch (e) { return; }
+            if (!L) return;
+            p.style.transition = "none"; p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+            p.getBoundingClientRect();
+            p.style.transition = "stroke-dashoffset 0.9s ease"; p.style.strokeDashoffset = 0;
+            setTimeout(function () { p.style.strokeDasharray = ""; }, 1000);
+        });
+    }
+
+    function renderCap() {
+        var f = FIGS[S.fig];
+        cap.innerHTML = "";
+        f.steps.forEach(function (t, i) {
+            var li = document.createElement("li"); li.innerHTML = t;
+            if (S.step && i + 1 === S.step) li.className = "cur";
+            else if (S.step && i + 1 > S.step) li.className = "later";
+            li.addEventListener("click", function () { go(i + 1); });
+            cap.appendChild(li);
+        });
+        pos.textContent = S.step ? S.step + " / " + f.steps.length + " 단계" : "전체 " + f.steps.length + " 단계";
+    }
+
+    function apply(animateNew) {                  // 지금 단계에 맞게 보이기 · 숨기기
+        var svgEl = svgOf(S.fig);
+        parts(svgEl).forEach(function (g) {
+            var k = +g.getAttribute("data-s");
+            var wasOff = g.classList.contains("off");
+            var show = !S.step || k <= S.step;
+            g.classList.toggle("off", !show);
+            g.classList.toggle("hl", !!S.step && k === S.step);
+            if (show && wasOff && animateNew) drawIn(g);
+        });
+        renderCap();
+    }
+
+    function drawAll() {                          // 전체를 단계 순서대로 그리면서 보여 주기
+        clearTimers();
+        var svgEl = svgOf(S.fig), n = FIGS[S.fig].steps.length;
+        S.step = 0;
+        parts(svgEl).forEach(function (g) { g.classList.add("off"); g.classList.remove("hl"); });
+        drawIn(svgEl);
+        renderCap();
+        for (var k = 1; k <= n; k++) (function (k) {
+            S.timers.push(setTimeout(function () {
+                parts(svgEl).forEach(function (g) { if (+g.getAttribute("data-s") === k) { g.classList.remove("off"); drawIn(g); } });
+            }, 350 + (k - 1) * 650));
+        })(k);
+    }
+
+    function go(step) {
+        clearTimers();
+        var n = FIGS[S.fig].steps.length;
+        S.step = Math.max(1, Math.min(n, step));
+        apply(true);
+    }
+
+    function show(i, draw) {
+        clearTimers();
+        S.fig = i; S.step = 0;
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (s) {   // SVG 는 .hidden 속성이 없어서 attribute 로
+            if (s.getAttribute("data-fig") === FIGS[i].id) s.removeAttribute("hidden"); else s.setAttribute("hidden", "");
+        });
+        Array.prototype.forEach.call(tabsBox.children, function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+        src.innerHTML = "📄 " + FIGS[i].src;
+        note.innerHTML = FIGS[i].note || "";
+        if (draw) drawAll(); else { parts(svgOf(i)).forEach(function (g) { g.classList.remove("off", "hl"); }); renderCap(); }
+        tell();
+    }
+
+    // 주차로 골라 보기 — ?week=5 = 그 주차 그림만 · ?weeks=1-7 = 그 범위 (주차 페이지 · 중간고사 · 기말고사 · 완전정리가 같은 그림 파일을 나눠 씀 · README 🎨)
+    (function () {
+        var q = location.search, m1 = /[?&]week=(\d+)/.exec(q), m2 = /[?&]weeks=(\d+)-(\d+)/.exec(q);
+        if (!m1 && !m2) return;
+        var lo = m1 ? +m1[1] : +m2[1], hi = m1 ? +m1[1] : +m2[2];
+        var keep = FIGS.filter(function (f) { return [].concat(f.week).some(function (w) { return w >= lo && w <= hi; }); });
+        if (keep.length) FIGS = keep;
+    })();
+
+    // 그림 검사 — 콘솔에서 figCheck() → 글자끼리 겹침 · 600 폭 밖으로 넘침 목록 (없으면 [] · 폰 폭에서도 한 번 더)
+    window.figCheck = function () {
+        var out = [];
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (sv) {
+            var wasHidden = sv.hasAttribute("hidden"); sv.removeAttribute("hidden");
+            var vb = sv.viewBox.baseVal, ts = Array.prototype.map.call(sv.querySelectorAll("text"), function (t) { return { t: t, b: t.getBBox() }; });
+            ts.forEach(function (o) { if (o.b.x < -1 || o.b.x + o.b.width > vb.width + 1) out.push(sv.getAttribute("data-fig") + " 넘침: " + o.t.textContent.slice(0, 24)); });
+            for (var i = 0; i < ts.length; i++) for (var j = i + 1; j < ts.length; j++) {
+                var a = ts[i].b, c = ts[j].b, ox = Math.min(a.x + a.width, c.x + c.width) - Math.max(a.x, c.x), oy = Math.min(a.y + a.height, c.y + c.height) - Math.max(a.y, c.y);
+                if (ox > 2 && oy > 3) out.push(sv.getAttribute("data-fig") + " 겹침: " + ts[i].t.textContent.slice(0, 16) + " × " + ts[j].t.textContent.slice(0, 16));
+            }
+            if (wasHidden) sv.setAttribute("hidden", "");
+        });
+        return out;
+    };
+
+    FIGS.forEach(function (f, i) {
+        var b = document.createElement("button"); b.type = "button"; b.textContent = f.tab;
+        b.addEventListener("click", function () { show(i, true); try { history.replaceState(null, "", "#" + f.id); } catch (e) {} });
+        tabsBox.appendChild(b);
+    });
+    document.getElementById("redraw").addEventListener("click", function () { drawAll(); });
+    document.getElementById("all").addEventListener("click", function () { clearTimers(); S.step = 0; apply(false); });
+    document.getElementById("prev").addEventListener("click", function () { go(S.step ? S.step - 1 : 1); });
+    document.getElementById("next").addEventListener("click", function () { go(S.step ? S.step + 1 : 1); });
+    document.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(S.step + 1); else if (e.key === "ArrowLeft") go(S.step ? S.step - 1 : 1); });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) {} }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    var start = 0, h = (location.hash || "").slice(1);
+    FIGS.forEach(function (f, i) { if (f.id === h) start = i; });
+    show(start, false);
+    // 처음 화면에 보일 때 한 번 그리면서 보여 주기
+    if (window.IntersectionObserver) {
+        var done = false;
+        new IntersectionObserver(function (es) { if (!done && es[0].isIntersecting) { done = true; drawAll(); } }, { threshold: 0.3 }).observe(document.querySelector(".stage"));
+    }
+})();
+</script>
+<script src="../../../figink.js?v=1"></script>
+</body>
+</html>
