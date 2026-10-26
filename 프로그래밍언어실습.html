@@ -37,7 +37,7 @@
 
     <header class="page-head">
         <h1>프로그래밍언어실습 · 완전 정리</h1>
-        <p>1주차 ~ 7주차 C 언어 · 실행과정 · 출력 · 함수 · 변수 · 자료형 · 서식 · 상수 · scanf · 연산자 · 조건 · 반복 · 함수 · 헤더파일 · 시험 예고 — <b>예제 코드 + 실제 출력 결과</b> 중심</p>
+        <p>1주차 ~ 9주차 C 언어 · 실행과정 · 출력 · 함수 · 변수 · 자료형 · 서식 · 상수 · scanf · 연산자 · 조건 · 반복 · 함수 · 헤더파일 · 시험 예고 · 빌드 · 메모리 공간 · 지역 · 전역변수 — <b>예제 코드 + 실제 출력 결과</b> 중심</p>
     </header>
 
     <div id="week-nav" data-subject="프로그래밍언어실습"></div>
@@ -82,6 +82,8 @@
         <a href="#s33">33.★헤더파일</a>
         <a href="#s34">34.★HW02</a>
         <a href="#s35">35.★7주차 예고</a>
+        <a href="#s36">36.빌드·메모리</a>
+        <a href="#s37">37.★지역·전역변수</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -3577,9 +3579,168 @@ for (i = 1; i &lt;= 9; i++) {
         </div>
     </section>
 
+    <section class="card" id="s36">
+        <h2>36. 빌드 · 메모리 공간 (기억장치 4영역)<span class="week">9주차</span></h2>
+<p><span class="wk-tag note">✍️ 필기</span> — [이론] <b>빌드 = 컴파일 + 링크</b> → <code>.exe</code> 실행파일 (Windows) · <code>.o</code> 목적파일 (Linux)</p>
+<table class="ref">
+<tbody>
+<tr><th>단계</th><th>하는 일</th><th>Windows</th><th>Linux · macOS</th></tr>
+<tr><td><b>컴파일</b></td><td>소스(.c) 하나를 기계어로 번역</td><td>목적파일 <code>.obj</code></td><td>목적파일 <code>.o</code></td></tr>
+<tr><td><b>링크</b></td><td>목적파일 + 라이브러리(printf 등)를 묶음</td><td>실행파일 <code>.exe</code></td><td>실행파일 (확장자 없음 · <code>a.out</code>)</td></tr>
+<tr><td><b>빌드</b></td><td>컴파일 + 링크</td><td colspan="2">실행파일까지 한 번에</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> <code>.o</code> 는 Linux 의 실행파일이 아니라 <b>링크 전 목적파일</b>이에요 — 맥에서 <code>clang -c</code> 로 만든 <code>.o</code> 는 object, 링크한 결과는 executable 로 확인했어요.</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#build" title="그림 — 빌드 = 컴파일 + 링크" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#build" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 빌드 = 컴파일 + 링크 — 새 창으로 크게 보기</a></p></div>
+<p><span class="wk-tag note">✍️ 필기</span> — #기억장치 공간 (메모리 공간) { A. 정적 공간: 컴파일 시간에 결정 — 1 코드 <b>중요!</b> · 2 데이터 <b>중요!</b> · 3 스택 <b>아주 중요!</b> / B. 동적 공간: 런타임 시간(실행시간)에 결정 — 4 힙 }</p>
+<table class="ref">
+<tbody>
+<tr><th>공간</th><th>영역</th><th>🤖 무엇이 들어가나</th></tr>
+<tr><td rowspan="3"><b>A. 정적</b><br>컴파일 시간</td><td>1. 코드 (code) — 중요!</td><td>main · 함수의 명령 (기계어)</td></tr>
+<tr><td>2. 데이터 (data) — 중요!</td><td><b>전역변수</b> · static 변수 (프로그램 시작 ~ 끝)</td></tr>
+<tr><td>3. 스택 (stack) — <b>아주 중요!</b></td><td><b>지역변수</b> · <b>매개변수</b> (함수가 불릴 때 생기고 끝나면 사라짐)</td></tr>
+<tr><td><b>B. 동적</b><br>런타임</td><td>4. 힙 (heap)</td><td>실행 중에 빌려 쓰는 공간 (malloc · 아직 안 배움)</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag fix">⚠️ 팩트체크</span> 스택에 들어갈 변수 <b>크기</b>는 컴파일 때 정해지지만, 스택 칸이 <b>실제로 생기고 없어지는 건</b> 함수가 호출 · 끝날 때(실행 중)예요 → 그래서 지역변수는 함수가 끝나면 사라져요.</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#memory" title="그림 — 메모리 4영역" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#memory" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 메모리 4영역 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s37">
+        <h2>37. ★ 변수의 유효범위 — 지역변수 · 전역변수<span class="week">9주차</span></h2>
+<p><span class="wk-tag note">✍️ 필기</span> — #변수의 유효범위(기억 클래스): 선언된 변수가 <b>사용될 수 있는 범위</b> (scope) · <b>오늘의 실습 { 지역변수 · 전역변수 }</b></p>
+<table class="ref">
+<tbody>
+<tr><th>종류</th><th>✍️ 어디서 선언</th><th>쓸 수 있는 곳</th><th>기본값</th></tr>
+<tr><td><b>지역변수</b> (local)</td><td><b>블록(중괄호)</b> 또는 <b>함수의 내부</b></td><td>그 블록 · 함수 안에서만</td><td>🤖 정해지지 않음</td></tr>
+<tr><td><b>전역변수</b> (global)</td><td><b>함수의 외부</b></td><td>어디서나 (다른 파일은 extern)</td><td><b>0</b> (gi: 0)</td></tr>
+<tr><td>정적 · 외부 · 레지스터</td><td colspan="3">static · extern · register — ✍️ 필기 빈칸 (다음 시간)</td></tr>
+</tbody></table>
+<div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> <b>지역이 전역보다 우선</b> — 같은 이름이면 그 블록 안에서는 지역변수가 쓰여요 (아래 ③ PI).</div>
+        <h3>① 수업 파일 scope1_5.c — 블록 밖에서 b 를 쓰면 오류</h3>
+        <pre><code class="language-c">// scope1_5.c                                       // 지역변수의 범위 — 함수 · 블록 안에서만
+#include &lt;stdio.h&gt;                                  // printf
+
+void test1() {                                      // 매개변수 없는 함수
+	int local1 = 10;                                // test1 의 지역변수 → test1 안에서만
+	printf("local1: %d\n", local1);                 // local1: 10
+}                                                   // test1 끝 → local1 사라짐
+
+void test2(int local2) {                            // 매개변수 local2 도 지역변수
+	printf("local2: %d\n", local2);                 // test2(100) → local2: 100
+}                                                   // test2 끝 → local2 사라짐
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+	test1();                                        // local1: 10
+	test2(100);                                     // local2: 100
+
+	int a = 0;                                      // main 의 지역변수 a = 0
+	while (a &lt; 5) {                                 // a = 0 ~ 4 → 5번 반복
+		a++;                                        // a: 1 → 2 → 3 → 4 → 5
+		int b = 20;                                 // while 블록 안 지역변수 b (반복마다 새로 20)
+		printf("a, b: %d, %d\n", a, b);             // a, b: 1, 20 … a, b: 5, 20
+	}                                               // while 블록 끝 → b 사라짐
+	printf("b: %d\n", b); // error                  // ❌ b 는 while 블록의 지역변수 → 여기서는 없음
+
+	return 0;                                       // 정상 종료
+}                                                   // main 끝
+</code></pre>
+        <p>▶ 컴파일 결과 (맥 clang) — 실행 파일이 만들어지지 않음</p>
+        <pre class="io"><code class="language-text">scope1_5.c:23:20: error: use of undeclared identifier 'b'
+   23 |         printf("b: %d\n", b); // error
+      |                           ^
+1 error generated.</code></pre>
+        <p>▶ 오류 줄을 지우고 실행하면</p>
+        <pre class="io"><code class="language-text">local1: 10
+local2: 100
+a, b: 1, 20
+a, b: 2, 20
+a, b: 3, 20
+a, b: 4, 20
+a, b: 5, 20</code></pre>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#scope" title="그림 — 블록 범위 (scope1_5.c)" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#scope" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 블록 범위 (scope1_5.c) — 새 창으로 크게 보기</a></p></div>
+        <h3>② 01localvar.c — 지역변수</h3>
+        <pre><code class="language-c">// 01localvar.c                                     // 지역변수: 블록 · 함수 안에서만 쓸 수 있음
+#include &lt;stdio.h&gt;                                  // printf
+void sub(int param);                                // 함수 원형 (아래에 정의)
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	auto int n = 10;                                // 지역변수 n = 10 (auto = 자동 지역변수 · 생략 가능)
+	printf("%d\n", n);                              // 10
+	for (int m = 0, sum = 0; m &lt; 3; m++) {          // m · sum 은 for 블록의 지역변수 (m = 0, 1, 2)
+		sum += m;                                   // sum: 0 → 0+1=1 → 1+2=3
+		printf("\t%d %d\n", m, sum);                // 탭 + "0 0" → "1 1" → "2 3"
+	}                                               // for 끝 → m · sum 사라짐
+	printf("%d\n", n);                              // n 은 main 블록 → 아직 참조 가능 → 10
+	// printf("%d %d\n", m, sum);                   // ❌ m · sum 참조 불가능 (for 밖)
+	sub(20);                                        // 함수 호출 → param = 20
+	return 0;                                       // 정상 종료
+}                                                   // main 끝
+
+void sub(int param) {                               // 매개변수 param 도 sub 의 지역변수
+	auto int local = 100;                           // sub 의 지역변수 local = 100
+	printf("\t%d %d\n", param, local);              // 탭 + "20 100"
+	// printf("%d\n", n);                           // ❌ n 은 main 의 지역변수 → sub 에서 참조 불가능
+}                                                   // sub 끝
+</code></pre>
+        <pre class="io"><code class="language-text">10
+	0 0
+	1 1
+	2 3
+10
+	20 100</code></pre>
+        <h3>③ 02-1global.c + 02-2circumference.c — 전역변수 (파일 2개)</h3>
+        <pre><code class="language-c">// 02-1global.c                                     // 전역변수 PI · gi + 같은 이름 지역변수 PI
+#include &lt;stdio.h&gt;                                  // printf
+double getArea(double);                             // 함수 원형 — 면적 (이 파일 아래)
+double getCircum(double);                           // 함수 원형 — 둘레 (02-2 파일에 있음)
+
+double PI = 3.14;                                   // 전역변수 PI = 3.14 (함수 밖)
+int gi;                                             // 전역변수 gi — 초기화 안 함 → 기본값 0
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	double r = 5.87;                                // 지역변수 반지름 r = 5.87
+	const double PI = 3.141592;                     // 전역 PI 와 같은 이름의 지역변수 → main 안에서는 이게 우선
+	printf("면적: %.2f\n", getArea(r));             // getArea 는 전역 PI 사용 → 5.87 × 5.87 × 3.14 = 108.19
+	printf("둘레1: %.2f\n", 2 * PI * r);            // main 의 지역 PI → 2 × 3.141592 × 5.87 = 36.88
+	printf("둘레2: %.2f\n", getCircum(r));          // 다른 파일의 함수 → 전역 PI → 2 × 5.87 × 3.14 = 36.86
+	printf("PI: %f\n", PI);                         // 지역변수 PI 참조 → 3.141592
+	printf("gi: %d\n", gi);                         // 전역변수 gi 기본값 → 0
+	return 0;                                       // 정상 종료
+}                                                   // main 끝
+
+double getArea(double r) {                          // 매개변수 r 은 getArea 의 지역변수
+	return r * r * PI;                              // 여기엔 지역 PI 가 없음 → 전역 PI(3.14) 참조
+}                                                   // getArea 끝
+</code></pre>
+        <pre><code class="language-c">// 02-2circumference.c                              // 같은 프로젝트의 두 번째 파일
+extern double PI;                                   // 이미 다른 파일(02-1)에서 선언된 전역변수 PI 를 쓰겠다는 선언
+double getCircum(double r) {                        // 둘레 = 2 × r × PI
+	return 2 * r * PI;                              // 전역 PI(3.14) 참조
+}                                                   // getCircum 끝
+</code></pre>
+        <pre class="io"><code class="language-text">면적: 108.19
+둘레1: 36.88
+둘레2: 36.86
+PI: 3.141592
+gi: 0</code></pre>
+        <div class="tip">🔥 <b>둘레1(36.88) ≠ 둘레2(36.86)</b> — 둘레1 은 main 의 <b>지역 PI(3.141592)</b>, 둘레2 는 다른 파일 함수라 <b>전역 PI(3.14)</b> · <code>extern double PI;</code> = 다른 파일에 이미 있는 전역변수를 쓰겠다는 선언</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#shadow" title="그림 — 지역이 전역보다 우선" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#shadow" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 지역이 전역보다 우선 — 새 창으로 크게 보기</a></p></div>
+        <div class="quiz-item" data-answers="int b = 20;|int b=20;" data-full="int b = 20;" data-explain="b 는 while 블록 안에서 선언된 지역변수라 while 밖의 printf(&quot;b: %d\n&quot;, b); 에서는 쓸 수 없어 컴파일 오류가 납니다.">
+            <p class="quiz-q"><span class="quiz-cat">빈칸 ①</span>scope1_5.c 에서 <b>while 블록 안에서만</b> 쓸 수 있어서 마지막 printf 를 오류로 만드는 <b>선언문</b>을 그대로 쓰시오.</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="extern" data-full="extern" data-explain="02-2circumference.c 의 extern double PI; — 다른 파일(02-1global.c)에 이미 선언된 전역변수를 쓰겠다는 선언입니다.">
+            <p class="quiz-q"><span class="quiz-cat">빈칸 ②</span>다른 파일에서 선언한 전역변수 PI 를 쓰려면 <code>( ? ) double PI;</code> — ( ? ) 에 들어갈 키워드는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 30 · 주관식 30 · 출력결과 63 · 코드 작성 56 · 총 179문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 35 · 주관식 35 · 출력결과 66 · 코드 작성 58 · 총 194문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="프로그래밍언어실습-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
@@ -3588,6 +3749,7 @@ for (i = 1; i &lt;= 9; i++) {
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
+<script>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 <script src="quiz.js?v=202610250006"></script>
 <script src="review.js?v=202610250006"></script>
 <script src="weeks.js?v=202610250006"></script>

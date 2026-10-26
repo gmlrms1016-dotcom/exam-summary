@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프로그래밍언어실습 그림 정리</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --cell:#7c6ae6;--myelin:#e0a838;--astro:#e0862b;--oligo:#0f9f74;--micro:#d9363e;--schwann:#2b8fd1;--vessel:#d9363e;
+          --ex:#16a34a;--inh:#2563eb;--ap:#e5484d;--fore:#e0862b;--mid:#c9b48a;--hind:#a0522d;
+          --fr:#8b7cf6;--pa:#ec5f9e;--te:#22b07d;--oc:#e9b52c;--light:#f5a524;--eye:#eef4fb;--nerve:#e8a3a3;--hl:#f59e0b;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --cell:#a596f5;--myelin:#f0c35a;--astro:#f5a04a;--oligo:#34d399;--micro:#ff6369;--schwann:#5ab8f0;--vessel:#ff6369;
+          --ex:#4cc38a;--inh:#6b9cff;--ap:#ff6369;--fore:#f5a04a;--mid:#d9c79c;--hind:#d07a4f;
+          --fr:#a596f5;--pa:#f27db3;--te:#4cc38a;--oc:#f5c84a;--light:#ffb547;--eye:#1c2733;--nerve:#c97878;--hl:#ffb547;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+    .box{max-width:780px;margin:0 auto;padding:10px 12px 14px;}
+    .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0 0 8px;}
+    .tabs button{min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 4px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;}
+    .tabs button[aria-pressed=true]{border-color:var(--main);color:var(--main);box-shadow:inset 0 0 0 1px var(--main);}
+    .src{margin:0 0 6px;font-size:13px;color:var(--ink2);}
+    .src b{color:var(--main);}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;}
+    svg{display:block;width:100%;height:auto;}
+    svg[hidden]{display:none;}
+    svg text{fill:var(--ink);font-family:inherit;font-size:19px;}
+    svg text.s{font-size:15px;fill:var(--ink2);}
+    svg text.b{font-weight:800;}
+    svg text.w{fill:#fff;}
+    svg text.m{font-family:Menlo,Consolas,"D2Coding",monospace;}
+    svg .ln{stroke:var(--ink2);stroke-width:1.6;fill:none;}
+    svg .ax{stroke:var(--ink2);stroke-width:2;fill:none;}
+    svg .dash{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:6 5;fill:none;}
+    svg [data-s]{transition:opacity .45s ease;}
+    svg [data-s].off{opacity:0;}
+    svg [data-s].dim{opacity:.28;}
+    svg [data-s].hl{filter:drop-shadow(0 0 5px var(--hl));}
+    .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;}
+    .ctl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+    .ctl button.main{border-color:var(--main);color:var(--main);}
+    .ctl .pos{margin-left:auto;font-size:13px;color:var(--ink2);}
+    ol.cap{margin:8px 0 0;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:14.5px;line-height:1.65;}
+    ol.cap li{margin:2px 0;padding:1px 4px;border-radius:6px;cursor:pointer;}
+    ol.cap li b{color:var(--main);}
+    ol.cap li.cur{background:color-mix(in srgb,var(--hl) 22%,transparent);}
+    ol.cap li.later{opacity:.45;}
+    .note{margin:6px 0 0;font-size:13px;color:var(--ink2);line-height:1.6;}
+    .note a{color:var(--main);}
+    @media (max-width:560px){ .tabs{grid-template-columns:repeat(3,minmax(0,1fr));} .tabs button{font-size:12px;} ol.cap{font-size:14px;padding-left:28px;}
+        /* 폰: 그림이 작아지니 그림 속 글자를 키움 (긴 줄도 600 폭 안에 들어가는 크기까지만) */
+        svg text{font-size:22px;} svg text.s{font-size:17px;} .stage{padding:3px;} }
+</style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="tabs" id="tabs" role="group" aria-label="그림 고르기"></div>
+    <p class="src" id="src"></p>
+    <div class="stage">
+
+<!-- ① 빌드 = 컴파일 + 링크 -->
+<svg data-fig="build" viewBox="0 0 600 400" role="img" aria-label="빌드는 컴파일과 링크" hidden>
+  <g data-s="1"><rect x="150" y="16" width="300" height="64" rx="10" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <text x="300" y="42" text-anchor="middle" class="b">소스 파일</text><text x="300" y="68" text-anchor="middle" class="s m">01localvar.c</text></g>
+  <g data-s="2"><path class="d" d="M300,82 L300,140" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M293,132 L300,144 L307,132 Z" style="fill:var(--ink2)"/>
+    <text x="318" y="118" class="b" style="fill:var(--oc)">① 컴파일</text>
+    <rect x="150" y="146" width="300" height="64" rx="10" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="300" y="172" text-anchor="middle" class="b">목적파일</text><text x="300" y="198" text-anchor="middle" class="s">.obj (Win) · .o (Linux)</text></g>
+  <g data-s="3"><rect x="470" y="146" width="120" height="64" rx="10" style="fill:var(--fr);fill-opacity:.15;stroke:var(--fr);stroke-width:2"/>
+    <text x="530" y="172" text-anchor="middle" class="b">라이브러리</text><text x="530" y="198" text-anchor="middle" class="s">printf 등</text>
+    <path class="d" d="M300,212 L300,266 M530,212 L530,240 L306,240" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M293,260 L300,272 L307,260 Z" style="fill:var(--ink2)"/>
+    <text x="236" y="254" text-anchor="middle" class="b" style="fill:var(--te)">② 링크</text>
+    <rect x="150" y="274" width="300" height="64" rx="10" style="fill:var(--te);fill-opacity:.2;stroke:var(--te);stroke-width:2"/>
+    <text x="300" y="300" text-anchor="middle" class="b">실행파일</text><text x="300" y="326" text-anchor="middle" class="s">.exe (Win) · a.out (Linux)</text></g>
+  <g data-s="4"><path class="ln" d="M132,18 L114,18 L114,336 L132,336"/>
+    <text x="60" y="160" text-anchor="middle" class="b" style="fill:var(--main)">빌드</text><text x="60" y="186" text-anchor="middle" class="s">= 컴파일</text><text x="60" y="208" text-anchor="middle" class="s">+ 링크</text></g>
+  <g data-s="5"><text x="300" y="380" text-anchor="middle" class="s" style="fill:var(--ap)">⚠️ .o = 링크 전 목적파일 (실행파일 아님)</text></g>
+</svg>
+
+<!-- ② 메모리 4 영역 -->
+<svg data-fig="memory" viewBox="0 0 600 440" role="img" aria-label="코드 데이터 스택 힙 메모리 영역" hidden>
+  <g data-s="1"><rect x="200" y="16" width="200" height="76" rx="8" style="fill:var(--inh);fill-opacity:.18;stroke:var(--inh);stroke-width:2"/>
+    <text x="300" y="48" text-anchor="middle" class="b">코드 (code)</text><text x="300" y="76" text-anchor="middle" class="s">✍️ 중요!</text>
+    <text x="418" y="48" class="s">main · 함수의</text><text x="418" y="72" class="s">명령 (기계어)</text></g>
+  <g data-s="2"><rect x="200" y="100" width="200" height="76" rx="8" style="fill:var(--oc);fill-opacity:.22;stroke:var(--oc);stroke-width:2"/>
+    <text x="300" y="132" text-anchor="middle" class="b">데이터 (data)</text><text x="300" y="160" text-anchor="middle" class="s">✍️ 중요!</text>
+    <text x="418" y="132" class="s">전역변수</text><text x="418" y="156" class="s">static 변수</text></g>
+  <g data-s="3"><rect x="200" y="184" width="200" height="76" rx="8" style="fill:var(--te);fill-opacity:.2;stroke:var(--te);stroke-width:2"/>
+    <text x="300" y="216" text-anchor="middle" class="b">스택 (stack)</text><text x="300" y="244" text-anchor="middle" class="s b" style="fill:var(--ap)">✍️ 아주 중요!</text>
+    <text x="418" y="216" class="s">지역변수</text><text x="418" y="240" class="s">매개변수</text></g>
+  <g data-s="4"><rect x="200" y="300" width="200" height="76" rx="8" style="fill:var(--fr);fill-opacity:.18;stroke:var(--fr);stroke-width:2"/>
+    <text x="300" y="332" text-anchor="middle" class="b">힙 (heap)</text><text x="300" y="360" text-anchor="middle" class="s">실행 중에 빌림</text>
+    <text x="418" y="332" class="s">malloc</text><text x="418" y="356" class="s">(나중에 배움)</text></g>
+  <g data-s="5"><path class="ln" d="M190,18 L172,18 L172,258 L190,258"/>
+    <text x="90" y="118" text-anchor="middle" class="b">A. 정적</text><text x="90" y="144" text-anchor="middle" class="s">컴파일 때</text><text x="90" y="166" text-anchor="middle" class="s">크기 결정</text>
+    <path class="ln" d="M190,302 L172,302 L172,374 L190,374"/>
+    <text x="90" y="334" text-anchor="middle" class="b">B. 동적</text><text x="90" y="358" text-anchor="middle" class="s">런타임</text>
+    <text x="300" y="416" text-anchor="middle" class="s">스택 칸은 함수가 불릴 때 생기고 끝나면 사라짐</text></g>
+</svg>
+
+<!-- ③ 블록 범위 — scope1_5.c -->
+<svg data-fig="scope" viewBox="0 0 600 470" role="img" aria-label="지역변수의 블록 범위" hidden>
+  <g><rect x="10" y="10" width="580" height="452" rx="12" class="dash"/><text x="24" y="34" class="s m">scope1_5.c</text></g>
+  <g data-s="1"><rect x="30" y="140" width="540" height="306" rx="10" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:2"/>
+    <text x="50" y="168" class="b m">main() { … }</text><text x="50" y="194" class="s">int a = 0; → main 블록 안 어디서나</text></g>
+  <g data-s="2"><rect x="60" y="210" width="480" height="104" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/>
+    <text x="80" y="238" class="b m">while (a &lt; 5) { … }</text><text x="80" y="266" class="s">int b = 20; → while 블록 안에서만</text>
+    <text x="80" y="294" class="s m">a, b: 1, 20 … 5, 20</text></g>
+  <g data-s="3"><text x="300" y="356" text-anchor="middle" class="m" style="fill:var(--ap)">printf("b: %d\n", b);</text>
+    <text x="300" y="388" text-anchor="middle" class="s b" style="fill:var(--ap)">❌ b 는 while 블록 밖 → 컴파일 오류</text>
+    <text x="300" y="420" text-anchor="middle" class="s" style="fill:var(--te)">a 는 main 블록이라 여기서도 OK</text></g>
+  <g data-s="4"><rect x="30" y="50" width="260" height="74" rx="10" style="fill:var(--oc);fill-opacity:.18;stroke:var(--oc);stroke-width:2"/>
+    <text x="160" y="80" text-anchor="middle" class="b m">test1()</text><text x="160" y="106" text-anchor="middle" class="s">local1 = 10</text>
+    <rect x="310" y="50" width="260" height="74" rx="10" style="fill:var(--oc);fill-opacity:.18;stroke:var(--oc);stroke-width:2"/>
+    <text x="440" y="80" text-anchor="middle" class="b m">test2(local2)</text><text x="440" y="106" text-anchor="middle" class="s">매개변수도 지역변수</text></g>
+</svg>
+
+<!-- ④ 지역이 전역보다 우선 — 02-1global.c -->
+<svg data-fig="shadow" viewBox="0 0 600 430" role="img" aria-label="전역변수 PI 와 지역변수 PI" hidden>
+  <g data-s="1"><rect x="150" y="14" width="300" height="72" rx="10" style="fill:var(--oc);fill-opacity:.22;stroke:var(--oc);stroke-width:2"/>
+    <text x="300" y="44" text-anchor="middle" class="b">전역 PI = 3.14</text><text x="300" y="72" text-anchor="middle" class="s">gi = 0 (기본값) · 함수 밖</text></g>
+  <g data-s="2"><rect x="16" y="130" width="276" height="200" rx="10" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:2"/>
+    <text x="154" y="158" text-anchor="middle" class="b m">main()</text>
+    <rect x="34" y="172" width="240" height="48" rx="8" style="fill:var(--te);fill-opacity:.25;stroke:var(--te);stroke-width:2"/>
+    <text x="154" y="203" text-anchor="middle" class="b">지역 PI = 3.141592</text>
+    <text x="154" y="252" text-anchor="middle" class="s">둘레1 = 2 × PI × r</text><text x="154" y="280" text-anchor="middle" class="b" style="fill:var(--te)">→ 36.88</text>
+    <text x="154" y="310" text-anchor="middle" class="s">PI 출력 → 3.141592</text>
+    <path class="dash" d="M196,88 L104,128"/><text x="168" y="120" class="s b" style="fill:var(--ap)">✕ 가려짐</text></g>
+  <g data-s="3"><rect x="308" y="130" width="276" height="200" rx="10" style="fill:var(--oc);fill-opacity:.08;stroke:var(--oc);stroke-width:2"/>
+    <text x="446" y="158" text-anchor="middle" class="b m">getArea()</text><text x="446" y="184" text-anchor="middle" class="b m">getCircum()</text>
+    <text x="446" y="214" text-anchor="middle" class="s">지역 PI 없음 → 전역 사용</text>
+    <text x="446" y="250" text-anchor="middle" class="s">면적 = r × r × 3.14</text><text x="446" y="276" text-anchor="middle" class="b" style="fill:var(--oc)">→ 108.19</text>
+    <text x="446" y="308" text-anchor="middle" class="s">둘레2 → 36.86</text>
+    <path class="d" d="M380,88 L420,126" style="stroke:var(--oc);stroke-width:2.5;fill:none"/></g>
+  <g data-s="4"><text x="300" y="372" text-anchor="middle" class="b" style="fill:var(--main)">같은 이름이면 지역변수가 우선</text>
+    <text x="300" y="404" text-anchor="middle" class="s">둘레1(36.88) ≠ 둘레2(36.86) 인 이유</text></g>
+</svg>
+
+    </div>
+    <div class="ctl">
+        <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
+        <button type="button" id="prev" title="이전 단계">◀ 이전</button>
+        <button type="button" id="next" title="다음 단계">다음 ▶</button>
+        <button type="button" id="all" title="모두 보기">전체</button>
+        <span class="pos" id="pos"></span>
+    </div>
+    <ol class="cap" id="cap"></ol>
+    <p class="note" id="note"></p>
+</div>
+<script>
+(function () {
+    "use strict";
+    // 그림마다: 탭 이름 · 강의자료 출처 · 단계 설명 (단계 번호 = SVG 의 data-s) · 아래 메모
+    var FIGS = [
+        { id: "build", week: 9, tab: "① 빌드", src: "9주차 ✍️ 필기 — [이론] 빌드 = 컴파일 + 링크 → .exe 실행파일 (Windows) · .o 목적파일 (Linux)",
+          steps: [
+            "<b>소스 파일</b> — 사람이 쓴 C 코드 (<code>01localvar.c</code>)",
+            "<b>① 컴파일</b> — 소스 하나를 기계어로 번역 → <b>목적파일</b> (Windows <code>.obj</code> · Linux <code>.o</code>)",
+            "<b>② 링크</b> — 목적파일 + 라이브러리(<code>printf</code> 등)를 묶음 → <b>실행파일</b> (<code>.exe</code> · Linux 기본 이름 <code>a.out</code>)",
+            "<b>빌드 = 컴파일 + 링크</b> — 한 번에 실행파일까지 만드는 것",
+            "⚠️ 필기의 <code>.o</code> 는 Linux 실행파일이 아니라 <b>링크 전 목적파일</b> (맥 clang 으로 확인)" ],
+          note: "🤖 Linux 실행파일은 보통 확장자가 없어요 · 목적파일 · 실행파일 종류는 맥에서 <code>clang -c</code> / <code>file</code> 명령으로 직접 확인" },
+        { id: "memory", week: 9, tab: "② 메모리 4영역", src: "9주차 ✍️ 필기 — #기억장치 공간 { A. 정적 공간 1 코드 · 2 데이터 · 3 스택 / B. 동적 공간 4 힙 }",
+          steps: [
+            "<b>코드 (code)</b> — ✍️ 중요! · 🤖 main · 함수의 명령(기계어)",
+            "<b>데이터 (data)</b> — ✍️ 중요! · 🤖 전역변수 · static 변수 (프로그램 시작 ~ 끝)",
+            "<b>스택 (stack)</b> — ✍️ <b>아주 중요!</b> · 🤖 지역변수 · 매개변수",
+            "<b>힙 (heap)</b> — 실행 중에 빌려 쓰는 공간 (malloc · 아직 안 배움)",
+            "<b>A. 정적 공간</b> = 컴파일 시간에 결정 (코드 · 데이터 · 스택) / <b>B. 동적 공간</b> = 런타임(실행 시간)에 결정 (힙)" ],
+          note: "⚠️ 스택에 들어갈 변수 크기는 컴파일 때 정해지지만, 스택 칸이 실제로 생기고 없어지는 건 함수가 호출 · 끝날 때(실행 중) — 그래서 지역변수는 함수가 끝나면 사라져요" },
+        { id: "scope", week: 9, tab: "③ 블록 범위", src: "9주차 수업 파일 scope1_5.c · ✍️ 지역변수 = 블록(중괄호) 또는 함수의 내부에서 선언",
+          steps: [
+            "<b>main 블록</b> — <code>int a = 0;</code> 는 main 안 어디서나 쓸 수 있음",
+            "<b>while 블록</b> — <code>int b = 20;</code> 는 while 중괄호 안에서만 · 반복마다 다시 20",
+            "while 밖의 <code>printf(\"b: %d\\n\", b);</code> → <b>❌ 컴파일 오류</b> (use of undeclared identifier 'b')",
+            "<b>test1 · test2</b> — <code>local1</code> · 매개변수 <code>local2</code> 도 그 함수의 지역변수" ],
+          note: "📄 01localvar.c 도 같은 규칙 — <code>for (int m = 0, sum = 0; …)</code> 의 m · sum 은 for 밖에서 못 씀 · main 의 n 은 sub 함수에서 못 씀" },
+        { id: "shadow", week: 9, tab: "④ 지역 우선", src: "9주차 ✍️ 필기 — 지역이 전역보다 우선임 · 📄 02-1global.c + 02-2circumference.c",
+          steps: [
+            "<b>전역변수</b> — 함수 밖에서 선언 · <code>PI = 3.14</code> · 초기화 안 한 <code>gi</code> 는 기본값 <b>0</b>",
+            "<b>main</b> 안에 같은 이름 <code>const double PI = 3.141592;</code> → main 안에서는 <b>지역 PI 가 우선</b> (전역 PI 가 가려짐) → 둘레1 = <b>36.88</b>",
+            "<b>getArea · getCircum</b> 에는 지역 PI 가 없음 → <b>전역 PI(3.14)</b> → 면적 <b>108.19</b> · 둘레2 <b>36.86</b>",
+            "정리: 같은 이름이면 <b>가까운 지역변수가 우선</b> → 둘레1 ≠ 둘레2" ],
+          note: "02-2 파일의 <code>extern double PI;</code> = 다른 파일에 이미 있는 전역변수를 쓰겠다는 선언 (외부변수 — 다음 시간)" }
+    ];
+
+    var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
+        note = document.getElementById("note"), pos = document.getElementById("pos"), box = document.getElementById("box");
+    var S = { fig: 0, step: 0, timers: [] };   // step 0 = 전체
+
+    function svgOf(i) { return document.querySelector('svg[data-fig="' + FIGS[i].id + '"]'); }
+    function parts(svgEl) { return Array.prototype.slice.call(svgEl.querySelectorAll("[data-s]")); }
+    function clearTimers() { S.timers.forEach(clearTimeout); S.timers = []; }
+
+    function drawIn(root) {                       // 선이 그려지듯이 (stroke-dashoffset)
+        var list = root.matches && root.matches(".d") ? [root] : [];
+        list = list.concat(Array.prototype.slice.call(root.querySelectorAll(".d")));
+        list.forEach(function (p) {
+            if (!p.getTotalLength) return;
+            var L; try { L = p.getTotalLength(); } catch (e) { return; }
+            if (!L) return;
+            p.style.transition = "none"; p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+            p.getBoundingClientRect();
+            p.style.transition = "stroke-dashoffset 0.9s ease"; p.style.strokeDashoffset = 0;
+            setTimeout(function () { p.style.strokeDasharray = ""; }, 1000);
+        });
+    }
+
+    function renderCap() {
+        var f = FIGS[S.fig];
+        cap.innerHTML = "";
+        f.steps.forEach(function (t, i) {
+            var li = document.createElement("li"); li.innerHTML = t;
+            if (S.step && i + 1 === S.step) li.className = "cur";
+            else if (S.step && i + 1 > S.step) li.className = "later";
+            li.addEventListener("click", function () { go(i + 1); });
+            cap.appendChild(li);
+        });
+        pos.textContent = S.step ? S.step + " / " + f.steps.length + " 단계" : "전체 " + f.steps.length + " 단계";
+    }
+
+    function apply(animateNew) {                  // 지금 단계에 맞게 보이기 · 숨기기
+        var svgEl = svgOf(S.fig);
+        parts(svgEl).forEach(function (g) {
+            var k = +g.getAttribute("data-s");
+            var wasOff = g.classList.contains("off");
+            var show = !S.step || k <= S.step;
+            g.classList.toggle("off", !show);
+            g.classList.toggle("hl", !!S.step && k === S.step);
+            if (show && wasOff && animateNew) drawIn(g);
+        });
+        renderCap();
+    }
+
+    function drawAll() {                          // 전체를 단계 순서대로 그리면서 보여 주기
+        clearTimers();
+        var svgEl = svgOf(S.fig), n = FIGS[S.fig].steps.length;
+        S.step = 0;
+        parts(svgEl).forEach(function (g) { g.classList.add("off"); g.classList.remove("hl"); });
+        drawIn(svgEl);
+        renderCap();
+        for (var k = 1; k <= n; k++) (function (k) {
+            S.timers.push(setTimeout(function () {
+                parts(svgEl).forEach(function (g) { if (+g.getAttribute("data-s") === k) { g.classList.remove("off"); drawIn(g); } });
+            }, 350 + (k - 1) * 650));
+        })(k);
+    }
+
+    function go(step) {
+        clearTimers();
+        var n = FIGS[S.fig].steps.length;
+        S.step = Math.max(1, Math.min(n, step));
+        apply(true);
+    }
+
+    function show(i, draw) {
+        clearTimers();
+        S.fig = i; S.step = 0;
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (s) {   // SVG 는 .hidden 속성이 없어서 attribute 로
+            if (s.getAttribute("data-fig") === FIGS[i].id) s.removeAttribute("hidden"); else s.setAttribute("hidden", "");
+        });
+        Array.prototype.forEach.call(tabsBox.children, function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+        src.innerHTML = "📄 " + FIGS[i].src;
+        note.innerHTML = FIGS[i].note || "";
+        if (draw) drawAll(); else { parts(svgOf(i)).forEach(function (g) { g.classList.remove("off", "hl"); }); renderCap(); }
+        tell();
+    }
+
+    // 주차로 골라 보기 — ?week=5 = 그 주차 그림만 · ?weeks=1-7 = 그 범위 (주차 페이지 · 중간고사 · 기말고사 · 완전정리가 같은 그림 파일을 나눠 씀 · README 🎨)
+    (function () {
+        var q = location.search, m1 = /[?&]week=(\d+)/.exec(q), m2 = /[?&]weeks=(\d+)-(\d+)/.exec(q);
+        if (!m1 && !m2) return;
+        var lo = m1 ? +m1[1] : +m2[1], hi = m1 ? +m1[1] : +m2[2];
+        var keep = FIGS.filter(function (f) { return [].concat(f.week).some(function (w) { return w >= lo && w <= hi; }); });
+        if (keep.length) FIGS = keep;
+    })();
+
+    // 그림 검사 — 콘솔에서 figCheck() → 글자끼리 겹침 · 600 폭 밖으로 넘침 목록 (없으면 [] · 폰 폭에서도 한 번 더)
+    window.figCheck = function () {
+        var out = [];
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (sv) {
+            var wasHidden = sv.hasAttribute("hidden"); sv.removeAttribute("hidden");
+            var vb = sv.viewBox.baseVal, ts = Array.prototype.map.call(sv.querySelectorAll("text"), function (t) { return { t: t, b: t.getBBox() }; });
+            ts.forEach(function (o) { if (o.b.x < -1 || o.b.x + o.b.width > vb.width + 1) out.push(sv.getAttribute("data-fig") + " 넘침: " + o.t.textContent.slice(0, 24)); });
+            for (var i = 0; i < ts.length; i++) for (var j = i + 1; j < ts.length; j++) {
+                var a = ts[i].b, c = ts[j].b, ox = Math.min(a.x + a.width, c.x + c.width) - Math.max(a.x, c.x), oy = Math.min(a.y + a.height, c.y + c.height) - Math.max(a.y, c.y);
+                if (ox > 2 && oy > 3) out.push(sv.getAttribute("data-fig") + " 겹침: " + ts[i].t.textContent.slice(0, 16) + " × " + ts[j].t.textContent.slice(0, 16));
+            }
+            if (wasHidden) sv.setAttribute("hidden", "");
+        });
+        return out;
+    };
+
+    FIGS.forEach(function (f, i) {
+        var b = document.createElement("button"); b.type = "button"; b.textContent = f.tab;
+        b.addEventListener("click", function () { show(i, true); try { history.replaceState(null, "", "#" + f.id); } catch (e) {} });
+        tabsBox.appendChild(b);
+    });
+    document.getElementById("redraw").addEventListener("click", function () { drawAll(); });
+    document.getElementById("all").addEventListener("click", function () { clearTimers(); S.step = 0; apply(false); });
+    document.getElementById("prev").addEventListener("click", function () { go(S.step ? S.step - 1 : 1); });
+    document.getElementById("next").addEventListener("click", function () { go(S.step ? S.step + 1 : 1); });
+    document.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(S.step + 1); else if (e.key === "ArrowLeft") go(S.step ? S.step - 1 : 1); });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) {} }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    var start = 0, h = (location.hash || "").slice(1);
+    FIGS.forEach(function (f, i) { if (f.id === h) start = i; });
+    show(start, false);
+    // 처음 화면에 보일 때 한 번 그리면서 보여 주기
+    if (window.IntersectionObserver) {
+        var done = false;
+        new IntersectionObserver(function (es) { if (!done && es[0].isIntersecting) { done = true; drawAll(); } }, { threshold: 0.3 }).observe(document.querySelector(".stage"));
+    }
+})();
+</script>
+<script src="../../figink.js?v=1"></script>
+</body>
+</html>

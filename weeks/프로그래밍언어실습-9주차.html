@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610250006"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍언어실습 9주차 · 빌드 · 메모리 공간 · 변수의 유효범위 (ch10 지역 · 전역변수)</title>
+    <link rel="stylesheet" href="../style.css?v=202610250006">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../프로그래밍언어실습.html">← 프로그래밍언어실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>💾 프로그래밍언어실습 · 9주차</h1>
+        <p>빌드 · 메모리 공간 · 변수의 유효범위 (ch10 지역 · 전역변수)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9주차 반영)</small></a></nav>
+
+<div class="tip">자료: 노션 필기(10/26) · <b>요약-w09-실습-stu-김희숙.pdf</b> (PerfectC ch10 변수 유효범위 — 오늘 실습한 <b>01localvar · 02 전역변수</b>만) · 수업 파일 <b>scope1_5.c</b> · PDF 펜 필기 없음. ✍️ = 내 필기 · ⚠️ = 정정 · 🤖 = 강의자료에 없는 설명 · 추가 설명. 코드 주석과 ▶ 출력 결과는 전부 직접 컴파일 · 실행한 값입니다.</div>
+<div class="tip">📌 <b>오늘의 실습 (✍️)</b> — <b>지역변수 · 전역변수</b>. 필기의 정적(static) · 외부(extern) · 레지스터(register) 변수는 칸만 만들어 두고 비어 있어서(다음 시간) 이번 정리에서는 이름만 적었어요.</div>
+<section class="card" id="s1">
+<h2>🎨 9주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-그림정리.html?week=9" title="9주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-그림정리.html?week=9" target="_blank" rel="noopener">🎬 9주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
+<h2>1. ✍️ [이론] 빌드 = 컴파일 + 링크</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — 빌드 = 컴파일 + 링크 → <code>.exe</code> 실행파일 (Windows) · <code>.o</code> 목적파일 (Linux)</li></ul>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>단계</th><th>하는 일</th><th>Windows (Visual Studio)</th><th>Linux · macOS (gcc · clang)</th></tr>
+<tr><td><b>컴파일</b></td><td>소스(<code>.c</code>) 한 개를 기계어로 번역</td><td>목적파일 <code>.obj</code></td><td>목적파일 <b><code>.o</code></b></td></tr>
+<tr><td><b>링크</b></td><td>목적파일들 + 라이브러리(<code>printf</code> 등)를 하나로 묶음</td><td>실행파일 <b><code>.exe</code></b></td><td>실행파일 (확장자 없음 · gcc 기본 이름 <code>a.out</code>)</td></tr>
+<tr><td><b>빌드</b></td><td>컴파일 + 링크를 한 번에</td><td><code>.exe</code> 가 생김</td><td>실행파일이 생김</td></tr>
+</tbody></table>
+<ul><li>⚠️ <b>팩트체크</b> — <code>.o</code> 는 Linux 의 <b>실행파일이 아니라 목적파일</b>이에요 (컴파일만 하고 링크하기 <b>전</b> 결과). Linux 실행파일은 보통 확장자가 없어요. 맥에서 <code>clang -c 01localvar.c</code> → <code>01localvar.o</code> 는 <code>object</code> 파일, 이걸 링크하면 <code>executable</code> 로 바뀌는 걸 직접 확인했어요. Windows 목적파일은 <code>.obj</code>.</li></ul>
+</section>
+<section class="card" id="s3">
+<h2>2. ✍️ 기억장치 공간 (메모리 공간) — 4 영역</h2>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th></th><th>영역 (세그먼트)</th><th>언제 정해지나</th><th>🤖 무엇이 들어가나</th></tr>
+<tr><td>A. <b>정적 공간</b></td><td>1. <b>코드</b> (code) — ✍️ 중요!</td><td>✍️ <b>컴파일 시간</b></td><td>번역된 명령 (main · 함수들)</td></tr>
+<tr><td></td><td>2. <b>데이터</b> (data) — ✍️ 중요!</td><td>✍️ 컴파일 시간</td><td><b>전역변수</b> · 정적(static) 변수 — 프로그램 시작 ~ 끝까지</td></tr>
+<tr><td></td><td>3. <b>스택</b> (stack) — ✍️ <b>아주 중요!</b></td><td>✍️ 컴파일 시간</td><td><b>지역변수</b> · <b>매개변수</b> — 함수가 불릴 때 생기고 끝나면 사라짐</td></tr>
+<tr><td>B. <b>동적 공간</b></td><td>4. <b>힙</b> (heap)</td><td>✍️ <b>런타임 (실행 시간)</b></td><td>실행 중에 빌려 쓰는 공간 (<code>malloc</code> — 아직 안 배움)</td></tr>
+</tbody></table>
+<ul><li>⚠️ <b>팩트체크</b> — 스택에 들어갈 지역변수의 <b>크기 · 개수</b>는 컴파일 때 정해지지만, 스택 칸이 <b>실제로 생기고 없어지는 건</b> 함수가 <b>호출 · 끝날 때(실행 중)</b> 예요. 그래서 지역변수는 함수가 끝나면 값이 사라져요 (필기의 “컴파일 시간에 결정” = 크기가 정해진다는 뜻으로 이해).</li></ul>
+</section>
+<section class="card" id="s4">
+<h2>3. ✍️ 변수의 유효범위 (scope) · 기억 클래스</h2>
+<ul><li>✍️ <b>유효범위</b> = 선언된 변수가 <b>사용될 수 있는 범위</b> (scope)</li></ul>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>종류</th><th>✍️ 어디서 선언</th><th>쓸 수 있는 곳</th><th>기본값 (📄 02-1global)</th></tr>
+<tr><td><b>지역변수</b> (local)</td><td><b>블록(중괄호)</b> 또는 <b>함수의 내부</b></td><td>그 블록 · 함수 안에서만</td><td>🤖 정해지지 않음 (초기화하고 쓰기)</td></tr>
+<tr><td><b>전역변수</b> (global)</td><td><b>함수의 외부</b></td><td>파일 어디서나 (다른 파일은 <code>extern</code> 으로)</td><td><b>0</b> (<code>gi: 0</code>)</td></tr>
+<tr><td>정적변수 (static) · 외부변수 (extern) · 레지스터변수 (register)</td><td>✍️ 필기 빈칸 — 다음 시간</td><td></td><td></td></tr>
+</tbody></table>
+<ul><li>✍️ 🔥 <b>지역이 전역보다 우선</b> — 전역과 <b>같은 이름</b>의 지역변수가 있으면 그 블록 안에서는 <b>지역변수</b>가 쓰여요 → 아래 ③ <code>PI</code></li><li>📄 <code>for (int m = 0, sum = 0; …)</code> 처럼 <b>for 괄호 안에서 선언한 변수</b>도 for 블록의 지역변수 → for 밖에서 쓰면 오류</li></ul>
+</section>
+<section class="card" id="s5">
+<h2>4. 오늘의 실습 ① scope1_5.c — 블록 밖에서 <code>b</code> 를 쓰면 오류</h2>
+<pre><code class="language-c">// scope1_5.c                                       // 지역변수의 범위 — 함수 · 블록 안에서만
+#include &lt;stdio.h&gt;                                  // printf
+
+void test1() {                                      // 매개변수 없는 함수
+	int local1 = 10;                                // test1 의 지역변수 → test1 안에서만
+	printf("local1: %d\n", local1);                 // local1: 10
+}                                                   // test1 끝 → local1 사라짐
+
+void test2(int local2) {                            // 매개변수 local2 도 지역변수
+	printf("local2: %d\n", local2);                 // test2(100) → local2: 100
+}                                                   // test2 끝 → local2 사라짐
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+	test1();                                        // local1: 10
+	test2(100);                                     // local2: 100
+
+	int a = 0;                                      // main 의 지역변수 a = 0
+	while (a &lt; 5) {                                 // a = 0 ~ 4 → 5번 반복
+		a++;                                        // a: 1 → 2 → 3 → 4 → 5
+		int b = 20;                                 // while 블록 안 지역변수 b (반복마다 새로 20)
+		printf("a, b: %d, %d\n", a, b);             // a, b: 1, 20 … a, b: 5, 20
+	}                                               // while 블록 끝 → b 사라짐
+	printf("b: %d\n", b); // error                  // ❌ b 는 while 블록의 지역변수 → 여기서는 없음
+
+	return 0;                                       // 정상 종료
+}                                                   // main 끝</code></pre>
+<p>▶ 컴파일 결과 (맥 clang) — <code>b</code> 가 선언되지 않았다는 오류 → 실행 파일이 만들어지지 않음</p>
+<pre class="io"><code class="language-text">scope1_5.c:23:20: error: use of undeclared identifier 'b'
+   23 |         printf("b: %d\n", b); // error
+      |                           ^
+1 error generated.</code></pre>
+<p>▶ <code>printf("b: …")</code> 줄을 지우고 실행하면</p>
+<pre class="io"><code class="language-text">local1: 10
+local2: 100
+a, b: 1, 20
+a, b: 2, 20
+a, b: 3, 20
+a, b: 4, 20
+a, b: 5, 20</code></pre>
+</section>
+<section class="card" id="s6">
+<h2>5. 오늘의 실습 ② 01localvar.c — 지역변수</h2>
+<pre><code class="language-c">// 01localvar.c                                     // 지역변수: 블록 · 함수 안에서만 쓸 수 있음
+#include &lt;stdio.h&gt;                                  // printf
+void sub(int param);                                // 함수 원형 (아래에 정의)
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	auto int n = 10;                                // 지역변수 n = 10 (auto = 자동 지역변수 · 생략 가능)
+	printf("%d\n", n);                              // 10
+	for (int m = 0, sum = 0; m &lt; 3; m++) {          // m · sum 은 for 블록의 지역변수 (m = 0, 1, 2)
+		sum += m;                                   // sum: 0 → 0+1=1 → 1+2=3
+		printf("\t%d %d\n", m, sum);                // 탭 + "0 0" → "1 1" → "2 3"
+	}                                               // for 끝 → m · sum 사라짐
+	printf("%d\n", n);                              // n 은 main 블록 → 아직 참조 가능 → 10
+	// printf("%d %d\n", m, sum);                   // ❌ m · sum 참조 불가능 (for 밖)
+	sub(20);                                        // 함수 호출 → param = 20
+	return 0;                                       // 정상 종료
+}                                                   // main 끝
+
+void sub(int param) {                               // 매개변수 param 도 sub 의 지역변수
+	auto int local = 100;                           // sub 의 지역변수 local = 100
+	printf("\t%d %d\n", param, local);              // 탭 + "20 100"
+	// printf("%d\n", n);                           // ❌ n 은 main 의 지역변수 → sub 에서 참조 불가능
+}                                                   // sub 끝</code></pre>
+<pre class="io"><code class="language-text">10
+	0 0
+	1 1
+	2 3
+10
+	20 100</code></pre>
+</section>
+<section class="card" id="s7">
+<h2>6. 오늘의 실습 ③ 02-1global.c + 02-2circumference.c — 전역변수 (파일 2개)</h2>
+<pre><code class="language-c">// 02-1global.c                                     // 전역변수 PI · gi + 같은 이름 지역변수 PI
+#include &lt;stdio.h&gt;                                  // printf
+double getArea(double);                             // 함수 원형 — 면적 (이 파일 아래)
+double getCircum(double);                           // 함수 원형 — 둘레 (02-2 파일에 있음)
+
+double PI = 3.14;                                   // 전역변수 PI = 3.14 (함수 밖)
+int gi;                                             // 전역변수 gi — 초기화 안 함 → 기본값 0
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	double r = 5.87;                                // 지역변수 반지름 r = 5.87
+	const double PI = 3.141592;                     // 전역 PI 와 같은 이름의 지역변수 → main 안에서는 이게 우선
+	printf("면적: %.2f\n", getArea(r));             // getArea 는 전역 PI 사용 → 5.87 × 5.87 × 3.14 = 108.19
+	printf("둘레1: %.2f\n", 2 * PI * r);            // main 의 지역 PI → 2 × 3.141592 × 5.87 = 36.88
+	printf("둘레2: %.2f\n", getCircum(r));          // 다른 파일의 함수 → 전역 PI → 2 × 5.87 × 3.14 = 36.86
+	printf("PI: %f\n", PI);                         // 지역변수 PI 참조 → 3.141592
+	printf("gi: %d\n", gi);                         // 전역변수 gi 기본값 → 0
+	return 0;                                       // 정상 종료
+}                                                   // main 끝
+
+double getArea(double r) {                          // 매개변수 r 은 getArea 의 지역변수
+	return r * r * PI;                              // 여기엔 지역 PI 가 없음 → 전역 PI(3.14) 참조
+}                                                   // getArea 끝</code></pre>
+<pre><code class="language-c">// 02-2circumference.c                              // 같은 프로젝트의 두 번째 파일
+extern double PI;                                   // 이미 다른 파일(02-1)에서 선언된 전역변수 PI 를 쓰겠다는 선언
+double getCircum(double r) {                        // 둘레 = 2 × r × PI
+	return 2 * r * PI;                              // 전역 PI(3.14) 참조
+}                                                   // getCircum 끝</code></pre>
+<p>▶ 두 파일을 같이 빌드 (<code>clang 02-1global.c 02-2circumference.c</code>)</p>
+<pre class="io"><code class="language-text">면적: 108.19
+둘레1: 36.88
+둘레2: 36.86
+PI: 3.141592
+gi: 0</code></pre>
+<ul><li>🔥 <b>둘레1 ≠ 둘레2</b> 인 이유 = 둘레1 은 main 의 <b>지역 PI(3.141592)</b>, 둘레2 는 <b>전역 PI(3.14)</b> → ✍️ “지역이 전역보다 우선”</li><li><code>extern</code> = “이 전역변수는 다른 곳에 이미 있다” 는 선언 (외부변수 — 필기 빈칸 · 다음 시간에 자세히)</li></ul>
+</section>
+<section class="card" id="s8">
+<h2>7. 한 줄 정리</h2>
+<ul><li>빌드 = <b>컴파일</b>(→ 목적파일 <code>.obj</code> · <code>.o</code>) + <b>링크</b>(→ 실행파일 <code>.exe</code>)</li><li>메모리 = <b>코드 · 데이터 · 스택</b>(정적 · 컴파일 때 크기 결정) + <b>힙</b>(동적 · 실행 중)</li><li>지역변수 = 블록 · 함수 <b>안</b> · 그 안에서만 / 전역변수 = 함수 <b>밖</b> · 어디서나 · 기본값 0 / 같은 이름이면 <b>지역 우선</b></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「프로그래밍언어실습 · 9주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202610250006"></script>
+</body>
+</html>
