@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- 없는 주소로 들어왔을 때 GitHub Pages 가 보여 주는 페이지 (2026-10-26)
+     - 어느 폴더 주소에서 열려도 사이트 맨 위 기준으로 공용 파일 · 링크를 찾도록 <base> 를 먼저 씀
+     - 디자인은 과목 페이지와 같은 style.css · theme.js (다크 기본 · ☀️ 전환) -->
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function () {                                                // /exam-summary/… (GitHub Pages) · / (내 컴퓨터에서 띄울 때)
+            var b = location.pathname.indexOf("/exam-summary/") === 0 ? "/exam-summary/" : "/";
+            document.write('<base href="' + b + '"><script src="' + b + 'theme.js"><\/script>');
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>페이지를 찾을 수 없어요 · 학습 정리</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon-180.png">
+    <link rel="stylesheet" href="style.css?v=202610261953">
+    <style>
+        .nf { text-align: center; padding: 34px 20px 30px; }
+        .nf-ic { font-size: 46px; line-height: 1; margin-bottom: 12px; }
+        .nf h2 { justify-content: center; border: 0; margin-bottom: 6px; }
+        .nf p { color: var(--muted, #6b7a72); margin: 0 0 18px; }
+        .nf-path { display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 12.5px; padding: 3px 10px; border-radius: 999px;
+                   background: var(--bg, #f4f7f4); border: 1px solid var(--line, #e6ebe6); margin-bottom: 18px; }
+        .nf-btns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+        .nf-btns a, .nf-btns button { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 18px; border-radius: 999px;
+                   font: inherit; font-weight: 800; font-size: 14.5px; text-decoration: none; cursor: pointer;
+                   border: 1px solid var(--line, #e6ebe6); background: var(--card, #fff); color: var(--main, #2d6a4f); }
+        .nf-btns .main { background: var(--main, #2d6a4f); border-color: var(--main, #2d6a4f); color: #fff; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <header class="page-head">
+        <h1>🧭 길을 잃었어요</h1>
+        <p>주소가 바뀌었거나 아직 만들지 않은 페이지예요</p>
+    </header>
+    <section class="card nf">
+        <div class="nf-ic" aria-hidden="true">📚</div>
+        <h2>페이지를 찾을 수 없어요</h2>
+        <p>아직 정리하지 않은 주차이거나, 파일 이름이 바뀌었을 수 있어요.</p>
+        <span class="nf-path" id="nf-path"></span>
+        <div class="nf-btns">
+            <a class="main" href="index.html">🏠 전공 첫 화면</a>
+            <a href="liberal-arts-courses/index.html">📘 교양 첫 화면</a>
+            <button type="button" id="nf-back">← 이전 페이지</button>
+        </div>
+    </section>
+</div>
+<script>
+    document.getElementById("nf-path").textContent = decodeURIComponent(location.pathname);
+    var back = document.getElementById("nf-back");
+    if (history.length < 2) back.style.display = "none";
+    back.addEventListener("click", function () { history.back(); });
+</script>
+</body>
+</html>

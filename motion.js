@@ -278,6 +278,7 @@
     var hapticSwitch = null;
     function haptic(ms) {
         try {
+            if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;   // 화면을 한 번도 안 눌렀으면 브라우저가 막음 (콘솔 오류 방지)
             if (navigator.vibrate) { navigator.vibrate(ms || 12); return; }
             if (!("switch" in document.createElement("input")) || !document.body) return;
             if (!hapticSwitch) {

@@ -78,6 +78,10 @@ def main():
             "<!--  ⚠️ 이 파일은 scripts/build_liberal_arts.py 가 전공 index.html 을 복사해 만듭니다 — 직접 고치지 마세요 -->")
     s = sub(s, "동양미래대학교 컴퓨터정보공학과 전공 시험 정리", "동양미래대학교 교양 시험 정리")
     s = sub(s, "<title>전공 학습 정리</title>", "<title>교양 학습 정리</title>")
+    s = sub(s, '<meta property="og:site_name" content="전공 학습 정리">', '<meta property="og:site_name" content="교양 학습 정리">')
+    s = sub(s, '<meta property="og:title" content="전공 학습 정리">', '<meta property="og:title" content="교양 학습 정리">')
+    s = sub(s, 'content="https://gmlrms1016-dotcom.github.io/exam-summary/">', 'content="https://gmlrms1016-dotcom.github.io/exam-summary/liberal-arts-courses/">')
+    s = re.sub(r'href="(favicon\.svg|favicon-32\.png|icon-180\.png)"', lambda m: 'href="../%s"' % m.group(1), s)
 
     # ② 공용 파일 경로 (한 폴더 아래)
     s = re.sub(r'src="(theme\.js|schedule\.js)(\?v=[\w.-]*)?"', lambda m: 'src="../%s%s"' % (m.group(1), m.group(2) or ""), s)

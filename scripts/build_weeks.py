@@ -389,10 +389,17 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202610261935"></script>
+    <script src="{asset}theme.js?v=202610261953"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
-    <link rel="stylesheet" href="{asset}style.css?v=202610261935">
+    <meta name="description" content="{subject} {week_label} 정리 — {title}">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{subject} {week_label} · {title}">
+    <meta property="og:description" content="{subject} {week_label} 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="{asset}favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{asset}icon-180.png">
+    <link rel="stylesheet" href="{asset}style.css?v=202610261953">
     <style>{css}</style>
 </head>
 <body>
@@ -420,7 +427,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202610261935"></script>
+<script src="{asset}ink.js?v=202610261953"></script>
 </body>
 </html>
 """
