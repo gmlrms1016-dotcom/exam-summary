@@ -33,15 +33,15 @@
     var OPT = window.INK_OPTS || {};
     var PAGE_KEY = "ink:" + decodeURIComponent(location.pathname);
     var NS = "http://www.w3.org/2000/svg";
-    var INK = ["pen", "monoline", "fountain", "marker", "pencil", "crayon", "watercolor"];
+    var INK = ["pen", "monoline", "fountain", "reed", "marker", "pencil", "crayon", "watercolor"];
     var TOOLS = INK.concat(["eraser", "lasso"]);
-    var NAMES = { pen: "펜", monoline: "모노라인", fountain: "만년필", marker: "마커", pencil: "연필", crayon: "크레용", watercolor: "수채화", eraser: "지우개", lasso: "올가미", ruler: "자" };
+    var NAMES = { pen: "펜", monoline: "모노라인", fountain: "만년필", reed: "갈대펜", marker: "마커", pencil: "연필", crayon: "크레용", watercolor: "수채화", eraser: "지우개", lasso: "올가미", ruler: "자" };
     var WIDTHS = {
-        pen: [1, 1.8, 2.8, 4.2, 6.5], monoline: [1, 2, 3, 5, 8], fountain: [2, 3.5, 5, 7, 10],
+        pen: [1.6, 3.5, 5.6, 8.4, 12], monoline: [1, 2, 3, 5, 8], fountain: [2, 3.5, 5, 7, 10], reed: [5, 13, 21, 29, 40],
         marker: [8, 12, 18, 26, 36], pencil: [1.2, 2, 3, 4.6, 7], crayon: [3, 5, 8, 12, 18],
         watercolor: [8, 14, 22, 32, 46], eraser: [8, 14, 22, 34, 50]
     };
-    var RANGE = { pen: [0.5, 12], monoline: [0.5, 14], fountain: [1, 18], marker: [4, 48], pencil: [0.6, 12], crayon: [2, 28], watercolor: [4, 64], eraser: [4, 80] };
+    var RANGE = { pen: [0.5, 16], monoline: [0.5, 14], fountain: [1, 18], reed: [5, 40], marker: [4, 48], pencil: [0.6, 12], crayon: [2, 28], watercolor: [4, 64], eraser: [4, 80] };
     var QUICK = ["auto", "#157efb", "#53d769", "#fed030", "#fc3142"];   // 미리보기 막대 색을 화면에서 그대로 뽑음          // 막대의 색 5개 (아이패드 기본: 검정 · 파랑 · 초록 · 노랑 · 빨강)
     var GRID_HUES = [190, 210, 228, 262, 288, 318, 0, 18, 36, 52, 72, 110];   // 격자 12열 (하늘 · 파랑 · 남색 · 보라 · 자주 · 분홍 · 빨강 · 주황 · 귤 · 노랑 · 연두 · 초록)
 
@@ -49,13 +49,14 @@
     var DEF = {
         tool: "pen", lastDraw: "pen", open: true, finger: false, mouse: false, hidden: false, autoMin: false, off: false,
         dock: "bottom", corner: "bl", ruler: false, rul: { cx: 0, cy: 0, ang: 0 },
-        pen: { c: "auto", w: 1.8, o: 1 }, monoline: { c: "auto", w: 2, o: 1 }, fountain: { c: "auto", w: 3.5, o: 1 },
-        marker: { c: "#fed030", w: 18, o: 0.35 }, pencil: { c: "#157efb", w: 2, o: 0.5 }, crayon: { c: "#fc3142", w: 8, o: 0.9 },
+        pen: { c: "auto", w: 3.5, o: 1 }, monoline: { c: "auto", w: 2, o: 1 }, fountain: { c: "auto", w: 3.5, o: 1 }, reed: { c: "auto", w: 29, o: 1 },
+        marker: { c: "#fed030", w: 18, o: 0.8 }, pencil: { c: "#157efb", w: 2, o: 0.5 }, crayon: { c: "#fc3142", w: 8, o: 0.9 },
         watercolor: { c: "auto", w: 22, o: 0.5 },          // 처음 색 · 불투명도 = iOS 27 도구 막대 기본값 (연필 파랑 50 · 크레용 빨강 · 마커 노랑)
         eraser: { mode: "pixel", w: 22 },
         recent: [], saved: [], cpTab: "grid"
     };
-    var P = loadPrefs();
+    var migrated = false, P = loadPrefs();
+    if (migrated) savePrefs();                                  // 새 기본값을 한 번 저장 → 그림 필기(figink.js)도 같은 값
     function loadPrefs() {
         var out = JSON.parse(JSON.stringify(DEF));
         try {
@@ -68,6 +69,12 @@
                 });
             }
         } catch (e) {}
+        if (v && !v.v6) {                                      // v6(2026-10-26) 기본값을 iOS 27 도구 막대처럼: 펜 굵기 1.8 → 3.5 · 마커 불투명도 35 → 80 (예전 기본값 그대로 쓰던 경우만)
+            if (out.pen.w === 1.8) out.pen.w = 3.5;
+            if (out.marker.o === 0.35) out.marker.o = 0.8;
+            migrated = true;
+        }
+        out.v6 = 1;
         if (TOOLS.indexOf(out.tool) < 0) out.tool = "pen";
         if (INK.indexOf(out.lastDraw) < 0) out.lastDraw = "pen";
         if (out.eraser.mode === "stroke") out.eraser.mode = "object";
@@ -195,7 +202,7 @@
     var PI1 = Math.PI + 0.0001, RATE = 0.275;
     var FEEL = {
         pen: { thin: 0.48, smooth: 0.62, stream: 0.5 }, pencil: { thin: 0.3, smooth: 0.62, stream: 0.5 },
-        crayon: { thin: 0.16, smooth: 0.5, stream: 0.45 }, fountain: { stream: 0.55 },
+        crayon: { thin: 0.16, smooth: 0.5, stream: 0.45 }, fountain: { stream: 0.55 }, reed: { stream: 0.55 },
         marker: { stream: 0.6 }, monoline: { stream: 0.55 }, watercolor: { stream: 0.6 }
     };
     function vsub(a, b) { return [a[0] - b[0], a[1] - b[1]]; }
@@ -284,6 +291,17 @@
         if (n === 1) { var p = sp[0].p, r0 = size * 0.4; return [[p[0] - r0, p[1] + r0], [p[0] + r0, p[1] - r0], [p[0] + r0 + 1, p[1] - r0 + 1], [p[0] - r0 + 1, p[1] + r0 + 1]]; }
         return L.concat(R.reverse());
     }
+    function reedPts(sp, size) {                               // 갈대펜 (iOS 27 PencilKit 실측): 납작한 촉 날이 가로로 고정 · 날 길이 ≈ 굵기 × 2 → 세로획 가장 굵게 · 가로획은 굵기의 1/6 정도로 가늘게
+        var n = sp.length, L = [], R = [];
+        if (!n) return [];
+        for (var i = 0; i < n; i++) {
+            var c = sp[i], vl = Math.hypot(c.v[0], c.v[1]) || 1, my = c.v[0] / vl;
+            var h = size * (0.75 + 0.5 * c.pr), m = size * 0.085;                     // 날 반쪽 길이 (필압) · 날과 나란히(가로로) 그어도 남는 굵기 반쪽
+            L.push([c.p[0] - h, c.p[1] - (my < 0 ? -m : m)]); R.push([c.p[0] + h, c.p[1] + (my < 0 ? -m : m)]);
+        }
+        if (n === 1) { var p = sp[0].p, r0 = size; return [[p[0] - r0, p[1] - size * 0.12], [p[0] + r0, p[1] - size * 0.12], [p[0] + r0, p[1] + size * 0.12], [p[0] - r0, p[1] + size * 0.12]]; }
+        return L.concat(R.reverse());
+    }
     function polyPath(pts) {                                  // 테두리 점 → 2차 곡선으로 이은 닫힌 모양
         var n = pts.length;
         if (!n) return "";
@@ -315,6 +333,7 @@
         var sp = strokePts(st.pts, ox, oy, st.sm != null ? st.sm : o.stream, LINE_T[st.t] ? Math.min(size, 8) : size, !live);
         if (LINE_T[st.t]) return centerD(sp);
         if (st.t === "fountain") return polyPath(nibPts(sp, size));
+        if (st.t === "reed") return polyPath(reedPts(sp, size));
         var sim = st.sim != null ? !!st.sim : flatP(st.pts);
         return polyPath(outlinePts(sp, size, o.thin, o.smooth, sim));
     }
@@ -342,6 +361,11 @@
                 for (i = 0; i < S * S; i++) {
                     var a = holes[i] ? 0.08 + Math.random() * 0.18 : 0.72 + Math.random() * 0.28;
                     im.data[4 * i] = R0; im.data[4 * i + 1] = G0; im.data[4 * i + 2] = B0; im.data[4 * i + 3] = Math.round(a * 255);
+                }
+            } else if (kind === "reed") {
+                for (i = 0; i < S * S; i++) {
+                    var rr = Math.random(), a3 = rr < 0.07 ? 0.35 + Math.random() * 0.3 : 0.86 + Math.random() * 0.14;
+                    im.data[4 * i] = R0; im.data[4 * i + 1] = G0; im.data[4 * i + 2] = B0; im.data[4 * i + 3] = Math.round(a3 * 255);
                 }
             } else {
                 for (i = 0; i < S * S; i++) {
@@ -378,10 +402,10 @@
         }
         p = document.createElementNS(NS, "path");
         if (st.geo && !LINE_T[st.t]) {                         // 인식된 모양: 같은 굵기 선 (연필 · 크레용은 종이결 그대로)
-            var gg = st.t === "pencil" || st.t === "crayon" ? grainFor(col, st.t) : null;
+            var gg = st.t === "pencil" || st.t === "crayon" || st.t === "reed" ? grainFor(col, st.t) : null;
             p.setAttribute("fill", "none");
             p.setAttribute("stroke", gg ? "url(#" + gg + ")" : col);
-            p.setAttribute("stroke-width", f2(st.t === "fountain" ? st.w * 0.8 : st.w));
+            p.setAttribute("stroke-width", f2(st.t === "fountain" || st.t === "reed" ? st.w * 0.8 : st.w));
             p.setAttribute("stroke-linecap", "round"); p.setAttribute("stroke-linejoin", "round");
             p.setAttribute("stroke-opacity", st.o);
             return p;
@@ -394,7 +418,7 @@
             p.setAttribute("stroke-linejoin", "round");
             p.setAttribute("stroke-opacity", st.o);
         } else {
-            var g = st.t === "pencil" || st.t === "crayon" ? grainFor(col, st.t) : null;
+            var g = st.t === "pencil" || st.t === "crayon" || st.t === "reed" ? grainFor(col, st.t) : null;
             p.setAttribute("fill", g ? "url(#" + g + ")" : col);
             p.setAttribute("fill-opacity", st.o);
         }
@@ -473,7 +497,7 @@
     var strokes = [];              // 획 { a, fx, fy, t, c, w, o, pts:[x,y,p…] } · 넣은 것 { k: text|shape|sig|mag, … } — 바꿀 때는 새 객체로
     var undoS = [], redoS = [];
     var rendered = [];             // strokes 와 같은 순서 { el, bb, ox, oy }
-    var svg, gHalo, gMarker, gPencil, gPen, gObj, gSel, layerCur, lassoPath, objLayer;
+    var svg, svgMk, gHalo, gMarker, gPencil, gPen, gObj, gSel, layerCur, lassoPath, objLayer;
     var sel = [];                  // 올가미로 고른 획
     var selPoly = null, selMenu = null;   // 고른 획 둘레(문서 좌표 x,y,x,y…) · 톡 누른 곳(메뉴 위치)
     var osel = null;               // 고른 넣은 것 하나
@@ -497,6 +521,8 @@
         var W = Math.max(root.scrollWidth, document.body.scrollWidth), H = Math.max(root.scrollHeight, document.body.scrollHeight);
         svg.setAttribute("width", W); svg.setAttribute("height", H);
         svg.style.width = W + "px"; svg.style.height = H + "px";
+        svgMk.setAttribute("width", W); svgMk.setAttribute("height", H);
+        svgMk.style.width = W + "px"; svgMk.style.height = H + "px";
         [gMarker, gPencil, gPen, gObj].forEach(function (g) { while (g.firstChild) g.removeChild(g.firstChild); });
         objLayer.innerHTML = "";
         rendered = [];
@@ -781,7 +807,7 @@
         var st = { a: a ? a.key : "", fx: f1(ax), fy: f1(ay), t: tool, c: cfg.c, w: cfg.w, o: cfg.o, sim: kind === "pen" ? 0 : 1, pts: [f2(x - ax), f2(y - ay), p] };
         if (edge) { st.sim = 0; st.sm = 0; }
         var e = makeEl(st);
-        layerCur.appendChild(e);
+        (tool === "marker" || tool === "watercolor" ? gMarker : layerCur).appendChild(e);
         cur = { st: st, el: e, ax: ax, ay: ay, lx: x, ly: y, straight: false, plen: 0, edge: edge, raw: [x, y] };
         redrawCur();
         armHold();
@@ -1839,6 +1865,10 @@
             '<path d="M20 .6C22.4 5.5 27.4 15 27.4 26V38.6H12.6V26C12.6 15 17.6 5.5 20 .6Z" fill="url(#ink-mt)"/>' +
             '<path d="M20 3.5V22.4" stroke="#3a3a3c" stroke-width=".7"/><circle cx="20" cy="23.8" r="1.5" fill="#f2f2f7" stroke="#6e6e73" stroke-width=".4"/>' +
             '<rect x="11.4" y="38.4" width="17.2" height="2.8" rx=".6" fill="' + (D ? "#48484a" : "#e5e5ea") + '"/>' + body(41) + band(52.5, 3) + "</svg>";
+        if (t === "reed") return o +                           // 갈대펜: 납작하게 깎은 크림색 갈대 촉 · 끝에 먹(색)이 배어 옅어짐 · 굵은 색 띠 (iOS 27 도구 막대)
+            '<path d="M17 2.7H25.3L29.5 31.6V36H10.5V31.6Z" fill="' + (D ? "#d8d1c2" : "#f3eee3") + '"/>' +
+            '<path d="M17 2.7H25.3L29.5 31.6V36H10.5V31.6Z" fill="' + tip + '" mask="url(#ink-fade)"/>' +
+            body(35.8) + band(43.7, 13.3) + "</svg>";
         if (t === "watercolor") return o +                     // 수채화: 색 붓끝 + 회색 쇠테 · 색 띠 (iOS 27 도구 막대)
             '<path d="M15.5 28.4 11 38.4V44.6H29V38.4L24.5 28.4Z" fill="url(#ink-mt)"/>' +
             '<path d="M20.3 2.8C22.4 6 25.3 15 25.3 21.6 25.3 25.4 24.6 28.4 24.6 28.4H15.4S14.9 25.4 14.9 21.6C14.9 15 18.2 6 20.3 2.8Z" fill="' + tip + '"/>' +
@@ -1885,7 +1915,8 @@
         ".ink-svg .ink-handle{fill:#fff;stroke:#0a84ff;stroke-width:2} .ink-svg .ink-handle.blue{fill:#0a84ff;stroke:#fff} .ink-svg .ink-handle.green{fill:#34c759;stroke:#fff}",
         ".ink-svg .ink-lasso{fill:none;stroke:#7f7f7f;stroke-width:2;stroke-dasharray:3.5 10.5;stroke-linecap:round;stroke-linejoin:round;animation:ink-ants 1s linear infinite} @keyframes ink-ants{to{stroke-dashoffset:-14}}",   // iOS 27: 회색 2pt · 보이는 점 5.5 / 빈칸 8.5 · 1초에 한 칸
         "html[data-theme=dark] .ink-svg .ink-lasso{stroke:#aeaeb2}",
-        "html[data-theme=light] .ink-svg .ink-wc{mix-blend-mode:multiply} html[data-theme=dark] .ink-svg .ink-wc{mix-blend-mode:screen}",
+        ".ink-svg.ink-mk{z-index:9979}",
+        "html[data-theme=light] .ink-svg.ink-mk{mix-blend-mode:multiply} html[data-theme=dark] .ink-svg.ink-mk{mix-blend-mode:screen}",
         ".ink-objs{position:absolute;left:0;top:0;width:0;height:0;z-index:9981;pointer-events:none}",
         ".ink-text{position:absolute;min-height:1.4em;line-height:1.35;white-space:pre-wrap;word-break:break-word;font-family:-apple-system,'Apple SD Gothic Neo',sans-serif;padding:2px 4px;border-radius:4px;outline:none;pointer-events:none}",
         ".ink-text.on{box-shadow:0 0 0 1.5px #0a84ff} .ink-text.edit{pointer-events:auto;box-shadow:0 0 0 2px #0a84ff;background:rgba(10,132,255,.06);-webkit-user-select:text;user-select:text;cursor:text}",
@@ -2031,9 +2062,9 @@
         toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 1800);
     }
 
-    /* 도구 막대 순서 = iOS 27 PencilKit 기본 도구 막대 (펜 · 모노라인 · 마커 · 지우개 · 올가미 · 자 → 옆으로 밀면 연필 · 크레용 · 만년필 · 수채화)
+    /* 도구 막대 순서 = iOS 27 PencilKit 기본 도구 막대 (펜 · 모노라인 · 마커 · 지우개 · 올가미 · 자 → 옆으로 밀면 연필 · 크레용 · 만년필 · 갈대펜 · 수채화)
        2026-10-25: 테스트 앱에 PKToolPicker 를 띄워 toolItems 를 출력해 확인 — 줄무늬 원뿔은 연필이 아니라 올가미 */
-    var BAR = ["pen", "monoline", "marker", "eraser", "lasso", "ruler", "pencil", "crayon", "fountain", "watercolor"];
+    var BAR = ["pen", "monoline", "marker", "eraser", "lasso", "ruler", "pencil", "crayon", "fountain", "reed", "watercolor"];
     function buildUI() {
         var st = el("style"); st.setAttribute("data-theme-skip", ""); st.textContent = CSS; document.head.appendChild(st);
 
@@ -2051,7 +2082,13 @@
         gSel = document.createElementNS(NS, "g");
         lassoPath = document.createElementNS(NS, "path"); lassoPath.setAttribute("class", "ink-lasso"); lassoPath.style.display = "none";
         gHalo = document.createElementNS(NS, "g"); gHalo.setAttribute("filter", "url(#ink-lift)");   // 올가미로 고른 획의 흰 테두리 (획 아래)
-        [gHalo, gMarker, gPencil, gPen, gObj, layerCur, gSel, lassoPath].forEach(function (g) { svg.appendChild(g); });
+        [gHalo, gPencil, gPen, gObj, layerCur, gSel, lassoPath].forEach(function (g) { svg.appendChild(g); });
+        svgMk = document.createElementNS(NS, "svg");                    // 마커 · 수채화 전용 층 — 페이지 글자와 곱하기로 섞여 글자가 비침
+        svgMk.setAttribute("class", "ink-svg ink-mk");
+        svgMk.setAttribute("aria-hidden", "true");
+        svgMk.setAttribute("data-theme-skip", "");
+        svgMk.appendChild(gMarker);
+        document.body.appendChild(svgMk);
         var defsHost = document.createElement("div"); defsHost.innerHTML = ART_DEFS; document.body.appendChild(defsHost.firstChild);
         document.body.appendChild(svg);
         objLayer = document.createElement("div");
@@ -2462,6 +2499,7 @@
         mkBtn.classList.toggle("on", !P.off);
         mkBtn.setAttribute("aria-pressed", P.off ? "false" : "true");
         svg.style.display = P.hidden ? "none" : "";
+        svgMk.style.display = P.hidden ? "none" : "";
         objLayer.style.display = P.hidden ? "none" : "";
     }
     function setOpen(v) {
@@ -2475,6 +2513,7 @@
         P.off = v; savePrefs(); closePop();
         if (v) {
             if (editing) endEdit();
+            if (cur && cur.el && cur.el.parentNode === gMarker) gMarker.removeChild(cur.el);
             cur = null; drag = null; layerCur.innerHTML = ""; lassoPath.style.display = "none";
             root.classList.remove("ink-drawing");
             if (hoverEl) hoverEl.style.display = "none";

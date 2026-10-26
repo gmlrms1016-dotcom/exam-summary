@@ -13,11 +13,19 @@
     window.__figinkLoaded = true;
     var NS = "http://www.w3.org/2000/svg";
     var KEY = "figink:" + decodeURIComponent(location.pathname) + ":";
-    var DRAW = /^(pen|monoline|fountain|marker|pencil|crayon|watercolor)$/;
+    var DRAW = /^(pen|monoline|fountain|reed|marker|pencil|crayon|watercolor)$/;
     var FP = { touch: false, erase: false };
     try { var fp = JSON.parse(localStorage.getItem("figink:prefs") || "null"); if (fp) { FP.touch = !!fp.touch; FP.erase = !!fp.erase; } } catch (e) {}
     function saveFP() { try { localStorage.setItem("figink:prefs", JSON.stringify(FP)); } catch (e) {} }
-    function inkPrefs() { try { return JSON.parse(localStorage.getItem("ink:prefs2") || "null") || {}; } catch (e) { return {}; } }
+    function inkPrefs() {
+        var ip = {};
+        try { ip = JSON.parse(localStorage.getItem("ink:prefs2") || "null") || {}; } catch (e) {}
+        if (!ip.v6) {                                          // ink.js v6 기본값 (페이지 필기 막대를 아직 안 연 기기): 펜 굵기 1.8 → 3.5 · 마커 불투명도 35 → 80
+            if (ip.pen && ip.pen.w === 1.8) ip.pen.w = 3.5;
+            if (ip.marker && ip.marker.o === 0.35) ip.marker.o = 0.8;
+        }
+        return ip;
+    }
     function load(id) { try { return JSON.parse(localStorage.getItem(KEY + id) || "[]") || []; } catch (e) { return []; } }
     function save(id, arr) { try { if (arr.length) localStorage.setItem(KEY + id, JSON.stringify(arr)); else localStorage.removeItem(KEY + id); } catch (e) {} }
     function r1(v) { return Math.round(v * 10) / 10; }
@@ -45,6 +53,7 @@
         e.style.stroke = !st.c || st.c === "auto" ? "var(--ink)" : st.c;
         e.style.strokeWidth = st.w;
         e.style.opacity = st.o;
+        if (st.t === "marker" || st.t === "watercolor") e.setAttribute("class", "fi-mk");   // 형광펜 · 수채화는 그림과 곱하기로 섞어 아래 글자가 비침
         return e;
     }
     function render(svg) {
@@ -98,8 +107,8 @@
             return;
         }
         var kind = DRAW.test(ip.tool || "") ? ip.tool : (DRAW.test(ip.lastDraw || "") ? ip.lastDraw : "pen");
-        var set = ip[kind] || {}, def = kind === "marker" ? { c: "#ffcc00", w: 18, o: 0.35 } : { c: "#ff3b30", w: 1.8, o: 1 };
-        var st = { c: set.c || def.c, w: r1(Math.max(0.6, (set.w || def.w) * s)), o: set.o == null ? def.o : set.o, p: p };
+        var set = ip[kind] || {}, def = kind === "marker" ? { c: "#fed030", w: 18, o: 0.8 } : { c: "#ff3b30", w: 3.5, o: 1 };
+        var st = { t: kind, c: set.c || def.c, w: r1(Math.max(0.6, (set.w || def.w) * s)), o: set.o == null ? def.o : set.o, p: p };
         var el = strokeEl(st);
         layer(svg).appendChild(el);
         cur = { svg: svg, id: id, st: st, el: el };
@@ -172,6 +181,9 @@
     }
 
     function init() {
+        var mk = document.createElement("style");
+        mk.textContent = "html[data-theme=light] svg[data-fig] .fi-mk{mix-blend-mode:multiply} html[data-theme=dark] svg[data-fig] .fi-mk{mix-blend-mode:screen}";
+        document.head.appendChild(mk);
         renderAll();
         ui();
         document.addEventListener("pointerdown", onDown, { capture: true, passive: false });

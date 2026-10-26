@@ -24,7 +24,9 @@ def main():
     version = sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime("%Y%m%d%H%M")
     files = sorted(glob.glob(os.path.join(ROOT, "*.html")) + glob.glob(os.path.join(ROOT, "weeks", "*.html"))
                    + glob.glob(os.path.join(ROOT, "liberal-arts-courses", "*.html"))
-                   + glob.glob(os.path.join(ROOT, "liberal-arts-courses", "weeks", "*.html")))
+                   + glob.glob(os.path.join(ROOT, "liberal-arts-courses", "weeks", "*.html"))
+                   + glob.glob(os.path.join(ROOT, "weeks", "anim", "*.html"))                     # 그림 정리 페이지 → figink.js
+                   + glob.glob(os.path.join(ROOT, "liberal-arts-courses", "weeks", "anim", "*.html")))
     files.append(os.path.join(ROOT, "scripts", "build_weeks.py"))
     total = 0
     for path in files:
