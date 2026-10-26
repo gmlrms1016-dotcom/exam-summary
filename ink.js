@@ -50,8 +50,8 @@
         tool: "pen", lastDraw: "pen", open: true, finger: false, mouse: false, hidden: false, autoMin: false, off: false,
         dock: "bottom", corner: "bl", ruler: false, rul: { cx: 0, cy: 0, ang: 0 },
         pen: { c: "auto", w: 1.8, o: 1 }, monoline: { c: "auto", w: 2, o: 1 }, fountain: { c: "auto", w: 3.5, o: 1 },
-        marker: { c: "#fed030", w: 18, o: 0.35 }, pencil: { c: "auto", w: 2, o: 0.85 }, crayon: { c: "#fc3142", w: 8, o: 0.9 },
-        watercolor: { c: "#157efb", w: 22, o: 0.5 },
+        marker: { c: "#fed030", w: 18, o: 0.35 }, pencil: { c: "#157efb", w: 2, o: 0.5 }, crayon: { c: "#fc3142", w: 8, o: 0.9 },
+        watercolor: { c: "auto", w: 22, o: 0.5 },          // 처음 색 · 불투명도 = iOS 27 도구 막대 기본값 (연필 파랑 50 · 크레용 빨강 · 마커 노랑)
         eraser: { mode: "pixel", w: 22 },
         recent: [], saved: [], cpTab: "grid"
     };
@@ -475,6 +475,7 @@
     var rendered = [];             // strokes 와 같은 순서 { el, bb, ox, oy }
     var svg, gHalo, gMarker, gPencil, gPen, gObj, gSel, layerCur, lassoPath, objLayer;
     var sel = [];                  // 올가미로 고른 획
+    var selPoly = null, selMenu = null;   // 고른 획 둘레(문서 좌표 x,y,x,y…) · 톡 누른 곳(메뉴 위치)
     var osel = null;               // 고른 넣은 것 하나
     var clip = [];                 // 잘라내기 · 복사한 것
 
@@ -679,8 +680,8 @@
         root.classList.add("ink-drawing");
         if (P.tool === "eraser") { drag = { kind: "erase", snap: strokes.slice(), changed: false }; eraseAt(x, y); return; }
         if (P.tool === "lasso") {
-            var bb = selBox();
-            if (bb && x >= bb.x1 - 12 && x <= bb.x2 + 12 && y >= bb.y1 - 12 && y <= bb.y2 + 12) drag = { kind: "move", sx: x, sy: y, dx: 0, dy: 0 };
+            selMenu = null;
+            if (sel.length && selPoly && selPoly.some(function (pl) { return inPoly(x, y, pl); })) { drag = { kind: "move", sx: x, sy: y, dx: 0, dy: 0 }; showSelBar(); }   // 둘레 안: 끌면 옮기기 · 톡 = 메뉴
             else {
                 sel = []; drawSelection();
                 drag = { kind: "lasso", pts: [x, y] };
@@ -705,13 +706,13 @@
         }
         var x = docX(e), y = docY(e);
         if (drag.kind === "erase") eraseAt(x, y);
-        else if (drag.kind === "lasso") { drag.pts.push(f1(x), f1(y)); lassoPath.setAttribute("d", polyD(drag.pts) + "Z"); }
+        else if (drag.kind === "lasso") { drag.pts.push(f1(x), f1(y)); lassoPath.setAttribute("d", polyD(drag.pts)); }   // 그리는 동안은 열린 점선 (아이패드와 같음)
         else if (drag.kind === "move") {
             drag.dx = x - drag.sx; drag.dy = y - drag.sy;
             var tf = "translate(" + f1(drag.dx) + " " + f1(drag.dy) + ")";
             sel.forEach(function (s) { var r = rendered[strokes.indexOf(s)]; if (r && r.el) r.el.setAttribute("transform", tf); });
             gSel.setAttribute("transform", tf); gHalo.setAttribute("transform", tf);
-            placeSelBar();
+            if (Math.abs(drag.dx) + Math.abs(drag.dy) > 3 && selBar.style.display !== "none") selBar.style.display = "none";
         } else if (drag.kind === "omove" || drag.kind === "handle") objDragMove(x, y);
     }
     function onUp() {
@@ -727,6 +728,7 @@
             selectIn(d.pts);
         } else if (d.kind === "move") {
             gSel.removeAttribute("transform"); gHalo.removeAttribute("transform");
+            if (Math.abs(d.dx) + Math.abs(d.dy) <= 3) { selMenu = { x: d.sx, y: d.sy }; renderAll(); return; }   // 톡 → 오려두기 · 복사하기 … 메뉴
             if (Math.abs(d.dx) + Math.abs(d.dy) > 0.5) {
                 snapshot();
                 var moved = sel.map(function (s) { return shifted(s, d.dx, d.dy); });
@@ -801,19 +803,18 @@
         var go = function () { rafId = 0; if (cur) setD(cur.el, shapeOf(cur.st, cur.ax, cur.ay, true)); };
         rafId = window.requestAnimationFrame ? window.requestAnimationFrame(go) : setTimeout(go, 16);
     }
-    /* ---------- 모양 인식 — iPadOS 미리보기처럼 (2026-10-23 · 시뮬레이터에서 직접 그려 보고 맞춤) ----------
-       그리다가 멈추고 꾹(0.5초) → 반듯한 모양으로 바뀜 · 손을 떼지 않고 움직이면 크기 · 방향을 바꿀 수 있음
-       · 원: 거의 둥글면 정원 (반지름 = 평균) · 타원: 납작하면 타원 (기울기 유지 · 수평 · 수직 근처면 반듯하게)
-       · 사각형: 긴 변 ÷ 짧은 변이 1.35 미만이면 정사각형(한 변 = √(가로 × 세로)) · 아니면 직사각형
-       · 삼각형: 세 각이 다 60° 근처면 정삼각형(한 변 = 평균) · 아니면 그린 꼭짓점 그대로
-       · 별(오각별 · 한 획 별) · 하트 · 오각형 ~ 팔각형 · 곧은 선 · 화살표 · 호(열린 곡선)
+    /* ---------- 모양 인식 — iPadOS 미리보기처럼 (2026-10-23 · 10-26 v6: 시뮬레이터에서 같은 획을 그려 결과를 겹쳐 맞춤) ----------
+       그리다가 멈추고 꾹(0.5초) → 반듯한 모양으로 바뀜 · 손을 떼지 않고 움직이면 크기 · 방향(열린 모양은 끝점)을 바꿀 수 있음
+       · 원 · 타원 · 정사각형(가로 ÷ 세로 1.35 미만) · 직사각형 · 정삼각형 · 별 · 정오각형 · 정육각형(반지름 = (가로 + 세로) ÷ 4)
+       · 하트 · 구름 = 미리보기가 바꿔 준 모양을 따라 그린 틀 · 말풍선 = 타원 + 곧은 꼬리(꼬리 방향 ± 13°) · 블록 화살표(머리 폭 = 몸통 × 2 · 45°)
+       · 곧은 선 · 화살표 · 양쪽 화살표 · 휜 화살표(양 끝 고정 2차 곡선) · 원호 — 화살촉 날개 = 굵기 × 4.9 · 25.5°
        결과는 획 굵기가 한결같은 선(geo) — 테두리 대신 stroke 로 그려 모서리 · 곡선이 깨끗함 */
     function armHold() {
         clearTimeout(holdT);
         if (!cur || cur.straight || cur.edge) return;
         holdT = setTimeout(function () {
             if (!cur || cur.straight || cur.plen < 24) return;
-            var res = recognize(cur.st.pts);
+            var res = recognize(cur.st.pts, cur.st.w);
             if (!res) return;
             var st = cur.st;
             st.geo = 1; st.sim = 0; st.sm = 0;
@@ -827,20 +828,25 @@
             redrawCur();
         }, 500);
     }
-    function geoAdjust(x, y) {                                 // 모양으로 바뀐 뒤 펜을 움직이면: 선 = 끝점 · 닫힌 모양 = 크기 · 회전
+    function geoAdjust(x, y) {                                 // 모양으로 바뀐 뒤 펜을 움직이면: 열린 모양 = 끝점이 따라옴 · 닫힌 모양 = 크기 · 회전
         var c = cur, g = c.geo, px = x - c.ax, py = y - c.ay;
         if (!g) return;
-        if (g.kind === "line" || g.kind === "arrow") {
-            var s = g.a, ex = px, ey = py, dx = ex - s[0], dy = ey - s[1];
-            if (Math.abs(dy) < Math.abs(dx) * 0.07) ey = s[1]; else if (Math.abs(dx) < Math.abs(dy) * 0.07) ex = s[0];
-            c.st.pts = g.kind === "line" ? densify([s, [ex, ey]], g.p) : arrowPts(s, [ex, ey], g.p);
+        if (g.path) {                                          // 시작점은 그대로 · 끝점 = 처음 끝점 + 펜이 움직인 만큼 (곡선은 같이 돌고 늘어남 · 화살촉 크기는 그대로)
+            var A = g.path[0], B = g.path[g.path.length - 1], ex = B[0] + px - c.ref[0], ey = B[1] + py - c.ref[1], dx = ex - A[0], dy = ey - A[1];
+            if (g.path.length === 2) { if (Math.abs(dy) < Math.abs(dx) * 0.07) ey = A[1]; else if (Math.abs(dx) < Math.abs(dy) * 0.07) ex = A[0]; }
+            var L0 = Math.hypot(B[0] - A[0], B[1] - A[1]) || 1, k0 = Math.hypot(ex - A[0], ey - A[1]) / L0;
+            if (k0 < 0.05) return;
+            var r0 = Math.atan2(ey - A[1], ex - A[0]) - Math.atan2(B[1] - A[1], B[0] - A[0]), kc = Math.cos(r0) * k0, ks = Math.sin(r0) * k0;
+            var np = g.path.map(function (q) { var ux = q[0] - A[0], uy = q[1] - A[1]; return [A[0] + ux * kc - uy * ks, A[1] + ux * ks + uy * kc]; });
+            np[np.length - 1] = [ex, ey];
+            c.st.pts = openPts(np, g.ha, g.hb, g.p, g.w);
         } else if (g.verts) {
             var cx = g.c[0], cy = g.c[1], r0 = Math.hypot(c.ref[0] - cx, c.ref[1] - cy), r1 = Math.hypot(px - cx, py - cy);
             if (r0 < 8) return;
             var k = Math.max(0.15, r1 / r0), rot = Math.atan2(py - cy, px - cx) - Math.atan2(c.ref[1] - cy, c.ref[0] - cx);
             var cs = Math.cos(rot), sn = Math.sin(rot);
             var v = g.verts.map(function (p) { var ux = (p[0] - cx) * k, uy = (p[1] - cy) * k; return [cx + ux * cs - uy * sn, cy + ux * sn + uy * cs]; });
-            c.st.pts = densify(v, g.p, !g.smooth);
+            c.st.pts = densify(v.concat([v[0]]), g.p, !g.smooth);
         } else return;
         redrawCur();
     }
@@ -855,11 +861,35 @@
         });
         return r;
     }
-    function arrowPts(a, b, p) {                               // 화살표 = 선 + 끝의 열린 화살촉 (한 획: 날개 → 끝 → 날개)
-        var L = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1, an = Math.atan2(b[1] - a[1], b[0] - a[0]);
-        var hl = Math.max(12, Math.min(30, L * 0.16)), sp = 0.5;
-        var w1 = [b[0] - hl * Math.cos(an - sp), b[1] - hl * Math.sin(an - sp)], w2 = [b[0] - hl * Math.cos(an + sp), b[1] - hl * Math.sin(an + sp)];
-        return densify([a, b, w1], p).concat(densify([w1, b, w2], p).slice(3));   // 선 → 끝 → 날개1 → (끝으로 돌아와) → 날개2
+    /* 화살촉: 미리보기에서 잰 값 — 날개 길이 = 선 굵기 × 4.9 (굵기 3.5 → 17pt) · 벌어진 각 25.5° · 둥근 끝 */
+    function headPts(tip, dir, w) {                            // dir = 화살이 가는 방향(라디안) → [날개1, 끝, 날개2]
+        var hl = Math.max(11, w * 4.9), sp = 25.5 * Math.PI / 180;
+        return [[tip[0] - hl * Math.cos(dir - sp), tip[1] - hl * Math.sin(dir - sp)], tip, [tip[0] - hl * Math.cos(dir + sp), tip[1] - hl * Math.sin(dir + sp)]];
+    }
+    function openPts(path, ha, hb, p, w) {                     // 열린 모양 한 획: [날개 → 시작 → 날개 → 시작 →] 선 [→ 끝 → 날개 → 끝 → 날개]
+        var n = path.length, a = path[0], b = path[n - 1], list = [];
+        if (ha) { var h = headPts(a, Math.atan2(a[1] - path[1][1], a[0] - path[1][0]), w); list.push(h[0], a, h[2]); }
+        list = list.concat(path);
+        if (hb) { var g = headPts(b, Math.atan2(b[1] - path[n - 2][1], b[0] - path[n - 2][0]), w); list.push(g[0], b, g[2]); }
+        return densify(list, p);
+    }
+    function quadPts(a, c, b, m) {                             // 2차 곡선 (휜 화살표 · 휜 선)
+        var v = [];
+        for (var i = 0; i <= m; i++) { var t = i / m, u = 1 - t; v.push([u * u * a[0] + 2 * u * t * c[0] + t * t * b[0], u * u * a[1] + 2 * u * t * c[1] + t * t * b[1]]); }
+        return v;
+    }
+    function quadFit(S, a, b) {                                // 양 끝을 고정한 2차 곡선의 조절점 (최소제곱)
+        var L = [0], i, nx = 0, ny = 0, den = 0;
+        for (i = 1; i < S.length; i++) L.push(L[i - 1] + Math.hypot(S[i][0] - S[i - 1][0], S[i][1] - S[i - 1][1]));
+        var T = L[L.length - 1] || 1;
+        S.forEach(function (p, j) { var t = L[j] / T, u = 1 - t, B = 2 * u * t; den += B * B; nx += B * (p[0] - u * u * a[0] - t * t * b[0]); ny += B * (p[1] - u * u * a[1] - t * t * b[1]); });
+        return den ? [nx / den, ny / den] : null;
+    }
+    /* 하트 · 구름: 미리보기가 바꿔 준 모양을 화면에서 따라 그린 중심선 (가로 -0.5~0.5) */
+    var HEART_T = [0,0.143,0.026,0.107,0.058,0.069,0.094,0.039,0.132,0.018,0.173,0.005,0.214,0,0.254,0.002,0.293,0.01,0.331,0.024,0.366,0.044,0.397,0.068,0.424,0.098,0.448,0.13,0.467,0.165,0.481,0.202,0.491,0.24,0.497,0.279,0.5,0.317,0.499,0.355,0.495,0.392,0.489,0.428,0.48,0.463,0.469,0.496,0.456,0.527,0.442,0.557,0.427,0.586,0.411,0.613,0.395,0.639,0.378,0.663,0.36,0.687,0.342,0.71,0.323,0.732,0.304,0.754,0.285,0.774,0.265,0.795,0.244,0.815,0.223,0.835,0.2,0.856,0.177,0.876,0.152,0.897,0.126,0.918,0.098,0.939,0.068,0.962,0.035,0.985,0,1,-0.035,0.985,-0.068,0.962,-0.098,0.939,-0.126,0.918,-0.152,0.897,-0.177,0.876,-0.2,0.856,-0.223,0.835,-0.244,0.815,-0.265,0.795,-0.285,0.774,-0.304,0.754,-0.323,0.732,-0.342,0.71,-0.36,0.687,-0.378,0.663,-0.395,0.639,-0.411,0.613,-0.427,0.586,-0.442,0.557,-0.456,0.527,-0.469,0.496,-0.48,0.463,-0.489,0.428,-0.495,0.392,-0.499,0.355,-0.5,0.317,-0.497,0.279,-0.491,0.24,-0.481,0.202,-0.467,0.165,-0.448,0.13,-0.424,0.098,-0.397,0.068,-0.366,0.044,-0.331,0.024,-0.293,0.01,-0.254,0.002,-0.214,0,-0.173,0.005,-0.132,0.018,-0.094,0.039,-0.058,0.069,-0.026,0.107];
+    var CLOUD_T = [0,-0.447,0.01,-0.457,0.019,-0.469,0.03,-0.479,0.04,-0.487,0.051,-0.492,0.062,-0.497,0.073,-0.499,0.084,-0.5,0.095,-0.499,0.105,-0.497,0.116,-0.492,0.126,-0.486,0.136,-0.479,0.146,-0.47,0.156,-0.462,0.172,-0.472,0.189,-0.481,0.205,-0.485,0.221,-0.485,0.236,-0.482,0.25,-0.476,0.263,-0.467,0.275,-0.455,0.286,-0.442,0.296,-0.426,0.305,-0.409,0.312,-0.39,0.319,-0.369,0.324,-0.347,0.327,-0.324,0.329,-0.3,0.329,-0.275,0.327,-0.25,0.346,-0.24,0.388,-0.242,0.413,-0.231,0.434,-0.213,0.451,-0.193,0.465,-0.17,0.477,-0.144,0.486,-0.117,0.493,-0.089,0.497,-0.06,0.5,-0.03,0.5,0,0.498,0.03,0.493,0.059,0.486,0.088,0.477,0.115,0.465,0.141,0.451,0.165,0.434,0.186,0.436,0.215,0.439,0.245,0.439,0.274,0.435,0.302,0.429,0.328,0.419,0.351,0.407,0.372,0.392,0.388,0.373,0.4,0.347,0.402,0.315,0.392,0.304,0.408,0.296,0.427,0.287,0.444,0.276,0.458,0.265,0.47,0.251,0.479,0.237,0.484,0.221,0.485,0.204,0.481,0.184,0.468,0.165,0.454,0.155,0.46,0.146,0.47,0.136,0.479,0.126,0.486,0.116,0.492,0.105,0.496,0.095,0.499,0.084,0.5,0.073,0.499,0.062,0.497,0.051,0.492,0.04,0.486,0.03,0.479,0.019,0.469,0.01,0.457,0,0.451,-0.009,0.455,-0.019,0.467,-0.029,0.477,-0.039,0.485,-0.05,0.492,-0.061,0.496,-0.072,0.499,-0.083,0.5,-0.094,0.499,-0.105,0.497,-0.116,0.493,-0.126,0.487,-0.136,0.48,-0.146,0.471,-0.155,0.461,-0.164,0.452,-0.183,0.466,-0.203,0.48,-0.22,0.485,-0.236,0.484,-0.251,0.479,-0.264,0.471,-0.277,0.459,-0.287,0.445,-0.297,0.428,-0.304,0.409,-0.314,0.392,-0.346,0.401,-0.372,0.4,-0.392,0.389,-0.408,0.373,-0.42,0.352,-0.43,0.329,-0.436,0.303,-0.44,0.275,-0.44,0.246,-0.437,0.215,-0.433,0.186,-0.451,0.165,-0.465,0.141,-0.477,0.115,-0.486,0.088,-0.493,0.059,-0.498,0.03,-0.5,0,-0.5,-0.03,-0.497,-0.06,-0.493,-0.089,-0.486,-0.117,-0.477,-0.144,-0.465,-0.17,-0.451,-0.193,-0.434,-0.214,-0.413,-0.231,-0.388,-0.242,-0.347,-0.241,-0.328,-0.251,-0.33,-0.276,-0.33,-0.301,-0.328,-0.325,-0.324,-0.348,-0.319,-0.37,-0.313,-0.391,-0.305,-0.41,-0.296,-0.427,-0.286,-0.443,-0.275,-0.456,-0.263,-0.468,-0.249,-0.476,-0.235,-0.482,-0.221,-0.485,-0.205,-0.485,-0.188,-0.48,-0.171,-0.471,-0.155,-0.462,-0.146,-0.471,-0.136,-0.48,-0.126,-0.487,-0.116,-0.493,-0.105,-0.497,-0.094,-0.499,-0.083,-0.5,-0.072,-0.499,-0.061,-0.496,-0.05,-0.492,-0.039,-0.485,-0.029,-0.477,-0.019,-0.467,-0.009,-0.455];
+    function tplPts(T, cx, cy, w, h, y0) {                     // 틀 → 크기 (y0 = 틀 세로 가운데 값)
+        var v = []; for (var i = 0; i < T.length; i += 2) v.push([cx + T[i] * w, cy + (T[i + 1] - y0) * h]); return v;
     }
     function resample(P2, n) {                                 // 길이를 따라 같은 간격 n 점
         var len = 0, i, seg = [0];
@@ -874,6 +904,7 @@
         }
         return out;
     }
+    function pathLen(S) { var L = 0; for (var i = 1; i < S.length; i++) L += Math.hypot(S[i][0] - S[i - 1][0], S[i][1] - S[i - 1][1]); return L; }
     function polyDist(p, poly, closed) {                       // 점 → 다각형 테두리까지 가장 가까운 거리
         var best = Infinity, n = poly.length, m = closed ? n : n - 1;
         for (var i = 0; i < m; i++) { var a = poly[i], b = poly[(i + 1) % n]; best = Math.min(best, segDist2(p[0], p[1], a[0], a[1], b[0], b[1])); }
@@ -896,16 +927,79 @@
         for (var i = 0; i < m; i++) { var an = rot + i * 2 * Math.PI / m, rr = inner && i % 2 ? R * inner : R; v.push([cx + Math.cos(an) * rr, cy + Math.sin(an) * rr]); }
         return v;
     }
-    function heartPts(cx, cy, w, h) {                          // 하트: 위 가운데 오목 · 아래 뾰족 (가로 = 세로)
-        var v = [], i;
-        for (i = 0; i <= 96; i++) {
-            var t = i / 96 * 2 * Math.PI, x = 16 * Math.pow(Math.sin(t), 3), y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-            v.push([x, y]);
-        }
-        var y0 = Math.min.apply(null, v.map(function (p) { return p[1]; })), y9 = Math.max.apply(null, v.map(function (p) { return p[1]; }));
-        return v.map(function (p) { return [cx + p[0] / 32 * w, cy + ((p[1] - y0) / (y9 - y0) - 0.5) * h]; });
+    function frame(o, th) {                                    // (u, v) 좌표 → 화면 (o = 원점 · th = u 축 방향)
+        var c = Math.cos(th), s = Math.sin(th);
+        return function (u, v) { return [o[0] + u * c - v * s, o[1] + u * s + v * c]; };
     }
-    function recognize(pts) {
+    function rdpIdx(R, i0, i1, eps, out) {                     // 더글러스-포이커 (꼭짓점 번호만)
+        var a = R[i0], b = R[i1], idx = -1, dm = eps;
+        for (var i = i0 + 1; i < i1; i++) { var d = Math.sqrt(segDist2(R[i][0], R[i][1], a[0], a[1], b[0], b[1])); if (d > dm) { dm = d; idx = i; } }
+        if (idx < 0) return;
+        rdpIdx(R, i0, idx, eps, out); out.push(idx); rdpIdx(R, idx, i1, eps, out);
+    }
+
+    /* 열린 획: 곧은 선 · 휜 선 · 화살표(한쪽 · 양쪽 · 휜 화살표)
+       날카롭게(70° 넘게) 꺾인 곳에서 획을 자름 → 가장 긴 토막 = 화살 몸통 · 앞 · 뒤 토막 = 화살촉 (몸통 양쪽으로 다 벌어져야)
+       몸통: 곧으면 직선 · 아니면 양 끝 고정 2차 곡선 (미리보기 휜 화살표와 평균 0.8pt 차이) · 반원처럼 많이 휘면 원호 */
+    function openShape(P2, avgP, w, diag) {
+        var R = resample(P2, 120), n = R.length, k, ids = [0];
+        rdpIdx(R, 0, n - 1, Math.max(3, diag * 0.025), ids); ids.push(n - 1);
+        var cuts = [0];
+        for (k = 1; k < ids.length - 1; k++) if (180 - angAt(R[ids[k - 1]], R[ids[k]], R[ids[k + 1]]) > 70) cuts.push(ids[k]);
+        cuts.push(n - 1);
+        var bi = 0, bl = -1;
+        for (k = 0; k < cuts.length - 1; k++) { var l = pathLen(R.slice(cuts[k], cuts[k + 1] + 1)); if (l > bl) { bl = l; bi = k; } }
+        var i0 = cuts[bi], i1 = cuts[bi + 1], shaft = R.slice(i0, i1 + 1), A = R[i0], B = R[i1];
+        var chord = Math.hypot(B[0] - A[0], B[1] - A[1]);
+        if (chord < 12) return null;
+        var path = null, curved = false, dev = 0;
+        shaft.forEach(function (p) { dev = Math.max(dev, Math.sqrt(segDist2(p[0], p[1], A[0], A[1], B[0], B[1]))); });
+        if (dev < Math.max(6, chord * 0.07)) {                 // 곧은 선 (수평 · 수직 근처면 반듯하게)
+            var ex = B[0], ey = B[1], dx = ex - A[0], dy = ey - A[1];
+            if (Math.abs(dy) < Math.abs(dx) * 0.07) ey = A[1]; else if (Math.abs(dx) < Math.abs(dy) * 0.07) ex = A[0];
+            path = [A, [ex, ey]];
+        } else {
+            var c = quadFit(shaft, A, B), arc = null, ae = 0;
+            if (c) {
+                var Q = quadPts(A, c, B, 48), e1 = 0, eM = 0;
+                shaft.forEach(function (p) { var d = polyDist(p, Q, false); e1 += d; eM = Math.max(eM, d); });
+                if (e1 / shaft.length < Math.max(2.5, chord * 0.03) && eM < Math.max(8, chord * 0.09)) path = Q;
+            }
+            var cf = path ? null : circleFit(shaft);           // 원호 (반원처럼 많이 휘어 2차 곡선이 안 맞을 때)
+            if (cf && cf.r < diag * 3) {
+                var a0 = Math.atan2(A[1] - cf.y, A[0] - cf.x), sweep = 0, prev = a0;
+                shaft.forEach(function (p) { var a = Math.atan2(p[1] - cf.y, p[0] - cf.x), d = a - prev; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; sweep += d; prev = a; });
+                if (Math.abs(sweep) > 0.6) {
+                    arc = []; for (k = 0; k <= 64; k++) { var an = a0 + sweep * k / 64; arc.push([cf.x + Math.cos(an) * cf.r, cf.y + Math.sin(an) * cf.r]); }
+                    ae = 0; shaft.forEach(function (p) { ae += polyDist(p, arc, false); }); ae /= shaft.length;
+                    if (ae > cf.r * 0.06) arc = null;
+                }
+            }
+            if (!path) path = arc;                             // 미리보기는 2차 곡선이 먼저 (그린 선에 원이 더 잘 맞아도 곡선으로 바꿈)
+            if (!path) return null;
+            curved = true;
+        }
+        function head(part, tip, from) {                       // 1 = 화살촉 · 0 = 짧은 꼬리(무시) · -1 = 화살촉 아닌 긴 획 → 인식 안 함
+            if (part.length < 2) return 0;
+            var dl = Math.hypot(tip[0] - from[0], tip[1] - from[1]) || 1, ux = (tip[0] - from[0]) / dl, uy = (tip[1] - from[1]) / dl;
+            var L = 0, Rt = 0, bad = 0, far = 0, thr;
+            part.forEach(function (p) { far = Math.max(far, Math.hypot(p[0] - tip[0], p[1] - tip[1])); });
+            thr = Math.max(2, far * 0.12);                     // 날개가 몸통에서 벌어진 정도 (화살촉 크기에 비례)
+            part.forEach(function (p) {
+                var bx = p[0] - tip[0], by = p[1] - tip[1], back = -(bx * ux + by * uy), sd = -bx * uy + by * ux;
+                if (back < -Math.max(5, far * 0.35)) bad = 1;
+                if (sd > thr) L = 1; if (sd < -thr) Rt = 1;
+            });
+            if (L && Rt && !bad && far > 6 && far < chord * 0.7) return 1;
+            return pathLen(part) < Math.max(10, chord * 0.12) ? 0 : -1;
+        }
+        var m = path.length, hb = head(R.slice(i1), B, path[m - 2]), ha = head(R.slice(0, i0 + 1).reverse(), A, path[1]);
+        if (ha < 0 || hb < 0) return null;
+        var kind = ha || hb ? (curved ? "carrow" : ha && hb ? "arrow2" : "arrow") : (curved ? "curve" : "line");
+        return { kind: kind, path: path, ha: ha > 0, hb: hb > 0, w: w, p: avgP, pts: openPts(path, ha > 0, hb > 0, avgP, w) };
+    }
+
+    function recognize(pts, w) {
         var n = pts.length / 3, P2 = [], avgP = 0, k;
         for (k = 0; k < n; k++) { P2.push([pts[3 * k], pts[3 * k + 1]]); avgP += pts[3 * k + 2]; }
         avgP = f2(avgP / n);
@@ -914,45 +1008,12 @@
         var diag = Math.hypot(x2 - x1, y2 - y1) || 1, s = P2[0], e = P2[n - 1];
         if (diag < 14) return null;
         var closed = Math.hypot(e[0] - s[0], e[1] - s[1]) < Math.max(22, diag * 0.24) && len > diag * 1.7;
-        var R = resample(P2, 72);
-
-        if (!closed) {
-            // 화살표: 처음에서 가장 먼 점(끝)까지 곧고, 그 뒤 짧게 양쪽으로 꺾인 획
-            var far = 0, fd = 0;
-            R.forEach(function (p) { fd = Math.max(fd, Math.hypot(p[0] - s[0], p[1] - s[1])); });
-            for (k = 0; k < R.length; k++) if (Math.hypot(R[k][0] - s[0], R[k][1] - s[1]) >= fd * 0.97) { far = k; break; }   // 처음 끝에 닿은 곳 = 화살 끝
-            var tip = R[far], shaft = R.slice(0, far + 1), tail = R.slice(far);
-            var sDev = 0; shaft.forEach(function (p) { sDev = Math.max(sDev, Math.sqrt(segDist2(p[0], p[1], s[0], s[1], tip[0], tip[1]))); });
-            var tailLen = 0; for (k = 1; k < tail.length; k++) tailLen += Math.hypot(tail[k][0] - tail[k - 1][0], tail[k][1] - tail[k - 1][1]);
-            if (far < R.length - 3 && tailLen > fd * 0.1 && sDev < fd * 0.08) {
-                var ux = (tip[0] - s[0]) / fd, uy = (tip[1] - s[1]) / fd, left = 0, right = 0;
-                tail.forEach(function (p) { var sd = (p[0] - tip[0]) * -uy + (p[1] - tip[1]) * ux, back = (tip[0] - p[0]) * ux + (tip[1] - p[1]) * uy; if (back > -4 && back < fd * 0.6) { if (sd > fd * 0.03) left++; if (sd < -fd * 0.03) right++; } });
-                if (left && right) return { kind: "arrow", a: s, p: avgP, pts: arrowPts(s, tip, avgP) };
-            }
-            // 곧은 선
-            var dev = 0; R.forEach(function (p) { dev = Math.max(dev, Math.sqrt(segDist2(p[0], p[1], s[0], s[1], e[0], e[1]))); });
-            var chord = Math.hypot(e[0] - s[0], e[1] - s[1]);
-            if (dev < Math.max(6, chord * 0.07)) {
-                var ex = e[0], ey = e[1], dx = ex - s[0], dy = ey - s[1];
-                if (Math.abs(dy) < Math.abs(dx) * 0.07) ey = s[1]; else if (Math.abs(dx) < Math.abs(dy) * 0.07) ex = s[0];
-                return { kind: "line", a: s, p: avgP, pts: densify([s, [ex, ey]], avgP) };
-            }
-            // 호 (원의 일부) — 최소제곱 원 맞춤
-            var cf = circleFit(R);
-            if (cf && cf.r < diag * 3) {
-                var res = 0; R.forEach(function (p) { res += Math.abs(Math.hypot(p[0] - cf.x, p[1] - cf.y) - cf.r); });
-                res /= R.length;
-                var a0 = Math.atan2(s[1] - cf.y, s[0] - cf.x), sweep = 0, prev = a0;
-                R.forEach(function (p) { var a = Math.atan2(p[1] - cf.y, p[0] - cf.x), d = a - prev; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; sweep += d; prev = a; });
-                if (res < cf.r * 0.06 && Math.abs(sweep) > 0.6) {
-                    var arc = []; for (k = 0; k <= 64; k++) { var an = a0 + sweep * k / 64; arc.push([cf.x + Math.cos(an) * cf.r, cf.y + Math.sin(an) * cf.r]); }
-                    return { kind: "arc", p: avgP, pts: densify(arc, avgP, false) };
-                }
-            }
-            return null;
-        }
+        if (!closed) return openShape(P2, avgP, w || 1.8, diag);
 
         // ---- 닫힌 모양 ----
+        var R = resample(P2, 128), bw = x2 - x1, bh = y2 - y1, bx = (x1 + x2) / 2, by = (y1 + y2) / 2, cut = R.length - 1, bd = Infinity;
+        for (k = Math.floor(R.length * 0.85); k < R.length; k++) { var d0 = Math.hypot(R[k][0] - R[0][0], R[k][1] - R[0][1]); if (d0 < bd) { bd = d0; cut = k; } }
+        R = resample(R.slice(0, cut + 1).concat([R[0]]), 128);  // 끝이 시작점을 지나쳐 겹쳤으면 시작점까지만
         var cx = 0, cy = 0; R.forEach(function (p) { cx += p[0]; cy += p[1]; }); cx /= R.length; cy /= R.length;
         var sxx = 0, syy = 0, sxy = 0; R.forEach(function (p) { var a = p[0] - cx, b = p[1] - cy; sxx += a * a; syy += b * b; sxy += a * b; });
         var th = 0.5 * Math.atan2(2 * sxy, sxx - syy), cs = Math.cos(th), sn = Math.sin(th);
@@ -960,7 +1021,7 @@
         R.forEach(function (p) { var a = p[0] - cx, b = p[1] - cy, u = a * cs + b * sn, v = -a * sn + b * cs; umin = Math.min(umin, u); umax = Math.max(umax, u); vmin = Math.min(vmin, v); vmax = Math.max(vmax, v); });
         var ea = (umax - umin) / 2, eb = (vmax - vmin) / 2, ecx = cx + ((umin + umax) / 2) * cs - ((vmin + vmax) / 2) * sn, ecy = cy + ((umin + umax) / 2) * sn + ((vmin + vmax) / 2) * cs;
         var size = Math.max(ea, eb) * 2 || 1;
-        function ellipsePts(x, y, a, b, t) { var v = []; for (var i = 0; i < 96; i++) { var an = i / 96 * 2 * Math.PI, ca = Math.cos(an) * a, sa = Math.sin(an) * b; v.push([x + ca * Math.cos(t) - sa * Math.sin(t), y + ca * Math.sin(t) + sa * Math.cos(t)]); } return v; }
+        function ellipsePts(x, y, a, b, t, from, to, m) { var v = []; m = m || 96; from = from || 0; to = to == null ? 2 * Math.PI * (m - 1) / m : to; for (var i = 0; i < m; i++) { var an = from + (to - from) * i / (m - 1), ca = Math.cos(an) * a, sa = Math.sin(an) * b; v.push([x + ca * Math.cos(t) - sa * Math.sin(t), y + ca * Math.sin(t) + sa * Math.cos(t)]); } return v; }
         var cand = [];
         // 원 · 타원
         var thS = snapAng(th, 9), ell = ellipsePts(ecx, ecy, ea, eb, thS), eErr = fitErr(R, ell, true, size);
@@ -969,20 +1030,28 @@
         // 꼭짓점 (가장 먼 점에서 시작해 더글러스-포이커)
         var st0 = 0, md = 0; R.forEach(function (p, i) { var d = Math.hypot(p[0] - cx, p[1] - cy); if (d > md) { md = d; st0 = i; } });
         var loop = R.slice(st0, R.length - 1).concat(R.slice(0, st0 + 1));
-        var cor = rdp(loop, Math.max(5, size * 0.075));
-        if (cor.length > 1 && Math.hypot(cor[0][0] - cor[cor.length - 1][0], cor[0][1] - cor[cor.length - 1][1]) < size * 0.1) cor.pop();
-        for (var it = 0; it < 4 && cor.length > 3; it++) {     // 거의 일직선인 꼭짓점(160° 넘음) 빼기 — 시작 · 끝 이음매에 생기는 가짜 꼭짓점
-            var flat = -1; for (k = 0; k < cor.length; k++) if (angAt(cor[(k + cor.length - 1) % cor.length], cor[k], cor[(k + 1) % cor.length]) > 160) { flat = k; break; }
-            if (flat < 0) break; cor.splice(flat, 1);
+        function corners(eps, flatMax) {
+            var c = rdp(loop, eps);
+            if (c.length > 1 && Math.hypot(c[0][0] - c[c.length - 1][0], c[0][1] - c[c.length - 1][1]) < size * 0.1) c.pop();
+            for (var it = 0; it < 8 && c.length > 3; it++) {   // 거의 일직선인 꼭짓점 빼기 — 시작 · 끝 이음매에 생기는 가짜 꼭짓점
+                var flat = -1; for (var q = 0; q < c.length; q++) if (angAt(c[(q + c.length - 1) % c.length], c[q], c[(q + 1) % c.length]) > flatMax) { flat = q; break; }
+                if (flat < 0) break; c.splice(flat, 1);
+            }
+            return c;
         }
-        var nc = cor.length;
+        function concave(c) {                                  // 안으로 꺾인 꼭짓점 (하트 위 · 말풍선 꼬리 · 블록 화살표 목 · 별 · 구름)
+            var o = 0, m = c.length, q;
+            for (q = 0; q < m; q++) o += c[q][0] * c[(q + 1) % m][1] - c[(q + 1) % m][0] * c[q][1];
+            return c.map(function (p, i) { var a = c[(i + m - 1) % m], b = c[(i + 1) % m]; return ((p[0] - a[0]) * (b[1] - p[1]) - (p[1] - a[1]) * (b[0] - p[0])) * o < 0 && angAt(a, p, b) < 160; });
+        }
+        var cor = corners(Math.max(5, size * 0.075), 160), nc = cor.length, conc = concave(cor), ncc = conc.filter(Boolean).length;
         if (nc === 3) {
             var angs = [angAt(cor[2], cor[0], cor[1]), angAt(cor[0], cor[1], cor[2]), angAt(cor[1], cor[2], cor[0])];
             var tri = cor, tErr = fitErr(R, cor, true, size);
             if (angs.every(function (a) { return Math.abs(a - 60) < 13; })) {            // 정삼각형
                 var side = 0; for (k = 0; k < 3; k++) side += Math.hypot(cor[k][0] - cor[(k + 1) % 3][0], cor[k][1] - cor[(k + 1) % 3][1]); side /= 3;
-                var gx = (cor[0][0] + cor[1][0] + cor[2][0]) / 3, gy = (cor[0][1] + cor[1][1] + cor[2][1]) / 3, best = 0, bh = Infinity;
-                for (k = 0; k < 3; k++) { var a1 = cor[(k + 1) % 3], a2 = cor[(k + 2) % 3], sl = Math.abs(Math.sin(Math.atan2(a2[1] - a1[1], a2[0] - a1[0]))); if (sl < bh) { bh = sl; best = k; } }
+                var gx = (cor[0][0] + cor[1][0] + cor[2][0]) / 3, gy = (cor[0][1] + cor[1][1] + cor[2][1]) / 3, best = 0, bh0 = Infinity;
+                for (k = 0; k < 3; k++) { var a1 = cor[(k + 1) % 3], a2 = cor[(k + 2) % 3], sl = Math.abs(Math.sin(Math.atan2(a2[1] - a1[1], a2[0] - a1[0]))); if (sl < bh0) { bh0 = sl; best = k; } }
                 var apx = Math.atan2(cor[best][1] - gy, cor[best][0] - gx);
                 apx = Math.abs(Math.sin(apx + Math.PI / 2)) < 0.14 ? (Math.cos(apx + Math.PI / 2) > 0 ? -Math.PI / 2 : Math.PI / 2) : apx;
                 tri = regular(gx, gy, 3, side / Math.sqrt(3), apx);
@@ -997,8 +1066,8 @@
                 var ang = snapAng(Math.atan2(cor[1][1] - cor[0][1], cor[1][0] - cor[0][0]), 9);
                 var qx = (cor[0][0] + cor[1][0] + cor[2][0] + cor[3][0]) / 4, qy = (cor[0][1] + cor[1][1] + cor[2][1] + cor[3][1]) / 4;
                 if (Math.max(w0, h0) / Math.min(w0, h0) < 1.35) w0 = h0 = Math.sqrt(w0 * h0);
-                var ca = Math.cos(ang), sa = Math.sin(ang);
-                quad = [[-w0 / 2, -h0 / 2], [w0 / 2, -h0 / 2], [w0 / 2, h0 / 2], [-w0 / 2, h0 / 2]].map(function (p) { return [qx + p[0] * ca - p[1] * sa, qy + p[0] * sa + p[1] * ca]; });
+                var Fq = frame([qx, qy], ang);
+                quad = [Fq(-w0 / 2, -h0 / 2), Fq(w0 / 2, -h0 / 2), Fq(w0 / 2, h0 / 2), Fq(-w0 / 2, h0 / 2)];
             }
             cand.push({ kind: "rect", err: qErr, verts: quad, c: [cx, cy] });
         }
@@ -1014,16 +1083,95 @@
             var sv = regular(cx, cy + Ro * 0.05, 5, Ro, rot, 0.382);
             cand.push({ kind: "star", err: Math.min(0.03, fitErr(R, sv, true, size)), verts: sv, c: [cx, cy] });
         }
-        if (nc >= 5 && nc <= 6 && !isStar) {                   // 오각형 · 육각형: 꼭짓점이 또렷할 때만 (둥근 원이 울퉁불퉁해서 생긴 꼭짓점은 X)
-            var sharpN = 0; for (k = 0; k < nc; k++) if (angAt(cor[(k + nc - 1) % nc], cor[k], cor[(k + 1) % nc]) < 150) sharpN++;
-            if (sharpN === nc) cand.push({ kind: "poly", err: fitErr(R, cor, true, size) * 1.6, verts: cor, c: [cx, cy] });
+        // 오각형 · 육각형: 꼭짓점이 또렷하고 안으로 꺾인 곳이 없을 때 — 각이 고르면 정다각형
+        //   미리보기: 반지름 = (가로 + 세로) ÷ 4 · 가운데 = 그린 범위 가운데 · 꼭짓점이 위쪽이면 반듯하게 세움
+        if (nc >= 5 && nc <= 6 && !isStar && !ncc) {
+            var sharpN = 0, regOK = true, want = nc === 5 ? 108 : 120;
+            for (k = 0; k < nc; k++) { var ak = angAt(cor[(k + nc - 1) % nc], cor[k], cor[(k + 1) % nc]); if (ak < 150) sharpN++; if (Math.abs(ak - want) > 24) regOK = false; }
+            if (sharpN === nc) {
+                var pv = cor, pErr = fitErr(R, cor, true, size) * 1.6;
+                if (regOK) {
+                    var Rp = (bw + bh) / 4, up = -Math.PI / 2, pr;
+                    var near = cor.map(function (p) { var a = Math.atan2(p[1] - by, p[0] - bx) - up; a = ((a + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; return a; });
+                    var off = near.reduce(function (a, b) { return Math.abs(b) < Math.abs(a) ? b : a; });
+                    var shift = 0;
+                    if (Math.abs(off) < 14 * Math.PI / 180) { pr = up; shift = nc === 5 ? -0.058 * Rp : 0; }                     // 꼭짓점 위
+                    else if (nc === 5 && Math.abs(Math.abs(off) - Math.PI / 5) < 14 * Math.PI / 180) { pr = -up; shift = 0.058 * Rp; } // 위가 평평 (꼭짓점 아래)
+                    else if (nc === 6 && Math.abs(Math.abs(off) - Math.PI / 6) < 14 * Math.PI / 180) pr = 0;                        // 육각형 위가 평평
+                    else pr = up + off;
+                    pv = regular(bx, by + shift, nc, Rp, pr);
+                    pErr = Math.min(pErr, fitErr(R, pv, true, size) * 1.3);
+                }
+                cand.push({ kind: "poly", err: pErr, verts: pv, c: [bx, by] });
+            }
         }
-        // 하트 (가로 = 세로)
-        var hw = ((x2 - x1) + (y2 - y1)) / 2, hv = heartPts((x1 + x2) / 2, (y1 + y2) / 2, hw, hw), hErr = fitErr(R, hv, true, size);
-        cand.push({ kind: "heart", err: hErr * 0.95, verts: hv, c: [(x1 + x2) / 2, (y1 + y2) / 2], smooth: 1 });
+        // 블록 화살표 (꼭짓점 7 · 오목 2): 미리보기 틀 — 머리 폭 = 몸통 폭 × 2 · 머리 옆선 45° · 길이 × 0.95
+        if (nc === 7 && ncc === 2) {
+            var ci = []; conc.forEach(function (f, i) { if (f) ci.push(i); });
+            var c1 = ci[0], c2 = ci[1];
+            if ((c2 - c1 + 7) % 7 === 3) { var tmp = c1; c1 = c2; c2 = tmp; }
+            if ((c2 - c1 + 7) % 7 === 4) {
+                var V = function (i) { return cor[(i + 7) % 7]; };
+                var tip = V(c1 + 2), t1 = V(c2 + 1), t2 = V(c2 + 2), tm = [(t1[0] + t2[0]) / 2, (t1[1] + t2[1]) / 2];
+                var La = Math.hypot(tip[0] - tm[0], tip[1] - tm[1]), tha = snapAng(Math.atan2(tip[1] - tm[1], tip[0] - tm[0]), 9);
+                var vOf = function (p) { return Math.abs(-(p[0] - tm[0]) * Math.sin(tha) + (p[1] - tm[1]) * Math.cos(tha)); };
+                var sh = (vOf(t1) + vOf(t2) + vOf(V(c1)) + vOf(V(c2))) / 4, wing = (vOf(V(c1 + 1)) + vOf(V(c1 + 3))) / 2;
+                if (La > 20 && wing > sh * 1.3) {
+                    var L2 = La * 0.95, H = Math.min(sh * 2, L2 * 0.6), u0 = (La - L2) / 2, u1 = u0 + L2, ub = u1 - H, Fa = frame(tm, tha);
+                    var bv = [Fa(u0, -sh), Fa(ub, -sh), Fa(ub, -H), Fa(u1, 0), Fa(ub, H), Fa(ub, sh), Fa(u0, sh)];
+                    cand.push({ kind: "block", err: Math.min(0.03, fitErr(R, bv, true, size)), verts: bv, c: Fa(La / 2, 0) });
+                }
+            }
+        }
+        // 말풍선: 뾰족한 꼬리(양옆이 다 안으로 꺾임) + 나머지 = 타원
+        //   미리보기: 타원 = 꼬리를 뺀 범위 (세로 × 1.045) · 꼬리 끝 = 그린 끝 · 꼬리 뿌리 = 꼬리 방향 ± 13° (타원 각)
+        if (ncc >= 1 && ncc <= 3 && nc >= 5) {
+            for (k = 0; k < nc; k++) {
+                var kp = (k + nc - 1) % nc, kn = (k + 1) % nc;
+                if (conc[k] || !(conc[kp] || conc[kn]) || angAt(cor[kp], cor[k], cor[kn]) > 80) continue;
+                var ia = loop.indexOf(cor[kp]), ib = loop.indexOf(cor[kn]);
+                if (ia < 0 || ib < 0) continue;
+                var body = loop.filter(function (p, i) { return ia <= ib ? i < ia || i > ib : i < ia && i > ib; });
+                if (body.length < loop.length * 0.6) continue;
+                var bx1 = Infinity, by1 = Infinity, bx2 = -Infinity, by2 = -Infinity;
+                body.forEach(function (p) { bx1 = Math.min(bx1, p[0]); by1 = Math.min(by1, p[1]); bx2 = Math.max(bx2, p[0]); by2 = Math.max(by2, p[1]); });
+                var ba = (bx2 - bx1) / 2 * 1.01, bb = (by2 - by1) / 2 * 1.045, bcx = (bx1 + bx2) / 2, bcy = (by1 + by2) / 2, T = cor[k];
+                var tu = (T[0] - bcx) / ba, tv = (T[1] - bcy) / bb;
+                if (Math.hypot(tu, tv) < 1.3) continue;
+                var phi = Math.atan2(tv, tu), sp13 = 13 * Math.PI / 180;
+                var bub = ellipsePts(bcx, bcy, ba, bb, 0, phi + sp13, phi - sp13 + 2 * Math.PI, 90).concat([T]);
+                var fe = fitErr(R, bub, true, size);
+                if (fe < 0.12) cand.push({ kind: "bubble", err: Math.min(0.03, fe), verts: bub, c: [bcx, bcy] });
+                break;
+            }
+        }
+        // 구름: 획을 따라 안으로 꺾이는 곳(볼록한 혹 사이)이 4곳 넘게 · 얕게 (별 · 꽃은 깊음) — 미리보기 틀 · 가로 × 0.98 · 세로 × 0.9
+        var polyOK = cand.some(function (c) { return /^(triangle|rect|poly)$/.test(c.kind) && c.err < 0.02; });
+        if (!isStar && !polyOK) {                              // 반듯한 삼각형 · 사각형 · 다각형이면 손떨림을 혹으로 세지 않게
+            var L0 = R.length - 1, ori = 0, runs = 0, inRun = false, peak = 0, rIn = 0, rAll = 0, first = -1;
+            for (k = 0; k < L0; k++) ori += R[k][0] * R[(k + 1) % L0][1] - R[(k + 1) % L0][0] * R[k][1];
+            R.slice(0, L0).forEach(function (p) { rAll += Math.hypot(p[0] - cx, p[1] - cy); }); rAll /= L0;
+            var turnAt = function (i) {
+                var a = R[(i - 3 + L0) % L0], b = R[i % L0], c = R[(i + 3) % L0], t = Math.atan2((b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0]), (b[0] - a[0]) * (c[0] - b[0]) + (b[1] - a[1]) * (c[1] - b[1]));
+                return ori > 0 ? t : -t;                       // + = 바깥으로 도는 쪽 · - = 안으로 꺾임
+            };
+            for (k = 0; k < L0; k++) if (turnAt(k) > -0.2) { first = k; break; }
+            if (first >= 0) for (var i2 = 0; i2 <= L0; i2++) {
+                var ii = (first + i2) % L0, tt = turnAt(ii);
+                if (tt < -0.35) { if (!inRun) { inRun = true; peak = ii; } else if (tt < turnAt(peak)) peak = ii; }
+                else if (tt > -0.2 && inRun) { inRun = false; if (turnAt(peak) < -0.45) { runs++; rIn += Math.hypot(R[peak][0] - cx, R[peak][1] - cy); } }
+            }
+            if (runs >= 4 && rIn / runs > rAll * 0.75) {
+                var cl = tplPts(CLOUD_T, bx, by, bw * 0.98, bh * 0.9, 0);
+                cand.push({ kind: "cloud", err: runs >= 5 ? 0.008 : Math.min(0.02, fitErr(R, cl, true, size)), verts: cl, c: [bx, by], smooth: 1 });
+            }
+        }
+        // 하트: 미리보기 틀 · 가로 = 세로 = 그린 가로 · 세로 평균 (위 가운데 오목이 없으면 감점)
+        var hw = (bw + bh) / 2, hv = tplPts(HEART_T, bx, by, hw, hw, 0.5), hErr = fitErr(R, tplPts(HEART_T, bx, by, bw, bh, 0.5), true, size);
+        cand.push({ kind: "heart", err: hErr * (ncc ? 0.95 : 1.5), verts: hv, c: [bx, by], smooth: 1 });
 
         cand.sort(function (a, b) { return a.err - b.err; });
-        if (window.__inkDebug) window.__inkDebug.push(cand.map(function (c) { return c.kind + ":" + c.err.toFixed(3); }).join(" ") + " nc=" + nc);
+        if (window.__inkDebug) window.__inkDebug.push(cand.map(function (c) { return c.kind + ":" + c.err.toFixed(3); }).join(" ") + " nc=" + nc + " ncc=" + ncc);
         var b0 = cand[0];
         if (!b0 || b0.err > 0.06) return null;
         var vv = b0.verts.concat([b0.verts[0]]);
@@ -1121,7 +1269,7 @@
         return inside;
     }
     function selectIn(poly) {
-        sel = [];
+        sel = []; selMenu = null;
         if (poly.length >= 6) {
             strokes.forEach(function (st, i) {
                 var R = rendered[i];
@@ -1157,27 +1305,155 @@
         }
         return [];
     }
+    /* 올가미로 고른 획 둘레 — iOS 27 PencilKit 을 시뮬레이터에서 재서 맞춤 (2026-10-25)
+       · 획 중심에서 15pt 떨어져 감쌈 (획 자체는 그대로 — 흰 테두리 · 그림자 없음)
+       · 32pt 로 넓혔다가 17pt 줄임(닫기) → 가까운 획 사이 틈은 메워지고 끝 사이엔 얕은 홈 (아이패드에서 잰 6.5pt 와 같음)
+       · 멀리 떨어진 획: 획 끝점에서 다른 획의 가장 가까운 곳까지(260pt 안) 이어 한 덩어리 · 둘러싸인 곳은 다 채움
+       · 거의 닫힌 획(U · ∩ 모양)은 안을 채움 · 획 아래 오목한 곳은 평평하게 (안 고른 획이 가까우면 그대로 따라감)
+       → 회색 점선이 시계 방향으로 흐름 (CSS .ink-lasso) */
+    function selOutline(list) {
+        var S = [], x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity, i, j, k;
+        list.forEach(function (st) {
+            var R = rendered[strokes.indexOf(st)], p = st.pts, v = [];
+            if (!R || !p) return;
+            for (var q = 0; q < p.length; q += 3) { var x = p[q] + R.ox, y = p[q + 1] + R.oy; v.push([x, y]); x1 = Math.min(x1, x); y1 = Math.min(y1, y); x2 = Math.max(x2, x); y2 = Math.max(y2, y); }
+            if (v.length) S.push(v);
+        });
+        if (!S.length) return null;
+        var OFF = 15, CL = 17, pad = OFF + CL + 8, cell = Math.max(2, Math.ceil(Math.max(x2 - x1, y2 - y1) / 600));
+        var ox = x1 - pad, oy = y1 - pad, W = Math.ceil((x2 - x1 + 2 * pad) / cell) + 2, H = Math.ceil((y2 - y1 + 2 * pad) / cell) + 2;
+        var cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+        var c = cv.getContext("2d");
+        if (!c) return null;
+        c.setTransform(1 / cell, 0, 0, 1 / cell, -ox / cell, -oy / cell);
+        c.strokeStyle = c.fillStyle = "#fff"; c.lineCap = c.lineJoin = "round";
+        function path(v, close) { c.beginPath(); v.forEach(function (q, n) { if (n) c.lineTo(q[0], q[1]); else c.moveTo(q[0], q[1]); }); if (v.length === 1) c.lineTo(v[0][0] + 0.01, v[0][1]); if (close) c.closePath(); }
+        c.lineWidth = (OFF + CL) * 2;
+        S.forEach(function (v) {                               // 획 + 15pt (+ 닫기 17pt) · 거의 닫힌 획은 안까지
+            path(v); c.stroke();
+            var L = 0; for (var n = 1; n < v.length; n++) L += Math.hypot(v[n][0] - v[n - 1][0], v[n][1] - v[n - 1][1]);
+            if (v.length > 4 && Math.hypot(v[0][0] - v[v.length - 1][0], v[0][1] - v[v.length - 1][1]) < L * 0.6) { path(v, true); c.fill(); c.stroke(); }
+        });
+        // 획 아래 오목한 곳: 아래쪽 볼록 껍질까지 채움 (4px 칸마다 획의 맨 아래 → 껍질)
+        var others = [];
+        strokes.forEach(function (st, n) {
+            if (list.indexOf(st) >= 0 || isObj(st)) return;
+            var R = rendered[n]; if (!R || !R.bb || R.bb.x2 < x1 - 40 || R.bb.x1 > x2 + 40 || R.bb.y2 < y1 - 40 || R.bb.y1 > y2 + 60) return;
+            for (var q = 0; q < st.pts.length; q += 3) others.push([st.pts[q] + R.ox, st.pts[q + 1] + R.oy]);
+        });
+        S.forEach(function (v) {
+            if (v.length < 3) return;
+            var srt = v.slice().sort(function (a, b) { return a[0] - b[0] || b[1] - a[1]; }), hull = [];
+            srt.forEach(function (p) {
+                while (hull.length > 1) { var o = hull[hull.length - 2], a = hull[hull.length - 1]; if ((a[0] - o[0]) * (p[1] - o[1]) - (a[1] - o[1]) * (p[0] - o[0]) >= 0) hull.pop(); else break; }
+                hull.push(p);
+            });
+            var hx1 = srt[0][0], hx2 = srt[srt.length - 1][0], nb = Math.max(2, Math.ceil((hx2 - hx1) / 4) + 1), env = [], hy = [], ok = [], h = 0;
+            for (k = 0; k < nb; k++) env.push(-Infinity);
+            v.forEach(function (p) { var b = Math.min(nb - 1, Math.round((p[0] - hx1) / 4)); env[b] = Math.max(env[b], p[1]); });
+            for (k = 0; k < nb; k++) {
+                var X = Math.min(hx2, hx1 + k * 4);
+                while (h < hull.length - 2 && hull[h + 1][0] < X) h++;
+                var A = hull[h], Bq = hull[Math.min(h + 1, hull.length - 1)], t = Bq[0] - A[0] ? (X - A[0]) / (Bq[0] - A[0]) : 0;
+                hy.push(A[1] + (Bq[1] - A[1]) * Math.max(0, Math.min(1, t)));
+                if (env[k] === -Infinity) env[k] = k ? env[k - 1] : hy[k];
+                ok.push(true);
+            }
+            others.forEach(function (p) {                      // 안 고른 획이 펼 자리 아래 67pt 안에 있으면 그 근처(±28pt)는 펴지 않고 획을 따라감 (아이패드 실험 3가지와 같게)
+                var b = Math.round((p[0] - hx1) / 4);
+                for (var e = Math.max(0, b - 7); e <= Math.min(nb - 1, b + 7); e++) if (p[1] > env[e] - 2 && p[1] < hy[e] + OFF + 52) ok[e] = false;
+            });
+            for (k = 0; k < nb;) {
+                if (!ok[k] || hy[k] - env[k] < 2) { k++; continue; }
+                var s0 = k; while (k < nb && ok[k]) k++;
+                if (k - s0 < 2) continue;
+                var top = [], bot = [];
+                for (var e = s0; e < k; e++) { var X2 = Math.min(hx2, hx1 + e * 4); bot.push([X2, hy[e]]); top.push([X2, env[e]]); }
+                path(bot.concat(top.reverse()), true); c.fill(); c.stroke();
+            }
+        });
+        // 떨어진 획: 끝점(처음 · 끝) → 다른 획의 가장 가까운 점 (260pt 안) 을 획처럼 굵게 이음
+        S.forEach(function (v, n) {
+            [v[0], v[v.length - 1]].forEach(function (e) {
+                var bd = Infinity, pb = null;
+                S.forEach(function (u, m) { if (m !== n) u.forEach(function (q) { var dd = (e[0] - q[0]) * (e[0] - q[0]) + (e[1] - q[1]) * (e[1] - q[1]); if (dd < bd) { bd = dd; pb = q; } }); });
+                bd = Math.sqrt(bd);
+                if (pb && bd > (OFF + CL) * 2 && bd < 260) { c.beginPath(); c.moveTo(e[0], e[1]); c.lineTo(pb[0], pb[1]); c.stroke(); }
+            });
+        });
+        var img = c.getImageData(0, 0, W, H).data, M = new Uint8Array(W * H), Q = [], n2;
+        for (i = 0; i < W * H; i++) M[i] = img[i * 4 + 3] > 127 ? 1 : 0;
+        var D = new Float32Array(W * H), r2 = Math.SQRT2, x, y, a;   // 17pt 줄이기: 바깥까지 거리(1 · √2 두 번 훑기)
+        for (i = 0; i < W * H; i++) D[i] = M[i] ? 1e9 : 0;
+        for (y = 0; y < H; y++) for (x = 0; x < W; x++) { i = y * W + x; if (!D[i]) continue; a = D[i];
+            a = Math.min(a, x ? D[i - 1] + 1 : 1, y ? D[i - W] + 1 : 1, x && y ? D[i - W - 1] + r2 : r2, y && x < W - 1 ? D[i - W + 1] + r2 : r2); D[i] = a; }
+        for (y = H - 1; y >= 0; y--) for (x = W - 1; x >= 0; x--) { i = y * W + x; if (!D[i]) continue; a = D[i];
+            a = Math.min(a, x < W - 1 ? D[i + 1] + 1 : 1, y < H - 1 ? D[i + W] + 1 : 1, x < W - 1 && y < H - 1 ? D[i + W + 1] + r2 : r2, y < H - 1 && x ? D[i + W - 1] + r2 : r2); D[i] = a; }
+        for (i = 0; i < W * H; i++) M[i] = D[i] * cell > CL ? 1 : 0;
+        for (i = 0; i < W; i++) { Q.push(i, (H - 1) * W + i); }                 // 바깥에서 물 채우기 → 닿지 않은 빈 곳 = 둘러싸인 곳
+        for (i = 0; i < H; i++) { Q.push(i * W, i * W + W - 1); }
+        var seen = new Uint8Array(W * H);
+        while (Q.length) {
+            n2 = Q.pop();
+            if (seen[n2] || M[n2]) continue;
+            seen[n2] = 1;
+            var cx = n2 % W, cy = (n2 - cx) / W;
+            if (cx > 0) Q.push(n2 - 1); if (cx < W - 1) Q.push(n2 + 1); if (cy > 0) Q.push(n2 - W); if (cy < H - 1) Q.push(n2 + W);
+        }
+        for (i = 0; i < W * H; i++) if (!seen[i]) M[i] = 1;
+        // 덩어리마다 바깥 둘레 따라가기 — 위 · 왼쪽 첫 칸에서 시계 방향 (점선이 시계 방향으로 흐름)
+        var DX = [-1, -1, 0, 1, 1, 1, 0, -1], DY = [0, -1, -1, -1, 0, 1, 1, 1], rings = [];
+        var lab = new Int32Array(W * H), comp = 0;
+        for (i = 0; i < W * H; i++) {
+            if (!M[i] || lab[i]) continue;
+            comp++; var st2 = [i]; lab[i] = comp;
+            while (st2.length) {
+                var m = st2.pop(), mx = m % W;
+                if (mx > 0 && M[m - 1] && !lab[m - 1]) { lab[m - 1] = comp; st2.push(m - 1); }
+                if (mx < W - 1 && M[m + 1] && !lab[m + 1]) { lab[m + 1] = comp; st2.push(m + 1); }
+                if (m >= W && M[m - W] && !lab[m - W]) { lab[m - W] = comp; st2.push(m - W); }
+                if (m + W < W * H && M[m + W] && !lab[m + W]) { lab[m + W] = comp; st2.push(m + W); }
+            }
+            var ring = [], sx = i % W, sy = (i - sx) / W, d = 0, guard = 0;
+            x = sx; y = sy;
+            do {
+                ring.push([x, y]);
+                for (k = 0; k < 8; k++) { var nd = (d + k) % 8, nx = x + DX[nd], ny = y + DY[nd]; if (nx >= 0 && ny >= 0 && nx < W && ny < H && lab[ny * W + nx] === comp) { x = nx; y = ny; d = (nd + 6) % 8; break; } }
+                if (k === 8) break;
+            } while ((x !== sx || y !== sy) && ++guard < W * H);
+            if (ring.length < 4) continue;
+            var R2 = rdp(ring.concat([ring[0]]), 0.75); R2.pop();
+            for (k = 0; k < 2; k++) {                          // 계단 지우기 (Chaikin)
+                var sm = [];
+                R2.forEach(function (p, n) { var q = R2[(n + 1) % R2.length]; sm.push([p[0] * 0.75 + q[0] * 0.25, p[1] * 0.75 + q[1] * 0.25], [p[0] * 0.25 + q[0] * 0.75, p[1] * 0.25 + q[1] * 0.75]); });
+                R2 = sm;
+            }
+            rings.push(R2.map(function (p) { return [ox + (p[0] + 0.5) * cell, oy + (p[1] + 0.5) * cell]; }));
+        }
+        return rings.length ? rings : null;
+    }
     function drawSelection() {
         if (!gSel) return;
         while (gSel.firstChild) gSel.removeChild(gSel.firstChild);
         sel = sel.filter(function (s) { return strokes.indexOf(s) >= 0; });
         if (osel && strokes.indexOf(osel) < 0) osel = null;
         while (gHalo.firstChild) gHalo.removeChild(gHalo.firstChild);
-        var hc = isDark() ? "#4a4a4e" : "#ffffff";                // 고른 획: 같은 모양을 굵게 한 겹 아래에 깔아 떠 보이게 (스티커처럼)
-        sel.forEach(function (st) {
-            var R = rendered[strokes.indexOf(st)];
-            if (!R || !R.el) return;
-            var cl = R.el.cloneNode(true);
-            cl.removeAttribute("transform"); cl.removeAttribute("class");
-            [cl].concat(Array.prototype.slice.call(cl.querySelectorAll ? cl.querySelectorAll("path") : [])).forEach(function (p) {
-                if (p.tagName !== "path") return;
-                var sw = parseFloat(p.getAttribute("stroke-width")) || 0, filled = p.getAttribute("fill") && p.getAttribute("fill") !== "none";
-                p.setAttribute("stroke", hc); p.setAttribute("stroke-opacity", "1"); p.setAttribute("stroke-linejoin", "round"); p.setAttribute("stroke-linecap", "round");
-                p.setAttribute("stroke-width", f1((filled ? 0 : sw) + 7));
-                if (filled) { p.setAttribute("fill", hc); p.setAttribute("fill-opacity", "1"); }
-            });
-            gHalo.appendChild(cl);
-        });
+        selPoly = null;
+        if (sel.length) {                                      // 고른 획은 그대로 두고 둘레에 회색 점선 (iOS 27 PencilKit)
+            var rings = selOutline(sel);
+            if (rings) {
+                var d = "";
+                selPoly = rings.map(function (ring) {
+                    var flat = [];
+                    ring.forEach(function (q, i) { d += (i ? "L" : "M") + f1(q[0]) + " " + f1(q[1]); flat.push(q[0], q[1]); });
+                    d += "Z";
+                    return flat;
+                });
+                var pe = document.createElementNS(NS, "path");
+                pe.setAttribute("d", d); pe.setAttribute("class", "ink-lasso ink-selline");
+                gSel.appendChild(pe);
+            }
+        }
         if (osel) {
             var R = rendered[strokes.indexOf(osel)];
             if (R && R.bb && osel.k !== "text" && osel.k !== "mag" && !(osel.k === "shape" && /^(line|arrow)$/.test(osel.sh))) {
@@ -1250,7 +1526,8 @@
         selBar.innerHTML = "";
         var items = [];
         if (sel.length) {
-            items = [["잘라내기", selCut], ["복사", selCopy], ["삭제", selDelete], ["복제", selDuplicate], ["색 바꾸기", selRecolor]];   // PencilKit 편집 메뉴 순서
+            if (!selMenu) { selBar.style.display = "none"; return; }   // 아이패드처럼 고른 곳을 톡 눌러야 뜸
+            items = [["오려두기", selCut], ["복사하기", selCopy], ["삭제", selDelete], ["복제", selDuplicate], ["색 바꾸기", selRecolor]];   // iOS 27 PencilKit 편집 메뉴 문구 · 순서 (+ 사이트: 색 바꾸기)
         } else if (osel) {
             var k = osel.k;
             if (k === "text") items = [["편집", function () { startEdit(osel); }], ["가 −", function () { objSet({ fs: Math.max(10, osel.fs - 2) }); }], ["가 +", function () { objSet({ fs: Math.min(72, osel.fs + 2) }); }],
@@ -1264,7 +1541,7 @@
         if (!items.length) { selBar.style.display = "none"; return; }
         items.forEach(function (it, i) {
             if (i) selBar.appendChild(el("span", "ink-sbsep"));
-            selBar.appendChild(button("", it[0], it[0], it[1]));
+            selBar.appendChild(button("", it[0], it[0], function () { selMenu = null; it[1](); showSelBar(); }));
         });
         selBar.style.display = "flex";
         placeSelBar();
@@ -1276,7 +1553,8 @@
         var dx = drag && drag.kind === "move" ? drag.dx : 0, dy = drag && drag.kind === "move" ? drag.dy : 0;
         var w = selBar.offsetWidth, h = selBar.offsetHeight;
         var left = (b.x1 + b.x2) / 2 + dx - scrollX - w / 2, top = b.y1 + dy - scrollY - h - 18;
-        if (top < 8) top = b.y2 + dy - scrollY + 18;
+        if (sel.length && selMenu) top = selMenu.y - scrollY - h - 10;   // 톡 누른 곳 바로 위 · 가로는 고른 것 가운데
+        if (top < 8) top = (sel.length && selMenu ? selMenu.y + 24 : b.y2 + 18) + dy - scrollY;
         selBar.style.left = Math.max(8, Math.min(innerWidth - w - 8, left)) + "px";
         selBar.style.top = Math.max(8, Math.min(innerHeight - h - 8, top)) + "px";
     }
@@ -1545,11 +1823,10 @@
         if (t === "eraser") return o +
             '<path d="M10.5 17.4V4.4Q10.5 .5 14.4 .5H25.6Q29.5 .5 29.5 4.4V17.4Z" fill="url(#ink-pk)"/>' + body(17.2) +
             '<rect x="10.5" y="33.3" width="19" height=".7" fill="' + (D ? "rgba(255,255,255,.06)" : "rgba(0,0,0,.07)") + '"/></svg>';
-        if (t === "pencil") {
-            var sp = ""; for (var k = -18; k < 40; k += 6.6) sp += "M" + k + " 36L" + (k + 15) + " -1";
-            return o + '<path d="M20 .4 29.5 35H10.5Z" fill="' + B + '"/>' +
-                '<path d="' + sp + '" stroke="' + (D ? "#5c5c61" : "#c9c9ce") + '" stroke-width="3" clip-path="url(#ink-pcone)"/>' + body(34.8) + "</svg>";
-        }
+        if (t === "pencil") return o +                         // 연필: 흰 원뿔 + 색 심 · 가는 색 띠 · 불투명도 숫자 (iOS 27 도구 막대)
+            '<path d="M15.9 14.5 10.5 39H29.5L24.1 14.5Z" fill="' + B + '" stroke="' + ed + '" stroke-width=".5"/>' +
+            '<path d="M20 2.2C20.6 2.2 24.1 14.5 24.1 14.5H15.9S19.4 2.2 20 2.2Z" fill="' + tip + '"/>' +
+            body(38.8) + band(44.2, 1.7) + pct + "</svg>";
         if (t === "ruler") {
             var tk = "", y = 3.2, i = 0;
             for (; y < 90; y += 4.6, i++) tk += '<path d="M5.6 ' + y.toFixed(1) + "h" + (i % 5 ? 3.3 : 8.6) + '" stroke="' + (D ? "#aeaeb2" : "#6e6e73") + '" stroke-width="' + (i % 5 ? .9 : 1.2) + '"/>';
@@ -1562,15 +1839,14 @@
             '<path d="M20 .6C22.4 5.5 27.4 15 27.4 26V38.6H12.6V26C12.6 15 17.6 5.5 20 .6Z" fill="url(#ink-mt)"/>' +
             '<path d="M20 3.5V22.4" stroke="#3a3a3c" stroke-width=".7"/><circle cx="20" cy="23.8" r="1.5" fill="#f2f2f7" stroke="#6e6e73" stroke-width=".4"/>' +
             '<rect x="11.4" y="38.4" width="17.2" height="2.8" rx=".6" fill="' + (D ? "#48484a" : "#e5e5ea") + '"/>' + body(41) + band(52.5, 3) + "</svg>";
-        if (t === "watercolor") return o +                     // 붓 (미리보기의 수채화 붓)
-            '<path d="M12.8 40C12.8 26 15.6 8 16.4 1H23.6C24.4 8 27.2 26 27.2 40Z" fill="' + (D ? "#d8d1c2" : "#f3eee3") + '"/>' +
-            '<path d="M12.8 40C12.8 26 15.6 8 16.4 1H23.6C24.4 8 27.2 26 27.2 40Z" fill="' + tip + '" mask="url(#ink-fade)"/>' +
-            '<path d="M16.6 6V28M20 3V30M23.4 6V28" stroke="rgba(0,0,0,.08)" stroke-width=".6"/>' +
-            '<rect x="10.5" y="39.6" width="19" height="14.4" fill="' + (D ? "#0b0b0c" : "#1c1c1e") + '"/>' + body(54) + "</svg>";
-        return o +                                             // 올가미 (미리보기 막대에는 없어 같은 그림체로)
-            '<ellipse cx="20" cy="7.2" rx="9" ry="5.6" fill="none" stroke="#8e8e93" stroke-width="1.3" stroke-dasharray="2.4 2"/>' +
-            '<path d="M15.2 11.6C13.6 14 15.4 15.6 18 15.2" fill="none" stroke="#8e8e93" stroke-width="1.3" stroke-linecap="round"/>' +
-            '<path d="M20 15C21 15 29.5 28 29.5 35H10.5C10.5 28 19 15 20 15Z" fill="' + B + '" stroke="' + ed + '" stroke-width=".5"/>' + body(34.8) + band(41, 3.3).replace(tip, "#8e8e93") + "</svg>";
+        if (t === "watercolor") return o +                     // 수채화: 색 붓끝 + 회색 쇠테 · 색 띠 (iOS 27 도구 막대)
+            '<path d="M15.5 28.4 11 38.4V44.6H29V38.4L24.5 28.4Z" fill="url(#ink-mt)"/>' +
+            '<path d="M20.3 2.8C22.4 6 25.3 15 25.3 21.6 25.3 25.4 24.6 28.4 24.6 28.4H15.4S14.9 25.4 14.9 21.6C14.9 15 18.2 6 20.3 2.8Z" fill="' + tip + '"/>' +
+            body(44.4) + band(52.3, 5.5) + "</svg>";
+        // 올가미: 줄무늬 원뿔 (iOS 27 도구 막대의 다섯째 — 색 없음)
+        var sp = ""; for (var k = -16; k < 40; k += 5.6) sp += "M" + k + " 36L" + (k + 15) + " -1";
+        return o + '<path d="M20 .4 29.5 35H10.5Z" fill="' + B + '"/>' +
+            '<path d="' + sp + '" stroke="' + (D ? "#5c5c61" : "#cfcfd4") + '" stroke-width="2.3" clip-path="url(#ink-pcone)"/>' + body(34.8) + "</svg>";
     }
     function icon(name) {
         var s = '<svg viewBox="0 0 24 24" class="ink-ic" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">';
@@ -1607,7 +1883,7 @@
         ".ink-svg .ink-selrect{fill:rgba(10,132,255,.06);stroke:#0a84ff;stroke-width:1.5;stroke-dasharray:6 5}",
         ".ink-svg .ink-objframe{fill:none;stroke:#0a84ff;stroke-width:1.2;stroke-dasharray:4 4}",
         ".ink-svg .ink-handle{fill:#fff;stroke:#0a84ff;stroke-width:2} .ink-svg .ink-handle.blue{fill:#0a84ff;stroke:#fff} .ink-svg .ink-handle.green{fill:#34c759;stroke:#fff}",
-        ".ink-svg .ink-lasso{fill:none;stroke:#8e8e93;stroke-width:1.6;stroke-dasharray:5 4;stroke-linecap:round;animation:ink-ants .6s linear infinite} @keyframes ink-ants{to{stroke-dashoffset:-9}}",
+        ".ink-svg .ink-lasso{fill:none;stroke:#7f7f7f;stroke-width:2;stroke-dasharray:3.5 10.5;stroke-linecap:round;stroke-linejoin:round;animation:ink-ants 1s linear infinite} @keyframes ink-ants{to{stroke-dashoffset:-14}}",   // iOS 27: 회색 2pt · 보이는 점 5.5 / 빈칸 8.5 · 1초에 한 칸
         "html[data-theme=dark] .ink-svg .ink-lasso{stroke:#aeaeb2}",
         "html[data-theme=light] .ink-svg .ink-wc{mix-blend-mode:multiply} html[data-theme=dark] .ink-svg .ink-wc{mix-blend-mode:screen}",
         ".ink-objs{position:absolute;left:0;top:0;width:0;height:0;z-index:9981;pointer-events:none}",
@@ -1706,9 +1982,9 @@
         ".ink-sigs{display:flex;gap:8px;flex-wrap:wrap;padding:4px 8px 8px} .ink-sigs button{width:100px;height:46px;border-radius:12px!important;background:var(--ink-bg-solid)!important;padding:4px!important} .ink-sigs svg{width:100%;height:100%}",
         ".ink-note{font-size:12.5px;color:var(--ink-sub);line-height:1.5;margin:6px 14px 8px}",
         // 고른 것 위 메뉴 (아이패드 말풍선 메뉴처럼 검은 막대)
-        ".ink-selbar{position:fixed;z-index:10004;display:none;align-items:center;padding:0 6px;height:44px;border-radius:22px;background:var(--ink-glass-2);-webkit-backdrop-filter:blur(24px) saturate(1.8);backdrop-filter:blur(24px) saturate(1.8);border:1px solid var(--ink-edge2);box-shadow:0 10px 30px rgba(0,0,0,.18),0 1px 4px rgba(0,0,0,.08);max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none}",
+        ".ink-selbar{position:fixed;z-index:10004;display:none;align-items:center;padding:0 3px;height:44px;border-radius:22px;background:var(--ink-glass-2);-webkit-backdrop-filter:blur(24px) saturate(1.8);backdrop-filter:blur(24px) saturate(1.8);border:1px solid var(--ink-edge2);box-shadow:0 10px 30px rgba(0,0,0,.18),0 1px 4px rgba(0,0,0,.08);max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none}",
         ".ink-selbar::-webkit-scrollbar{display:none}",
-        ".ink-selbar button{height:36px;padding:0 13px;border:0;border-radius:18px;background:transparent;color:var(--ink-text);font-size:15px;cursor:pointer;white-space:nowrap;font-family:inherit}",
+        ".ink-selbar button{height:38px;padding:0 17px;border:0;border-radius:19px;background:transparent;color:var(--ink-text);font-size:17px;letter-spacing:-.2px;cursor:pointer;white-space:nowrap;font-family:-apple-system,'SF Pro Text',system-ui,sans-serif}",   // 미리보기 편집 메뉴: 글자만 · 17pt · 얇은 세로선
         ".ink-selbar button:active,.ink-selbar button:hover{background:var(--ink-btn)} .ink-sbsep{width:1px;height:18px;background:var(--ink-hair);flex:0 0 1px}",
         // 자
         ".ink-ruler{position:fixed;left:0;top:0;width:940px;height:68px;z-index:9990;transform-origin:470px 34px;display:none;touch-action:none;cursor:move;",
@@ -1755,8 +2031,9 @@
         toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 1800);
     }
 
-    /* 도구 막대 순서 = Apple 미리보기 (펜 · 파인라이너 · 마커 · 지우개 · 연필 · 자 → 옆으로 밀면 수채화 · 크레용 · 만년필 · 올가미) */
-    var BAR = ["pen", "monoline", "marker", "eraser", "pencil", "ruler", "watercolor", "crayon", "fountain", "lasso"];
+    /* 도구 막대 순서 = iOS 27 PencilKit 기본 도구 막대 (펜 · 모노라인 · 마커 · 지우개 · 올가미 · 자 → 옆으로 밀면 연필 · 크레용 · 만년필 · 수채화)
+       2026-10-25: 테스트 앱에 PKToolPicker 를 띄워 toolItems 를 출력해 확인 — 줄무늬 원뿔은 연필이 아니라 올가미 */
+    var BAR = ["pen", "monoline", "marker", "eraser", "lasso", "ruler", "pencil", "crayon", "fountain", "watercolor"];
     function buildUI() {
         var st = el("style"); st.setAttribute("data-theme-skip", ""); st.textContent = CSS; document.head.appendChild(st);
 
@@ -2160,7 +2437,7 @@
         BAR.forEach(function (t) {
             var cfg = P[t], tip = cfg && cfg.c ? colorOf(cfg.c) : "#8e8e93";
             var key = t + "|" + tip + "|" + (cfg && cfg.o) + "|" + isDark();
-            if (B[t].getAttribute("data-k") !== key) { B[t].innerHTML = toolArt(t, tip, /^(marker|watercolor)$/.test(t) ? cfg.o : null); B[t].setAttribute("data-k", key); }
+            if (B[t].getAttribute("data-k") !== key) { B[t].innerHTML = toolArt(t, tip, /^(marker|pencil)$/.test(t) ? cfg.o : null); B[t].setAttribute("data-k", key); }
             B[t].classList.toggle("on", t === "ruler" ? !!P.ruler : P.tool === t);
         });
         var dc = P[P.lastDraw], showSel = P.tool !== "eraser" && P.tool !== "lasso";
