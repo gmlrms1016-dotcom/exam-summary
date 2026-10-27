@@ -21,7 +21,7 @@
 
     <header class="page-head">
         <h1>자바프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 7주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체 + 생성자 · this</p>
+        <p>1주차 ~ 9주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체 + 생성자 · this + this() · 오버로딩 · 접근 지정자 · static · 객체 배열</p>
     </header>
 
     <div id="week-nav" data-subject="자바프로그래밍"></div>
@@ -61,6 +61,10 @@
         <a href="#s28">28.클래스실습</a>
         <a href="#s29">29.✍️PDF필기·🔥식별자</a>
         <a href="#s30">30.🔥생성자·this·타입8</a>
+        <a href="#s31">31.this()·오버로딩</a>
+        <a href="#s32">32.✍️접근지정자</a>
+        <a href="#s33">33.✍️static</a>
+        <a href="#s34">34.객체배열</a>
         <a href="#quiz">✏️퀴즈</a>
         <a href="#output">🖥️출력맞히기</a>
         <a href="#code">💻코딩테스트</a>
@@ -1279,8 +1283,376 @@ public class Main {
         </div>
     </section>
 
+    <section class="card" id="s31">
+        <h2>31. this() · 메소드 오버로딩 (복습 + 4장 예제 4-5 · 42쪽)<span class="week">9주차</span></h2>
+        <p>생성자 3개가 <code>this(…)</code> 로 2개짜리 생성자를 불러 필드를 채워요 · 이름이 같은 메소드를 매개변수의 개수 · 타입을 다르게 여러 개 = <b>오버로딩</b>. 코드 주석과 출력은 javac · java 로 직접 실행한 값이에요.</p>
+        <pre><code class="language-java">// Book.java + BookMain.java 를 한 파일로 — 생성자 3개 · this() (4장 예제 4-5)
+class Book {                                    // 책 설계도 · public 은 파일 이름과 같은 클래스(연습)에만
+    String title;                               // 필드: 제목
+    String author;                              // 필드: 저자
+
+    Book() {                                    // ① 기본 생성자 — 매개변수 0개
+        this("", "");                           // 첫 문장 this(…) → ③ 을 먼저 불러 title · author ← 빈 문자열 ""
+        System.out.println("기본 생성자 호출됨");    // ③ 이 끝나고 돌아와서 출력 → 객체를 만들 때 찍힘
+    }                                           // ① 끝
+
+    Book(String title) {                        // ② 매개변수 1개 — 제목만 받음
+        this(title, "작자미상");                  // 저자는 "작자미상" 으로 채워서 ③ 을 부름
+    }                                           // ② 끝
+
+    Book(String title, String author) {         // ③ 매개변수 2개 — 실제로 필드에 넣는 생성자
+        this.title = title;                     // this.title(필드) ← 매개변수 title
+        this.author = author;                   // this.author(필드) ← 매개변수 author
+    }                                           // ③ 끝
+
+    void printInfo() {                          // 메소드 — 필드 두 개를 한 줄로 출력
+        System.out.println("제목: " + title + ", 저자: " + author);   // "제목: " + 제목 + ", 저자: " + 저자
+    }                                           // printInfo 끝
+}                                               // Book 끝
+
+public class 연습 {                              // 원래 이름 BookMain → 파일 이름 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Book littlePrince = new Book("어린왕자", "생텍쥐페리");   // 매개변수 2개 → ③ 바로 → 출력 없음
+        Book loveStory = new Book("춘향전");                   // 1개 → ② → this(…) → ③ → 저자 "작자미상"
+        Book empty = new Book();                              // 0개 → ① → this("", "") → ③ → 돌아와서 "기본 생성자 호출됨" 출력
+
+        littlePrince.printInfo();               // 제목: 어린왕자, 저자: 생텍쥐페리
+        loveStory.printInfo();                  // 제목: 춘향전, 저자: 작자미상
+        empty.printInfo();                      // 빈 문자열이라 "제목: , 저자: " 만 보임
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">기본 생성자 호출됨
+제목: 어린왕자, 저자: 생텍쥐페리
+제목: 춘향전, 저자: 작자미상
+제목: , 저자: </code></pre>
+        <table class="ref">
+            <tr><th>this() 규칙 (4장 28 · 29쪽)</th><th>뜻</th></tr>
+            <tr><td>this(…)</td><td>같은 클래스의 <b>다른 생성자</b>를 부름</td></tr>
+            <tr><td>어디서 · 언제</td><td><b>생성자 안에서만</b> · <b>반드시 첫 문장</b> (println 다음이면 <code>call to this must be first statement in constructor</code> — javac 로 확인)</td></tr>
+            <tr><td>출력 첫 줄</td><td><code>new Book()</code> 을 <b>만드는 순간</b> 찍혀서 printInfo 보다 먼저 <b>기본 생성자 호출됨</b></td></tr>
+        </table>
+        <pre><code class="language-java">// MethodSample.java + MethodMain.java 를 한 파일로 — 메소드 오버로딩 (4장 42 · 43쪽)
+class MethodSample {                            // getSum 이 3개 — 이름은 같고 매개변수가 다름
+    public int getSum(int i, int j) {           // ① int 2개
+        return i + j;                           // 두 수의 합을 int 로 돌려줌
+    }                                           // ① 끝
+    public int getSum(int i, int j, int k) {    // ② int 3개 — 개수가 달라서 오버로딩 OK
+        return i + j + k;                       // 세 수의 합
+    }                                           // ② 끝
+    public double getSum(double i, double j) {  // ③ double 2개 — 타입이 달라서 오버로딩 OK
+        return i + j;                           // 실수 합을 double 로
+    }                                           // ③ 끝
+}                                               // MethodSample 끝
+
+public class 연습 {                              // 원래 이름 MethodMain
+    public static void main(String[] args) {    // 프로그램 시작
+        MethodSample a = new MethodSample();    // 메소드를 부를 객체 a
+
+        int i = a.getSum(1, 2);                 // int 2개 → ① → 1 + 2 → 3
+        int j = a.getSum(1, 2, 3);              // int 3개 → ② → 1 + 2 + 3 → 6
+        double k = a.getSum(1.1, 2.2);          // double 2개 → ③ → 1.1 + 2.2 → 3.3000000000000003 (실수 오차)
+
+        System.out.println(i);                  // 3
+        System.out.println(j);                  // 6
+        System.out.println(k);                  // 3.3000000000000003
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">3
+6
+3.3000000000000003</code></pre>
+        <table class="ref">
+            <tr><th>오버로딩 (4장 42쪽)</th><th>뜻</th></tr>
+            <tr><td>성공 조건</td><td>이름이 같고 <b>매개변수의 개수나 타입이 다름</b></td></tr>
+            <tr><td>리턴 타입</td><td><b>상관없음</b> — <code>double getSum(int i, int j)</code> 를 더하면 매개변수가 같아서 ❌ <code>already defined</code></td></tr>
+            <tr><td>3.3000000000000003</td><td>🤖 double 의 실수 오차 (1.1 · 2.2 를 2진수로 딱 맞게 못 담음)</td></tr>
+        </table>
+        <h3>괄호넣기 — this( … )</h3>
+        <pre><code class="language-java">class Book {
+    String title;
+    String author;
+    Book(String title) {
+        ( ① )(title, "작자미상");
+    }
+    Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Book b = new Book("춘향전");
+        System.out.println(b.title + " " + b.author);
+    }
+}</code></pre>
+        <div class="quiz-item" data-answers="this|this()" data-explain="this(title, &quot;작자미상&quot;) → 2개짜리 생성자 → 춘향전 작자미상 · 생성자 안 첫 문장에서만">
+            <p class="quiz-q"><span class="quiz-cat">①</span><code>Book(String title)</code> 생성자에서 같은 클래스의 <b>다른 생성자</b> <code>Book(String title, String author)</code> 를 부르는 ( ① ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#thiscall" title="그림 — this()" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#thiscall" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — this() — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#overload" title="그림 — 오버로딩" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#overload" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 오버로딩 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s32">
+        <h2>32. ✍️ 접근 지정자 4가지 — 차이 (예제 4-10)<span class="week">9주차</span></h2>
+        <p><span class="wk-tag note">✍️ 필기</span> — “복습하다가 오늘 새로 배우는 것: <b>접근 지정자 차이</b> — public , protected , private , default(<b>아무것도 안 쓰면</b>)”</p>
+        <table class="ref">
+            <tr><th>접근 지정자</th><th>접근 허용 (4장 52쪽)</th></tr>
+            <tr><td>public</td><td>패키지에 관계없이 <b>모든 클래스</b></td></tr>
+            <tr><td>protected</td><td><b>같은 패키지</b> + 다른 패키지라도 <b>상속받은 자식(서브) 클래스</b></td></tr>
+            <tr><td>디폴트 (아무것도 안 씀)</td><td><b>같은 패키지</b> 안의 클래스</td></tr>
+            <tr><td>private</td><td><b>같은 클래스 안</b>에서만 (서브 클래스도 X)</td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>멤버에 접근하는 클래스</th><th>private</th><th>디폴트</th><th>protected</th><th>public</th></tr>
+            <tr><td>같은 패키지</td><td>✕</td><td>○</td><td>○</td><td>○</td></tr>
+            <tr><td>다른 패키지</td><td>✕</td><td>✕</td><td>✕ (자식 클래스면 ○)</td><td>○</td></tr>
+        </table>
+        <div class="tip">공개 범위: <b>private &lt; 디폴트 &lt; protected &lt; public</b> · 접근 지정의 목적 = 캡슐화로 보호한 멤버를 <b>일부 풀어</b> 다른 클래스가 쓰게 허용 (4장 50쪽)</div>
+        <pre><code class="language-java">// Sample.java + AccessEx.java 를 한 파일로 (4장 예제 4-10) — ❌ 컴파일 오류가 나는 원래 코드
+class Sample {                                  // 같은 패키지(같은 폴더)의 클래스
+    public int a;                               // public → 어디서나 접근 OK
+    private int b;                              // private → Sample 클래스 안에서만
+    int c;                                      // 디폴트(아무것도 안 씀) → 같은 패키지 OK
+}                                               // Sample 끝
+
+public class 연습 {                              // 원래 이름 AccessEx
+    public static void main(String[] args) {    // 프로그램 시작
+        Sample aClass = new Sample();           // Sample 객체
+        aClass.a = 10;                          // ✅ public
+        aClass.b = 10;                          // ❌ private 을 다른 클래스(연습)에서 → 컴파일 오류
+        aClass.c = 10;                          // ✅ 디폴트 · 같은 패키지
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">연습.java:12: error: b has private access in Sample
+        aClass.b = 10;
+              ^
+1 error</code></pre>
+        <div class="tip">예제 4-10 (55쪽) — 같은 패키지라서 <code>a</code>(public) · <code>c</code>(디폴트) 는 OK, <code>b</code> 는 <b>private</b> 이라 다른 클래스에서 접근 불가 → 컴파일 오류 · 🤖 private 필드는 그 클래스 안의 메소드로 바꾸고 읽어요 (<a href="weeks/자바프로그래밍-9주차.html">9주차 페이지</a>의 고친 코드)</div>
+        <h3>괄호넣기 — 접근 지정자</h3>
+        <pre><code class="language-java">class Sample {
+    public int a;
+    ( ① ) int b;
+    int c;
+}
+public class Main {
+    public static void main(String[] args) {
+        Sample s = new Sample();
+        s.a = 10;
+        s.c = 30;
+        System.out.println(s.a + " " + s.c);
+    }
+}</code></pre>
+        <div class="quiz-item" data-answers="private|프라이빗" data-explain="private = 같은 클래스 안에서만 · 다른 클래스에서 s.b = 10; 이면 b has private access 컴파일 오류">
+            <p class="quiz-q"><span class="quiz-cat">①</span><code>b</code> 를 <b>Sample 클래스 안에서만</b> 쓸 수 있게 하는 접근 지정자 ( ① ) 는? (그래서 Main 에서는 <code>s.b</code> 를 쓰지 않음)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="디폴트|default|디폴트 접근 지정|기본|package-private|패키지 전용|패키지 프라이빗" data-explain="✍️ default(아무것도 안 쓰면) = 같은 패키지 안의 클래스에게 허용">
+            <p class="quiz-q"><span class="quiz-cat">②</span>접근 지정자를 <b>아무것도 쓰지 않은</b> <code>int c;</code> 의 접근 지정을 무엇이라 하나요? (같은 패키지에서 접근 가능)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#access" title="그림 — 접근 지정자" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#access" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 접근 지정자 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s33">
+        <h2>33. ✍️ static — 클래스에 하나 · 모든 객체가 공유<span class="week">9주차</span></h2>
+        <p><span class="wk-tag note">✍️ 필기</span> — “키워드: <b>static</b>” · 4장 56쪽 그림: 눈은 사람마다 따로(non-static) · 공기는 모두가 함께(static)</p>
+        <table class="ref">
+            <tr><th></th><th>non-static 멤버</th><th>static 멤버</th></tr>
+            <tr><td>공간</td><td>객체마다 별도 · <b>인스턴스 멤버</b></td><td><b>클래스당 하나</b> · <b>클래스 멤버</b></td></tr>
+            <tr><td>시간</td><td>객체 생성 시 생김 · 객체와 같이 사라짐</td><td><b>클래스 로딩 시</b> 생김 · 객체 없이도 사용 · 프로그램이 끝날 때 사라짐</td></tr>
+            <tr><td>공유</td><td>공유 안 됨</td><td>같은 클래스의 <b>모든 객체가 공유</b></td></tr>
+        </table>
+        <pre><code class="language-java">// Counter.java + StaticEx1.java 를 한 파일로 — static 필드 = 모든 객체가 공유
+class Counter {                                 // 카운터 설계도
+    int instanceCount;                          // non-static(인스턴스) 필드 — 객체마다 따로 · 기본값 0
+    static int gongyuCount;                     // static(클래스) 필드 — 클래스에 하나 · 모든 객체가 공유 · 기본값 0
+    void add1() {                               // 둘 다 1씩 늘리는 메소드
+        instanceCount++;                        // 이 객체의 칸만 +1
+        gongyuCount++;                          // 공유 칸 +1 → 다른 객체가 늘린 값에 이어서
+    }                                           // add1 끝
+}                                               // Counter 끝
+
+public class 연습 {                              // 원래 이름 StaticEx1
+    public static void main(String[] args) {    // 프로그램 시작
+        Counter cnt1 = new Counter();           // 객체 1 — instanceCount 0
+        Counter cnt2 = new Counter();           // 객체 2 — instanceCount 0 (cnt1 과 따로)
+        cnt1.add1();                            // cnt1.instanceCount 0 → 1 · gongyuCount 0 → 1
+        cnt2.add1();                            // cnt2.instanceCount 0 → 1 · gongyuCount 1 → 2 (같은 칸)
+        System.out.println("공유 값 클래스 static = " + Counter.gongyuCount);   // 클래스 이름으로 → 2
+        System.out.println("객체 값1 = " + cnt1.instanceCount);              // cnt1 의 칸 → 1
+        System.out.println("객체 값2 = " + cnt2.instanceCount);              // cnt2 의 칸 → 1
+        System.out.println("공유 값 객체 static = " + cnt1.gongyuCount);     // 객체 이름으로 읽어도 같은 칸 → 2
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">공유 값 클래스 static = 2
+객체 값1 = 1
+객체 값2 = 1
+공유 값 객체 static = 2</code></pre>
+        <pre><code class="language-java">// Calc.java + CalcEx.java 를 한 파일로 — static 메소드 (4장 예제 4-11)
+class Calc {                                    // 계산 도구 모음 (객체 없이 쓰는 전역 함수처럼)
+    public static int abs(int a) {              // 절댓값 — static 이라 Calc.abs(…) 로 바로 호출
+        return a &gt; 0 ? a : -a;                  // 삼항: -5 &gt; 0 거짓 → -a → -(-5) → 5
+    }                                           // abs 끝
+    public static int max(int a, int b) {       // 큰 값
+        return a &gt; b ? a : b;                   // 10 &gt; 8 참 → a → 10
+    }                                           // max 끝
+    public static int min(int a, int b) {       // 작은 값
+        return a &gt; b ? b : a;                   // -3 &gt; -8 참 → b → -8
+    }                                           // min 끝
+}                                               // Calc 끝
+
+public class 연습 {                              // 원래 이름 CalcEx
+    public static void main(String[] args) {    // 프로그램 시작
+        System.out.println(Calc.abs(-5));       // new 없이 클래스 이름으로 → 5
+        System.out.println(Calc.max(10, 8));    // 10
+        System.out.println(Calc.min(-3, -8));   // -8
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">5
+10
+-8</code></pre>
+        <table class="ref">
+            <tr><th>static 메소드 (4장 63 · 65 · 66쪽)</th><th>뜻</th></tr>
+            <tr><td>부르는 법</td><td>객체 없이 <code>클래스이름.메소드()</code> — <code>Calc.abs(-5)</code> · <code>Math.abs(-5)</code> (Math 는 모두 public static)</td></tr>
+            <tr><td>제약 1</td><td>static 메소드는 <b>non-static 멤버를 못 씀</b> (<code>non-static variable n cannot be referenced from a static context</code> — javac 로 확인)</td></tr>
+            <tr><td>제약 2</td><td>static 메소드에서는 <b>this 를 못 씀</b> (객체 없이도 불릴 수 있어서)</td></tr>
+        </table>
+        <h3>괄호넣기 — static</h3>
+        <pre><code class="language-java">class Calc {
+    public static int abs(int a) {
+        return a &gt; 0 ? a : -a;
+    }
+}
+class Counter {
+    ( ① ) int gongyuCount;
+    void add1() {
+        gongyuCount++;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(( ② ).abs(-5));
+        new Counter().add1();
+        new Counter().add1();
+        System.out.println(Counter.gongyuCount);
+    }
+}</code></pre>
+        <div class="quiz-item" data-answers="static|스태틱" data-explain="static 필드 = 클래스당 하나 · 객체 두 개가 add1() 을 한 번씩 → 2">
+            <p class="quiz-q"><span class="quiz-cat">①</span><code>gongyuCount</code> 를 클래스에 <b>하나만</b> 만들어 모든 Counter 객체가 공유하게 하는 ( ① ) 키워드는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="Calc" data-explain="static 메소드 = 클래스이름.메소드() → Calc.abs(-5) → 5">
+            <p class="quiz-q"><span class="quiz-cat">②</span>객체를 만들지 않고 static 메소드 abs 를 부를 때 ( ② ) 에 쓰는 것은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#static" title="그림 — static" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#static" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — static — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s34">
+        <h2>34. 객체 배열 (예제 4-7) · for-each 복습<span class="week">9주차</span></h2>
+        <p><code>Book[] book = new Book[2];</code> 는 <b>레퍼런스 칸</b>만 만들어요 (값 null) → 칸마다 <code>new Book(…)</code> 로 객체를 만들어 연결해야 해요.</p>
+        <pre><code class="language-java">// Book.java + BookArray.java 를 한 파일로 — 객체 배열 (4장 예제 4-7)
+import java.util.Scanner;                       // 키보드 입력 도구
+
+class Book {                                    // 책 설계도 (이 예제에 필요한 생성자만)
+    String title;                               // 필드: 제목
+    String author;                              // 필드: 저자
+    Book(String title, String author) {         // 매개변수 2개 생성자
+        this.title = title;                     // 필드 ← 입력한 제목
+        this.author = author;                   // 필드 ← 입력한 저자
+    }                                           // 생성자 끝
+}                                               // Book 끝
+
+public class 연습 {                              // 원래 이름 BookArray
+    public static void main(String[] args) {    // 프로그램 시작
+        Book[] book = new Book[2];              // ① 레퍼런스 칸 2개만 생김 (값 null · 객체는 아직 없음)
+        Scanner sc = new Scanner(System.in);    // 입력 준비
+
+        for (int i = 0; i &lt; book.length; i++) { // i = 0, 1 → 두 번
+            System.out.print("제목&gt;&gt;");          // 안내 (print 라 줄 안 바꿈)
+            String title = sc.nextLine();       // 한 줄 통째로 → "사랑의 기술" (띄어쓰기 포함)
+            System.out.print("저자&gt;&gt;");          // 안내
+            String author = sc.nextLine();      // "에리히 프롬"
+            book[i] = new Book(title, author);  // ② 칸마다 Book 객체를 만들어 연결
+        }                                       // for 끝
+
+        for (int i = 0; i &lt; book.length; i++) { // 두 권 출력
+            System.out.print("(" + book[i].title + ", " + book[i].author + ")");   // ③ (제목, 저자) — print 라 한 줄에 이어서
+        }                                       // for 끝
+        sc.close();                             // 입력 닫기 (교재 예제처럼)
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <p><b>실행 화면</b> — 사랑의 기술 / 에리히 프롬 / 시간의 역사 / 스티븐 호킹 입력 (교재 예)</p>
+        <pre class="io"><code class="language-text">제목&gt;&gt;사랑의 기술
+저자&gt;&gt;에리히 프롬
+제목&gt;&gt;시간의 역사
+저자&gt;&gt;스티븐 호킹
+(사랑의 기술, 에리히 프롬)(시간의 역사, 스티븐 호킹)</code></pre>
+        <div class="tip">⚠️ <code>book[i] = new Book(…)</code> 를 빼먹고 <code>book[0].title</code> 을 쓰면 칸이 null 이라 <b>NullPointerException</b> (직접 실행해 확인) · 마지막 출력은 print 라 두 책이 한 줄에 이어져요</div>
+        <pre><code class="language-java">// ForeachEx1.java + ForeachEx2.java 를 한 파일로 — for-each (향상된 for 문)
+public class 연습 {                              // 원래 이름 ForeachEx1 · ForeachEx2
+    public static void main(String[] args) {    // 프로그램 시작
+        String[] fruits = {"사과", "바나나", "체리"};   // 문자열 배열 3칸
+        for (String fruit : fruits) {           // 배열 칸을 처음부터 하나씩 fruit 에 꺼냄 (인덱스 없음)
+            System.out.println(fruit);          // 사과 → 바나나 → 체리
+        }                                       // for-each 끝
+
+        int pointsArr[] = {65, 82, 95, 78, 40, 88};       // 점수 6개
+        System.out.println("합격자 목록 80점 이상");          // 제목 줄
+        for (int point : pointsArr) {           // 65, 82, 95, 78, 40, 88 이 차례로 point 에
+            if (point &gt;= 80) {                  // 80 이상만 → 82 · 95 · 88
+                System.out.println(point + "점");   // 82 + "점" → 82점 (숫자 + 문자열 → 문자열)
+            }                                   // if 끝
+        }                                       // for-each 끝
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">사과
+바나나
+체리
+합격자 목록 80점 이상
+82점
+95점
+88점</code></pre>
+        <h3>괄호넣기 — 객체 배열</h3>
+        <pre><code class="language-java">class Book {
+    String title;
+    String author;
+    Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Book[] book = ( ① ) Book[2];
+        book[0] = new Book("사랑의 기술", "에리히 프롬");
+        book[1] = new Book("시간의 역사", "스티븐 호킹");
+        for (int i = 0; i &lt; book.length; i++) {
+            System.out.print("(" + book[i].title + ", " + book[i].author + ")");
+        }
+    }
+}</code></pre>
+        <div class="quiz-item" data-answers="new" data-explain="new Book[2] → 레퍼런스 칸 2개 (값 null) · 객체는 book[i] = new Book(…) 으로 따로">
+            <p class="quiz-q"><span class="quiz-cat">①</span>Book <b>레퍼런스 칸 2개짜리 배열</b>을 만드는 ( ① ) 키워드는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#objarr" title="그림 — 객체 배열" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#objarr" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 객체 배열 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 27 · 주관식 27<span class="week">2~7주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 32 · 주관식 32<span class="week">2~9주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -1500,6 +1872,46 @@ public class Main {
             <button class="opt" type="button" data-opt="D"><b>D.</b> <code>0</code> 과 <code>0</code></button>
             <div class="mcq-exp"><b>정답 C</b> — 값을 안 넣은 필드는 기본값 — 레퍼런스(String) → <b>null</b> · int → <b>0</b> · double → 0.0 · boolean → false</div>
         </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">28</span>✍️ 9주차 접근 지정자 — <b>같은 패키지의 다른 클래스</b>에서 접근할 수 <b>없는</b> 멤버는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>public int a;</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>private int b;</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>int c;</code> (아무것도 안 씀)</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>protected int d;</code></button>
+            <div class="mcq-exp"><b>정답 B</b> — private = <b>같은 클래스 안</b>에서만 · 예제 4-10 <code>aClass.b = 10;</code> → b has private access 컴파일 오류 / 디폴트 · protected · public 은 같은 패키지에서 OK</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">29</span>✍️ 9주차 — 접근 지정자를 <b>아무것도 쓰지 않은</b>(default) 멤버의 접근 범위는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 패키지에 관계없이 모든 클래스</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 같은 클래스 안에서만</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 같은 패키지 안의 클래스</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 같은 패키지 + 다른 패키지의 자식 클래스</button>
+            <div class="mcq-exp"><b>정답 C</b> — ✍️ default(아무것도 안 쓰면) = <b>같은 패키지</b> · A = public · B = private · D = protected (4장 52쪽)</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">30</span>✍️ 9주차 static — static 멤버에 대한 설명으로 <b>틀린</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 클래스당 하나만 생긴다 (클래스 멤버)</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 클래스가 로딩될 때 생겨서 객체를 만들기 전에도 쓸 수 있다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 같은 클래스의 모든 객체가 공유한다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 객체마다 따로 생기고 객체가 사라지면 같이 사라진다</button>
+            <div class="mcq-exp"><b>정답 D</b> — D 는 <b>non-static(인스턴스) 멤버</b>의 특성 · static 은 클래스당 하나 · 클래스 로딩 때 생기고 프로그램이 끝날 때 사라짐 (4장 58쪽)</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">31</span>9주차 오버로딩 — 같은 클래스에 <code>int getSum(int i, int j)</code> 가 이미 있을 때 <b>오버로딩이 실패</b>(컴파일 오류)하는 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>int getSum(int i, int j, int k)</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>double getSum(double i, double j)</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>double getSum(int i, int j)</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>int getSum(int i)</code></button>
+            <div class="mcq-exp"><b>정답 C</b> — 오버로딩 = 이름이 같고 <b>매개변수의 개수나 타입이 다름</b> · C 는 매개변수가 같고 <b>리턴 타입만</b> 달라서 <code>method getSum(int,int) is already defined</code> (javac 로 확인)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">32</span>9주차 Book — <code>this(title, "작자미상");</code> 처럼 쓰는 <code>this()</code> 에 대한 설명으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 메소드 어디에서나 쓸 수 있다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 같은 클래스의 다른 생성자를 부르며, 생성자의 첫 문장이어야 한다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 생성자의 마지막 문장에만 쓸 수 있다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 객체의 필드를 가리키는 것으로 <code>this.title</code> 과 같다</button>
+            <div class="mcq-exp"><b>정답 B</b> — this() = <b>다른 생성자 호출</b> · 생성자 안에서만 · 반드시 첫 문장 (println 다음이면 call to this must be first statement in constructor) · <code>this.title</code> 은 필드</div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers=".class|class" data-explain=".java → javac 컴파일 → .class (JVM 이 실행)">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>자바 소스를 컴파일하면 만들어지는 <b>바이트코드 파일</b>의 확장자는?</p>
@@ -1663,10 +2075,40 @@ public class Main {
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
+        <div class="quiz-item" data-answers="private|프라이빗" data-explain="private = 외부로부터 완벽 차단 · 상속받은 서브 클래스도 접근 X">
+            <p class="quiz-q"><span class="quiz-cat">주관식 28</span>✍️ 9주차 — 접근 지정자 4가지 중 <b>같은 클래스 안에서만</b> 접근을 허용하는 것은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="static|스태틱|정적" data-explain="static 멤버 = 클래스 멤버 · Counter 의 gongyuCount 처럼 객체 두 개가 하나의 칸을 같이 씀">
+            <p class="quiz-q"><span class="quiz-cat">주관식 29</span>✍️ 9주차 — 클래스당 <b>하나만</b> 생기고 그 클래스의 <b>모든 객체가 공유</b>하는 멤버를 만드는 키워드는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="오버로딩|메소드 오버로딩|메서드 오버로딩|overloading|method overloading|오버로드|메소드 중복 정의|중복 정의|중복정의" data-explain="getSum(int, int) · getSum(int, int, int) · getSum(double, double) — 리턴 타입은 상관없음">
+            <p class="quiz-q"><span class="quiz-cat">주관식 30</span>9주차 — 이름이 같은 메소드를 <b>매개변수의 개수나 타입을 다르게</b> 해서 여러 개 만드는 것은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="Calc" data-explain="static 메소드 = 클래스이름.메소드() → Calc.abs(-5) → 5">
+            <p class="quiz-q"><span class="quiz-cat">주관식 31</span>9주차 Calc — 객체를 만들지 않고 static 메소드를 부르는 코드 <code>System.out.println(___.abs(-5));</code> 의 빈칸 (클래스 이름) 은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="null|널" data-explain="new Book[2] 는 레퍼런스 칸만 만들고 객체는 없음 → null · 그대로 book[0].title 이면 NullPointerException">
+            <p class="quiz-q"><span class="quiz-cat">주관식 32</span>9주차 객체 배열 — <code>Book[] book = new Book[2];</code> 만 실행했을 때 <code>book[0]</code> 의 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
     </section>
 
     <section class="card" id="output">
-        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~7주차</span></h2>
+        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~9주차</span></h2>
         <div class="tip">📝 시험의 <b>“실행결과를 쓰시오”</b> 대비 — 코드를 눈으로 따라가며 화면에 찍힐 결과를 적고 <b>확인</b>을 누르세요. 줄마다 <b>Enter</b>, 띄어쓰기 개수·빈 줄은 채점에서 무시하고 <b>글자·숫자·기호</b>는 정확히 봐요 (칸수 문제만 띄어쓰기까지). <code>print</code> 는 줄을 안 바꾸고 <code>println</code> 은 바꿔요. 정답은 모두 <b>실제로 실행한 결과</b>예요.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="oq-score"></div>
@@ -2135,10 +2577,96 @@ true
 </script>
             <div class="oq-why">💡 <b>풀이</b> — 85 &gt;= 80 → <b>true</b> · (85 == 100) false || ('A' == 'A') true → <b>true</b> · double 에 10 → <b>10.0</b> · 정수 85 / 2 → 몫 <b>42</b></div>
         </div>
+        <h3 class="oq-group">✍️ 9주차 — this() · 오버로딩 · static</h3>
+        <div class="oq" id="oq-oj22">
+            <p class="oq-q"><span class="oq-no">22</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">9주차</span></p>
+            <pre><code class="language-java">class Counter {
+    int a;
+    static int b;
+    void add() {
+        a++;
+        b++;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Counter c1 = new Counter();
+        Counter c2 = new Counter();
+        c1.add();
+        c1.add();
+        c2.add();
+        System.out.println(c1.a + " " + c2.a);
+        System.out.print(Counter.b);
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+2 1
+3
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — b 는 <b>static</b> 이라 c1 · c2 가 <b>같은 칸</b> → add() 3번 → <b>3</b> · a 는 객체마다 따로 → c1.a = <b>2</b> · c2.a = <b>1</b></div>
+        </div>
+        <div class="oq" id="oq-oj23">
+            <p class="oq-q"><span class="oq-no">23</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">9주차</span></p>
+            <pre><code class="language-java">class Calc2 {
+    int add(int i, int j) {
+        return i + j;
+    }
+    double add(double i, double j) {
+        return i + j;
+    }
+    String add(String i, String j) {
+        return i + j;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Calc2 c = new Calc2();
+        System.out.println(c.add(1, 2));
+        System.out.println(c.add(1.5, 2.5));
+        System.out.print(c.add("1", "2"));
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+3
+4.0
+12
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 넣은 값의 타입으로 메소드가 골라짐 (오버로딩) → int 1 + 2 = <b>3</b> · double 1.5 + 2.5 = <b>4.0</b> (double 은 .0) · String "1" + "2" = <b>12</b> (문자열 이어 붙이기)</div>
+        </div>
+        <div class="oq" id="oq-oj24">
+            <p class="oq-q"><span class="oq-no">24</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">9주차</span></p>
+            <pre><code class="language-java">class Box {
+    int w, h;
+    Box() {
+        this(1);
+        System.out.println("A");
+    }
+    Box(int w) {
+        this(w, 2);
+        System.out.println("B");
+    }
+    Box(int w, int h) {
+        this.w = w;
+        this.h = h;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Box b = new Box();
+        System.out.print(b.w * b.h);
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+B
+A
+2
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>new Box()</code> → this(1) → Box(int) → this(1, 2) → w = 1 · h = 2 → 돌아와서 <b>B</b> → 다시 돌아와서 <b>A</b> → w × h = <b>2</b> (안쪽 생성자의 println 이 먼저)</div>
+        </div>
     </section>
 
     <section class="card" id="code">
-        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~7주차</span></h2>
+        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~9주차</span></h2>
         <div class="tip">📝 문제를 읽고 <b>전체 소스코드</b>를 붙여넣은 뒤 <b>▶ 채점하기</b>를 누르세요. 입력 예 말고도 <b>숨은 테스트</b> 여러 개로 실제로 실행해서 출력이 모두 같아야 통과예요. Java 는 인터넷의 채점 서버(Wandbox · OpenJDK)에서 실행돼요. <code>package</code> 줄이나 클래스 이름은 그대로 붙여넣어도 괜찮아요. 입력은 <code>Scanner</code> 로 받습니다.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드를 채점 문제로 만든 것 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="ct-score"></div>
@@ -2512,6 +3040,81 @@ public class Main {
 }
 </script>
         </div>
+        <div class="ct" id="ct-j14" data-lang="java" data-must="[&quot;static\\s+int&quot;, &quot;new\\s+\\w+\\s*\\[\\s*\\w+\\s*\\]&quot;]" data-must-msg="static int 필드와 객체 배열(new 클래스[n])을 써야 해요.">
+            <p class="ct-q"><span class="ct-no">14</span>static 공유 카운터 — 객체 배열로 n개<span class="ct-tag">9주차 · static · 객체 배열</span></p>
+            <p class="ct-desc">정수 n 을 입력받아 카운터 객체 <b>n 개를 객체 배열</b>로 만들고, 각 객체의 <code>add1()</code> 을 <b>한 번씩</b> 부르세요. 카운터 클래스에는 객체마다 따로인 <code>int</code> 필드와 <b>모든 객체가 공유하는 static int 필드</b>가 있고 <code>add1()</code> 은 둘 다 1 늘려요. 마지막에 <b>첫 번째 객체의 따로 필드 값</b>과 <b>static 필드 값</b>을 띄어쓰기 한 칸으로 출력하세요. (클래스 · 변수 이름은 자유 · public 클래스 이름은 Main)</p>
+            <div class="ct-ex"><pre class="io ct-in"><code>3</code></pre><pre class="io ct-out"><code>1 3</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="static 공유 카운터 — 객체 배열로 n개 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "3\n", "expect": "1 3\n"}, {"stdin": "1\n", "expect": "1 1\n"}, {"stdin": "5\n", "expect": "1 5\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+import java.util.Scanner;
+
+class Counter {                         // 카운터 설계도
+    int instanceCount;                  // 객체마다 따로
+    static int gongyuCount;             // 클래스에 하나 · 모두 공유
+    void add1() {                       // 둘 다 +1
+        instanceCount++;
+        gongyuCount++;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();                   // 만들 객체 수
+        Counter[] cnt = new Counter[n];         // 레퍼런스 칸 n개 (아직 null)
+        for (int i = 0; i < n; i++) {
+            cnt[i] = new Counter();             // 칸마다 객체 생성
+            cnt[i].add1();                      // 각자 한 번씩
+        }
+        System.out.println(cnt[0].instanceCount + " " + Counter.gongyuCount);   // 1 n
+        sc.close();
+    }
+}
+</script>
+        </div>
+        <div class="ct" id="ct-j15" data-lang="java" data-must="[&quot;this\\s*\\(\\s*\\w+\\s*,&quot;]" data-must-msg="생성자 안에서 this(…, …) 로 다른 생성자를 불러야 해요.">
+            <p class="ct-q"><span class="ct-no">15</span>this() 로 저자 채우기 — 작자미상<span class="ct-tag">9주차 · this()</span></p>
+            <p class="ct-desc">책 제목을 <b>한 줄</b>(띄어쓰기 포함)로 입력받아, 매개변수 1개 생성자 <code>(String title)</code> 로 책 객체를 만드세요. 그 생성자는 <code>this(title, "작자미상")</code> 처럼 <b>this()</b> 로 매개변수 2개 생성자를 불러 필드를 채워야 해요. <code>제목: 제목, 저자: 저자</code> 형식으로 출력하세요. (클래스 이름은 자유 · public 클래스 이름은 Main)</p>
+            <div class="ct-ex"><pre class="io ct-in"><code>어린왕자</code></pre><pre class="io ct-out"><code>제목: 어린왕자, 저자: 작자미상</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="this() 로 저자 채우기 — 작자미상 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "어린왕자\n", "expect": "제목: 어린왕자, 저자: 작자미상\n"}, {"stdin": "사랑의 기술\n", "expect": "제목: 사랑의 기술, 저자: 작자미상\n"}, {"stdin": "자바 프로그래밍\n", "expect": "제목: 자바 프로그래밍, 저자: 작자미상\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+import java.util.Scanner;
+
+class Book {                                    // 책 설계도
+    String title;                               // 필드: 제목
+    String author;                              // 필드: 저자
+
+    Book(String title) {                        // 매개변수 1개
+        this(title, "작자미상");                  // 첫 문장 this(…) → 2개짜리 생성자
+    }
+
+    Book(String title, String author) {         // 매개변수 2개 — 필드에 넣는 곳
+        this.title = title;
+        this.author = author;
+    }
+
+    void printInfo() {
+        System.out.println("제목: " + title + ", 저자: " + author);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String title = sc.nextLine();           // 한 줄 통째로 (띄어쓰기 포함)
+        Book b = new Book(title);               // 저자 없이 → 작자미상
+        b.printInfo();
+        sc.close();
+    }
+}
+</script>
+        </div>
     </section>
 
 
@@ -2525,5 +3128,6 @@ public class Main {
 <script src="codetest.js?v=202610262015"></script>
 <script src="outquiz.js?v=202610262015"></script>
 <script src="ink.js?v=202610262015"></script>
+<script>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 </body>
 </html>

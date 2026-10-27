@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610262015"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹프로그래밍 9주차 · &lt;10월 27일&gt; 🔥 이벤트 4요소 · 요소 순회(for · for…of · Object.keys) · 요청과 응답(JSON)</title>
+    <meta name="description" content="웹프로그래밍 9주차 정리 — &lt;10월 27일&gt; 🔥 이벤트 4요소 · 요소 순회(for · for…of · Object.keys) · 요청과 응답(JSON)">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="웹프로그래밍 9주차 · &lt;10월 27일&gt; 🔥 이벤트 4요소 · 요소 순회(for · for…of · Object.keys) · 요청과 응답(JSON)">
+    <meta property="og:description" content="웹프로그래밍 9주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202610262015">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../웹프로그래밍.html">← 웹프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🕸️ 웹프로그래밍 · 9주차</h1>
+        <p>&lt;10월 27일&gt; 🔥 이벤트 4요소 · 요소 순회(for · for…of · Object.keys) · 요청과 응답(JSON)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="웹프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9주차 반영)</small></a></nav>
+
+<div class="tip">자료: 수업 필기(노션) · <b>1027_01_event.html</b> · <b>1027_02_요소순회.js</b> (강의자료 · 원본 txt 없음) · 코드 주석과 ▶ 출력 결과는 크롬 · node 로 직접 실행한 값이에요. 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
+<div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> — “(<b>이벤트, 이벤트소스, 이벤트헨들러, 이벤트객체</b>) <b>기말고사에 나옴</b>” → <a href="웹프로그래밍-15주차-기말고사.html">기말고사 정리</a> 맨 위 카드에 넣었어요 · 🔒 실제시험에 🔥 문제로도 넣었어요.</div>
+<section class="card" id="s1">
+<h2>🎨 9주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-그림정리.html?week=9" title="9주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-그림정리.html?week=9" target="_blank" rel="noopener">🎬 9주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
+<h2>1. 🔥 이벤트 4요소 — 기말고사에 나옴 (1027_01_event.html)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “(이벤트,이벤트소스,이벤트헨들러,이벤트객체) <b>기말고사에 나옴</b>”</p>
+<table class="ref">
+<tbody>
+<tr><th>4요소</th><th>뜻 (2주차 정리)</th><th>오늘 코드에서</th></tr>
+<tr><td><b>이벤트</b></td><td>웹에서 발생하는 <b>사건</b> (클릭 등)</td><td><code>'click'</code> — addEventListener 의 첫 번째 인자</td></tr>
+<tr><td><b>이벤트 소스</b></td><td>이벤트가 발생한 <b>근원지</b> (요소)</td><td><code>addBtn</code> — 목록 추가 버튼</td></tr>
+<tr><td><b>이벤트 핸들러</b> (= 리스너)</td><td>이벤트가 일어나면 <b>실행되는 코드(함수)</b></td><td><code>function(){ … }</code> — 두 번째 인자</td></tr>
+<tr><td><b>이벤트 객체</b></td><td>발생한 이벤트의 <b>정보</b>를 담은 객체</td><td>🤖 핸들러의 매개변수 <code>e</code> 로 받음 (오늘 코드는 받지 않음 · 아래 확인 코드)</td></tr>
+</tbody></table>
+<ul><li>⚠️ 필기 오타 <code>이벤트헨들러</code> → <b>이벤트 핸들러</b> (handler)</li><li>⚠️ <b>팩트체크</b> — 수업 코드 주석은 같은 함수를 <b>‘이벤트리스너’</b> 라고 했어요. MDN 정의: <b>리스너</b> = 이벤트가 일어나는지 기다리는 쪽(<code>addEventListener</code> 로 등록) · <b>핸들러</b> = 이벤트가 일어나면 <b>불리는 함수</b> → 둘이 함께 일하고, 수업에서는 같은 뜻으로 써요 (2주차 “이벤트 핸들러(=이벤트 리스너)”).</li></ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;                                                  &lt;!-- HTML5 문서라고 알림 --&gt;
+&lt;html lang="ko"&gt;                                                 &lt;!-- 문서 시작 · 한국어 --&gt;
+&lt;head&gt;                                                           &lt;!-- 문서 정보 시작 --&gt;
+    &lt;meta charset="UTF-8"&gt;                                       &lt;!-- 한글이 깨지지 않게 UTF-8 --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;   &lt;!-- 폰 화면 폭에 맞춤 --&gt;
+    &lt;title&gt;Document&lt;/title&gt;                                      &lt;!-- 탭 제목 --&gt;
+    &lt;style&gt;                                                      /* CSS 시작 */
+        #add-btn{                                                /* id 가 add-btn 인 버튼 */
+            padding: 5px 10px;                                   /* 안쪽 여백 위아래 5px · 좌우 10px */
+            border: 0;                                           /* 테두리 없앰 */
+            background: #f80;                                    /* 주황 배경 */
+            color: white;                                        /* 흰 글자 */
+            border-radius: 5px;                                  /* 모서리 둥글게 */
+        }                                                        /* #add-btn 끝 */
+        ul {                                                     /* 목록 */
+            padding: 0;                                          /* 왼쪽 들여쓰기 없앰 */
+            list-style-position: inside;                         /* 글머리 기호(•)를 안쪽에 */
+        }                                                        /* ul 끝 */
+        li {                                                     /* 목록 한 줄 */
+            border-bottom: 1px solid #999;                       /* 아래 회색 선 */
+            padding: 5px 0;                                      /* 위아래 여백 5px */
+        }                                                        /* li 끝 */
+        .active {                                                /* active 클래스 (오늘 코드에서는 아직 안 씀) */
+            background: #abc;                                    /* 연한 파랑 배경 */
+        }                                                        /* .active 끝 */
+    &lt;/style&gt;                                                     &lt;!-- CSS 끝 --&gt;
+&lt;/head&gt;                                                          &lt;!-- 문서 정보 끝 --&gt;
+&lt;body&gt;                                                           &lt;!-- 화면에 보이는 부분 --&gt;
+    &lt;h1 id="title"&gt;할일 목록&lt;/h1&gt;                                 &lt;!-- 제목 --&gt;
+    &lt;button id="add-btn"&gt;목록 추가&lt;/button&gt;                       &lt;!-- 🔥 이벤트 소스가 될 버튼 --&gt;
+    &lt;ul id="list"&gt;                                               &lt;!-- 할 일 목록 (새 li 가 끝에 붙는 곳) --&gt;
+        &lt;li&gt;제목 1&lt;/li&gt;                                           &lt;!-- 처음부터 있는 항목 1 --&gt;
+        &lt;li&gt;제목 2&lt;/li&gt;                                           &lt;!-- 항목 2 --&gt;
+        &lt;li&gt;제목 3&lt;/li&gt;                                           &lt;!-- 항목 3 --&gt;
+        &lt;li&gt;제목 4&lt;/li&gt;                                           &lt;!-- 항목 4 --&gt;
+    &lt;/ul&gt;                                                        &lt;!-- 목록 끝 --&gt;
+    &lt;script&gt;                                                     // 자바스크립트 시작 (위의 요소들이 이미 있어서 찾을 수 있음)
+        let title = document.getElementById('title');           // id 로 h1 찾기 (오늘 코드에서는 안 씀)
+        let list = document.getElementById('list');             // ul 요소 → 새 li 를 붙일 곳
+        let li = document.getElementsByTagName('li');           // li 요소들 → 지금 4개 · 추가하면 5개로 저절로 늘어남
+        let addBtn = document.getElementById('add-btn');        // 버튼 요소 → 🔥 이벤트 소스
+
+        addBtn.addEventListener('click',function(){ //이벤트,이벤트리스너,이벤트소스 ← 'click' = 이벤트 · function = 핸들러(리스너) · addBtn = 소스
+            let txt=prompt("할 일 입력");                         // 입력 창 → 입력한 글자가 txt 에 ("제목 5")
+            list.innerHTML+='&lt;li&gt;'+txt+'&lt;/li&gt;';                  // 원래 목록 HTML + "&lt;li&gt;제목 5&lt;/li&gt;" → 목록 끝에 추가
+        });                                                      // 핸들러 함수 끝 · addEventListener 끝
+    &lt;/script&gt;                                                    &lt;!-- 스크립트 끝 --&gt;
+&lt;/body&gt;                                                          &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                          &lt;!-- 문서 끝 --&gt;</code></pre>
+<div class="tip">▶ 크롬에서 직접 눌러 본 결과 — <b>목록 추가</b> 를 누르면 <code>할 일 입력</code> 창이 뜨고, <code>제목 5</code> 를 입력하면 목록 <b>맨 끝에 제목 5</b> 가 붙어요 (li 4개 → 5개) · <code>getElementsByTagName</code> 으로 받은 <code>li</code> 는 새로 붙은 li 까지 저절로 세어서 5 가 돼요.</div>
+<h3>🤖 이벤트 객체 e 확인 — 핸들러에 매개변수를 하나 받으면 브라우저가 넣어 줘요</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;                                         &lt;!-- HTML5 문서 --&gt;
+&lt;html lang="ko"&gt;                                        &lt;!-- 문서 시작 --&gt;
+&lt;body&gt;                                                  &lt;!-- 화면 --&gt;
+    &lt;button id="btn"&gt;눌러 보기&lt;/button&gt;                   &lt;!-- 이벤트 소스가 될 버튼 --&gt;
+    &lt;script&gt;                                            // 자바스크립트 시작
+        let btn = document.getElementById('btn');       // 버튼 요소를 찾아 btn 에
+        btn.addEventListener('click', function (e) {    // 'click' = 이벤트 · function = 핸들러 · e = 이벤트 객체 (브라우저가 넣어 줌)
+            console.log(e.type);                        // 무슨 이벤트? → click
+            console.log(e.target.id);                   // 이벤트가 일어난 요소(소스)의 id → btn
+        });                                             // 핸들러 끝 · addEventListener 끝
+    &lt;/script&gt;                                           &lt;!-- 스크립트 끝 --&gt;
+&lt;/body&gt;                                                 &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                 &lt;!-- 문서 끝 --&gt;</code></pre>
+<pre class="io"><code class="language-text">click
+btn</code></pre>
+<div class="tip">MDN — 이벤트 객체는 핸들러에 <b>자동으로 전달</b>되고 이름은 <code>e</code> · <code>evt</code> · <code>event</code> 처럼 마음대로 · <code>e.target</code> = 이벤트가 <b>일어난 요소</b> (= 이벤트 소스) · 버튼을 누른 뒤 크롬 콘솔에 찍힌 값이에요.</div>
+</section>
+<section class="card" id="s3">
+<h2>2. 요소 순회 — for · for…of · Object.keys · Object.values (1027_02_요소순회.js)</h2>
+<pre><code class="language-javascript">let arr = [1, 2, 3];                          // 배열 — 값 1 · 2 · 3 (인덱스 0 · 1 · 2)
+
+console.log("\n방법1");                        // 맨 앞 \n → 빈 줄을 먼저 찍고 → 방법1
+for (let i = 0; i &lt; arr.length; i++) {        // 방법1 for — i = 0, 1, 2 (arr.length 3 이 되면 끝)
+    let item = arr[i];                        // 인덱스로 꺼냄 → arr[0] = 1 · arr[1] = 2 · arr[2] = 3
+    console.log(item);                        // 1 → 2 → 3
+};                                            // for 끝 (뒤의 ; 는 빈 문장이라 있어도 없어도 같음)
+
+console.log("\n방법2");                        // 빈 줄 → 방법2
+for (let item of arr) {                       // 방법2 for…of — 인덱스 없이 값이 차례로 item 에
+    console.log(item);                        // 1 → 2 → 3
+}                                             // for…of 끝
+
+let person = {                                // 객체 — 키: 값 3쌍
+    name: "윤희근",                            // 키 name → 값 "윤희근"
+    age: 27,                                  // 키 age → 값 27
+    hobby: "테니스",                           // 키 hobby → 값 "테니스" (마지막 쉼표는 있어도 됨)
+};                                            // 객체 끝
+
+let keys = Object.keys(person);               // 키만 모은 배열 → ["name", "age", "hobby"]
+let values = Object.values(person);           // 값만 모은 배열 → ["윤희근", 27, "테니스"]
+
+for (let key of keys) {                       // key = "name" → "age" → "hobby"
+    const value = person[key];                // 대괄호 + 키 변수 → person["name"] → "윤희근"
+    console.log(key, value);                  // 쉼표로 두 값 → 한 칸 띄어 출력 → name 윤희근
+}                                             // for…of 끝
+
+for (let key of keys) {                       // 키만 다시 돌기
+    console.log(key);                         // name → age → hobby
+}                                             // for…of 끝
+
+for (let value of values) {                   // 값만 돌기
+    console.log(value);                       // 윤희근 → 27 → 테니스
+}                                             // for…of 끝</code></pre>
+<pre class="io"><code class="language-text">
+방법1
+1
+2
+3
+
+방법2
+1
+2
+3
+name 윤희근
+age 27
+hobby 테니스
+name
+age
+hobby
+윤희근
+27
+테니스</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>방법</th><th>코드</th><th>꺼내는 것</th></tr>
+<tr><td>방법1 for</td><td><code>for (let i = 0; i &lt; arr.length; i++)</code></td><td><b>인덱스</b> i → <code>arr[i]</code> 로 값</td></tr>
+<tr><td>방법2 for…of</td><td><code>for (let item of arr)</code></td><td>인덱스 없이 <b>값</b>을 바로</td></tr>
+<tr><td>Object.keys</td><td><code>Object.keys(person)</code></td><td>객체의 <b>키</b>만 모은 배열 <code>["name", "age", "hobby"]</code></td></tr>
+<tr><td>Object.values</td><td><code>Object.values(person)</code></td><td>객체의 <b>값</b>만 모은 배열 <code>["윤희근", 27, "테니스"]</code></td></tr>
+<tr><td>객체[변수]</td><td><code>person[key]</code></td><td>변수 key 에 든 이름으로 값 꺼내기 → <code>"윤희근"</code></td></tr>
+</tbody></table>
+<div class="tip">⚠️ <code>person.key</code> 라고 쓰면 변수 key 의 값이 아니라 <b>‘key’ 라는 이름의 속성</b>을 찾아서 <code>undefined</code> 예요 (node 로 확인) → 변수로 꺼낼 때는 꼭 <b>대괄호</b> <code>person[key]</code> · 출력 맨 위의 빈 줄은 <code>"\n방법1"</code> 의 <code>\n</code> 때문이에요.</div>
+</section>
+<section class="card" id="s4">
+<h2>3. ✍️ 요청 · 파라미터 · 응답 · JSON</h2>
+<ul><li><span class="wk-tag note">✍️ 필기</span> — “클라이언트가 서버에 전송(리퀘스트) 하는 것을 <b>파라미터</b>라고 함”<ul><li>⚠️ <b>팩트체크</b> — 서버에 보내는 것 자체는 <b>요청(request)</b> 이고, 요청에 <b>담아 보내는 값</b>이 <b>파라미터</b>예요 (🤖 예: <code>…/search?name=hong&amp;age=20</code> 의 <code>name=hong</code> · <code>age=20</code>)</li></ul></li><li><span class="wk-tag note">✍️ 필기</span> — “서버에서 받은 리스판스된 텍스트를 json으로 저장되고 json으로 저장된 텍스트를 클라이언트 화면에 뿌려줌”<ul><li>⚠️ <b>팩트체크</b> — 서버의 <b>응답(response)</b> 은 <b>텍스트(문자열)</b> 이고 흔히 <b>JSON 형식</b>이에요 → 클라이언트는 <code>JSON.parse()</code> 로 <b>객체</b>로 바꾼 뒤 → 화면(DOM · <code>innerHTML</code> 등)에 출력(= “뿌려 줌”)</li></ul></li></ul>
+<table class="ref">
+<tbody>
+<tr><th>말</th><th>뜻</th></tr>
+<tr><td>요청 (request · 리퀘스트)</td><td>클라이언트 → 서버</td></tr>
+<tr><td>파라미터 (parameter)</td><td>요청에 담아 보내는 값 (이름=값)</td></tr>
+<tr><td>응답 (response · 리스폰스)</td><td>서버 → 클라이언트 · 텍스트</td></tr>
+<tr><td>JSON</td><td>JavaScript Object Notation — 객체 모양의 <b>텍스트</b> 형식 · 키는 반드시 큰따옴표 <code>{"name":"hong"}</code> (따옴표 없는 키는 <code>JSON.parse</code> 가 SyntaxError — node 로 확인)</td></tr>
+</tbody></table>
+<h3>🤖 JSON 문자열 ↔ 객체 (node)</h3>
+<pre><code class="language-javascript">let txt = '{"name":"윤희근","age":27}';      // 서버가 보낸 응답이라고 생각 — JSON 형식의 "문자열" (키는 큰따옴표)
+console.log(typeof txt);                     // 아직 글자일 뿐 → string
+let obj = JSON.parse(txt);                   // 문자열 → 자바스크립트 객체로 바꿈
+console.log(typeof obj);                     // object
+console.log(obj.name, obj.age);              // 점(.)으로 값 꺼내기 → 윤희근 27
+console.log(JSON.stringify(obj));            // 반대로 객체 → JSON 문자열 ({"name":"윤희근","age":27})</code></pre>
+<pre class="io"><code class="language-text">string
+object
+윤희근 27
+{"name":"윤희근","age":27}</code></pre>
+<div class="tip"><code>JSON.stringify</code> 는 <a href="웹프로그래밍-7주차.html">7주차</a> 깊은 비교에서 썼던 함수 — <code>parse</code> 는 그 반대(문자열 → 객체)예요.</div>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
+<pre><code class="language-text">(이벤트,이벤트소스,이벤트헨들러,이벤트객체) 기말고사에 나옴
+클라이언트가 서버에 전송(리퀘스트) 하는것을 파라미터라고 함
+서버에서 받은 리스판스된 텍스트를 json으로 저장되고 json으로 저장된 텍스트를 클라이언트 화면에 뿌려줌</code></pre>
+<div class="tip">⚠️ 필기 오타 <code>이벤트헨들러</code> → <b>이벤트핸들러</b> · <code>리스판스</code> 는 보통 <b>리스폰스</b>(response · 응답)라고 써요</div>
+</details>
+</section>
+<section class="card" id="s5">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../웹프로그래밍-실제시험.html">🔒 웹프로그래밍 실제시험 — 9주차 🔥 이벤트 4요소 · 요소 순회 · 요청과 응답 문제까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="웹프로그래밍-15주차-기말고사.html">기말고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="웹프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「웹프로그래밍 · 9주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202610262015"></script>
+</body>
+</html>

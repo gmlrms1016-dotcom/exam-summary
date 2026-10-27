@@ -22,7 +22,7 @@
 
     <header class="page-head">
         <h1>웹프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 7주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29 · 10/13) · 강의시간에 나온 내용 전부 정리</p>
+        <p>1주차 ~ 9주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29 · 10/13 · 10/27) · 강의시간에 나온 내용 전부 정리</p>
     </header>
 
     <div id="week-nav" data-subject="웹프로그래밍"></div>
@@ -69,6 +69,8 @@
         <a href="#s35">35.🔥매개변수구조분해</a>
         <a href="#s36">36.DOM색바꾸기</a>
         <a href="#s37">37.🔥7주차 switch·복사·BOM</a>
+        <a href="#s38">38.🔥이벤트4요소</a>
+        <a href="#s39">39.요소순회·JSON</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1129,9 +1131,235 @@ switch (day.getDay()) {
         </div>
     </section>
 
+    <section class="card" id="s38">
+        <h2>38. 🔥 9주차 — 이벤트 4요소 · 할일 목록 (기말고사에 나옴)<span class="week">9주차</span></h2>
+        <p><span class="wk-tag note">✍️ 필기</span> — <b>“(이벤트,이벤트소스,이벤트헨들러,이벤트객체) 기말고사에 나옴”</b> · 수업 파일 <b>1027_01_event.html</b> — 2주차에 배운 4요소를 <code>addEventListener</code> 코드로 다시 짚었어요. 동작은 크롬에서 직접 눌러 확인했어요.</p>
+        <table class="ref">
+            <tr><th>4요소</th><th>뜻 (2주차)</th><th>오늘 코드에서</th></tr>
+            <tr><td>이벤트</td><td>웹에서 발생하는 <b>사건</b> (클릭 등)</td><td><code>'click'</code> — addEventListener 의 첫 번째 인자</td></tr>
+            <tr><td>이벤트 소스</td><td>이벤트가 발생한 <b>근원지</b></td><td><code>addBtn</code> — 목록 추가 버튼</td></tr>
+            <tr><td>이벤트 핸들러 (= 리스너)</td><td>이벤트가 일어나면 <b>실행되는 함수</b></td><td><code>function(){ … }</code> — 두 번째 인자</td></tr>
+            <tr><td>이벤트 객체</td><td>발생한 이벤트의 <b>정보</b></td><td>🤖 핸들러의 매개변수 <code>e</code> — <code>e.type</code> → click · <code>e.target</code> → 버튼</td></tr>
+        </table>
+        <div class="tip">⚠️ 필기 오타 <code>이벤트헨들러</code> → <b>이벤트 핸들러</b> · 수업 코드 주석은 같은 함수를 ‘이벤트리스너’라고 함 — MDN: 리스너 = 이벤트를 기다리는 쪽 (<code>addEventListener</code> 로 등록) · 핸들러 = 불리는 함수 → 수업에서는 같은 뜻으로 써요</div>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;                                                  &lt;!-- HTML5 문서라고 알림 --&gt;
+&lt;html lang="ko"&gt;                                                 &lt;!-- 문서 시작 · 한국어 --&gt;
+&lt;head&gt;                                                           &lt;!-- 문서 정보 시작 --&gt;
+    &lt;meta charset="UTF-8"&gt;                                       &lt;!-- 한글이 깨지지 않게 UTF-8 --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;   &lt;!-- 폰 화면 폭에 맞춤 --&gt;
+    &lt;title&gt;Document&lt;/title&gt;                                      &lt;!-- 탭 제목 --&gt;
+    &lt;style&gt;                                                      /* CSS 시작 */
+        #add-btn{                                                /* id 가 add-btn 인 버튼 */
+            padding: 5px 10px;                                   /* 안쪽 여백 위아래 5px · 좌우 10px */
+            border: 0;                                           /* 테두리 없앰 */
+            background: #f80;                                    /* 주황 배경 */
+            color: white;                                        /* 흰 글자 */
+            border-radius: 5px;                                  /* 모서리 둥글게 */
+        }                                                        /* #add-btn 끝 */
+        ul {                                                     /* 목록 */
+            padding: 0;                                          /* 왼쪽 들여쓰기 없앰 */
+            list-style-position: inside;                         /* 글머리 기호(•)를 안쪽에 */
+        }                                                        /* ul 끝 */
+        li {                                                     /* 목록 한 줄 */
+            border-bottom: 1px solid #999;                       /* 아래 회색 선 */
+            padding: 5px 0;                                      /* 위아래 여백 5px */
+        }                                                        /* li 끝 */
+        .active {                                                /* active 클래스 (오늘 코드에서는 아직 안 씀) */
+            background: #abc;                                    /* 연한 파랑 배경 */
+        }                                                        /* .active 끝 */
+    &lt;/style&gt;                                                     &lt;!-- CSS 끝 --&gt;
+&lt;/head&gt;                                                          &lt;!-- 문서 정보 끝 --&gt;
+&lt;body&gt;                                                           &lt;!-- 화면에 보이는 부분 --&gt;
+    &lt;h1 id="title"&gt;할일 목록&lt;/h1&gt;                                 &lt;!-- 제목 --&gt;
+    &lt;button id="add-btn"&gt;목록 추가&lt;/button&gt;                       &lt;!-- 🔥 이벤트 소스가 될 버튼 --&gt;
+    &lt;ul id="list"&gt;                                               &lt;!-- 할 일 목록 (새 li 가 끝에 붙는 곳) --&gt;
+        &lt;li&gt;제목 1&lt;/li&gt;                                           &lt;!-- 처음부터 있는 항목 1 --&gt;
+        &lt;li&gt;제목 2&lt;/li&gt;                                           &lt;!-- 항목 2 --&gt;
+        &lt;li&gt;제목 3&lt;/li&gt;                                           &lt;!-- 항목 3 --&gt;
+        &lt;li&gt;제목 4&lt;/li&gt;                                           &lt;!-- 항목 4 --&gt;
+    &lt;/ul&gt;                                                        &lt;!-- 목록 끝 --&gt;
+    &lt;script&gt;                                                     // 자바스크립트 시작 (위의 요소들이 이미 있어서 찾을 수 있음)
+        let title = document.getElementById('title');           // id 로 h1 찾기 (오늘 코드에서는 안 씀)
+        let list = document.getElementById('list');             // ul 요소 → 새 li 를 붙일 곳
+        let li = document.getElementsByTagName('li');           // li 요소들 → 지금 4개 · 추가하면 5개로 저절로 늘어남
+        let addBtn = document.getElementById('add-btn');        // 버튼 요소 → 🔥 이벤트 소스
+
+        addBtn.addEventListener('click',function(){ //이벤트,이벤트리스너,이벤트소스 ← 'click' = 이벤트 · function = 핸들러(리스너) · addBtn = 소스
+            let txt=prompt("할 일 입력");                         // 입력 창 → 입력한 글자가 txt 에 ("제목 5")
+            list.innerHTML+='&lt;li&gt;'+txt+'&lt;/li&gt;';                  // 원래 목록 HTML + "&lt;li&gt;제목 5&lt;/li&gt;" → 목록 끝에 추가
+        });                                                      // 핸들러 함수 끝 · addEventListener 끝
+    &lt;/script&gt;                                                    &lt;!-- 스크립트 끝 --&gt;
+&lt;/body&gt;                                                          &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                          &lt;!-- 문서 끝 --&gt;</code></pre>
+        <div class="tip">▶ <b>목록 추가</b> 를 누르면 <code>할 일 입력</code> 창 → <code>제목 5</code> 입력 → 목록 <b>맨 끝에 제목 5</b> (li 4개 → 5개 · <code>getElementsByTagName</code> 의 li 도 저절로 5)</div>
+        <h3>🤖 이벤트 객체 e 확인</h3>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;                                         &lt;!-- HTML5 문서 --&gt;
+&lt;html lang="ko"&gt;                                        &lt;!-- 문서 시작 --&gt;
+&lt;body&gt;                                                  &lt;!-- 화면 --&gt;
+    &lt;button id="btn"&gt;눌러 보기&lt;/button&gt;                   &lt;!-- 이벤트 소스가 될 버튼 --&gt;
+    &lt;script&gt;                                            // 자바스크립트 시작
+        let btn = document.getElementById('btn');       // 버튼 요소를 찾아 btn 에
+        btn.addEventListener('click', function (e) {    // 'click' = 이벤트 · function = 핸들러 · e = 이벤트 객체 (브라우저가 넣어 줌)
+            console.log(e.type);                        // 무슨 이벤트? → click
+            console.log(e.target.id);                   // 이벤트가 일어난 요소(소스)의 id → btn
+        });                                             // 핸들러 끝 · addEventListener 끝
+    &lt;/script&gt;                                           &lt;!-- 스크립트 끝 --&gt;
+&lt;/body&gt;                                                 &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                 &lt;!-- 문서 끝 --&gt;</code></pre>
+        <pre class="io"><code class="language-text">click
+btn</code></pre>
+        <h3>🔥 괄호넣기 — addEventListener ( ① ) ~ ( ③ )</h3>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="ko"&gt;
+&lt;body&gt;
+    &lt;button id="add-btn"&gt;목록 추가&lt;/button&gt;
+    &lt;ul id="list"&gt;&lt;/ul&gt;
+    &lt;script&gt;
+        let list = document.getElementById('list');
+        let addBtn = document.getElementById('add-btn');
+        addBtn.( ① )('( ② )', function () {
+            let txt = prompt("할 일 입력");
+            list.innerHTML ( ③ ) '&lt;li&gt;' + txt + '&lt;/li&gt;';
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <div class="quiz-item" data-answers="addEventListener|addEventListener()" data-explain="addBtn.addEventListener(&#x27;click&#x27;, function(){…}) — 첫 번째 인자 = 이벤트 · 두 번째 = 핸들러">
+            <p class="quiz-q"><span class="quiz-cat">①</span>버튼(이벤트 소스)에 이벤트 핸들러를 <b>등록</b>하는 메서드 ( ① ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="click" data-explain="&#x27;click&#x27; = 이벤트 (4요소 중 이벤트) · 따옴표 안에 이벤트 이름">
+            <p class="quiz-q"><span class="quiz-cat">②</span>버튼을 <b>누를 때</b> 실행되게 하는 이벤트 이름 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="+=" data-explain="list.innerHTML += … → 원래 HTML + 새 &amp;lt;li&amp;gt; (그냥 = 이면 원래 목록이 지워짐)">
+            <p class="quiz-q"><span class="quiz-cat">③</span>원래 목록 뒤에 새 li 를 <b>이어 붙이는</b> 연산자 ( ③ ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#event" title="그림 — 이벤트 4요소" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#event" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 이벤트 4요소 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s39">
+        <h2>39. 9주차 — 요소 순회 (for · for…of · Object.keys) · ✍️ 요청과 응답 (JSON)<span class="week">9주차</span></h2>
+        <p>수업 파일 <b>1027_02_요소순회.js</b> · 출력은 node 로 직접 실행한 값이에요.</p>
+        <pre><code class="language-javascript">let arr = [1, 2, 3];                          // 배열 — 값 1 · 2 · 3 (인덱스 0 · 1 · 2)
+
+console.log("\n방법1");                        // 맨 앞 \n → 빈 줄을 먼저 찍고 → 방법1
+for (let i = 0; i &lt; arr.length; i++) {        // 방법1 for — i = 0, 1, 2 (arr.length 3 이 되면 끝)
+    let item = arr[i];                        // 인덱스로 꺼냄 → arr[0] = 1 · arr[1] = 2 · arr[2] = 3
+    console.log(item);                        // 1 → 2 → 3
+};                                            // for 끝 (뒤의 ; 는 빈 문장이라 있어도 없어도 같음)
+
+console.log("\n방법2");                        // 빈 줄 → 방법2
+for (let item of arr) {                       // 방법2 for…of — 인덱스 없이 값이 차례로 item 에
+    console.log(item);                        // 1 → 2 → 3
+}                                             // for…of 끝
+
+let person = {                                // 객체 — 키: 값 3쌍
+    name: "윤희근",                            // 키 name → 값 "윤희근"
+    age: 27,                                  // 키 age → 값 27
+    hobby: "테니스",                           // 키 hobby → 값 "테니스" (마지막 쉼표는 있어도 됨)
+};                                            // 객체 끝
+
+let keys = Object.keys(person);               // 키만 모은 배열 → ["name", "age", "hobby"]
+let values = Object.values(person);           // 값만 모은 배열 → ["윤희근", 27, "테니스"]
+
+for (let key of keys) {                       // key = "name" → "age" → "hobby"
+    const value = person[key];                // 대괄호 + 키 변수 → person["name"] → "윤희근"
+    console.log(key, value);                  // 쉼표로 두 값 → 한 칸 띄어 출력 → name 윤희근
+}                                             // for…of 끝
+
+for (let key of keys) {                       // 키만 다시 돌기
+    console.log(key);                         // name → age → hobby
+}                                             // for…of 끝
+
+for (let value of values) {                   // 값만 돌기
+    console.log(value);                       // 윤희근 → 27 → 테니스
+}                                             // for…of 끝</code></pre>
+        <pre class="io"><code class="language-text">
+방법1
+1
+2
+3
+
+방법2
+1
+2
+3
+name 윤희근
+age 27
+hobby 테니스
+name
+age
+hobby
+윤희근
+27
+테니스</code></pre>
+        <table class="ref">
+            <tr><th>방법</th><th>꺼내는 것</th></tr>
+            <tr><td>방법1 <code>for (let i = 0; i &lt; arr.length; i++)</code></td><td><b>인덱스</b> i → <code>arr[i]</code></td></tr>
+            <tr><td>방법2 <code>for (let item of arr)</code></td><td>인덱스 없이 <b>값</b>을 바로</td></tr>
+            <tr><td><code>Object.keys(person)</code></td><td><b>키</b>만 모은 배열 <code>["name", "age", "hobby"]</code></td></tr>
+            <tr><td><code>Object.values(person)</code></td><td><b>값</b>만 모은 배열 <code>["윤희근", 27, "테니스"]</code></td></tr>
+            <tr><td><code>person[key]</code></td><td>변수에 든 키로 값 (⚠️ <code>person.key</code> 는 ‘key’ 라는 속성을 찾아 <code>undefined</code> — node 로 확인)</td></tr>
+        </table>
+        <h3>괄호넣기 — 객체 순회 ( ① ) ~ ( ③ )</h3>
+        <pre><code class="language-javascript">let person = { name: "윤희근", age: 27, hobby: "테니스" };
+let keys = Object.( ① )(person);
+for (let key ( ② ) keys) {
+    console.log(key, person( ③ ));
+}</code></pre>
+        <div class="quiz-item" data-answers="keys|keys()" data-explain="Object.keys(person) → [&quot;name&quot;, &quot;age&quot;, &quot;hobby&quot;] · 값만 = Object.values">
+            <p class="quiz-q"><span class="quiz-cat">①</span>객체의 <b>키만</b> 모은 배열을 만드는 <code>Object.( ① )</code> 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="of" data-explain="for…of = 값을 차례로 · 방법1 for 는 인덱스로 arr[i]">
+            <p class="quiz-q"><span class="quiz-cat">②</span>배열의 <b>값</b>을 하나씩 꺼내는 for 문 — <code>for (let key ( ② ) keys)</code> 의 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="[key]" data-explain="person[key] → 윤희근 · 27 · 테니스 (person.key 는 undefined)">
+            <p class="quiz-q"><span class="quiz-cat">③</span>변수 key 에 든 이름으로 값을 꺼내는 <code>person( ③ )</code> 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <h3>✍️ 요청 · 파라미터 · 응답 · JSON</h3>
+        <p><span class="wk-tag note">✍️ 필기</span> — “클라이언트가 서버에 전송(리퀘스트) 하는 것을 파라미터라고 함” · “서버에서 받은 리스판스된 텍스트를 json으로 저장되고 json으로 저장된 텍스트를 클라이언트 화면에 뿌려줌”</p>
+        <table class="ref">
+            <tr><th>말</th><th>뜻</th></tr>
+            <tr><td>요청 (request · 리퀘스트)</td><td>클라이언트 → 서버</td></tr>
+            <tr><td>파라미터 (parameter)</td><td>요청에 <b>담아 보내는 값</b> (🤖 예: <code>?name=hong&amp;age=20</code>)</td></tr>
+            <tr><td>응답 (response · 리스폰스)</td><td>서버 → 클라이언트 · <b>텍스트(문자열)</b> — 흔히 <b>JSON</b> 형식</td></tr>
+            <tr><td>JSON</td><td>JavaScript Object Notation · 객체 모양의 텍스트 · 키는 큰따옴표 (없으면 <code>JSON.parse</code> 가 SyntaxError — node 로 확인)</td></tr>
+        </table>
+        <div class="tip">⚠️ <b>팩트체크</b> — 보내는 것 자체는 <b>요청</b> · 요청에 담긴 값이 <b>파라미터</b> / 응답은 JSON <b>형식의 문자열</b>로 오고 → <code>JSON.parse()</code> 로 객체로 바꿔 → 화면(DOM)에 출력(= 뿌려 줌)</div>
+        <pre><code class="language-javascript">let txt = '{"name":"윤희근","age":27}';      // 서버가 보낸 응답이라고 생각 — JSON 형식의 "문자열" (키는 큰따옴표)
+console.log(typeof txt);                     // 아직 글자일 뿐 → string
+let obj = JSON.parse(txt);                   // 문자열 → 자바스크립트 객체로 바꿈
+console.log(typeof obj);                     // object
+console.log(obj.name, obj.age);              // 점(.)으로 값 꺼내기 → 윤희근 27
+console.log(JSON.stringify(obj));            // 반대로 객체 → JSON 문자열 ({"name":"윤희근","age":27})</code></pre>
+        <pre class="io"><code class="language-text">string
+object
+윤희근 27
+{"name":"윤희근","age":27}</code></pre>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#reqres" title="그림 — 요청 · 응답" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#reqres" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 요청 · 응답 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#loop" title="그림 — 요소 순회" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#loop" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 요소 순회 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 36 · 주관식 27 · 출력결과 26 · 코드 작성 14 · 총 103문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 41 · 주관식 32 · 출력결과 28 · 코드 작성 16 · 총 117문제 · 9주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="웹프로그래밍-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
@@ -1145,5 +1373,6 @@ switch (day.getDay()) {
 <script src="codetest.js?v=202610262015"></script>
 <script src="outquiz.js?v=202610262015"></script>
 <script src="ink.js?v=202610262015"></script>
+<script>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 </body>
 </html>

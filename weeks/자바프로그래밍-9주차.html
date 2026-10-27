@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610262015"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바프로그래밍 9주차 · 4장 클래스 — this() · 메소드 오버로딩 · 접근 지정자 · static · 객체 배열</title>
+    <meta name="description" content="자바프로그래밍 9주차 정리 — 4장 클래스 — this() · 메소드 오버로딩 · 접근 지정자 · static · 객체 배열">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="자바프로그래밍 9주차 · 4장 클래스 — this() · 메소드 오버로딩 · 접근 지정자 · static · 객체 배열">
+    <meta property="og:description" content="자바프로그래밍 9주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202610262015">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../자바프로그래밍.html">← 자바프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>☕ 자바프로그래밍 · 9주차</h1>
+        <p>4장 클래스 — this() · 메소드 오버로딩 · 접근 지정자 · static · 객체 배열</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="자바프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9주차 반영)</small></a></nav>
+
+<div class="tip">수업: <b>10/27(화)</b> · 자료: <b>4장.pdf</b> (명품 Java 4장 — 28 ~ 66쪽 중 수업에서 실습한 예제) · 수업 소스 Book · BookMain · MethodSample · MethodMain · ForeachEx1 · ForeachEx2 · Sample · AccessEx · Calc · CalcEx · Counter · StaticEx1 · BookArray · 노션 필기. <b>PDF 펜 필기는 없어요.</b> 코드 주석과 ▶ 출력 결과는 전부 javac · java 로 직접 실행한 결과예요 (두 파일씩 나뉜 수업 소스를 복사해 바로 실행되게 <code>연습.java</code> 한 파일로 합쳤어요). 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
+<div class="tip">📌 <span class="wk-tag note">✍️ 필기</span> — “복습하다가 오늘 새로 배우는 것: <b>접근 지정자 차이</b> — public , protected , private , default(아무것도 안 쓰면) · 키워드: <b>static</b>” → 앞부분은 복습(생성자 · this() · for-each), <b>접근 지정자 · static</b> 이 새로 배운 것이에요.</div>
+<section class="card" id="s1">
+<h2>🎨 9주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/자바프로그래밍-그림정리.html?week=9" title="9주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/자바프로그래밍-그림정리.html?week=9" target="_blank" rel="noopener">🎬 9주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
+<h2>1. 복습 — 생성자 3개 · this() (Book · BookMain)</h2>
+<pre><code class="language-java">// Book.java + BookMain.java 를 한 파일로 — 생성자 3개 · this() (4장 예제 4-5)
+class Book {                                    // 책 설계도 · public 은 파일 이름과 같은 클래스(연습)에만
+    String title;                               // 필드: 제목
+    String author;                              // 필드: 저자
+
+    Book() {                                    // ① 기본 생성자 — 매개변수 0개
+        this("", "");                           // 첫 문장 this(…) → ③ 을 먼저 불러 title · author ← 빈 문자열 ""
+        System.out.println("기본 생성자 호출됨");    // ③ 이 끝나고 돌아와서 출력 → 객체를 만들 때 찍힘
+    }                                           // ① 끝
+
+    Book(String title) {                        // ② 매개변수 1개 — 제목만 받음
+        this(title, "작자미상");                  // 저자는 "작자미상" 으로 채워서 ③ 을 부름
+    }                                           // ② 끝
+
+    Book(String title, String author) {         // ③ 매개변수 2개 — 실제로 필드에 넣는 생성자
+        this.title = title;                     // this.title(필드) ← 매개변수 title
+        this.author = author;                   // this.author(필드) ← 매개변수 author
+    }                                           // ③ 끝
+
+    void printInfo() {                          // 메소드 — 필드 두 개를 한 줄로 출력
+        System.out.println("제목: " + title + ", 저자: " + author);   // "제목: " + 제목 + ", 저자: " + 저자
+    }                                           // printInfo 끝
+}                                               // Book 끝
+
+public class 연습 {                              // 원래 이름 BookMain → 파일 이름 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Book littlePrince = new Book("어린왕자", "생텍쥐페리");   // 매개변수 2개 → ③ 바로 → 출력 없음
+        Book loveStory = new Book("춘향전");                   // 1개 → ② → this(…) → ③ → 저자 "작자미상"
+        Book empty = new Book();                              // 0개 → ① → this("", "") → ③ → 돌아와서 "기본 생성자 호출됨" 출력
+
+        littlePrince.printInfo();               // 제목: 어린왕자, 저자: 생텍쥐페리
+        loveStory.printInfo();                  // 제목: 춘향전, 저자: 작자미상
+        empty.printInfo();                      // 빈 문자열이라 "제목: , 저자: " 만 보임
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">기본 생성자 호출됨
+제목: 어린왕자, 저자: 생텍쥐페리
+제목: 춘향전, 저자: 작자미상
+제목: , 저자: </code></pre>
+<table class="ref">
+<tbody>
+<tr><th>this() 규칙 (4장 28 · 29쪽)</th><th>뜻</th></tr>
+<tr><td><code>this(…)</code></td><td>같은 클래스의 <b>다른 생성자</b>를 부름 (생성자 코드를 한 곳에 모음)</td></tr>
+<tr><td>어디서</td><td><b>생성자 안에서만</b></td></tr>
+<tr><td>언제</td><td><b>반드시 생성자 코드의 첫 문장</b> — <code>println</code> 다음에 쓰면 <code>call to this must be first statement in constructor</code> (javac 로 직접 확인)</td></tr>
+<tr><td><code>this.</code> 와 차이</td><td><code>this.title</code> = 이 객체의 <b>필드</b> · <code>this(…)</code> = 다른 <b>생성자 호출</b></td></tr>
+</tbody></table>
+<div class="tip">출력 첫 줄이 <b>기본 생성자 호출됨</b> 인 이유 — 세 번째 객체 <code>new Book()</code> 을 <b>만드는 순간</b> ① 생성자가 실행돼서 printInfo 세 줄보다 먼저 찍혀요 · 마지막 줄은 제목 · 저자가 빈 문자열("")이라 <code>제목: , 저자: </code> 만 보여요.</div>
+<div class="tip">📄 교재 예제 4-5 는 <code>생성자 호출됨</code> 과 <code>show()</code>(제목 · 저자를 띄어쓰기로 출력)인데, 수업 파일은 <b>기본 생성자 호출됨</b> 과 <code>printInfo()</code>(<code>제목: … , 저자: …</code>) 로 바꿨어요 — 위 코드는 수업 파일대로예요.</div>
+</section>
+<section class="card" id="s3">
+<h2>2. 메소드 오버로딩 (MethodSample · MethodMain)</h2>
+<pre><code class="language-java">// MethodSample.java + MethodMain.java 를 한 파일로 — 메소드 오버로딩 (4장 42 · 43쪽)
+class MethodSample {                            // getSum 이 3개 — 이름은 같고 매개변수가 다름
+    public int getSum(int i, int j) {           // ① int 2개
+        return i + j;                           // 두 수의 합을 int 로 돌려줌
+    }                                           // ① 끝
+    public int getSum(int i, int j, int k) {    // ② int 3개 — 개수가 달라서 오버로딩 OK
+        return i + j + k;                       // 세 수의 합
+    }                                           // ② 끝
+    public double getSum(double i, double j) {  // ③ double 2개 — 타입이 달라서 오버로딩 OK
+        return i + j;                           // 실수 합을 double 로
+    }                                           // ③ 끝
+}                                               // MethodSample 끝
+
+public class 연습 {                              // 원래 이름 MethodMain
+    public static void main(String[] args) {    // 프로그램 시작
+        MethodSample a = new MethodSample();    // 메소드를 부를 객체 a
+
+        int i = a.getSum(1, 2);                 // int 2개 → ① → 1 + 2 → 3
+        int j = a.getSum(1, 2, 3);              // int 3개 → ② → 1 + 2 + 3 → 6
+        double k = a.getSum(1.1, 2.2);          // double 2개 → ③ → 1.1 + 2.2 → 3.3000000000000003 (실수 오차)
+
+        System.out.println(i);                  // 3
+        System.out.println(j);                  // 6
+        System.out.println(k);                  // 3.3000000000000003
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">3
+6
+3.3000000000000003</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>오버로딩 (4장 42 · 43쪽)</th><th>뜻</th></tr>
+<tr><td>성공 조건</td><td>이름이 같고 <b>매개변수의 개수나 타입이 다름</b></td></tr>
+<tr><td>리턴 타입</td><td><b>상관없음</b> — <code>int getSum(int i, int j)</code> 와 <code>double getSum(int i, int j)</code> 는 매개변수가 같아서 ❌ 실패 → <code>method getSum(int,int) is already defined</code> (javac 로 확인)</td></tr>
+<tr><td>호출</td><td>넣은 값의 <b>개수 · 타입</b>에 맞는 메소드가 골라져요 — <code>getSum(1, 2)</code> · <code>getSum(1, 2, 3)</code> · <code>getSum(1.1, 2.2)</code></td></tr>
+</tbody></table>
+<div class="tip">🤖 <code>1.1 + 2.2</code> 가 <code>3.3</code> 이 아니라 <b>3.3000000000000003</b> — double 은 2진수로 저장해서 1.1 · 2.2 를 딱 맞게 담지 못하는 <b>실수 오차</b> 때문이에요 (실행한 값 그대로).</div>
+</section>
+<section class="card" id="s4">
+<h2>3. 복습 — for-each (ForeachEx1 · ForeachEx2)</h2>
+<pre><code class="language-java">// ForeachEx1.java + ForeachEx2.java 를 한 파일로 — for-each (향상된 for 문)
+public class 연습 {                              // 원래 이름 ForeachEx1 · ForeachEx2
+    public static void main(String[] args) {    // 프로그램 시작
+        String[] fruits = {"사과", "바나나", "체리"};   // 문자열 배열 3칸
+        for (String fruit : fruits) {           // 배열 칸을 처음부터 하나씩 fruit 에 꺼냄 (인덱스 없음)
+            System.out.println(fruit);          // 사과 → 바나나 → 체리
+        }                                       // for-each 끝
+
+        int pointsArr[] = {65, 82, 95, 78, 40, 88};       // 점수 6개
+        System.out.println("합격자 목록 80점 이상");          // 제목 줄
+        for (int point : pointsArr) {           // 65, 82, 95, 78, 40, 88 이 차례로 point 에
+            if (point &gt;= 80) {                  // 80 이상만 → 82 · 95 · 88
+                System.out.println(point + "점");   // 82 + "점" → 82점 (숫자 + 문자열 → 문자열)
+            }                                   // if 끝
+        }                                       // for-each 끝
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">사과
+바나나
+체리
+합격자 목록 80점 이상
+82점
+95점
+88점</code></pre>
+<div class="tip"><code>for (자료형 변수 : 배열)</code> → 배열 칸을 <b>처음부터 끝까지 하나씩</b> 변수에 꺼내요 (인덱스 없음) · 처음 배운 곳: <a href="자바프로그래밍-6주차.html">6주차 for-each (예제 3-9)</a></div>
+</section>
+<section class="card" id="s5">
+<h2>4. ✍️ 접근 지정자 4가지 — 차이 (예제 4-10)</h2>
+<table class="ref">
+<tbody>
+<tr><th>접근 지정자</th><th>쓰는 법</th><th>접근 허용 (4장 52쪽)</th></tr>
+<tr><td><b>public</b></td><td><code>public int a;</code></td><td>패키지에 관계없이 <b>모든 클래스</b></td></tr>
+<tr><td><b>protected</b></td><td><code>protected int d;</code></td><td><b>같은 패키지</b> + 다른 패키지라도 <b>상속받은 자식(서브) 클래스</b></td></tr>
+<tr><td><b>디폴트</b></td><td>✍️ <b>아무것도 안 쓰면</b> <code>int c;</code></td><td><b>같은 패키지</b> 안의 클래스</td></tr>
+<tr><td><b>private</b></td><td><code>private int b;</code></td><td><b>같은 클래스 안</b>에서만 (상속받은 서브 클래스도 접근 X)</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:721px;">
+<tr><th>멤버에 접근하는 클래스</th><th>private</th><th>디폴트</th><th>protected</th><th>public</th></tr>
+<tr><td>같은 패키지</td><td>✕</td><td>○</td><td>○</td><td>○</td></tr>
+<tr><td>다른 패키지</td><td>✕</td><td>✕</td><td>✕ (자식 클래스면 ○)</td><td>○</td></tr>
+<tr><td>접근 가능 영역</td><td>클래스 내</td><td>동일 패키지 내</td><td>동일 패키지와 자식 클래스</td><td>모든 클래스</td></tr>
+</tbody></table>
+<ul><li>공개 범위: <b>private &lt; 디폴트 &lt; protected &lt; public</b> (4장 50쪽 그림 — 외부로부터 완벽 차단 → 동일 패키지 → 동일 패키지와 자식 클래스 → 모든 클래스)</li><li>목적 (50쪽): 캡슐화는 멤버를 <b>보호</b>하는 것 → 접근 지정은 그 보호를 <b>일부 풀어</b> 다른 클래스가 쓰게 허용하는 것</li><li>클래스에도 붙여요 (51쪽): <code>public class World</code> = 모든 클래스가 사용 · <code>class Local</code> (디폴트) = 같은 패키지만</li></ul>
+<pre><code class="language-java">// Sample.java + AccessEx.java 를 한 파일로 (4장 예제 4-10) — ❌ 컴파일 오류가 나는 원래 코드
+class Sample {                                  // 같은 패키지(같은 폴더)의 클래스
+    public int a;                               // public → 어디서나 접근 OK
+    private int b;                              // private → Sample 클래스 안에서만
+    int c;                                      // 디폴트(아무것도 안 씀) → 같은 패키지 OK
+}                                               // Sample 끝
+
+public class 연습 {                              // 원래 이름 AccessEx
+    public static void main(String[] args) {    // 프로그램 시작
+        Sample aClass = new Sample();           // Sample 객체
+        aClass.a = 10;                          // ✅ public
+        aClass.b = 10;                          // ❌ private 을 다른 클래스(연습)에서 → 컴파일 오류
+        aClass.c = 10;                          // ✅ 디폴트 · 같은 패키지
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<h3>javac 결과 — 컴파일 오류</h3>
+<pre class="io"><code class="language-text">연습.java:12: error: b has private access in Sample
+        aClass.b = 10;
+              ^
+1 error</code></pre>
+<div class="tip">예제 4-10 의 답 (55쪽) — Sample 과 AccessEx 는 <b>같은 패키지</b>라서 <code>a</code>(public) · <code>c</code>(디폴트) 는 접근 가능, <code>b</code> 는 <b>private</b> 이라 AccessEx 에서 접근 불가 → 컴파일 오류.</div>
+<pre><code class="language-java">// 🤖 고친 코드 — private b 는 Sample 안의 메소드로만 바꾸고 읽기
+class Sample {                                  // 같은 패키지의 클래스
+    public int a;                               // public
+    private int b;                              // private → 이 클래스 안에서만
+    int c;                                      // 디폴트
+    void setB(int b) {                          // Sample 안의 메소드 → private b 에 접근 가능
+        this.b = b;                             // 필드 b ← 매개변수 b
+    }                                           // setB 끝
+    int getB() {                                // b 값을 돌려주는 메소드
+        return b;                               // 클래스 안이라 OK
+    }                                           // getB 끝
+}                                               // Sample 끝
+
+public class 연습 {                              // 파일 이름 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Sample aClass = new Sample();           // Sample 객체
+        aClass.a = 10;                          // public → 바로 대입
+        aClass.setB(20);                        // private → 메소드를 거쳐서 20
+        aClass.c = 30;                          // 디폴트 → 같은 패키지라 바로 대입
+        System.out.println(aClass.a + " " + aClass.getB() + " " + aClass.c);   // 10 20 30
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">10 20 30</code></pre>
+<div class="tip">🤖 private 필드는 <b>그 클래스 안의 메소드</b>(<code>setB</code> · <code>getB</code>)를 거쳐서만 바꾸고 읽어요 — 수업 코드에는 없는, 오류를 고치는 한 가지 방법이에요.</div>
+</section>
+<section class="card" id="s6">
+<h2>5. ✍️ static — 클래스에 하나 · 모든 객체가 공유 (Counter · StaticEx1)</h2>
+<table class="ref">
+<tbody>
+<tr><th>(4장 57 · 58쪽)</th><th>non-static 멤버</th><th>static 멤버</th></tr>
+<tr><td>선언</td><td><code>int n;</code> · <code>void g() {…}</code></td><td><code>static int m;</code> · <code>static void f() {…}</code></td></tr>
+<tr><td>공간적 특성</td><td>멤버는 <b>객체마다 별도</b> 존재 · <b>인스턴스 멤버</b></td><td>멤버는 <b>클래스당 하나</b> · 객체 밖 별도 공간 · <b>클래스 멤버</b></td></tr>
+<tr><td>시간적 특성</td><td><b>객체 생성 시</b> 생김 · 객체가 사라지면 같이 사라짐</td><td><b>클래스 로딩 시</b> 생김 · 객체가 생기기 전에도 사용 가능 · 프로그램이 끝날 때 사라짐</td></tr>
+<tr><td>공유의 특성</td><td>공유되지 않음 (객체 안에 각각)</td><td>같은 클래스의 <b>모든 객체가 공유</b></td></tr>
+</tbody></table>
+<div class="tip">4장 56쪽 그림 — 눈은 사람마다 따로(non-static) · 공기는 모두가 함께(static)</div>
+<pre><code class="language-java">// Counter.java + StaticEx1.java 를 한 파일로 — static 필드 = 모든 객체가 공유
+class Counter {                                 // 카운터 설계도
+    int instanceCount;                          // non-static(인스턴스) 필드 — 객체마다 따로 · 기본값 0
+    static int gongyuCount;                     // static(클래스) 필드 — 클래스에 하나 · 모든 객체가 공유 · 기본값 0
+    void add1() {                               // 둘 다 1씩 늘리는 메소드
+        instanceCount++;                        // 이 객체의 칸만 +1
+        gongyuCount++;                          // 공유 칸 +1 → 다른 객체가 늘린 값에 이어서
+    }                                           // add1 끝
+}                                               // Counter 끝
+
+public class 연습 {                              // 원래 이름 StaticEx1
+    public static void main(String[] args) {    // 프로그램 시작
+        Counter cnt1 = new Counter();           // 객체 1 — instanceCount 0
+        Counter cnt2 = new Counter();           // 객체 2 — instanceCount 0 (cnt1 과 따로)
+        cnt1.add1();                            // cnt1.instanceCount 0 → 1 · gongyuCount 0 → 1
+        cnt2.add1();                            // cnt2.instanceCount 0 → 1 · gongyuCount 1 → 2 (같은 칸)
+        System.out.println("공유 값 클래스 static = " + Counter.gongyuCount);   // 클래스 이름으로 → 2
+        System.out.println("객체 값1 = " + cnt1.instanceCount);              // cnt1 의 칸 → 1
+        System.out.println("객체 값2 = " + cnt2.instanceCount);              // cnt2 의 칸 → 1
+        System.out.println("공유 값 객체 static = " + cnt1.gongyuCount);     // 객체 이름으로 읽어도 같은 칸 → 2
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">공유 값 클래스 static = 2
+객체 값1 = 1
+객체 값2 = 1
+공유 값 객체 static = 2</code></pre>
+<div class="tip"><code>cnt1</code> · <code>cnt2</code> 가 <code>add1()</code> 을 한 번씩 → 각자의 instanceCount 는 <b>1</b> · 공유 칸 gongyuCount 는 <b>2</b> · static 은 <code>Counter.gongyuCount</code> (클래스 이름)로도, <code>cnt1.gongyuCount</code> (객체 이름)로도 읽을 수 있고 <b>같은 칸</b>이에요.</div>
+</section>
+<section class="card" id="s7">
+<h2>6. static 메소드 — Calc (예제 4-11)</h2>
+<pre><code class="language-java">// Calc.java + CalcEx.java 를 한 파일로 — static 메소드 (4장 예제 4-11)
+class Calc {                                    // 계산 도구 모음 (객체 없이 쓰는 전역 함수처럼)
+    public static int abs(int a) {              // 절댓값 — static 이라 Calc.abs(…) 로 바로 호출
+        return a &gt; 0 ? a : -a;                  // 삼항: -5 &gt; 0 거짓 → -a → -(-5) → 5
+    }                                           // abs 끝
+    public static int max(int a, int b) {       // 큰 값
+        return a &gt; b ? a : b;                   // 10 &gt; 8 참 → a → 10
+    }                                           // max 끝
+    public static int min(int a, int b) {       // 작은 값
+        return a &gt; b ? b : a;                   // -3 &gt; -8 참 → b → -8
+    }                                           // min 끝
+}                                               // Calc 끝
+
+public class 연습 {                              // 원래 이름 CalcEx
+    public static void main(String[] args) {    // 프로그램 시작
+        System.out.println(Calc.abs(-5));       // new 없이 클래스 이름으로 → 5
+        System.out.println(Calc.max(10, 8));    // 10
+        System.out.println(Calc.min(-3, -8));   // -8
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">5
+10
+-8</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>static 활용 · 제약 (4장 63 · 65 · 66쪽)</th><th>뜻</th></tr>
+<tr><td>전역 함수처럼</td><td>객체를 만들지 않고 <code>클래스이름.메소드()</code> — <code>Calc.abs(-5)</code> · 자바의 <code>Math</code> 클래스도 모두 public static (<code>Math.abs(-5)</code>)</td></tr>
+<tr><td>공유 멤버</td><td>static 필드 · 메소드는 하나만 생겨서 그 클래스의 객체들이 공유</td></tr>
+<tr><td>제약 1</td><td>static 메소드는 <b>non-static 멤버를 못 씀</b> → <code>non-static variable n cannot be referenced from a static context</code> (반대로 non-static 메소드는 static 멤버를 씀 — 둘 다 javac · java 로 확인)</td></tr>
+<tr><td>제약 2</td><td>static 메소드에서는 <b>this 를 못 씀</b> (객체 없이도 불릴 수 있어서)</td></tr>
+</tbody></table>
+<div class="tip">삼항 연산자 <code>조건 ? 참일 때 : 거짓일 때</code> — <code>-5 &gt; 0</code> 거짓 → <code>-a</code> → 5 · <code>10 &gt; 8</code> 참 → 10 · <code>-3 &gt; -8</code> 참 → b → -8</div>
+</section>
+<section class="card" id="s8">
+<h2>7. 객체 배열 (BookArray · 예제 4-7)</h2>
+<pre><code class="language-java">// Book.java + BookArray.java 를 한 파일로 — 객체 배열 (4장 예제 4-7)
+import java.util.Scanner;                       // 키보드 입력 도구
+
+class Book {                                    // 책 설계도 (이 예제에 필요한 생성자만)
+    String title;                               // 필드: 제목
+    String author;                              // 필드: 저자
+    Book(String title, String author) {         // 매개변수 2개 생성자
+        this.title = title;                     // 필드 ← 입력한 제목
+        this.author = author;                   // 필드 ← 입력한 저자
+    }                                           // 생성자 끝
+}                                               // Book 끝
+
+public class 연습 {                              // 원래 이름 BookArray
+    public static void main(String[] args) {    // 프로그램 시작
+        Book[] book = new Book[2];              // ① 레퍼런스 칸 2개만 생김 (값 null · 객체는 아직 없음)
+        Scanner sc = new Scanner(System.in);    // 입력 준비
+
+        for (int i = 0; i &lt; book.length; i++) { // i = 0, 1 → 두 번
+            System.out.print("제목&gt;&gt;");          // 안내 (print 라 줄 안 바꿈)
+            String title = sc.nextLine();       // 한 줄 통째로 → "사랑의 기술" (띄어쓰기 포함)
+            System.out.print("저자&gt;&gt;");          // 안내
+            String author = sc.nextLine();      // "에리히 프롬"
+            book[i] = new Book(title, author);  // ② 칸마다 Book 객체를 만들어 연결
+        }                                       // for 끝
+
+        for (int i = 0; i &lt; book.length; i++) { // 두 권 출력
+            System.out.print("(" + book[i].title + ", " + book[i].author + ")");   // ③ (제목, 저자) — print 라 한 줄에 이어서
+        }                                       // for 끝
+        sc.close();                             // 입력 닫기 (교재 예제처럼)
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<h3>실행 화면 — 사랑의 기술 / 에리히 프롬 / 시간의 역사 / 스티븐 호킹 입력 (교재 예)</h3>
+<pre class="io"><code class="language-text">제목&gt;&gt;사랑의 기술
+저자&gt;&gt;에리히 프롬
+제목&gt;&gt;시간의 역사
+저자&gt;&gt;스티븐 호킹
+(사랑의 기술, 에리히 프롬)(시간의 역사, 스티븐 호킹)</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>단계 (4장 32 · 33쪽)</th><th>코드</th><th>메모리</th></tr>
+<tr><td>① 배열 생성</td><td><code>Book[] book = new Book[2];</code></td><td><b>레퍼런스 칸 2개</b>만 · 값은 <code>null</code> (객체 없음)</td></tr>
+<tr><td>② 객체 생성</td><td><code>book[i] = new Book(title, author);</code></td><td>칸마다 Book 객체를 만들어 연결</td></tr>
+<tr><td>③ 사용</td><td><code>book[i].title</code> · <code>book[i].author</code></td><td>점(.)으로 그 객체의 필드</td></tr>
+</tbody></table>
+<div class="tip">⚠️ ② 를 빼먹고 <code>book[0].title</code> 을 쓰면 칸이 null 이라 <b>NullPointerException</b> 이에요 (직접 실행해서 확인) · 마지막 출력은 <code>print</code> 라서 두 책이 <b>한 줄</b>에 이어져요.</div>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
+<pre><code class="language-text">복습하다가 오늘 새로배우는것: 접근 지정자 차이
+public , protected , private , default(아무것도 안쓰면)
+키워드:static</code></pre>
+</details>
+</section>
+<section class="card" id="s9">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../자바프로그래밍.html#quiz">자바프로그래밍 과목 페이지 — 퀴즈 (9주차 this() · 오버로딩 · 접근 지정자 · static · 객체 배열)</a></li><li><a href="../자바프로그래밍.html#output">🖥️ 출력 결과 맞히기 — static 공유 · 오버로딩</a></li><li><a href="../자바프로그래밍.html#code">💻 코딩테스트 — static 공유 카운터</a></li><li><a href="자바프로그래밍-15주차-기말고사.html">기말고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="자바프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「자바프로그래밍 · 9주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202610262015"></script>
+</body>
+</html>

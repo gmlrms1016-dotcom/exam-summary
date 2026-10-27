@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자바프로그래밍 그림 정리</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --cell:#7c6ae6;--myelin:#e0a838;--astro:#e0862b;--oligo:#0f9f74;--micro:#d9363e;--schwann:#2b8fd1;--vessel:#d9363e;
+          --ex:#16a34a;--inh:#2563eb;--ap:#e5484d;--fore:#e0862b;--mid:#c9b48a;--hind:#a0522d;
+          --fr:#8b7cf6;--pa:#ec5f9e;--te:#22b07d;--oc:#e9b52c;--light:#f5a524;--eye:#eef4fb;--nerve:#e8a3a3;--hl:#f59e0b;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --cell:#a596f5;--myelin:#f0c35a;--astro:#f5a04a;--oligo:#34d399;--micro:#ff6369;--schwann:#5ab8f0;--vessel:#ff6369;
+          --ex:#4cc38a;--inh:#6b9cff;--ap:#ff6369;--fore:#f5a04a;--mid:#d9c79c;--hind:#d07a4f;
+          --fr:#a596f5;--pa:#f27db3;--te:#4cc38a;--oc:#f5c84a;--light:#ffb547;--eye:#1c2733;--nerve:#c97878;--hl:#ffb547;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+    .box{max-width:780px;margin:0 auto;padding:10px 12px 14px;}
+    .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0 0 8px;}
+    .tabs button{min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 4px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;}
+    .tabs button[aria-pressed=true]{border-color:var(--main);color:var(--main);box-shadow:inset 0 0 0 1px var(--main);}
+    .src{margin:0 0 6px;font-size:13px;color:var(--ink2);}
+    .src b{color:var(--main);}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;}
+    svg{display:block;width:100%;height:auto;}
+    svg[hidden]{display:none;}
+    svg text{fill:var(--ink);font-family:inherit;font-size:19px;}
+    svg text.s{font-size:15px;fill:var(--ink2);}
+    svg text.b{font-weight:800;}
+    svg text.w{fill:#fff;}
+    svg text.m{font-family:Menlo,Consolas,"D2Coding",monospace;}
+    svg .ln{stroke:var(--ink2);stroke-width:1.6;fill:none;}
+    svg .ax{stroke:var(--ink2);stroke-width:2;fill:none;}
+    svg .dash{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:6 5;fill:none;}
+    svg [data-s]{transition:opacity .45s ease;}
+    svg [data-s].off{opacity:0;}
+    svg [data-s].dim{opacity:.28;}
+    svg [data-s].hl{filter:drop-shadow(0 0 5px var(--hl));}
+    .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;}
+    .ctl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+    .ctl button.main{border-color:var(--main);color:var(--main);}
+    .ctl .pos{margin-left:auto;font-size:13px;color:var(--ink2);}
+    ol.cap{margin:8px 0 0;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:14.5px;line-height:1.65;}
+    ol.cap li{margin:2px 0;padding:1px 4px;border-radius:6px;cursor:pointer;}
+    ol.cap li b{color:var(--main);}
+    ol.cap li.cur{background:color-mix(in srgb,var(--hl) 22%,transparent);}
+    ol.cap li.later{opacity:.45;}
+    .note{margin:6px 0 0;font-size:13px;color:var(--ink2);line-height:1.6;}
+    .note a{color:var(--main);}
+    @media (max-width:560px){ .tabs{grid-template-columns:repeat(3,minmax(0,1fr));} .tabs button{font-size:12px;} ol.cap{font-size:14px;padding-left:28px;}
+        /* 폰: 그림이 작아지니 그림 속 글자를 키움 (긴 줄도 600 폭 안에 들어가는 크기까지만) */
+        svg text{font-size:22px;} svg text.s{font-size:17px;} .stage{padding:3px;} }
+</style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="tabs" id="tabs" role="group" aria-label="그림 고르기"></div>
+    <p class="src" id="src"></p>
+    <div class="stage">
+
+<!-- ① this() — 생성자가 다른 생성자를 부름 (Book) -->
+<svg data-fig="thiscall" viewBox="0 0 600 470" role="img" aria-label="this 로 다른 생성자를 부르는 Book 생성자 세 개" hidden>
+  <g data-s="1"><rect x="12" y="14" width="280" height="78" rx="10" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="152" y="44" text-anchor="middle" class="b m">Book(title)</text><text x="152" y="74" text-anchor="middle" class="s m">this(title, "작자미상")</text>
+    <rect x="308" y="14" width="280" height="78" rx="10" style="fill:var(--fr);fill-opacity:.18;stroke:var(--fr);stroke-width:2"/>
+    <text x="448" y="44" text-anchor="middle" class="b m">Book()</text><text x="448" y="74" text-anchor="middle" class="s m">this("", "")</text>
+    <rect x="100" y="170" width="400" height="104" rx="10" style="fill:var(--te);fill-opacity:.18;stroke:var(--te);stroke-width:2"/>
+    <text x="300" y="200" text-anchor="middle" class="b m">Book(title, author)</text>
+    <text x="300" y="230" text-anchor="middle" class="s m">this.title = title;</text><text x="300" y="256" text-anchor="middle" class="s m">this.author = author;</text></g>
+  <g data-s="2"><path class="d" d="M152,94 L226,164" style="stroke:var(--oc);stroke-width:2.5;fill:none"/><path d="M218,162 L230,168 L226,155 Z" style="fill:var(--oc)"/>
+    <text x="40" y="140" class="s b" style="fill:var(--oc)">"춘향전" →</text></g>
+  <g data-s="3"><path class="d" d="M448,94 L374,164" style="stroke:var(--fr);stroke-width:2.5;fill:none"/><path d="M374,155 L370,168 L382,162 Z" style="fill:var(--fr)"/>
+    <text x="300" y="306" text-anchor="middle" class="s b" style="fill:var(--fr)">Book() 로 돌아와서 → 기본 생성자 호출됨</text></g>
+  <g data-s="4"><text x="40" y="350" class="s">매개변수 2개</text><text x="560" y="350" text-anchor="end" class="b">어린왕자 · 생텍쥐페리</text>
+    <text x="40" y="382" class="s">매개변수 1개</text><text x="560" y="382" text-anchor="end" class="b">춘향전 · 작자미상</text>
+    <text x="40" y="414" class="s">매개변수 0개</text><text x="560" y="414" text-anchor="end" class="b">빈 문자열 · 빈 문자열</text></g>
+  <g data-s="5"><text x="300" y="456" text-anchor="middle" class="s b" style="fill:var(--ap)">⚠️ this() = 생성자 안에서만 · 반드시 첫 문장</text></g>
+</svg>
+
+<!-- ② 메소드 오버로딩 — 매개변수 개수 · 타입으로 골라 부름 -->
+<svg data-fig="overload" viewBox="0 0 600 420" role="img" aria-label="오버로딩된 getSum 메소드 호출" hidden>
+  <g><text x="136" y="22" text-anchor="middle" class="s">호출 (MethodMain)</text><text x="445" y="22" text-anchor="middle" class="s">메소드 (MethodSample)</text></g>
+  <g data-s="1"><rect x="10" y="34" width="252" height="70" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="136" y="62" text-anchor="middle" class="s m b">a.getSum(1, 2)</text><text x="136" y="92" text-anchor="middle" class="s b" style="fill:var(--te)">→ 3</text>
+    <rect x="300" y="34" width="290" height="70" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/>
+    <text x="445" y="62" text-anchor="middle" class="s m b">getSum(int, int)</text><text x="445" y="92" text-anchor="middle" class="s">int 리턴 · i + j</text>
+    <path class="d" d="M264,69 L294,69" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M290,63 L300,69 L290,75 Z" style="fill:var(--ink2)"/></g>
+  <g data-s="2"><rect x="10" y="122" width="252" height="70" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="136" y="150" text-anchor="middle" class="s m b">a.getSum(1, 2, 3)</text><text x="136" y="180" text-anchor="middle" class="s b" style="fill:var(--te)">→ 6</text>
+    <rect x="300" y="122" width="290" height="70" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/>
+    <text x="445" y="150" text-anchor="middle" class="s m b">getSum(int, int, int)</text><text x="445" y="180" text-anchor="middle" class="s">int 리턴 · i + j + k</text>
+    <path class="d" d="M264,157 L294,157" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M290,151 L300,157 L290,163 Z" style="fill:var(--ink2)"/></g>
+  <g data-s="3"><rect x="10" y="210" width="252" height="70" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="136" y="238" text-anchor="middle" class="s m b">a.getSum(1.1, 2.2)</text><text x="136" y="268" text-anchor="middle" class="s b" style="fill:var(--te)">→ 3.3000000000000003</text>
+    <rect x="300" y="210" width="290" height="70" rx="10" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="445" y="238" text-anchor="middle" class="s m b">getSum(double, double)</text><text x="445" y="268" text-anchor="middle" class="s">double 리턴 · i + j</text>
+    <path class="d" d="M264,245 L294,245" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M290,239 L300,245 L290,251 Z" style="fill:var(--ink2)"/></g>
+  <g data-s="4"><rect x="10" y="300" width="580" height="108" rx="10" class="dash" style="stroke:var(--ap)"/>
+    <text x="30" y="328" class="s m">int getSum(int i, int j)</text><text x="30" y="356" class="s m">double getSum(int i, int j)</text>
+    <text x="300" y="392" text-anchor="middle" class="s b" style="fill:var(--ap)">❌ 리턴 타입만 다름 → 오버로딩 실패 (컴파일 오류)</text></g>
+</svg>
+
+<!-- ③ 접근 지정자 4가지 — 공개 범위 -->
+<svg data-fig="access" viewBox="0 0 600 480" role="img" aria-label="private 디폴트 protected public 공개 범위" hidden>
+  <g data-s="4"><rect x="10" y="10" width="580" height="292" rx="16" style="fill:var(--te);fill-opacity:.07;stroke:var(--te);stroke-width:2"/>
+    <text x="26" y="38" class="b" style="fill:var(--te)">public</text><text x="574" y="38" text-anchor="end" class="s">모든 클래스</text></g>
+  <g data-s="3"><rect x="30" y="52" width="540" height="236" rx="14" style="fill:var(--inh);fill-opacity:.07;stroke:var(--inh);stroke-width:2"/>
+    <text x="46" y="80" class="b" style="fill:var(--inh)">protected</text><text x="554" y="80" text-anchor="end" class="s">같은 패키지 + 자식 클래스</text></g>
+  <g data-s="2"><rect x="50" y="94" width="500" height="180" rx="12" style="fill:var(--oc);fill-opacity:.1;stroke:var(--oc);stroke-width:2"/>
+    <text x="66" y="122" class="b" style="fill:var(--oc)">디폴트 (생략)</text><text x="534" y="122" text-anchor="end" class="s">같은 패키지</text></g>
+  <g data-s="1"><rect x="70" y="136" width="460" height="124" rx="10" style="fill:var(--ap);fill-opacity:.1;stroke:var(--ap);stroke-width:2"/>
+    <text x="86" y="164" class="b" style="fill:var(--ap)">private</text><text x="514" y="164" text-anchor="end" class="s">같은 클래스 안만</text>
+    <text x="300" y="214" text-anchor="middle" class="s">외부로부터 완벽 차단</text><text x="300" y="242" text-anchor="middle" class="s">(상속받은 자식도 X)</text></g>
+  <g data-s="5"><text x="24" y="346" class="s m">aClass.a = 10;</text><text x="250" y="346" class="s b" style="fill:var(--te)">✅ public</text>
+    <text x="24" y="380" class="s m">aClass.b = 10;</text><text x="250" y="380" class="s b" style="fill:var(--ap)">❌ private → 컴파일 오류</text>
+    <text x="24" y="414" class="s m">aClass.c = 10;</text><text x="250" y="414" class="s b" style="fill:var(--te)">✅ 디폴트 (같은 패키지)</text>
+    <text x="300" y="456" text-anchor="middle" class="s m" style="fill:var(--ap)">b has private access in Sample</text></g>
+</svg>
+
+<!-- ④ static — 클래스에 하나 · 모든 객체가 공유 (Counter) -->
+<svg data-fig="static" viewBox="0 0 600 480" role="img" aria-label="static 필드는 클래스에 하나 객체들이 공유" hidden>
+  <g data-s="1"><rect x="130" y="12" width="340" height="112" rx="12" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="300" y="40" text-anchor="middle" class="b">Counter 클래스 (하나만)</text><text x="300" y="70" text-anchor="middle" class="s m">static int gongyuCount</text>
+    <text x="236" y="106" text-anchor="middle" class="b">0</text></g>
+  <g data-s="2"><rect x="16" y="196" width="264" height="112" rx="12" style="fill:var(--inh);fill-opacity:.12;stroke:var(--inh);stroke-width:2"/>
+    <text x="148" y="224" text-anchor="middle" class="b">cnt1 객체</text><text x="148" y="254" text-anchor="middle" class="s m">instanceCount</text><text x="108" y="290" text-anchor="middle" class="b">0</text>
+    <rect x="320" y="196" width="264" height="112" rx="12" style="fill:var(--inh);fill-opacity:.12;stroke:var(--inh);stroke-width:2"/>
+    <text x="452" y="224" text-anchor="middle" class="b">cnt2 객체</text><text x="452" y="254" text-anchor="middle" class="s m">instanceCount</text><text x="412" y="290" text-anchor="middle" class="b">0</text>
+    <path class="dash" d="M148,194 L240,126 M452,194 L360,126"/><text x="300" y="168" text-anchor="middle" class="s b" style="fill:var(--oc)">같은 칸 공유</text></g>
+  <g data-s="3"><text x="300" y="106" text-anchor="middle" class="b" style="fill:var(--oc)">→ 1</text><text x="162" y="290" text-anchor="middle" class="b" style="fill:var(--te)">→ 1</text>
+    <text x="148" y="342" text-anchor="middle" class="s m b">cnt1.add1()</text></g>
+  <g data-s="4"><text x="364" y="106" text-anchor="middle" class="b" style="fill:var(--ap)">→ 2</text><text x="466" y="290" text-anchor="middle" class="b" style="fill:var(--te)">→ 1</text>
+    <text x="452" y="342" text-anchor="middle" class="s m b">cnt2.add1()</text></g>
+  <g data-s="5"><text x="20" y="390" class="s m">Counter.gongyuCount → 2</text><text x="316" y="390" class="s m">cnt1.gongyuCount → 2</text>
+    <text x="20" y="422" class="s m">cnt1.instanceCount → 1</text><text x="316" y="422" class="s m">cnt2.instanceCount → 1</text>
+    <text x="300" y="464" text-anchor="middle" class="s b" style="fill:var(--main)">static = 클래스에 하나 · 객체 이름으로 읽어도 같은 칸</text></g>
+</svg>
+
+<!-- ⑤ 객체 배열 — Book[] book = new Book[2] -->
+<svg data-fig="objarr" viewBox="0 0 600 460" role="img" aria-label="객체 배열은 레퍼런스 배열을 만든 뒤 칸마다 객체를 만든다" hidden>
+  <g data-s="1"><text x="20" y="30" class="s m b">① Book[] book = new Book[2];</text>
+    <text x="70" y="88" text-anchor="middle" class="s m">book</text><rect x="40" y="96" width="60" height="38" rx="6" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><circle cx="70" cy="115" r="5" style="fill:var(--ink)"/>
+    <path class="d" d="M76,115 L156,82" style="stroke:var(--ink2);stroke-width:2;fill:none"/><path d="M150,78 L160,80 L154,88 Z" style="fill:var(--ink2)"/>
+    <rect x="160" y="50" width="90" height="40" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><rect x="160" y="90" width="90" height="40" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/>
+    <text x="205" y="76" text-anchor="middle" class="s m">null</text><text x="205" y="116" text-anchor="middle" class="s m">null</text>
+    <text x="270" y="76" class="s">[0]</text><text x="270" y="116" class="s">[1]</text>
+    <text x="320" y="96" class="s">레퍼런스 칸만 생김</text><text x="320" y="122" class="s">(객체는 아직 없음)</text></g>
+  <g data-s="2"><text x="20" y="178" class="s m b">② book[i] = new Book(title, author);</text>
+    <rect x="40" y="226" width="60" height="38" rx="6" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><circle cx="70" cy="245" r="5" style="fill:var(--ink)"/>
+    <path class="ln" d="M76,245 L156,222"/><rect x="160" y="196" width="90" height="40" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><rect x="160" y="236" width="90" height="40" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/>
+    <circle cx="205" cy="216" r="5" style="fill:var(--ink)"/><circle cx="205" cy="256" r="5" style="fill:var(--ink)"/>
+    <path class="d" d="M211,216 L292,210" style="stroke:var(--te);stroke-width:2.2;fill:none"/><path d="M286,204 L296,210 L286,216 Z" style="fill:var(--te)"/>
+    <path class="d" d="M211,256 L292,262" style="stroke:var(--te);stroke-width:2.2;fill:none"/><path d="M286,256 L296,262 L286,268 Z" style="fill:var(--te)"/>
+    <rect x="298" y="190" width="292" height="40" rx="8" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="444" y="216" text-anchor="middle" class="s b">사랑의 기술 · 에리히 프롬</text>
+    <rect x="298" y="242" width="292" height="40" rx="8" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="444" y="268" text-anchor="middle" class="s b">시간의 역사 · 스티븐 호킹</text></g>
+  <g data-s="3"><text x="20" y="330" class="s m b">③ book[i].title · book[i].author</text>
+    <text x="20" y="364" class="s">(사랑의 기술, 에리히 프롬)(시간의 역사, 스티븐 호킹)</text></g>
+  <g data-s="4"><text x="20" y="412" class="s b" style="fill:var(--ap)">⚠️ ② 없이 book[0].title</text><text x="20" y="440" class="s m" style="fill:var(--ap)">→ NullPointerException</text></g>
+</svg>
+
+    </div>
+    <div class="ctl">
+        <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
+        <button type="button" id="prev" title="이전 단계">◀ 이전</button>
+        <button type="button" id="next" title="다음 단계">다음 ▶</button>
+        <button type="button" id="all" title="모두 보기">전체</button>
+        <span class="pos" id="pos"></span>
+    </div>
+    <ol class="cap" id="cap"></ol>
+    <p class="note" id="note"></p>
+</div>
+<script>
+(function () {
+    "use strict";
+    // 그림마다: 탭 이름 · 강의자료 출처 · 단계 설명 (단계 번호 = SVG 의 data-s) · 아래 메모
+    var FIGS = [
+        { id: "thiscall", week: 9, tab: "① this()", src: "4장 28 ~ 30쪽 — this() 로 다른 생성자 호출 (예제 4-5) · 9주차 수업 파일 Book.java · BookMain.java",
+          steps: [
+            "<b>생성자 3개</b> — 이름(Book)은 같고 매개변수 개수가 다름 = <b>생성자 오버로딩</b> · 실제로 필드에 넣는 일은 <code>Book(title, author)</code> 하나가 맡음",
+            "<code>new Book(\"춘향전\")</code> → <code>Book(title)</code> → <code>this(title, \"작자미상\")</code> 로 2개짜리 생성자를 부름",
+            "<code>new Book()</code> → <code>this(\"\", \"\")</code> 로 2개짜리를 먼저 부르고 → 돌아와서 <code>println</code> → <b>기본 생성자 호출됨</b>",
+            "<code>printInfo()</code> 결과 — <b>어린왕자 · 생텍쥐페리</b> / <b>춘향전 · 작자미상</b> / 빈 문자열 · 빈 문자열 (<code>제목: , 저자: </code>)",
+            "⚠️ <code>this()</code> 는 <b>생성자 안에서만</b> · <b>반드시 첫 문장</b> — println 다음에 쓰면 <code>call to this must be first statement in constructor</code> (javac 로 확인)" ],
+          note: "출력 순서: <b>기본 생성자 호출됨</b> 이 맨 먼저 (세 번째 객체를 <b>만들 때</b> 찍힘) → 그다음 printInfo 세 줄 · 코드와 실행 결과는 <a href=\"../자바프로그래밍-9주차.html\" target=\"_top\">9주차 페이지</a>" },
+        { id: "overload", week: 9, tab: "② 오버로딩", src: "4장 42 ~ 43쪽 — 메소드 오버로딩 · 오버로딩된 메소드 호출 · 9주차 수업 파일 MethodSample.java · MethodMain.java",
+          steps: [
+            "<code>a.getSum(1, 2)</code> → int 2개 → <code>getSum(int i, int j)</code> → <b>3</b>",
+            "<code>a.getSum(1, 2, 3)</code> → int 3개 → <code>getSum(int i, int j, int k)</code> → <b>6</b>",
+            "<code>a.getSum(1.1, 2.2)</code> → double 2개 → <code>getSum(double i, double j)</code> → <b>3.3000000000000003</b> (🤖 실수 오차 — 직접 실행한 값)",
+            "❌ <b>실패</b> — 매개변수(개수 · 타입)가 같고 <b>리턴 타입만 다르면</b> 오버로딩이 아님 → <code>method getSum(int,int) is already defined</code>" ],
+          note: "오버로딩 조건 = 이름이 같고 <b>매개변수의 개수나 타입이 다름</b> · 리턴 타입은 상관없음 (4장 42쪽)" },
+        { id: "access", week: 9, tab: "③ 접근 지정자", src: "4장 50 · 52 · 55쪽 — 접근 지정자 4가지 · 멤버 접근 지정 · 예제 4-10 · ✍️ 필기 “접근 지정자 차이 public , protected , private , default(아무것도 안쓰면)”",
+          steps: [
+            "<b>private</b> — <b>같은 클래스 안</b>에서만 · 외부로부터 완벽 차단 (상속받은 서브 클래스도 접근 X)",
+            "<b>디폴트</b> (✍️ 아무것도 안 쓰면) — <b>같은 패키지</b>의 클래스에게 허용",
+            "<b>protected</b> — 같은 패키지 + <b>자식(서브) 클래스</b>는 다른 패키지에 있어도 허용",
+            "<b>public</b> — 패키지에 관계없이 <b>모든 클래스</b>에게 허용",
+            "예제 4-10 (Sample · AccessEx · 같은 패키지) — <code>a</code> public ✅ · <code>b</code> private ❌ <b>컴파일 오류</b> · <code>c</code> 디폴트 ✅" ],
+          note: "공개 범위: private &lt; 디폴트 &lt; protected &lt; public · javac 오류 메시지 <code>b has private access in Sample</code> 를 직접 확인" },
+        { id: "static", week: 9, tab: "④ static", src: "4장 56 ~ 58 · 64쪽 — static 멤버 · non-static 멤버 · 예제 4-11 Calc · 9주차 수업 파일 Counter.java · StaticEx1.java · ✍️ 필기 “키워드:static”",
+          steps: [
+            "<b>static 필드</b> <code>gongyuCount</code> — 객체마다가 아니라 <b>클래스에 하나</b> (클래스가 로딩될 때 생김 · 처음 0)",
+            "<code>new Counter()</code> 두 번 → <b>cnt1 · cnt2</b> — <code>instanceCount</code> 는 <b>객체마다 따로</b> (인스턴스 멤버) · static 칸은 둘이 공유",
+            "<code>cnt1.add1()</code> → cnt1 의 instanceCount <b>1</b> · 공유 gongyuCount <b>1</b>",
+            "<code>cnt2.add1()</code> → cnt2 의 instanceCount <b>1</b> · 공유 gongyuCount <b>2</b> (같은 칸이라 이어서 증가)",
+            "출력 — <code>Counter.gongyuCount</code> <b>2</b> · <code>cnt1.instanceCount</code> 1 · <code>cnt2.instanceCount</code> 1 · <code>cnt1.gongyuCount</code> <b>2</b> (객체 이름으로 읽어도 같은 칸)" ],
+          note: "static 메소드도 객체 없이 <code>클래스이름.메소드()</code> — <code>Calc.abs(-5)</code> 5 · <code>Calc.max(10, 8)</code> 10 · <code>Calc.min(-3, -8)</code> -8 · ⚠️ static 메소드 안에서는 non-static 필드 · <code>this</code> 를 못 씀 (javac 로 확인)" },
+        { id: "objarr", week: 9, tab: "⑤ 객체 배열", src: "4장 32 ~ 35쪽 — 객체 배열 선언과 생성 과정 · 예제 4-7 · 9주차 수업 파일 BookArray.java",
+          steps: [
+            "<code>Book[] book = new Book[2];</code> → <b>레퍼런스 칸 2개</b>만 생김 · 칸 값은 <code>null</code> (객체는 아직 없음)",
+            "반복문에서 <code>book[i] = new Book(title, author);</code> → 칸마다 <b>Book 객체를 만들어</b> 연결",
+            "<code>book[i].title</code> · <code>book[i].author</code> 로 꺼내 출력 → <b>(사랑의 기술, 에리히 프롬)(시간의 역사, 스티븐 호킹)</b>",
+            "⚠️ ② 를 빼먹고 <code>book[0].title</code> → 칸이 null 이라 <b>NullPointerException</b> (직접 실행해 확인)" ],
+          note: "입력 예는 교재 예제 4-7 의 값 · <code>print</code> 라서 두 책이 <b>한 줄</b>에 이어서 출력돼요" }
+    ];
+
+    var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
+        note = document.getElementById("note"), pos = document.getElementById("pos"), box = document.getElementById("box");
+    var S = { fig: 0, step: 0, timers: [] };   // step 0 = 전체
+
+    function svgOf(i) { return document.querySelector('svg[data-fig="' + FIGS[i].id + '"]'); }
+    function parts(svgEl) { return Array.prototype.slice.call(svgEl.querySelectorAll("[data-s]")); }
+    function clearTimers() { S.timers.forEach(clearTimeout); S.timers = []; }
+
+    function drawIn(root) {                       // 선이 그려지듯이 (stroke-dashoffset)
+        var list = root.matches && root.matches(".d") ? [root] : [];
+        list = list.concat(Array.prototype.slice.call(root.querySelectorAll(".d")));
+        list.forEach(function (p) {
+            if (!p.getTotalLength) return;
+            var L; try { L = p.getTotalLength(); } catch (e) { return; }
+            if (!L) return;
+            p.style.transition = "none"; p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+            p.getBoundingClientRect();
+            p.style.transition = "stroke-dashoffset 0.9s ease"; p.style.strokeDashoffset = 0;
+            setTimeout(function () { p.style.strokeDasharray = ""; }, 1000);
+        });
+    }
+
+    function renderCap() {
+        var f = FIGS[S.fig];
+        cap.innerHTML = "";
+        f.steps.forEach(function (t, i) {
+            var li = document.createElement("li"); li.innerHTML = t;
+            if (S.step && i + 1 === S.step) li.className = "cur";
+            else if (S.step && i + 1 > S.step) li.className = "later";
+            li.addEventListener("click", function () { go(i + 1); });
+            cap.appendChild(li);
+        });
+        pos.textContent = S.step ? S.step + " / " + f.steps.length + " 단계" : "전체 " + f.steps.length + " 단계";
+    }
+
+    function apply(animateNew) {                  // 지금 단계에 맞게 보이기 · 숨기기
+        var svgEl = svgOf(S.fig);
+        parts(svgEl).forEach(function (g) {
+            var k = +g.getAttribute("data-s");
+            var wasOff = g.classList.contains("off");
+            var show = !S.step || k <= S.step;
+            g.classList.toggle("off", !show);
+            g.classList.toggle("hl", !!S.step && k === S.step);
+            if (show && wasOff && animateNew) drawIn(g);
+        });
+        renderCap();
+    }
+
+    function drawAll() {                          // 전체를 단계 순서대로 그리면서 보여 주기
+        clearTimers();
+        var svgEl = svgOf(S.fig), n = FIGS[S.fig].steps.length;
+        S.step = 0;
+        parts(svgEl).forEach(function (g) { g.classList.add("off"); g.classList.remove("hl"); });
+        drawIn(svgEl);
+        renderCap();
+        for (var k = 1; k <= n; k++) (function (k) {
+            S.timers.push(setTimeout(function () {
+                parts(svgEl).forEach(function (g) { if (+g.getAttribute("data-s") === k) { g.classList.remove("off"); drawIn(g); } });
+            }, 350 + (k - 1) * 650));
+        })(k);
+    }
+
+    function go(step) {
+        clearTimers();
+        var n = FIGS[S.fig].steps.length;
+        S.step = Math.max(1, Math.min(n, step));
+        apply(true);
+    }
+
+    function show(i, draw) {
+        clearTimers();
+        S.fig = i; S.step = 0;
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (s) {   // SVG 는 .hidden 속성이 없어서 attribute 로
+            if (s.getAttribute("data-fig") === FIGS[i].id) s.removeAttribute("hidden"); else s.setAttribute("hidden", "");
+        });
+        Array.prototype.forEach.call(tabsBox.children, function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+        src.innerHTML = "📄 " + FIGS[i].src;
+        note.innerHTML = FIGS[i].note || "";
+        if (draw) drawAll(); else { parts(svgOf(i)).forEach(function (g) { g.classList.remove("off", "hl"); }); renderCap(); }
+        tell();
+    }
+
+    // 주차로 골라 보기 — ?week=5 = 그 주차 그림만 · ?weeks=1-7 = 그 범위 (주차 페이지 · 중간고사 · 기말고사 · 완전정리가 같은 그림 파일을 나눠 씀 · README 🎨)
+    (function () {
+        var q = location.search, m1 = /[?&]week=(\d+)/.exec(q), m2 = /[?&]weeks=(\d+)-(\d+)/.exec(q);
+        if (!m1 && !m2) return;
+        var lo = m1 ? +m1[1] : +m2[1], hi = m1 ? +m1[1] : +m2[2];
+        var keep = FIGS.filter(function (f) { return [].concat(f.week).some(function (w) { return w >= lo && w <= hi; }); });
+        if (keep.length) FIGS = keep;
+    })();
+
+    // 그림 검사 — 콘솔에서 figCheck() → 글자끼리 겹침 · 600 폭 밖으로 넘침 목록 (없으면 [] · 폰 폭에서도 한 번 더)
+    window.figCheck = function () {
+        var out = [];
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (sv) {
+            var wasHidden = sv.hasAttribute("hidden"); sv.removeAttribute("hidden");
+            var vb = sv.viewBox.baseVal, ts = Array.prototype.map.call(sv.querySelectorAll("text"), function (t) { return { t: t, b: t.getBBox() }; });
+            ts.forEach(function (o) { if (o.b.x < -1 || o.b.x + o.b.width > vb.width + 1) out.push(sv.getAttribute("data-fig") + " 넘침: " + o.t.textContent.slice(0, 24)); });
+            for (var i = 0; i < ts.length; i++) for (var j = i + 1; j < ts.length; j++) {
+                var a = ts[i].b, c = ts[j].b, ox = Math.min(a.x + a.width, c.x + c.width) - Math.max(a.x, c.x), oy = Math.min(a.y + a.height, c.y + c.height) - Math.max(a.y, c.y);
+                if (ox > 2 && oy > 3) out.push(sv.getAttribute("data-fig") + " 겹침: " + ts[i].t.textContent.slice(0, 16) + " × " + ts[j].t.textContent.slice(0, 16));
+            }
+            if (wasHidden) sv.setAttribute("hidden", "");
+        });
+        return out;
+    };
+
+    FIGS.forEach(function (f, i) {
+        var b = document.createElement("button"); b.type = "button"; b.textContent = f.tab;
+        b.addEventListener("click", function () { show(i, true); try { history.replaceState(null, "", "#" + f.id); } catch (e) {} });
+        tabsBox.appendChild(b);
+    });
+    document.getElementById("redraw").addEventListener("click", function () { drawAll(); });
+    document.getElementById("all").addEventListener("click", function () { clearTimers(); S.step = 0; apply(false); });
+    document.getElementById("prev").addEventListener("click", function () { go(S.step ? S.step - 1 : 1); });
+    document.getElementById("next").addEventListener("click", function () { go(S.step ? S.step + 1 : 1); });
+    document.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(S.step + 1); else if (e.key === "ArrowLeft") go(S.step ? S.step - 1 : 1); });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) {} }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    var start = 0, h = (location.hash || "").slice(1);
+    FIGS.forEach(function (f, i) { if (f.id === h) start = i; });
+    show(start, false);
+    // 처음 화면에 보일 때 한 번 그리면서 보여 주기
+    if (window.IntersectionObserver) {
+        var done = false;
+        new IntersectionObserver(function (es) { if (!done && es[0].isIntersecting) { done = true; drawAll(); } }, { threshold: 0.3 }).observe(document.querySelector(".stage"));
+    }
+})();
+</script>
+<script src="../../figink.js?v=202610262015"></script>
+</body>
+</html>

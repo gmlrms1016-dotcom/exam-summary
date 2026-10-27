@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웹프로그래밍 그림 정리</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --cell:#7c6ae6;--myelin:#e0a838;--astro:#e0862b;--oligo:#0f9f74;--micro:#d9363e;--schwann:#2b8fd1;--vessel:#d9363e;
+          --ex:#16a34a;--inh:#2563eb;--ap:#e5484d;--fore:#e0862b;--mid:#c9b48a;--hind:#a0522d;
+          --fr:#8b7cf6;--pa:#ec5f9e;--te:#22b07d;--oc:#e9b52c;--light:#f5a524;--eye:#eef4fb;--nerve:#e8a3a3;--hl:#f59e0b;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --cell:#a596f5;--myelin:#f0c35a;--astro:#f5a04a;--oligo:#34d399;--micro:#ff6369;--schwann:#5ab8f0;--vessel:#ff6369;
+          --ex:#4cc38a;--inh:#6b9cff;--ap:#ff6369;--fore:#f5a04a;--mid:#d9c79c;--hind:#d07a4f;
+          --fr:#a596f5;--pa:#f27db3;--te:#4cc38a;--oc:#f5c84a;--light:#ffb547;--eye:#1c2733;--nerve:#c97878;--hl:#ffb547;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+    .box{max-width:780px;margin:0 auto;padding:10px 12px 14px;}
+    .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0 0 8px;}
+    .tabs button{min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 4px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;}
+    .tabs button[aria-pressed=true]{border-color:var(--main);color:var(--main);box-shadow:inset 0 0 0 1px var(--main);}
+    .src{margin:0 0 6px;font-size:13px;color:var(--ink2);}
+    .src b{color:var(--main);}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;}
+    svg{display:block;width:100%;height:auto;}
+    svg[hidden]{display:none;}
+    svg text{fill:var(--ink);font-family:inherit;font-size:19px;}
+    svg text.s{font-size:15px;fill:var(--ink2);}
+    svg text.b{font-weight:800;}
+    svg text.w{fill:#fff;}
+    svg text.m{font-family:Menlo,Consolas,"D2Coding",monospace;}
+    svg .ln{stroke:var(--ink2);stroke-width:1.6;fill:none;}
+    svg .ax{stroke:var(--ink2);stroke-width:2;fill:none;}
+    svg .dash{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:6 5;fill:none;}
+    svg [data-s]{transition:opacity .45s ease;}
+    svg [data-s].off{opacity:0;}
+    svg [data-s].dim{opacity:.28;}
+    svg [data-s].hl{filter:drop-shadow(0 0 5px var(--hl));}
+    .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;}
+    .ctl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+    .ctl button.main{border-color:var(--main);color:var(--main);}
+    .ctl .pos{margin-left:auto;font-size:13px;color:var(--ink2);}
+    ol.cap{margin:8px 0 0;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:14.5px;line-height:1.65;}
+    ol.cap li{margin:2px 0;padding:1px 4px;border-radius:6px;cursor:pointer;}
+    ol.cap li b{color:var(--main);}
+    ol.cap li.cur{background:color-mix(in srgb,var(--hl) 22%,transparent);}
+    ol.cap li.later{opacity:.45;}
+    .note{margin:6px 0 0;font-size:13px;color:var(--ink2);line-height:1.6;}
+    .note a{color:var(--main);}
+    @media (max-width:560px){ .tabs{grid-template-columns:repeat(3,minmax(0,1fr));} .tabs button{font-size:12px;} ol.cap{font-size:14px;padding-left:28px;}
+        /* 폰: 그림이 작아지니 그림 속 글자를 키움 (긴 줄도 600 폭 안에 들어가는 크기까지만) */
+        svg text{font-size:22px;} svg text.s{font-size:17px;} .stage{padding:3px;} }
+</style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="tabs" id="tabs" role="group" aria-label="그림 고르기"></div>
+    <p class="src" id="src"></p>
+    <div class="stage">
+
+<!-- ① 이벤트 4요소 — 1027_01_event.html (할일 목록) -->
+<svg data-fig="event" viewBox="0 0 600 470" role="img" aria-label="이벤트 소스 이벤트 핸들러 이벤트 객체" hidden>
+  <g><rect x="12" y="12" width="276" height="300" rx="12" style="fill:var(--card);stroke:var(--line);stroke-width:2"/>
+    <text x="30" y="46" class="b">할일 목록</text>
+    <rect x="30" y="62" width="122" height="38" rx="7" style="fill:#f80"/><text x="91" y="87" text-anchor="middle" class="s w b">목록 추가</text>
+    <text x="34" y="134" class="s">제목 1</text><path class="ln" d="M30,144 L270,144"/>
+    <text x="34" y="168" class="s">제목 2</text><path class="ln" d="M30,178 L270,178"/>
+    <text x="34" y="202" class="s">제목 3</text><path class="ln" d="M30,212 L270,212"/>
+    <text x="34" y="236" class="s">제목 4</text><path class="ln" d="M30,246 L270,246"/></g>
+  <g data-s="1"><rect x="304" y="20" width="286" height="60" rx="10" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="318" y="44" class="b">① 이벤트 소스</text><text x="318" y="70" class="s m">addBtn (#add-btn)</text>
+    <path class="d" d="M302,58 L158,80" style="stroke:var(--oc);stroke-width:2.5;fill:none"/><path d="M166,74 L154,81 L167,86 Z" style="fill:var(--oc)"/></g>
+  <g data-s="2"><rect x="304" y="94" width="286" height="60" rx="10" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <text x="318" y="118" class="b">② 이벤트</text><text x="318" y="144" class="s m">'click' (누르기)</text></g>
+  <g data-s="3"><rect x="304" y="168" width="286" height="66" rx="10" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/>
+    <text x="318" y="192" class="b">③ 이벤트 핸들러</text><text x="318" y="220" class="s m">function () { … }</text></g>
+  <g data-s="4"><rect x="304" y="248" width="286" height="64" rx="10" style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:2"/>
+    <text x="318" y="272" class="b">④ 이벤트 객체 (e)</text><text x="318" y="300" class="s m">e.type → 'click'</text></g>
+  <g data-s="5"><text x="34" y="276" class="s b" style="fill:var(--te)">제목 5  ← 새로 추가</text><path class="ln" d="M30,286 L270,286"/></g>
+  <g><text x="20" y="352" class="s m">addBtn.addEventListener('click',</text><text x="60" y="380" class="s m">function () { … });</text></g>
+  <g data-s="5"><text x="20" y="418" class="s">prompt("할 일 입력") → 입력값을</text><text x="20" y="446" class="s m">list.innerHTML += '&lt;li&gt;' + txt + '&lt;/li&gt;'</text></g>
+</svg>
+
+<!-- ② 요청 · 응답 — ✍️ 파라미터 · JSON -->
+<svg data-fig="reqres" viewBox="0 0 600 450" role="img" aria-label="클라이언트 요청과 파라미터 서버 응답과 JSON" hidden>
+  <g><rect x="14" y="30" width="190" height="270" rx="12" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2"/>
+    <text x="109" y="62" text-anchor="middle" class="b">클라이언트</text><text x="109" y="88" text-anchor="middle" class="s">(브라우저)</text>
+    <rect x="396" y="30" width="190" height="270" rx="12" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/>
+    <text x="491" y="62" text-anchor="middle" class="b">서버</text><text x="491" y="88" text-anchor="middle" class="s">(웹 서버)</text></g>
+  <g data-s="1"><path class="d" d="M206,140 L388,140" style="stroke:var(--inh);stroke-width:3;fill:none"/><path d="M382,133 L394,140 L382,147 Z" style="fill:var(--inh)"/>
+    <text x="300" y="126" text-anchor="middle" class="b" style="fill:var(--inh)">요청 (request)</text>
+    <text x="300" y="168" text-anchor="middle" class="s m">?name=hong</text><text x="300" y="192" text-anchor="middle" class="s b">↑ 파라미터</text></g>
+  <g data-s="2"><text x="491" y="150" text-anchor="middle" class="s">요청을 받아</text><text x="491" y="176" text-anchor="middle" class="s">처리 🤖</text></g>
+  <g data-s="3"><path class="d" d="M394,246 L212,246" style="stroke:var(--oc);stroke-width:3;fill:none"/><path d="M218,239 L206,246 L218,253 Z" style="fill:var(--oc)"/>
+    <text x="300" y="232" text-anchor="middle" class="b" style="fill:var(--oc)">응답 (response)</text>
+    <text x="300" y="276" text-anchor="middle" class="s m">'{"name":"hong"}'</text></g>
+  <g data-s="4"><rect x="14" y="316" width="300" height="64" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/>
+    <text x="30" y="342" class="s m">JSON.parse(텍스트)</text><text x="30" y="368" class="s">→ 자바스크립트 객체 🤖</text></g>
+  <g data-s="5"><rect x="14" y="394" width="572" height="46" rx="10" style="fill:var(--main);fill-opacity:.1;stroke:var(--main);stroke-width:2"/>
+    <text x="300" y="424" text-anchor="middle" class="b">화면에 출력 = ✍️ “뿌려 줌” (innerHTML 등)</text></g>
+</svg>
+
+<!-- ③ 요소 순회 — 1027_02_요소순회.js -->
+<svg data-fig="loop" viewBox="0 0 600 480" role="img" aria-label="for 와 for of 그리고 Object keys values" hidden>
+  <g data-s="1"><text x="300" y="28" text-anchor="middle" class="s m b">let arr = [1, 2, 3];</text>
+    <rect x="180" y="42" width="80" height="48" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="260" y="42" width="80" height="48" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="340" y="42" width="80" height="48" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <text x="220" y="74" text-anchor="middle" class="b">1</text><text x="300" y="74" text-anchor="middle" class="b">2</text><text x="380" y="74" text-anchor="middle" class="b">3</text>
+    <text x="220" y="114" text-anchor="middle" class="s">[0]</text><text x="300" y="114" text-anchor="middle" class="s">[1]</text><text x="380" y="114" text-anchor="middle" class="s">[2]</text></g>
+  <g data-s="2"><rect x="12" y="134" width="282" height="104" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/>
+    <text x="28" y="160" class="b">방법1 — for</text><text x="28" y="192" class="s m">i = 0, 1, 2 (인덱스)</text><text x="28" y="222" class="s m">item = arr[i]</text></g>
+  <g data-s="3"><rect x="306" y="134" width="282" height="104" rx="10" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/>
+    <text x="322" y="160" class="b">방법2 — for…of</text><text x="322" y="192" class="s m">item = 1, 2, 3 (값)</text><text x="322" y="222" class="s">인덱스 없이 값을 바로</text></g>
+  <g data-s="4"><text x="300" y="270" text-anchor="middle" class="s m b">person 객체</text>
+    <rect x="190" y="282" width="100" height="32" style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:1.5"/><rect x="290" y="282" width="120" height="32" style="fill:var(--card);stroke:var(--fr);stroke-width:1.5"/>
+    <rect x="190" y="314" width="100" height="32" style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:1.5"/><rect x="290" y="314" width="120" height="32" style="fill:var(--card);stroke:var(--fr);stroke-width:1.5"/>
+    <rect x="190" y="346" width="100" height="32" style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:1.5"/><rect x="290" y="346" width="120" height="32" style="fill:var(--card);stroke:var(--fr);stroke-width:1.5"/>
+    <text x="240" y="304" text-anchor="middle" class="s m">name</text><text x="350" y="304" text-anchor="middle" class="s">윤희근</text>
+    <text x="240" y="336" text-anchor="middle" class="s m">age</text><text x="350" y="336" text-anchor="middle" class="s">27</text>
+    <text x="240" y="368" text-anchor="middle" class="s m">hobby</text><text x="350" y="368" text-anchor="middle" class="s">테니스</text>
+    <text x="20" y="412" class="s m b">Object.keys</text><text x="196" y="412" class="s m">→ ["name", "age", "hobby"]</text></g>
+  <g data-s="5"><text x="20" y="446" class="s m b">Object.values</text><text x="196" y="446" class="s m">→ ["윤희근", 27, "테니스"]</text>
+    <text x="300" y="474" text-anchor="middle" class="s">for…of 로 key 를 돌며 person[key] → 값</text></g>
+</svg>
+
+    </div>
+    <div class="ctl">
+        <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
+        <button type="button" id="prev" title="이전 단계">◀ 이전</button>
+        <button type="button" id="next" title="다음 단계">다음 ▶</button>
+        <button type="button" id="all" title="모두 보기">전체</button>
+        <span class="pos" id="pos"></span>
+    </div>
+    <ol class="cap" id="cap"></ol>
+    <p class="note" id="note"></p>
+</div>
+<script>
+(function () {
+    "use strict";
+    // 그림마다: 탭 이름 · 강의자료 출처 · 단계 설명 (단계 번호 = SVG 의 data-s) · 아래 메모
+    var FIGS = [
+        { id: "event", week: 9, tab: "① 이벤트 4요소", src: "9주차 수업 파일 1027_01_event.html (할일 목록) · 🔥 ✍️ 필기 “(이벤트,이벤트소스,이벤트헨들러,이벤트객체) 기말고사에 나옴”",
+          steps: [
+            "<b>이벤트 소스</b> — 이벤트가 일어난 <b>근원지(요소)</b> · 수업 코드의 <code>addBtn</code> (목록 추가 버튼)",
+            "<b>이벤트</b> — 웹에서 일어난 <b>사건</b> · <code>addEventListener</code> 의 첫 번째 인자 <code>'click'</code>",
+            "<b>이벤트 핸들러</b> (= 이벤트 리스너) — 이벤트가 일어나면 <b>실행되는 함수</b> · 두 번째 인자 <code>function () { … }</code>",
+            "<b>이벤트 객체</b> — 발생한 이벤트의 <b>정보</b>를 담은 객체 · 브라우저가 만들어 핸들러의 매개변수(<code>e</code>)로 넘겨 줌 · <code>e.type</code> → 'click' · <code>e.target</code> → 누른 버튼",
+            "결과 — <code>prompt(\"할 일 입력\")</code> 로 받은 값을 <code>list.innerHTML += '&lt;li&gt;' + txt + '&lt;/li&gt;'</code> → 목록 <b>끝에 추가</b>" ],
+          note: "🔥 기말고사에 나옴 (✍️) · 4요소는 2주차에 처음 배움 · 🤖 수업 코드는 <code>function()</code> 이라 e 를 받지 않았어요 — e 의 값은 크롬에서 버튼을 눌러 직접 확인 · MDN: 리스너 = 이벤트를 기다리는 쪽 · 핸들러 = 불리는 함수 (수업 코드 주석은 같은 함수를 ‘이벤트리스너’라고 함)" },
+        { id: "reqres", week: 9, tab: "② 요청 · 응답", src: "9주차 ✍️ 필기 — 클라이언트가 서버에 전송(리퀘스트) · 파라미터 · 서버에서 받은 리스판스된 텍스트 · json · 클라이언트 화면에 뿌려줌",
+          steps: [
+            "<b>요청 (request)</b> — 클라이언트가 서버로 보냄 · 요청에 담아 보내는 값 = <b>파라미터</b> (예: <code>?name=hong</code>)",
+            "서버가 요청과 파라미터를 받아 처리 (🤖 예: 데이터를 찾기)",
+            "<b>응답 (response)</b> — 서버가 돌려주는 <b>텍스트(문자열)</b> · 흔히 <b>JSON</b> 형식 (<code>'{\"name\":\"hong\"}'</code>)",
+            "🤖 <code>JSON.parse(텍스트)</code> → 자바스크립트 <b>객체</b>로 바꿈 (node 로 확인: <code>typeof</code> string → object)",
+            "객체의 값을 화면(DOM)에 출력 — ✍️ “클라이언트 화면에 뿌려 줌” (<code>innerHTML</code> 등)" ],
+          note: "⚠️ 팩트체크 — 필기 “전송(리퀘스트)하는 것을 파라미터라고 함” → 보내는 것 = <b>요청</b> · 요청에 담긴 값 = <b>파라미터</b> / “json 으로 저장” → 응답은 JSON <b>형식의 문자열</b>로 오고 JSON.parse 로 객체로 바꿔 씀" },
+        { id: "loop", week: 9, tab: "③ 요소 순회", src: "9주차 수업 파일 1027_02_요소순회.js — 방법1 for · 방법2 for…of · Object.keys · Object.values",
+          steps: [
+            "배열 <code>arr = [1, 2, 3]</code> — 값 1 · 2 · 3 · 인덱스 0 · 1 · 2",
+            "<b>방법1 for</b> — 인덱스 <code>i</code> 를 0 부터 <code>arr.length - 1</code> 까지 → <code>arr[i]</code> 로 꺼냄",
+            "<b>방법2 for…of</b> — 인덱스 없이 <b>값</b>이 차례로 <code>item</code> 에 들어옴",
+            "<code>Object.keys(person)</code> → <b>키만</b> 모은 배열 <code>[\"name\", \"age\", \"hobby\"]</code>",
+            "<code>Object.values(person)</code> → <b>값만</b> 모은 배열 · for…of 로 key 를 돌며 <code>person[key]</code> → <code>name 윤희근</code> · <code>age 27</code> · <code>hobby 테니스</code>" ],
+          note: "<code>console.log(\"\\n방법1\")</code> 는 맨 앞 <code>\\n</code> 때문에 빈 줄을 먼저 찍어요 · 전체 출력은 node 로 직접 실행한 값 (<a href=\"../웹프로그래밍-9주차.html\" target=\"_top\">9주차 페이지</a>)" }
+    ];
+
+    var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
+        note = document.getElementById("note"), pos = document.getElementById("pos"), box = document.getElementById("box");
+    var S = { fig: 0, step: 0, timers: [] };   // step 0 = 전체
+
+    function svgOf(i) { return document.querySelector('svg[data-fig="' + FIGS[i].id + '"]'); }
+    function parts(svgEl) { return Array.prototype.slice.call(svgEl.querySelectorAll("[data-s]")); }
+    function clearTimers() { S.timers.forEach(clearTimeout); S.timers = []; }
+
+    function drawIn(root) {                       // 선이 그려지듯이 (stroke-dashoffset)
+        var list = root.matches && root.matches(".d") ? [root] : [];
+        list = list.concat(Array.prototype.slice.call(root.querySelectorAll(".d")));
+        list.forEach(function (p) {
+            if (!p.getTotalLength) return;
+            var L; try { L = p.getTotalLength(); } catch (e) { return; }
+            if (!L) return;
+            p.style.transition = "none"; p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+            p.getBoundingClientRect();
+            p.style.transition = "stroke-dashoffset 0.9s ease"; p.style.strokeDashoffset = 0;
+            setTimeout(function () { p.style.strokeDasharray = ""; }, 1000);
+        });
+    }
+
+    function renderCap() {
+        var f = FIGS[S.fig];
+        cap.innerHTML = "";
+        f.steps.forEach(function (t, i) {
+            var li = document.createElement("li"); li.innerHTML = t;
+            if (S.step && i + 1 === S.step) li.className = "cur";
+            else if (S.step && i + 1 > S.step) li.className = "later";
+            li.addEventListener("click", function () { go(i + 1); });
+            cap.appendChild(li);
+        });
+        pos.textContent = S.step ? S.step + " / " + f.steps.length + " 단계" : "전체 " + f.steps.length + " 단계";
+    }
+
+    function apply(animateNew) {                  // 지금 단계에 맞게 보이기 · 숨기기
+        var svgEl = svgOf(S.fig);
+        parts(svgEl).forEach(function (g) {
+            var k = +g.getAttribute("data-s");
+            var wasOff = g.classList.contains("off");
+            var show = !S.step || k <= S.step;
+            g.classList.toggle("off", !show);
+            g.classList.toggle("hl", !!S.step && k === S.step);
+            if (show && wasOff && animateNew) drawIn(g);
+        });
+        renderCap();
+    }
+
+    function drawAll() {                          // 전체를 단계 순서대로 그리면서 보여 주기
+        clearTimers();
+        var svgEl = svgOf(S.fig), n = FIGS[S.fig].steps.length;
+        S.step = 0;
+        parts(svgEl).forEach(function (g) { g.classList.add("off"); g.classList.remove("hl"); });
+        drawIn(svgEl);
+        renderCap();
+        for (var k = 1; k <= n; k++) (function (k) {
+            S.timers.push(setTimeout(function () {
+                parts(svgEl).forEach(function (g) { if (+g.getAttribute("data-s") === k) { g.classList.remove("off"); drawIn(g); } });
+            }, 350 + (k - 1) * 650));
+        })(k);
+    }
+
+    function go(step) {
+        clearTimers();
+        var n = FIGS[S.fig].steps.length;
+        S.step = Math.max(1, Math.min(n, step));
+        apply(true);
+    }
+
+    function show(i, draw) {
+        clearTimers();
+        S.fig = i; S.step = 0;
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (s) {   // SVG 는 .hidden 속성이 없어서 attribute 로
+            if (s.getAttribute("data-fig") === FIGS[i].id) s.removeAttribute("hidden"); else s.setAttribute("hidden", "");
+        });
+        Array.prototype.forEach.call(tabsBox.children, function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+        src.innerHTML = "📄 " + FIGS[i].src;
+        note.innerHTML = FIGS[i].note || "";
+        if (draw) drawAll(); else { parts(svgOf(i)).forEach(function (g) { g.classList.remove("off", "hl"); }); renderCap(); }
+        tell();
+    }
+
+    // 주차로 골라 보기 — ?week=5 = 그 주차 그림만 · ?weeks=1-7 = 그 범위 (주차 페이지 · 중간고사 · 기말고사 · 완전정리가 같은 그림 파일을 나눠 씀 · README 🎨)
+    (function () {
+        var q = location.search, m1 = /[?&]week=(\d+)/.exec(q), m2 = /[?&]weeks=(\d+)-(\d+)/.exec(q);
+        if (!m1 && !m2) return;
+        var lo = m1 ? +m1[1] : +m2[1], hi = m1 ? +m1[1] : +m2[2];
+        var keep = FIGS.filter(function (f) { return [].concat(f.week).some(function (w) { return w >= lo && w <= hi; }); });
+        if (keep.length) FIGS = keep;
+    })();
+
+    // 그림 검사 — 콘솔에서 figCheck() → 글자끼리 겹침 · 600 폭 밖으로 넘침 목록 (없으면 [] · 폰 폭에서도 한 번 더)
+    window.figCheck = function () {
+        var out = [];
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (sv) {
+            var wasHidden = sv.hasAttribute("hidden"); sv.removeAttribute("hidden");
+            var vb = sv.viewBox.baseVal, ts = Array.prototype.map.call(sv.querySelectorAll("text"), function (t) { return { t: t, b: t.getBBox() }; });
+            ts.forEach(function (o) { if (o.b.x < -1 || o.b.x + o.b.width > vb.width + 1) out.push(sv.getAttribute("data-fig") + " 넘침: " + o.t.textContent.slice(0, 24)); });
+            for (var i = 0; i < ts.length; i++) for (var j = i + 1; j < ts.length; j++) {
+                var a = ts[i].b, c = ts[j].b, ox = Math.min(a.x + a.width, c.x + c.width) - Math.max(a.x, c.x), oy = Math.min(a.y + a.height, c.y + c.height) - Math.max(a.y, c.y);
+                if (ox > 2 && oy > 3) out.push(sv.getAttribute("data-fig") + " 겹침: " + ts[i].t.textContent.slice(0, 16) + " × " + ts[j].t.textContent.slice(0, 16));
+            }
+            if (wasHidden) sv.setAttribute("hidden", "");
+        });
+        return out;
+    };
+
+    FIGS.forEach(function (f, i) {
+        var b = document.createElement("button"); b.type = "button"; b.textContent = f.tab;
+        b.addEventListener("click", function () { show(i, true); try { history.replaceState(null, "", "#" + f.id); } catch (e) {} });
+        tabsBox.appendChild(b);
+    });
+    document.getElementById("redraw").addEventListener("click", function () { drawAll(); });
+    document.getElementById("all").addEventListener("click", function () { clearTimers(); S.step = 0; apply(false); });
+    document.getElementById("prev").addEventListener("click", function () { go(S.step ? S.step - 1 : 1); });
+    document.getElementById("next").addEventListener("click", function () { go(S.step ? S.step + 1 : 1); });
+    document.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(S.step + 1); else if (e.key === "ArrowLeft") go(S.step ? S.step - 1 : 1); });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) {} }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    var start = 0, h = (location.hash || "").slice(1);
+    FIGS.forEach(function (f, i) { if (f.id === h) start = i; });
+    show(start, false);
+    // 처음 화면에 보일 때 한 번 그리면서 보여 주기
+    if (window.IntersectionObserver) {
+        var done = false;
+        new IntersectionObserver(function (es) { if (!done && es[0].isIntersecting) { done = true; drawAll(); } }, { threshold: 0.3 }).observe(document.querySelector(".stage"));
+    }
+})();
+</script>
+<script src="../../figink.js?v=202610262015"></script>
+</body>
+</html>
