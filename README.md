@@ -45,6 +45,7 @@ codecolor.js        전 페이지 공용 — 소스코드 색칠(VS Code 고대�
 motion.js           전 페이지 공용 — 애니메이션·인터랙션(화면 전환·스크롤 등장·퀴즈 반응·맨 위로 버튼) · theme.js 가 자동으로 불러옴
 outview.js          전 페이지 공용 — ▶ 출력 결과 상자(pre.io): 줄 번호 · ⌨️ 키보드 입력 강조 · 오류 줄 빨강 · [␣ 공백] 버튼 · 줄마다 💡 설명(앞 코드의 출력문 · 들어간 값 · 주석 · 반복 N번째 / 리눅스 passwd·group·shadow·ls -l·chage·id 칸 풀이) · theme.js 가 자동으로 불러옴
 ux.js               전 페이지 공용 — 쓰기 편하게(디자인 · 색은 그대로, 2026-10-26): 아이폰 · 아이패드 입력칸 누를 때 확대 막기(iOS 만 viewport maximum-scale=1 · 두 손가락 확대는 됨) · 작은 버튼(⧉ 복사 · 학사일정 ◀ ▶ · 더보기 · 💡 정답 보기 · 주차 맨 위 ← 링크) 누르는 영역만 넓힘 · 빠른 두 번 누름 확대 막기 · 가로 화면 글자 자동 확대 막기 · 애니메이션 중 옆으로 밀림 막기(body overflow-x: clip — 82쪽 폰 폭 점검에서 넘치는 내용 없음 확인) · 키보드 포커스 테두리(링크 · 접기) · 답 · 코드 입력칸 자동 대문자 · 자동 고침 끄기 + Enter = 완료 · 탭 아이콘 · 홈 화면 아이콘 · 브라우저 위쪽 색(다크 #0c1014 / 라이트 = 페이지 배경) · theme.js 가 자동으로 불러옴
+tools/pc-capture/   학교 PC(Windows) Claude Code 캡처 설정 (2026-10-29) — vmcapture.ps1 = DPI 인식(SetProcessDpiAwarenessContext(-4)) → VMware 창 영역만 → 원래 픽셀 PNG (줄이기 · JPG 없음) · CLAUDE-capture.md = 사용자 CLAUDE.md 에 붙이는 규칙 · setup.md = 학교 PC Claude Code 에 “이 주소 읽고 그대로 설치해” 한 줄로 설치 (사이트 페이지와 상관없는 도구라 빌드 · 버전 올리기 대상 아님)
 favicon.svg · favicon-32.png · icon-180.png · icon-512.png  사이트 아이콘(초록 바탕 펼친 책 + 주황 책갈피) — 탭 · 홈 화면 · 카톡 링크 미리보기(og:image)
 404.html            없는 주소로 들어오면 GitHub Pages 가 보여 주는 페이지 — 어느 폴더에서 열려도 맞게 <base> 를 먼저 씀 · 전공 · 교양 첫 화면 · 이전 페이지 버튼
 termclick.js        전 페이지 공용 — 🖥️ 명령을 한 줄씩 누르면 출력이 펼쳐지는 터미널(.tclick · 닫기 · 긴 출력은 앞 6줄 + … N줄 더 · 💡 설명 · 🪟 윈도우 예시) · 원고는 ```term · theme.js 가 자동으로 불러옴
