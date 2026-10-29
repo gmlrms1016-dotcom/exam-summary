@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="../theme.js?v=202610290946"></script>
+    <script src="../theme.js?v=202610292237"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로그래밍언어실습 15주차 · 기말고사 시험문제 정리 (9주차 반영)</title>
     <meta name="description" content="프로그래밍언어실습 15주차 정리 — 기말고사 시험문제 정리 (9주차 반영)">
@@ -12,7 +12,7 @@
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="../icon-180.png">
-    <link rel="stylesheet" href="../style.css?v=202610290946">
+    <link rel="stylesheet" href="../style.css?v=202610292237">
     <style>
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
@@ -126,6 +126,74 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-9주차.html">9주차</a> · 문제는 🔒 실제시험.</div>
 </section>
+<section class="card" id="s3">
+<h2>🎓 튜터링 3회차 (10/29) — 배열 합 · 0~9 중 가장 많이 나온 수</h2>
+<div class="tip">자료: <code>8주차_중간고사/튜터링/3회차/c.c</code> (CP949 저장) — 프로그램 2개가 한 파일에 있어요(앞의 1개는 주석 처리). 아래 결과는 전부 <b>직접 컴파일 · 실행</b>한 값이에요.<br>기말 범위 <b>8장 배열</b>과 이어지는 문제 (중간고사 때 ✍️ “배열을 기말고사에”). <code>#define _CRT_SECURE_NO_WARNINGS</code> 는 이번엔 밑줄까지 맞게 썼어요 (1회차 정정 참고).</div>
+<h3>① 정수 4개 입력 → 그대로 출력 · 합</h3>
+<pre><code class="language-c">#define _CRT_SECURE_NO_WARNINGS        // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                     // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	int a[5];                          // 정수 5칸 배열 a[0] ~ a[4] — 4칸만 쓰니 a[4] 로도 충분 (a[4] 칸은 안 씀)
+	int sum = 0;                       // 합을 모을 변수 — 0 에서 시작해야 함
+	printf("4개의 정수 입력 &gt;&gt; ");      // 질문 출력 (줄바꿈 없음)
+	for (int i = 0; i &lt;= 3; i++) {     // i = 0 → 1 → 2 → 3 (4번 · i &lt; 4 와 같음)
+		scanf("%d", &amp;a[i]);            // 10 20 30 40 입력 → a[0]=10 · a[1]=20 · a[2]=30 · a[3]=40
+	}                                  // for 끝
+	for (int j = 0; j &lt;= 3; j++) {     // j = 0 → 3 (4번)
+		printf("%d ", a[j]);           // 10 → "10 " · 20 → "20 " … (숫자 뒤에 칸 하나)
+		sum += a[j];                   // 0 → 10 → 30 → 60 → 100
+	}                                  // for 끝
+	printf("%d", sum);                 // 100 → "100" — 앞의 "40 " 바로 뒤에 붙어서 나옴
+}                                      // main 끝 (return 0 이 없어도 main 은 0 을 돌려준 것으로 침)</code></pre>
+<pre class="io"><code class="language-text">4개의 정수 입력 &gt;&gt; 10 20 30 40
+10 20 30 40 100</code></pre>
+<ul><li>🤖 합 <code>100</code> 이 숫자들 바로 뒤에 붙어서 <b>다섯 번째 수처럼</b> 보여요 → <code>printf("\n합: %d\n", sum);</code> 처럼 줄을 나누면 <code>합: 100</code> 으로 따로 나와요 (실행 확인)</li><li><code>i &lt;= 3</code> = 0 · 1 · 2 · 3 → <b>4번</b> — 배열 칸 번호는 <b>0부터</b>라서 4칸이면 마지막이 3</li><li>🤖 <code>main</code> 끝에 <code>return 0;</code> 이 없어도 괜찮아요 — C99 부터 main 은 끝까지 가면 0 을 돌려준 것으로 쳐요 (다른 함수는 아님)</li></ul>
+<h3>② 0~9 정수를 -1 이 나올 때까지 입력 → 가장 많이 나온 수 (빈도수 배열)</h3>
+<pre><code class="language-c">#define _CRT_SECURE_NO_WARNINGS        // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                     // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int count[10] = { 0 };             // 0~9 가 몇 번 나왔는지 세는 칸 10개 — { 0 } = 10칸 모두 0 으로 시작
+    int n;                             // 입력한 수를 잠깐 담을 변수
+
+    printf("0에서 9까지의 정수를 입력하세요.\n");   // 안내 출력 후 줄바꿈
+
+    while (1) {                        // 1 = 항상 참 → break 를 만날 때까지 계속 반복
+        scanf("%d", &amp;n);               // 3 5 3 7 5 3 -1 을 하나씩 → n
+
+        if (n == -1)                   // -1 = 끝 신호
+            break;                     // while 을 빠져나감 (-1 은 세지 않음)
+
+        if (n &gt;= 0 &amp;&amp; n &lt;= 9)          // 0~9 범위일 때만 (12 · -5 같은 수는 무시)
+            count[n]++;                // 입력한 수 자체를 칸 번호로 → 3 → count[3] 이 1 증가
+    }                                  // while 끝 → count[3]=3 · count[5]=2 · count[7]=1 · 나머지 0
+
+    int max = 0;                       // 지금까지 가장 많이 나온 수 = 일단 0 이라고 가정
+
+    for (int i = 1; i &lt; 10; i++) {     // 1 ~ 9 를 하나씩 max 와 비교 (0 은 이미 max)
+        if (count[i] &gt; count[max])     // 더 많이 나왔으면 → 3: 3 &gt; 0 → max=3 · 5: 2 &gt; 3 거짓 · 7: 1 &gt; 3 거짓
+            max = i;                   // max 를 그 수로 바꿈 → 마지막에 max = 3
+    }                                  // for 끝
+
+    printf("0~9중 가장 많이 나온 수는 %d이고, %d번 나왔습니다.\n",   // 3 · count[3]=3 → "…3이고, 3번 나왔습니다."
+        max, count[max]);              // %d 두 개 → max · count[max] 순서
+
+    return 0;                          // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                      // main 끝</code></pre>
+<pre class="io"><code class="language-text">0에서 9까지의 정수를 입력하세요.
+3 5 3 7 5 3 -1
+0~9중 가장 많이 나온 수는 3이고, 3번 나왔습니다.</code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>입력 (끝은 -1)</th><th>count 배열</th><th>결과</th><th>이유</th></tr>
+<tr><td><code>3 5 3 7 5 3 -1</code></td><td>[3]=3 · [5]=2 · [7]=1</td><td><b>3이고, 3번</b></td><td>3 이 3번으로 가장 많음</td></tr>
+<tr><td><code>2 4 2 4 -1</code></td><td>[2]=2 · [4]=2</td><td><b>2이고, 2번</b></td><td>같으면 <code>&gt;</code> 가 거짓이라 <b>먼저(작은 수)</b> 가 남음</td></tr>
+<tr><td><code>12 -5 7 -1</code></td><td>[7]=1</td><td><b>7이고, 1번</b></td><td>12 · -5 는 범위 밖이라 안 셈</td></tr>
+<tr><td><code>0 0 9 -1</code></td><td>[0]=2 · [9]=1</td><td><b>0이고, 2번</b></td><td>max 시작값 0 이 그대로 답</td></tr>
+<tr><td><code>-1</code> (바로 끝)</td><td>모두 0</td><td><b>0이고, 0번</b></td><td>🤖 하나도 안 넣어도 0 이 답처럼 나옴 → <code>count[max] == 0</code> 이면 “입력 없음” 을 찍게 하면 더 정확</td></tr>
+</tbody></table>
+<ul><li><b>빈도수 배열</b> — 입력한 수(0~9)를 <b>칸 번호</b>로 써서 <code>count[n]++</code> → 숫자마다 if 를 10개 쓸 필요가 없음</li><li><b>최댓값 찾기 패턴</b> — <code>max</code> 를 첫 칸(0)으로 두고 <code>i = 1</code> 부터 비교해 더 크면 바꿈 (배열 최댓값 · 최솟값 문제에 그대로 씀)</li><li><code>while (1)</code> + <code>break</code> — 몇 번 입력할지 모를 때 <b>끝 신호(-1)</b> 로 멈추는 방법</li></ul>
+</section>
 
     <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>빌드 · 메모리 공간 · 변수의 유효범위 (ch10 지역 · 전역변수)</small></a><span></span></nav>
 
@@ -135,6 +203,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="../ink.js?v=202610290946"></script>
+<script src="../ink.js?v=202610292237"></script>
 </body>
 </html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>공동체와배려의실천 그림 정리</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --cell:#7c6ae6;--myelin:#e0a838;--astro:#e0862b;--oligo:#0f9f74;--micro:#d9363e;--schwann:#2b8fd1;--vessel:#d9363e;
+          --ex:#16a34a;--inh:#2563eb;--ap:#e5484d;--fore:#e0862b;--mid:#c9b48a;--hind:#a0522d;
+          --fr:#8b7cf6;--pa:#ec5f9e;--te:#22b07d;--oc:#e9b52c;--light:#f5a524;--eye:#eef4fb;--nerve:#e8a3a3;--hl:#f59e0b;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --cell:#a596f5;--myelin:#f0c35a;--astro:#f5a04a;--oligo:#34d399;--micro:#ff6369;--schwann:#5ab8f0;--vessel:#ff6369;
+          --ex:#4cc38a;--inh:#6b9cff;--ap:#ff6369;--fore:#f5a04a;--mid:#d9c79c;--hind:#d07a4f;
+          --fr:#a596f5;--pa:#f27db3;--te:#4cc38a;--oc:#f5c84a;--light:#ffb547;--eye:#1c2733;--nerve:#c97878;--hl:#ffb547;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+    .box{max-width:780px;margin:0 auto;padding:10px 12px 14px;}
+    .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0 0 8px;}
+    .tabs button{min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 4px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;}
+    .tabs button[aria-pressed=true]{border-color:var(--main);color:var(--main);box-shadow:inset 0 0 0 1px var(--main);}
+    .src{margin:0 0 6px;font-size:13px;color:var(--ink2);}
+    .src b{color:var(--main);}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;}
+    svg{display:block;width:100%;height:auto;}
+    svg[hidden]{display:none;}
+    svg text{fill:var(--ink);font-family:inherit;font-size:19px;}
+    svg text.s{font-size:15px;fill:var(--ink2);}
+    svg text.b{font-weight:800;}
+    svg text.w{fill:#fff;}
+    svg .ln{stroke:var(--ink2);stroke-width:1.6;fill:none;}
+    svg .ax{stroke:var(--ink2);stroke-width:2;fill:none;}
+    svg .dash{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:6 5;fill:none;}
+    svg [data-s]{transition:opacity .45s ease;}
+    svg [data-s].off{opacity:0;}
+    svg [data-s].dim{opacity:.28;}
+    svg [data-s].hl{filter:drop-shadow(0 0 5px var(--hl));}
+    .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;}
+    .ctl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+    .ctl button.main{border-color:var(--main);color:var(--main);}
+    .ctl .pos{margin-left:auto;font-size:13px;color:var(--ink2);}
+    ol.cap{margin:8px 0 0;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:14.5px;line-height:1.65;}
+    ol.cap li{margin:2px 0;padding:1px 4px;border-radius:6px;cursor:pointer;}
+    ol.cap li b{color:var(--main);}
+    ol.cap li.cur{background:color-mix(in srgb,var(--hl) 22%,transparent);}
+    ol.cap li.later{opacity:.45;}
+    .note{margin:6px 0 0;font-size:13px;color:var(--ink2);line-height:1.6;}
+    .note a{color:var(--main);}
+    @media (max-width:560px){ .tabs{grid-template-columns:repeat(3,minmax(0,1fr));} .tabs button{font-size:12px;} ol.cap{font-size:14px;padding-left:28px;}
+        /* 폰: 그림이 작아지니 그림 속 글자를 키움 (긴 줄도 600 폭 안에 들어가는 크기까지만) */
+        svg text{font-size:22px;} svg text.s{font-size:17px;} .stage{padding:3px;} }
+</style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="tabs" id="tabs" role="group" aria-label="그림 고르기"></div>
+    <p class="src" id="src"></p>
+    <div class="stage">
+
+<!-- ① 세 사상의 배려 (12 · 14쪽) -->
+<svg data-fig="three" viewBox="0 0 600 460" role="img" aria-label="유교 불교 도가의 배려와 원더에의 적용" hidden>
+  <g data-s="1"><rect x="10" y="10" width="580" height="136" rx="10" style="fill:var(--te);fill-opacity:.1;stroke:var(--te);stroke-width:2"/><rect x="10" y="10" width="120" height="136" rx="10" style="fill:var(--te);fill-opacity:.28;stroke:var(--te);stroke-width:2"/><text x="70" y="72" text-anchor="middle" class="b">유교</text><text x="70" y="102" text-anchor="middle" class="s">인 · 서</text><text x="150" y="52" class="b">인(仁) · 충서(忠恕)</text><text x="150" y="88" class="s">원더의 입장에서 헤아리고</text><text x="150" y="118" class="s">내가 싫은 것은 하지 않기 (혈구지도)</text></g>
+  <g data-s="2"><rect x="10" y="160" width="580" height="136" rx="10" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2"/><rect x="10" y="160" width="120" height="136" rx="10" style="fill:var(--inh);fill-opacity:.28;stroke:var(--inh);stroke-width:2"/><text x="70" y="222" text-anchor="middle" class="b">불교</text><text x="70" y="252" text-anchor="middle" class="s">자비</text><text x="150" y="202" class="b">대자대비 · 자타불이</text><text x="150" y="238" class="s">원더의 고통을 함께 아파하고 (대비)</text><text x="150" y="268" class="s">기쁨을 나누어 주기 (대자)</text></g>
+  <g data-s="3"><rect x="10" y="310" width="580" height="136" rx="10" style="fill:var(--oc);fill-opacity:.1;stroke:var(--oc);stroke-width:2"/><rect x="10" y="310" width="120" height="136" rx="10" style="fill:var(--oc);fill-opacity:.28;stroke:var(--oc);stroke-width:2"/><text x="70" y="372" text-anchor="middle" class="b">도가</text><text x="70" y="402" text-anchor="middle" class="s">노장사상</text><text x="150" y="352" class="b">상선약수 · 무위 · 무용지용</text><text x="150" y="388" class="s">나의 기준으로 판단하지 않고</text><text x="150" y="418" class="s">물처럼 낮은 자세로 곁에 머물기</text></g>
+</svg>
+
+<!-- ② 유교 인(仁) — 뜻 · 실천 · 오륜 (3 ~ 5쪽) -->
+<svg data-fig="inn" viewBox="0 0 600 484" role="img" aria-label="유교의 인 실천 방법과 오륜" hidden>
+  <g data-s="1"><rect x="150" y="10" width="300" height="56" rx="10" style="fill:var(--te);fill-opacity:.22;stroke:var(--te);stroke-width:2"/><text x="300" y="46" text-anchor="middle" class="b">인(仁) — 유교의 최고 덕목</text></g>
+  <g data-s="1"><rect x="10" y="84" width="184" height="84" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><text x="102" y="118" text-anchor="middle" class="b">애인</text><text x="102" y="148" text-anchor="middle" class="s">사람을 사랑하는 일</text></g>
+  <g data-s="1"><rect x="208" y="84" width="184" height="84" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><text x="300" y="118" text-anchor="middle" class="b">상인우</text><text x="300" y="148" text-anchor="middle" class="s">만남을 전제</text></g>
+  <g data-s="1"><rect x="406" y="84" width="184" height="84" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><text x="498" y="118" text-anchor="middle" class="b">측은지심</text><text x="498" y="148" text-anchor="middle" class="s">인의 실마리</text></g>
+  <g data-s="2"><text x="300" y="204" text-anchor="middle" class="s">실천 방법</text></g>
+  <g data-s="2"><rect x="10" y="216" width="184" height="84" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="102" y="250" text-anchor="middle" class="b">충서</text><text x="102" y="280" text-anchor="middle" class="s">마음을 다해 헤아림</text></g>
+  <g data-s="2"><rect x="208" y="216" width="184" height="84" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="300" y="250" text-anchor="middle" class="b">극기복례</text><text x="300" y="280" text-anchor="middle" class="s">나를 이겨 조화 회복</text></g>
+  <g data-s="2"><rect x="406" y="216" width="184" height="84" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="498" y="250" text-anchor="middle" class="b">살신성인</text><text x="498" y="280" text-anchor="middle" class="s">희생하여 인 완성</text></g>
+  <g data-s="3"><text x="300" y="336" text-anchor="middle" class="s">오륜 — 가정에서 사회로 확장</text></g>
+  <g data-s="3"><rect x="10" y="348" width="108" height="84" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/><text x="64" y="382" text-anchor="middle" class="b">부자유친</text><text x="64" y="412" text-anchor="middle" class="s">친애</text></g>
+  <g data-s="3"><rect x="128" y="348" width="108" height="84" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/><text x="182" y="382" text-anchor="middle" class="b">군신유의</text><text x="182" y="412" text-anchor="middle" class="s">의리</text></g>
+  <g data-s="3"><rect x="246" y="348" width="108" height="84" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/><text x="300" y="382" text-anchor="middle" class="b">부부유별</text><text x="300" y="412" text-anchor="middle" class="s">분별</text></g>
+  <g data-s="3"><rect x="364" y="348" width="108" height="84" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/><text x="418" y="382" text-anchor="middle" class="b">장유유서</text><text x="418" y="412" text-anchor="middle" class="s">질서</text></g>
+  <g data-s="3"><rect x="482" y="348" width="108" height="84" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/><text x="536" y="382" text-anchor="middle" class="b">붕우유신</text><text x="536" y="412" text-anchor="middle" class="s">믿음</text></g>
+  <g data-s="4"><text x="300" y="468" text-anchor="middle" class="s" style="fill:var(--main)">‘나’의 도덕적 완성은 타인과의 관계 속에서</text></g>
+</svg>
+
+<!-- ③ 혈구지도 (6쪽) -->
+<svg data-fig="hyeolgu" viewBox="0 0 600 456" role="img" aria-label="혈구지도 — 나의 마음을 기준으로 위아래 앞뒤 사람을 헤아림" hidden>
+  <g data-s="1"><text x="300" y="34" text-anchor="middle" class="b">혈구지도 — 내 마음을 자로 재어 헤아림</text><circle cx="300" cy="220" r="58" style="fill:var(--te);fill-opacity:.22;stroke:var(--te);stroke-width:2.5"/><text x="300" y="214" text-anchor="middle" class="b">나</text><text x="300" y="242" text-anchor="middle" class="s">내 마음 = 자</text></g>
+  <g data-s="2"><path class="ln" d="M300,162 L300,124"/><path class="ln" d="M300,278 L300,316"/><rect x="220" y="74" width="160" height="50" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="300" y="106" text-anchor="middle" class="b">윗사람</text><rect x="220" y="316" width="160" height="50" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="300" y="348" text-anchor="middle" class="b">아랫사람</text></g>
+  <g data-s="3"><path class="ln" d="M242,220 L200,220"/><path class="ln" d="M358,220 L400,220"/><rect x="20" y="195" width="180" height="50" rx="10" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/><text x="110" y="227" text-anchor="middle" class="b">앞사람</text><rect x="400" y="195" width="180" height="50" rx="10" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/><text x="490" y="227" text-anchor="middle" class="b">뒷사람</text></g>
+  <g data-s="4"><text x="300" y="410" text-anchor="middle" class="b" style="fill:var(--main)">기소불욕 물시어인 (논어 · 서)</text><text x="300" y="440" text-anchor="middle" class="s">내가 원하지 않는 것은 남에게 시키지 말라</text></g>
+</svg>
+
+<!-- ④ 불교 대자대비 · 연기설 · 자타불이 (7 · 8쪽) -->
+<svg data-fig="jabi" viewBox="0 0 600 480" role="img" aria-label="불교의 대자대비와 연기설 자타불이" hidden>
+  <g data-s="1"><rect x="10" y="10" width="280" height="108" rx="10" style="fill:var(--pa);fill-opacity:.14;stroke:var(--pa);stroke-width:2"/><text x="150" y="48" text-anchor="middle" class="b">대자(大慈) — 사랑</text><text x="150" y="80" text-anchor="middle" class="s">모든 중생에게 즐거움을 줌</text><text x="150" y="104" text-anchor="middle" class="s">행복을 주려는 마음</text></g>
+  <g data-s="1"><rect x="310" y="10" width="280" height="108" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="450" y="48" text-anchor="middle" class="b">대비(大悲) — 연민</text><text x="450" y="80" text-anchor="middle" class="s">모든 중생의 괴로움을 없앰</text><text x="450" y="104" text-anchor="middle" class="s">고통을 덜어주려는 마음</text></g>
+  <g data-s="2"><path class="ln" d="M300,270 L300.0,178.0"/><path class="ln" d="M300,270 L429.9,224.0"/><path class="ln" d="M300,270 L429.9,316.0"/><path class="ln" d="M300,270 L300.0,362.0"/><path class="ln" d="M300,270 L170.1,316.0"/><path class="ln" d="M300,270 L170.1,224.0"/><path class="ln" d="M300.0,178.0 L429.9,224.0"/><path class="ln" d="M429.9,224.0 L429.9,316.0"/><path class="ln" d="M429.9,316.0 L300.0,362.0"/><path class="ln" d="M300.0,362.0 L170.1,316.0"/><path class="ln" d="M170.1,316.0 L170.1,224.0"/><path class="ln" d="M170.1,224.0 L300.0,178.0"/><circle cx="300.0" cy="178.0" r="26" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="300" y="185" text-anchor="middle" class="s b">가족</text><circle cx="429.9" cy="224.0" r="26" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="429" y="231" text-anchor="middle" class="s b">친구</text><circle cx="429.9" cy="316.0" r="26" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="429" y="323" text-anchor="middle" class="s b">이웃</text><circle cx="300.0" cy="362.0" r="26" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="300" y="369" text-anchor="middle" class="s b">원더</text><circle cx="170.1" cy="316.0" r="26" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="170" y="323" text-anchor="middle" class="s b">동기</text><circle cx="170.1" cy="224.0" r="26" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="170" y="231" text-anchor="middle" class="s b">자연</text><circle cx="300" cy="270" r="30" style="fill:var(--te);fill-opacity:.3;stroke:var(--te);stroke-width:2.5"/><text x="300" y="277" text-anchor="middle" class="b">나</text><text x="300" y="400" text-anchor="middle" class="s">연기설 — 모두 서로 기대어 있음</text></g>
+  <g data-s="3"><text x="300" y="436" text-anchor="middle" class="b" style="fill:var(--main)">자타불이 — 남과 내가 둘이 아님</text><text x="300" y="464" text-anchor="middle" class="s">남을 배려 = 나를 돌봄 (공동체적 연대감)</text></g>
+</svg>
+
+<!-- ⑤ 도가 — 상선약수 · 무위 · 무용지용 (9 · 10쪽) -->
+<svg data-fig="water" viewBox="0 0 600 476" role="img" aria-label="도가의 상선약수 무위 무용지용" hidden>
+  <g data-s="1"><text x="300" y="34" text-anchor="middle" class="b">상선약수 — 가장 선한 것은 물과 같다</text><rect x="10" y="52" width="184" height="56" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="102" y="87" text-anchor="middle" class="s b">만물을 이롭게</text><rect x="208" y="52" width="184" height="56" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="300" y="87" text-anchor="middle" class="s b">다투지 않음</text><rect x="406" y="52" width="184" height="56" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="498" y="87" text-anchor="middle" class="s b">낮은 곳에 머묾</text></g>
+  <g data-s="2"><rect x="10" y="126" width="580" height="58" rx="10" style="fill:var(--te);fill-opacity:.12;stroke:var(--te);stroke-width:2"/><text x="300" y="162" text-anchor="middle" class="b">무위 — 억지로 바꾸지 않고 지켜봐 주기</text></g>
+  <g data-s="3"><text x="300" y="222" text-anchor="middle" class="s">장자 · 혜자와의 대화 — 넓은 땅</text><rect x="40" y="236" width="520" height="40" rx="4" style="fill:var(--mid);fill-opacity:.55"/><rect x="280" y="236" width="40" height="40" rx="4" style="fill:var(--te)"/><text x="300" y="263" text-anchor="middle" class="b w">발</text><text x="300" y="302" text-anchor="middle" class="s">실제로 쓰는 건 발 둘 곳뿐?</text></g>
+  <g data-s="4"><rect x="40" y="322" width="240" height="40" rx="4" style="fill:none;stroke:var(--ap);stroke-width:2;stroke-dasharray:6 5"/><rect x="320" y="322" width="240" height="40" rx="4" style="fill:none;stroke:var(--ap);stroke-width:2;stroke-dasharray:6 5"/><rect x="280" y="322" width="40" height="40" rx="4" style="fill:var(--te)"/><text x="300" y="349" text-anchor="middle" class="b w">발</text><text x="160" y="348" text-anchor="middle" class="s" style="fill:var(--ap)">낭떠러지</text><text x="440" y="348" text-anchor="middle" class="s" style="fill:var(--ap)">낭떠러지</text><text x="300" y="390" text-anchor="middle" class="s">나머지를 파 버리면 → 걸어갈 수 없다</text><text x="300" y="430" text-anchor="middle" class="b" style="fill:var(--main)">쓸모없는 땅이 있어야 발 둘 땅도 쓸모 있다</text><text x="300" y="460" text-anchor="middle" class="s">무용지용 — 나의 잣대로 쓸모를 판단하지 않기</text></g>
+</svg>
+
+    </div>
+    <div class="ctl">
+        <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
+        <button type="button" id="prev" title="이전 단계">◀ 이전</button>
+        <button type="button" id="next" title="다음 단계">다음 ▶</button>
+        <button type="button" id="all" title="모두 보기">전체</button>
+        <span class="pos" id="pos"></span>
+    </div>
+    <ol class="cap" id="cap"></ol>
+    <p class="note" id="note"></p>
+</div>
+<script>
+(function () {
+    "use strict";
+    // 그림마다: 탭 이름 · 강의자료 출처 · 단계 설명 (단계 번호 = SVG 의 data-s) · 아래 메모
+    var FIGS = [
+        { id: "three", week: 9, tab: "① 세 사상", src: "9주차 · 동양사상 PDF 12 · 14쪽 — 세 사상으로 바라본 배려의 실천 (원더)",
+          steps: [
+            "<b>유교</b> — 인(仁)과 충서(忠恕) · 공감과 역지사지 → 원더의 입장에서 헤아리고, 혈구지도처럼 내가 싫은 것을 원더에게 하지 않기",
+            "<b>불교</b> — 대자대비 · 나와 타인이 분리되어 있지 않다는 깨달음 → 원더의 고통을 함께 아파하고(大悲) 기쁨을 나누어 주기(大慈)",
+            "<b>도가</b> — 상선약수 · 무위 · 무용지용 · 낮아지고 판단하지 않음 → 원더를 나의 기준으로 판단하지 않고 물처럼 낮은 자세로 곁에 머물기" ],
+          note: "11쪽 실천적 적용 — 어느 날 원더가 우리 학과에 편입생으로 들어왔다. 나는 어떤 배려를 실천할 수 있을까?" },
+        { id: "inn", week: 9, tab: "② 유교 인(仁)", src: "9주차 · 동양사상 PDF 3 ~ 5쪽 — 인(仁) · 실천 방법 · 오륜",
+          steps: [
+            "<b>인(仁)</b> = 유교의 최고 덕목 — <b>애인</b>(사람을 사랑하는 일) · <b>상인우</b>(인간의 만남을 전제) · <b>측은지심</b>(가슴 쓰라리게 아파하는 마음이 인의 실마리)",
+            "실천 방법 — <b>충서</b>(마음을 다하고 상대 입장에서 헤아림) · <b>극기복례</b>(자신을 이기고 관계의 조화를 회복) · <b>살신성인</b>(자기를 희생하여 인을 완성)",
+            "<b>오륜</b> — 부자유친(친애) · 군신유의(의리) · 부부유별(분별) · 장유유서(질서) · 붕우유신(믿음) — 인의 사회적 성격: 생명 중시 · 관계의 조화 · 가정에서 사회로 확장",
+            "‘나’의 도덕적 완성은 <b>‘타인과의 관계’</b> 속에서 이루어진다 (4쪽)" ],
+          note: "측은지심 = 맹자의 네 가지 마음(사단) 중 인(仁)의 실마리" },
+        { id: "hyeolgu", week: 9, tab: "③ 혈구지도", src: "9주차 · 동양사상 PDF 6쪽 — 혈구지도(絜矩之道) · 『대학장구』 · 『논어』의 서(恕)",
+          steps: [
+            "<b>혈구</b> = 나의 마음을 <b>자로 재는</b> 방법 — 나의 마음을 기준으로 삼아 남의 마음을 미루어 헤아림",
+            "윗사람에게 싫었던 것으로 <b>아랫사람</b>을 부리지 말고, 아랫사람에게서 싫었던 것으로 <b>윗사람</b>을 섬기지 말 것",
+            "앞사람에게서 싫었던 것으로 <b>뒷사람</b>에게 가하지 말고, 뒷사람에게서 싫었던 것으로 <b>앞사람</b>을 따르지 말 것",
+            "<b>기소불욕 물시어인(己所不欲 勿施於人)</b> — 자기가 원하지 않는 바를 남에게 시키지 말라 (『논어』의 서)" ],
+          note: "원더에 적용 — 내가 편입생이라면 싫을 것(수군거림 · 혼자 밥 · 뒷말)을 원더에게 하지 않기" },
+        { id: "jabi", week: 9, tab: "④ 불교 대자대비", src: "9주차 · 동양사상 PDF 7 · 8쪽 — 대자대비 · 연기설 · 자타불이",
+          steps: [
+            "<b>대자(大慈)</b> = 모든 중생에게 즐거움을 주는 일(행복을 주려는 마음) · <b>대비(大悲)</b> = 모든 중생의 괴로움을 없애주는 일(고통을 덜어주려는 마음) — 자 = 사랑 · 비 = 연민",
+            "<b>연기설(緣起說)</b> — 세상 모든 존재는 독립적이지 않고 <b>상호 의존적</b>으로 얽혀 있다",
+            "<b>자타불이(自他不二)</b> — 남과 내가 근본적으로 둘이 아니다 → 타인을 배려하는 것이 곧 <b>나를 돌보는 것</b>" ],
+          note: "불교에서 배려는 감정이 아니라 깨달음과 수행의 방법으로서 <b>구체적인 실천</b>으로 연결되어야만 한다 (7쪽)" },
+        { id: "water", week: 9, tab: "⑤ 도가 물·무용", src: "9주차 · 동양사상 PDF 9 · 10 · 13쪽 — 노자 상선약수 · 무위 · 장자 무용지용",
+          steps: [
+            "<b>상선약수</b> (『도덕경』 8장) — 물은 만물을 <b>이롭게</b> 할 뿐 <b>다투지 않고</b>, 남들이 가장 싫어하는 <b>낮은 곳</b>에 머문다 → 도에 가장 가깝다",
+            "<b>무위의 배려</b> — 나의 잣대로 억지로 통제하거나 바꾸지 않고, 있는 그대로 존중 · 때로는 섣불리 개입하지 않고 <b>지켜봐 주고 수용</b>",
+            "장자와 혜자 — 넓은 땅도 걷는 사람에게는 <b>발 둘 곳</b>만 있으면 되는 것 같지만…",
+            "그 나머지를 천 길 낭떠러지로 파 버리면 걸어갈 수 없다 → <b>쓸모없는 땅이 있기에 발 둘 땅이 쓸모 있다</b> (무용지용)" ],
+          note: "⚠️ 강의자료는 출처를 『장자』 내편 「외물」로 적었지만 「외물」은 잡편(26편) · 13쪽 멍때리기 = 무쓸모의 쓸모 (뇌도 휴식이 필요)" }
+    ];
+
+    var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
+        note = document.getElementById("note"), pos = document.getElementById("pos"), box = document.getElementById("box");
+    var S = { fig: 0, step: 0, timers: [] };   // step 0 = 전체
+
+    function svgOf(i) { return document.querySelector('svg[data-fig="' + FIGS[i].id + '"]'); }
+    function parts(svgEl) { return Array.prototype.slice.call(svgEl.querySelectorAll("[data-s]")); }
+    function clearTimers() { S.timers.forEach(clearTimeout); S.timers = []; }
+
+    function drawIn(root) {                       // 선이 그려지듯이 (stroke-dashoffset)
+        var list = root.matches && root.matches(".d") ? [root] : [];
+        list = list.concat(Array.prototype.slice.call(root.querySelectorAll(".d")));
+        list.forEach(function (p) {
+            if (!p.getTotalLength) return;
+            var L; try { L = p.getTotalLength(); } catch (e) { return; }
+            if (!L) return;
+            p.style.transition = "none"; p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+            p.getBoundingClientRect();
+            p.style.transition = "stroke-dashoffset 0.9s ease"; p.style.strokeDashoffset = 0;
+            setTimeout(function () { p.style.strokeDasharray = ""; }, 1000);
+        });
+    }
+
+    function renderCap() {
+        var f = FIGS[S.fig];
+        cap.innerHTML = "";
+        f.steps.forEach(function (t, i) {
+            var li = document.createElement("li"); li.innerHTML = t;
+            if (S.step && i + 1 === S.step) li.className = "cur";
+            else if (S.step && i + 1 > S.step) li.className = "later";
+            li.addEventListener("click", function () { go(i + 1); });
+            cap.appendChild(li);
+        });
+        pos.textContent = S.step ? S.step + " / " + f.steps.length + " 단계" : "전체 " + f.steps.length + " 단계";
+    }
+
+    function apply(animateNew) {                  // 지금 단계에 맞게 보이기 · 숨기기
+        var svgEl = svgOf(S.fig);
+        parts(svgEl).forEach(function (g) {
+            var k = +g.getAttribute("data-s");
+            var wasOff = g.classList.contains("off");
+            var show = !S.step || k <= S.step;
+            g.classList.toggle("off", !show);
+            g.classList.toggle("hl", !!S.step && k === S.step);
+            if (show && wasOff && animateNew) drawIn(g);
+        });
+        renderCap();
+    }
+
+    function drawAll() {                          // 전체를 단계 순서대로 그리면서 보여 주기
+        clearTimers();
+        var svgEl = svgOf(S.fig), n = FIGS[S.fig].steps.length;
+        S.step = 0;
+        parts(svgEl).forEach(function (g) { g.classList.add("off"); g.classList.remove("hl"); });
+        drawIn(svgEl);
+        renderCap();
+        for (var k = 1; k <= n; k++) (function (k) {
+            S.timers.push(setTimeout(function () {
+                parts(svgEl).forEach(function (g) { if (+g.getAttribute("data-s") === k) { g.classList.remove("off"); drawIn(g); } });
+            }, 350 + (k - 1) * 650));
+        })(k);
+    }
+
+    function go(step) {
+        clearTimers();
+        var n = FIGS[S.fig].steps.length;
+        S.step = Math.max(1, Math.min(n, step));
+        apply(true);
+    }
+
+    function show(i, draw) {
+        clearTimers();
+        S.fig = i; S.step = 0;
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (s) {   // SVG 는 .hidden 속성이 없어서 attribute 로
+            if (s.getAttribute("data-fig") === FIGS[i].id) s.removeAttribute("hidden"); else s.setAttribute("hidden", "");
+        });
+        Array.prototype.forEach.call(tabsBox.children, function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+        src.innerHTML = "📄 " + FIGS[i].src;
+        note.innerHTML = FIGS[i].note || "";
+        if (draw) drawAll(); else { parts(svgOf(i)).forEach(function (g) { g.classList.remove("off", "hl"); }); renderCap(); }
+        tell();
+    }
+
+    // 주차로 골라 보기 — ?week=5 = 그 주차 그림만 · ?weeks=1-7 = 그 범위 (주차 페이지 · 중간고사 · 기말고사 · 완전정리가 같은 그림 파일을 나눠 씀 · README 🎨)
+    (function () {
+        var q = location.search, m1 = /[?&]week=(\d+)/.exec(q), m2 = /[?&]weeks=(\d+)-(\d+)/.exec(q);
+        if (!m1 && !m2) return;
+        var lo = m1 ? +m1[1] : +m2[1], hi = m1 ? +m1[1] : +m2[2];
+        var keep = FIGS.filter(function (f) { return [].concat(f.week).some(function (w) { return w >= lo && w <= hi; }); });
+        if (keep.length) FIGS = keep;
+    })();
+
+    // 그림 검사 — 콘솔에서 figCheck() → 글자끼리 겹침 · 600 폭 밖으로 넘침 목록 (없으면 [] · 폰 폭에서도 한 번 더)
+    window.figCheck = function () {
+        var out = [];
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (sv) {
+            var wasHidden = sv.hasAttribute("hidden"); sv.removeAttribute("hidden");
+            var vb = sv.viewBox.baseVal, ts = Array.prototype.map.call(sv.querySelectorAll("text"), function (t) { return { t: t, b: t.getBBox() }; });
+            ts.forEach(function (o) { if (o.b.x < -1 || o.b.x + o.b.width > vb.width + 1) out.push(sv.getAttribute("data-fig") + " 넘침: " + o.t.textContent.slice(0, 24)); });
+            for (var i = 0; i < ts.length; i++) for (var j = i + 1; j < ts.length; j++) {
+                var a = ts[i].b, c = ts[j].b, ox = Math.min(a.x + a.width, c.x + c.width) - Math.max(a.x, c.x), oy = Math.min(a.y + a.height, c.y + c.height) - Math.max(a.y, c.y);
+                if (ox > 2 && oy > 3) out.push(sv.getAttribute("data-fig") + " 겹침: " + ts[i].t.textContent.slice(0, 16) + " × " + ts[j].t.textContent.slice(0, 16));
+            }
+            if (wasHidden) sv.setAttribute("hidden", "");
+        });
+        return out;
+    };
+
+    FIGS.forEach(function (f, i) {
+        var b = document.createElement("button"); b.type = "button"; b.textContent = f.tab;
+        b.addEventListener("click", function () { show(i, true); try { history.replaceState(null, "", "#" + f.id); } catch (e) {} });
+        tabsBox.appendChild(b);
+    });
+    document.getElementById("redraw").addEventListener("click", function () { drawAll(); });
+    document.getElementById("all").addEventListener("click", function () { clearTimers(); S.step = 0; apply(false); });
+    document.getElementById("prev").addEventListener("click", function () { go(S.step ? S.step - 1 : 1); });
+    document.getElementById("next").addEventListener("click", function () { go(S.step ? S.step + 1 : 1); });
+    document.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(S.step + 1); else if (e.key === "ArrowLeft") go(S.step ? S.step - 1 : 1); });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) {} }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    var start = 0, h = (location.hash || "").slice(1);
+    FIGS.forEach(function (f, i) { if (f.id === h) start = i; });
+    show(start, false);
+    // 처음 화면에 보일 때 한 번 그리면서 보여 주기
+    if (window.IntersectionObserver) {
+        var done = false;
+        new IntersectionObserver(function (es) { if (!done && es[0].isIntersecting) { done = true; drawAll(); } }, { threshold: 0.3 }).observe(document.querySelector(".stage"));
+    }
+})();
+</script>
+<script src="../../../figink.js?v=202610292237"></script>
+</body>
+</html>

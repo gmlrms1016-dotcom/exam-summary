@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="theme.js?v=202610290946"></script>
+    <script src="theme.js?v=202610292237"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운영체제실습 · 완전 정리</title>
     <style>
@@ -10,8 +10,8 @@
         .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
         .ref.wrap1 td:first-child{white-space:normal;}   /* 명령이 긴 표(14 · 15번) — 폰에서 첫 칸도 줄바꿈해 설명 칸이 눌리지 않게 */
     </style>
-    <link rel="stylesheet" href="style.css?v=202610290946">
-    <script src="schedule.js?v=202610290946"></script>
+    <link rel="stylesheet" href="style.css?v=202610292237">
+    <script src="schedule.js?v=202610292237"></script>
 </head>
 <body>
 <div class="wrap">
@@ -56,6 +56,8 @@
         <a href="#s16">16.🔥7주차 시험힌트</a>
         <a href="#s17">17.⌨️도전문제 풀기</a>
         <a href="#s18">18.셸스크립트 도전</a>
+        <a href="#s19">19.디스크·fstab(9주차)</a>
+        <a href="#s20">20.쿼터(9주차)</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1537,9 +1539,41 @@ exit 0                                    # 정상 종료</code></pre>
         </details>
     </section>
 
+    <section class="card" id="s19">
+        <h2>19. 디스크 추가 · 파티션 · 마운트 · fstab (6장)<span class="week">9주차</span></h2>
+        <p>10/29(목) 실습 로그(✍️ 노션 = linux_disk.txt)와 과제 1(VITAMIN QUIZ 6-1)을 정리했어요. 로그 · 캡처 · 실수 메모는 <a href="weeks/운영체제실습-9주차.html" target="_blank" rel="noopener">9주차 페이지</a>.</p>
+        <table class="ref">
+            <tr><th>단계</th><th>명령 · 핵심</th></tr>
+            <tr><td>디스크 추가</td><td>VM 을 끄고 Edit virtual machine settings → Add → Hard Disk → <b>SCSI</b> → 크기 → 부팅 → <code>ls -l /dev/sd*</code> 로 새 <code>/dev/sdb</code> 확인</td></tr>
+            <tr><td>파티션</td><td><code>fdisk /dev/sdb</code> → <code>n</code> 새로 · <code>p</code> primary · <code>1</code> · Enter · Enter(끝까지) 또는 <code>+2G</code> · <code>p</code> print · <code>d</code> 삭제 · <code>w</code> 저장 (w 전엔 디스크가 안 바뀜)</td></tr>
+            <tr><td>포맷 · 마운트</td><td><code>mkfs.ext4 /dev/sdb1</code> (파티션을!) → <code>mkdir /mydata</code> → <code>mount /dev/sdb1 /mydata</code> → 원래 /mydata 의 test1 은 <b>가려짐</b> · <code>umount</code> 하면 다시 보임</td></tr>
+            <tr><td>/etc/fstab</td><td><code>/dev/sdb1 /mydata ext4 defaults 0 0</code> = <b>장치 · 마운트 위치 · 파일 시스템 · 옵션 · dump · fsck 순서</b> → <code>reboot</code> → <code>df</code></td></tr>
+            <tr><td>장치 이름이 바뀜</td><td>부팅 · 디스크 추가 · 제거에 따라 sda ↔ sdb → fstab 장치를 못 찾으면 <b>응급 모드</b> → root 로그인 → <code>vi /etc/fstab</code> 고치기 · <code>#</code> 주석 → 예방 = <b>UUID</b>(<code>blkid</code>)</td></tr>
+            <tr><td>경로 실수</td><td><code>cp anaconda-ks.cfg mydata/test1</code> = 상대경로(/root/mydata) · <code>vi etc/fstab</code> → E212 · <code>mkdir disk1</code> → /root/disk1</td></tr>
+        </table>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#disk" title="그림 — 디스크 추가 순서" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#disk" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 디스크 추가 순서 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#mount" title="그림 — 마운트하면 가려짐" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#mount" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 마운트하면 가려짐 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#fstab" title="그림 — fstab 6칸" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#fstab" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — fstab 6칸 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#devname" title="그림 — 장치 이름이 바뀜 → 응급 모드" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#devname" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 장치 이름이 바뀜 → 응급 모드 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s20">
+        <h2>20. 쿼터 — 사용자별 공간 할당 (실습 17 · VITAMIN QUIZ 6-9)<span class="week">9주차</span></h2>
+        <p>과제 2 — Server(B) 에 10GB 디스크(<code>/dev/sdc</code>)를 /userHome 에 마운트하고 blackpink · mamamoo 에게 soft 40MB · hard 50MB. 제출 캡처의 실제 출력은 <a href="weeks/운영체제실습-9주차.html" target="_blank" rel="noopener">9주차 페이지</a>.</p>
+        <table class="ref">
+            <tr><th>순서</th><th>명령 · 핵심</th></tr>
+            <tr><td>옵션</td><td>fstab 옵션 <code>defaults,usrquota,grpquota</code> (usrquota = 사용자별 · grpquota = 그룹별 · 넣기만 하면 <b>준비</b>만 됨)</td></tr>
+            <tr><td>ext4 쿼터 켜기</td><td><code>umount /dev/sdc1</code> → <code>tune2fs -O quota /dev/sdc1</code> → <code>systemctl daemon-reload</code> → <code>mount</code> → <code>mount --options remount /userHome</code></td></tr>
+            <tr><td>쿼터 DB · 켜기</td><td><code>quotaoff -avug</code> · <code>quotacheck -augmn</code> · <code>touch aquota.user aquota.group</code> · <code>chmod 600 aquota.*</code> · <code>quotaon -avug</code></td></tr>
+            <tr><td>한도</td><td><code>edquota -u blackpink</code> → soft <b>40960</b> · hard <b>51200</b> (단위 KB · 0 = 제한 없음) · <code>edquota -p blackpink mamamoo</code> = 한도 복사</td></tr>
+            <tr><td>확인</td><td><code>su - blackpink</code> → 복사 → soft 를 넘어도 <b>유예 7일</b> 동안은 됨 · hard 는 <code>Disk quota exceeded</code> · <code>quota</code>(나) · <code>repquota /userHome</code>(모두)</td></tr>
+        </table>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#quota" title="그림 — 쿼터 soft · hard" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#quota" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 쿼터 soft · hard — 새 창으로 크게 보기</a></p></div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 30 · 주관식 63 · 셸 스크립트 작성 5 · 총 98문제 — 7주차 도전문제 포함)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 53 · 주관식 97 · 출력결과 3 · 서술형 6 · 총 159문제 — 7주차 도전문제 · 9주차 디스크 · 쿼터 포함)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="운영체제실습-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
@@ -1548,9 +1582,9 @@ exit 0                                    # 정상 종료</code></pre>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="quiz.js?v=202610290946"></script>
-<script src="weeks.js?v=202610290946"></script>
-<script src="ink.js?v=202610290946"></script>
+<script src="quiz.js?v=202610292237"></script>
+<script src="weeks.js?v=202610292237"></script>
+<script src="ink.js?v=202610292237"></script>
 <script>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 </body>
 </html>

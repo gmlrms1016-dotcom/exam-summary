@@ -5,7 +5,7 @@
    - 제외: 실행 화면 · 출력 결과(pre.io · .py-output), 코드 입력창(textarea), 실제시험을 푸는 동안의 문제 코드
    - 폰(폭 600px 이하): 긴 줄은 화면 폭에서 줄바꿈해서 보여 줌 (옆으로 밀지 않고 위아래로만 읽기 · 2026-10-29)
      → 긴 줄이 있는 코드에만 “↩ 줄바꿈” 버튼 · 누르면 모든 코드가 원래처럼 한 줄(가로 스크롤) · 고른 값은 이 기기에 저장
-     → 출력 결과 상자(outview.js)도 같은 설정을 따름 — 줄 번호 칸은 그대로 두고 긴 글자만 줄바꿈
+     → 출력 결과 상자(outview.js) · 누르면 펼쳐지는 터미널(termclick.js)의 출력도 같은 설정을 따름 — 줄 번호 칸은 그대로 두고 긴 글자만 줄바꿈
      → 줄마다 상자로 나눠 “내어쓰기”: 넘친 부분은 그 줄의 들여쓰기 + 2칸에서 이어짐 (끝 주석이 맨 앞으로 떨어져 다른 줄처럼 보이지 않게)
      → 보이는 모양만 바뀌고 복사되는 코드 글자(textContent)는 그대로
    ===================================================================== */
@@ -29,7 +29,8 @@
         + "html.cc-wrapon .codecopy.cc-long>pre,html.cc-wrapon .codecopy.cc-long>pre code{white-space:pre-wrap;overflow-wrap:anywhere;}"
         + "html.cc-wrapon .codecopy.cc-long .cc-ln{display:block;padding-left:var(--ccind);text-indent:calc(-1 * var(--ccind));}"
         + "html.cc-wrapon pre.ov .ov-l{display:flex;}html.cc-wrapon pre.ov .ov-n{flex:none;}"          // 출력 결과(outview.js): 줄 번호는 그대로 · 긴 글자만 오른쪽 칸 안에서 줄바꿈
-        + "html.cc-wrapon pre.ov .ov-t{flex:1 1 auto;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere;}}"
+        + "html.cc-wrapon pre.ov .ov-t{flex:1 1 auto;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere;}"
+        + "html.cc-wrapon .tclick .tc-out{white-space:pre-wrap;overflow-wrap:anywhere;}}"          // 명령을 누르면 펼쳐지는 터미널(termclick.js)의 긴 출력 줄도
         + "@media print{.codecopy>.cc-btn{display:none;}}";
 
     var WRAP_KEY = "codecopy:wrap", LONG = 32;                  // 한 줄이 32자를 넘으면 폰(375px)에서 잘려 보임

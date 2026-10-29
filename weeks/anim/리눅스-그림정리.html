@@ -419,6 +419,69 @@
     <text x="24" y="426" class="s">윈도우와 호환되는 압축은 zip / unzip</text></g>
 </svg>
 
+<!-- ⑮ 디스크 추가 순서 -->
+<svg data-fig="disk" viewBox="0 0 600 526" role="img" aria-label="새 디스크를 추가해 마운트하는 순서" hidden>
+  <g data-s="1"><rect x="8" y="8" width="584" height="68" rx="12" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><circle cx="44" cy="42" r="19" style="fill:var(--inh)"/><text x="44" y="49" text-anchor="middle" class="b w">1</text><text x="76" y="37" class="b">디스크 추가 (VM 끈 상태)</text><text x="76" y="63" class="s">Edit virtual machine settings → Add → SCSI</text></g>
+  <g data-s="2"><path d="M292,80 L300,90 L308,80 Z" style="fill:var(--ink2)"/><rect x="8" y="94" width="584" height="68" rx="12" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/><circle cx="44" cy="128" r="19" style="fill:var(--oc)"/><text x="44" y="135" text-anchor="middle" class="b w">2</text><text x="76" y="123" class="b">새 디스크 확인</text><text x="76" y="149" class="s m">ls -l /dev/sd*  →  /dev/sdb 생김</text></g>
+  <g data-s="3"><path d="M292,166 L300,176 L308,166 Z" style="fill:var(--ink2)"/><rect x="8" y="180" width="584" height="68" rx="12" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><circle cx="44" cy="214" r="19" style="fill:var(--te)"/><text x="44" y="221" text-anchor="middle" class="b w">3</text><text x="76" y="209" class="b">파티션 만들기</text><text x="76" y="235" class="s m">fdisk /dev/sdb → n · p · 1 · Enter · Enter · w</text></g>
+  <g data-s="4"><path d="M292,252 L300,262 L308,252 Z" style="fill:var(--ink2)"/><rect x="8" y="266" width="584" height="68" rx="12" style="fill:var(--fr);fill-opacity:.14;stroke:var(--fr);stroke-width:2"/><circle cx="44" cy="300" r="19" style="fill:var(--fr)"/><text x="44" y="307" text-anchor="middle" class="b w">4</text><text x="76" y="295" class="b">ext4 로 포맷</text><text x="76" y="321" class="s m">mkfs.ext4 /dev/sdb1</text></g>
+  <g data-s="5"><path d="M292,338 L300,348 L308,338 Z" style="fill:var(--ink2)"/><rect x="8" y="352" width="584" height="68" rx="12" style="fill:var(--pa);fill-opacity:.14;stroke:var(--pa);stroke-width:2"/><circle cx="44" cy="386" r="19" style="fill:var(--pa)"/><text x="44" y="393" text-anchor="middle" class="b w">5</text><text x="76" y="381" class="b">마운트 (연결)</text><text x="76" y="407" class="s m">mkdir /mydata → mount /dev/sdb1 /mydata</text></g>
+  <g data-s="6"><path d="M292,424 L300,434 L308,424 Z" style="fill:var(--ink2)"/><rect x="8" y="438" width="584" height="68" rx="12" style="fill:var(--ap);fill-opacity:.14;stroke:var(--ap);stroke-width:2"/><circle cx="44" cy="472" r="19" style="fill:var(--ap)"/><text x="44" y="479" text-anchor="middle" class="b w">6</text><text x="76" y="467" class="b">자동 마운트 등록</text><text x="76" y="493" class="s m">/etc/fstab 한 줄 → reboot → df</text></g>
+</svg>
+
+<!-- ⑯ 마운트하면 원래 내용이 가려짐 -->
+<svg data-fig="mount" viewBox="0 0 600 466" role="img" aria-label="마운트하면 원래 디렉터리 내용이 가려지고 umount 하면 다시 보임" hidden>
+  <g data-s="1"><rect x="10" y="10" width="280" height="150" rx="12" style="fill:var(--inh);fill-opacity:.12;stroke:var(--inh);stroke-width:2"/><text x="150" y="40" text-anchor="middle" class="b">루트 디스크 sda2</text><text x="150" y="64" text-anchor="middle" class="s">xfs · / 아래의 /mydata</text><rect x="40" y="80" width="220" height="64" rx="8" style="fill:var(--card);stroke:var(--inh);stroke-width:1.5"/><text x="150" y="106" text-anchor="middle" class="m b">/mydata</text><text x="150" y="132" text-anchor="middle" class="m">test1</text></g>
+  <g data-s="1"><rect x="310" y="10" width="280" height="150" rx="12" style="fill:var(--te);fill-opacity:.12;stroke:var(--te);stroke-width:2"/><text x="450" y="40" text-anchor="middle" class="b">새 디스크 sdb1</text><text x="450" y="64" text-anchor="middle" class="s">ext4 · 포맷하면 lost+found</text><rect x="340" y="80" width="220" height="64" rx="8" style="fill:var(--card);stroke:var(--te);stroke-width:1.5"/><text x="450" y="106" text-anchor="middle" class="m">lost+found</text><text x="450" y="132" text-anchor="middle" class="m">test2</text></g>
+  <g data-s="1"><text x="104" y="210" text-anchor="middle" class="b">① 마운트 전</text><text x="104" y="234" text-anchor="middle" class="s">/mydata 를 열면</text><rect x="12" y="248" width="184" height="150" rx="10" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2.5"/><text x="104" y="318" text-anchor="middle" class="m b">test1</text><text x="104" y="430" text-anchor="middle" class="s">sda2 의 것</text></g>
+  <g data-s="2"><text x="300" y="210" text-anchor="middle" class="b">② mount 뒤</text><text x="300" y="234" text-anchor="middle" class="s">/mydata 를 열면</text><rect x="208" y="248" width="184" height="150" rx="10" style="fill:var(--te);fill-opacity:.1;stroke:var(--te);stroke-width:2.5"/><text x="300" y="300" text-anchor="middle" class="m b">lost+found</text><text x="300" y="332" text-anchor="middle" class="m b">test2</text><text x="300" y="376" text-anchor="middle" class="s" style="fill:var(--ap)">test1 은 가려짐</text><text x="300" y="430" text-anchor="middle" class="s">sdb1 의 것</text></g>
+  <g data-s="3"><text x="496" y="210" text-anchor="middle" class="b">③ umount 뒤</text><text x="496" y="234" text-anchor="middle" class="s">/mydata 를 열면</text><rect x="404" y="248" width="184" height="150" rx="10" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2.5"/><text x="496" y="318" text-anchor="middle" class="m b">test1</text><text x="496" y="376" text-anchor="middle" class="s" style="fill:var(--te)">다시 보임</text><text x="496" y="430" text-anchor="middle" class="s">sda2 의 것</text></g>
+</svg>
+
+<!-- ⑰ /etc/fstab 한 줄 = 6칸 -->
+<svg data-fig="fstab" viewBox="0 0 600 536" role="img" aria-label="/etc/fstab 한 줄의 6칸" hidden>
+  <g data-s="1"><rect x="10" y="10" width="580" height="52" rx="10" style="fill:var(--main);fill-opacity:.14;stroke:var(--main);stroke-width:2"/><text x="300" y="44" text-anchor="middle" class="m b">/dev/sdb1  /mydata  ext4  defaults  0  0</text></g>
+  <g data-s="1"><rect x="10" y="80" width="170" height="50" rx="8" style="fill:var(--inh);fill-opacity:.18;stroke:var(--inh);stroke-width:2"/><text x="95" y="112" text-anchor="middle" class="m b">/dev/sdb1</text><text x="196" y="101" class="b">① 장치</text><text x="196" y="124" class="s">무엇을 (UUID=… 도 됨)</text></g>
+  <g data-s="1"><rect x="10" y="140" width="170" height="50" rx="8" style="fill:var(--te);fill-opacity:.18;stroke:var(--te);stroke-width:2"/><text x="95" y="172" text-anchor="middle" class="m b">/mydata</text><text x="196" y="161" class="b">② 마운트 위치</text><text x="196" y="184" class="s">어디에 연결</text></g>
+  <g data-s="1"><rect x="10" y="200" width="170" height="50" rx="8" style="fill:var(--oc);fill-opacity:.18;stroke:var(--oc);stroke-width:2"/><text x="95" y="232" text-anchor="middle" class="m b">ext4</text><text x="196" y="221" class="b">③ 파일 시스템</text><text x="196" y="244" class="s">종류 (xfs · ext4 …)</text></g>
+  <g data-s="2"><rect x="10" y="260" width="170" height="50" rx="8" style="fill:var(--fr);fill-opacity:.18;stroke:var(--fr);stroke-width:2"/><text x="95" y="292" text-anchor="middle" class="m b">defaults</text><text x="196" y="281" class="b">④ 옵션</text><text x="196" y="304" class="s">기본 옵션 묶음 (쿼터: usrquota …)</text></g>
+  <g data-s="3"><rect x="10" y="320" width="170" height="50" rx="8" style="fill:var(--pa);fill-opacity:.18;stroke:var(--pa);stroke-width:2"/><text x="95" y="352" text-anchor="middle" class="m b">0</text><text x="196" y="341" class="b">⑤ dump</text><text x="196" y="364" class="s">백업 대상이면 1 · 아니면 0</text></g>
+  <g data-s="3"><rect x="10" y="380" width="170" height="50" rx="8" style="fill:var(--ap);fill-opacity:.18;stroke:var(--ap);stroke-width:2"/><text x="95" y="412" text-anchor="middle" class="m b">0</text><text x="196" y="401" class="b">⑥ fsck 순서</text><text x="196" y="424" class="s">0 안 함 · 1 루트 · 2 그 밖</text></g>
+  <g data-s="4"><rect x="10" y="448" width="580" height="78" rx="10" style="fill:var(--te);fill-opacity:.12;stroke:var(--te);stroke-width:2;stroke-dasharray:7 5"/><text x="300" y="478" text-anchor="middle" class="s m">UUID=0c9daa77-…  /mydata  ext4  defaults  0  0</text><text x="300" y="508" text-anchor="middle" class="s">장치 이름이 바뀌어도 안전 — blkid 로 확인</text></g>
+</svg>
+
+<!-- ⑱ 장치 이름이 바뀜 → 응급 모드 -->
+<svg data-fig="devname" viewBox="0 0 600 512" role="img" aria-label="재부팅 뒤 장치 이름이 바뀌어 fstab 마운트가 실패하는 과정" hidden>
+  <g data-s="1"><text x="150" y="30" text-anchor="middle" class="b">디스크를 붙였을 때</text>
+    <rect x="20" y="48" width="260" height="70" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="150" y="76" text-anchor="middle" class="b">루트 디스크 80GB</text><text x="150" y="102" text-anchor="middle" class="s m">sda  ·  / = sda2</text>
+    <rect x="20" y="134" width="260" height="70" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><text x="150" y="162" text-anchor="middle" class="b">새 디스크 3GB</text><text x="150" y="188" text-anchor="middle" class="s m">sdb → sdb1 · sdb2</text>
+    <text x="150" y="238" text-anchor="middle" class="s m">fstab: /dev/sdb1 /disk1</text></g>
+  <g data-s="2"><text x="450" y="30" text-anchor="middle" class="b" style="fill:var(--ap)">재부팅 뒤</text>
+    <rect x="320" y="48" width="260" height="70" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="450" y="76" text-anchor="middle" class="b">루트 디스크 80GB</text><text x="450" y="102" text-anchor="middle" class="s m" style="fill:var(--ap)">sdb  ·  / = sdb2</text>
+    <rect x="320" y="134" width="260" height="70" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><text x="450" y="162" text-anchor="middle" class="b">새 디스크 3GB</text><text x="450" y="188" text-anchor="middle" class="s m" style="fill:var(--ap)">sda → sda1 · sda2</text>
+    <text x="300" y="132" text-anchor="middle" class="b" style="fill:var(--ap)">⇄</text>
+    <text x="450" y="238" text-anchor="middle" class="s" style="fill:var(--ap)">fstab 은 그대로 sdb1 → ✗</text></g>
+  <g data-s="3"><rect x="20" y="262" width="560" height="84" rx="10" style="fill:var(--ap);fill-opacity:.12;stroke:var(--ap);stroke-width:2"/><text x="300" y="296" text-anchor="middle" class="b">부팅 중 마운트 실패 → 응급 모드</text><text x="300" y="326" text-anchor="middle" class="s m">You are in emergency mode</text></g>
+  <g data-s="4"><rect x="20" y="364" width="560" height="136" rx="10" style="fill:var(--te);fill-opacity:.12;stroke:var(--te);stroke-width:2"/><text x="44" y="396" class="b">해결 · 예방</text><text x="44" y="426" class="s">root 로그인 → vi /etc/fstab → 이름 고치기 또는 # 주석</text><text x="44" y="456" class="s">reboot → df 로 확인 (데이터는 그대로)</text><text x="44" y="486" class="s">예방: UUID=… (blkid) · 옵션에 nofail</text></g>
+</svg>
+
+<!-- ⑲ 쿼터 soft · hard -->
+<svg data-fig="quota" viewBox="0 0 600 420" role="img" aria-label="blackpink 의 쿼터 소프트 한도와 하드 한도" hidden>
+  <g data-s="1"><text x="300" y="34" text-anchor="middle" class="s">blackpink 가 /userHome 에 쓴 양 (KB)</text>
+    <path class="ax" d="M40,226 L566,226"/><text x="40" y="250" text-anchor="middle" class="s">0</text>
+    <path d="M382,96 L382,236" style="stroke:var(--oc);stroke-width:2.5;stroke-dasharray:7 5"/><text x="376" y="92" text-anchor="end" class="b" style="fill:var(--oc)">soft 40MB</text>
+    <path d="M468,70 L468,236" style="stroke:var(--ap);stroke-width:3"/><text x="474" y="76" class="b" style="fill:var(--ap)">hard 50MB</text>
+    <text x="40" y="392" class="s">단위 KB (40960 = 40MB) · 0 = 제한 없음</text></g>
+  <g data-s="2"><rect x="40.0" y="150" width="129.6" height="60" style="fill:var(--inh);fill-opacity:.32;stroke:var(--inh);stroke-width:1.5"/><text x="104.8" y="186" text-anchor="middle" class="m b">test1</text></g>
+  <g data-s="2"><rect x="169.6" y="150" width="129.6" height="60" style="fill:var(--inh);fill-opacity:.22;stroke:var(--inh);stroke-width:1.5"/><text x="234.3" y="186" text-anchor="middle" class="m b">test2</text></g>
+  <g data-s="3"><rect x="299.1" y="150" width="129.6" height="60" style="fill:var(--oc);fill-opacity:.38;stroke:var(--oc);stroke-width:1.5"/><text x="363.9" y="186" text-anchor="middle" class="m b">test3</text></g>
+  <g data-s="3"><rect x="382" y="110" width="86" height="116" style="fill:var(--oc);fill-opacity:.12"/><text x="425" y="132" text-anchor="middle" class="s">유예</text></g>
+  <g data-s="4"><rect x="428.7" y="150" width="39.3" height="60" style="fill:var(--ap);fill-opacity:.45;stroke:var(--ap);stroke-width:1.5"/><text x="448.3" y="252" text-anchor="middle" class="s m" style="fill:var(--ap)">test4 (잘림)</text></g>
+  <g data-s="2"><text x="40" y="296" class="s">test1 + test2 ≈ 31MB → 아직 soft 아래</text></g>
+  <g data-s="3"><text x="40" y="326" class="s">test3 까지 ≈ 45MB → soft 를 넘었지만 복사됨</text></g>
+  <g data-s="4"><text x="40" y="356" class="s" style="fill:var(--ap)">test4 → hard 에서 멈춤 → Disk quota exceeded</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -523,7 +586,7 @@
             "내용 있는 파일 → 앞 5줄 · <b>빈 파일</b> → -s 거짓 → else · 없는 파일 → -f 거짓 → else",
             "따옴표 — <code>\"$v\"</code> = 값 · <code>'$v'</code> · <code>\\$v</code> = 글자 그대로 / 변수는 모두 문자열 → <code>expr</code> 로만 계산 (띄어쓰기 필수)" ],
           note: "조건: <code>-e</code> 있으면 · <code>-f</code> 일반 파일 · <code>-d</code> 디렉터리 · <code>-s</code> 크기 &gt; 0 · <code>[</code> 뒤 · <code>]</code> 앞 띄어쓰기 필수 · if → then → else → <b>fi</b> (출력값은 직접 실행해서 확인)" },
-        { id: "vi", week: 3, tab: "⑬ vi 모드", src: "3주차 · 4장 PPT 12 ~ 15쪽 · 작년 튜터링 서술형",
+        { id: "vi", week: [3, 9], tab: "⑬ vi 모드", src: "3주차 · 4장 PPT 12 ~ 15쪽 · 작년 튜터링 서술형 · 9주차 fstab 고칠 때 실수 (입력 모드에서 :wq)",
           steps: [
             "<code>vi 파일</code> → <b>명령 모드</b>로 시작 (커서 이동 · 삭제 · 복사)",
             "<b>i · a · o</b> → 입력 모드 (글자 입력) · <b>Esc</b> → 명령 모드로",
@@ -536,7 +599,43 @@
             "<b>압축</b> — xz · bzip2 · gzip · 한 번에 <code>tar cvfJ my.tar.xz /etc/sysconfig/</code> (J = xz)",
             "<b>풀기</b> <code>tar xvfJ my.tar.xz</code> — 압축 풀고 묶음도 풀기",
             "글자 정리 — 동작 <b>c x t</b> · 옵션 <b>f v</b> · 압축 <b>J z j</b> · 압축만 <code>gzip -d</code> = gunzip" ],
-          note: "리눅스는 묶기(tar)와 압축(xz · gzip · bzip2)이 원래 별개 프로그램 · 백업 스크립트의 <code>tar cfJ</code> 도 같은 뜻" }
+          note: "리눅스는 묶기(tar)와 압축(xz · gzip · bzip2)이 원래 별개 프로그램 · 백업 스크립트의 <code>tar cfJ</code> 도 같은 뜻" },
+        { id: "disk", week: 9, tab: "⑮ 디스크 추가", src: "9주차 · 교재 6장 실습 · 내 로그(linux_disk.txt) — 새 디스크를 붙여 쓰기까지",
+          steps: [
+            "<b>디스크 추가</b> — VM 을 끄고 Edit virtual machine settings → Add → Hard Disk → <b>SCSI</b> → 크기 (수업 10GB · 과제 1 3GB)",
+            "<b>새 디스크 확인</b> — <code>ls -l /dev/sd*</code> → <code>/dev/sdb</code> 가 생김 (8, 16 · 아직 파티션 없음)",
+            "<b>파티션</b> — <code>fdisk /dev/sdb</code> → <code>n</code> 새로 · <code>p</code> primary · <code>1</code> · Enter · Enter(끝까지) · <code>w</code> 저장 → <code>/dev/sdb1</code>",
+            "<b>포맷</b> — <code>mkfs.ext4 /dev/sdb1</code> (파티션을! 디스크 전체 <code>/dev/sdb</code> 아님)",
+            "<b>마운트</b> — <code>mkdir /mydata</code> → <code>mount /dev/sdb1 /mydata</code> (맨 앞 / = 절대경로)",
+            "<b>자동 마운트</b> — <code>/etc/fstab</code> 맨 아래 <code>/dev/sdb1 /mydata ext4 defaults 0 0</code> → <code>reboot</code> → <code>df</code> 로 확인" ],
+          note: "fdisk 는 <b>w</b> 를 누르기 전까지 디스크를 바꾸지 않음 (실수하면 <code>q</code> 로 나가거나 <code>d</code> 로 지우기)" },
+        { id: "mount", week: 9, tab: "⑯ 마운트·가려짐", src: "9주차 · 내 로그 — test1 · test2 가 다르게 보인 이유",
+          steps: [
+            "<b>마운트 전</b> — /mydata 는 루트 디스크(sda2)의 빈 디렉터리 → <code>cp … /mydata/test1</code> 은 <b>sda2</b> 에 저장",
+            "<b>mount /dev/sdb1 /mydata 뒤</b> — /mydata 를 열면 <b>sdb1</b> 의 내용(lost+found · test2) → test1 은 <b>가려짐</b> (지워진 게 아님)",
+            "<b>umount 뒤</b> — 연결이 끊겨 다시 sda2 의 /mydata → <b>test1 이 그대로</b> 보임" ],
+          note: "마운트 = 디렉터리 위에 다른 디스크를 덮어 연결 · 마운트 포인트 안에 있으면(<code>cd /mydata</code>) umount 가 안 됨" },
+        { id: "fstab", week: 9, tab: "⑰ fstab 6칸", src: "9주차 · 교재 6장 — /etc/fstab 한 줄",
+          steps: [
+            "<b>① 장치 · ② 마운트 위치 · ③ 파일 시스템</b> — 무엇을 · 어디에 · 어떤 종류로",
+            "<b>④ 옵션</b> — <code>defaults</code> = rw · suid · dev · exec · auto · nouser · async · 쿼터면 <code>defaults,usrquota,grpquota</code>",
+            "<b>⑤ dump</b> (백업 1 · 아니면 0) · <b>⑥ fsck 순서</b> (0 안 함 · 1 루트 · 2 그 밖)",
+            "<b>UUID</b> 로 쓰면 장치 이름(sda · sdb)이 바뀌어도 안전 — <code>blkid /dev/sdb1</code> 로 확인 (UUID 는 mkfs.ext4 로그의 실제 값)" ],
+          note: "편집: <code>vi /etc/fstab</code> → <code>G</code> → <code>o</code> → 입력 → <code>Esc</code> → <code>:wq</code> · 저장 전 확인 = <code>systemctl daemon-reload</code> → <code>mount -a</code>" },
+        { id: "devname", week: 9, tab: "⑱ 이름 바뀜", src: "9주차 · 과제 1 · 트러블슈팅 — 📖 VITAMIN QUIZ 6-1 HINT1 “부팅 시 /dev/sda와 /dev/sdb가 바뀔 수도 있다”",
+          steps: [
+            "<b>붙였을 때</b> — 루트 디스크 = sda · 새 3GB 디스크 = sdb → fstab 에 <code>/dev/sdb1</code> · <code>/dev/sdb2</code>",
+            "<b>재부팅 뒤</b> — 이름이 바뀌어 루트 = <b>sdb</b> (/ = sdb2) · 새 디스크 = <b>sda</b> → fstab 의 sdb1 은 엉뚱한 장치",
+            "fstab 의 장치를 못 찾아 <b>부팅 중 마운트 실패 → 응급 모드</b> (You are in emergency mode)",
+            "<b>해결</b> — root 비밀번호 → <code>vi /etc/fstab</code> → 이름을 고치거나 <code>#</code> 주석 → <code>reboot</code> · <b>예방</b> — UUID · <code>nofail</code>" ],
+          note: "fstab 줄을 지우거나 # 로 막아도 디스크 데이터는 그대로 (자동 마운트만 꺼짐) · 과제 2 때는 <code>sed -i '/disk/s/sda/sdb/' /etc/fstab</code> 로 한 번에 고침" },
+        { id: "quota", week: 9, tab: "⑲ 쿼터", src: "9주차 · 과제 2 (VITAMIN QUIZ 6-9 = 실습 17) · 🖼️ 제출 캡처의 실제 값",
+          steps: [
+            "<b>한도</b> — <code>edquota -u blackpink</code> → soft <b>40960</b> KB (40MB) · hard <b>51200</b> KB (50MB)",
+            "<b>test1 · test2</b> (각 15,866,696 B ≈ 15.5MB) → 합 ≈ 31MB · 아직 soft 아래",
+            "<b>test3</b> → ≈ 46,488 KB · <b>soft 를 넘었지만 복사됨</b> — 유예 기간(기본 7일) 동안만 허용",
+            "<b>test4</b> → hard 51,200 KB 에서 멈춤 → <code>Disk quota exceeded</code> · test4 는 4,808,704 B 만 쓰인 잘린 파일" ],
+          note: "순서: fstab <code>defaults,usrquota,grpquota</code> → <code>tune2fs -O quota</code> → 다시 마운트 → <code>quotacheck</code> → <code>quotaon</code> → <code>edquota</code> → <code>quota</code> · <code>repquota</code> · <code>edquota -p blackpink mamamoo</code> = 한도 복사" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
@@ -672,6 +771,6 @@
     }
 })();
 </script>
-<script src="../../figink.js?v=202610290946"></script>
+<script src="../../figink.js?v=202610292237"></script>
 </body>
 </html>
