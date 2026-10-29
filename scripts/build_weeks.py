@@ -374,10 +374,10 @@ PAGE_CSS = """
 .wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
 .wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
 .wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
-.wk-pager a,.wk-pager span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
 .wk-pager a b{color:var(--main);}
 .wk-pager .next{text-align:right;}
-.wk-pager span{visibility:hidden;}
+.wk-pager>span{visibility:hidden;}
 .wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
 pre.io{background:#0f1b14;}
 pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
@@ -389,7 +389,7 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202610262015"></script>
+    <script src="{asset}theme.js?v=202610290946"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
     <meta name="description" content="{subject} {week_label} 정리 — {title}">
@@ -399,7 +399,7 @@ PAGE = """<!DOCTYPE html>
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="{asset}favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="{asset}icon-180.png">
-    <link rel="stylesheet" href="{asset}style.css?v=202610262015">
+    <link rel="stylesheet" href="{asset}style.css?v=202610290946">
     <style>{css}</style>
 </head>
 <body>
@@ -427,7 +427,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202610262015"></script>
+<script src="{asset}ink.js?v=202610290946"></script>
 </body>
 </html>
 """

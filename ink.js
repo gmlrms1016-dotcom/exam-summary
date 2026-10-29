@@ -75,6 +75,12 @@
             migrated = true;
         }
         out.v6 = 1;
+        var phone = Math.min(screen.width, screen.height) < 600 && !!(window.matchMedia && matchMedia("(pointer: coarse)").matches);
+        if (phone && !(v && v.mob)) {                          // 폰(펜슬 없음)은 필기 막대가 화면 아래를 가려 읽기 불편 → 처음엔 꺼 둠 (2026-10-29 · 예전에 쓰던 폰도 한 번만) · ✏️ 버튼으로 다시 켬
+            out.off = true;
+            if (v) migrated = true;
+        }
+        if (phone) out.mob = 1;
         if (TOOLS.indexOf(out.tool) < 0) out.tool = "pen";
         if (INK.indexOf(out.lastDraw) < 0) out.lastDraw = "pen";
         if (out.eraser.mode === "stroke") out.eraser.mode = "object";
