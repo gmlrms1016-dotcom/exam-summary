@@ -401,8 +401,8 @@ a2: 5</code></pre>
 <div class="tip">코드 · 실행 결과는 <a href="프로그래밍언어실습-6주차.html">6주차 페이지 5번</a> · 과목 페이지 🖥️ 출력 결과 맞히기 · 💻 코딩테스트 <b>🔥 6주차</b> 묶음에서 직접 풀 수 있어요.</div>
 </section>
 <section class="card" id="s3">
-<h2>🎓 튜터링 코드 — 온도 변환 · 윤년 · for 실행결과</h2>
-<div class="tip">자료: <code>8주차_중간고사/튜터링/solution/Project1/1.c</code> — 프로그램 3개가 한 파일에 있어요(앞의 2개는 주석 처리). 파일의 <b>한글이 깨져</b> 있어서(CP949 글자가 UTF-8 로 잘못 저장됨) 문자열은 <b>문맥으로 채웠어요(추정)</b>. 코드 · 식은 그대로이고, 아래 결과는 전부 직접 컴파일 · 실행한 값입니다.<br><span class="wk-tag fix">⚠️ 정정</span> 두 군데 — ① 섭씨 → 화씨 식 ② 윤년 조건. 둘 다 실행해 보면 틀린 값이 나와요.</div>
+<h2>🎓 튜터링 1회차 (10/1) — 온도 변환 · 윤년 · for 실행결과</h2>
+<div class="tip">자료: <code>8주차_중간고사/튜터링/1회차/solution/Project1/1.c</code> — 프로그램 3개가 한 파일에 있어요(앞의 2개는 주석 처리). 파일의 <b>한글이 깨져</b> 있어서(CP949 글자가 UTF-8 로 잘못 저장됨) 문자열은 <b>문맥으로 채웠어요(추정)</b>. 코드 · 식은 그대로이고, 아래 결과는 전부 직접 컴파일 · 실행한 값입니다.<br><span class="wk-tag fix">⚠️ 정정</span> 두 군데 — ① 섭씨 → 화씨 식 ② 윤년 조건. 둘 다 실행해 보면 틀린 값이 나와요.</div>
 <h3>① 온도 변환 (F → 섭씨 · C → 화씨)</h3>
 <pre><code class="language-c">#include &lt;stdio.h&gt;   // printf · scanf 를 쓰기 위한 표준 입출력 헤더
 
@@ -489,6 +489,252 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
 <ul><li><code>%5d</code> → 숫자를 <b>5칸 오른쪽 정렬</b> → 한 자리 수 앞에 공백 <b>4개</b>, 두 자리 수 앞에 공백 <b>3개</b></li><li><code>i == 15</code> 일 때 <code>\n</code> 이 <b>15 앞</b>에서 먼저 찍힘 → 15 · 18 은 둘째 줄</li><li>마지막에 <code>\n</code> 이 <b>없음</b> → <code>18</code> 뒤에서 줄바꿈 없이 끝 (5주차 필기 “<code>\n</code> 있나 없나 주의”)</li></ul>
 </section>
 <section class="card" id="s4">
+<h2>🎓 튜터링 2회차 (10/8) — 세 자리 수 나누기 · continue · 별 피라미드 · max 함수 · switch 성적</h2>
+<div class="tip">자료: <code>8주차_중간고사/튜터링/2회차/soluition/Project1/1.c</code> (CP949 저장 · 한글은 정상) — 프로그램 7개가 한 파일에 있어요(앞의 6개는 주석 처리). 아래 결과는 전부 <b>직접 컴파일 · 실행</b>한 값이에요.<br><span class="wk-tag fix">⚠️ 정정</span> — ⑥ <code>max</code> 함수는 <b>원형(선언)이 없어서</b> 요즘 컴파일러(clang · gcc 14 이상)에서는 <b>컴파일 오류</b>가 나요. 같은 값이 들어오면 return 이 없는 문제도 있어요 → 고친 코드로 실었어요.</div>
+<table class="ref">
+<tbody>
+<tr><th>번호</th><th>프로그램</th><th>핵심</th></tr>
+<tr><td>①</td><td>세 자리 수 → 백 · 십 · 일의 자리 (<code>while (1)</code>)</td><td><code>/</code> 몫 · <code>%</code> 나머지 · 범위 밖이면 <code>continue</code> · 다 찍으면 <code>break</code></td></tr>
+<tr><td>②</td><td>같은 문제를 <code>do-while</code> 로</td><td>몸통을 <b>먼저 한 번</b> · 조건 = 범위 밖이면 다시</td></tr>
+<tr><td>③</td><td>1 ~ 15 에서 3의 배수 빼기</td><td><code>for</code> 안 <code>continue</code> → <b>i++ 로</b> 감</td></tr>
+<tr><td>④ ⑤</td><td>별 피라미드 · 다이아몬드</td><td>공백 <code>5 - i</code> 개 + 별 <code>2 * i - 1</code> 개 · 아래쪽은 <code>i = 4</code> 부터 거꾸로</td></tr>
+<tr><td>⑥</td><td>세 수 중 최댓값 <code>max</code> 함수</td><td>⚠️ main 위에 <b>원형</b> · 같은 값은 <code>&gt;=</code></td></tr>
+<tr><td>⑦</td><td>점수 → 성적 (<code>switch</code>)</td><td><code>i / 10</code> 으로 10점 단위 · break 없는 <code>case 10:</code> 은 아래로 내려감</td></tr>
+</tbody></table>
+<h3>① 세 자리 수 → 백 · 십 · 일의 자리 (<code>while (1)</code> + continue · break)</h3>
+<pre><code class="language-c">#define _CRT_SECURE_NO_WARNINGS                   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i;                                        // 입력한 정수를 담을 변수
+    while (1) {                                   // 1 = 항상 참 → break 를 만날 때까지 계속 반복
+        printf("양의 정수 [100-999] 입력 : ");     // 질문 출력 (줄바꿈 없음)
+        scanf("%d", &amp;i);                          // 50 입력 → i = 50 (두 번째 바퀴: 456)
+        if (i &lt; 100 || i &gt; 999) {                 // 50 &lt; 100 → 참 → 범위 밖
+            printf("정상적인 숫자 범위를 입력하세요.");   // ⚠️ 끝에 \n 이 없음 → 다음 질문이 같은 줄에 붙어 나옴
+            continue;                             // 아래를 건너뛰고 while 조건(1)으로 → 다시 질문
+        }                                         // if 끝
+        else if (i &gt;= 100 &amp;&amp; i &lt;= 999) {          // 456 → 100 이상 999 이하 → 참
+            printf("100단위 출력 : %d\n", i / 100);        // 456 / 100 → 정수 나눗셈 → 4
+            printf("10단위 출력 : %d\n", i % 100 / 10);    // 456 % 100 = 56 → 56 / 10 → 5
+            printf("1단위 출력 : %d\n", i % 100 % 10);     // 456 % 100 = 56 → 56 % 10 → 6
+            break;                                // while 을 빠져나감 → 반복 끝
+        }                                         // else if 끝
+        else {                                    // ⚠️ 위 두 조건이 정반대라 여기는 실행될 일이 없음
+            printf("정삭적인 숫자를 입력하세요.");   // (원본 그대로 · '정삭적인' 은 '정상적인' 의 오타)
+            continue;                             // 다시 질문
+        }                                         // else 끝
+    }                                             // while 끝
+    return 0;                                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                 // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">양의 정수 [100-999] 입력 : 50
+정상적인 숫자 범위를 입력하세요.양의 정수 [100-999] 입력 : 456
+100단위 출력 : 4
+10단위 출력 : 5
+1단위 출력 : 6</code></pre>
+<ul><li><code>/</code> 와 <code>%</code> 로 자리 나누기 — 정수 ÷ 정수 = <b>몫만</b> (소수점 버림): <code>456 / 100</code> → 4 · <code>456 % 100</code> → 56 (나머지)</li><li><code>i % 100 % 10</code> 은 <code>i % 10</code> 과 결과가 같아요 (456 % 10 → 6 · 실행 확인) — 끝자리 = 10 으로 나눈 나머지</li><li><code>continue</code> → 아래 줄을 건너뛰고 <b>다음 바퀴</b>로 · <code>break</code> → <b>반복 끝</b> (7주차 ✍️ “continue · break 꼭”)</li><li>⚠️ 오류 문구 끝에 <code>\n</code> 이 없어서 다음 질문이 <b>같은 줄</b>에 붙어요 → <code>"…입력하세요.\n"</code> 으로 쓰면 줄이 나뉨 (② do-while 은 <code>\n</code> 이 있음 · 시험 ✍️ “<code>\n</code> 있나 없나 주의”)</li><li>🤖 <code>i &lt; 100 || i &gt; 999</code> 와 <code>i &gt;= 100 &amp;&amp; i &lt;= 999</code> 는 <b>정반대</b> → 둘 중 하나는 꼭 참이라 마지막 <code>else</code> 는 실행될 일이 없어요 → <code>else if (…)</code> 를 그냥 <code>else</code> 로 써도 결과가 같아요</li></ul>
+<h3>② 같은 문제를 do-while 로</h3>
+<pre><code class="language-c">#define _CRT_SECURE_NO_WARNINGS                   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i;                                        // 입력한 정수를 담을 변수
+
+    do {                                          // do-while = 먼저 한 번 실행하고 끝에서 조건 검사 (최소 1번)
+        printf("양의 정수 [100-999] 입력 : ");     // 질문 출력 (줄바꿈 없음)
+        scanf("%d", &amp;i);                          // 50 입력 → i = 50 (두 번째 바퀴: 456)
+
+        if (i &lt; 100 || i &gt; 999) {                 // 50 → 범위 밖 → 참
+            printf("정상적인 숫자 범위를 입력하세요.\n");   // 이번엔 \n 이 있음 → 다음 질문은 새 줄에서
+        }                                         // if 끝
+        else if (i &gt;= 100 &amp;&amp; i &lt;= 999) {          // 456 → 범위 안 → 참
+            printf("100단위 출력 : %d\n", i / 100);        // 456 / 100 → 4
+            printf("10단위 출력 : %d\n", i % 100 / 10);    // 456 % 100 = 56 → 56 / 10 → 5
+            printf("1단위 출력 : %d\n", i % 100 % 10);     // 456 % 100 = 56 → 56 % 10 → 6
+        }                                         // else if 끝
+
+    } while (i &lt; 100 || i &gt; 999);                 // 범위 밖이면 다시 → 50: 참 → 한 바퀴 더 · 456: 거짓 → 끝 (끝의 ; 필수)
+
+    return 0;                                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                 // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">양의 정수 [100-999] 입력 : 50
+정상적인 숫자 범위를 입력하세요.
+양의 정수 [100-999] 입력 : 456
+100단위 출력 : 4
+10단위 출력 : 5
+1단위 출력 : 6</code></pre>
+<ul><li><code>while (1)</code> + <code>break</code> 대신 <b>반복 조건 자체</b>를 <code>while (범위 밖)</code> 으로 → continue · break 가 필요 없어요</li><li><code>do { … } while (조건);</code> — 몸통을 <b>먼저 한 번</b> 실행하고 조건 검사 → 입력부터 받아야 하는 문제에 딱 맞음 (조건이 처음부터 거짓이어도 1번은 실행 · 실행 확인)</li><li>끝의 <code>;</code> 를 빼면 컴파일 오류 <code>expected ';' after do/while statement</code> (직접 컴파일)</li></ul>
+<h3>③ 1 ~ 15 에서 3의 배수만 빼고 출력 (for 안의 continue)</h3>
+<pre><code class="language-c">#define _CRT_SECURE_NO_WARNINGS       // Visual Studio 에서 scanf 보안 경고 끄기 (이 프로그램은 scanf 가 없어서 없어도 됨)
+#include &lt;stdio.h&gt;                    // printf 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    for (int i = 1; i &lt;= 15; i++) {   // i = 1 → 2 → … → 15 (15번)
+        if (i % 3 == 0) {             // 3 · 6 · 9 · 12 · 15 → 3으로 나눈 나머지 0 → 참
+            continue;                 // printf 를 건너뛰고 i++ 로 → 3의 배수는 안 찍힘
+        }                             // if 끝
+        else {                        // 3의 배수가 아니면
+            printf("%d ", i);         // 1 → "1 " · 2 → "2 " · 4 → "4 " … (숫자 뒤에 칸 하나)
+        }                             // else 끝
+    }                                 // for 끝 → 1 2 4 5 7 8 10 11 13 14
+
+    printf("\n\n결과값은 같은 다른 버전\n\n");   // 줄바꿈 → 빈 줄 → 문구 → 줄바꿈 → 빈 줄
+
+    for (int i = 1; i &lt;= 15; i++) {   // 다시 1 ~ 15
+        if (i % 3 != 0) {             // 3의 배수가 아니면 → 참
+            printf("%d ", i);         // 1 2 4 5 … 14 를 찍음
+        }                             // if 끝
+        else {                        // 3의 배수면
+            continue;                 // 건너뜀 (어차피 반복의 끝이라 이 else 는 없어도 결과 같음)
+        }                             // else 끝
+    }                                 // for 끝 → 마지막에 \n 없음
+    return 0;                         // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                     // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">1 2 4 5 7 8 10 11 13 14 
+
+결과값은 같은 다른 버전
+
+1 2 4 5 7 8 10 11 13 14 </code></pre>
+<ul><li><code>for</code> 안의 <code>continue</code> → 아래를 건너뛰고 <b>증감식(i++)</b> 으로 → 그다음 조건 검사</li><li>🤖 <code>while</code> 은 다름 — <code>while (i &lt;= 15) { if (i % 3 == 0) continue; … i++; }</code> 처럼 i++ 가 continue <b>아래</b>에 있으면 i 가 3 에서 멈춰 <b>무한 반복</b> (실행 확인)</li><li><code>"\n\n결과값은…\n\n"</code> → 첫 <code>\n</code> 은 숫자 줄을 끝내고, 둘째 <code>\n</code> 이 <b>빈 줄</b> → 출력결과 쓸 때 빈 줄 개수 주의</li><li>마지막 <code>14</code> 뒤에는 칸 하나만 있고 <code>\n</code> 은 없음</li></ul>
+<h3>④ 별 피라미드 (5줄)</h3>
+<pre><code class="language-c">#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    for (int i = 1; i &lt;= 5; i++) {              // 줄 번호 i = 1 ~ 5 (5줄)
+        for (int j = 1; j &lt;= 5 - i; j++) {      // 공백 5 - i 개 → 1줄 4개 · 2줄 3개 … 5줄 0개
+            printf(" ");                        // 공백 하나
+        }                                       // 공백 for 끝
+        for (int j = 1; j &lt;= 2 * i - 1; j++) {  // 별 2 * i - 1 개 → 1 · 3 · 5 · 7 · 9 (홀수)
+            printf("*");                        // 별 하나
+        }                                       // 별 for 끝
+        printf("\n");                           // 한 줄 끝 → 줄바꿈
+    }                                           // 바깥 for 끝
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">    *
+   ***
+  *****
+ *******
+*********</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>줄 i</th><th>공백 <code>5 - i</code></th><th>별 <code>2 * i - 1</code></th></tr>
+<tr><td>1</td><td>4</td><td>1</td></tr>
+<tr><td>2</td><td>3</td><td>3</td></tr>
+<tr><td>3</td><td>2</td><td>5</td></tr>
+<tr><td>4</td><td>1</td><td>7</td></tr>
+<tr><td>5</td><td>0</td><td>9</td></tr>
+</tbody></table>
+<h3>⑤ 다이아몬드 (피라미드 + 거꾸로 4줄)</h3>
+<pre><code class="language-c">#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    for (int i = 1; i &lt;= 5; i++) {              // 위쪽 5줄 — ④ 피라미드와 똑같음
+        for (int j = 1; j &lt;= 5 - i; j++) {      // 공백 4 → 3 → 2 → 1 → 0
+            printf(" ");                        // 공백 하나
+        }                                       // 공백 for 끝
+        for (int j = 1; j &lt;= 2 * i - 1; j++) {  // 별 1 → 3 → 5 → 7 → 9
+            printf("*");                        // 별 하나
+        }                                       // 별 for 끝
+        printf("\n");                           // 한 줄 끝 → 줄바꿈
+    }                                           // 위쪽 끝
+    for (int i = 4; i &gt;= 1; i--) {              // 아래쪽 4줄 — i 를 4 부터 거꾸로 (4 → 3 → 2 → 1)
+        for (int j = 1; j &lt;= 5 - i; j++) {      // 공백 1 → 2 → 3 → 4
+            printf(" ");                        // 공백 하나
+        }                                       // 공백 for 끝
+        for (int j = 1; j &lt;= 2 * i - 1; j++) {  // 별 7 → 5 → 3 → 1
+            printf("*");                        // 별 하나
+        }                                       // 별 for 끝
+        printf("\n");                           // 한 줄 끝 → 줄바꿈
+    }                                           // 아래쪽 끝
+    return 0;                                   // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                               // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">    *
+   ***
+  *****
+ *******
+*********
+ *******
+  *****
+   ***
+    *</code></pre>
+<ul><li>아래쪽은 안쪽 for 두 개를 <b>그대로</b> 두고 바깥 i 만 거꾸로 → 7주차 🔥 “별 삼각형 <b>반대로</b>” 와 같은 생각</li><li>아래쪽을 <code>i = 5</code> 부터 시작하면 별 9개 줄이 <b>두 번</b> 나와요 (실행 확인) → 가운데 줄은 위쪽에서 이미 찍었으니 4 부터</li></ul>
+<h3>⑥ 세 수 중 최댓값 — max 함수 (⚠️ 원형 · 같은 값)</h3>
+<pre><code class="language-c">// 튜터링 코드에서 틀린 곳
+int main(void) {
+    printf("%d", max(5, 3, 8));    // ⚠️ main 보다 위에 max 원형이 없음 → clang: error: call to undeclared function 'max'
+}
+int max(int x, int y, int z) {     // main 아래에 정의
+    if (x &gt; y &amp;&amp; x &gt; z) { return x; }
+    else if (y &gt; x &amp;&amp; y &gt; z) { return y; }
+    else if (z &gt; x &amp;&amp; z &gt; y) { return z; }
+}                                  // ⚠️ (5, 5, 3) 처럼 같은 값이 가장 크면 셋 다 거짓 → return 없이 끝남</code></pre>
+<pre><code class="language-c">#include &lt;stdio.h&gt;                      // printf 를 쓰기 위한 표준 입출력 헤더
+
+int max(int x, int y, int z);           // ✅ 함수 원형(선언) — main 보다 위에 써야 main 이 max 를 알고 부를 수 있음
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    printf("%d\n", max(5, 3, 8));       // 5, 3, 8 → 8 이 가장 큼 → 8
+    printf("%d\n", max(5, 5, 3));       // 5 와 5 가 같음 → &gt;= 덕분에 5
+    printf("%d\n", max(7, 7, 7));       // 셋 다 같음 → 7
+    return 0;                           // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                       // main 함수 끝
+
+int max(int x, int y, int z) {          // 함수 정의(몸체) — 원형과 이름 · 매개변수가 같아야 함
+    if (x &gt;= y &amp;&amp; x &gt;= z) {             // x 가 y · z 보다 크거나 같으면 → (5, 3, 8): 5 &gt;= 8 거짓
+        return x;                       // x 를 돌려줌 → (5, 5, 3): 5
+    }                                   // if 끝
+    else if (y &gt;= x &amp;&amp; y &gt;= z) {        // y 가 가장 크거나 같으면 → (5, 3, 8): 3 &gt;= 5 거짓
+        return y;                       // y 를 돌려줌
+    }                                   // else if 끝
+    else {                              // 둘 다 아니면 z 가 가장 큼
+        return z;                       // (5, 3, 8): 8
+    }                                   // else 끝 → 어떤 경우든 return 이 있음
+}                                       // max 함수 끝</code></pre>
+<pre class="io"><code class="language-text">8
+5
+7</code></pre>
+<ul><li>⚠️ <b>정정 ① 원형</b> — main <b>아래</b>에 만든 함수를 main 에서 부르려면 main <b>위</b>에 원형 <code>int max(int x, int y, int z);</code> 가 있어야 해요 (6주차 함수 원형). 함수 전체를 main 위로 옮겨도 돼요<ul><li>원형이 없으면 clang 은 <code>error: call to undeclared function 'max'</code> (직접 컴파일) · gcc 도 14 버전부터 기본이 오류</li><li>🤖 Visual Studio(C)는 경고(C4013)만 내고 실행될 수 있어서 튜터링 때는 8 이 나왔을 거예요 — VS 에서는 확인 못 함 (오류를 경고로 낮춰 컴파일하면 8 이 나오는 것만 확인)</li></ul></li><li>⚠️ <b>정정 ② 같은 값</b> — <code>&gt;</code> 만 쓰면 (5, 5, 3) 에서 세 조건이 <b>모두 거짓</b> → return 없이 함수가 끝나서 돌려주는 값이 <b>정해져 있지 않아요</b> (clang 경고 <code>non-void function does not return a value in all control paths</code>) → <code>&gt;=</code> 로 바꾸고 마지막을 <code>else</code> 로</li><li>튜터링 코드에 주석 처리된 <code>return "same";</code> · <code>return "error";</code> → int 함수는 <b>문자열</b>을 돌려줄 수 없어요 → 살리면 clang 오류 <code>incompatible pointer to integer conversion</code> (직접 컴파일)</li></ul>
+<h3>⑦ 점수 → 성적 (switch · case 묶기)</h3>
+<pre><code class="language-c">#define _CRT_SECURE_NO_WARNINGS                   // Visual Studio 에서 scanf 보안 경고(C4996) 끄기 — 맨 위에 써야 함
+#include &lt;stdio.h&gt;                                // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i;                                        // 점수를 담을 변수
+    char score;                                   // 성적 글자 하나('A' · 'B' …)를 담을 변수
+    printf("0부터 100사이에 숫자를 입력하세요 &gt;&gt; ");   // 질문 출력 (줄바꿈 없음)
+    scanf("%d", &amp;i);                              // 85 입력 → i = 85
+    switch (i / 10) {                             // 85 / 10 → 정수 나눗셈 → 8 (일의 자리를 버려 10점 단위로)
+        case 10:                                  // 100점 → 10 · 실행문이 없어서 아래 case 9 로 그대로 내려감
+        case 9:                                   // 90 ~ 99 (그리고 위에서 내려온 10)
+            score = 'A';                          // 'A' 저장 (문자 하나는 작은따옴표)
+            break;                                // switch 를 빠져나감
+        case 8:                                   // 80 ~ 89 → 85 는 여기 → 아래 case 7 로 그대로 내려감
+        case 7:                                   // 70 ~ 79 (그리고 위에서 내려온 8)
+            score = 'B';                          // 85 → 'B'
+            break;                                // switch 를 빠져나감
+        case 6:                                   // 60 ~ 69
+            score = 'D';                          // 'D' (⚠️ 'C' 가 없음 — 아래 표)
+            break;                                // switch 를 빠져나감
+        default:                                  // 위 case 에 없는 값 (0 ~ 59 · 110 이상 · 음수)
+            score = 'F';                          // 'F'
+            break;                                // 마지막이라 없어도 되지만 써 두는 습관
+    }                                             // switch 끝
+    printf("당신의 점수는 %d점이며, 성적은 %c 입니다.", i, score);   // %d ← 85 · %c ← 'B' → 마지막에 \n 없음
+    return 0;                                     // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                 // main 함수 끝</code></pre>
+<pre class="io"><code class="language-text">0부터 100사이에 숫자를 입력하세요 &gt;&gt; 85
+당신의 점수는 85점이며, 성적은 B 입니다.</code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>입력</th><th><code>i / 10</code></th><th>가는 곳</th><th>성적</th></tr>
+<tr><td>100</td><td>10</td><td>case 10 → case 9 로 내려감</td><td><b>A</b></td></tr>
+<tr><td>95</td><td>9</td><td>case 9</td><td><b>A</b></td></tr>
+<tr><td>85</td><td>8</td><td>case 8 → case 7 로 내려감</td><td><b>B</b></td></tr>
+<tr><td>75</td><td>7</td><td>case 7</td><td><b>B</b></td></tr>
+<tr><td>65</td><td>6</td><td>case 6</td><td><b>D</b></td></tr>
+<tr><td>59</td><td>5</td><td>default</td><td><b>F</b></td></tr>
+<tr><td>105</td><td>10</td><td>case 10</td><td><b>A</b> (🤖 100 을 넘어도 A)</td></tr>
+<tr><td>-5</td><td>0 (소수점 버림)</td><td>default</td><td><b>F</b></td></tr>
+</tbody></table>
+<ul><li><b>case 묶기</b> — <code>case 10:</code> 처럼 실행문 · break 없이 쓰면 아래 case 로 <b>그대로 내려가요</b> (5주차 🔥 “switch 에 break 를 빼면?” 을 일부러 쓴 것) → 10 과 9 가 같은 'A'</li><li><code>i / 10</code> — 정수끼리 나누면 소수점 아래를 버림 → 점수를 10점 단위로 묶어 case 수를 줄임</li><li>🤖 <b>'C' 가 없어요</b> — 70점대(7)는 'B', 60점대(6)는 'D' → 보통 성적표처럼 하려면 <code>case 8:</code> 은 'B' · <code>case 7:</code> 은 'C' 로 따로 (문제 조건은 못 봐서 확인 못 함)</li><li>🤖 <b>범위 검사 없음</b> — 101 ~ 109 도 <code>/ 10</code> 이 10 이라 'A' · 110 이상과 음수는 'F' (위 표 실행 확인) → switch 앞에 <code>if (i &lt; 0 || i &gt; 100)</code> 으로 걸러야 정확해요</li></ul>
+</section>
+<section class="card" id="s5">
 <h2>🔥 중간고사 예상문제 — 5주차 HW01 과제 32개 (교재 6 · 7장 실습)</h2>
 <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 9/29 : 5주차 HW01 과제(교재 6 · 7장 실습 요약 PDF 의 32개 코드)가 <b>전부 중간고사 예상문제</b> · 코드와 실행 결과는 <a href="프로그래밍언어실습-5주차.html">5주차 자세히</a> 의 📘 접기</div>
 <table class="ref">
@@ -529,7 +775,7 @@ int main() {   // () = 괄호를 비워 둔 옛 방식 · int main(void) 는 '�
 </tbody></table>
 <ul><li>🖥️ <a href="../프로그래밍언어실습-실제시험.html">출력 결과 맞히기 — 🔥 예상문제 32개</a> — 입력한 값과 Enter 까지 화면 그대로 · 줄바꿈까지 정확히 채점</li><li>💻 <a href="../프로그래밍언어실습-실제시험.html">코딩테스트 — 🔥 예상문제 32개</a> — 처음부터 직접 짜서 숨은 테스트로 채점</li></ul>
 </section>
-<section class="card" id="s5">
+<section class="card" id="s6">
 <h2>★ 5주차 시험 포인트 (<a href="프로그래밍언어실습-5주차.html">5주차 자세히</a>)</h2>
 <h3>① switch 에서 break 를 빼면? (n = 2)</h3>
 <pre><code class="language-c">#include &lt;stdio.h&gt;             // printf · scanf 를 쓰기 위한 표준 입출력 헤더
@@ -596,7 +842,7 @@ input number ? 7
 <h3>④ <code>\n</code> 있나 없나</h3>
 <ul><li><code>printf("a는 b보다 작다");</code> · <code>printf("quit..");</code> · <code>printf("for문 종료...");</code> 처럼 <b><code>\n</code> 이 없으면 다음 출력이 같은 줄에</b> 붙는다</li><li><code>printf("%d ", i);</code> 반복 → <code>1 2 3 </code> 한 줄 · <code>printf("%d\n", i);</code> 반복 → 한 줄에 하나</li></ul>
 </section>
-<section class="card" id="s6">
+<section class="card" id="s7">
 <h2>★ 4주차 시험문제 (<a href="프로그래밍언어실습-4주차.html">4주차 자세히</a>)</h2>
 <h3>① 1)시험문제! — 증감 + 우선순위</h3>
 <pre><code class="language-c">#include &lt;stdio.h&gt;                           // printf · scanf 를 쓰기 위한 표준 입출력 헤더
@@ -705,7 +951,7 @@ a &gt;&gt; 2: 15 </code></pre>
 <h3>④ 우선순위 · 필기 정정</h3>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 괄호 → 단항 → 산술 → 관계 → 논리 → 조건(삼항) → 대입 → 콤마 · <code>3&lt;&lt;2+5&lt;&lt;3</code> = <code>3&lt;&lt;7&lt;&lt;3</code> = <b>3072</b> (+ 가 먼저) · 52 를 원하면 <code>(3&lt;&lt;2)+(5&lt;&lt;3)</code></li><li><code>x = 3+4, 5-10;</code> → x = <b>7</b> (대입이 콤마보다 먼저) · <code>y = (3+4, 5-10, 2*3);</code> → <b>6</b> (괄호 안 콤마는 맨 뒤 값)</li><li>관계 연산 결과는 <b>참 1 / 거짓 0</b> (강의자료 11p 의 “참이면 0” 은 오타) · <code>^</code> 는 논리가 아니라 <b>비트 XOR</b></li><li><code>&lt;&lt;</code> 왼쪽 · <code>&gt;&gt;</code> 오른쪽 · <code>(double)3.45</code> → 3.450000 (반올림 X) · <code>0xDF</code> = 1101 1111 = 223</li></ul>
 </section>
-<section class="card" id="s7">
+<section class="card" id="s8">
 <h2>★ 3주차 시험문제 (<a href="프로그래밍언어실습-3주차.html">3주차 자세히</a>)</h2>
 <h3>① 23p — ex01_05-sizeof.c 실행결과</h3>
 <pre><code class="language-text">변수의 할당크기
@@ -721,7 +967,7 @@ char: 1, int: 4, float: 4, double: 8
 <h3>③ 오류 수정 모음</h3>
 <ul><li><code>printf("%c", "A");</code> ❌ → <code>'A'</code> ✅ · <code>char a1 = "c";</code> ❌ → <code>'c'</code> ✅</li><li><code>short → %s</code> ❌ → <code>%d</code> · <code>long</code> → <code>%ld</code> · <code>0진법</code> ❌ → <code>10진법 %d</code></li><li><code>unsigned char (1)~(256)</code> ❌ → <code>0 ~ 255</code></li><li><code>#define CRT_SECUE_NO_WARNINGS</code> ❌ → <code>#define _CRT_SECURE_NO_WARNINGS</code></li></ul>
 </section>
-<section class="card" id="s8">
+<section class="card" id="s9">
 <h2>5주차 — 조건 · 반복 (<a href="프로그래밍언어실습-5주차.html">5주차 자세히</a>)</h2>
 <table class="ref">
 <tbody>
@@ -736,11 +982,11 @@ char: 1, int: 4, float: 4, double: 8
 </tbody></table>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — Quiz 5: 1 ~ 100 합 = <b>5050</b> · Quiz 3: <code>i % 2 == 0</code> 짝수 → 넓이 <code>i * i</code>, 홀수 → 둘레 <code>4 * i</code></li><li><span class="wk-tag note">✍️ 필기</span> — VS 에서 입력을 받으려면 <code>#define _CRT_SECURE_NO_WARNINGS</code> 또는 <code>scanf_s()</code></li><li><span class="wk-tag fix">⚠️ 정정</span> — 요약 PDF 02evenifelse.c 는 <code>{</code> 가 주석 안에 있어 컴파일 오류 → <code>if (n % 2) {</code> … <code>}</code></li></ul>
 </section>
-<section class="card" id="s9">
+<section class="card" id="s10">
 <h2>4주차 — 연산자 (<a href="프로그래밍언어실습-4주차.html">4주차 자세히</a>)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 산술 <code>+ - * / %</code> (정수÷정수 = 몫, <code>%</code> 나머지, 글자 % 는 <code>%%</code>) · 복합 대입 <code>c += a;</code> == <code>c = c + a;</code></li><li><span class="wk-tag star">⭐ 강조</span> — 증감: <code>n++</code>/<code>n--</code> 는 <b>바뀌기 전 값</b>, <code>++n</code>/<code>--n</code> 는 <b>바뀐 값</b>이 연산 결과</li><li><span class="wk-tag star">⭐ 강조</span> — 논리 <code>! &amp;&amp; ||</code> (0 이 아니면 참) · 단축 평가: <code>&amp;&amp;</code> 왼쪽 거짓 / <code>||</code> 왼쪽 참이면 오른쪽 계산 안 함</li><li><span class="wk-tag star">⭐ 강조</span> — 비트 <code>&amp; | ^ ~</code> · 시프트 <code>&lt;&lt; &gt;&gt;</code> (1칸 = ×2 / ÷2) · 1의 보수 = 뒤집기, 2의 보수 = 1의 보수 + 1</li><li><span class="wk-tag note">✍️ 필기</span> — 전등 80개: 1바이트 변수 80개 = 80바이트 / 비트로 = 80비트 = <b>10바이트</b></li><li>진법: <code>017</code>(8진수) 17=001 111=1111=1+2+4+8=15 · <code>0x1A</code>(16진수) 1A=0001 1010=11010=2+8+16=26 · 형변환 <code>(int)3.14</code> = 3 · <code>(double)7/2</code> = 3.5 · 삼항 <code>(a &gt; b) ? a : b</code></li></ul>
 </section>
-<section class="card" id="s10">
+<section class="card" id="s11">
 <h2>3주차 — 변수 · 상수 · 자료형</h2>
 <ul><li>📏 자료형마다 <b>몇부터 몇까지</b> 담기는지는 이 절 맨 아래 <b>📏 자료형별 숫자 범위</b> 표 — <code>float</code> 는 소수점 아래 <b>6자리</b> 출력 · <code>double</code> 을 scanf 로 받을 땐 반드시 <code>%lf</code></li><li><span class="wk-tag star">⭐ 강조</span> — 변수 = 값이 바뀌는 <b>기억장소</b> / 상수 = 바뀌지 않음(<code>const</code>)</li><li><span class="wk-tag star">⭐ 강조</span> — 서식: <code>%d</code> 10진 · <code>%o</code> 8진 · <code>%x</code> 16진 · <code>%c</code> 문자 · <code>%s</code> 문자열 · <code>%f</code> 실수 · <code>%p</code> 주소</li><li><span class="wk-tag star">⭐ 강조</span> — <code>'A'</code> = 문자 1개 / <code>"A"</code> = 문자열 · <code>'A'</code> = 65 = <code>01000001</code> · <code>'a'</code> = 97</li><li><span class="wk-tag star">⭐ 강조</span> — <code>const</code> 는 선언과 동시에 초기화, 재대입하면 컴파일 오류 / <code>#define</code> 은 <b>전처리기</b>가 컴파일 전에 치환(끝에 <code>;</code> 없음)</li><li><span class="wk-tag star">⭐ 강조</span> — <code>scanf("%d", &amp;age);</code> — <code>&amp;</code> 로 <b>주소</b>를 넘겨야 저장됨 · VS 는 <code>#define _CRT_SECURE_NO_WARNINGS</code></li><li>변수 이름 규칙: 숫자로 시작 X · 공백 X · 대·소문자 구별 · 예약어 X · 초기화 안 한 변수 출력은 VS 에서 C4700 오류</li></ul>
 <h3>📏 자료형별 숫자 범위 — 몇부터 몇까지 (Visual Studio 기준)</h3>
@@ -802,15 +1048,15 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 0
 123456792.000000</code></pre>
 </section>
-<section class="card" id="s11">
+<section class="card" id="s12">
 <h2>2주차 — C 기본 실습 (<a href="프로그래밍언어실습-2주차.html">2주차 자세히</a>)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 소스 작성 → 전처리 → 빌드(컴파일 + 링크) → 실행 · <code>.c</code> → [컴파일] → <code>.obj</code> → [링크] → <code>.exe</code></li><li><span class="wk-tag star">⭐ 강조</span> — <code>printf</code> 는 자동 줄바꿈 없음(<code>\n</code> 필요) / <code>puts</code> 는 출력 후 자동 줄바꿈</li><li><span class="wk-tag note">✍️ 필기</span> — C 는 함수들로 구성 · <code>main()</code> 에서 시작 · 다른 함수는 <b>호출해야</b> 실행</li><li><span class="wk-tag note">✍️ 필기</span> — 세미콜론 · 닫는 따옴표 누락 → 컴파일 오류</li></ul>
 </section>
-<section class="card" id="s12">
+<section class="card" id="s13">
 <h2>1주차 — C 개요 (<a href="프로그래밍언어실습-1주차.html">1주차 자세히</a>)</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — C 언어 = <b>절차지향</b> 언어(함수 중심 구조적 프로그래밍) · 간결·효율 · 이식성</li><li><span class="wk-tag star">⭐ 강조</span> — 실행 과정: 소스(.c) → 컴파일(.obj) → 링킹(.exe) → 실행</li><li>VS 실행 단축키 <b>Ctrl+F5</b> · ✍️ 파일명에 <code>.c</code> 를 생략하면 <code>.cpp</code> 로 저장됨</li></ul>
 </section>
-<section class="card" id="s13">
+<section class="card" id="s14">
 <h2>✏️ 문제로 확인하기</h2>
 <ul><li><a href="../프로그래밍언어실습-실제시험.html">🔒 프로그래밍언어실습 실제시험 — 퀴즈 · 출력결과 · 코드 작성 문제를 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="../프로그래밍언어실습.html#s35">7주차 시험 예고 · 괄호넣기 직접 풀기</a></li><li><a href="../프로그래밍언어실습.html#s29">5주차 시험 포인트 · 괄호넣기 직접 풀기</a></li><li><a href="../프로그래밍언어실습.html#s22">4주차 시험문제 ① ② ③ 직접 풀기</a></li><li><a href="../프로그래밍언어실습.html#s7">23p · 27p 빈칸채우기 직접 풀기</a></li></ul>
 </section>
