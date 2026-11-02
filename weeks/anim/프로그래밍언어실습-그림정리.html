@@ -145,6 +145,49 @@
     <text x="300" y="404" text-anchor="middle" class="s">둘레1(36.88) ≠ 둘레2(36.86) 인 이유</text></g>
 </svg>
 
+<!-- ⑤ 1차원 배열 — 연속 공간 · 첨자 · sizeof (10주차) -->
+<svg data-fig="arr1d" viewBox="0 0 600 400" role="img" aria-label="1차원 배열 int count[5] 의 메모리" hidden>
+  <g><text x="300" y="34" text-anchor="middle" class="b m">int count[5] = {10,20,30,40,50};</text></g>
+  <g data-s="1"><rect x="40" y="60" width="104" height="70" rx="0" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="92" y="104" text-anchor="middle" class="b">10</text><text x="92" y="158" text-anchor="middle" class="b m" style="fill:var(--main)">[0]</text><rect x="144" y="60" width="104" height="70" rx="0" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="196" y="104" text-anchor="middle" class="b">20</text><text x="196" y="158" text-anchor="middle" class="b m" style="fill:var(--main)">[1]</text><rect x="248" y="60" width="104" height="70" rx="0" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="300" y="104" text-anchor="middle" class="b">30</text><text x="300" y="158" text-anchor="middle" class="b m" style="fill:var(--main)">[2]</text><rect x="352" y="60" width="104" height="70" rx="0" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="404" y="104" text-anchor="middle" class="b">40</text><text x="404" y="158" text-anchor="middle" class="b m" style="fill:var(--main)">[3]</text><rect x="456" y="60" width="104" height="70" rx="0" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="508" y="104" text-anchor="middle" class="b">50</text><text x="508" y="158" text-anchor="middle" class="b m" style="fill:var(--main)">[4]</text></g>
+  <g data-s="2"><text x="92" y="186" text-anchor="middle" class="s">+0</text><text x="196" y="186" text-anchor="middle" class="s">+4</text><text x="300" y="186" text-anchor="middle" class="s">+8</text><text x="404" y="186" text-anchor="middle" class="s">+12</text><text x="508" y="186" text-anchor="middle" class="s">+16</text><text x="300" y="222" text-anchor="middle" class="s">칸마다 int 4바이트 · 주소는 4씩 커짐</text></g>
+  <g data-s="3"><text x="300" y="262" text-anchor="middle" class="b m">sizeof(count) = 5 × 4 = 20</text><text x="300" y="292" text-anchor="middle" class="s">sizeof(count[0]) = 4 · 칸 수 = 20 / 4 = 5</text></g>
+  <g data-s="4"><path class="d" d="M24,330 L35.4,110.0" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M28.4,109.6 L36,98 L42.4,110.3 Z" style="fill:var(--ap)"/><text x="44" y="346" text-anchor="start" class="b" style="fill:var(--ap)">count == &amp;count[0] → 배열이름 = 시작주소</text><text x="300" y="384" text-anchor="middle" class="s">short student[10] → 2바이트 × 10 = 20바이트</text></g>
+</svg>
+
+<!-- ⑥ 2차원 배열 — 행 우선 · sizeof 24 · 12 · 4 (10주차) -->
+<svg data-fig="arr2d" viewBox="0 0 600 440" role="img" aria-label="2차원 배열 int count[2][3] 의 행 우선 저장" hidden>
+  <g><text x="300" y="30" text-anchor="middle" class="b m">int count[2][3] = {10,20,30,40,50,60};</text></g>
+  <g data-s="1"><text x="198" y="64" text-anchor="middle" class="s m">[0]</text><text x="274" y="64" text-anchor="middle" class="s m">[1]</text><text x="350" y="64" text-anchor="middle" class="s m">[2]</text><text x="150" y="104" text-anchor="end" class="b m" style="fill:var(--main)">count[0]</text><rect x="160" y="76" width="76" height="58" rx="0" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="198" y="112" text-anchor="middle" class="b">10</text><rect x="236" y="76" width="76" height="58" rx="0" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="274" y="112" text-anchor="middle" class="b">20</text><rect x="312" y="76" width="76" height="58" rx="0" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="350" y="112" text-anchor="middle" class="b">30</text><text x="150" y="162" text-anchor="end" class="b m" style="fill:var(--main)">count[1]</text><rect x="160" y="134" width="76" height="58" rx="0" style="fill:var(--oc);fill-opacity:0.16;stroke:var(--oc);stroke-width:2"/><text x="198" y="170" text-anchor="middle" class="b">40</text><rect x="236" y="134" width="76" height="58" rx="0" style="fill:var(--oc);fill-opacity:0.16;stroke:var(--oc);stroke-width:2"/><text x="274" y="170" text-anchor="middle" class="b">50</text><rect x="312" y="134" width="76" height="58" rx="0" style="fill:var(--oc);fill-opacity:0.16;stroke:var(--oc);stroke-width:2"/><text x="350" y="170" text-anchor="middle" class="b">60</text></g>
+  <g data-s="2"><text x="300" y="230" text-anchor="middle" class="s">메모리에는 0행 다음에 1행이 이어서 (행 우선)</text><rect x="30" y="246" width="90" height="52" rx="0" style="fill:var(--inh);fill-opacity:0.2;stroke:var(--inh);stroke-width:2"/><text x="75" y="280" text-anchor="middle" class="b">10</text><text x="75" y="322" text-anchor="middle" class="s m">[0][0]</text><rect x="120" y="246" width="90" height="52" rx="0" style="fill:var(--inh);fill-opacity:0.2;stroke:var(--inh);stroke-width:2"/><text x="165" y="280" text-anchor="middle" class="b">20</text><text x="165" y="322" text-anchor="middle" class="s m">[0][1]</text><rect x="210" y="246" width="90" height="52" rx="0" style="fill:var(--inh);fill-opacity:0.2;stroke:var(--inh);stroke-width:2"/><text x="255" y="280" text-anchor="middle" class="b">30</text><text x="255" y="322" text-anchor="middle" class="s m">[0][2]</text><rect x="300" y="246" width="90" height="52" rx="0" style="fill:var(--oc);fill-opacity:0.2;stroke:var(--oc);stroke-width:2"/><text x="345" y="280" text-anchor="middle" class="b">40</text><text x="345" y="322" text-anchor="middle" class="s m">[1][0]</text><rect x="390" y="246" width="90" height="52" rx="0" style="fill:var(--oc);fill-opacity:0.2;stroke:var(--oc);stroke-width:2"/><text x="435" y="280" text-anchor="middle" class="b">50</text><text x="435" y="322" text-anchor="middle" class="s m">[1][1]</text><rect x="480" y="246" width="90" height="52" rx="0" style="fill:var(--oc);fill-opacity:0.2;stroke:var(--oc);stroke-width:2"/><text x="525" y="280" text-anchor="middle" class="b">60</text><text x="525" y="322" text-anchor="middle" class="s m">[1][2]</text></g>
+  <g data-s="3"><text x="300" y="366" text-anchor="middle" class="b m">sizeof(count) = 24 · sizeof(count[0]) = 12</text><text x="300" y="394" text-anchor="middle" class="s">sizeof(count[0][0]) = 4 (6칸 × 4 · 한 행 3칸 × 4)</text></g>
+  <g data-s="4"><text x="300" y="428" text-anchor="middle" class="s" style="fill:var(--ap)">count = count[0] (같은 주소) · count[1] = +12바이트</text></g>
+</svg>
+
+<!-- ⑦ 🔥 8쪽 왼쪽 코드 → 오른쪽 코드 (기말고사 · 10주차) -->
+<svg data-fig="for8" viewBox="0 0 600 574" role="img" aria-label="배열 요소마다 printf 를 for 문으로 바꾸기" hidden>
+  <g data-s="1"><text x="300" y="28" text-anchor="middle" class="b">왼쪽 — printf 3줄</text><rect x="10" y="40" width="580" height="120" rx="10" style="fill:var(--ink2);fill-opacity:0.08;stroke:var(--ink2);stroke-width:2"/><text x="28" y="76" text-anchor="start" class="s m">printf("array1[0]:…", array1[0]);</text><text x="28" y="108" text-anchor="start" class="s m">printf("array1[1]:…", array1[1]);</text><text x="28" y="140" text-anchor="start" class="s m">printf("array1[2]:…", array1[2]);</text></g>
+  <g data-s="2"><path class="d" d="M300,164 L300.0,184.0" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M307.0,184.0 L300,196 L293.0,184.0 Z" style="fill:var(--ap)"/><text x="300" y="222" text-anchor="middle" class="b" style="fill:var(--ap)">오른쪽 — for 문</text><rect x="10" y="234" width="580" height="120" rx="10" style="fill:var(--ap);fill-opacity:0.1;stroke:var(--ap);stroke-width:2"/><text x="28" y="270" text-anchor="start" class="s m">int i;</text><text x="28" y="302" text-anchor="start" class="s m">for (i = 0; i &lt; 3; i++)</text><text x="28" y="334" text-anchor="start" class="s m">    printf("array1[%d]:…", i, array1[i]);</text></g>
+  <g data-s="3"><text x="300" y="392" text-anchor="middle" class="b m">i = 0 → array1[0] → 10</text><text x="300" y="422" text-anchor="middle" class="b m">i = 1 → array1[1] → 20</text><text x="300" y="452" text-anchor="middle" class="b m">i = 2 → array1[2] → 30</text></g>
+  <g data-s="4"><rect x="130" y="470" width="340" height="96" rx="10" style="fill:var(--te);fill-opacity:0.14;stroke:var(--te);stroke-width:2"/><text x="300" y="498" text-anchor="middle" class="m">array1[0]: 10</text><text x="300" y="526" text-anchor="middle" class="m">array1[1]: 20</text><text x="300" y="554" text-anchor="middle" class="m">array1[2]: 30</text></g>
+</svg>
+
+<!-- ⑧ ✍️ 수업 퀴즈 — 3 × 3 지그재그 (10주차) -->
+<svg data-fig="zigzag" viewBox="0 0 600 330" role="img" aria-label="3행 3열을 지그재그로 채우기" hidden>
+  <g data-s="1"><rect x="150" y="20" width="82" height="72" rx="0" style="fill:var(--te);fill-opacity:0.18;stroke:var(--te);stroke-width:2"/><text x="191" y="66" text-anchor="middle" class="b">1</text><rect x="232" y="20" width="82" height="72" rx="0" style="fill:var(--te);fill-opacity:0.18;stroke:var(--te);stroke-width:2"/><text x="273" y="66" text-anchor="middle" class="b">2</text><rect x="314" y="20" width="82" height="72" rx="0" style="fill:var(--te);fill-opacity:0.18;stroke:var(--te);stroke-width:2"/><text x="355" y="66" text-anchor="middle" class="b">3</text><path class="d" d="M162,82 L374.0,82.0" style="stroke:var(--te);stroke-width:2.5;fill:none"/><path d="M374.0,75.0 L386,82 L374.0,89.0 Z" style="fill:var(--te)"/><text x="410" y="64" text-anchor="start" class="s">sw = 1 (→)</text><text x="136" y="64" text-anchor="end" class="s">0행</text></g>
+  <g data-s="2"><rect x="150" y="102" width="82" height="72" rx="0" style="fill:var(--oc);fill-opacity:0.18;stroke:var(--oc);stroke-width:2"/><text x="191" y="148" text-anchor="middle" class="b">6</text><rect x="232" y="102" width="82" height="72" rx="0" style="fill:var(--oc);fill-opacity:0.18;stroke:var(--oc);stroke-width:2"/><text x="273" y="148" text-anchor="middle" class="b">5</text><rect x="314" y="102" width="82" height="72" rx="0" style="fill:var(--oc);fill-opacity:0.18;stroke:var(--oc);stroke-width:2"/><text x="355" y="148" text-anchor="middle" class="b">4</text><path class="d" d="M386,164 L174.0,164.0" style="stroke:var(--oc);stroke-width:2.5;fill:none"/><path d="M174.0,171.0 L162,164 L174.0,157.0 Z" style="fill:var(--oc)"/><text x="410" y="146" text-anchor="start" class="s">sw = -1 (←)</text><text x="136" y="146" text-anchor="end" class="s">1행</text></g>
+  <g data-s="3"><rect x="150" y="184" width="82" height="72" rx="0" style="fill:var(--te);fill-opacity:0.18;stroke:var(--te);stroke-width:2"/><text x="191" y="230" text-anchor="middle" class="b">7</text><rect x="232" y="184" width="82" height="72" rx="0" style="fill:var(--te);fill-opacity:0.18;stroke:var(--te);stroke-width:2"/><text x="273" y="230" text-anchor="middle" class="b">8</text><rect x="314" y="184" width="82" height="72" rx="0" style="fill:var(--te);fill-opacity:0.18;stroke:var(--te);stroke-width:2"/><text x="355" y="230" text-anchor="middle" class="b">9</text><path class="d" d="M162,246 L374.0,246.0" style="stroke:var(--te);stroke-width:2.5;fill:none"/><path d="M374.0,239.0 L386,246 L374.0,253.0 Z" style="fill:var(--te)"/><text x="410" y="228" text-anchor="start" class="s">sw = 1 (→)</text><text x="136" y="228" text-anchor="end" class="s">2행</text></g>
+  <g data-s="4"><text x="300" y="292" text-anchor="middle" class="s">j += sw 로 한 칸씩 · 끝을 넘으면</text><text x="300" y="320" text-anchor="middle" class="b">sw *= -1 (방향 바꿈) · j += sw (한 칸 되돌림)</text></g>
+</svg>
+
+<!-- ⑨ 배열 초기화 규칙 (10주차) -->
+<svg data-fig="ainit" viewBox="0 0 600 372" role="img" aria-label="배열 초기화 규칙" hidden>
+  <g data-s="1"><rect x="10" y="10" width="580" height="64" rx="10" style="fill:var(--te);fill-opacity:0.14;stroke:var(--te);stroke-width:2"/><text x="24" y="50" text-anchor="start" class="s m">int a[5] = {1,2,3,4,5};</text><text x="368" y="50" text-anchor="start" class="b" style="fill:var(--te)">1 2 3 4 5</text></g>
+  <g data-s="2"><rect x="10" y="82" width="580" height="64" rx="10" style="fill:var(--inh);fill-opacity:0.14;stroke:var(--inh);stroke-width:2"/><text x="24" y="122" text-anchor="start" class="s m">int b[5] = {100,200,300,};</text><text x="368" y="122" text-anchor="start" class="b" style="fill:var(--inh)">나머지 → 0</text></g>
+  <g data-s="3"><rect x="10" y="154" width="580" height="64" rx="10" style="fill:var(--oc);fill-opacity:0.14;stroke:var(--oc);stroke-width:2"/><text x="24" y="194" text-anchor="start" class="s m">short s[10] = { 0, };</text><text x="368" y="194" text-anchor="start" class="b" style="fill:var(--oc)">모두 0</text></g>
+  <g data-s="4"><rect x="10" y="226" width="580" height="64" rx="10" style="fill:var(--fr);fill-opacity:0.14;stroke:var(--fr);stroke-width:2"/><text x="24" y="266" text-anchor="start" class="s m">int c[] = {10,20,30};</text><text x="368" y="266" text-anchor="start" class="b" style="fill:var(--fr)">크기 생략 → 3칸</text></g>
+  <g data-s="5"><rect x="10" y="298" width="580" height="64" rx="10" style="fill:var(--ap);fill-opacity:0.14;stroke:var(--ap);stroke-width:2"/><text x="24" y="338" text-anchor="start" class="s m">short t[10];</text><text x="368" y="338" text-anchor="start" class="s">쓰레기값 (VS: -13108)</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -190,7 +233,43 @@
             "<b>main</b> 안에 같은 이름 <code>const double PI = 3.141592;</code> → main 안에서는 <b>지역 PI 가 우선</b> (전역 PI 가 가려짐) → 둘레1 = <b>36.88</b>",
             "<b>getArea · getCircum</b> 에는 지역 PI 가 없음 → <b>전역 PI(3.14)</b> → 면적 <b>108.19</b> · 둘레2 <b>36.86</b>",
             "정리: 같은 이름이면 <b>가까운 지역변수가 우선</b> → 둘레1 ≠ 둘레2" ],
-          note: "02-2 파일의 <code>extern double PI;</code> = 다른 파일에 이미 있는 전역변수를 쓰겠다는 선언 (외부변수 — 다음 시간)" }
+          note: "02-2 파일의 <code>extern double PI;</code> = 다른 파일에 이미 있는 전역변수를 쓰겠다는 선언 (외부변수 — 다음 시간)" },
+        { id: "arr1d", week: 10, tab: "⑤ 1차원 배열", src: "10주차 ✍️ 필기 — 배열 = 동일한 자료형 · 연속된 공간 · 첨자 0부터 · 📄 강의자료 4 · 5 · 14 · 15쪽",
+          steps: [
+            "<code>int count[5]</code> → <b>count[0] ~ count[4]</b> 5칸 · ✍️ 첨자(인덱스)는 <b>0부터</b>",
+            "칸마다 int <b>4바이트</b> · 연속으로 붙어 있어서 원소주소(<code>&amp;count[i]</code>)가 <b>4씩</b> 커짐 (15쪽 array02 의 %p)",
+            "🔥 14쪽 — <code>sizeof(count)</code> = 전체 <b>20</b> · <code>sizeof(count[0])</code> = 원소 하나 <b>4</b> · 칸 수 = 20 / 4 = <b>5</b>",
+            "배열이름 = <b>배열의 시작주소</b> (<code>count == &amp;count[0]</code> · 5쪽) · ✍️ <code>short student[10]</code> = 2 × 10 = <b>20바이트</b>" ],
+          note: "✍️ 1차원 int array[5] = 학생의 5과목 · 2차원 [10][5] = 10명의 5과목 · 3차원 [3][10][5] = 3반의 10명의 5과목" },
+        { id: "arr2d", week: 10, tab: "⑥ 2차원 배열", src: "10주차 강의자료 16쪽 [실습 1-06] array06.c (✍️ 수업에서 직접 침)",
+          steps: [
+            "<code>int count[2][3] = { 10,20,30,40,50,60 };</code> → 값을 <b>0행부터</b> 차례로 채움 (0행 10 20 30 · 1행 40 50 60)",
+            "메모리에는 <b>0행 3칸 다음에 1행 3칸</b>이 이어서 저장 (<b>행 우선</b>)",
+            "🔥 <code>sizeof(count)</code> = 2 × 3 × 4 = <b>24</b> · <code>sizeof(count[0])</code> = 한 행 3 × 4 = <b>12</b> · <code>sizeof(count[0][0])</code> = <b>4</b>",
+            "<code>count</code> 와 <code>count[0]</code> 은 <b>같은 주소</b> · <code>count[1]</code> 은 12바이트 뒤 (실행 예 …e0 → …ec)" ],
+          note: "주소(%p)는 실행할 때마다 달라요 — 차이(12바이트)가 핵심" },
+        { id: "for8", week: 10, tab: "⑦ 🔥 8쪽 for", src: "10주차 🔥 ✍️ 노션 “8페이지 왼쪽 코드를 오른쪽으로 바꾸는 게 기말고사 문제” — 강의자료 8쪽",
+          steps: [
+            "왼쪽 — 배열 요소마다 <b>printf 를 한 줄씩</b> (첨자 0 · 1 · 2 를 서식 안에 직접)",
+            "오른쪽 — <b><code>int i;</code></b> 추가 + <b><code>for (i = 0; i &lt; 3; i++)</code></b> · 서식은 <code>\"array1[%d]: %d\\n\"</code> · 값은 <b><code>i, array1[i]</code></b>",
+            "i = 0 · 1 · 2 → <code>array1[0]</code> · <code>array1[1]</code> · <code>array1[2]</code> → 10 · 20 · 30 (조건 <b>i &lt; 3</b> = 칸 수)",
+            "출력은 왼쪽 · 오른쪽 <b>똑같음</b> — array1[0]: 10 / array1[1]: 20 / array1[2]: 30" ],
+          note: "7쪽도 같은 생각 — <code>student[0] = 5;</code> … 4줄 → <code>for(i=0; i&lt;5; i++) student[i] = 5;</code>" },
+        { id: "zigzag", week: 10, tab: "⑧ ✍️ 지그재그", src: "10주차 ✍️ 수업 퀴즈 quiz01-01-array1.c — 3 × 3 을 → ← → 로 채우기",
+          steps: [
+            "0행 — j = 0 부터 <b>sw = 1 (→)</b> → a[0][0]=1 · a[0][1]=2 · a[0][2]=3 · j 가 3(밖)이 되면 while 끝",
+            "<b>sw *= -1</b> → -1 (←) · <b>j += sw</b> → 3 에서 2 로 되돌림 → 1행 a[1][2]=4 · a[1][1]=5 · a[1][0]=6",
+            "다시 sw = 1 (→) · j = 0 → 2행 a[2][0]=7 · a[2][1]=8 · a[2][2]=9",
+            "출력 <code>%3d</code> → 1 2 3 / 6 5 4 / 7 8 9" ],
+          note: "퀴즈 ② 5 × 5 뱀 모양도 같은 모양 — 홀수 행만 거꾸로 (<code>arr[i][4 - j] = k++</code>)" },
+        { id: "ainit", week: 10, tab: "⑨ 초기화 규칙", src: "10주차 강의자료 9 ~ 12쪽 · ✍️ 수업 파일 array5.c",
+          steps: [
+            "다 채움 — <code>int a[5] = {1,2,3,4,5};</code>",
+            "일부만 — <code>{100, 200, 300, }</code> → 쓰지 않은 칸은 <b>0</b>",
+            "쉼표 초기화 — <code>short student[10] = { 0, };</code> → <b>모두 0</b> (11쪽 ex01_01-array7 → <b>10 0</b>)",
+            "크기 생략 — <code>int c[] = {10,20,30};</code> → 값 개수만큼 <b>3칸</b> (12쪽)",
+            "초기화 안 함 — <code>short student[10];</code> → 자동으로 초기화되지 않음 → <b>쓰레기값</b> (10쪽 VS 결과 <b>10 -13108</b>)" ],
+          note: "⚠️ 필기 <code>{10.20.30.40.50};;</code> → 값 사이는 쉼표 · ; 하나 · 배열끼리 <code>y = x;</code> 는 오류 → 원소 하나씩 복사" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

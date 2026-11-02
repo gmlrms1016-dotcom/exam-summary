@@ -84,6 +84,7 @@
         <a href="#s35">35.★7주차 예고</a>
         <a href="#s36">36.빌드·메모리</a>
         <a href="#s37">37.★지역·전역변수</a>
+        <a href="#s38">38.★배열·sizeof</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -3737,10 +3738,93 @@ gi: 0</code></pre>
             <div class="quiz-feedback"></div>
         </div>
     </section>
+    <section class="card" id="s38">
+        <h2>38. ★ 배열 — 선언 · 초기화 · for · sizeof · 2차원<span class="week">10주차</span></h2>
+        <div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> “C-Lect10-ch08-배열 <b>8페이지 왼쪽 코드를 오른쪽으로 바꾸는 게 기말고사 문제</b> + <b>14페이지 sizeof 문제</b>” → 아래 ① ② · 수업 퀴즈(지그재그 · 뱀 모양)까지 자세히는 <a href="weeks/프로그래밍언어실습-10주차.html">10주차 페이지</a></div>
+        <table class="ref">
+<tbody>
+<tr><th>주제</th><th>핵심</th></tr>
+<tr><td>✍️ 배열</td><td>동일한 자료형의 기억장소를 <b>연속된 공간</b>에 할당한 데이터 모임 · 첨자는 <b>0부터</b> (<code>count[0] ~ count[4]</code>)</td></tr>
+<tr><td>배열이름</td><td>배열의 <b>시작주소</b> — <code>count == &amp;count[0]</code> (5쪽) · 원소주소 <code>&amp;count[i]</code> 는 int 라 4씩 커짐</td></tr>
+<tr><td>✍️ 크기</td><td><code>int count[5]</code> → 4 × 5 = <b>20byte</b> · <code>short student[10]</code> → 2 × 10 = <b>20byte</b></td></tr>
+<tr><td>🔥 sizeof</td><td><code>sizeof(count)</code> = 전체 <b>20</b> · <code>sizeof(count[0])</code> = <b>4</b> · 칸 수 = 전체 / 원소 · 2차원 <code>[2][3]</code> = <b>24 · 12 · 4</b></td></tr>
+<tr><td>초기화</td><td><code>{1,2,3,4,5}</code> · 크기 생략 <code>[]</code> · 일부만 쓰면 <b>나머지 0</b> · <code>{ 0, }</code> = <b>모두 0</b> · 안 하면 <b>쓰레기값</b> (VS <code>10 -13108</code>)</td></tr>
+<tr><td>✍️ 배열 대입</td><td><code>y = x;</code> = <b>오류</b> (배열 전체를 한 번에 대입 X) → <code>y[i] = x[i];</code> 로 하나씩</td></tr>
+<tr><td>2차원</td><td><b>행 우선</b> 저장 · <code>count == count[0]</code> · <code>count[1]</code> = +12바이트 · ✍️ 1차원 = 5과목 · 2차원 = 10명 · 3차원 = 3반</td></tr>
+<tr><td>✍️ 문자열</td><td>1차원 char 배열 · ⚠️ 끝에는 <b>널 문자 <code>'\0'</code></b> (필기의 <code>\n</code> 은 정정) · <code>gets</code> 는 VS2015 부터 없음 → <code>gets_s</code> · <code>fgets</code></td></tr>
+</tbody></table>
+        <h3>① 🔥 8쪽 — printf 3줄(왼쪽) → for 문(오른쪽)</h3>
+        <pre><code class="language-c">#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = &#x27;매개변수 없음&#x27;을 확실히 적음 — 실행 결과는 같음
+    int array1[3];                                  // int 3칸 배열
+    int i;                                          // ✅ 반복에 쓸 첨자 변수 — 왼쪽에는 없던 줄
+    array1[0] = 10;                                 // 0번 칸에 10
+    array1[1] = 20;                                 // 1번 칸에 20
+    array1[2] = 30;                                 // 2번 칸에 30
+
+    for (i = 0; i &lt; 3; i++)                         // i = 0 → 1 → 2 (3번 · i &lt; 3 = 칸 수) — ✍️ &quot;i 는 0부터 2까지 반복&quot;
+        printf(&quot;array1[%d]: %d\n&quot;, i, array1[i]);   // %d 두 개 ← i 와 array1[i] → &quot;array1[0]: 10&quot; · &quot;array1[1]: 20&quot; · &quot;array1[2]: 30&quot;
+
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+        <pre class="io"><code class="language-text">array1[0]: 10
+array1[1]: 20
+array1[2]: 30</code></pre>
+        <div class="tip">왼쪽은 <code>printf("array1[0]: %d\n", array1[0]);</code> 처럼 <b>3줄</b> → 오른쪽은 <b><code>int i;</code></b> 추가 · <b><code>for (i = 0; i &lt; 3; i++)</code></b> · 서식 <code>"array1[%d]: %d\n"</code> · 값 <b><code>i, array1[i]</code></b> — 출력은 똑같음</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#for8" title="그림 — 🔥 8쪽 왼쪽 → 오른쪽 (for 문)" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#for8" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 8쪽 왼쪽 → 오른쪽 (for 문) — 새 창으로 크게 보기</a></p></div>
+        <div class="quiz-item" data-answers="i &lt; 3|i&lt;3|i &lt;= 2|i&lt;=2" data-full="i &lt; 3" data-explain="int array1[3] 은 첨자 0 ~ 2 → i 는 0, 1, 2 → 조건 i &lt; 3 (칸 수). i &lt;= 3 이면 없는 칸 array1[3] 까지 읽어요.">
+            <p class="quiz-q"><span class="quiz-cat">빈칸 ①</span>8쪽 오른쪽 코드 — <code>for (i = 0; ( ? ); i++)</code> 로 <code>array1[0] ~ array1[2]</code> 를 찍으려면 ( ? ) 에 들어갈 조건은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="i, array1[i]|i,array1[i]" data-full="i, array1[i]" data-explain="서식의 %d 두 개에 차례로 첨자 i 와 값 array1[i] → array1[0]: 10 · array1[1]: 20 · array1[2]: 30">
+            <p class="quiz-q"><span class="quiz-cat">빈칸 ②</span>8쪽 오른쪽 코드 — <code>printf("array1[%d]: %d\n", ( ? ));</code> 의 ( ? ) 에 들어갈 두 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <h3>② 🔥 14쪽 — sizeof ([실습 1-01] array01.c)</h3>
+        <pre><code class="language-c">#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = &#x27;매개변수 없음&#x27;을 확실히 적음 — 실행 결과는 같음
+    int count[5];   // 정수형 1차원 배열            // int(4바이트) 5칸 → 4 × 5 = 20바이트
+    int i;                                          // 반복에 쓸 첨자
+
+    printf(&quot;배열의 전체크기:%d, 하나의 원소크기: %d\n&quot;,   // %d 두 개
+        sizeof(count), sizeof(count[0]));           // sizeof(배열 이름) = 전체 20 · sizeof(count[0]) = 원소 하나 4
+
+    count[0] = 100;   // 각각의 원소에 값을 할당    // 0번 칸 = 100
+    count[1] = 200;                                 // 1번 칸 = 200
+    count[2] = 300;                                 // 2번 칸 = 300
+    count[3] = 400;                                 // 3번 칸 = 400
+    count[4] = 500;                                 // 4번 칸 = 500 (마지막 칸 = 칸 수 - 1)
+
+    printf(&quot;\n%d, %d, %d, %d, %d \n&quot;,               // 맨 앞 \n → 빈 줄 하나 먼저 · 끝 %d 뒤에 칸 하나
+        count[0], count[1], count[2], count[3], count[4]);   // 100, 200, 300, 400, 500
+
+    for (i = 0; i &lt; 5; i++)                         // i = 0 ~ 4 (5번)
+        printf(&quot;%d, &quot;, count[i]);                   // &quot;100, &quot; → &quot;200, &quot; → … → &quot;500, &quot; (한 줄로 이어짐)
+    printf(&quot;\n&quot;);                                   // 다 찍고 줄바꿈
+
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+        <pre class="io"><code class="language-text">배열의 전체크기:20, 하나의 원소크기: 4
+
+100, 200, 300, 400, 500 
+100, 200, 300, 400, 500, </code></pre>
+        <div class="tip">🔥 <code>sizeof(count)</code> = 배열 전체 <b>20</b> (int 4바이트 × 5칸) · <code>sizeof(count[0])</code> = 원소 하나 <b>4</b> · 칸 수 = 20 / 4 = <b>5</b> · 두 번째 printf 가 <code>\n</code> 으로 시작해서 <b>빈 줄</b>이 하나 생겨요</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#arr1d" title="그림 — 1차원 배열 — 연속 공간 · 첨자 · sizeof" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#arr1d" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 1차원 배열 — 연속 공간 · 첨자 · sizeof — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#arr2d" title="그림 — 2차원 배열 — 행 우선 · sizeof 24 · 12 · 4" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#arr2d" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 2차원 배열 — 행 우선 · sizeof 24 · 12 · 4 — 새 창으로 크게 보기</a></p></div>
+        <h3>③ 초기화 · 수업 퀴즈</h3>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#ainit" title="그림 — 배열 초기화 규칙" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#ainit" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 배열 초기화 규칙 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#zigzag" title="그림 — ✍️ 수업 퀴즈 — 3 × 3 지그재그" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#zigzag" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — ✍️ 수업 퀴즈 — 3 × 3 지그재그 — 새 창으로 크게 보기</a></p></div>
+    </section>
 
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 37 · 주관식 36 · 출력결과 68 · 코드 작성 58 · 총 199문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 41 · 주관식 40 · 출력결과 71 · 코드 작성 64 · 총 216문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="프로그래밍언어실습-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
