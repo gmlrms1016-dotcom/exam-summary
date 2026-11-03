@@ -131,6 +131,122 @@
     <text x="300" y="474" text-anchor="middle" class="s">for…of 로 key 를 돌며 person[key] → 값</text></g>
 </svg>
 
+<!-- ④ 10주차 — 누른 항목 선택 (1027_01_event.html 에 더한 코드 · 이벤트 위임) -->
+<svg data-fig="delegate" viewBox="0 0 600 500" role="img" aria-label="ul 에 단 리스너 하나로 누른 li 를 찾아 제목과 선택 표시를 바꾸기" hidden>
+  <g><rect x="12" y="12" width="276" height="300" rx="12" style="fill:var(--card);stroke:var(--line);stroke-width:2"/></g>
+  <g data-s="5"><rect x="30" y="180" width="240" height="32" style="fill:#abc;fill-opacity:.6"/></g>
+  <g><text x="30" y="46" class="b">할일 목록</text>
+    <rect x="30" y="62" width="122" height="38" rx="7" style="fill:#f80"/><text x="91" y="87" text-anchor="middle" class="s w b">목록 추가</text>
+    <text x="34" y="134" class="s">제목 1</text><path class="ln" d="M30,144 L270,144"/>
+    <text x="34" y="168" class="s">제목 2</text><path class="ln" d="M30,178 L270,178"/>
+    <text x="34" y="202" class="s">제목 3</text><path class="ln" d="M30,212 L270,212"/>
+    <text x="34" y="236" class="s">제목 4</text><path class="ln" d="M30,246 L270,246"/>
+    <text x="20" y="346" class="s m">list.addEventListener(</text><text x="44" y="374" class="s m">'click', activeItem);</text></g>
+  <g data-s="1"><text x="176" y="202" class="s b" style="fill:var(--ap)">👆 클릭</text>
+    <rect x="304" y="20" width="286" height="62" rx="10" style="fill:var(--ap);fill-opacity:.14;stroke:var(--ap);stroke-width:2"/>
+    <text x="318" y="45" class="b m">① e.target</text><text x="318" y="72" class="s">실제로 누른 li (제목 3)</text>
+    <path class="d" d="M302,70 L262,176" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M257,167 L260,181 L269,170 Z" style="fill:var(--ap)"/></g>
+  <g data-s="2"><rect x="24" y="112" width="252" height="142" rx="8" class="dash" style="stroke:var(--te);stroke-width:2.5"/>
+    <text x="30" y="284" class="s b" style="fill:var(--te)">ul (#list) ← 리스너 하나</text>
+    <rect x="304" y="94" width="286" height="62" rx="10" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/>
+    <text x="318" y="119" class="b m">② e.currentTarget</text><text x="318" y="146" class="s">리스너를 단 ul (버블링)</text>
+    <text x="20" y="490" class="s">🤖 리스너는 ul 에 하나 = 이벤트 위임 (MDN)</text></g>
+  <g data-s="3"><rect x="304" y="168" width="286" height="62" rx="10" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="318" y="193" class="b m">③ nodeName=='LI'</text><text x="318" y="220" class="s">li 일 때만 아래를 실행</text></g>
+  <g data-s="4"><text x="150" y="46" class="b" style="fill:var(--inh)">→ 제목 3</text>
+    <rect x="304" y="242" width="286" height="62" rx="10" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <text x="318" y="267" class="b m">④ title.innerHTML</text><text x="318" y="294" class="s m">= e.target.innerHTML</text></g>
+  <g data-s="5"><rect x="304" y="316" width="286" height="88" rx="10" style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:2"/>
+    <text x="318" y="341" class="b">⑤ 선택 표시 옮기기</text><text x="318" y="367" class="s m">removeAttribute('class')</text><text x="318" y="392" class="s">→ 누른 li 에만 'active'</text>
+    <text x="20" y="434" class="s m">e.target.setAttribute('class','active');</text>
+    <text x="20" y="462" class="s">→ .active CSS (배경 #abc) · 새로 추가한 li 도 됨</text></g>
+</svg>
+
+<!-- ⑤ 10주차 — 배열 요소 조작 6가지 (1103_01_요소조작.js) -->
+<svg data-fig="arrmod" viewBox="0 0 600 570" role="img" aria-label="push pop shift unshift slice concat 이 배열을 바꾸는 모양과 반환값" hidden>
+  <g data-s="1"><text x="14" y="56" class="s m b">push(4,5,6,7)</text>
+    <rect x="170" y="30" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="210" y="30" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="250" y="30" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <rect x="290" y="30" width="40" height="38" style="fill:var(--te);fill-opacity:.25;stroke:var(--te);stroke-width:2"/><rect x="330" y="30" width="40" height="38" style="fill:var(--te);fill-opacity:.25;stroke:var(--te);stroke-width:2"/><rect x="370" y="30" width="40" height="38" style="fill:var(--te);fill-opacity:.25;stroke:var(--te);stroke-width:2"/><rect x="410" y="30" width="40" height="38" style="fill:var(--te);fill-opacity:.25;stroke:var(--te);stroke-width:2"/>
+    <text x="190" y="56" text-anchor="middle" class="s b">1</text><text x="230" y="56" text-anchor="middle" class="s b">2</text><text x="270" y="56" text-anchor="middle" class="s b">3</text><text x="310" y="56" text-anchor="middle" class="s b">4</text><text x="350" y="56" text-anchor="middle" class="s b">5</text><text x="390" y="56" text-anchor="middle" class="s b">6</text><text x="430" y="56" text-anchor="middle" class="s b">7</text>
+    <text x="470" y="56" class="s b" style="fill:var(--te)">반환 7</text></g>
+  <g data-s="2"><text x="14" y="128" class="s m b">pop()</text>
+    <rect x="170" y="102" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="210" y="102" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <rect x="270" y="102" width="40" height="38" class="dash" style="stroke:var(--ap);stroke-width:2"/>
+    <text x="190" y="128" text-anchor="middle" class="s b">1</text><text x="230" y="128" text-anchor="middle" class="s b">2</text><text x="290" y="128" text-anchor="middle" class="s b" style="fill:var(--ap)">3</text>
+    <text x="330" y="128" class="s" style="fill:var(--ap)">↗ 맨 뒤 빠짐</text><text x="470" y="128" class="s b" style="fill:var(--ap)">반환 3</text></g>
+  <g data-s="3"><text x="14" y="200" class="s m b">shift()</text>
+    <rect x="170" y="174" width="40" height="38" class="dash" style="stroke:var(--ap);stroke-width:2"/>
+    <rect x="230" y="174" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="270" y="174" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <text x="190" y="200" text-anchor="middle" class="s b" style="fill:var(--ap)">1</text><text x="250" y="200" text-anchor="middle" class="s b">2</text><text x="290" y="200" text-anchor="middle" class="s b">3</text>
+    <text x="330" y="200" class="s" style="fill:var(--ap)">↖ 맨 앞 빠짐</text><text x="470" y="200" class="s b" style="fill:var(--ap)">반환 1</text></g>
+  <g data-s="4"><text x="14" y="272" class="s m b">unshift(0)</text>
+    <rect x="170" y="246" width="40" height="38" style="fill:var(--te);fill-opacity:.25;stroke:var(--te);stroke-width:2"/>
+    <rect x="210" y="246" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="250" y="246" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="290" y="246" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <text x="190" y="272" text-anchor="middle" class="s b">0</text><text x="230" y="272" text-anchor="middle" class="s b">1</text><text x="270" y="272" text-anchor="middle" class="s b">2</text><text x="310" y="272" text-anchor="middle" class="s b">3</text>
+    <text x="470" y="272" class="s b" style="fill:var(--te)">반환 4</text></g>
+  <g data-s="5"><text x="14" y="352" class="s m b">slice(2, 5)</text>
+    <text x="190" y="318" text-anchor="middle" class="s">0</text><text x="230" y="318" text-anchor="middle" class="s">1</text><text x="270" y="318" text-anchor="middle" class="s">2</text><text x="310" y="318" text-anchor="middle" class="s">3</text><text x="350" y="318" text-anchor="middle" class="s">4</text>
+    <rect x="170" y="326" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="210" y="326" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <rect x="250" y="326" width="40" height="38" style="fill:var(--oc);fill-opacity:.3;stroke:var(--oc);stroke-width:2.5"/><rect x="290" y="326" width="40" height="38" style="fill:var(--oc);fill-opacity:.3;stroke:var(--oc);stroke-width:2.5"/><rect x="330" y="326" width="40" height="38" style="fill:var(--oc);fill-opacity:.3;stroke:var(--oc);stroke-width:2.5"/>
+    <text x="190" y="352" text-anchor="middle" class="s b">1</text><text x="230" y="352" text-anchor="middle" class="s b">2</text><text x="270" y="352" text-anchor="middle" class="s b">3</text><text x="310" y="352" text-anchor="middle" class="s b">4</text><text x="350" y="352" text-anchor="middle" class="s b">5</text>
+    <text x="190" y="388" text-anchor="middle" class="s">-5</text><text x="230" y="388" text-anchor="middle" class="s">-4</text><text x="270" y="388" text-anchor="middle" class="s">-3</text><text x="310" y="388" text-anchor="middle" class="s">-2</text><text x="350" y="388" text-anchor="middle" class="s">-1</text>
+    <text x="400" y="352" class="s b" style="fill:var(--oc)">→ [3, 4, 5]</text><text x="400" y="388" class="s m">slice(-3) 같음</text></g>
+  <g data-s="6"><text x="14" y="444" class="s m b">concat</text>
+    <rect x="110" y="418" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="150" y="418" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <text x="210" y="444" text-anchor="middle" class="b">+</text>
+    <rect x="230" y="418" width="40" height="38" style="fill:var(--fr);fill-opacity:.2;stroke:var(--fr);stroke-width:2"/><rect x="270" y="418" width="40" height="38" style="fill:var(--fr);fill-opacity:.2;stroke:var(--fr);stroke-width:2"/>
+    <text x="340" y="444" text-anchor="middle" class="b">→</text>
+    <rect x="370" y="418" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="410" y="418" width="40" height="38" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="450" y="418" width="40" height="38" style="fill:var(--fr);fill-opacity:.2;stroke:var(--fr);stroke-width:2"/><rect x="490" y="418" width="40" height="38" style="fill:var(--fr);fill-opacity:.2;stroke:var(--fr);stroke-width:2"/>
+    <text x="130" y="444" text-anchor="middle" class="s b">1</text><text x="170" y="444" text-anchor="middle" class="s b">2</text><text x="250" y="444" text-anchor="middle" class="s b">3</text><text x="290" y="444" text-anchor="middle" class="s b">4</text>
+    <text x="390" y="444" text-anchor="middle" class="s b">1</text><text x="430" y="444" text-anchor="middle" class="s b">2</text><text x="470" y="444" text-anchor="middle" class="s b">3</text><text x="510" y="444" text-anchor="middle" class="s b">4</text>
+    <text x="370" y="482" class="s">새 배열 (둘 다 그대로)</text></g>
+  <g><text x="14" y="526" class="s">원본이 바뀜 — push · pop · shift · unshift</text>
+    <text x="14" y="556" class="s">원본 그대로 · 새 배열 — slice · concat</text></g>
+</svg>
+
+<!-- ⑥ 10주차 — 순회 · 탐색 (1103_02_요소순회탐색.js) -->
+<svg data-fig="search" viewBox="0 0 600 520" role="img" aria-label="forEach includes indexOf findIndex 와 객체 배열 indexOf 가 -1 인 이유" hidden>
+  <g><text x="300" y="22" text-anchor="middle" class="s m b">let arr = [1, 2, 3];</text>
+    <rect x="200" y="34" width="80" height="44" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="280" y="34" width="80" height="44" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><rect x="360" y="34" width="80" height="44" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <text x="240" y="64" text-anchor="middle" class="b">1</text><text x="320" y="64" text-anchor="middle" class="b">2</text><text x="400" y="64" text-anchor="middle" class="b">3</text>
+    <text x="240" y="100" text-anchor="middle" class="s">[0]</text><text x="320" y="100" text-anchor="middle" class="s">[1]</text><text x="400" y="100" text-anchor="middle" class="s">[2]</text></g>
+  <g data-s="1"><text x="14" y="134" class="s m b">forEach</text>
+    <text x="240" y="134" text-anchor="middle" class="s m b" style="fill:var(--te)">0 2</text><text x="320" y="134" text-anchor="middle" class="s m b" style="fill:var(--te)">1 4</text><text x="400" y="134" text-anchor="middle" class="s m b" style="fill:var(--te)">2 6</text>
+    <text x="470" y="134" class="s">반환 없음</text></g>
+  <g data-s="2"><text x="14" y="176" class="s m b">includes(1)</text><text x="420" y="176" class="s b" style="fill:var(--te)">→ true</text></g>
+  <g data-s="3"><text x="14" y="214" class="s m b">indexOf(3)</text><text x="420" y="214" class="s b" style="fill:var(--te)">→ 2</text></g>
+  <g data-s="4"><text x="14" y="252" class="s m b">findIndex(item =&gt; item === 2)</text><text x="420" y="252" class="s b" style="fill:var(--te)">→ 1</text>
+    <text x="34" y="282" class="s">item 1 → 거짓 · item 2 → 참 → 거기서 멈춤</text></g>
+  <g data-s="5"><text x="300" y="320" text-anchor="middle" class="s m b">objectArr</text>
+    <rect x="40" y="332" width="240" height="40" rx="6" style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:2"/><rect x="320" y="332" width="240" height="40" rx="6" style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:2"/>
+    <text x="160" y="358" text-anchor="middle" class="s m">{name:"에스파"}</text><text x="440" y="358" text-anchor="middle" class="s m">{name:"홍길동"}</text>
+    <text x="160" y="394" text-anchor="middle" class="s">[0]</text><text x="440" y="394" text-anchor="middle" class="s">[1]</text>
+    <text x="14" y="430" class="s m b">indexOf({name:"에스파"})</text><text x="420" y="430" class="s b" style="fill:var(--ap)">→ -1</text>
+    <text x="34" y="458" class="s">새로 만든 객체 = 주소가 달라서 못 찾음 (===)</text>
+    <text x="14" y="496" class="s m b">findIndex(i =&gt; i.name === "에스파")</text><text x="500" y="496" class="s b" style="fill:var(--te)">→ 0</text></g>
+</svg>
+
+<!-- ⑦ 10주차 — ✍️ 프런트엔드 · 백엔드 · CRUD · 다음 주 투두리스트 -->
+<svg data-fig="crud" viewBox="0 0 600 480" role="img" aria-label="프런트엔드와 백엔드 사이의 요청 응답과 CRUD 네 가지" hidden>
+  <g><rect x="14" y="20" width="200" height="180" rx="12" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2"/>
+    <text x="114" y="52" text-anchor="middle" class="b">프런트엔드</text><text x="114" y="80" text-anchor="middle" class="s">클라이언트(브라우저)</text>
+    <text x="114" y="130" text-anchor="middle" class="s m">HTML · CSS · JS</text><text x="114" y="160" text-anchor="middle" class="s">투두리스트 화면</text>
+    <rect x="386" y="20" width="200" height="180" rx="12" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/>
+    <text x="486" y="52" text-anchor="middle" class="b">백엔드</text><text x="486" y="80" text-anchor="middle" class="s">서버</text>
+    <text x="486" y="130" text-anchor="middle" class="s">할 일 데이터</text><text x="486" y="160" text-anchor="middle" class="s">🤖 Node.js 등</text></g>
+  <g data-s="1"><path class="d" d="M216,92 L378,92" style="stroke:var(--inh);stroke-width:3;fill:none"/><path d="M372,85 L384,92 L372,99 Z" style="fill:var(--inh)"/>
+    <text x="300" y="78" text-anchor="middle" class="s b" style="fill:var(--inh)">요청</text><text x="300" y="116" text-anchor="middle" class="s m">C · R · U · D</text></g>
+  <g data-s="2"><path class="d" d="M384,160 L222,160" style="stroke:var(--oc);stroke-width:3;fill:none"/><path d="M228,153 L216,160 L228,167 Z" style="fill:var(--oc)"/>
+    <text x="300" y="148" text-anchor="middle" class="s b" style="fill:var(--oc)">응답</text><text x="300" y="186" text-anchor="middle" class="s m">JSON 텍스트</text></g>
+  <g data-s="3"><text x="14" y="240" class="s b">CRUD</text><text x="220" y="240" class="s b">할 일 목록</text><text x="380" y="240" class="s b">HTTP 🤖</text><text x="510" y="240" class="s b">SQL 🤖</text>
+    <rect x="14" y="252" width="34" height="32" rx="6" style="fill:var(--te);fill-opacity:.3"/><text x="31" y="275" text-anchor="middle" class="s b">C</text><text x="58" y="275" class="s">Create · 생성</text><text x="220" y="275" class="s">할 일 추가</text><text x="380" y="275" class="s m">POST</text><text x="510" y="275" class="s m">INSERT</text>
+    <rect x="14" y="292" width="34" height="32" rx="6" style="fill:var(--inh);fill-opacity:.3"/><text x="31" y="315" text-anchor="middle" class="s b">R</text><text x="58" y="315" class="s">Read · 조회</text><text x="220" y="315" class="s">목록 보기</text><text x="380" y="315" class="s m">GET</text><text x="510" y="315" class="s m">SELECT</text>
+    <rect x="14" y="332" width="34" height="32" rx="6" style="fill:var(--oc);fill-opacity:.35"/><text x="31" y="355" text-anchor="middle" class="s b">U</text><text x="58" y="355" class="s">Update · 수정</text><text x="220" y="355" class="s">할 일 고치기</text><text x="380" y="355" class="s m">PUT · PATCH</text><text x="510" y="355" class="s m">UPDATE</text>
+    <rect x="14" y="372" width="34" height="32" rx="6" style="fill:var(--ap);fill-opacity:.3"/><text x="31" y="395" text-anchor="middle" class="s b">D</text><text x="58" y="395" class="s">Delete · 삭제</text><text x="220" y="395" class="s">할 일 지우기</text><text x="380" y="395" class="s m">DELETE</text><text x="510" y="395" class="s m">DELETE</text></g>
+  <g data-s="4"><rect x="14" y="420" width="572" height="48" rx="10" style="fill:var(--main);fill-opacity:.1;stroke:var(--main);stroke-width:2"/>
+    <text x="300" y="451" text-anchor="middle" class="s b">✍️ 다음 주 — 백엔드에 요청해서 화면에 투두리스트</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -170,7 +286,39 @@
             "<b>방법2 for…of</b> — 인덱스 없이 <b>값</b>이 차례로 <code>item</code> 에 들어옴",
             "<code>Object.keys(person)</code> → <b>키만</b> 모은 배열 <code>[\"name\", \"age\", \"hobby\"]</code>",
             "<code>Object.values(person)</code> → <b>값만</b> 모은 배열 · for…of 로 key 를 돌며 <code>person[key]</code> → <code>name 윤희근</code> · <code>age 27</code> · <code>hobby 테니스</code>" ],
-          note: "<code>console.log(\"\\n방법1\")</code> 는 맨 앞 <code>\\n</code> 때문에 빈 줄을 먼저 찍어요 · 전체 출력은 node 로 직접 실행한 값 (<a href=\"../웹프로그래밍-9주차.html\" target=\"_top\">9주차 페이지</a>)" }
+          note: "<code>console.log(\"\\n방법1\")</code> 는 맨 앞 <code>\\n</code> 때문에 빈 줄을 먼저 찍어요 · 전체 출력은 node 로 직접 실행한 값 (<a href=\"../웹프로그래밍-9주차.html\" target=\"_top\">9주차 페이지</a>)" },
+        { id: "delegate", week: 10, tab: "④ 누른 항목 선택", src: "10주차 1027_01_event.html 에 오늘 더한 코드 — list.addEventListener('click', activeItem) · ✍️ 필기 “복습:(이벤트,이벤트소스,이벤트 헨들러(리스너),이벤트객체)”",
+          steps: [
+            "<b>e.target</b> — 실제로 <b>누른 요소</b> · 제목 3 을 누르면 <code>&lt;li&gt;제목 3&lt;/li&gt;</code>",
+            "<b>e.currentTarget</b> — 리스너를 <b>단</b> 요소 = ul · li 의 click 이 부모 ul 까지 <b>전달(버블링)</b> 돼서 ul 의 리스너 하나가 받음 (🤖 이벤트 위임 · MDN)",
+            "<code>if (e.target.nodeName == 'LI')</code> — 누른 게 li 일 때만 (nodeName 은 <b>대문자</b> 'LI') · ul 자체면 'UL' → 아무것도 안 함",
+            "<code>title.innerHTML = e.target.innerHTML</code> → h1 이 <b>제목 3</b> 으로 바뀜",
+            "for…of 로 모든 li 에 <code>removeAttribute('class')</code> → 누른 li 에만 <code>setAttribute('class','active')</code> → .active 배경 #abc" ],
+          note: "크롬에서 직접 눌러 본 결과 · <code>console.log(e)</code> → <code>PointerEvent {…}</code> · 🤖 li 에 하나씩 단 리스너는 <code>innerHTML +=</code> 로 li 가 새로 만들어지면 사라지지만, ul 에 단 리스너는 새 li 도 받아요 (<a href=\"../웹프로그래밍-10주차.html\" target=\"_top\">10주차 페이지</a>)" },
+        { id: "arrmod", week: 10, tab: "⑤ 요소 조작 6가지", src: "10주차 수업 파일 1103_01_요소조작.js — push · pop · shift · unshift · slice · concat",
+          steps: [
+            "<code>push(4, 5, 6, 7)</code> — <b>맨 뒤</b>에 추가 → [1,2,3,4,5,6,7] · 반환 = <b>새 길이 7</b>",
+            "<code>pop()</code> — <b>맨 뒤</b> 하나 제거 → [1, 2] · 반환 = <b>뺀 요소 3</b>",
+            "<code>shift()</code> — <b>맨 앞</b> 하나 제거 → [2, 3] · 반환 = <b>뺀 요소 1</b>",
+            "<code>unshift(0)</code> — <b>맨 앞</b>에 추가 → [0, 1, 2, 3] · 반환 = <b>새 길이 4</b>",
+            "<code>slice(2, 5)</code> — 인덱스 2 부터 <b>5 직전</b>까지 → [3, 4, 5] · <code>slice(4)</code> → [5] · <code>slice(-3)</code> = 5 + (−3) = 2 부터 → [3, 4, 5]",
+            "<code>arr6.concat(arr7)</code> — [1, 2] 뒤에 [3, 4] 를 이어 <b>새 배열</b> [1, 2, 3, 4] · arr6 · arr7 은 그대로" ],
+          note: "🤖 외우기 — push · pop = 뒤 / shift · unshift = 앞 · 넣는 둘은 새 길이 · 빼는 둘은 뺀 값 · slice · concat 만 원본을 안 바꿈 (전부 node 로 실행한 값)" },
+        { id: "search", week: 10, tab: "⑥ 순회 · 탐색", src: "10주차 수업 파일 1103_02_요소순회탐색.js — forEach · includes · indexOf · findIndex (⚠️ 오타 4곳을 고쳐서 실행)",
+          steps: [
+            "<code>forEach((item, idx, arr) =&gt; …)</code> — 요소마다 함수를 한 번씩 → <code>console.log(idx, item*2)</code> → <b>0 2 · 1 4 · 2 6</b> · 돌려주는 값 없음(undefined)",
+            "<code>includes(1)</code> — 1 이 <b>있는지</b> → <b>true</b> (없으면 false)",
+            "<code>indexOf(3)</code> — 3 이 있는 <b>인덱스</b> → <b>2</b> (없으면 -1)",
+            "<code>findIndex(콜백)</code> — 콜백이 <b>참을 돌려준 첫 요소</b>의 인덱스 → item 2 에서 참 → <b>1</b> (없으면 -1)",
+            "객체 배열 — <code>indexOf({name:\"에스파\"})</code> 는 새로 만든 객체라 <b>주소가 달라 -1</b> (수업 주석 “얕은 비교”) · 내용으로 찾으려면 <code>findIndex(i =&gt; i.name === \"에스파\")</code> → <b>0</b>" ],
+          note: "⚠️ 수업 파일은 <code>arr.forEach</code> · <code>inIncludes</code> · <code>const findedIndex</code> 두 번 · <code>findexIndex</code> 오타로 실행되지 않아요 (SyntaxError 라 한 줄도 실행 안 됨) — 고친 코드와 결과는 <a href=\"../웹프로그래밍-10주차.html\" target=\"_top\">10주차 페이지</a>" },
+        { id: "crud", week: 10, tab: "⑦ 프런트 · CRUD", src: "10주차 ✍️ 필기 — “프론트엔드 백엔드 뜻 복습” · “CRUD가 무엇인가” · “다음주에 서버 백엔드 요청해서 화면에 투두리스트 나오게 하기”",
+          steps: [
+            "브라우저(<b>프런트엔드</b>)가 서버(<b>백엔드</b>)에 <b>요청</b> — 만들기 · 읽기 · 고치기 · 지우기 중 무엇을 할지 담아 보냄",
+            "서버가 <b>응답</b> — 할 일 목록을 <b>JSON 텍스트</b>로 돌려줌 (9주차 요청 · 응답)",
+            "🤖 <b>CRUD</b> = Create(생성) · Read(조회) · Update(수정) · Delete(삭제) — 데이터를 다루는 기본 4가지 · HTTP 요청 방식 · SQL 과 흔히 짝지음 (위키백과 CRUD)",
+            "✍️ 다음 주 — 백엔드에 요청해서 화면에 <b>투두리스트</b> 나오게 하기" ],
+          note: "1주차 필기: 프런트엔드 = 클라이언트(웹브라우저)에서 실행되는 기술 · 백엔드 = 서버에서 실행되는 기술 · 🤖 HTTP · SQL 칸은 설명을 위한 짝이에요 (수업 코드에 나온 것은 아님)" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

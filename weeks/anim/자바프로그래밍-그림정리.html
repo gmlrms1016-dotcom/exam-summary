@@ -167,6 +167,105 @@
   <g data-s="4"><text x="20" y="412" class="s b" style="fill:var(--ap)">⚠️ ② 없이 book[0].title</text><text x="20" y="440" class="s m" style="fill:var(--ap)">→ NullPointerException</text></g>
 </svg>
 
+<!-- ⑥ 10주차 — 상속 객체 (Point · ColorPoint · 5장 6 ~ 8 · 21쪽) -->
+<svg data-fig="inherit" viewBox="0 0 600 480" role="img" aria-label="ColorPoint 객체 하나 안의 Point 부분과 ColorPoint 부분" hidden>
+  <g data-s="1"><rect x="12" y="16" width="230" height="64" rx="10" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/>
+    <text x="127" y="44" text-anchor="middle" class="b m">Point</text><text x="127" y="68" text-anchor="middle" class="s">슈퍼 클래스 (부모)</text>
+    <rect x="12" y="130" width="230" height="64" rx="10" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/>
+    <text x="127" y="158" text-anchor="middle" class="b m">ColorPoint</text><text x="127" y="182" text-anchor="middle" class="s">서브 클래스 (자식)</text>
+    <path class="d" d="M127,128 L127,90" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M120,94 L127,82 L134,94 Z" style="fill:var(--ink2)"/>
+    <text x="140" y="112" class="s m b">extends</text></g>
+  <g data-s="2"><rect x="270" y="16" width="318" height="338" rx="12" style="fill:var(--card);stroke:var(--line);stroke-width:2"/>
+    <text x="429" y="40" text-anchor="middle" class="s b">객체 하나 (new ColorPoint)</text>
+    <rect x="282" y="52" width="294" height="140" rx="8" style="fill:var(--inh);fill-opacity:.12;stroke:var(--inh);stroke-width:1.5"/>
+    <text x="294" y="76" class="s b" style="fill:var(--inh)">Point 부분</text>
+    <text x="294" y="108" class="s m">private int x</text><text x="294" y="138" class="s m">private int y</text><text x="294" y="174" class="s m">set() · showPoint()</text>
+    <rect x="282" y="202" width="294" height="140" rx="8" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:1.5"/>
+    <text x="294" y="226" class="s b" style="fill:var(--te)">ColorPoint 부분</text>
+    <text x="294" y="258" class="s m">private String color</text><text x="294" y="290" class="s m">setColor()</text><text x="294" y="320" class="s m">showColorPoint()</text>
+    <rect x="40" y="232" width="34" height="34" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="20" y="226" class="s m b">cp1</text>
+    <path class="d" d="M57,249 L262,249" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M256,242 L268,249 L256,256 Z" style="fill:var(--ink2)"/></g>
+  <g data-s="3"><rect x="500" y="88" width="64" height="30" rx="5" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="532" y="109" text-anchor="middle" class="s b">3</text>
+    <rect x="500" y="118" width="64" height="30" rx="5" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="532" y="139" text-anchor="middle" class="s b">4</text>
+    <text x="20" y="310" class="s m b" style="fill:var(--inh)">super(3, 4)</text><text x="20" y="336" class="s">→ 부모가 x · y 채움</text></g>
+  <g data-s="4"><rect x="518" y="240" width="62" height="28" rx="5" style="fill:var(--card);stroke:var(--te);stroke-width:2"/><text x="549" y="260" text-anchor="middle" class="s b">빨강</text></g>
+  <g data-s="5"><text x="20" y="396" class="s m b">cp1.showColorPoint()</text><text x="320" y="396" class="b" style="fill:var(--te)">→ 빨강(3,4)</text>
+    <text x="20" y="424" class="s">print(color) 빨강 + 물려받은 showPoint() (3,4)</text></g>
+  <g data-s="6"><text x="20" y="464" class="s b" style="fill:var(--ap)">❌ ColorPoint 에서 x 를 직접 → private 오류</text></g>
+</svg>
+
+<!-- ⑦ 10주차 — 생성자 호출 · 실행 순서 (ConstructorEx4 · 5장 13 · 14 · 20쪽) -->
+<svg data-fig="ctororder" viewBox="0 0 600 470" role="img" aria-label="new BBBB(5) 에서 생성자 호출은 서브 먼저 실행은 슈퍼 먼저" hidden>
+  <g><rect x="96" y="16" width="290" height="96" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="110" y="42" class="b">AAAA (슈퍼)</text><text x="110" y="70" class="s m">AAAA(int x) {</text><text x="124" y="96" class="s m">println(…A + x); }</text>
+    <rect x="96" y="148" width="290" height="124" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/>
+    <text x="110" y="174" class="b">BBBB (서브)</text><text x="110" y="202" class="s m">BBBB(int x) {</text><text x="124" y="228" class="s m b">super(x);</text><text x="124" y="256" class="s m">println(…B + x); }</text>
+    <rect x="96" y="308" width="290" height="70" rx="10" style="fill:var(--card);stroke:var(--line);stroke-width:2"/>
+    <text x="110" y="334" class="b">main</text><text x="110" y="362" class="s m">b = new BBBB(5);</text></g>
+  <g data-s="1"><path class="d" d="M94,350 C40,330 40,220 92,200" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M84,195 L96,198 L88,207 Z" style="fill:var(--ap)"/>
+    <text x="110" y="296" class="s b" style="fill:var(--ap)">① 호출</text></g>
+  <g data-s="2"><path class="d" d="M94,224 C40,200 40,90 92,68" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M84,63 L96,66 L88,75 Z" style="fill:var(--ap)"/>
+    <text x="110" y="136" class="s b" style="fill:var(--ap)">② 호출</text><text x="200" y="136" class="s" style="fill:var(--ap)">super(x) · x = 5 전달</text></g>
+  <g data-s="3"><rect x="402" y="30" width="186" height="64" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="414" y="54" class="s b">③ 실행 → 리턴</text><text x="414" y="82" class="s m b">매개변수생성자A5</text></g>
+  <g data-s="4"><rect x="402" y="176" width="186" height="64" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/>
+    <text x="414" y="200" class="s b">④ 실행</text><text x="414" y="228" class="s m b">매개변수생성자B5</text>
+    <path class="d" d="M496,96 L496,170" style="stroke:var(--ink2);stroke-width:2;fill:none"/><path d="M489,164 L496,176 L503,164 Z" style="fill:var(--ink2)"/></g>
+  <g data-s="5"><text x="20" y="414" class="s b" style="fill:var(--ap)">호출 순서: 서브 → 슈퍼 (서브가 실행 전에 슈퍼 호출)</text>
+    <text x="20" y="446" class="s b" style="fill:var(--te)">실행 순서: 슈퍼 → 서브 (슈퍼 생성자가 먼저)</text></g>
+</svg>
+
+<!-- ⑧ 10주차 — 슈퍼 생성자 고르기 (ConstructorEx2 · 3 · 4 · 5장 15 ~ 20쪽) -->
+<svg data-fig="superpick" viewBox="0 0 600 500" role="img" aria-label="서브 생성자 첫 줄의 super 유무로 슈퍼 생성자가 정해지는 흐름" hidden>
+  <g data-s="1"><rect x="90" y="12" width="420" height="54" rx="12" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="300" y="46" text-anchor="middle" class="b">서브 생성자 첫 줄에 super(…)?</text></g>
+  <g data-s="2"><path class="d" d="M180,68 L150,104" style="stroke:var(--te);stroke-width:2.5;fill:none"/><path d="M146,96 L146,110 L157,102 Z" style="fill:var(--te)"/>
+    <text x="40" y="94" class="s b" style="fill:var(--te)">✅ 있음</text>
+    <rect x="12" y="112" width="278" height="120" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/>
+    <text x="24" y="140" class="s b">인자에 맞는 슈퍼 생성자</text><text x="24" y="172" class="s m">super(x) → AAAA(int x)</text><text x="24" y="204" class="s">Ex4 → 매개변수생성자A5</text></g>
+  <g data-s="3"><path class="d" d="M420,68 L450,104" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M443,102 L454,110 L454,96 Z" style="fill:var(--ap)"/>
+    <text x="474" y="94" class="s b" style="fill:var(--ap)">❌ 없음</text>
+    <rect x="310" y="112" width="278" height="60" rx="10" style="fill:var(--card);stroke:var(--ap);stroke-width:2"/>
+    <text x="322" y="148" class="s b">컴파일러가 super(); 넣음</text></g>
+  <g data-s="4"><path class="d" d="M449,174 L449,196" style="stroke:var(--ink2);stroke-width:2;fill:none"/><path d="M442,192 L449,204 L456,192 Z" style="fill:var(--ink2)"/>
+    <rect x="310" y="206" width="278" height="56" rx="12" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="449" y="241" text-anchor="middle" class="s b">슈퍼에 기본 생성자?</text></g>
+  <g data-s="5"><path class="d" d="M449,264 L449,286" style="stroke:var(--te);stroke-width:2;fill:none"/><path d="M442,282 L449,294 L456,282 Z" style="fill:var(--te)"/>
+    <rect x="310" y="296" width="278" height="86" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/>
+    <text x="322" y="324" class="s b">있음 → 기본 생성자 실행</text><text x="322" y="352" class="s">Ex2 · Ex3 → 생성자A 먼저</text><text x="322" y="374" class="s">(BBB(5) 여도 AAA())</text></g>
+  <g data-s="6"><rect x="310" y="400" width="278" height="88" rx="10" style="fill:var(--ap);fill-opacity:.12;stroke:var(--ap);stroke-width:2"/>
+    <text x="322" y="428" class="s b" style="fill:var(--ap)">없음 → 컴파일 오류 (17쪽)</text><text x="322" y="456" class="s m">cannot be applied</text><text x="322" y="478" class="s">→ super(값) 으로 직접 고르기</text>
+    <rect x="12" y="300" width="278" height="124" rx="10" style="fill:var(--card);stroke:var(--line);stroke-width:2"/>
+    <text x="24" y="328" class="s b">⚠️ super(…) = 반드시 첫 줄</text><text x="24" y="358" class="s">둘째 줄이면 컴파일 오류</text><text x="24" y="386" class="s m">call to super must be</text><text x="24" y="410" class="s m">first statement …</text></g>
+</svg>
+
+<!-- ⑨ 10주차 — 과제 상속 트리 · toString (Person · Book · 과제 1 ~ 4) -->
+<svg data-fig="assign" viewBox="0 0 600 480" role="img" aria-label="Object 아래 Person Book 과 그 자식 클래스들 그리고 toString" hidden>
+  <g data-s="1"><rect x="180" y="12" width="240" height="66" rx="10" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/>
+    <text x="300" y="40" text-anchor="middle" class="b m">Object</text><text x="300" y="66" text-anchor="middle" class="s">toString() 이 원래 있음</text></g>
+  <g data-s="2"><rect x="12" y="120" width="276" height="96" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="150" y="146" text-anchor="middle" class="b m">Person</text><text x="150" y="174" text-anchor="middle" class="s">이름 · 주소 · 전화번호</text><text x="150" y="202" text-anchor="middle" class="s m">printInfo()</text>
+    <path class="ln" d="M150,118 L250,80"/>
+    <rect x="12" y="262" width="130" height="80" rx="10" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:2"/>
+    <text x="77" y="290" text-anchor="middle" class="s b m">Student</text><text x="77" y="320" text-anchor="middle" class="s">학번 · 전공</text>
+    <rect x="158" y="262" width="130" height="80" rx="10" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:2"/>
+    <text x="223" y="290" text-anchor="middle" class="s b m">Customer</text><text x="223" y="320" text-anchor="middle" class="s">번호 · 마일리지</text>
+    <path class="ln" d="M77,260 L120,218"/><path class="ln" d="M223,260 L180,218"/></g>
+  <g data-s="3"><rect x="312" y="120" width="276" height="96" rx="10" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/>
+    <text x="450" y="146" text-anchor="middle" class="b m">Book</text><text x="450" y="174" text-anchor="middle" class="s">제목 · 페이지수 · 저자</text><text x="450" y="202" text-anchor="middle" class="s m">printInfo() · toString()</text>
+    <path class="ln" d="M450,118 L350,80"/>
+    <rect x="312" y="262" width="130" height="80" rx="10" style="fill:var(--te);fill-opacity:.08;stroke:var(--te);stroke-width:2"/>
+    <text x="377" y="290" text-anchor="middle" class="s b m">Magazine</text><text x="377" y="320" text-anchor="middle" class="s">발매일</text>
+    <rect x="458" y="262" width="130" height="80" rx="10" style="fill:var(--te);fill-opacity:.08;stroke:var(--te);stroke-width:2"/>
+    <text x="523" y="290" text-anchor="middle" class="s b m">TextBook</text><text x="523" y="320" text-anchor="middle" class="s">학년학기 · 학교</text>
+    <path class="ln" d="M377,260 L420,218"/><path class="ln" d="M523,260 L480,218"/></g>
+  <g><text x="300" y="244" text-anchor="middle" class="s m">extends</text></g>
+  <g data-s="4"><text x="14" y="382" class="s m b">super(name,addr,phone)</text><text x="300" y="382" class="s">부모 필드는 부모 생성자가</text>
+    <text x="14" y="412" class="s m b">super.printInfo()</text><text x="300" y="412" class="s">부모 출력 + 내 필드 출력</text></g>
+  <g data-s="5"><text x="14" y="442" class="s m b">super.toString() + …</text><text x="300" y="442" class="s">TextBook 이 다시 쓴 toString</text>
+    <text x="14" y="470" class="s">println(t1) 만 써도 toString() 이 자동으로 불림</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -220,7 +319,41 @@
             "반복문에서 <code>book[i] = new Book(title, author);</code> → 칸마다 <b>Book 객체를 만들어</b> 연결",
             "<code>book[i].title</code> · <code>book[i].author</code> 로 꺼내 출력 → <b>(사랑의 기술, 에리히 프롬)(시간의 역사, 스티븐 호킹)</b>",
             "⚠️ ② 를 빼먹고 <code>book[0].title</code> → 칸이 null 이라 <b>NullPointerException</b> (직접 실행해 확인)" ],
-          note: "입력 예는 교재 예제 4-7 의 값 · <code>print</code> 라서 두 책이 <b>한 줄</b>에 이어서 출력돼요" }
+          note: "입력 예는 교재 예제 4-7 의 값 · <code>print</code> 라서 두 책이 <b>한 줄</b>에 이어서 출력돼요" },
+        { id: "inherit", week: 10, tab: "⑥ 상속 객체", src: "5장 5 ~ 8 · 21쪽 — extends · 예제 5-1 객체 생성 · 서브 클래스에서 슈퍼 클래스 멤버 접근 · 예제 5-3 · 10주차 수업 파일 Point.java · ColorPointEx.java",
+          steps: [
+            "<code>class ColorPoint extends Point</code> — Point = <b>슈퍼 클래스</b>(부모) · ColorPoint = <b>서브 클래스</b>(자식) · extends = 슈퍼 클래스를 <b>확장</b>",
+            "<code>new ColorPoint(3, 4, \"빨강\")</code> → <b>객체 하나 안에</b> Point 부분(x · y · set · showPoint)과 ColorPoint 부분(color · setColor · showColorPoint)이 함께 들어 있음",
+            "첫 줄 <code>super(3, 4)</code> → 부모 생성자 <code>Point(int x, int y)</code> 가 private x · y 를 <b>3 · 4</b> 로 채움",
+            "<code>this.color = color</code> → 내 필드 color 가 <b>\"빨강\"</b>",
+            "<code>cp1.showColorPoint()</code> → <code>print(color)</code> 빨강 + 물려받은 <code>showPoint()</code> (3,4) → <b>빨강(3,4)</b>",
+            "❌ x · y 는 <b>private</b> → ColorPoint 안에서 <code>System.out.println(x)</code> 는 <code>x has private access in Point</code> (javac 로 확인) → 부모의 메소드 · 생성자를 거쳐서만" ],
+          note: "수업 파일은 예제 5-1 의 <code>set(…)</code> · <code>setColor(…)</code> 호출을 주석으로 막고 예제 5-3 처럼 생성자 + super(x, y) 로 바꿨어요 · 출력 <b>(1,2) / 빨강(3,4) / 코발트(10,20)</b> (<a href=\"../자바프로그래밍-10주차.html\" target=\"_top\">10주차 페이지</a>)" },
+        { id: "ctororder", week: 10, tab: "⑦ 생성자 순서", src: "5장 13 · 14 · 20쪽 — 서브 클래스 / 슈퍼 클래스의 생성자 호출 및 실행 · super() 를 이용한 사례 · 10주차 수업 파일 ConstructorEx4.java",
+          steps: [
+            "<code>new BBBB(5)</code> → ① 서브 생성자 <code>BBBB(int x)</code> 가 <b>먼저 호출</b>됨",
+            "② BBBB 는 자기 코드를 실행하기 <b>전에</b> 첫 줄 <code>super(x)</code> 로 슈퍼 생성자 <code>AAAA(int x)</code> 를 호출 — x = 5 전달",
+            "③ <b>슈퍼 생성자가 먼저 실행</b> → <b>매개변수생성자A5</b> 출력 → 끝나면 BBBB 로 리턴",
+            "④ 돌아와서 서브 생성자의 나머지 실행 → <b>매개변수생성자B5</b>",
+            "정리 — <b>호출</b>은 서브 → 슈퍼 · <b>실행</b>은 슈퍼 → 서브 (13쪽) · 서브 객체를 만들면 두 생성자가 <b>모두</b> 실행" ],
+          note: "13쪽 질문 — “서브 · 슈퍼 생성자가 모두 실행되는가?” → 둘 다 · “누가 먼저 실행되는가?” → 슈퍼 클래스의 생성자 · 실행 결과는 javac · java 로 직접 확인" },
+        { id: "superpick", week: 10, tab: "⑧ super() 고르기", src: "5장 15 ~ 20쪽 — 서브 클래스에서 슈퍼 클래스의 생성자 선택 · 기본 생성자 자동 선택 · 오류 난 경우 · super() · 10주차 수업 파일 ConstructorEx2 · 3 · 4",
+          steps: [
+            "서브 생성자의 <b>첫 줄</b>을 봐요 — <code>super(…)</code> 가 있나?",
+            "✅ 있으면 — 인자에 맞는 슈퍼 생성자 · ConstructorEx4 <code>super(x)</code> → <code>AAAA(int x)</code> → <b>매개변수생성자A5</b>",
+            "❌ 없으면 — 컴파일러가 첫 줄에 <code>super();</code> (매개변수 없는 것)를 <b>자동으로</b> 넣음",
+            "그러면 슈퍼 클래스에 <b>기본 생성자</b>가 있나?",
+            "있음 → 기본 생성자 실행 · ConstructorEx2 <b>생성자A / 생성자B</b> · ConstructorEx3 은 <code>new BBB(5)</code> 여도 <b>AAA()</b> → 생성자A / 매개변수생성자B",
+            "없음 → <b>컴파일 오류</b> (17쪽 · javac <code>cannot be applied to given types</code>) · ⚠️ <code>super(…)</code> 는 <b>반드시 첫 줄</b> — 둘째 줄이면 <code>call to super must be first statement in constructor</code>" ],
+          note: "이클립스 오류 메시지는 “Implicit super constructor A() is undefined. Must explicitly invoke another constructor” (17쪽) · 🤖 Java 25 부터는 super(…) 앞에 this 를 쓰지 않는 문장을 둘 수 있게 바뀌었지만 (JEP 513) 수업 · 시험은 “첫 줄”로 답해요" },
+        { id: "assign", week: 10, tab: "⑨ 과제 · toString", src: "10주차 과제.txt 1 ~ 4 — Person → Student · Customer / Book → Magazine · TextBook · 5장 9쪽 (최상위 조상 Object)",
+          steps: [
+            "모든 클래스의 최상위 조상 = <b>java.lang.Object</b> — extends 를 안 써도 자동으로 상속 · <code>toString()</code> 도 Object 에 이미 있음 (9쪽)",
+            "과제 1 · 2 — <b>Person</b>(이름 · 주소 · 전화번호 · printInfo) → <b>Student</b>(학번 · 전공) · <b>Customer</b>(고객번호 · 마일리지)",
+            "과제 3 · 4 — <b>Book</b>(제목 · 페이지수 · 저자 · printInfo · toString) → <b>Magazine</b>(발매일) · <b>TextBook</b>(학년학기 · 학교)",
+            "생성자 첫 줄 <code>super(name,addr,phone)</code> — 부모의 private 필드는 <b>부모 생성자</b>가 채움 · 출력은 내 필드 print → <code>super.printInfo()</code> → 내 필드 println = <b>한 줄</b>",
+            "TextBook 은 toString 을 <b>다시 써서</b> <code>super.toString()</code> + 학년학기 · 학교 · <code>println(t1)</code> 만 써도 toString() 이 자동으로 불림" ],
+          note: "🤖 toString 안에서 <code>super.</code> 없이 <code>toString()</code> 을 부르면 자기 자신을 끝없이 불러 <b>StackOverflowError</b> · public 을 빼면 <code>attempting to assign weaker access privileges</code> (둘 다 javac · java 로 확인) · 같은 이름으로 다시 쓰기 = <b>메소드 오버라이딩</b> (5장 32쪽)" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

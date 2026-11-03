@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202610292237"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자바프로그래밍 15주차 · 기말고사 시험문제 정리 (9주차 반영)</title>
-    <meta name="description" content="자바프로그래밍 15주차 정리 — 기말고사 시험문제 정리 (9주차 반영)">
+    <title>자바프로그래밍 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)</title>
+    <meta name="description" content="자바프로그래밍 15주차 정리 — 기말고사 시험문제 정리 (9 · 10주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="자바프로그래밍 15주차 · 기말고사 시험문제 정리 (9주차 반영)">
+    <meta property="og:title" content="자바프로그래밍 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)">
     <meta property="og:description" content="자바프로그래밍 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -99,17 +99,17 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>☕ 자바프로그래밍 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 · 10주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-9주차.html">‹ 이전 · <b>9주차</b><br><small>4장 클래스 — this() · 메소드 오버로딩 · 접근 지정자 · static · 객체 배열</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-10주차.html">‹ 이전 · <b>10주차</b><br><small>5장 상속 — extends · 생성자 호출 순서 · super() · super.메소드 · toString</small></a><span></span></nav>
 
-<div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 필기평가1 <b>30점</b> · 직무수행능력평가 (실습 중심)였어요. 9주차 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a> 에 있어요.</div>
+<div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 필기평가1 <b>30점</b> · 직무수행능력평가 (실습 중심)였어요. 9 · 10주차 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a> 에 있어요.</div>
 <section class="card" id="s1">
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/자바프로그래밍-그림정리.html?weeks=9-15#thiscall" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/자바프로그래밍-그림정리.html?weeks=9-15#thiscall" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차 — ① this() · ② 메소드 오버로딩 · ③ 접근 지정자 · ④ static · ⑤ 객체 배열</li></ul>
+<ul><li>9주차 — ① this() · ② 메소드 오버로딩 · ③ 접근 지정자 · ④ static · ⑤ 객체 배열</li><li>10주차 — ⑥ 상속 객체 · ⑦ 생성자 호출 순서 · ⑧ super() 고르기 · ⑨ 과제 상속 · toString</li></ul>
 </section>
 <section class="card" id="s2">
 <h2>9주차 · 4장 클래스 — this() · 오버로딩 · 접근 지정자 · static · 객체 배열</h2>
@@ -125,8 +125,23 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="자바프로그래밍-9주차.html">9주차</a>.</div>
 </section>
+<section class="card" id="s3">
+<h2>10주차 · 5장 상속 — extends · 생성자 호출 순서 · super() · toString</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>상속 · extends</td><td>부모 = <b>슈퍼 클래스</b> · 자식 = <b>서브 클래스</b> · <code>class ColorPoint extends Point</code> · 클래스 <b>다중 상속 X</b> (<code>extends A, B</code> → 컴파일 오류) · 횟수 무제한 · 최상위 조상 <b>java.lang.Object</b></td><td>⑥ ⑨</td></tr>
+<tr><td>상속과 private</td><td>서브 객체 안에 슈퍼 멤버도 들어 있지만 <b>private</b> 은 서브 클래스도 직접 X (<code>x has private access in Point</code>) → 부모의 생성자 · 메소드로</td><td>⑥</td></tr>
+<tr><td>생성자 호출 순서</td><td>서브 객체 생성 → <b>둘 다 실행</b> · 호출은 서브 → 슈퍼 · <b>실행은 슈퍼 → 서브</b> (13쪽) · ConstructorEx2 → 생성자A / 생성자B</td><td>⑦</td></tr>
+<tr><td>super 가 없으면</td><td>컴파일러가 첫 줄에 <code>super();</code> → 슈퍼의 <b>기본 생성자</b> · <code>new BBB(5)</code> 여도 <b>AAA()</b> → 생성자A / 매개변수생성자B · 슈퍼에 기본 생성자가 없으면 <b>컴파일 오류</b> (17쪽)</td><td>⑧</td></tr>
+<tr><td>super(…)</td><td>슈퍼 생성자를 <b>직접 고름</b> · <code>super(x)</code> → AAAA(int x) → 매개변수생성자A5 / 매개변수생성자B5 · <b>반드시 첫 줄</b> (둘째 줄 → call to super must be first statement)</td><td>⑦ ⑧</td></tr>
+<tr><td>super.메소드()</td><td>부모의 메소드 호출 · <code>super.printInfo()</code> (TV · Student · Customer · Magazine) · print 로 이어서 마지막 println → 한 줄</td><td>⑨</td></tr>
+<tr><td>과제 4 toString</td><td><code>public String toString()</code> 을 다시 써서 문자열을 <b>돌려줌</b> · TextBook → <code>super.toString() + " 학년학기 : " + …</code> · <code>println(t1)</code> 만 써도 자동 호출 · public 빼면 오류 · super. 없이 부르면 StackOverflowError</td><td>⑨</td></tr>
+</tbody></table>
+<div class="tip">자세한 코드 · 실행 결과는 <a href="자바프로그래밍-10주차.html">10주차</a> · 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a>.</div>
+</section>
 
-    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-9주차.html">‹ 이전 · <b>9주차</b><br><small>4장 클래스 — this() · 메소드 오버로딩 · 접근 지정자 · static · 객체 배열</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-10주차.html">‹ 이전 · <b>10주차</b><br><small>5장 상속 — extends · 생성자 호출 순서 · super() · super.메소드 · toString</small></a><span></span></nav>
 
     <p class="wk-src">노션 「자바프로그래밍」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

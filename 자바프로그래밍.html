@@ -21,7 +21,7 @@
 
     <header class="page-head">
         <h1>자바프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 9주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체 + 생성자 · this + this() · 오버로딩 · 접근 지정자 · static · 객체 배열</p>
+        <p>1주차 ~ 10주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체 + 생성자 · this + this() · 오버로딩 · 접근 지정자 · static · 객체 배열 · 상속 · 생성자 호출 순서 · super() · toString</p>
     </header>
 
     <div id="week-nav" data-subject="자바프로그래밍"></div>
@@ -65,6 +65,8 @@
         <a href="#s32">32.✍️접근지정자</a>
         <a href="#s33">33.✍️static</a>
         <a href="#s34">34.객체배열</a>
+        <a href="#s35">35.상속·super()</a>
+        <a href="#s36">36.과제·toString</a>
         <a href="#quiz">✏️퀴즈</a>
         <a href="#output">🖥️출력맞히기</a>
         <a href="#code">💻코딩테스트</a>
@@ -1651,8 +1653,457 @@ public class Main {
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#objarr" title="그림 — 객체 배열" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#objarr" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 객체 배열 — 새 창으로 크게 보기</a></p></div>
     </section>
 
+    <section class="card" id="s35">
+        <h2>35. 10주차 — 상속 (extends) · 생성자 호출 순서 · super()<span class="week">10주차</span></h2>
+        <p>5장_상속.pdf 2 ~ 21쪽 · 수업 소스 ConstructorEx2 · 3 · 4 · Point · ColorPointEx (노션 · PDF 펜 필기 없음) · 출력은 javac · java 로 직접 실행한 값이에요.</p>
+        <table class="ref">
+            <tr><th>말</th><th>뜻 (5장)</th></tr>
+            <tr><td><b>상속</b> (inheritance)</td><td>부모 클래스의 <b>필드 · 메소드를 자식 클래스가 물려받음</b> (2쪽)</td></tr>
+            <tr><td><b>슈퍼 클래스</b> · <b>서브 클래스</b></td><td>부모 클래스 · 자식 클래스 (5쪽)</td></tr>
+            <tr><td><b>extends</b></td><td>상속 선언 — 슈퍼 클래스를 <b>확장</b> · <code>class ColorPoint extends Point</code></td></tr>
+            <tr><td>특징 (9쪽)</td><td>클래스 <b>다중 상속 X</b> (<code>extends A, B</code> → javac <code>'{' expected</code>) · 상속 횟수 무제한 · 최상위 조상 = <b>java.lang.Object</b> (자동 상속)</td></tr>
+            <tr><td>접근 (10쪽)</td><td>슈퍼의 <b>private</b> 멤버는 서브 클래스도 접근 X → 부모의 생성자 · 메소드를 거쳐서 (<a href="#s32">32번</a>)</td></tr>
+        </table>
+        <h3>생성자 호출 순서 — 슈퍼 생성자가 먼저 실행 (13 ~ 20쪽)</h3>
+        <div class="tip">13쪽 — 서브 클래스 객체를 만들면 서브 · 슈퍼 생성자가 <b>둘 다</b> 실행 · <b>호출</b>은 서브 생성자가 먼저(실행 <b>전에</b> 슈퍼 생성자를 호출) · <b>실행</b>은 <b>슈퍼 생성자가 먼저</b></div>
+        <p>① 서브 생성자가 슈퍼 생성자를 고르지 않으면 → <b>기본 생성자</b> 자동 (ConstructorEx2 · 16쪽)</p>
+        <pre><code class="language-java">// ConstructorEx2.java — 서브 생성자가 슈퍼 생성자를 고르지 않으면 → 슈퍼의 기본 생성자가 자동 (5장 16쪽)
+public class 연습 {                              // 원래 이름 ConstructorEx2
+    public static void main(String[] args) {    // 프로그램 시작
+        BB BB;                                  // 수업 파일 그대로 — 변수 이름도 BB (문법은 되지만 헷갈려서 보통 BB b;)
+        BB = new BB();                          // BB() 호출 → 실행 전에 첫 줄 super() → AA() 가 먼저 실행
+    }                                           // main 끝
+}                                               // 연습 끝
+class AA {                                      // 슈퍼 클래스
+    public AA() {                               // 기본 생성자 ← 자동 super() 가 고르는 생성자
+        System.out.println("생성자A");           // ① 먼저 출력
+    }                                           // AA() 끝
+    public AA(int x) {                          // 매개변수 생성자 — 비어 있고 오늘은 불리지 않음
+    }                                           // AA(int) 끝
+}                                               // AA 끝
+class BB extends AA {                           // 서브 클래스 — AA 를 상속
+    public BB() {                               // super(…) 를 안 씀 → 컴파일러가 첫 줄에 super(); 를 넣음 → AA()
+        System.out.println("생성자B");           // ② AA() 가 끝난 뒤 출력
+    }                                           // BB() 끝
+}                                               // BB 끝</code></pre>
+        <pre class="io"><code class="language-text">생성자A
+생성자B</code></pre>
+        <p>② 서브가 매개변수 생성자여도 super 가 없으면 → 슈퍼는 <b>기본 생성자</b> (ConstructorEx3 · 18쪽)</p>
+        <pre><code class="language-java">// ConstructorEx3.java — 서브가 매개변수 생성자여도 super 를 안 쓰면 → 슈퍼는 기본 생성자 (5장 18쪽)
+public class 연습 {                              // 원래 이름 ConstructorEx3
+    public static void main(String[] args) {    // 프로그램 시작
+        BBB b;                                  // 레퍼런스 변수만 선언
+        b = new BBB(5);                         // BBB(int x) 호출 (x = 5) → 첫 줄 자동 super() → AAA() 먼저
+    }                                           // main 끝
+}                                               // 연습 끝
+class AAA {                                     // 슈퍼 클래스
+    public AAA() {                              // 기본 생성자 ← 자동 super() 는 매개변수 없는 이것을 고름
+        System.out.println("생성자A");           // ① 출력
+    }                                           // AAA() 끝
+    public AAA(int x) {                         // 매개변수 생성자 — 5 를 받았어도 자동으로는 안 불림
+        System.out.println("매개변수생성자A");    // (출력 안 됨)
+    }                                           // AAA(int) 끝
+}                                               // AAA 끝
+class BBB extends AAA {                         // 서브 클래스
+    public BBB() {                              // 기본 생성자 — 오늘은 안 불림
+        System.out.println("생성자B");           // (출력 안 됨)
+    }                                           // BBB() 끝
+    public BBB(int x) {                         // x = 5 · super(…) 를 안 씀 → 컴파일러가 super(); (매개변수 없음) 를 넣음
+        System.out.println("매개변수생성자B");    // ② AAA() 다음에 출력
+    }                                           // BBB(int) 끝
+}                                               // BBB 끝</code></pre>
+        <pre class="io"><code class="language-text">생성자A
+매개변수생성자B</code></pre>
+        <p>③ <b>super(x)</b> 로 슈퍼의 매개변수 생성자를 직접 고르기 (ConstructorEx4 · 19 · 20쪽)</p>
+        <pre><code class="language-java">// ConstructorEx4.java — super(x) 로 슈퍼의 매개변수 생성자를 직접 고름 (5장 19 · 20쪽)
+public class 연습 {                              // 원래 이름 ConstructorEx4
+    public static void main(String[] args) {    // 프로그램 시작
+        BBBB b;                                 // 레퍼런스 변수만 선언
+        b = new BBBB(5);                        // BBBB(int x) 호출 (x = 5) → 첫 줄 super(x) → AAAA(5) 먼저
+    }                                           // main 끝
+}                                               // 연습 끝
+class AAAA {                                    // 슈퍼 클래스
+    public AAAA() {                             // 기본 생성자 — 오늘은 안 불림 (super(x) 로 다른 걸 골랐으니까)
+        System.out.println("생성자A");           // (출력 안 됨)
+    }                                           // AAAA() 끝
+    public AAAA(int x) {                        // super(x) 가 고른 생성자 → x = 5
+        System.out.println("매개변수생성자A" + x);   // 문자열 + 5 → ① 매개변수생성자A5
+    }                                           // AAAA(int) 끝
+}                                               // AAAA 끝
+class BBBB extends AAAA {                       // 서브 클래스
+    public BBBB() {                             // 기본 생성자 — 오늘은 안 불림
+        System.out.println("생성자B");           // (출력 안 됨)
+    }                                           // BBBB() 끝
+    public BBBB(int x) {                        // x = 5
+        super(x);                               // 반드시 첫 줄 — 5 를 넘겨 AAAA(int x) 를 고름
+        System.out.println("매개변수생성자B" + x);   // ② AAAA(5) 가 끝난 뒤 → 매개변수생성자B5
+    }                                           // BBBB(int) 끝
+}                                               // BBBB 끝</code></pre>
+        <pre class="io"><code class="language-text">매개변수생성자A5
+매개변수생성자B5</code></pre>
+        <table class="ref">
+            <tr><th>경우</th><th>서브 생성자 첫 줄</th><th>불리는 슈퍼 생성자</th><th>출력</th></tr>
+            <tr><td>① Ex2 (16쪽)</td><td>없음 → 컴파일러가 <code>super();</code></td><td><b>AA()</b></td><td>생성자A / 생성자B</td></tr>
+            <tr><td>② Ex3 (18쪽)</td><td>없음 → <code>super();</code></td><td><b>AAA()</b> — BBB(int) 여도</td><td>생성자A / 매개변수생성자B</td></tr>
+            <tr><td>③ Ex4 (20쪽)</td><td><b><code>super(x);</code></b></td><td><b>AAAA(int x)</b> — 5 전달</td><td>매개변수생성자A5 / 매개변수생성자B5</td></tr>
+            <tr><td>④ 17쪽</td><td>없음 → <code>super();</code></td><td>슈퍼에 <b>기본 생성자가 없음</b></td><td>컴파일 오류</td></tr>
+        </table>
+        <p>④ 슈퍼에 기본 생성자가 없으면 — 컴파일 오류 (17쪽)</p>
+        <pre><code class="language-java">// 17쪽 — 슈퍼 클래스에 기본 생성자가 없어서 오류 (일부러 틀린 코드)
+public class 연습 {                              // 원래 이름 ConstructorEx2
+    public static void main(String[] args) {    // 프로그램 시작
+        B b;                                    // 레퍼런스 변수
+        b = new B();                            // B() 호출 → 첫 줄 자동 super() → A() 를 찾음
+    }                                           // main 끝
+}                                               // 연습 끝
+class A {                                       // 슈퍼 클래스 — 매개변수 생성자만 있음
+    public A(int x) {                           // 생성자를 하나라도 쓰면 기본 생성자 A() 는 자동으로 안 생김
+        System.out.println("생성자A");           // (실행 안 됨)
+    }                                           // A(int) 끝
+}                                               // A 끝
+class B extends A {                             // 서브 클래스
+    public B() {                                // ❌ super(…) 가 없어서 컴파일러가 super(); → A() 가 없음 → 오류
+        System.out.println("생성자B");           // (실행 안 됨)
+    }                                           // B() 끝
+}                                               // B 끝</code></pre>
+        <pre class="io"><code class="language-text">연습.java:14: error: constructor A in class A cannot be applied to given types;
+    public B() {                                // ❌ super(…) 가 없어서 컴파일러가 super(); → A() 가 없음 → 오류
+               ^
+  required: int
+  found: no arguments
+  reason: actual and formal argument lists differ in length
+1 error</code></pre>
+        <div class="tip">강의자료(17쪽)는 이클립스 메시지 “<b>Implicit super constructor A() is undefined. Must explicitly invoke another constructor</b>” · 위는 javac(JDK 8) 메시지 — 뜻은 같아요: A() 가 없으니 <code>super(정수)</code> 로 다른 생성자를 직접 고르라는 것 (B() 첫 줄에 <code>super(0);</code> → 생성자A / 생성자B — 실행해서 확인)</div>
+        <p>⑤ <code>super(…)</code> 는 <b>반드시 첫 줄</b> (19쪽)</p>
+        <pre><code class="language-java">// super(x) 가 첫 줄이 아니면 오류 (일부러 틀린 코드 · ConstructorEx4 를 바꿈)
+public class 연습 {                              // 원래 이름 ConstructorEx4
+    public static void main(String[] args) {    // 프로그램 시작
+        BBBB b;                                 // 레퍼런스 변수
+        b = new BBBB(5);                        // BBBB(int x) 호출
+    }                                           // main 끝
+}                                               // 연습 끝
+class AAAA {                                    // 슈퍼 클래스
+    public AAAA() {                             // 기본 생성자
+        System.out.println("생성자A");           // (실행 안 됨 — 컴파일부터 실패)
+    }                                           // AAAA() 끝
+    public AAAA(int x) {                        // 매개변수 생성자
+        System.out.println("매개변수생성자A" + x);   // (실행 안 됨)
+    }                                           // AAAA(int) 끝
+}                                               // AAAA 끝
+class BBBB extends AAAA {                       // 서브 클래스
+    public BBBB(int x) {                        // x = 5
+        System.out.println("매개변수생성자B" + x);   // 첫 줄이 super 가 아님
+        super(x);                               // ❌ 둘째 줄 → 오류
+    }                                           // BBBB(int) 끝
+}                                               // BBBB 끝</code></pre>
+        <pre class="io"><code class="language-text">연습.java:19: error: call to super must be first statement in constructor
+        super(x);                               // ❌ 둘째 줄 → 오류
+             ^
+1 error</code></pre>
+        <div class="tip">🤖 <code>this(…)</code> 도 첫 줄이어야 해서 한 생성자에 <code>this(…)</code> 와 <code>super(…)</code> 를 <b>같이 못 써요</b> (javac 같은 오류) · 🤖 <b>Java 25</b> 부터는 super(…) 앞에 <code>this</code> 를 쓰지 않는 문장을 둘 수 있게 바뀌었어요 (JEP 513 · 이 맥 JDK 8 에서는 오류) → 수업 · 시험은 강의자료대로 <b>“제일 첫 라인”</b></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#ctororder" title="그림 — 생성자 순서" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#ctororder" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 생성자 순서 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#superpick" title="그림 — super() 고르기" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#superpick" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — super() 고르기 — 새 창으로 크게 보기</a></p></div>
+        <h3>Point · ColorPoint — super(x, y) (예제 5-1 → 5-3)</h3>
+        <pre><code class="language-java">// Point.java + ColorPointEx.java 를 한 파일로 — extends · super(x, y) (5장 예제 5-1 → 5-3)
+class Point {                                   // 슈퍼 클래스(부모) — 한 점 (x, y)
+    private int x, y;                           // private → Point 안에서만 씀 (자식 ColorPoint 도 x · y 를 직접 못 씀)
+    public Point() {                            // 기본 생성자 — 매개변수 0개
+        this.x = this.y = 0;                    // 오른쪽부터: this.y = 0 → 그 값 0 을 this.x 에 → 둘 다 0
+    }                                           // Point() 끝
+    public Point(int x, int y) {                // 매개변수 2개 생성자
+        this.x = x;                             // 필드 x ← 매개변수 x
+        this.y = y;                             // 필드 y ← 매개변수 y
+    }                                           // Point(int, int) 끝
+    public void set(int x, int y) {             // 예제 5-1 에서 좌표를 넣던 메소드 (오늘은 생성자로 대신)
+        this.x = x;                             // 필드 x ← x
+        this.y = y;                             // 필드 y ← y
+    }                                           // set 끝
+    public void showPoint() {                   // 좌표 출력
+        System.out.println("(" + x + "," + y + ")");   // "(" + 1 + "," + 2 + ")" → (1,2) 찍고 줄바꿈
+    }                                           // showPoint 끝
+}                                               // Point 끝
+class ColorPoint extends Point {                // 서브 클래스(자식) — Point 를 상속(확장) + 색
+    private String color;                       // 추가 필드: 색
+    public ColorPoint() {                       // 기본 생성자 — 비어 있어도 첫 줄에 super(); 가 자동으로 들어감
+    }                                           // ColorPoint() 끝
+    public ColorPoint(int x, int y, String color) {   // 매개변수 3개 생성자
+        super(x, y);                            // 첫 줄 — 부모의 Point(int x, int y) 호출 → 부모의 private x · y 는 부모 생성자가 채움
+        this.color = color;                     // 내 필드 color ← "빨강"
+    }                                           // ColorPoint(…) 끝
+    public void setColor(String color) {        // 색만 바꾸는 메소드 (예제 5-1)
+        this.color = color;                     // 필드 color ← 매개변수 color
+    }                                           // setColor 끝
+    public void showColorPoint() {              // 색 + 좌표 출력
+        System.out.print(color);                // 색을 줄바꿈 없이 → 빨강
+        showPoint();                            // 부모에게 물려받은 메소드 → (3,4) + 줄바꿈 → 합쳐서 빨강(3,4)
+    }                                           // showColorPoint 끝
+}                                               // ColorPoint 끝
+
+public class 연습 {                              // 원래 이름 ColorPointEx → 파일 이름 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Point p1 = new Point(1, 2);             // Point(int, int) → x = 1 · y = 2
+//      p1.set(1, 2);                           // 예제 5-1 방식(set 으로 좌표 넣기) — 생성자로 바꾸면서 주석 처리
+        p1.showPoint();                         // (1,2)
+
+        ColorPoint cp1 = new ColorPoint(3, 4, "빨강");   // super(3, 4) 로 부모 부분 먼저 → 그다음 color = "빨강"
+//      cp1.set(3, 4);                          // 예제 5-1 방식 — 물려받은 set 으로 좌표
+//      cp1.setColor("빨강");                    // 예제 5-1 방식 — 색
+        cp1.showColorPoint();                   // 빨강 + (3,4) → 빨강(3,4)
+        ColorPoint cp2 = new ColorPoint(10, 20, "코발트");   // x = 10 · y = 20 · color = "코발트"
+        cp2.showColorPoint();                   // 코발트(10,20)
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">(1,2)
+빨강(3,4)
+코발트(10,20)</code></pre>
+        <div class="tip">수업 파일은 예제 5-1 (6쪽)의 <code>set(…)</code> · <code>setColor(…)</code> 호출을 <b>주석으로 막고</b> 예제 5-3 (21쪽)처럼 <b>생성자 + super(x, y)</b> 로 값을 넣었어요 · 7 · 8쪽 — <b>객체 하나 안에</b> Point 부분과 ColorPoint 부분이 함께 · x · y 는 private 이라 ColorPoint 에서 <code>System.out.println(x);</code> 는 <code>x has private access in Point</code> (javac 로 확인) → 물려받은 <code>showPoint()</code> 로 출력 · <code>this.x = this.y = 0;</code> 은 오른쪽부터 → 둘 다 0</div>
+        <h3>괄호넣기 — 상속 · super ( ① ) ( ② )</h3>
+        <pre><code class="language-java">class ColorPoint ( ① ) Point {
+    private String color;
+    public ColorPoint(int x, int y, String color) {
+        ( ② )(x, y);
+        this.color = color;
+    }
+}</code></pre>
+        <div class="quiz-item" data-answers="extends" data-explain="class ColorPoint extends Point — 슈퍼 클래스 Point 를 확장(상속) · 자바는 extends 뒤에 클래스 하나만">
+            <p class="quiz-q"><span class="quiz-cat">①</span>Point 를 상속받는 클래스 선언 — <code>class ColorPoint ( ① ) Point</code> 의 ( ① ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="super|super()" data-explain="super(x, y) → 슈퍼 클래스 생성자 Point(int x, int y) 호출 · 반드시 서브 생성자의 첫 줄">
+            <p class="quiz-q"><span class="quiz-cat">②</span>서브 생성자 첫 줄에서 슈퍼 클래스 생성자 <code>Point(int x, int y)</code> 를 부르는 <code>( ② )(x, y);</code> 의 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#inherit" title="그림 — 상속 객체" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#inherit" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 상속 객체 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s36">
+        <h2>36. 10주차 — super.메소드() · 과제 4문제 (Person · Book 상속) · toString()<span class="week">10주차</span></h2>
+        <h3>실습 — Product · TV (InheEx1)</h3>
+        <pre><code class="language-java">// Product.java — 상품 → TV 상속 · super(brand, price) · super.printInfo() (수업 실습 InheEx1)
+class Product {                                 // 슈퍼 클래스 — 상품
+    private String brand;                       // 브랜드 (private → Product 안에서만)
+    private int price;                          // 가격
+    Product(){}                                 // 기본 생성자 — 아무것도 안 함
+    Product(String brand,int price){            // 매개변수 2개 생성자
+        this.brand=brand;                       // 필드 brand ← "LGTV"
+        this.price=price;                       // 필드 price ← 2000000
+    }                                           // Product(…) 끝
+    void printInfo() {                          // 상품 정보 출력 (줄바꿈 없이 print)
+        System.out.print(" 브랜드 : "+brand+" 가격 : "+price);   // " 브랜드 : LGTV 가격 : 2000000" — 맨 앞에 칸 하나
+    }                                           // printInfo 끝
+}                                               // Product 끝
+class TV extends Product{                       // 서브 클래스 — Product 를 상속 + 크기
+    private int inch;                           // 추가 필드: 인치
+    TV(){}                                      // 기본 생성자 (첫 줄에 super(); 자동 → Product())
+    TV(String brand,int price,int inch){        // 매개변수 3개 생성자
+        super(brand,price);                     // 첫 줄 — Product(brand, price) 호출 → 부모의 private 필드는 부모가 채움
+        this.inch=inch;                         // 내 필드 inch ← 75
+    }                                           // TV(…) 끝
+    void printTV() {                            // TV 정보 출력
+        super.printInfo();                      // super. = 부모의 메소드 호출 → " 브랜드 : LGTV 가격 : 2000000" (줄바꿈 X)
+        System.out.println(" 크기(인치): "+inch);   // 이어서 " 크기(인치): 75" + 줄바꿈 → 한 줄 완성
+    }                                           // printTV 끝
+}                                               // TV 끝
+public class 연습 {                              // 원래 이름 InheEx1 (수업 파일에서는 public 이 아님) → 연습.java
+    public static void main(String[]args) {     // 프로그램 시작
+        TV gsTv = new TV("LGTV",2000000,75);    // TV 생성자 → super("LGTV", 2000000) → inch = 75
+        TV myTv = new TV("삼성TV",1000000,45);   // 두 번째 TV → 삼성TV · 1000000 · 45
+        gsTv.printTV();                         // 브랜드 : LGTV 가격 : 2000000 크기(인치): 75
+        myTv.printTV();                         // 브랜드 : 삼성TV 가격 : 1000000 크기(인치): 45
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text"> 브랜드 : LGTV 가격 : 2000000 크기(인치): 75
+ 브랜드 : 삼성TV 가격 : 1000000 크기(인치): 45</code></pre>
+        <div class="tip"><code>super.printInfo()</code> — <b>super.</b> = 슈퍼 클래스의 멤버에 접근하는 레퍼런스 (5장 40쪽 · 서브 클래스에서만) · 🤖 TV 에 printInfo 가 따로 없어서 <code>printInfo();</code> 만 써도 결과가 같아요 (javac 로 확인) — 자식이 <b>같은 이름의 메소드를 다시 만든</b> 경우(아래 toString)에 부모 것을 부르려면 <code>super.</code> 가 꼭 필요 · 줄 맨 앞의 칸은 출력 문자열이 <code>" 브랜드"</code> 처럼 칸으로 시작해서 · 🤖 public 클래스가 없는 Product.java 는 이름이 달라도 컴파일돼요 (main 은 InheEx1)</div>
+        <h3>과제 1 · 2 — Person → Student · Customer</h3>
+        <p>📄 과제 1 — Person(name · addr · phone) 을 상속한 <b>Student</b>(stuId · jeongong) + <code>printStudent()</code> · 📄 과제 2 — Person 을 상속한 <b>Customer</b>(<code>int cusNo</code> · <code>int mile</code>) + <code>printCust()</code> · 객체 2개씩</p>
+        <pre><code class="language-java">// 과제 1 · 2 — Person.java + StudentEx.java + CustomerEx.java 를 한 파일로 (Person → Student · Customer)
+class Person {                                  // 슈퍼 클래스 — 사람 (공통: 이름 · 주소 · 전화번호)
+    private String name;                        // 이름
+    private String addr;                        // 주소
+    private String phone;                       // 전화번호
+    Person(){}                                  // 기본 생성자
+    Person(String name,String addr,String phone){   // 매개변수 3개 생성자
+        this.name=name;                         // 필드 name ← 매개변수
+        this.addr=addr;                         // 필드 addr ← 매개변수
+        this.phone=phone;                       // 필드 phone ← 매개변수
+    }                                           // Person(…) 끝
+    void printInfo() {                          // 공통 정보 출력 (줄바꿈 없이)
+        System.out.print(" 이름 : "+name+" 주소 : "+addr+" 전화번호 : "+phone);   // " 이름 : 윤희근 주소 : 서울 전화번호 : 010-1111-2222"
+    }                                           // printInfo 끝
+}                                               // Person 끝
+class Student extends Person{                   // 과제 1 — Person 을 상속 + 학번 · 전공
+    private String stuId;                       // 학번
+    private String jeongong;                    // 전공
+    Student(){}                                 // 기본 생성자
+    Student(String name,String addr,String phone,String stuId,String jeongong){   // 5개 = 부모 것 3개 + 내 것 2개
+        super(name,addr,phone);                 // 첫 줄 — 부모 Person(name, addr, phone) 이 이름 · 주소 · 전화번호를 채움
+        this.stuId=stuId;                       // 내 필드 학번
+        this.jeongong=jeongong;                 // 내 필드 전공
+    }                                           // Student(…) 끝
+    void printStudent() {                       // 학생 정보 출력
+        System.out.print(" 학번 : "+stuId);      // ① " 학번 : 20232629" (줄바꿈 X)
+        super.printInfo();                      // ② 부모 메소드 → " 이름 : … 주소 : … 전화번호 : …" (줄바꿈 X)
+        System.out.println(" 전공 : "+jeongong); // ③ " 전공 : 컴퓨터소프트웨어" + 줄바꿈 → 한 줄 완성
+    }                                           // printStudent 끝
+}                                               // Student 끝
+class Customer extends Person{                  // 과제 2 — Person 을 상속 + 고객번호 · 마일리지
+    private int cusNo;                          // 고객 번호 (int)
+    private int mile;                           // 마일리지 (int)
+    Customer(){}                                // 기본 생성자
+    Customer(String name,String addr,String phone,int cusNo,int mile){   // 부모 것 3개 + 내 것 2개
+        super(name,addr,phone);                 // 첫 줄 — 부모 생성자
+        this.cusNo=cusNo;                       // 내 필드 고객번호
+        this.mile=mile;                         // 내 필드 마일리지
+    }                                           // Customer(…) 끝
+    void printCust() {                          // 고객 정보 출력
+        System.out.print(" 고객번호 : "+cusNo);  // ① " 고객번호 : 1001"
+        super.printInfo();                      // ② 이름 · 주소 · 전화번호
+        System.out.println(" 마일리지 : "+mile); // ③ " 마일리지 : 3000" + 줄바꿈
+    }                                           // printCust 끝
+}                                               // Customer 끝
+public class 연습 {                              // 원래 StudentEx · CustomerEx 두 main 을 하나로 → 연습.java
+    public static void main(String[]args) {     // 프로그램 시작
+        Student s1 = new Student("윤희근","서울","010-1111-2222","20232629","컴퓨터소프트웨어");   // 학생 1
+        Student s2 = new Student("홍길동","인천","010-3333-4444","2024002","정보통신");          // 학생 2
+        s1.printStudent();                      // 학번 → 이름 · 주소 · 전화번호 → 전공 (한 줄)
+        s2.printStudent();                      // 두 번째 학생 한 줄
+        Customer c1 = new Customer("윤희근","서울","010-5555-6666",1001,3000);   // 고객 1
+        Customer c2 = new Customer("홍길동","부산","010-7777-8888",1002,500);    // 고객 2
+        c1.printCust();                         // 고객번호 → 이름 · 주소 · 전화번호 → 마일리지
+        c2.printCust();                         // 두 번째 고객 한 줄
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text"> 학번 : 20232629 이름 : 윤희근 주소 : 서울 전화번호 : 010-1111-2222 전공 : 컴퓨터소프트웨어
+ 학번 : 2024002 이름 : 홍길동 주소 : 인천 전화번호 : 010-3333-4444 전공 : 정보통신
+ 고객번호 : 1001 이름 : 윤희근 주소 : 서울 전화번호 : 010-5555-6666 마일리지 : 3000
+ 고객번호 : 1002 이름 : 홍길동 주소 : 부산 전화번호 : 010-7777-8888 마일리지 : 500</code></pre>
+        <div class="tip">생성자 매개변수 = <b>부모 것 3개 + 내 것 2개</b> → 첫 줄 <code>super(name,addr,phone)</code> · 출력 = 내 필드 print → <code>super.printInfo()</code> → 내 필드 println = <b>한 줄</b> · ⚠️ 과제 2 문구 순서는 “고객번호, 이름, <b>마일리지</b>, 주소, 전화번호” 인데 printInfo 가 이름 · 주소 · 전화번호를 한 번에 찍어서 풀이는 마일리지가 맨 끝 → 🤖 문구대로 하려면 Person 에 getName() · getAddr() · getPhone() 을 만들어 원하는 순서로 이어 붙이기 (javac 로 확인)</div>
+        <h3>과제 3 · 4 — Book → Magazine · TextBook · toString()</h3>
+        <p>📄 과제 3 — Book(title · pages · author) 을 상속한 <b>Magazine</b>(date) · 생성자 포함 · 📄 과제 4 — Book 을 상속한 <b>TextBook</b>(hakgi · school) · 객체 2개를 <b>toString</b> 으로 출력</p>
+        <pre><code class="language-java">// 과제 3 · 4 — Book.java + MagaEx.java + TextBookEx.java 를 한 파일로 (Book → Magazine · TextBook · toString)
+class Book {                                    // 슈퍼 클래스 — 책 (제목 · 페이지수 · 저자)
+    private String title;                       // 제목
+    private int pages;                          // 페이지수
+    private String author;                      // 저자
+    Book(){}                                    // 기본 생성자
+    Book(String title,int pages,String author){ // 매개변수 3개 생성자
+        this.title=title;                       // 필드 title ← 매개변수
+        this.pages=pages;                       // 필드 pages ← 매개변수
+        this.author=author;                     // 필드 author ← 매개변수
+    }                                           // Book(…) 끝
+    void printInfo() {                          // 과제 3 용 — 바로 출력 (줄바꿈 없이)
+        System.out.print(" 제목 : "+title+" 페이지수 : "+pages+" 저자 : "+author);
+    }                                           // printInfo 끝
+    public String toString() {                  // 과제 4 용 — 출력하지 않고 같은 글자를 문자열로 돌려줌 (Object 의 toString 을 다시 씀)
+        return " 제목 : "+title+" 페이지수 : "+pages+" 저자 : "+author;   // " 제목 : 웹프로그래밍 페이지수 : 100 저자 : 장용미"
+    }                                           // toString 끝
+}                                               // Book 끝
+class Magazine extends Book{                    // 과제 3 — Book 을 상속 + 발매일
+    private String date;                        // 발매일
+    Magazine(){}                                // 기본 생성자
+    Magazine(String title,int pages,String author,String date){   // 부모 것 3개 + 발매일
+        super(title,pages,author);              // 첫 줄 — 부모 Book(…) 이 제목 · 페이지수 · 저자를 채움
+        this.date=date;                         // 내 필드 발매일
+    }                                           // Magazine(…) 끝
+    void printMagazine() {                      // 잡지 정보 출력
+        super.printInfo();                      // 부모 메소드 → " 제목 : … 페이지수 : … 저자 : …" (줄바꿈 X)
+        System.out.println(" 발매일 : "+date);   // 이어서 " 발매일 : 2026-11-02" + 줄바꿈
+    }                                           // printMagazine 끝
+}                                               // Magazine 끝
+class TextBook extends Book{                    // 과제 4 — Book 을 상속 + 학년학기 · 학교
+    private String hakgi;                       // 학년학기
+    private String school;                      // 학교 (초중고대)
+    TextBook(){}                                // 기본 생성자
+    TextBook(String title,int pages,String author,String hakgi,String school){   // 부모 것 3개 + 내 것 2개
+        super(title,pages,author);              // 첫 줄 — 부모 생성자
+        this.hakgi=hakgi;                       // 내 필드 학년학기
+        this.school=school;                     // 내 필드 학교
+    }                                           // TextBook(…) 끝
+    public String toString() {                  // 부모의 toString 을 다시 씀 — 부모 글자 + 내 필드
+        return super.toString()+" 학년학기 : "+hakgi+" 학교 : "+school;   // super.toString() = 부모 Book 의 toString → " 제목 : … 저자 : …" + " 학년학기 : … 학교 : …"
+    }                                           // toString 끝
+}                                               // TextBook 끝
+public class 연습 {                              // 원래 MagaEx · TextBookEx 두 main 을 하나로 → 연습.java
+    public static void main(String[]args) {     // 프로그램 시작
+        Magazine m1 = new Magazine("컴퓨터공학1",120,"컴소과","2026-11-02");   // 잡지 1
+        Magazine m2 = new Magazine("컴퓨터공학2",90,"웹소과","2026-11-03");    // 잡지 2
+        m1.printMagazine();                     // 제목 · 페이지수 · 저자 → 발매일 (한 줄)
+        m2.printMagazine();                     // 두 번째 잡지 한 줄
+        TextBook t1 = new TextBook("웹프로그래밍",100,"장용미","1학년2학기","동양미래대학교");     // 교과서 1
+        TextBook t2 = new TextBook("자바프로그래밍",200,"강은영","1학년2학기","동양미래대학교");   // 교과서 2
+        System.out.println(t1.toString());      // toString() 이 돌려준 문자열을 println 이 출력
+        System.out.println(t2.toString());      // 두 번째 교과서 한 줄
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text"> 제목 : 컴퓨터공학1 페이지수 : 120 저자 : 컴소과 발매일 : 2026-11-02
+ 제목 : 컴퓨터공학2 페이지수 : 90 저자 : 웹소과 발매일 : 2026-11-03
+ 제목 : 웹프로그래밍 페이지수 : 100 저자 : 장용미 학년학기 : 1학년2학기 학교 : 동양미래대학교
+ 제목 : 자바프로그래밍 페이지수 : 200 저자 : 강은영 학년학기 : 1학년2학기 학교 : 동양미래대학교</code></pre>
+        <table class="ref">
+            <tr><th>printInfo() 방식 (과제 3)</th><th>toString() 방식 (과제 4)</th></tr>
+            <tr><td>메소드 안에서 <b>바로 출력</b> · 반환형 void</td><td>출력하지 않고 <b>문자열을 돌려줌</b> · 반환형 String</td></tr>
+            <tr><td>자식: <code>super.printInfo();</code> 다음 <code>println(" 발매일 : " + date)</code></td><td>자식: <code>return super.toString() + " 학년학기 : " + …;</code></td></tr>
+            <tr><td>main: <code>m1.printMagazine();</code></td><td>main: <code>System.out.println(t1.toString());</code></td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>🤖 toString() 더 알기</th><th>확인 (javac · java)</th></tr>
+            <tr><td>모든 클래스의 조상 <b>Object</b> 에 이미 있는 메소드 → Book 이 같은 모양 <code>public String toString()</code> 으로 다시 씀</td><td>다시 쓰지 않으면 <code>Book@15db9742</code> 처럼 클래스이름@해시값 (값은 실행마다 다를 수 있음)</td></tr>
+            <tr><td><code>System.out.println(t1);</code> 만 써도 toString() 이 <b>자동으로</b> 불림</td><td><code>t1.toString()</code> 과 같은 줄</td></tr>
+            <tr><td><b>public</b> 을 빼면</td><td><code>attempting to assign weaker access privileges; was public</code></td></tr>
+            <tr><td>TextBook 의 toString 안에서 <code>super.</code> 없이 <code>toString()</code></td><td>자기 자신을 끝없이 불러 <b>StackOverflowError</b></td></tr>
+        </table>
+        <div class="tip">부모의 메소드를 자식이 같은 이름 · 매개변수 · 리턴 타입으로 다시 쓰는 것 = <b>메소드 오버라이딩</b> (5장 32쪽 — 오늘 범위 21쪽 뒤에 나오는 내용)</div>
+        <h3>🤖 정리 — super vs this</h3>
+        <table class="ref">
+            <tr><th>코드</th><th>뜻</th><th>오늘 코드</th></tr>
+            <tr><td><code>super(…)</code></td><td>슈퍼 클래스 <b>생성자</b> 호출 · 서브 생성자 <b>첫 줄</b></td><td><code>super(x, y)</code> · <code>super(brand,price)</code></td></tr>
+            <tr><td><code>super.메소드()</code></td><td>슈퍼 클래스 <b>메소드</b> 호출</td><td><code>super.printInfo()</code> · <code>super.toString()</code></td></tr>
+            <tr><td><code>this(…)</code></td><td>같은 클래스의 <b>다른 생성자</b> · 첫 줄 (<a href="#s31">31번</a>)</td><td>(오늘 없음)</td></tr>
+            <tr><td><code>this.필드</code></td><td>이 객체의 <b>필드</b></td><td><code>this.color = color</code></td></tr>
+            <tr><td>(아무것도 안 씀)</td><td>컴파일러가 첫 줄에 <b><code>super();</code></b></td><td>ConstructorEx2 · 3 · <code>ColorPoint(){}</code></td></tr>
+        </table>
+        <h3>괄호넣기 — toString 다시 쓰기 ( ① ) ( ② )</h3>
+        <pre><code class="language-java">class Book {
+    private String title;
+    Book(String title) {
+        this.title = title;
+    }
+    public String ( ① )() {
+        return title;
+    }
+}
+class TextBook extends Book {
+    private String school;
+    TextBook(String title, String school) {
+        super(title);
+        this.school = school;
+    }
+    public String ( ① )() {
+        return ( ② ).( ① )() + " " + school;
+    }
+}</code></pre>
+        <div class="quiz-item" data-answers="toString|toString()" data-explain="Object 에서 물려받은 toString() 을 public String toString() 으로 다시 씀 · println(t) 만 써도 자동으로 불림">
+            <p class="quiz-q"><span class="quiz-cat">①</span>객체 정보를 <b>문자열로 돌려주는</b>, Object 에서 물려받은 메소드 ( ① ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="super" data-explain="super.toString() = 부모 Book 의 toString → &quot;자바&quot; + &quot; &quot; + school · this.toString() 이면 자기 자신을 끝없이 불러 StackOverflowError">
+            <p class="quiz-q"><span class="quiz-cat">②</span>TextBook 의 toString 안에서 <b>부모 Book 의</b> toString 을 부르는 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#assign" title="그림 — 과제 · toString" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#assign" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 과제 · toString — 새 창으로 크게 보기</a></p></div>
+    </section>
+
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 32 · 주관식 32<span class="week">2~9주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 37 · 주관식 37<span class="week">2~10주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -1912,6 +2363,46 @@ public class Main {
             <button class="opt" type="button" data-opt="D"><b>D.</b> 객체의 필드를 가리키는 것으로 <code>this.title</code> 과 같다</button>
             <div class="mcq-exp"><b>정답 B</b> — this() = <b>다른 생성자 호출</b> · 생성자 안에서만 · 반드시 첫 문장 (println 다음이면 call to this must be first statement in constructor) · <code>this.title</code> 은 필드</div>
         </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">33</span>10주차 생성자 호출 순서 — 서브 클래스 객체를 <code>new</code> 로 만들 때 생성자 실행에 대한 설명으로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 서브 클래스의 생성자만 실행된다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 슈퍼 클래스의 생성자만 실행된다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 슈퍼 클래스 생성자가 먼저 실행된 뒤 서브 클래스 생성자가 실행된다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 서브 클래스 생성자가 끝까지 실행된 뒤 슈퍼 클래스 생성자가 실행된다</button>
+            <div class="mcq-exp"><b>정답 C</b> — 5장 13쪽 — 둘 다 실행 · <b>호출</b>은 서브가 먼저(실행 전에 슈퍼 생성자 호출) · <b>실행</b>은 슈퍼가 먼저 → ConstructorEx2 출력 생성자A → 생성자B</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">34</span>10주차 super() — <code>super(…)</code> 에 대한 설명으로 <b>틀린</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 서브 클래스 생성자에서 슈퍼 클래스의 생성자를 골라 부른다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 인자에 맞는 슈퍼 클래스 생성자가 호출된다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 서브 클래스 생성자의 어느 줄에 써도 된다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 쓰지 않으면 컴파일러가 <code>super();</code> 를 자동으로 넣는다</button>
+            <div class="mcq-exp"><b>정답 C</b> — 반드시 서브 생성자의 <b>첫 줄</b> (19쪽) — 둘째 줄이면 <code>call to super must be first statement in constructor</code> (javac 로 확인)</div>
+        </div>
+        <div class="mcq" data-correct="D">
+            <p class="mcq-q"><span class="mcq-no">35</span>10주차 자바 상속의 특징으로 <b>틀린</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 클래스의 다중 상속을 지원하지 않는다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 상속 횟수에 제한이 없다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 모든 클래스는 자동으로 <code>java.lang.Object</code> 를 상속받는다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>class C extends A, B { }</code> 처럼 두 클래스를 한 번에 상속받을 수 있다</button>
+            <div class="mcq-exp"><b>정답 D</b> — 5장 9쪽 — extends 뒤 클래스는 <b>하나만</b> · <code>extends A, B</code> → javac <code>'{' expected</code> 컴파일 오류</div>
+        </div>
+        <div class="mcq" data-correct="A">
+            <p class="mcq-q"><span class="mcq-no">36</span>10주차 ConstructorEx3 — 슈퍼 클래스 AAA 에 <code>AAA()</code> 와 <code>AAA(int x)</code> 가 있고, 서브 클래스 <code>BBB(int x)</code> 의 첫 줄에 super 가 <b>없을 때</b> <code>new BBB(5)</code> 에서 실행되는 슈퍼 클래스 생성자는?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>AAA()</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>AAA(int x)</code> — 5 가 전달된다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 슈퍼 클래스 생성자는 실행되지 않는다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 컴파일 오류가 난다</button>
+            <div class="mcq-exp"><b>정답 A</b> — 컴파일러가 넣는 것은 매개변수 없는 <code>super();</code> → <b>AAA()</b> → 출력 생성자A / 매개변수생성자B (18쪽 · 직접 실행)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">37</span>10주차 상속과 private — 슈퍼 클래스 Point 의 <code>private int x</code> 를 서브 클래스 ColorPoint 의 메소드에서 <code>System.out.println(x);</code> 로 직접 쓰면?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 상속받았으니 정상 출력된다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 컴파일 오류 (<code>x has private access in Point</code>)</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 0 이 출력된다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 실행 중 NullPointerException</button>
+            <div class="mcq-exp"><b>정답 B</b> — private = 그 클래스 안에서만 (서브 클래스도 X · 10쪽) → 부모의 생성자(<code>super(x, y)</code>)나 메소드(<code>showPoint()</code>)를 거쳐서 · javac 로 확인</div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers=".class|class" data-explain=".java → javac 컴파일 → .class (JVM 이 실행)">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>자바 소스를 컴파일하면 만들어지는 <b>바이트코드 파일</b>의 확장자는?</p>
@@ -2105,10 +2596,40 @@ public class Main {
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
+        <div class="quiz-item" data-answers="extends" data-explain="extends = 슈퍼 클래스를 확장(상속) · 5장 5쪽">
+            <p class="quiz-q"><span class="quiz-cat">주관식 33</span>10주차 상속 — 클래스를 상속받을 때 쓰는 키워드는? (<code>class ColorPoint ( ? ) Point</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="서브 클래스|서브클래스|sub class|subclass|하위 클래스|하위클래스" data-full="서브 클래스" data-explain="부모 = 슈퍼 클래스(super class) · 자식 = 서브 클래스(sub class) · 5장 5쪽">
+            <p class="quiz-q"><span class="quiz-cat">주관식 34</span>10주차 상속 — 자바에서 <b>자식 클래스</b>를 부르는 이름은? (부모 클래스 = 슈퍼 클래스)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="Object|java.lang.Object|오브젝트" data-full="Object" data-explain="상속의 최상위 조상 = java.lang.Object (5장 9쪽) · toString() 도 여기서 물려받음">
+            <p class="quiz-q"><span class="quiz-cat">주관식 35</span>10주차 — extends 를 쓰지 않아도 모든 클래스가 <b>자동으로</b> 상속받는 최상위 조상 클래스는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="super|super()|슈퍼" data-full="super" data-explain="super(x) → AAAA(int x) 호출 → 매개변수생성자A5 → 매개변수생성자B5 · 반드시 첫 줄 (19쪽)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 36</span>10주차 ConstructorEx4 — 서브 클래스 생성자의 <b>첫 줄</b>에서 슈퍼 클래스의 매개변수 생성자를 직접 고르는 <code>( ? )(x);</code> 의 ( ? ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="toString|toString()|투스트링" data-full="toString()" data-explain="println(t1) = println(t1.toString()) · Book · TextBook 이 public String toString() 으로 다시 씀 (javac · java 로 확인)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 37</span>10주차 과제 4 — <code>System.out.println(t1)</code> 처럼 객체를 출력하면 자동으로 불리는, Object 에서 물려받는 메소드 이름은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
     </section>
 
     <section class="card" id="output">
-        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~9주차</span></h2>
+        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~10주차</span></h2>
         <div class="tip">📝 시험의 <b>“실행결과를 쓰시오”</b> 대비 — 코드를 눈으로 따라가며 화면에 찍힐 결과를 적고 <b>확인</b>을 누르세요. 줄마다 <b>Enter</b>, 띄어쓰기 개수·빈 줄은 채점에서 무시하고 <b>글자·숫자·기호</b>는 정확히 봐요 (칸수 문제만 띄어쓰기까지). <code>print</code> 는 줄을 안 바꾸고 <code>println</code> 은 바꿔요. 정답은 모두 <b>실제로 실행한 결과</b>예요.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="oq-score"></div>
@@ -2663,10 +3184,120 @@ A
 </script>
             <div class="oq-why">💡 <b>풀이</b> — <code>new Box()</code> → this(1) → Box(int) → this(1, 2) → w = 1 · h = 2 → 돌아와서 <b>B</b> → 다시 돌아와서 <b>A</b> → w × h = <b>2</b> (안쪽 생성자의 println 이 먼저)</div>
         </div>
+        <div class="oq" id="oq-oj25">
+            <p class="oq-q"><span class="oq-no">25</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">10주차</span></p>
+            <pre><code class="language-java">class A {
+    A() {
+        System.out.println("A");
+    }
+    A(int n) {
+        System.out.println("A" + n);
+    }
+}
+class B extends A {
+    B() {
+        System.out.println("B");
+    }
+    B(int n) {
+        super(n * 2);
+        System.out.println("B" + n);
+    }
+}
+class C extends B {
+    C(int n) {
+        System.out.println("C" + n);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        new C(3);
+        new B(5);
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+A
+B
+C3
+A10
+B5
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>new C(3)</code> → C(int) 첫 줄에 super 가 없음 → <code>super()</code> → B() → 또 <code>super()</code> → A() → <b>A</b> → <b>B</b> → <b>C3</b> · <code>new B(5)</code> → <code>super(5 * 2)</code> → A(int) → <b>A10</b> → <b>B5</b> (슈퍼 생성자가 먼저 실행)</div>
+        </div>
+        <div class="oq" id="oq-oj26">
+            <p class="oq-q"><span class="oq-no">26</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">10주차</span></p>
+            <pre><code class="language-java">class Person {
+    private String name;
+    Person(String name) {
+        this.name = name;
+    }
+    void printInfo() {
+        System.out.print(name + " ");
+    }
+}
+class Student extends Person {
+    private int id;
+    Student(String name, int id) {
+        super(name);
+        this.id = id;
+    }
+    void printStudent() {
+        System.out.print(id + " ");
+        super.printInfo();
+        System.out.println(id * 2);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Student s = new Student("홍길동", 7);
+        s.printStudent();
+        new Student("윤희근", 10).printStudent();
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+7 홍길동 14
+10 윤희근 20
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>print(id + " ")</code> → 7 · <code>super.printInfo()</code> → 홍길동 · <code>println(id * 2)</code> → 14 → 한 줄 <b>7 홍길동 14</b> · 두 번째 객체 <b>10 윤희근 20</b></div>
+        </div>
+        <div class="oq" id="oq-oj27">
+            <p class="oq-q"><span class="oq-no">27</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">10주차</span></p>
+            <pre><code class="language-java">class Book {
+    private String title;
+    Book(String title) {
+        this.title = title;
+    }
+    public String toString() {
+        return title;
+    }
+}
+class Magazine extends Book {
+    private int month;
+    Magazine(String title, int month) {
+        super(title);
+        this.month = month;
+    }
+    public String toString() {
+        return super.toString() + " " + month;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Magazine m = new Magazine("자바", 11);
+        System.out.println(m.toString());
+        Book b = new Book("웹");
+        System.out.println(b.toString() + m.toString());
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+자바 11
+웹자바 11
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>m.toString()</code> → <code>super.toString()</code> 자바 + " " + 11 → <b>자바 11</b> · <code>b.toString() + m.toString()</code> → 웹 + 자바 11 → <b>웹자바 11</b> (사이에 칸 없음)</div>
+        </div>
     </section>
 
     <section class="card" id="code">
-        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~9주차</span></h2>
+        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~10주차</span></h2>
         <div class="tip">📝 문제를 읽고 <b>전체 소스코드</b>를 붙여넣은 뒤 <b>▶ 채점하기</b>를 누르세요. 입력 예 말고도 <b>숨은 테스트</b> 여러 개로 실제로 실행해서 출력이 모두 같아야 통과예요. Java 는 인터넷의 채점 서버(Wandbox · OpenJDK)에서 실행돼요. <code>package</code> 줄이나 클래스 이름은 그대로 붙여넣어도 괜찮아요. 입력은 <code>Scanner</code> 로 받습니다.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드를 채점 문제로 만든 것 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="ct-score"></div>
@@ -3110,6 +3741,107 @@ public class Main {
         String title = sc.nextLine();           // 한 줄 통째로 (띄어쓰기 포함)
         Book b = new Book(title);               // 저자 없이 → 작자미상
         b.printInfo();
+        sc.close();
+    }
+}
+</script>
+        </div>
+        <div class="ct" id="ct-j16" data-lang="java" data-must="[&quot;extends\\s+Person&quot;, &quot;super\\s*\\(\\s*\\w+\\s*\\)&quot;, &quot;super\\s*\\.\\s*printInfo\\s*\\(&quot;]" data-must-msg="extends Person · 생성자 첫 줄 super(이름) · super.printInfo() 를 써야 해요.">
+            <p class="ct-q"><span class="ct-no">16</span>상속 — Person → Student (super · super.printInfo)<span class="ct-tag">10주차 · 상속 · super</span></p>
+            <p class="ct-desc">이름 · 학번 · 전공을 <b>한 줄씩</b> 입력받아 Student 객체를 만들고 <code>printStudent()</code> 로 출력하세요. Person(<code>private String name</code> · <code>printInfo()</code> → <code> 이름 : 이름</code> 을 줄바꿈 없이) 을 <b>상속</b>한 Student(학번 · 전공)의 생성자는 첫 줄에 <b>super(name)</b>, printStudent() 는 학번 → <b>super.printInfo()</b> → 전공 순서로 <b>한 줄</b>에 출력해요. 형식: <code>학번 : 학번 이름 : 이름 전공 : 전공</code> (public 클래스 이름은 Main)</p>
+            <div class="ct-ex"><pre class="io ct-in"><code>홍길동
+2024002
+정보통신</code></pre><pre class="io ct-out"><code>학번 : 2024002 이름 : 홍길동 전공 : 정보통신</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="상속 — Person → Student (super · super.printInfo) 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "홍길동\n2024002\n정보통신\n", "expect": "학번 : 2024002 이름 : 홍길동 전공 : 정보통신\n"}, {"stdin": "김자바\n2026100\n컴퓨터 소프트웨어\n", "expect": "학번 : 2026100 이름 : 김자바 전공 : 컴퓨터 소프트웨어\n"}, {"stdin": "이웹\n2025123\n웹소프트웨어\n", "expect": "학번 : 2025123 이름 : 이웹 전공 : 웹소프트웨어\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+import java.util.Scanner;
+
+class Person {                                  // 슈퍼 클래스
+    private String name;                        // 이름 (private → 자식도 직접 못 씀)
+    Person(String name) {                       // 이름을 받는 생성자
+        this.name = name;
+    }
+    void printInfo() {                          // 이름 출력 (줄바꿈 없이)
+        System.out.print(" 이름 : " + name);
+    }
+}
+
+class Student extends Person {                  // Person 을 상속
+    private String stuId;                       // 학번
+    private String jeongong;                    // 전공
+    Student(String name, String stuId, String jeongong) {
+        super(name);                            // 첫 줄 — 부모 생성자가 이름을 채움
+        this.stuId = stuId;
+        this.jeongong = jeongong;
+    }
+    void printStudent() {
+        System.out.print("학번 : " + stuId);     // ① 학번
+        super.printInfo();                      // ② 부모 메소드 → 이름
+        System.out.println(" 전공 : " + jeongong);   // ③ 전공 + 줄바꿈
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String name = sc.nextLine();            // 이름 (한 줄)
+        String stuId = sc.nextLine();           // 학번
+        String jeongong = sc.nextLine();        // 전공 (띄어쓰기 포함 가능)
+        Student s = new Student(name, stuId, jeongong);
+        s.printStudent();
+        sc.close();
+    }
+}
+</script>
+        </div>
+        <div class="ct" id="ct-j17" data-lang="java" data-must="[&quot;extends\\s+Book&quot;, &quot;super\\s*\\.\\s*toString\\s*\\(&quot;, &quot;public\\s+String\\s+toString\\s*\\(&quot;]" data-must-msg="extends Book · public String toString() · super.toString() 을 써야 해요.">
+            <p class="ct-q"><span class="ct-no">17</span>toString 다시 쓰기 — Book → TextBook<span class="ct-tag">10주차 · 상속 · toString</span></p>
+            <p class="ct-desc">제목(한 줄 · 띄어쓰기 포함) · 페이지수(정수) · 학교(한 줄)를 입력받아 TextBook 객체를 만들고 <code>System.out.println(t.toString());</code> 으로 출력하세요. Book(제목 · 페이지수)의 <code>public String toString()</code> 은 <code>제목 : 제목 페이지수 : 페이지수</code> 를 돌려주고, Book 을 <b>상속</b>한 TextBook(학교)은 toString 을 다시 써서 <b>super.toString()</b> 뒤에 <code> 학교 : 학교</code> 를 붙여 돌려줘요. (public 클래스 이름은 Main)</p>
+            <div class="ct-ex"><pre class="io ct-in"><code>자바프로그래밍
+200
+동양미래대학교</code></pre><pre class="io ct-out"><code>제목 : 자바프로그래밍 페이지수 : 200 학교 : 동양미래대학교</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="toString 다시 쓰기 — Book → TextBook 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "자바프로그래밍\n200\n동양미래대학교\n", "expect": "제목 : 자바프로그래밍 페이지수 : 200 학교 : 동양미래대학교\n"}, {"stdin": "웹 프로그래밍\n100\n동양미래대학교\n", "expect": "제목 : 웹 프로그래밍 페이지수 : 100 학교 : 동양미래대학교\n"}, {"stdin": "국어\n40\n서울초등학교\n", "expect": "제목 : 국어 페이지수 : 40 학교 : 서울초등학교\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+import java.util.Scanner;
+
+class Book {                                    // 슈퍼 클래스 — 책
+    private String title;                       // 제목
+    private int pages;                          // 페이지수
+    Book(String title, int pages) {
+        this.title = title;
+        this.pages = pages;
+    }
+    public String toString() {                  // Object 의 toString 을 다시 씀 (public 필수)
+        return "제목 : " + title + " 페이지수 : " + pages;
+    }
+}
+
+class TextBook extends Book {                   // Book 을 상속 + 학교
+    private String school;
+    TextBook(String title, int pages, String school) {
+        super(title, pages);                    // 첫 줄 — 부모 생성자
+        this.school = school;
+    }
+    public String toString() {                  // 부모 글자 + 내 필드
+        return super.toString() + " 학교 : " + school;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String title = sc.nextLine();           // 제목 (띄어쓰기 포함)
+        int pages = sc.nextInt();               // 페이지수
+        sc.nextLine();                          // 숫자 뒤에 남은 줄바꿈 버리기
+        String school = sc.nextLine();          // 학교
+        TextBook t = new TextBook(title, pages, school);
+        System.out.println(t.toString());
         sc.close();
     }
 }

@@ -22,13 +22,13 @@
 
     <header class="page-head">
         <h1>웹프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 9주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29 · 10/13 · 10/27) · 강의시간에 나온 내용 전부 정리</p>
+        <p>1주차 ~ 10주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29 · 10/13 · 10/27 · 11/3) · 강의시간에 나온 내용 전부 정리</p>
     </header>
 
     <div id="week-nav" data-subject="웹프로그래밍"></div>
 
     <div class="tip">
-        📖 <b>이 페이지 보는 법</b> : ⚠️ 교수님이 <b>강의시간에 말한 내용을 전부 시험(100문제)</b>으로 낸다고 하셨습니다. 한 항목도 건너뛰지 마세요. ★는 필수 암기입니다.
+        📖 <b>이 페이지 보는 법</b> : ⚠️ 교수님이 <b>강의시간에 말한 내용을 전부 시험(100문제)</b>으로 낸다고 하셨습니다. 한 항목도 건너뛰지 마세요. ★는 필수 암기입니다.<br>🔥 <b>기말고사는 필기가 아닌 실기</b>로 시행해요 (10주차 ✍️) — 직접 코드를 짜는 시험이니 <a href="#s40">40번</a> 배열 메서드 · 이벤트 코드를 손으로 쳐 보기
     </div>
 
     <nav class="toc">
@@ -71,6 +71,7 @@
         <a href="#s37">37.🔥7주차 switch·복사·BOM</a>
         <a href="#s38">38.🔥이벤트4요소</a>
         <a href="#s39">39.요소순회·JSON</a>
+        <a href="#s40">40.🔥배열메서드·CRUD</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1357,9 +1358,250 @@ object
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#loop" title="그림 — 요소 순회" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#loop" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 요소 순회 — 새 창으로 크게 보기</a></p></div>
     </section>
 
+    <section class="card" id="s40">
+        <h2>40. 🔥 10주차 — 기말 = 실기 · 누른 항목 선택 (e.target) · 배열 요소 조작 6가지 · 순회 · 탐색 · ✍️ CRUD<span class="week">10주차</span></h2>
+        <div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> — <b>“기말고사는 필기가 아닌 실기로 시행함”</b> → 중간고사(필기)와 달리 <b>직접 코드를 짜는 시험</b>이에요 · <a href="weeks/웹프로그래밍-15주차-기말고사.html">기말고사 정리</a> · 오늘 배열 메서드는 <a href="웹프로그래밍-실제시험.html">🔒 실제시험</a> 코드 작성 문제로 손으로 쳐 보기</div>
+        <p>수업 파일 <b>1027_01_event.html</b> (9주차 파일에 오늘 코드를 더함) · <b>1103_01_요소조작.js</b> · <b>1103_02_요소순회탐색.js</b> · 출력은 크롬 · node 로 직접 실행한 값이에요.</p>
+        <h3>✍️ 복습 — 이벤트 4요소 + 누른 항목 선택하기 (1027_01_event.html)</h3>
+        <p><span class="wk-tag note">✍️ 필기</span> — “복습:(이벤트,이벤트소스,이벤트 헨들러(리스너),이벤트객체)” → 뜻은 <a href="#s38">38번</a> 그대로 · 오늘은 <b>목록(ul)을 누르면 그 항목을 제목으로 올리고 파랗게 표시</b>하는 코드를 더했어요.</p>
+        <table class="ref">
+            <tr><th>4요소</th><th>9주차 — 목록 추가 버튼</th><th>오늘 더한 코드 — 목록 누르기</th></tr>
+            <tr><td>이벤트</td><td><code>'click'</code></td><td><code>'click'</code></td></tr>
+            <tr><td>이벤트 소스</td><td><code>addBtn</code> (버튼)</td><td><code>list</code> (ul) — 🤖 실제로 누른 li 는 <code>e.target</code></td></tr>
+            <tr><td>이벤트 핸들러 (= 리스너)</td><td><code>function(){ … }</code> (이름 없는 함수)</td><td><code>activeItem</code> (이름 있는 함수 — 괄호 없이 <b>이름만</b> 넘김)</td></tr>
+            <tr><td>이벤트 객체</td><td>받지 않음</td><td><code>e</code> — 핸들러의 매개변수</td></tr>
+        </table>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;                                                  &lt;!-- HTML5 문서라고 알림 --&gt;
+&lt;html lang="ko"&gt;                                                 &lt;!-- 문서 시작 · 한국어 --&gt;
+&lt;head&gt;                                                           &lt;!-- 문서 정보 시작 --&gt;
+    &lt;meta charset="UTF-8"&gt;                                       &lt;!-- 한글이 깨지지 않게 UTF-8 --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;   &lt;!-- 폰 화면 폭에 맞춤 --&gt;
+    &lt;title&gt;Document&lt;/title&gt;                                      &lt;!-- 탭 제목 --&gt;
+    &lt;style&gt;                                                      /* CSS 시작 (9주차와 같음) */
+        #add-btn{                                                /* 목록 추가 버튼 */
+            padding: 5px 10px;                                   /* 안쪽 여백 위아래 5px · 좌우 10px */
+            border: 0;                                           /* 테두리 없앰 */
+            background: #f80;                                    /* 주황 배경 */
+            color: white;                                        /* 흰 글자 */
+            border-radius: 5px;                                  /* 모서리 둥글게 */
+        }                                                        /* #add-btn 끝 */
+        ul {                                                     /* 목록 */
+            padding: 0;                                          /* 왼쪽 들여쓰기 없앰 */
+            list-style-position: inside;                         /* 글머리 기호(•)를 안쪽에 */
+        }                                                        /* ul 끝 */
+        li {                                                     /* 목록 한 줄 */
+            border-bottom: 1px solid #999;                       /* 아래 회색 선 */
+            padding: 5px 0;                                      /* 위아래 여백 5px */
+        }                                                        /* li 끝 */
+        .active {                                                /* ★ 9주차엔 안 쓰던 클래스 → 오늘 누른 li 에 붙임 */
+            background: #abc;                                    /* 연한 파랑 배경 */
+        }                                                        /* .active 끝 */
+    &lt;/style&gt;                                                     &lt;!-- CSS 끝 --&gt;
+&lt;/head&gt;                                                          &lt;!-- 문서 정보 끝 --&gt;
+&lt;body&gt;                                                           &lt;!-- 화면에 보이는 부분 --&gt;
+    &lt;h1 id="title"&gt;할일 목록&lt;/h1&gt;                                 &lt;!-- 제목 → 누른 li 의 글자로 바뀜 --&gt;
+    &lt;button id="add-btn"&gt;목록 추가&lt;/button&gt;                       &lt;!-- 목록 추가 버튼 (9주차) --&gt;
+    &lt;ul id="list"&gt;                                               &lt;!-- 🔥 오늘 리스너를 다는 곳 — li 4개의 부모 --&gt;
+        &lt;li&gt;제목 1&lt;/li&gt;                                           &lt;!-- 항목 1 --&gt;
+        &lt;li&gt;제목 2&lt;/li&gt;                                           &lt;!-- 항목 2 --&gt;
+        &lt;li&gt;제목 3&lt;/li&gt;                                           &lt;!-- 항목 3 --&gt;
+        &lt;li&gt;제목 4&lt;/li&gt;                                           &lt;!-- 항목 4 --&gt;
+    &lt;/ul&gt;                                                        &lt;!-- 목록 끝 --&gt;
+    &lt;script&gt;                                                     // 자바스크립트 시작
+        let title = document.getElementById('title');           // h1 → 오늘은 제목 글자를 바꿀 때 씀
+        let list = document.getElementById('list');             // ul → 리스너를 달 곳 + 새 li 를 붙일 곳
+        // let li = document.getElementsByTagName('li');        // 오늘 주석 처리 — li 들은 아래에서 liArray 로 구함
+        let addBtn = document.getElementById('add-btn');        // 목록 추가 버튼
+
+        list.addEventListener('click',activeItem);              // ul 안을 누르면 activeItem 실행 · 함수 이름만(괄호 X) 넘김 · 함수가 아래에 있어도 호이스팅이라 됨
+        function activeItem(e){                                 // 이벤트 핸들러 — e = 이벤트 객체 (브라우저가 넣어 줌)
+            console.log(e);                                     // 크롬 콘솔 → PointerEvent {…} (클릭 정보를 담은 객체)
+            let liArray=e.target.parentNode.children;           // e.target = 누른 li → .parentNode = ul → .children = ul 의 자식 li 4개
+            if (e.target.nodeName=='LI'){                       // 누른 요소가 li 일 때만 (nodeName = 대문자 태그 이름 'LI') · ul 자체면 'UL' → 건너뜀
+                title.innerHTML=e.target.innerHTML;             // 누른 li 의 글자 "제목 3" → h1 에 넣음 → 제목이 "제목 3"
+                /*for(var i=0;i&lt;e.target.parentNode.children.length;i++){     ← 방법 1: 인덱스 for (긴 식 그대로)
+                    e.target.parentNode.children[i].removeAttribute('class');
+                }
+                for(var i=0;i&lt;liArray.length;i++){                            ← 방법 2: 인덱스 for (liArray 변수로 짧게)
+                    liArray[i].removeAttribute('class');
+                }*/                                             // 방법 1 · 2 는 /* */ 로 막아 둠 → 아래 방법 3 만 실행
+                for(let item of liArray){                       // 방법 3: for…of 로 li 를 하나씩 (9주차 요소 순회)
+                    item.removeAttribute('class');              // 모든 li 의 class 속성을 지움 → 전에 누른 li 의 표시가 없어짐
+                }                                               // for…of 끝
+                e.target.setAttribute('class','active');        // 누른 li 에만 class="active" → .active CSS → 연한 파랑 배경
+            }                                                   // if 끝
+        };                                                      // activeItem 끝 (함수 뒤 ; 는 빈 문장 — 있어도 없어도 같음)
+        addBtn.addEventListener('click',function(){ //이벤트,이벤트리스너,이벤트소스   ← 9주차 코드 그대로
+            let txt=prompt("할 일 입력");                         // 입력 창 → 입력한 글자가 txt 에
+            list.innerHTML+='&lt;li&gt;'+txt+'&lt;/li&gt;';                  // 목록 끝에 li 추가 → 리스너가 ul 에 있어서 새 li 도 누르면 됨
+        });                                                      // 핸들러 끝 · addEventListener 끝
+    &lt;/script&gt;                                                    &lt;!-- 스크립트 끝 --&gt;
+&lt;/body&gt;                                                          &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                          &lt;!-- 문서 끝 --&gt;</code></pre>
+        <div class="tip">▶ 크롬에서 직접 눌러 본 결과 — <b>제목 3</b> 을 누르면 h1 이 <code>제목 3</code> 으로 바뀌고 제목 3 줄만 연한 파랑(#abc) · 이어서 <b>제목 1</b> 을 누르면 h1 은 <code>제목 1</code>, 파란 표시도 제목 1 로 옮겨 가요 · 콘솔에는 누를 때마다 <code>PointerEvent {…}</code> · ul 자체가 눌리면(콘솔 <code>list.click()</code>) nodeName 이 <code>'UL'</code> 이라 아무것도 안 바뀌어요.</div>
+        <table class="ref">
+            <tr><th>코드</th><th>뜻</th><th>제목 3 을 누르면</th></tr>
+            <tr><td><code>e.target</code></td><td>이벤트가 <b>실제로 일어난 요소</b> (누른 요소)</td><td><code>&lt;li&gt;제목 3&lt;/li&gt;</code></td></tr>
+            <tr><td><code>e.currentTarget</code> (= <code>this</code>) 🤖</td><td>리스너를 <b>단</b> 요소</td><td><code>&lt;ul id="list"&gt;</code></td></tr>
+            <tr><td><code>.parentNode</code> · <code>.children</code></td><td>부모 · 자식 요소들</td><td>ul · li 4개 (<code>liArray</code>)</td></tr>
+            <tr><td><code>.nodeName</code></td><td>태그 이름 (<b>대문자</b>)</td><td><code>'LI'</code></td></tr>
+            <tr><td><code>removeAttribute('class')</code></td><td>class 속성을 <b>지움</b></td><td>모든 li 의 active 가 없어짐</td></tr>
+            <tr><td><code>setAttribute('class','active')</code></td><td>class 속성을 <b>정함</b></td><td>제목 3 에만 <code>class="active"</code></td></tr>
+        </table>
+        <div class="tip">🤖 <b>이벤트 위임</b> (MDN event delegation) — li 의 click 은 부모 ul 까지 <b>전달(버블링)</b> 돼서 ul 에 단 리스너 하나가 받아요 → li 마다 리스너를 달지 않아도 되고 <b>목록 추가로 새로 생긴 li 도 바로 눌러져요</b> (<code>innerHTML +=</code> 는 li 를 전부 새로 만들어서 li 에 직접 단 리스너는 사라짐 — 크롬으로 확인) · <code>activeItem()</code> 처럼 괄호를 붙이면 등록하는 순간 실행돼서 <code>TypeError: Cannot read properties of undefined (reading 'target')</code> · 함수 선언이 아래에 있어도 되는 건 <a href="#s24">호이스팅</a> 덕분</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#delegate" title="그림 — 누른 항목 선택" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#delegate" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 누른 항목 선택 — 새 창으로 크게 보기</a></p></div>
+        <h3>배열 요소 조작 메서드 6가지 (1103_01_요소조작.js)</h3>
+        <pre><code class="language-javascript">// 6가지의 요소 조작 메서드                                          // 수업 파일 첫 줄 (🤖 = 값 확인용으로 더한 console.log)
+
+// 1. push : 배열의 맨 뒤에 새로운 요소를 추가하는 메서드
+let arr1 = [1, 2, 3];                                              // [1, 2, 3] · 길이 3
+const newLength = arr1.push(4, 5, 6, 7);                           // 뒤에 4 → 5 → 6 → 7 → [1,2,3,4,5,6,7] · 돌려주는 값 = 새 길이 7
+console.log(`push : [${arr1}] 반환 ${newLength}`);                  // 🤖 배열을 ${ } 에 넣으면 쉼표로 이어진 글자 → push : [1,2,3,4,5,6,7] 반환 7
+
+// 2. pop : 배열의 맨 뒤에 있는 요소를 제거하고, 반환
+let arr2 = [1, 2, 3];                                              // [1, 2, 3]
+const poppedItem = arr2.pop();                                     // 맨 뒤 3 을 뺌 → [1, 2] · 돌려주는 값 = 뺀 요소 3
+console.log(`pop : [${arr2}] 반환 ${poppedItem}`);                  // 🤖 → pop : [1,2] 반환 3
+
+// 3. shift : 배열의 맨 앞에 있는 요소를 제거, 반환
+let arr3 = [1, 2, 3];                                              // [1, 2, 3]
+const shiftedItem = arr3.shift();                                  // 맨 앞 1 을 뺌 → 남은 요소가 한 칸씩 앞으로 → [2, 3] · 반환 = 1
+console.log(`shift : [${arr3}] 반환 ${shiftedItem}`);               // 🤖 → shift : [2,3] 반환 1
+
+// 4. unshift : 배열의 맨 앞에 새로운 요소를 추가하는 메서드
+let arr4 = [1, 2, 3];                                              // [1, 2, 3]
+const newLength2 = arr4.unshift(0);                                // 맨 앞에 0 → [0, 1, 2, 3] · 반환 = 새 길이 4
+console.log(`unshift : [${arr4}] 반환 ${newLength2}`);              // 🤖 → unshift : [0,1,2,3] 반환 4
+
+// 5. slice : 마치 가위처럼, 배열의 특정 범위를 잘라내서 새로운 배열로 반환 slice(시작index, 끝index직전까지)
+let arr5 = [1, 2, 3, 4, 5];                                        // 인덱스 0 ~ 4 에 값 1 ~ 5
+let sliced = arr5.slice(2, 5);                                     // 2 부터 5 직전(4)까지 → [2]=3 · [3]=4 · [4]=5 → [3, 4, 5]
+let sliced2 = arr5.slice(4);                                       // 끝 생략 → 4 부터 끝까지 → [5]
+let sliced3 = arr5.slice(-3); //음수값은 배열끝에서부터              // -3 → 길이 5 - 3 = 2 → slice(2) 와 같음 → [3, 4, 5]
+console.log(`slice : [${sliced}] [${sliced2}] [${sliced3}] 원본 [${arr5}]`);   // 🤖 원본 arr5 는 그대로 [1,2,3,4,5]
+
+// 6. concat
+// 두개의 서로 다른 배열을 이어 붙여서 새로운 배열을 반환
+let arr6 = [1, 2];                                                 // 앞 배열
+let arr7 = [3, 4];                                                 // 뒤 배열
+
+let concatedArr = arr6.concat(arr7);                               // arr6 뒤에 arr7 요소를 이어 새 배열 → [1, 2, 3, 4] (arr6 · arr7 은 그대로)
+console.log(concatedArr);                                          // 수업 파일의 출력 줄 → [ 1, 2, 3, 4 ] (node 는 [ ] 안쪽을 한 칸씩 띄워 보여 줌)</code></pre>
+        <pre class="io"><code class="language-text">push : [1,2,3,4,5,6,7] 반환 7
+pop : [1,2] 반환 3
+shift : [2,3] 반환 1
+unshift : [0,1,2,3] 반환 4
+slice : [3,4,5] [5] [3,4,5] 원본 [1,2,3,4,5]
+[ 1, 2, 3, 4 ]</code></pre>
+        <p>수업 파일은 마지막 <code>console.log(concatedArr)</code> 한 줄만 출력해요 · 위 다섯 줄은 값을 보려고 🤖 가 더한 <code>console.log</code> 예요.</p>
+        <table class="ref">
+            <tr><th>메서드</th><th>하는 일</th><th>원본</th><th>반환값</th></tr>
+            <tr><td><code>push(값, …)</code></td><td><b>맨 뒤</b>에 추가</td><td>바뀜</td><td><b>새 길이</b></td></tr>
+            <tr><td><code>pop()</code></td><td><b>맨 뒤</b> 하나 제거</td><td>바뀜</td><td><b>뺀 요소</b></td></tr>
+            <tr><td><code>shift()</code></td><td><b>맨 앞</b> 하나 제거</td><td>바뀜</td><td><b>뺀 요소</b></td></tr>
+            <tr><td><code>unshift(값, …)</code></td><td><b>맨 앞</b>에 추가</td><td>바뀜</td><td><b>새 길이</b></td></tr>
+            <tr><td><code>slice(시작, 끝)</code></td><td>시작 ~ <b>끝 직전</b>까지 잘라 새 배열 · 끝 생략 = 끝까지 · 음수 = 뒤에서부터</td><td><b>그대로</b></td><td><b>새 배열</b></td></tr>
+            <tr><td><code>concat(배열)</code></td><td>이어 붙인 새 배열</td><td><b>그대로</b></td><td><b>새 배열</b></td></tr>
+        </table>
+        <div class="tip">🤖 외우기 — <b>push · pop = 뒤</b> · <b>shift · unshift = 앞</b> · 넣는 둘은 <b>새 길이</b>, 빼는 둘은 <b>뺀 값</b> · <code>slice(-3)</code> = 5 + (−3) = 2 → <code>slice(2)</code> · <code>const arr = [1]; arr.push(2);</code> 도 돼요 (const 는 <code>arr = [3]</code> 같은 <b>다시 대입</b>만 막음 → <code>TypeError: Assignment to constant variable.</code>) — 모두 node 로 확인</div>
+        <h3>괄호넣기 — 배열 요소 조작 ( ① ) ~ ( ③ )</h3>
+        <pre><code class="language-javascript">let arr = [1, 2, 3];
+let n = arr.( ① )(4);         // 맨 뒤에 4 추가 → n 은 4
+let first = arr.( ② )();      // 맨 앞의 1 을 빼서 돌려줌
+let part = arr.( ③ )(1, 3);   // 원본은 그대로 · 인덱스 1 ~ 2 를 새 배열로 → [3, 4]</code></pre>
+        <div class="quiz-item" data-answers="push|push()" data-explain="push = 맨 뒤에 추가 · 반환 = 새 길이 → [1, 2, 3, 4] · n = 4">
+            <p class="quiz-q"><span class="quiz-cat">①</span><b>맨 뒤</b>에 추가하고 <b>새 길이</b>를 돌려주는 <code>arr.( ① )(4)</code> 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="shift|shift()" data-explain="shift = 맨 앞 하나 제거 · 반환 = 뺀 요소 1 → arr = [2, 3, 4] (맨 뒤 제거는 pop)">
+            <p class="quiz-q"><span class="quiz-cat">②</span><b>맨 앞</b> 요소를 빼서 돌려주는 <code>arr.( ② )()</code> 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="slice|slice()" data-explain="slice(1, 3) = 인덱스 1 부터 3 직전(2)까지 → [2, 3, 4] 의 [1] · [2] → [3, 4] · 원본 그대로">
+            <p class="quiz-q"><span class="quiz-cat">③</span>원본을 바꾸지 않고 인덱스 1 ~ 2 를 잘라 새 배열로 돌려주는 <code>arr.( ③ )(1, 3)</code> 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#arrmod" title="그림 — 요소 조작 6가지" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#arrmod" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 요소 조작 6가지 — 새 창으로 크게 보기</a></p></div>
+        <h3>배열 순회 · 탐색 — forEach · includes · indexOf · findIndex (1103_02_요소순회탐색.js)</h3>
+        <div class="tip">⚠️ <b>수업 파일 그대로는 실행되지 않아요</b> (node) — 3줄 <code>arr.forEach</code> → <code>ReferenceError: arr is not defined</code> · 13줄 <code>arr2.inIncludes(1)</code> → <code>TypeError: arr2.inIncludes is not a function</code> · 19 · 24줄 <code>const findedIndex</code> 두 번 → <code>SyntaxError: Identifier 'findedIndex' has already been declared</code> · 25줄 <code>${findexIndex}</code> → <code>ReferenceError: findexIndex is not defined</code> — SyntaxError 는 실행 <b>전에</b> 잡혀서 <b>한 줄도 실행되지 않아요</b>. 아래는 4곳을 고친 코드예요.</div>
+        <pre><code class="language-javascript">//forEach
+let arr1=[1,2,3];                                  // [1, 2, 3]
+arr1.forEach(function(item,idx,arr){               // ⚠️ 수업 파일 arr.forEach → arr1 · 요소마다 함수를 한 번씩 — item = 값 · idx = 인덱스 · arr = 배열 전체
+    console.log(idx,item*2);                       // (0, 1*2) → 0 2 · (1, 2*2) → 1 4 · (2, 3*2) → 2 6
+});                                                // forEach 끝 (돌려주는 값 없음 → undefined)
+
+let doubledArr=[];                                 // 빈 배열 []
+arr1.forEach((item)=&gt;{                             // 화살표 함수 · 필요한 매개변수(item)만 받아도 됨
+    doubledArr.push(item*2);                       // 2 → 4 → 6 을 차례로 뒤에 추가 (오늘 배운 push)
+});                                                // forEach 끝
+console.log(doubledArr);                           // 🤖 확인 → [ 2, 4, 6 ]
+
+let arr2=[1,2,3];                                  // [1, 2, 3]
+let isInclude=arr2.includes(1); //배열에 특정 요소가 있는지 확인하는 메서드   ⚠️ inIncludes → includes · 1 이 있음 → true
+console.log(isInclude);                            // 🤖 → true
+
+let arr3=[1,2,3];                                  // [1, 2, 3]
+let index = arr3.indexOf(3); //배열안에 숫자3의 인덱스 번호를 반환 결과:2   ← 3 은 [2] 칸에 → 2
+console.log(index);                                // 🤖 → 2
+
+let arr4=[1,2,3];                                  // [1, 2, 3]
+const findedIndex=arr4.findIndex(//모든 요소를 순회하면서 콜백함수를 만족하는 그런 특정 요소의 인덱스를 반환하는 메서드
+    (item)=&gt;{                                      // 콜백 — item = 1 → 2 … (참이 나오면 거기서 멈춤)
+        if(item===2) return true;                  // 1: return 없음 → undefined(거짓) → 다음 · 2: true → 인덱스 1
+    }                                              // 콜백 끝
+);                                                 // findIndex 끝 → findedIndex = 1
+const findedIndex2=arr4.findIndex((item)=&gt;item===2);   // ⚠️ 같은 이름 const 두 번 → 이름을 findedIndex2 로 · 한 줄 화살표 = 식의 값이 반환 → 1
+console.log(`findexIndex : ${findedIndex}`);       // ⚠️ ${findexIndex}(오타) → ${findedIndex} · 따옴표 안 글자는 그대로 → findexIndex : 1
+console.log(findedIndex2);                         // 🤖 → 1
+
+let objectArr=[{name:"에스파"},{name:"홍길동"}];    // 객체 2개를 담은 배열
+
+console.log(objectArr.indexOf({name:"에스파"}));//못 찾음 얕은 비교이기 때문   ← 🤖 console.log 로 감쌈 · 새로 만든 객체라 주소가 다름 → -1
+console.log(objectArr.findIndex(                   // 🤖 console.log 로 감쌈
+    (item)=&gt;item.name==="에스파"                    // 객체 안 name 값(문자열)끼리 비교 → [0] 에서 참
+));                                                // → 0</code></pre>
+        <pre class="io"><code class="language-text">0 2
+1 4
+2 6
+[ 2, 4, 6 ]
+true
+2
+findexIndex : 1
+1
+-1
+0</code></pre>
+        <table class="ref">
+            <tr><th>메서드</th><th>하는 일</th><th>반환값</th><th>없으면</th></tr>
+            <tr><td><code>forEach(콜백)</code></td><td>요소마다 콜백을 한 번씩 — <code>(item, idx, arr)</code> = 값 · 인덱스 · 배열</td><td>없음 (undefined)</td><td>—</td></tr>
+            <tr><td><code>includes(값)</code></td><td>그 값이 <b>있는지</b></td><td>true / false</td><td>false</td></tr>
+            <tr><td><code>indexOf(값)</code></td><td>그 값의 <b>(첫) 인덱스</b></td><td>인덱스</td><td><b>-1</b></td></tr>
+            <tr><td><code>findIndex(콜백)</code></td><td>콜백이 <b>참을 돌려준 첫 요소</b>의 인덱스</td><td>인덱스</td><td><b>-1</b></td></tr>
+        </table>
+        <div class="tip">⚠️ <b>팩트체크</b> — 수업 주석 “못 찾음 얕은 비교이기 때문” → <code>indexOf</code> 는 <code>===</code> 로 비교해서 객체는 <b>주소(참조)</b> 가 같아야 같다고 봐요 (<a href="#s37">7주차</a> <code>o3 === o4</code> → false 와 같은 이유) · 새로 쓴 <code>{name:"에스파"}</code> 는 다른 객체라 <b>-1</b> · 배열 안의 그 객체를 넘기면 <code>objectArr.indexOf(objectArr[0])</code> → <b>0</b> · 내용으로 찾으려면 <code>findIndex</code> (node 로 확인)</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#search" title="그림 — 순회 · 탐색" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#search" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 순회 · 탐색 — 새 창으로 크게 보기</a></p></div>
+        <h3>✍️ 프론트엔드 · 백엔드 · CRUD — 다음 주 예고</h3>
+        <p><span class="wk-tag note">✍️ 필기</span> — “프론트엔드 백엔드 뜻 복습” → <a href="#s2">2번</a>: <b>프런트엔드</b> = 클라이언트(웹브라우저)에서 실행되는 기술 · <b>백엔드</b> = 서버에서 실행되는 기술</p>
+        <p><span class="wk-tag note">✍️ 필기</span> — “CRUD가 무엇인가” → 🤖 <b>CRUD</b> = <b>C</b>reate · <b>R</b>ead · <b>U</b>pdate · <b>D</b>elete — 데이터를 다루는 기본 동작 4가지</p>
+        <table class="ref">
+            <tr><th>CRUD</th><th>뜻</th><th>할 일 목록에서</th><th>🤖 HTTP</th><th>🤖 SQL</th></tr>
+            <tr><td><b>C</b>reate</td><td>생성</td><td>할 일 추가</td><td>POST</td><td>INSERT</td></tr>
+            <tr><td><b>R</b>ead</td><td>조회</td><td>목록 보기</td><td>GET</td><td>SELECT</td></tr>
+            <tr><td><b>U</b>pdate</td><td>수정</td><td>할 일 고치기</td><td>PUT · PATCH</td><td>UPDATE</td></tr>
+            <tr><td><b>D</b>elete</td><td>삭제</td><td>할 일 지우기</td><td>DELETE</td><td>DELETE</td></tr>
+        </table>
+        <div class="tip">🤖 HTTP · SQL 칸은 CRUD 를 설명할 때 흔히 짝짓는 표 (위키백과 CRUD — Update 는 통째로 바꾸면 PUT · 일부만 고치면 PATCH) · 오늘 배열 메서드로 보면 C = push · unshift / R = forEach · includes · indexOf · findIndex / U = findIndex 로 찾은 칸에 <code>arr[i] = 새 값</code> / D = pop · shift<br><span class="wk-tag note">✍️ 필기</span> — “다음주에 서버 백엔드 요청해서 화면에 투두리스트 나오게 하기” → <a href="#s39">39번</a> 요청 · 응답 · JSON 흐름 그대로: 요청 → 응답(JSON 텍스트) → <code>JSON.parse</code> → 객체 배열 → forEach 로 li 를 만들어 화면에 (🤖 흐름 정리 · 다음 주에 쓸 코드는 아직 몰라요)</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#crud" title="그림 — 프런트엔드 · 백엔드 · CRUD" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#crud" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 프런트엔드 · 백엔드 · CRUD — 새 창으로 크게 보기</a></p></div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 41 · 주관식 32 · 출력결과 28 · 코드 작성 16 · 총 117문제 · 9주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 46 · 주관식 37 · 출력결과 31 · 코드 작성 18 · 총 132문제 · 10주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="웹프로그래밍-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
