@@ -1,5 +1,5 @@
 ﻿<#
-  vmcapture.ps1 — VMware 창을 "원래 픽셀 크기 그대로" PNG 로 캡처 (학교 PC Claude Code 용 · 2026-10-29)
+  vmcapture.ps1 — VMware 창을 "원래 픽셀 크기 그대로" PNG 로 캡처 (다른 컴퓨터(학교 PC · PC방 등) Claude Code 용 · 2026-10-29)
   왜: Claude Code 가 찍은 캡처가 흐려서 과제를 다시 직접 캡처함 → 원인 = 화면 배율(125 · 150%)에서
       DPI 인식 없이 찍으면 작게 찍힌 그림이 늘어나 흐려짐 · JPG · 크기 줄이기
   하는 일: ① DPI 인식 켜기 (SetProcessDpiAwarenessContext(-4) = Per-Monitor V2 · 안 되면 이 스레드만)

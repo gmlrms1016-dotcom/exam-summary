@@ -1,6 +1,6 @@
-# 학교 PC Claude Code — 캡처 설정 (한 번만)
+# 다른 컴퓨터(학교 PC · PC방 등) Claude Code — 캡처 설정 (한 번만)
 
-> 사용자(윤희근)가 학교 PC 의 Claude Code 에 “https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 읽고 그대로 설치해” 라고 시키면, 아래를 **그대로** 해 주세요 (Windows · PowerShell).
+> 사용자(윤희근)가 다른 컴퓨터(학교 PC · PC방 등 · Windows)의 Claude Code 에 “https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 읽고 그대로 설치해” 라고 시키면, 아래를 **그대로** 해 주세요 (Windows · PowerShell).
 > 목적: 이 PC 에서 Claude Code 가 찍는 캡처가 흐리지 않게 — **DPI 인식 → VMware 창 영역만 → 원래 픽셀 크기 → PNG** 를 말하지 않아도 매번.
 
 ## 1. 스크립트 · 규칙 받기 + 사용자 CLAUDE.md 에 규칙 붙이기
@@ -38,5 +38,5 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\to
 “캡처 설정 끝 — 이제부터 캡처는 VMware 창만 · 원래 픽셀 크기 PNG 로 찍어요 (규칙 파일: %USERPROFILE%\.claude\CLAUDE.md)” + 시험 캡처 경로 · 크기
 
 ## 참고
-- 학교 PC 가 재부팅 때 초기화되면 1번이 지워질 수 있어요 → 같은 한 줄로 다시 설치
+- 학교 PC · PC방처럼 재부팅 때 초기화되면 1번이 지워질 수 있어요 → 같은 한 줄로 다시 설치 (또는 iCloud `동양미래대학교/Claude설정.zip` 의 `프롬프트.txt`)
 - 원본: `exam-summary/tools/pc-capture/` (vmcapture.ps1 · CLAUDE-capture.md · 이 파일)

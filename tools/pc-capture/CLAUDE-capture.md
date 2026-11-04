@@ -12,4 +12,4 @@
 - 소스코드를 캡처할 때는 **소스 안에 커서가 보이지 않게** — 편집기 밖(솔루션 탐색기 등)을 눌러 포커스를 빼서 커서가 사라진 걸 확인하고 찍는다 (커서가 있으면 깔끔하지 않음 · 2026-11-03 사용자)
 - 명령의 출력이 다 나온 뒤에 찍는다 · 찍은 뒤 스크립트가 알려 준 px 크기가 창 크기와 맞는지 확인하고 사용자에게 저장 경로 · 크기를 알린다
 - 워드(docx)에 넣을 때도 원본 PNG 그대로 — python-docx 는 `width` 만 지정(비율 유지 · 다시 저장 · 압축 X) · 워드는 파일 → 옵션 → 고급 → 이미지 크기 및 품질 → "파일의 이미지 압축 안 함"
-- 스크립트가 없으면(PC 초기화 등) iCloud `동양미래대학교/Claude설정/` 을 내려받아 `00_학교PC에서_이것부터.txt` 대로 하거나 https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 대로 다시 설치하고 찍는다
+- 스크립트가 없으면(PC 초기화 등) iCloud `동양미래대학교/Claude설정/`(또는 `Claude설정.zip`)을 내려받아 `프롬프트.txt` 대로 하거나 https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 대로 다시 설치하고 찍는다
