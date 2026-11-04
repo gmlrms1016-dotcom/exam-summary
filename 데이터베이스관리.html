@@ -15,7 +15,7 @@
 
     <header class="page-head">
         <h1>데이터베이스관리 · 완전 정리</h1>
-        <p>1주차 ~ 7주차 · DB 개념 + DBMS + 데이터언어 + 키 5종 + 관계형 데이터 모델 + 뷰(view) + 널 값 + INSERT + 무결성 제약조건 + SELECT · UPDATE · DELETE + ALTER · GRANT/REVOKE · 기본키 · 외래키 테이블 생성</p>
+        <p>1주차 ~ 10주차 · DB 개념 + DBMS + 데이터언어 + 키 5종 + 관계형 데이터 모델 + 뷰(view) + 널 값 + INSERT + 무결성 제약조건 + SELECT · UPDATE · DELETE + ALTER · GRANT/REVOKE · 기본키 · 외래키 테이블 생성 + SELECT 심화(LIKE · ORDER BY · 집계함수 · GROUP BY · HAVING) + 관계대수(🔥 합집합 · σ · π · 조인)</p>
     </header>
 
     <div id="week-nav" data-subject="데이터베이스관리"></div>
@@ -56,6 +56,8 @@
         <a href="#s28">28.참조무결성실습★</a>
         <a href="#s29">29.수강키·용어★</a>
         <a href="#s30">30.🔥ALTER·Quiz7-3</a>
+        <a href="#s31">31.SELECT·GROUP BY</a>
+        <a href="#s32">32.🔥합집합·관계대수</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -940,9 +942,159 @@ CREATE TABLE dmember (
         </div>
     </section>
 
+    <section class="card" id="s31">
+        <h2>31. 9주차 — SELECT 문법 · LIKE · NULL · ORDER BY · 집계함수 · GROUP BY · HAVING<span class="week">9주차</span></h2>
+        <p>강의자료 <b>DB-Lect09-SELECT-group</b> · 노션 필기 · 결과는 이 맥 MySQL 8.4 로 직접 실행한 값이에요 · 자세한 SQL 은 <a href="weeks/데이터베이스관리-9주차.html">9주차 페이지</a></p>
+        <table class="ref">
+            <tr><th>쓰는 순서</th><th>✍️ 실행 순서</th><th>하는 일</th></tr>
+            <tr><td><code>SELECT</code></td><td><b>5</b></td><td>보여 줄 열 (집계함수 · AS 별칭)</td></tr>
+            <tr><td><code>FROM</code></td><td><b>1</b></td><td>어느 테이블에서</td></tr>
+            <tr><td><code>WHERE</code></td><td><b>2</b></td><td><b>행</b> 조건 (그룹 전 · 집계함수 X → ERROR 1111)</td></tr>
+            <tr><td><code>GROUP BY</code></td><td><b>3</b></td><td>같은 값끼리 그룹</td></tr>
+            <tr><td><code>HAVING</code></td><td><b>4</b></td><td><b>그룹</b> 조건 (집계함수 O)</td></tr>
+            <tr><td><code>ORDER BY</code></td><td><b>6</b></td><td>정렬 · ✍️ <code>ASC</code> 기본값 · <code>DESC</code></td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>문법</th><th>뜻</th><th>예 (customer)</th></tr>
+            <tr><td>✍️ <code>LIKE</code> <code>%</code> · <code>_</code></td><td><code>%</code> 0개 이상 · <code>_</code> 1개 문자</td><td><code>'정%'</code> 정씨 · <code>'%동%'</code> · <code>'__우'</code> 세 번째 글자 우</td></tr>
+            <tr><td><code>IN</code> · <code>NOT IN</code> ⭐⭐⭐</td><td>목록 중 하나 · 목록 어디에도 없음</td><td><code>city IN ('서울','안양')</code></td></tr>
+            <tr><td><code>BETWEEN a AND b</code></td><td>a 이상 b 이하 (양 끝 포함)</td><td><code>point BETWEEN 350 AND 500</code> → 350 · 400 · 500</td></tr>
+            <tr><td><code>IS NULL</code> · <code>IS NOT NULL</code></td><td>널 값 검사 (<code>= NULL</code> 은 결과 없음)</td><td>포인트 없는 정동우</td></tr>
+            <tr><td><code>DISTINCT</code> · <code>AS</code></td><td>중복 행 제거 · 열 이름 바꾸기</td><td><code>SELECT DISTINCT city</code> · <code>cname AS 성명</code></td></tr>
+            <tr><td><code>ORDER BY 열1, 열2 DESC</code></td><td>앞 열이 같으면 다음 열로</td><td><code>ORDER BY city ASC, point DESC</code> · <code>ORDER BY 3</code> = 3번째 열</td></tr>
+        </table>
+        <div class="tip">✍️ <b>드 모르간 법칙</b> — ~(A ∧ B) = ~A ∨ ~B · ~(A ∨ B) = ~A ∧ ~B → 실습 2-7 “서울이거나 안양인 것이 아닌” = <code>city &lt;&gt; '서울' AND city &lt;&gt; '안양'</code> = <code>NOT IN ('서울','안양')</code> (문장 그대로 <code>!= OR !=</code> 면 6행 전부 — MySQL 로 확인)</div>
+        <pre><code class="language-sql">SELECT * FROM customer WHERE cname LIKE '홍%' OR cname LIKE '박%' OR cname LIKE '정%';   -- 3-4) 홍 · 박 · 정씨 (⚠️ 내 답은 '홍%' 하나뿐)
+SELECT * FROM customer ORDER BY city ASC, point DESC;                                  -- 4-3) 거주지 ↑ → 같으면 포인트 ↓</code></pre>
+        <table class="ref">
+            <tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr>
+            <tr><td>c101</td><td>홍길동</td><td>서울</td><td>500</td></tr>
+            <tr><td>c103</td><td>박찬호</td><td>안양</td><td>800</td></tr>
+            <tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr>
+            <tr><td>c307</td><td>정동우</td><td>서울</td><td>NULL</td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr>
+            <tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr>
+            <tr><td>c204</td><td>신동엽</td><td>과천</td><td>350</td></tr>
+            <tr><td>c101</td><td>홍길동</td><td>서울</td><td>500</td></tr>
+            <tr><td>c307</td><td>정동우</td><td>서울</td><td>NULL</td></tr>
+            <tr><td>c103</td><td>박찬호</td><td>안양</td><td>800</td></tr>
+            <tr><td>c102</td><td>임꺽정</td><td>인천</td><td>300</td></tr>
+        </table>
+        <div class="tip">✍️ <b>필기</b> — <code>COUNT(*)</code> : NULL 을 <b>포함</b> · <code>COUNT(필드)</code> : NULL 을 <b>제외</b> → 성적 <code>COUNT(*)</code> <b>8</b> · <code>COUNT(점수)</code> <b>7</b> · <code>SUM</code> 525 · <code>AVG</code> = 525 ÷ 7 = 75.0000 · <code>MAX</code> 90 · <code>MIN</code> 60 · <code>COUNT(DISTINCT 과목)</code> 3</div>
+        <pre><code class="language-sql">SELECT 과목, COUNT(점수) FROM 성적2 GROUP BY 과목;                              -- 2-2) 과목별 응시자 (교수님 답 · NULL 제외)
+SELECT 과목, AVG(점수) FROM 성적2                                                -- 2-5) ⑤ 과목 · 평균
+WHERE 점수 &gt;= 70 GROUP BY 과목 HAVING AVG(점수) &gt;= 75 ORDER BY AVG(점수) DESC;    -- ② 행 조건 → ③ 묶기 → ④ 그룹 조건 → ⑥ 정렬</code></pre>
+        <table class="ref">
+            <tr><th>과목</th><th>COUNT(점수)</th></tr>
+            <tr><td>수학</td><td>4</td></tr>
+            <tr><td>국어</td><td>1</td></tr>
+            <tr><td>영어</td><td>2</td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>과목</th><th>AVG(점수)</th></tr>
+            <tr><td>수학</td><td>82.5000</td></tr>
+            <tr><td>영어</td><td>78.5000</td></tr>
+            <tr><td>국어</td><td>75.0000</td></tr>
+        </table>
+        <div class="tip">⚠️ 2-2 내 답 <code>COUNT(*)</code> 는 영어가 <b>3</b> (신동엽 NULL 포함) · 교수님 답(51쪽) <code>COUNT(점수)</code> 는 <b>2</b> · 2-4 문제는 “75 보다 높은” 인데 교수님 답도 <code>&gt;= 75</code> (국어 75 포함 · <code>&gt; 75</code> 면 영어만) · tradeDB 1-3 <code>WHERE 마일리지 &gt;= 100000</code> → ATRAN 배순용 128790 · PRDSU 한현구 116898 (93행 중 · 내 답의 <code>딤당자명</code> 은 ERROR 1054)</div>
+        <h3>괄호넣기 — 그룹화 ( ① ) ( ② ) · LIKE ( ③ )</h3>
+        <pre><code class="language-sql">SELECT 과목, AVG(점수)
+FROM 성적2
+( ① ) 과목
+( ② ) AVG(점수) &gt;= 75;
+
+SELECT * FROM customer WHERE cname ( ③ ) '정%';</code></pre>
+        <div class="quiz-item" data-answers="GROUP BY" data-explain="GROUP BY 과목 → 같은 과목끼리 묶음 (실행 3번째)">
+            <p class="quiz-q"><span class="quiz-cat">①</span>과목별로 묶는 ( ① ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="HAVING" data-explain="그룹 조건은 HAVING — WHERE 에 AVG 를 쓰면 ERROR 1111">
+            <p class="quiz-q"><span class="quiz-cat">②</span>묶은 그룹에 조건을 거는 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="LIKE" data-explain="LIKE &#x27;정%&#x27; → % = 0개 이상의 문자 → 정씨 (정진우 · 정동우)">
+            <p class="quiz-q"><span class="quiz-cat">③</span>정씨 성을 가진 고객을 찾는 패턴 비교 ( ③ ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#order" title="그림 — SELECT 실행 순서" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#order" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — SELECT 실행 순서 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#group" title="그림 — GROUP BY · HAVING" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#group" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — GROUP BY · HAVING — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#count" title="그림 — COUNT 와 NULL" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#count" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — COUNT 와 NULL — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s32">
+        <h2>32. 🔥 10주차 — 관계대수 (합집합 UNION만 기말 · 28쪽 프로젝션) · 조인 4가지 · 널 값과 집계함수<span class="week">10주차</span></h2>
+        <div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> — <b>“(MySQL) 기말고사에 합집합만 나옴 + 강의자료 28페이지”</b> → 합집합 <code>UNION</code> · 28쪽 프로젝션 π · <a href="weeks/데이터베이스관리-15주차-기말고사.html">기말고사 정리</a> · 자세한 SQL 은 <a href="weeks/데이터베이스관리-10주차.html">10주차 페이지</a></div>
+        <table class="ref">
+            <tr><th>집합 연산 (18쪽)</th><th>기호</th><th>SQL</th></tr>
+            <tr><td>🔥 <b>합집합</b></td><td>∪</td><td><b><code>UNION</code></b> (중복 제거) · <code>UNION ALL</code> (중복 포함)</td></tr>
+            <tr><td>교집합</td><td>∩</td><td><code>INTERSECT</code></td></tr>
+            <tr><td>차집합</td><td>−</td><td><code>MINUS</code> (Oracle) · <code>EXCEPT</code> (MS SQL)</td></tr>
+            <tr><td>카티션 프로덕트</td><td>×</td><td><code>FROM R1, S1</code> (조건 없음)</td></tr>
+        </table>
+        <pre><code class="language-sql">select * from 사원 UNION select * from 직원;        -- 🔥 사원 {1 고길동, 2 이순신} ∪ 직원 {2 이순신, 3 둘리} → 이순신은 한 번만
+select * from 사원 UNION ALL select * from 직원;    -- UNION ALL → 중복까지 모두 (4행)</code></pre>
+        <table class="ref">
+            <tr><th>사번</th><th>이름</th></tr>
+            <tr><td>1</td><td>고길동</td></tr>
+            <tr><td>2</td><td>이순신</td></tr>
+            <tr><td>3</td><td>둘리</td></tr>
+        </table>
+        <div class="tip">🔥 <b>합병 가능</b>(union-compatible) — 두 릴레이션의 속성 개수 · 도메인이 같아야 (열 개수가 다르면 MySQL ERROR 1222) · 19쪽 A = {1, 3, 6} · B = {2, 3, 7} → A ∪ B = {1, 2, 3, 6, 7} · ⚠️ 필기 “교집합 · 차집합은 MySQL 문법 지원하지 않음” → <b>MySQL 8.0.31+ 는 INTERSECT · EXCEPT 지원</b> (8.4 로 확인) · <code>MINUS</code> 는 ERROR 1064 · 시험은 합집합만</div>
+        <table class="ref">
+            <tr><th>순수 관계 연산 (26쪽)</th><th>기호</th><th>뜻</th><th>SQL</th></tr>
+            <tr><td>✍️ 실렉션 (selection) = 시그마</td><td>σ</td><td>원하는 <b>행</b></td><td><code>SELECT * FROM 고객 WHERE 등급='gold';</code></td></tr>
+            <tr><td>✍️ 🔥 프로젝션 (projection) = 파이 (28쪽)</td><td>π</td><td>원하는 <b>열</b></td><td><code>SELECT 고객이름, 등급, 적립금 FROM 고객;</code></td></tr>
+            <tr><td>조인 · 디비전</td><td>⋈ · ÷</td><td>공통 속성으로 연결 · (안 다룸)</td><td>아래 Quiz 10-5</td></tr>
+        </table>
+        <div class="tip">⚠️ 필기 <code>프로젝션(PRODUCTION)</code> → <b>PROJECTION</b> · 🔥 28쪽 <code>π 고객이름,등급,적립금 (고객)</code> → 행 수는 그대로 · 열만 3개 (Quiz 10-2 고객 → 정소화 gold 1000 · 김선우 vip 2500 · 고명석 gold 4500 · 성원용 gold 5000 · 김용축 silver NULL · 오형준 silver 300 · 채광주 silver 500)</div>
+        <table class="ref">
+            <tr><th>✍️ 조인 (Quiz 10-5 · R1(A,B) · S1(A,C,D))</th><th>SQL (38 · 39쪽)</th><th>결과 (MySQL)</th></tr>
+            <tr><td>카티션 프로덕트 ×</td><td><code>select * from R1, S1;</code></td><td>2 × 3 = <b>6행</b> · 열 5개</td></tr>
+            <tr><td>동등조인 (equi) =</td><td><code>… where R1.A = S1.A;</code></td><td>2행 — (1, 4, 1, 3, 4) · (2, 5, 2, 2, 6)</td></tr>
+            <tr><td>자연조인 (natural) — 공통 필드 하나 제거</td><td><code>select R1.A, B, C, D … where R1.A = S1.A;</code></td><td>(1, 4, 3, 4) · (2, 5, 2, 6)</td></tr>
+            <tr><td>세타조인 (theta) &gt; &gt;= = &lt;&gt; &lt;= &lt;</td><td><code>… where R1.A &gt;= C;</code></td><td><b>3행</b> — (1, 4, 3, 1, 9) · (2, 5, 2, 2, 6) · (2, 5, 3, 1, 9)</td></tr>
+        </table>
+        <div class="tip">✍️ <b>널 값</b> — NULL 과 산술연산(+ − × ÷) = <b>NULL</b> · <code>AVG(필드)</code> · <code>COUNT(필드)</code> NULL 제외 · <code>COUNT(*)</code> 포함 → Quiz 10-3 <code>AVG(col1) 45 · SUM(col2) 50 · COUNT(col3) 2</code> · Quiz 10-4 <code>WHERE col2 IS NOT NULL</code> → <b>SUM(col1) 10</b> · SUM(col2) 20 (⚠️ 필기 30 은 WHERE 가 먼저 (20, NULL) 행을 빼는 걸 놓친 값) · Quiz 10-1 fruit · 10-2 고객(<code>NOT NULL</code> · <code>DEFAULT 0</code> — 빼면 0 · 직접 NULL 이면 NULL)은 <a href="weeks/데이터베이스관리-10주차.html">10주차 페이지</a></div>
+        <h3>🔥 괄호넣기 — 합집합 ( ① ) ( ② ) · 프로젝션 기호 ( ③ )</h3>
+        <pre><code class="language-sql">-- 중복은 한 번만
+select * from 사원 ( ① ) select * from 직원;
+-- 중복까지 모두
+select * from 사원 ( ② ) select * from 직원;
+-- ( ③ ) 고객이름,등급,적립금 (고객)  =  SELECT 고객이름, 등급, 적립금 FROM 고객;</code></pre>
+        <div class="quiz-item" data-answers="UNION" data-explain="UNION = 합집합 · 두 결과를 합치고 중복 행은 한 번만 (기말 🔥)">
+            <p class="quiz-q"><span class="quiz-cat">①</span>두 SELECT 결과를 합치고 <b>중복은 한 번만</b> 남기는 ( ① ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="UNION ALL" data-explain="UNION ALL = 중복까지 모두 → 이순신 2번 · 4행">
+            <p class="quiz-q"><span class="quiz-cat">②</span>중복까지 모두 남기는 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="π|파이|pi|프로젝션|projection" data-explain="프로젝션 π = 원하는 열만 · 실렉션 σ(시그마) = 원하는 행">
+            <p class="quiz-q"><span class="quiz-cat">③</span>원하는 <b>열</b>을 고르는 관계대수 연산의 기호 ( ③ ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#union" title="그림 — 🔥 합집합 UNION" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#union" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 합집합 UNION — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#sigpi" title="그림 — 실렉션 · 프로젝션" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#sigpi" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 실렉션 · 프로젝션 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#join" title="그림 — 조인 4가지" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#join" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 조인 4가지 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 30 · 주관식 30 · 출력결과 15 · 코드 작성 19 · 총 94문제)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 40 · 주관식 40 · 출력결과 20 · 코드 작성 23 · 총 123문제 · 10주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="데이터베이스관리-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 

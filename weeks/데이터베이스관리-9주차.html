@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610292237"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 9주차 · SELECT 문법 — 연산자 · LIKE · NULL · ORDER BY · 집계함수 · GROUP BY · HAVING · 실행 순서</title>
+    <meta name="description" content="데이터베이스관리 9주차 정리 — SELECT 문법 — 연산자 · LIKE · NULL · ORDER BY · 집계함수 · GROUP BY · HAVING · 실행 순서">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="데이터베이스관리 9주차 · SELECT 문법 — 연산자 · LIKE · NULL · ORDER BY · 집계함수 · GROUP BY · HAVING · 실행 순서">
+    <meta property="og:description" content="데이터베이스관리 9주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202610292237">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 9주차</h1>
+        <p>SELECT 문법 — 연산자 · LIKE · NULL · ORDER BY · 집계함수 · GROUP BY · HAVING · 실행 순서</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="데이터베이스관리-10주차.html">다음 · <b>10주차</b> ›<br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a></nav>
+
+<div class="tip">수업: <b>10/28(수)</b> · 자료: 노션 9주차 필기 · <code>필기내용 원본.txt</code>(수업요약 원본) · 강의자료 <b>DB-Lect09-SELECT-group</b> (PDF 펜 필기 없음) · <code>고객.csv</code> — 원본 txt 에 없고 <b>내가 노션에 쓴 것은 ✍️</b>. 결과 표는 전부 이 맥 <b>MySQL 8.4</b> 로 직접 실행한 값이에요 (행 순서는 MySQL 이 정한 순서 · ORDER BY 가 없으면 순서는 보장되지 않아요). ⭐ = 원본 txt 의 <code>*</code> 표시(별이 많을수록 강조) · 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
+<section class="card" id="s1">
+<h2>🎨 9주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-그림정리.html?week=9" title="9주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-그림정리.html?week=9" target="_blank" rel="noopener">🎬 9주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
+<h2>1. ✍️ SELECT 문법 요약 — 연산자 · LIKE · ORDER BY</h2>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>기호 · 낱말</th><th>뜻</th></tr>
+<tr><td>관계 연산자</td><td><code>&gt;</code> <code>&gt;=</code> <code>=</code> <code>&lt;&gt;</code> <code>!=</code> <code>&lt;=</code> <code>&lt;</code></td><td>초과 · 이상 · 같다 · 같지 않다 · 같지 않다 · 이하 · 미만 (<a href="데이터베이스관리-6주차.html">6주차</a>)</td></tr>
+<tr><td>논리 연산자</td><td><code>NOT</code> · <code>AND</code> · <code>OR</code></td><td>아니다 · <b>이고</b> · <b>이거나</b></td></tr>
+<tr><td>✍️ 패턴 <code>LIKE</code></td><td><code>%</code> · <code>_</code></td><td><code>%</code> = <b>0개 이상</b>의 문자열 · <code>_</code> = <b>1개</b> 문자 · ✍️ LIKE = “~와 같은 · ~와 유사한”</td></tr>
+<tr><td>✍️ 정렬 <code>ORDER BY</code></td><td><code>ASC</code> · <code>DESC</code></td><td>오름차순 <b>asc = 기본값</b>(안 써도 오름차순) · 내림차순 desc</td></tr>
+<tr><td>널 값 검사</td><td><code>IS NULL</code> · <code>IS NOT NULL</code></td><td>널 값은 <code>=</code> 로 비교하지 않음 (아래 3-5)</td></tr>
+</tbody></table>
+<div class="tip">✍️ <b>필기 — 드 모르간 법칙</b> <code>~(A ∧ B)</code> · <code>~(A ∨ B)</code> → 🤖 <b>~(A ∧ B) = ~A ∨ ~B</b> · <b>~(A ∨ B) = ~A ∧ ~B</b> (∧ = AND · ∨ = OR · ~ = NOT). 실습 2-7 “서울이거나 안양인 것이 <b>아닌</b>” = <code>NOT (서울 OR 안양)</code> = <code>서울이 아니고 AND 안양이 아닌</code> = <b><code>NOT IN ('서울','안양')</code></b> 이에요.</div>
+</section>
+<section class="card" id="s3">
+<h2>2. ✍️ SELECT 문법 순서 = 실행 순서 ⭐</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — 쓰는 순서는 위에서부터지만 <b>실행되는 순서</b>는 숫자 순서:</p>
+<table class="ref">
+<tbody>
+<tr><th>쓰는 순서</th><th>실행 순서 (✍️)</th><th>하는 일</th></tr>
+<tr><td><code>SELECT</code></td><td><b>5</b></td><td>보여 줄 열 고르기 (집계함수 · 별칭 AS)</td></tr>
+<tr><td><code>FROM</code></td><td><b>1</b></td><td>어느 테이블에서</td></tr>
+<tr><td><code>WHERE</code></td><td><b>2</b></td><td>조건에 맞는 <b>행</b>만 남기기 (그룹을 만들기 전)</td></tr>
+<tr><td><code>GROUP BY</code></td><td><b>3</b></td><td>같은 값끼리 <b>그룹</b>으로 묶기</td></tr>
+<tr><td><code>HAVING</code></td><td><b>4</b></td><td><b>그룹</b>에 조건 (집계함수 조건)</td></tr>
+<tr><td><code>ORDER BY</code></td><td><b>6</b></td><td>마지막에 정렬</td></tr>
+</tbody></table>
+<div class="tip">🤖 WHERE(2)는 그룹(3)을 만들기 <b>전</b>에 실행돼서 <code>AVG(점수)</code> 같은 집계함수를 못 써요 → <code>WHERE AVG(점수)&gt;=75</code> 는 <b>ERROR 1111 Invalid use of group function</b> (MySQL 로 확인) → 그룹 조건은 <b>HAVING</b>. 6주차에 배운 <code>FROM → WHERE → SELECT</code> 에 GROUP BY · HAVING · ORDER BY 가 더해진 것이에요.</div>
+</section>
+<section class="card" id="s4">
+<h2>3. [실습1] customer — SELECT 기초 · NULL · LIKE · ORDER BY (강의자료 14 ~ 43쪽)</h2>
+<pre><code class="language-sql">-- customer(cno, cname, city, point) = 고객(고객번호, 고객명, 거주지, 포인트)
+CREATE  TABLE   customer (                           -- customer 테이블 만들기 시작
+      cno     char(4)         NOT  NULL  ,           -- 고객번호 — 문자 4자리 · 필수
+      cname  varchar(10)   NOT  NULL  ,              -- 고객명 — 최대 10자 · 필수
+      city     varchar(20)  ,                        -- 거주지 — 최대 20자 · 비워도 됨
+      point    int  ,                                -- 포인트 — 정수 · 비워도 됨(NULL)
+      CONSTRAINT  pk_customer_cno  PRIMARY  KEY(cno) -- 제약조건 이름 pk_customer_cno 로 cno 를 기본키로
+);                                                   -- CREATE TABLE 끝
+insert into customer values('c101','홍길동','서울',500);    -- 1행 c101 · 홍길동 · 서울 · 500
+insert into customer values('c102','임꺽정','인천',300);    -- 2행
+insert into customer values('c103','박찬호','안양',800);    -- 3행
+insert into customer values('c204','신동엽','과천',350);    -- 4행
+insert into customer values('c205','정진우','고양',400);    -- 5행
+insert into customer values('c307','정동우','서울', NULL);  -- 6행 — 새로 추가 · 포인트 없음(NULL)
+
+-- ✍️ 내 답
+SELECT * FROM customer;                              -- 1-1) 모든 열 → 6행
+SELECT cno,cname,city,point FROM customer;           -- 1-2) 모든 열을 필드명으로 → 1-1 과 같음
+SELECT cname,city FROM customer;                     -- 1-3) 고객명 · 거주지 두 열만
+SELECT cname as 성명,city as 거주지 FROM customer;   -- 1-4) ⭐ AS = 화면에 보이는 열 이름만 바꿈 (별칭)
+SELECT city FROM customer;                           -- 1-5) 거주지 → 서울이 두 번 (6행)
+SELECT DISTINCT city FROM customer;                  -- 1-6) ⭐ DISTINCT = 중복 행 제거 → 서울 한 번 (5행)
+
+SELECT *FROM customer WHERE cno='c101';              -- 2-1) 고객번호 c101 → 홍길동
+SELECT * FROM customer WHERE point&lt;=400;             -- 2-2) 400 이하 (400 포함) → 3행
+SELECT cname,city,point FROM customer WHERE city='서울' AND point&gt;=500;   -- 2-3) 서울 이면서(AND) 500 이상 → 홍길동
+SELECT cname,city,point FROM customer WHERE city='서울' OR point&gt;=500;    -- 2-4) 서울 이거나(OR) 500 이상 → 3행
+SELECT cname,city,point FROM customer WHERE point&gt;=350 AND point&lt;=500;    -- 2-5) 350 ~ 500 — 부등호
+SELECT cname,city,point FROM customer WHERE point BETWEEN 350 AND 500;    -- 2-5) BETWEEN a AND b = a 이상 b 이하 (양 끝 포함)
+SELECT cno,cname,city FROM customer WHERE city='서울' OR city='안양';     -- 2-6) 부등호(=) + OR
+SELECT cno,cname,city FROM customer WHERE city IN ('서울','안양');        -- 2-6) ⭐⭐⭐ IN = 목록 중 하나와 같으면
+SELECT cno,cname,city FROM customer WHERE city!='서울' AND city!='안양';  -- 2-7) 서울도 아니고 안양도 아닌 (드 모르간)
+SELECT cno,cname,city FROM customer WHERE city NOT IN ('서울','안양');    -- 2-7) NOT IN = 목록 어디에도 없으면
+
+SELECT * FROM customer WHERE cname LIKE '정%';       -- 3-1) ⭐⭐ 정 + 뒤에 0글자 이상 → 정씨
+SELECT * FROM customer WHERE cname LIKE '%동%';      -- 3-2) 어디든 '동' 이 들어감 → 홍길동 · 신동엽 · 정동우
+SELECT * FROM customer WHERE cname LIKE '__우';      -- 3-3) _ 두 개 = 아무 글자 2개 + 세 번째 '우' → 정진우 · 정동우
+SELECT * FROM customer WHERE cname LIKE '홍%' OR cname LIKE '박%' OR cname LIKE '정%';             -- 3-4) ⚠️ 정정 — 홍 · 박 · 정씨 (35쪽)
+SELECT * FROM customer WHERE cname NOT LIKE '홍%' AND cname NOT LIKE '박%' AND cname NOT LIKE '정%';  -- 3-4) 셋 다 아닌 → NOT LIKE + AND
+SELECT cno,cname,point FROM customer WHERE point IS NULL;      -- 3-5) ⭐ 포인트가 없는 (NULL) → 정동우
+SELECT cno,cname,point FROM customer WHERE point IS NOT NULL;  -- 3-5) 포인트가 있는 → 5행
+
+SELECT * FROM customer ORDER BY cname ASC;                     -- 4-1) ⭐⭐ 이름 오름차순 (가나다)
+SELECT * FROM customer WHERE city='서울' ORDER BY cname ASC;   -- 4-2) 서울만 → 이름 오름차순
+SELECT * FROM customer ORDER BY city ASC,point DESC;           -- 4-3) ⭐⭐ 거주지 오름차순 → 같으면 포인트 내림차순
+SELECT * FROM customer ORDER BY point DESC, cname ASC, city ASC;   -- 4-4) ⚠️ 빠진 답 — 포인트 ↓ → 이름 ↑ → 거주지 ↑ (42쪽)
+SELECT cno, cname, city, point FROM customer ORDER BY 3;       -- 4-5) ORDER BY 3 = SELECT 의 3번째 열(city) 오름차순</code></pre>
+<p>1-4) AS 별칭 · 1-6) DISTINCT 의 실행 결과</p>
+<table class="ref">
+<tbody>
+<tr><th>성명</th><th>거주지</th></tr>
+<tr><td>홍길동</td><td>서울</td></tr>
+<tr><td>임꺽정</td><td>인천</td></tr>
+<tr><td>박찬호</td><td>안양</td></tr>
+<tr><td>신동엽</td><td>과천</td></tr>
+<tr><td>정진우</td><td>고양</td></tr>
+<tr><td>정동우</td><td>서울</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>city</th></tr>
+<tr><td>서울</td></tr>
+<tr><td>인천</td></tr>
+<tr><td>안양</td></tr>
+<tr><td>과천</td></tr>
+<tr><td>고양</td></tr>
+</tbody></table>
+<p>2-4) <code>서울 OR 500 이상</code> — 정동우는 포인트가 NULL 이지만 <b>서울</b>이라서 나와요 · 2-5) BETWEEN 은 <b>양 끝(350 · 500) 포함</b></p>
+<table class="ref">
+<tbody>
+<tr><th>cname</th><th>city</th><th>point</th></tr>
+<tr><td>홍길동</td><td>서울</td><td>500</td></tr>
+<tr><td>박찬호</td><td>안양</td><td>800</td></tr>
+<tr><td>정동우</td><td>서울</td><td>NULL</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>cname</th><th>city</th><th>point</th></tr>
+<tr><td>홍길동</td><td>서울</td><td>500</td></tr>
+<tr><td>신동엽</td><td>과천</td><td>350</td></tr>
+<tr><td>정진우</td><td>고양</td><td>400</td></tr>
+</tbody></table>
+<p>2-7) <code>NOT IN ('서울','안양')</code> · ⚠️ 문제 문장을 글자 그대로 <code>city!='서울' OR city!='안양'</code> 로 쓰면</p>
+<table class="ref">
+<tbody>
+<tr><th>cno</th><th>cname</th><th>city</th></tr>
+<tr><td>c102</td><td>임꺽정</td><td>인천</td></tr>
+<tr><td>c204</td><td>신동엽</td><td>과천</td></tr>
+<tr><td>c205</td><td>정진우</td><td>고양</td></tr>
+</tbody></table>
+<div class="tip">⚠️ <b>팩트체크</b> — 문제 “서울이 아니거나 안양이 아닌” 을 글자 그대로 <code>!= OR !=</code> 로 쓰면 <b>6행 전부</b> 나와요 (서울이면 ‘안양이 아님’이 참 → 어떤 행이든 둘 중 하나는 참) — MySQL 로 확인. 의도는 “서울<b>이거나</b> 안양인 것이 <b>아닌</b>” → 드 모르간 <code>~(A ∨ B) = ~A ∧ ~B</code> → <b>AND</b> 또는 <b>NOT IN</b> (교수님 답도 이것).</div>
+<p>3-3) <code>LIKE '__우'</code> · 3-4) 홍 · 박 · 정씨</p>
+<table class="ref">
+<tbody style="min-width:322px;">
+<tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr>
+<tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr>
+<tr><td>c307</td><td>정동우</td><td>서울</td><td>NULL</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:322px;">
+<tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr>
+<tr><td>c101</td><td>홍길동</td><td>서울</td><td>500</td></tr>
+<tr><td>c103</td><td>박찬호</td><td>안양</td><td>800</td></tr>
+<tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr>
+<tr><td>c307</td><td>정동우</td><td>서울</td><td>NULL</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> — 내 3-4 답은 <code>LIKE '홍%'</code> 하나뿐이었어요 → 홍씨만 나옴. 교수님 답(35쪽)처럼 <code>OR</code> 로 셋을 잇고, “아닌” 쪽은 <code>NOT LIKE</code> 를 <b>AND</b> 로 이어요 (→ 임꺽정 · 신동엽). 3-3 의 <code>'__우'</code> 는 정확히 <b>세 글자</b>인 이름만 — 네 글자 이상까지 보려면 <code>'__우%'</code> (🤖).</div>
+<p>3-5) <code>IS NULL</code> — 🤖 <code>WHERE point = NULL</code> 로 쓰면 <b>결과 없음</b> (NULL 은 어떤 값과도 같다 · 다르다를 비교할 수 없어서 — MySQL 로 확인)</p>
+<table class="ref">
+<tbody>
+<tr><th>cno</th><th>cname</th><th>point</th></tr>
+<tr><td>c307</td><td>정동우</td><td>NULL</td></tr>
+</tbody></table>
+<p>4-3) 거주지 ↑ → 같으면 포인트 ↓ · 4-4) 포인트 ↓ (NULL 은 내림차순에서 맨 뒤) · 4-5) <code>ORDER BY 3</code></p>
+<table class="ref">
+<tbody style="min-width:322px;">
+<tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr>
+<tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr>
+<tr><td>c204</td><td>신동엽</td><td>과천</td><td>350</td></tr>
+<tr><td>c101</td><td>홍길동</td><td>서울</td><td>500</td></tr>
+<tr><td>c307</td><td>정동우</td><td>서울</td><td>NULL</td></tr>
+<tr><td>c103</td><td>박찬호</td><td>안양</td><td>800</td></tr>
+<tr><td>c102</td><td>임꺽정</td><td>인천</td><td>300</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:322px;">
+<tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr>
+<tr><td>c103</td><td>박찬호</td><td>안양</td><td>800</td></tr>
+<tr><td>c101</td><td>홍길동</td><td>서울</td><td>500</td></tr>
+<tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr>
+<tr><td>c204</td><td>신동엽</td><td>과천</td><td>350</td></tr>
+<tr><td>c102</td><td>임꺽정</td><td>인천</td><td>300</td></tr>
+<tr><td>c307</td><td>정동우</td><td>서울</td><td>NULL</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:322px;">
+<tr><th>cno</th><th>cname</th><th>city</th><th>point</th></tr>
+<tr><td>c205</td><td>정진우</td><td>고양</td><td>400</td></tr>
+<tr><td>c204</td><td>신동엽</td><td>과천</td><td>350</td></tr>
+<tr><td>c101</td><td>홍길동</td><td>서울</td><td>500</td></tr>
+<tr><td>c307</td><td>정동우</td><td>서울</td><td>NULL</td></tr>
+<tr><td>c103</td><td>박찬호</td><td>안양</td><td>800</td></tr>
+<tr><td>c102</td><td>임꺽정</td><td>인천</td><td>300</td></tr>
+</tbody></table>
+<div class="tip">4-5 <code>ORDER BY 3</code> = SELECT 목록의 <b>3번째 열(city)</b> 로 오름차순 — 4-3 처럼 거주지 순서가 돼요 (서울 두 명의 순서는 정해지지 않음). 🤖 MySQL 은 오름차순에서 <b>NULL 을 가장 작은 값</b>처럼 맨 앞, 내림차순에서 맨 뒤에 둬요 (4-4 의 정동우).</div>
+</section>
+<section class="card" id="s5">
+<h2>4. [실습2] 집계함수 · GROUP BY · HAVING — 성적 · 성적2 (강의자료 45 ~ 52쪽)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — <code>COUNT(*)</code> : <b>NULL 을 포함</b>하여 계산 · <code>COUNT(필드)</code> : <b>NULL 을 제외</b>하여 계산 (45쪽 “널값포함 · 널값제외”) · 집계함수 = 여러 개 행의 값들을 계산하여 <b>하나의 결과</b>를 산출하는 함수 (aggregate function)</p>
+<pre><code class="language-sql">CREATE TABLE 성적(                                   -- 성적(이름, 점수)
+     이름 varchar(9) NOT NULL primary key,           -- 이름 — 기본키
+     점수 int                                        -- 점수 — 비워도 됨(NULL)
+);                                                   -- CREATE TABLE 끝
+INSERT INTO 성적 ( 이름, 점수 ) VALUES ( '홍길동', 87 );   -- 87
+INSERT INTO 성적 ( 이름, 점수 ) VALUES ( '임꺽정', 60 );   -- 60
+INSERT INTO 성적 ( 이름, 점수 ) VALUES ( '박찬호', 75 );   -- 75
+INSERT INTO 성적 ( 이름, 점수 ) VALUES ( '선동열', 70 );   -- 70
+INSERT INTO 성적 ( 이름, 점수 ) VALUES ( '홍명보', 90 );   -- 90
+INSERT INTO 성적 ( 이름, 점수 ) VALUES ( '차범근', 75 );   -- 75
+INSERT INTO 성적 ( 이름, 점수 ) VALUES ( '강성범', 68 );   -- 68
+INSERT INTO 성적 ( 이름, 점수 ) VALUES ( '신동엽', null);  -- 응시 안 함 → NULL
+CREATE TABLE 성적2 (                                 -- 성적2(이름, 과목, 점수)
+    이름 varchar(9) NOT NULL primary key ,           -- 이름 — 기본키
+    과목 varchar(8),                                 -- 과목
+    점수 int                                         -- 점수
+);                                                   -- CREATE TABLE 끝
+INSERT INTO 성적2 VALUES ('홍길동', '영어',87 );     -- 영어 87
+INSERT INTO 성적2 VALUES ('임꺽정', '수학',60 );     -- 수학 60
+INSERT INTO 성적2 VALUES ('박찬호', '국어',75 );     -- 국어 75
+INSERT INTO 성적2 VALUES ('선동열', '영어',70 );     -- 영어 70
+INSERT INTO 성적2 VALUES ('홍명보', '수학',90 );     -- 수학 90
+INSERT INTO 성적2 VALUES ('차범근', '수학',75 );     -- 수학 75
+INSERT INTO 성적2 VALUES ('강성범', '수학',68 );     -- 수학 68
+INSERT INTO 성적2 VALUES ('신동엽', '영어',null);    -- 영어 NULL
+
+-- ✍️ 내 답 — 성적(이름, 점수)
+SELECT MAX(점수) FROM 성적;                          -- 1-1) 최고 점수
+SELECT MIN(점수) FROM 성적;                          -- 1-2) 최저 점수
+SELECT SUM(점수) FROM 성적;                          -- 1-3) 합계 — NULL 은 빼고 더함
+SELECT AVG(점수) FROM 성적;                          -- 1-4) 평균 — NULL 은 빼고 (7명으로 나눔)
+SELECT SUM(점수) / COUNT(점수) FROM 성적;            -- 1-4) 합계 ÷ 점수가 있는 사람 수 = AVG 와 같음
+SELECT COUNT(*) FROM 성적;                           -- 1-5) 학생 수 — NULL 행도 셈
+SELECT COUNT(점수) FROM 성적;                        -- 1-6) 응시한 학생 수 — 점수가 NULL 인 신동엽은 빼고 셈
+
+-- ✍️ 내 답 — 성적2(이름, 과목, 점수)
+SELECT COUNT(DISTINCT 과목) FROM 성적2;              -- 2-1) ⭐ 과목 종류 수 — 중복 빼고 셈
+SELECT 과목,COUNT(*) FROM 성적2 GROUP BY 과목;       -- 2-2) ⭐⭐⭐ 과목별 수강생 (⚠️ 교수님 답은 COUNT(점수))
+SELECT 과목,ROUND(AVG(점수),1) FROM 성적2 GROUP BY 과목;   -- 2-3) 과목별 평균 — ROUND(값, 1) = 소수 첫째 자리까지 반올림
+SELECT 과목,AVG(점수) FROM 성적2 GROUP BY 과목 HAVING AVG(점수)&gt;=75;   -- 2-4) 그룹 조건은 HAVING
+SELECT 과목,AVG(점수)                                -- 2-5) ⑤ 과목 · 평균 보여 주기
+FROM 성적2                                           -- ① 성적2 에서
+WHERE 점수&gt;=70                                       -- ② 70점 이상인 행만 남기고
+GROUP BY 과목                                        -- ③ 과목별로 묶어
+HAVING AVG(점수)&gt;=75                                 -- ④ 평균 75 이상인 그룹만
+ORDER BY AVG(점수) DESC;                             -- ⑥ 평균이 높은 순</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>문제</th><th>SQL</th><th>결과 (MySQL)</th></tr>
+<tr><td>1-1 최고</td><td><code>MAX(점수)</code></td><td><b>90</b></td></tr>
+<tr><td>1-2 최저</td><td><code>MIN(점수)</code></td><td><b>60</b></td></tr>
+<tr><td>1-3 합계</td><td><code>SUM(점수)</code></td><td><b>525</b> (NULL 빼고)</td></tr>
+<tr><td>1-4 평균</td><td><code>AVG(점수)</code> = <code>SUM(점수) / COUNT(점수)</code></td><td><b>75.0000</b> (525 ÷ 7) · 🤖 <code>SUM(점수) / COUNT(*)</code> 면 525 ÷ 8 = 65.6250</td></tr>
+<tr><td>1-5 학생 수</td><td><code>COUNT(*)</code></td><td><b>8</b> (NULL 행 포함)</td></tr>
+<tr><td>1-6 응시자 수</td><td><code>COUNT(점수)</code></td><td><b>7</b> (NULL 제외)</td></tr>
+<tr><td>2-1 과목 수</td><td><code>COUNT(DISTINCT 과목)</code></td><td><b>3</b> (영어 · 수학 · 국어)</td></tr>
+</tbody></table>
+<p>2-2) 과목별 수강생 — 내 답 <code>COUNT(*)</code> · 교수님 답 <code>COUNT(점수)</code> (51쪽)</p>
+<table class="ref">
+<tbody>
+<tr><th>과목</th><th>COUNT(*)</th></tr>
+<tr><td>수학</td><td>4</td></tr>
+<tr><td>국어</td><td>1</td></tr>
+<tr><td>영어</td><td>3</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>과목</th><th>COUNT(점수)</th></tr>
+<tr><td>수학</td><td>4</td></tr>
+<tr><td>국어</td><td>1</td></tr>
+<tr><td>영어</td><td>2</td></tr>
+</tbody></table>
+<div class="tip">⚠️ <b>차이</b> — 영어는 3명인데 신동엽의 점수가 <b>NULL</b> 이라 <code>COUNT(점수)</code> 는 <b>2</b>, <code>COUNT(*)</code> 는 <b>3</b>. 교수님 답(51쪽)은 <code>COUNT(점수)</code> 예요 → 시험에서는 “응시한(점수가 있는)” 학생 수인지 “행 수”인지 보고 고르기.</div>
+<p>2-3) <code>ROUND(AVG(점수),1)</code> · 2-4) <code>HAVING AVG(점수)&gt;=75</code> · 2-5) WHERE → GROUP BY → HAVING → ORDER BY</p>
+<table class="ref">
+<tbody>
+<tr><th>과목</th><th>ROUND(AVG(점수),1)</th></tr>
+<tr><td>수학</td><td>73.3</td></tr>
+<tr><td>국어</td><td>75.0</td></tr>
+<tr><td>영어</td><td>78.5</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>과목</th><th>AVG(점수)</th></tr>
+<tr><td>국어</td><td>75.0000</td></tr>
+<tr><td>영어</td><td>78.5000</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>과목</th><th>AVG(점수)</th></tr>
+<tr><td>수학</td><td>82.5000</td></tr>
+<tr><td>영어</td><td>78.5000</td></tr>
+<tr><td>국어</td><td>75.0000</td></tr>
+</tbody></table>
+<div class="tip">⚠️ <b>팩트체크</b> — 2-4 문제는 “75 <b>보다 높은</b>” 인데 교수님 답(52쪽)도 내 답도 <b><code>&gt;= 75</code></b> (75 이상) → 국어(75.0000)까지 나와요. 글자 그대로 <code>&gt; 75</code> 면 영어만 나와요 (MySQL 로 확인) → 시험은 교수님 답(<code>&gt;=</code>)대로. 🤖 2-5 에서 수학은 WHERE 가 60 · 68 을 먼저 빼서 (90 + 75) ÷ 2 = <b>82.5</b> 가 돼 1등 — WHERE(행) 와 HAVING(그룹) 의 순서 차이. <code>ROUND(AVG(점수))</code> 처럼 자릿수를 빼면 정수로 반올림 → 수학 73 · 국어 75 · 영어 79. 🤖 GROUP BY 결과의 행 순서는 MySQL 이 정해요 (ORDER BY 를 써야 순서가 보장됨).</div>
+</section>
+<section class="card" id="s6">
+<h2>5. [실습3] tradeDB — CSV 데이터 가져오기 (강의자료 53 ~ 68쪽 · 수업중 제출)</h2>
+<pre><code class="language-sql">drop database if exists tradeDB;                     -- 같은 이름의 DB 가 있으면 지움 (없으면 그냥 넘어감)
+CREATE DATABASE tradeDB                              -- tradeDB 데이터베이스 만들기
+default character set utf8mb4;                       -- 한글 · 이모지까지 저장되는 문자 집합
+USE tradeDB;                                         -- 이제부터 tradeDB 를 사용
+drop table if exists 고객;                           -- 고객 테이블이 있으면 지움
+CREATE TABLE 고객 (                                  -- 고객 테이블 만들기 시작
+      고객번호  CHAR(5)           PRIMARY KEY ,      -- 고객번호 — 5글자 · 기본키
+      고객회사명 VARCHAR(30),                         -- 회사 이름
+      담당자명    VARCHAR(20),                        -- 담당자 이름
+      담당자직위 VARCHAR(20),                         -- 담당자 직위
+      주소          VARCHAR(50),                      -- 주소
+      도시          VARCHAR(20),                      -- 도시
+      지역          VARCHAR(20),                      -- 지역
+      전화번호    VARCHAR(20),                        -- 전화번호
+      마일리지    INT                                 -- 마일리지 — 정수
+);                                                   -- CREATE TABLE 끝
+-- 데이터 넣기: Workbench 에서 고객 테이블 오른쪽 클릭 → Table Data Import Wizard → Browse → 고객.csv → Next → Next → Finish
+SELECT COUNT(*) as '몇개임?' FROM 고객;              -- ✍️ 가져온 행 수 확인 → 93
+SELECT 고객번호, 담당자명, 마일리지                   -- 1-3) 고객번호 · 담당자명 · 마일리지를
+FROM 고객                                            -- 고객 테이블에서
+WHERE 마일리지&gt;=100000;                              -- 마일리지 100,000 이상만 (숫자에는 쉼표를 쓰지 않음)</code></pre>
+<p>1-3) 의 실행 결과 (고객.csv 93행을 MySQL 에 넣어 실행)</p>
+<table class="ref">
+<tbody>
+<tr><th>고객번호</th><th>담당자명</th><th>마일리지</th></tr>
+<tr><td>ATRAN</td><td>배순용</td><td>128790</td></tr>
+<tr><td>PRDSU</td><td>한현구</td><td>116898</td></tr>
+</tbody></table>
+<div class="tip">⚠️ <b>오타</b> — 내 답의 <code>딤당자명</code> → <b>담당자명</b> · 그대로 실행하면 <b>ERROR 1054 Unknown column '딤당자명' in 'field list'</b> (MySQL 로 확인). 문제의 “100,000점” 은 SQL 에서는 쉼표 없이 <code>100000</code>.</div>
+</section>
+<section class="card" id="s7">
+<h2>6. 생성형 AI 활용 실습 (w09)</h2>
+<ul><li>질문: “나는 컴퓨터공학과 1학년 학생이야 · SQL 데이터 조회에 자주 쓰이는 유형별 예제를 알려줘 · 단, 기본조회와 group by 는 꼭 포함하고 조인과 서브쿼리는 제외하고 알려줘”</li><li>과제: AI 결과를 공부한 뒤 <b>내가 만든 테이블</b>에 SELECT 문 <b>5가지</b>를 적용해 워드로 정리 (9주차 폴더 <code>워드.docx</code>)</li></ul>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로 · 수업요약에 내가 채운 부분)</summary>
+<pre><code class="language-text">-- 패턴 문자열: LIKE
+% 0개 이상의 문자열
+_ 1개 문자열
+LIKE:~와 같은,~와 유사한
+
+-- 정렬: ORDER BY
+    순서: 오름차순(asc) 기본값
+          내림차순(desc)
+
+# [요약]  /* SELECT 문법 순서 */
+5 SELECT
+1 FROM
+2 WHERE
+3 GROUP BY
+4 HAVING
+6 ORDER BY
+
+드 모르간 법칙
+~ (A ∧ B)
+~ (A ∨ B)
+
+-- COUNT(*) : NULL을 포함하여 계산
+-- COUNT(필드) : NULL을 제외하여 계산</code></pre>
+<div class="tip">노션에는 이 밖에 실습1 · 2 · tradeDB 의 내 SQL 답안 전체가 있어요 (위 3 ~ 5번에 주석을 달아 옮김 · 고친 곳은 ⚠️).</div>
+</details>
+</section>
+<section class="card" id="s8">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../데이터베이스관리-실제시험.html">🔒 데이터베이스관리 실제시험 — 9주차 SELECT · 집계함수 · GROUP BY · HAVING 문제까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="데이터베이스관리-15주차-기말고사.html">기말고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="데이터베이스관리-10주차.html">다음 · <b>10주차</b> ›<br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리 · 9주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202610292237"></script>
+</body>
+</html>

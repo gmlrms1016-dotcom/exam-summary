@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202610292237"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)</title>
+    <meta name="description" content="데이터베이스관리 15주차 정리 — 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <meta property="og:description" content="데이터베이스관리 15주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202610292237">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 15주차 · 기말고사</h1>
+        <p>기말고사 시험문제 정리 (9 · 10주차 반영)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><span></span></nav>
+
+<p class="wk-exambtn"><a href="../데이터베이스관리-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>📊 성적 비율</dt><dd><span class="wk-chip">출석 20%</span><span class="wk-chip">중간 30%</span><span class="wk-chip"><b>기말 30%</b></span><span class="wk-chip">과제 20%</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">10주차</span><b>(MySQL) 기말고사에 합집합만 나옴</b> — 관계대수 집합 연산 중 <b>합집합 <code>UNION</code></b></li><li><span class="wk-exam-wk">10주차</span><b>강의자료 28페이지</b> — 프로젝션 π 예제</li><li><span class="wk-exam-wk">6주차</span>무결성 제약조건 중 <b>키 · 도메인 제약조건은 기말고사</b> (개체 · 참조 무결성은 중간고사였음)</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
+<tbody>
+<tr><th>찍어 준 것</th><th>핵심 · 답</th></tr>
+<tr><td><b>합집합만 나옴</b> (10주차)</td><td>합집합 <b>∪</b> = SQL <b><code>UNION</code></b> — 두 SELECT 결과를 합치고 <b>중복은 한 번만</b> · <b><code>UNION ALL</code></b> = 중복까지 모두 · 두 릴레이션은 <b>합병 가능</b>(속성 개수 · 도메인이 같아야) — 열 개수가 다르면 ERROR 1222 · 사원 {1 고길동, 2 이순신} ∪ 직원 {2 이순신, 3 둘리} → 1 고길동 · 2 이순신 · 3 둘리 (UNION ALL 은 4행)</td></tr>
+<tr><td><b>강의자료 28페이지</b> (10주차)</td><td>프로젝션 <b>π</b> = 원하는 <b>열</b>(속성)을 검색 · 관계대수식 <code>π 고객이름,등급,적립금 (고객)</code> → SQL <code>SELECT 고객이름, 등급, 적립금 FROM 고객;</code> → 행 수는 그대로 · 열만 3개 (실렉션 σ 는 행을 고름)</td></tr>
+<tr><td><b>키 · 도메인 제약조건</b> (6주차)</td><td>키 제약조건 = 키는 중복된 값을 갖지 않는다 (<code>UNIQUE</code>) · 도메인 제약조건 = 값의 범위 · 기본값 지정 (<code>CHECK</code> · <code>DEFAULT</code> — 10주차 Quiz 10-2 <code>적립금 int DEFAULT 0</code>)</td></tr>
+</tbody></table></div></details></dd><dd class="wk-exam-note">📌 일시 · 시험 방식 · 범위는 아직 안내 전 — 교수님이 알려 주면 이 카드에 더해요.</dd></dl></section>
+<section class="card" id="s1">
+<h2>🎨 그림으로 정리</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-그림정리.html?weeks=9-15#order" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-그림정리.html?weeks=9-15#order" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+<ul><li>9주차 — ① SELECT 실행 순서 · ② GROUP BY · HAVING · ③ COUNT 와 NULL</li><li>10주차 — ④ 🔥 합집합 UNION · ⑤ 실렉션 σ · 프로젝션 π · ⑥ 조인 4가지</li></ul>
+</section>
+<section class="card" id="s2">
+<h2>10주차 · 🔥 관계대수 — 합집합 · 프로젝션 · 조인 / 널 값과 집계함수</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>🔥 ✍️ 합집합 UNION</td><td><b>기말고사에 합집합만 나옴</b> — <code>UNION</code> 중복 제거 · <code>UNION ALL</code> 중복 포함 · 합병 가능해야 (열 개수 · 도메인 같음) · 교집합 INTERSECT · 차집합 MINUS(Oracle) / EXCEPT(MS SQL) — ⚠️ MySQL 8.0.31+ 는 INTERSECT · EXCEPT 도 됨 · MINUS 는 없음</td><td>④</td></tr>
+<tr><td>🔥 28쪽 프로젝션 π</td><td>원하는 <b>열</b> — <code>π 고객이름,등급,적립금 (고객)</code> = <code>SELECT 고객이름, 등급, 적립금 FROM 고객;</code></td><td>⑤</td></tr>
+<tr><td>✍️ 실렉션 σ</td><td>원하는 <b>행</b> — <code>σ 등급='gold' (고객)</code> = <code>SELECT * FROM 고객 WHERE 등급='gold';</code> · ⚠️ 필기 PRODUCTION → <b>PROJECTION</b></td><td>⑤</td></tr>
+<tr><td>✍️ 조인 4가지 (Quiz 10-5)</td><td>카티션 프로덕트 × (R1 2행 × S1 3행 = <b>6행</b>) · 동등조인 = (<code>R1.A = S1.A</code> → 2행 · A 열 2개) · 자연조인 (공통 필드 하나 제거 → A · B · C · D) · 세타조인 (<code>R1.A &gt;= C</code> → <b>3행</b>)</td><td>⑥</td></tr>
+<tr><td>✍️ 널 값 · 집계함수</td><td>NULL 과 산술연산 → <b>NULL</b> · <code>AVG(필드)</code> · <code>COUNT(필드)</code> 는 NULL <b>제외</b> · <code>COUNT(*)</code> 는 <b>포함</b> · Quiz 10-3 → 45 · 50 · 2 · Quiz 10-4 → <b>10 · 20</b> (⚠️ 필기 30 은 WHERE 를 빼먹은 값)</td><td>③</td></tr>
+<tr><td>Quiz 10-2 고객</td><td><code>고객이름 NOT NULL</code> · <code>적립금 int DEFAULT 0</code> — 빼면 0 · 직접 NULL 이면 NULL · 이름을 빼면 ERROR 1364</td><td></td></tr>
+</tbody></table>
+<div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
+</section>
+<section class="card" id="s3">
+<h2>9주차 · SELECT 문법 — LIKE · NULL · ORDER BY · 집계함수 · GROUP BY · HAVING</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>✍️ 실행 순서</td><td>쓰는 순서 SELECT · FROM · WHERE · GROUP BY · HAVING · ORDER BY → 실행 <b>5 · 1 · 2 · 3 · 4 · 6</b> · WHERE 에 집계함수 → ERROR 1111 → <b>HAVING</b></td><td>①</td></tr>
+<tr><td>✍️ LIKE</td><td><code>%</code> 0개 이상 · <code>_</code> 1개 — <code>'정%'</code> 정씨 · <code>'%동%'</code> 동이 들어감 · <code>'__우'</code> 세 번째 글자 우 · 여러 성은 <code>LIKE … OR LIKE …</code> / 아닌 것은 <code>NOT LIKE … AND …</code></td><td></td></tr>
+<tr><td>IN · BETWEEN · NULL</td><td><code>IN ('서울','안양')</code> · <code>NOT IN</code> · <code>BETWEEN 350 AND 500</code> (양 끝 포함) · <code>IS NULL</code> (✕ <code>= NULL</code> → 결과 없음) · ✍️ 드 모르간 ~(A ∨ B) = ~A ∧ ~B</td><td></td></tr>
+<tr><td>✍️ ORDER BY</td><td><code>ASC</code> 기본값 · <code>DESC</code> · 여러 열 <code>ORDER BY city ASC, point DESC</code> · <code>ORDER BY 3</code> = 3번째 열 · NULL 은 오름차순 맨 앞</td><td></td></tr>
+<tr><td>✍️ COUNT · 집계함수</td><td><code>COUNT(*)</code> NULL 포함 (8) · <code>COUNT(점수)</code> NULL 제외 (7) · <code>AVG</code> = SUM ÷ COUNT(점수) · <code>COUNT(DISTINCT 과목)</code> 3</td><td>③</td></tr>
+<tr><td>GROUP BY · HAVING</td><td>과목별 <code>COUNT(점수)</code> → 수학 4 · 국어 1 · 영어 2 · <code>HAVING AVG(점수) &gt;= 75</code> (교수님 답) · WHERE(행) → GROUP BY → HAVING(그룹) → ORDER BY</td><td>②</td></tr>
+</tbody></table>
+<div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-9주차.html">9주차</a> · 문제는 🔒 실제시험.</div>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><span></span></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202610292237"></script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터베이스관리 그림 정리</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --cell:#7c6ae6;--myelin:#e0a838;--astro:#e0862b;--oligo:#0f9f74;--micro:#d9363e;--schwann:#2b8fd1;--vessel:#d9363e;
+          --ex:#16a34a;--inh:#2563eb;--ap:#e5484d;--fore:#e0862b;--mid:#c9b48a;--hind:#a0522d;
+          --fr:#8b7cf6;--pa:#ec5f9e;--te:#22b07d;--oc:#e9b52c;--light:#f5a524;--eye:#eef4fb;--nerve:#e8a3a3;--hl:#f59e0b;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --cell:#a596f5;--myelin:#f0c35a;--astro:#f5a04a;--oligo:#34d399;--micro:#ff6369;--schwann:#5ab8f0;--vessel:#ff6369;
+          --ex:#4cc38a;--inh:#6b9cff;--ap:#ff6369;--fore:#f5a04a;--mid:#d9c79c;--hind:#d07a4f;
+          --fr:#a596f5;--pa:#f27db3;--te:#4cc38a;--oc:#f5c84a;--light:#ffb547;--eye:#1c2733;--nerve:#c97878;--hl:#ffb547;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+    .box{max-width:780px;margin:0 auto;padding:10px 12px 14px;}
+    .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0 0 8px;}
+    .tabs button{min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 4px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;}
+    .tabs button[aria-pressed=true]{border-color:var(--main);color:var(--main);box-shadow:inset 0 0 0 1px var(--main);}
+    .src{margin:0 0 6px;font-size:13px;color:var(--ink2);}
+    .src b{color:var(--main);}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;}
+    svg{display:block;width:100%;height:auto;}
+    svg[hidden]{display:none;}
+    svg text{fill:var(--ink);font-family:inherit;font-size:19px;}
+    svg text.s{font-size:15px;fill:var(--ink2);}
+    svg text.b{font-weight:800;}
+    svg text.w{fill:#fff;}
+    svg text.m{font-family:Menlo,Consolas,"D2Coding",monospace;}
+    svg .ln{stroke:var(--ink2);stroke-width:1.6;fill:none;}
+    svg .ax{stroke:var(--ink2);stroke-width:2;fill:none;}
+    svg .dash{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:6 5;fill:none;}
+    svg [data-s]{transition:opacity .45s ease;}
+    svg [data-s].off{opacity:0;}
+    svg [data-s].dim{opacity:.28;}
+    svg [data-s].hl{filter:drop-shadow(0 0 5px var(--hl));}
+    .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0;}
+    .ctl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+    .ctl button.main{border-color:var(--main);color:var(--main);}
+    .ctl .pos{margin-left:auto;font-size:13px;color:var(--ink2);}
+    ol.cap{margin:8px 0 0;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:14.5px;line-height:1.65;}
+    ol.cap li{margin:2px 0;padding:1px 4px;border-radius:6px;cursor:pointer;}
+    ol.cap li b{color:var(--main);}
+    ol.cap li.cur{background:color-mix(in srgb,var(--hl) 22%,transparent);}
+    ol.cap li.later{opacity:.45;}
+    .note{margin:6px 0 0;font-size:13px;color:var(--ink2);line-height:1.6;}
+    .note a{color:var(--main);}
+    @media (max-width:560px){ .tabs{grid-template-columns:repeat(3,minmax(0,1fr));} .tabs button{font-size:12px;} ol.cap{font-size:14px;padding-left:28px;}
+        /* 폰: 그림이 작아지니 그림 속 글자를 키움 (긴 줄도 600 폭 안에 들어가는 크기까지만) */
+        svg text{font-size:22px;} svg text.s{font-size:17px;} .stage{padding:3px;} }
+</style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="tabs" id="tabs" role="group" aria-label="그림 고르기"></div>
+    <p class="src" id="src"></p>
+    <div class="stage">
+
+<!-- ① 9주차 — SELECT 실행 순서 (성적2 2-5) -->
+<svg data-fig="order" viewBox="0 0 600 500" role="img" aria-label="SELECT 문의 쓰는 순서와 실행 순서" hidden>
+  <g><text x="114" y="18" text-anchor="middle" class="s">쓰는 순서</text><text x="410" y="18" text-anchor="middle" class="s">성적2 예 (실습 2-5)</text>
+    <rect x="14" y="30" width="200" height="56" rx="10" style="fill:var(--card);stroke:var(--line);stroke-width:2"/><text x="30" y="65" class="b m">SELECT</text>
+    <rect x="14" y="100" width="200" height="56" rx="10" style="fill:var(--card);stroke:var(--line);stroke-width:2"/><text x="30" y="135" class="b m">FROM</text>
+    <rect x="14" y="170" width="200" height="56" rx="10" style="fill:var(--card);stroke:var(--line);stroke-width:2"/><text x="30" y="205" class="b m">WHERE</text>
+    <rect x="14" y="240" width="200" height="56" rx="10" style="fill:var(--card);stroke:var(--line);stroke-width:2"/><text x="30" y="275" class="b m">GROUP BY</text>
+    <rect x="14" y="310" width="200" height="56" rx="10" style="fill:var(--card);stroke:var(--line);stroke-width:2"/><text x="30" y="345" class="b m">HAVING</text>
+    <rect x="14" y="380" width="200" height="56" rx="10" style="fill:var(--card);stroke:var(--line);stroke-width:2"/><text x="30" y="415" class="b m">ORDER BY</text></g>
+  <g data-s="1"><circle cx="186" cy="128" r="17" style="fill:var(--inh)"/><text x="186" y="135" text-anchor="middle" class="b w">1</text>
+    <text x="236" y="122" class="s b">FROM 성적2</text><text x="236" y="148" class="s">8행 모두 가져오기</text></g>
+  <g data-s="2"><circle cx="186" cy="198" r="17" style="fill:var(--inh)"/><text x="186" y="205" text-anchor="middle" class="b w">2</text>
+    <text x="236" y="192" class="s b">WHERE 점수 &gt;= 70</text><text x="236" y="218" class="s">행 조건 → 5행 남음 (60 · 68 · NULL 빠짐)</text></g>
+  <g data-s="3"><circle cx="186" cy="268" r="17" style="fill:var(--inh)"/><text x="186" y="275" text-anchor="middle" class="b w">3</text>
+    <text x="236" y="262" class="s b">GROUP BY 과목</text><text x="236" y="288" class="s">영어 {87, 70} · 국어 {75} · 수학 {90, 75}</text></g>
+  <g data-s="4"><circle cx="186" cy="338" r="17" style="fill:var(--inh)"/><text x="186" y="345" text-anchor="middle" class="b w">4</text>
+    <text x="236" y="332" class="s b">HAVING AVG(점수) &gt;= 75</text><text x="236" y="358" class="s">그룹 조건 → 78.5 · 75 · 82.5 모두 통과</text></g>
+  <g data-s="5"><circle cx="186" cy="58" r="17" style="fill:var(--te)"/><text x="186" y="65" text-anchor="middle" class="b w">5</text>
+    <text x="236" y="52" class="s b">SELECT 과목, AVG(점수)</text><text x="236" y="78" class="s">보여 줄 열 고르기</text></g>
+  <g data-s="6"><circle cx="186" cy="408" r="17" style="fill:var(--te)"/><text x="186" y="415" text-anchor="middle" class="b w">6</text>
+    <text x="236" y="402" class="s b">ORDER BY AVG(점수) DESC</text><text x="236" y="428" class="s">수학 82.5 → 영어 78.5 → 국어 75</text></g>
+  <g data-s="6"><text x="14" y="474" class="s b" style="fill:var(--ap)">WHERE 에 AVG(점수) → ERROR 1111 → 그룹 조건은 HAVING</text></g>
+</svg>
+
+<!-- ② 9주차 — GROUP BY · HAVING (성적2) -->
+<svg data-fig="group" viewBox="0 0 600 440" role="img" aria-label="성적2 를 과목별로 묶고 HAVING 으로 그룹 고르기" hidden>
+  <g><text x="130" y="20" text-anchor="middle" class="s b">성적2</text>
+    <text x="60" y="48" text-anchor="middle" class="s b">이름</text><text x="150" y="48" text-anchor="middle" class="s b">과목</text><text x="225" y="48" text-anchor="middle" class="s b">점수</text>
+    <path class="ln" d="M14,58 L262,58"/>
+    <text x="60" y="84" text-anchor="middle" class="s">홍길동</text><text x="60" y="116" text-anchor="middle" class="s">임꺽정</text><text x="60" y="148" text-anchor="middle" class="s">박찬호</text><text x="60" y="180" text-anchor="middle" class="s">선동열</text>
+    <text x="60" y="212" text-anchor="middle" class="s">홍명보</text><text x="60" y="244" text-anchor="middle" class="s">차범근</text><text x="60" y="276" text-anchor="middle" class="s">강성범</text><text x="60" y="308" text-anchor="middle" class="s">신동엽</text>
+    <text x="225" y="84" text-anchor="middle" class="s m">87</text><text x="225" y="116" text-anchor="middle" class="s m">60</text><text x="225" y="148" text-anchor="middle" class="s m">75</text><text x="225" y="180" text-anchor="middle" class="s m">70</text>
+    <text x="225" y="212" text-anchor="middle" class="s m">90</text><text x="225" y="244" text-anchor="middle" class="s m">75</text><text x="225" y="276" text-anchor="middle" class="s m">68</text><text x="225" y="308" text-anchor="middle" class="s m" style="fill:var(--ap)">NULL</text></g>
+  <g data-s="1"><rect x="116" y="64" width="68" height="28" rx="6" style="fill:var(--inh);fill-opacity:.3"/><rect x="116" y="160" width="68" height="28" rx="6" style="fill:var(--inh);fill-opacity:.3"/><rect x="116" y="288" width="68" height="28" rx="6" style="fill:var(--inh);fill-opacity:.3"/>
+    <rect x="116" y="96" width="68" height="28" rx="6" style="fill:var(--oc);fill-opacity:.35"/><rect x="116" y="192" width="68" height="28" rx="6" style="fill:var(--oc);fill-opacity:.35"/><rect x="116" y="224" width="68" height="28" rx="6" style="fill:var(--oc);fill-opacity:.35"/><rect x="116" y="256" width="68" height="28" rx="6" style="fill:var(--oc);fill-opacity:.35"/>
+    <rect x="116" y="128" width="68" height="28" rx="6" style="fill:var(--te);fill-opacity:.35"/></g>
+  <g><text x="150" y="84" text-anchor="middle" class="s">영어</text><text x="150" y="116" text-anchor="middle" class="s">수학</text><text x="150" y="148" text-anchor="middle" class="s">국어</text><text x="150" y="180" text-anchor="middle" class="s">영어</text>
+    <text x="150" y="212" text-anchor="middle" class="s">수학</text><text x="150" y="244" text-anchor="middle" class="s">수학</text><text x="150" y="276" text-anchor="middle" class="s">수학</text><text x="150" y="308" text-anchor="middle" class="s">영어</text>
+    <text x="14" y="350" class="s m b">GROUP BY 과목</text><text x="14" y="378" class="s">같은 과목끼리 한 묶음</text></g>
+  <g data-s="2"><rect x="290" y="30" width="296" height="104" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="304" y="56" class="b">영어</text><text x="370" y="56" class="s m">87 · 70 · NULL</text>
+    <rect x="290" y="146" width="296" height="104" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/>
+    <text x="304" y="172" class="b">수학</text><text x="370" y="172" class="s m">60 · 90 · 75 · 68</text>
+    <rect x="290" y="262" width="296" height="104" rx="10" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/>
+    <text x="304" y="288" class="b">국어</text><text x="370" y="288" class="s m">75</text></g>
+  <g data-s="3"><text x="304" y="88" class="s">COUNT(*) 3 · COUNT(점수) 2</text><text x="304" y="204" class="s">COUNT(*) 4 · COUNT(점수) 4</text><text x="304" y="320" class="s">COUNT(*) 1 · COUNT(점수) 1</text></g>
+  <g data-s="4"><text x="304" y="118" class="s m">AVG 78.5</text><text x="304" y="234" class="s m">AVG 73.25</text><text x="304" y="350" class="s m">AVG 75</text></g>
+  <g data-s="5"><text x="566" y="118" text-anchor="end" class="s b" style="fill:var(--te)">✓ 통과</text><text x="566" y="234" text-anchor="end" class="s b" style="fill:var(--ap)">✕ 빠짐</text><text x="566" y="350" text-anchor="end" class="s b" style="fill:var(--te)">✓ 통과</text>
+    <text x="14" y="420" class="s m b">HAVING AVG(점수) &gt;= 75</text><text x="300" y="420" class="s">→ 영어 · 국어 (그룹 조건)</text></g>
+</svg>
+
+<!-- ③ 9 · 10주차 — COUNT 와 NULL · Quiz 10-4 -->
+<svg data-fig="count" viewBox="0 0 600 470" role="img" aria-label="COUNT 별표와 COUNT 필드 그리고 WHERE 로 NULL 행이 빠지는 Quiz 10-4" hidden>
+  <g><text x="70" y="22" text-anchor="middle" class="s b">성적.점수</text>
+    <rect x="30" y="34" width="80" height="34" style="fill:var(--card);stroke:var(--line);stroke-width:1.5"/><rect x="30" y="68" width="80" height="34" style="fill:var(--card);stroke:var(--line);stroke-width:1.5"/><rect x="30" y="102" width="80" height="34" style="fill:var(--card);stroke:var(--line);stroke-width:1.5"/><rect x="30" y="136" width="80" height="34" style="fill:var(--card);stroke:var(--line);stroke-width:1.5"/>
+    <rect x="30" y="170" width="80" height="34" style="fill:var(--card);stroke:var(--line);stroke-width:1.5"/><rect x="30" y="204" width="80" height="34" style="fill:var(--card);stroke:var(--line);stroke-width:1.5"/><rect x="30" y="238" width="80" height="34" style="fill:var(--card);stroke:var(--line);stroke-width:1.5"/><rect x="30" y="272" width="80" height="34" style="fill:var(--ap);fill-opacity:.15;stroke:var(--line);stroke-width:1.5"/>
+    <text x="70" y="58" text-anchor="middle" class="s m">87</text><text x="70" y="92" text-anchor="middle" class="s m">60</text><text x="70" y="126" text-anchor="middle" class="s m">75</text><text x="70" y="160" text-anchor="middle" class="s m">70</text>
+    <text x="70" y="194" text-anchor="middle" class="s m">90</text><text x="70" y="228" text-anchor="middle" class="s m">75</text><text x="70" y="262" text-anchor="middle" class="s m">68</text><text x="70" y="296" text-anchor="middle" class="s m b" style="fill:var(--ap)">NULL</text></g>
+  <g data-s="1"><path class="ln" d="M120,36 L132,36 L132,304 L120,304" style="stroke:var(--inh);stroke-width:2.5"/><text x="142" y="166" class="s m b" style="fill:var(--inh)">COUNT(*)</text><text x="142" y="192" class="s b" style="fill:var(--inh)">= 8 (NULL 포함)</text></g>
+  <g data-s="2"><path class="ln" d="M20,36 L10,36 L10,270 L20,270" style="stroke:var(--te);stroke-width:2.5"/><text x="14" y="340" class="s m b" style="fill:var(--te)">COUNT(점수) = 7</text><text x="14" y="366" class="s">NULL 은 세지 않음</text></g>
+  <g data-s="3"><text x="14" y="404" class="s m">SUM 525 · AVG = 525 ÷ 7 = 75</text><text x="14" y="430" class="s">AVG 도 NULL 을 빼고 나눔</text></g>
+  <g><text x="440" y="22" text-anchor="middle" class="s b">Quiz 10-4 SAMPLE</text>
+    <text x="400" y="52" text-anchor="middle" class="s b">col1</text><text x="490" y="52" text-anchor="middle" class="s b">col2</text><path class="ln" d="M350,62 L540,62"/>
+    <text x="400" y="90" text-anchor="middle" class="s m">10</text><text x="490" y="90" text-anchor="middle" class="s m">5</text>
+    <text x="400" y="124" text-anchor="middle" class="s m">20</text><text x="490" y="124" text-anchor="middle" class="s m" style="fill:var(--ap)">NULL</text>
+    <text x="400" y="158" text-anchor="middle" class="s m" style="fill:var(--ap)">NULL</text><text x="490" y="158" text-anchor="middle" class="s m">15</text></g>
+  <g data-s="4"><path class="ln" d="M350,118 L546,118" style="stroke:var(--ap);stroke-width:3"/>
+    <text x="300" y="204" class="s m b">WHERE col2 IS NOT NULL</text><text x="300" y="230" class="s">→ (20, NULL) 행을 먼저 뺌</text></g>
+  <g data-s="5"><rect x="300" y="250" width="286" height="96" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/>
+    <text x="316" y="280" class="s m b">SUM(col1) = 10</text><text x="316" y="306" class="s m b">SUM(col2) = 5 + 15 = 20</text><text x="316" y="332" class="s" style="fill:var(--ap)">⚠️ 30 이 아님 (20 은 빠짐)</text></g>
+  <g data-s="6"><text x="330" y="404" class="s m b">10 + NULL → NULL</text><text x="330" y="430" class="s">NULL 과 산술연산 = NULL</text></g>
+</svg>
+
+<!-- ④ 10주차 — 🔥 합집합 UNION (기말) -->
+<svg data-fig="union" viewBox="0 0 600 500" role="img" aria-label="합집합 UNION 과 UNION ALL" hidden>
+  <g data-s="1"><circle cx="140" cy="120" r="80" style="fill:var(--oc);fill-opacity:.28"/><circle cx="240" cy="120" r="80" style="fill:var(--oc);fill-opacity:.28"/></g>
+  <g><circle cx="140" cy="120" r="80" class="ln" style="stroke-width:2.5"/><circle cx="240" cy="120" r="80" class="ln" style="stroke-width:2.5"/>
+    <text x="84" y="38" class="b">A</text><text x="290" y="38" class="b">B</text>
+    <text x="104" y="112" class="s m b">1</text><text x="104" y="146" class="s m b">6</text><text x="184" y="128" class="s m b">3</text><text x="262" y="112" class="s m b">2</text><text x="262" y="146" class="s m b">7</text></g>
+  <g data-s="1"><text x="350" y="92" class="b" style="fill:var(--oc)">🔥 A ∪ B</text><text x="350" y="124" class="s m">= {1, 2, 3, 6, 7}</text><text x="350" y="152" class="s">3 은 한 번만</text></g>
+  <g data-s="5"><text x="350" y="186" class="s m">A ∩ B = {3}</text><text x="350" y="212" class="s m">A − B = {1, 6}</text></g>
+  <g data-s="2"><text x="14" y="252" class="s b">사원</text><text x="14" y="282" class="s m">1 고길동</text><text x="14" y="310" class="s m">2 이순신</text>
+    <text x="150" y="252" class="s b">직원</text><text x="150" y="282" class="s m">2 이순신</text><text x="150" y="310" class="s m">3 둘리</text>
+    <rect x="290" y="236" width="140" height="132" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/>
+    <text x="304" y="260" class="s m b">UNION</text><text x="304" y="288" class="s m">1 고길동</text><text x="304" y="314" class="s m">2 이순신</text><text x="304" y="340" class="s m">3 둘리</text>
+    <text x="304" y="362" class="s">3행</text></g>
+  <g data-s="3"><rect x="446" y="236" width="140" height="160" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="460" y="260" class="s m b">UNION ALL</text><text x="460" y="288" class="s m">1 고길동</text><text x="460" y="314" class="s m">2 이순신</text><text x="460" y="340" class="s m">2 이순신</text><text x="460" y="366" class="s m">3 둘리</text>
+    <text x="460" y="390" class="s">4행</text></g>
+  <g data-s="4"><text x="14" y="420" class="s b">합병 가능 = 열 개수 · 자료형이 같아야</text><text x="14" y="448" class="s">열 개수가 다르면 ERROR 1222</text></g>
+  <g data-s="5"><text x="14" y="484" class="s">교집합 INTERSECT · 차집합 MINUS / EXCEPT (기말엔 합집합만)</text></g>
+</svg>
+
+<!-- ⑤ 10주차 — 실렉션 σ · 🔥 프로젝션 π (28쪽) -->
+<svg data-fig="sigpi" viewBox="0 0 600 470" role="img" aria-label="실렉션은 행을 프로젝션은 열을 고름" hidden>
+  <g data-s="1"><rect x="6" y="66" width="588" height="32" style="fill:var(--inh);fill-opacity:.22"/><rect x="6" y="134" width="588" height="32" style="fill:var(--inh);fill-opacity:.22"/><rect x="6" y="168" width="588" height="32" style="fill:var(--inh);fill-opacity:.22"/></g>
+  <g data-s="2"><rect x="102" y="30" width="96" height="272" style="fill:var(--oc);fill-opacity:.25"/><rect x="294" y="30" width="96" height="272" style="fill:var(--oc);fill-opacity:.25"/><rect x="486" y="30" width="96" height="272" style="fill:var(--oc);fill-opacity:.25"/></g>
+  <g><text x="300" y="20" text-anchor="middle" class="s b">고객 (Quiz 10-2)</text>
+    <text x="54" y="54" text-anchor="middle" class="s b">고객아이디</text><text x="150" y="54" text-anchor="middle" class="s b">고객이름</text><text x="246" y="54" text-anchor="middle" class="s b">나이</text><text x="342" y="54" text-anchor="middle" class="s b">등급</text><text x="438" y="54" text-anchor="middle" class="s b">직업</text><text x="534" y="54" text-anchor="middle" class="s b">적립금</text>
+    <path class="ln" d="M6,63 L594,63"/>
+    <text x="54" y="88" text-anchor="middle" class="s m">apple</text><text x="150" y="88" text-anchor="middle" class="s">정소화</text><text x="246" y="88" text-anchor="middle" class="s m">20</text><text x="342" y="88" text-anchor="middle" class="s m">gold</text><text x="438" y="88" text-anchor="middle" class="s">학생</text><text x="534" y="88" text-anchor="middle" class="s m">1000</text>
+    <text x="54" y="122" text-anchor="middle" class="s m">banana</text><text x="150" y="122" text-anchor="middle" class="s">김선우</text><text x="246" y="122" text-anchor="middle" class="s m">25</text><text x="342" y="122" text-anchor="middle" class="s m">vip</text><text x="438" y="122" text-anchor="middle" class="s">간호사</text><text x="534" y="122" text-anchor="middle" class="s m">2500</text>
+    <text x="54" y="156" text-anchor="middle" class="s m">carrot</text><text x="150" y="156" text-anchor="middle" class="s">고명석</text><text x="246" y="156" text-anchor="middle" class="s m">28</text><text x="342" y="156" text-anchor="middle" class="s m">gold</text><text x="438" y="156" text-anchor="middle" class="s">교사</text><text x="534" y="156" text-anchor="middle" class="s m">4500</text>
+    <text x="54" y="190" text-anchor="middle" class="s m">melon</text><text x="150" y="190" text-anchor="middle" class="s">성원용</text><text x="246" y="190" text-anchor="middle" class="s m">35</text><text x="342" y="190" text-anchor="middle" class="s m">gold</text><text x="438" y="190" text-anchor="middle" class="s">회사원</text><text x="534" y="190" text-anchor="middle" class="s m">5000</text>
+    <text x="54" y="224" text-anchor="middle" class="s m">orange</text><text x="150" y="224" text-anchor="middle" class="s">김용축</text><text x="246" y="224" text-anchor="middle" class="s m">22</text><text x="342" y="224" text-anchor="middle" class="s m">silver</text><text x="438" y="224" text-anchor="middle" class="s">학생</text><text x="534" y="224" text-anchor="middle" class="s m">NULL</text>
+    <text x="54" y="258" text-anchor="middle" class="s m">peach</text><text x="150" y="258" text-anchor="middle" class="s">오형준</text><text x="246" y="258" text-anchor="middle" class="s m">NULL</text><text x="342" y="258" text-anchor="middle" class="s m">silver</text><text x="438" y="258" text-anchor="middle" class="s">의사</text><text x="534" y="258" text-anchor="middle" class="s m">300</text>
+    <text x="54" y="292" text-anchor="middle" class="s m">pear</text><text x="150" y="292" text-anchor="middle" class="s">채광주</text><text x="246" y="292" text-anchor="middle" class="s m">31</text><text x="342" y="292" text-anchor="middle" class="s m">silver</text><text x="438" y="292" text-anchor="middle" class="s">회사원</text><text x="534" y="292" text-anchor="middle" class="s m">500</text></g>
+  <g data-s="1"><text x="14" y="338" class="b" style="fill:var(--inh)">σ 등급='gold' (고객)</text><text x="14" y="366" class="s m">SELECT * FROM 고객 WHERE 등급='gold';</text><text x="14" y="392" class="s">실렉션 = 원하는 행 (3행 · 열은 그대로)</text></g>
+  <g data-s="2"><text x="14" y="424" class="b" style="fill:var(--oc)">🔥 π 고객이름,등급,적립금 (고객)</text><text x="14" y="454" class="s m">SELECT 고객이름, 등급, 적립금 FROM 고객;</text></g>
+</svg>
+
+<!-- ⑥ 10주차 — 조인 4가지 (Quiz 10-5 R1 · S1) -->
+<svg data-fig="join" viewBox="0 0 600 560" role="img" aria-label="R1 과 S1 의 카티션 프로덕트 동등조인 자연조인 세타조인" hidden>
+  <g><text x="14" y="22" class="b m">R1</text><text x="34" y="50" text-anchor="middle" class="s m b">A</text><text x="74" y="50" text-anchor="middle" class="s m b">B</text><path class="ln" d="M14,58 L94,58"/>
+    <text x="34" y="80" text-anchor="middle" class="s m">1</text><text x="74" y="80" text-anchor="middle" class="s m">4</text><text x="34" y="106" text-anchor="middle" class="s m">2</text><text x="74" y="106" text-anchor="middle" class="s m">5</text>
+    <text x="130" y="22" class="b m">S1</text><text x="150" y="50" text-anchor="middle" class="s m b">A</text><text x="190" y="50" text-anchor="middle" class="s m b">C</text><text x="230" y="50" text-anchor="middle" class="s m b">D</text><path class="ln" d="M130,58 L250,58"/>
+    <text x="150" y="80" text-anchor="middle" class="s m">1</text><text x="190" y="80" text-anchor="middle" class="s m">3</text><text x="230" y="80" text-anchor="middle" class="s m">4</text>
+    <text x="150" y="106" text-anchor="middle" class="s m">2</text><text x="190" y="106" text-anchor="middle" class="s m">2</text><text x="230" y="106" text-anchor="middle" class="s m">6</text>
+    <text x="150" y="132" text-anchor="middle" class="s m">3</text><text x="190" y="132" text-anchor="middle" class="s m">1</text><text x="230" y="132" text-anchor="middle" class="s m">9</text></g>
+  <g data-s="1"><text x="290" y="26" class="s b">1. 카티션 프로덕트 R1 × S1</text>
+    <text x="290" y="50" class="s">모든 짝 → 2 × 3 = 6행 · 열 5개</text>
+    <text x="14" y="176" class="s m b">A B A C D</text>
+    <text x="14" y="204" class="s m">1 4 1 3 4</text><text x="14" y="230" class="s m">1 4 2 2 6</text><text x="14" y="256" class="s m">1 4 3 1 9</text>
+    <text x="14" y="282" class="s m">2 5 1 3 4</text><text x="14" y="308" class="s m">2 5 2 2 6</text><text x="14" y="334" class="s m">2 5 3 1 9</text></g>
+  <g data-s="2"><text x="290" y="92" class="s b">2. 동등조인 R1.A = S1.A</text>
+    <text x="210" y="176" class="s m b" style="fill:var(--te)">A B A C D</text>
+    <text x="210" y="204" class="s m" style="fill:var(--te)">1 4 1 3 4</text><text x="210" y="230" class="s m" style="fill:var(--te)">2 5 2 2 6</text></g>
+  <g data-s="3"><text x="290" y="120" class="s b">3. 자연조인 — 같은 A 하나 제거</text>
+    <text x="210" y="290" class="s m b" style="fill:var(--inh)">A B C D</text>
+    <text x="210" y="318" class="s m" style="fill:var(--inh)">1 4 3 4</text><text x="210" y="344" class="s m" style="fill:var(--inh)">2 5 2 6</text></g>
+  <g data-s="4"><text x="290" y="148" class="s b">4. 세타조인 R1.A &gt;= C</text>
+    <text x="400" y="176" class="s m b" style="fill:var(--oc)">A B A C D</text>
+    <text x="400" y="204" class="s m" style="fill:var(--oc)">1 4 3 1 9</text><text x="400" y="230" class="s m" style="fill:var(--oc)">2 5 2 2 6</text><text x="400" y="256" class="s m" style="fill:var(--oc)">2 5 3 1 9</text>
+    <text x="400" y="290" class="s">A=1 → C 가 1 인 짝</text><text x="400" y="316" class="s">A=2 → C 가 2 · 1</text></g>
+  <g data-s="5"><text x="14" y="392" class="s b">✍️ 조인 = 2개 이상의 테이블에서 일치하는 행 검색</text>
+    <text x="14" y="424" class="s m">1. select * from R1, S1;</text>
+    <text x="14" y="452" class="s m">2. ... where R1.A = S1.A;</text>
+    <text x="14" y="480" class="s m">3. select R1.A, B, C, D ... where R1.A = S1.A;</text>
+    <text x="14" y="508" class="s m">4. ... where R1.A &gt;= C;</text>
+    <text x="14" y="540" class="s">행 순서는 상관없음 (투플은 순서가 없음)</text></g>
+</svg>
+
+    </div>
+    <div class="ctl">
+        <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
+        <button type="button" id="prev" title="이전 단계">◀ 이전</button>
+        <button type="button" id="next" title="다음 단계">다음 ▶</button>
+        <button type="button" id="all" title="모두 보기">전체</button>
+        <span class="pos" id="pos"></span>
+    </div>
+    <ol class="cap" id="cap"></ol>
+    <p class="note" id="note"></p>
+</div>
+<script>
+(function () {
+    "use strict";
+    // 그림마다: 탭 이름 · 강의자료 출처 · 단계 설명 (단계 번호 = SVG 의 data-s) · 아래 메모
+    var FIGS = [
+        { id: "order", week: 9, tab: "① 실행 순서", src: "9주차 ✍️ 필기 “SELECT 문법 순서 5 SELECT · 1 FROM · 2 WHERE · 3 GROUP BY · 4 HAVING · 6 ORDER BY” · 강의자료 52쪽 실습 2-5 (성적2)",
+          steps: [
+            "<b>① FROM</b> — 어느 테이블에서 · 성적2 의 8행을 가져옴",
+            "<b>② WHERE</b> — <b>행</b> 조건 · <code>점수 &gt;= 70</code> → 60 · 68 · NULL 행이 빠져 5행",
+            "<b>③ GROUP BY</b> — 같은 과목끼리 묶음 · 영어 {87, 70} · 국어 {75} · 수학 {90, 75}",
+            "<b>④ HAVING</b> — <b>그룹</b> 조건 · <code>AVG(점수) &gt;= 75</code> → 78.5 · 75 · 82.5 모두 통과",
+            "<b>⑤ SELECT</b> — 보여 줄 열 · <code>과목, AVG(점수)</code> (쓰는 순서는 맨 처음이지만 실행은 5번째)",
+            "<b>⑥ ORDER BY</b> — 마지막에 정렬 · 수학 82.5 → 영어 78.5 → 국어 75 · WHERE 에 집계함수를 쓰면 <b>ERROR 1111</b> → 그룹 조건은 HAVING" ],
+          note: "결과는 이 맥 MySQL 8.4 로 직접 실행한 값 · 6주차에 배운 FROM → WHERE → SELECT 에 GROUP BY · HAVING · ORDER BY 가 더해진 것 (<a href=\"../데이터베이스관리-9주차.html\" target=\"_top\">9주차 페이지</a>)" },
+        { id: "group", week: 9, tab: "② GROUP BY · HAVING", src: "9주차 강의자료 48 ~ 52쪽 — [실습2-2] 그룹화 (성적2) · ⭐⭐⭐ 2-2 GROUP BY",
+          steps: [
+            "<code>GROUP BY 과목</code> — 같은 과목(같은 색)끼리 한 묶음",
+            "묶음 3개 — 영어 {87, 70, NULL} · 수학 {60, 90, 75, 68} · 국어 {75}",
+            "<code>COUNT(*)</code> 는 NULL 행도 세고 <code>COUNT(점수)</code> 는 NULL 을 빼고 셈 → 영어 3 / 2 (교수님 2-2 답 = COUNT(점수))",
+            "<code>AVG(점수)</code> — NULL 은 빼고 평균 → 영어 78.5 · 수학 73.25 · 국어 75",
+            "<code>HAVING AVG(점수) &gt;= 75</code> — 그룹에 조건 → 영어 · 국어만 (수학 빠짐)" ],
+          note: "⚠️ 문제는 “75 보다 높은” 인데 교수님 답(52쪽)은 <code>&gt;= 75</code> — 글자 그대로 <code>&gt; 75</code> 면 영어만 · MySQL 로 확인 · 행 순서는 MySQL 이 정함 (ORDER BY 를 써야 보장)" },
+        { id: "count", week: [9, 10], tab: "③ COUNT 와 NULL", src: "9주차 ✍️ 필기 “COUNT(*) : NULL을 포함 · COUNT(필드) : NULL을 제외” · 10주차 ✍️ 필기 · 강의자료 7쪽 Quiz 10-4",
+          steps: [
+            "<code>COUNT(*)</code> — 행 수 · NULL 인 행도 셈 → 성적 <b>8</b>",
+            "<code>COUNT(점수)</code> — 점수가 NULL 인 신동엽은 빼고 → <b>7</b>",
+            "<code>SUM(점수)</code> 525 · <code>AVG(점수)</code> = 525 ÷ 7 = <b>75</b> (AVG 도 NULL 을 빼고 나눔)",
+            "Quiz 10-4 — <code>WHERE col2 IS NOT NULL</code> 이 (20, NULL) 행을 <b>먼저</b> 뺌",
+            "<code>SUM(col1)</code> = <b>10</b> (NULL 은 빼고) · <code>SUM(col2)</code> = 5 + 15 = <b>20</b> — ⚠️ 필기 답 30 은 WHERE 를 빼먹은 값",
+            "✍️ NULL 과 산술연산 (+ − × ÷) 의 결과는 <b>NULL</b> — <code>10 + NULL</code> → NULL" ],
+          note: "전부 MySQL 8.4 로 확인 · Quiz 10-3 (AVG(col1) 45 · SUM(col2) 50 · COUNT(col3) 2) 는 <a href=\"../데이터베이스관리-10주차.html\" target=\"_top\">10주차 페이지</a>" },
+        { id: "union", week: 10, tab: "④ 🔥 합집합 UNION", src: "10주차 🔥 ✍️ 필기 “(MySQL) 기말고사에 합집합만 나옴” · 강의자료 18 ~ 21 · 24쪽",
+          steps: [
+            "🔥 <b>합집합</b> A ∪ B — 둘 중 한쪽에라도 있으면 · A = {1, 3, 6} · B = {2, 3, 7} → {1, 2, 3, 6, 7} (3 은 한 번만)",
+            "<code>UNION</code> — 사원 ∪ 직원 → 두 SELECT 결과를 합치고 <b>중복(2 이순신)은 한 번만</b> → 3행",
+            "<code>UNION ALL</code> — <b>중복까지 모두</b> → 4행 (이순신 두 번)",
+            "<b>합병 가능</b>(union-compatible) — 두 릴레이션의 속성 개수 · 도메인이 같아야 · 열 개수가 다르면 MySQL <b>ERROR 1222</b>",
+            "(참고) 교집합 A ∩ B = {3} · 차집합 A − B = {1, 6} — <code>INTERSECT</code> · <code>MINUS</code>(Oracle) / <code>EXCEPT</code>(MS SQL) · 기말은 <b>합집합만</b>" ],
+          note: "⚠️ 필기는 교집합 · 차집합을 “MySQL 문법 지원하지 않음” 이라 했지만 MySQL 8.0.31 부터 <code>INTERSECT</code> · <code>EXCEPT</code> 지원 (8.4 로 확인) · <code>MINUS</code> 는 ERROR 1064" },
+        { id: "sigpi", week: 10, tab: "⑤ 실렉션 · 프로젝션", src: "10주차 ✍️ 필기 “실렉션(SELECTION):시그마 원하는 행 · 프로젝션:파이 원하는 열” · 강의자료 26 ~ 28쪽 (🔥 28쪽 = 기말)",
+          steps: [
+            "<b>실렉션 σ</b> — 원하는 <b>행</b>(투플) · <code>σ 등급='gold' (고객)</code> = <code>SELECT * FROM 고객 WHERE 등급='gold';</code> → 3행 · 열은 그대로",
+            "🔥 <b>프로젝션 π</b> (28쪽) — 원하는 <b>열</b>(속성) · <code>π 고객이름,등급,적립금 (고객)</code> = <code>SELECT 고객이름, 등급, 적립금 FROM 고객;</code> → 행 수는 그대로" ],
+          note: "⚠️ 필기 “프로젝션(PRODUCTION)” → <b>PROJECTION</b> · 표는 수업 Quiz 10-2 고객 테이블 (MySQL 결과와 같음) · 28쪽 슬라이드는 위 · 아래 표 이름이 서로 달라요 (그림 출처가 다름)" },
+        { id: "join", week: 10, tab: "⑥ 조인 4가지", src: "10주차 ✍️ 필기 [QUIZ 10-5] · 강의자료 9 · 36 ~ 39쪽 — R1(A, B) · S1(A, C, D)",
+          steps: [
+            "<b>카티션 프로덕트</b> R1 × S1 — 조건 없이 <b>모든 짝</b> → 2 × 3 = <b>6행</b> · 열 2 + 3 = 5개",
+            "<b>동등조인</b> (equi join) — <code>R1.A = S1.A</code> 인 짝만 → 2행 · A 열이 두 번",
+            "<b>자연조인</b> (natural join) — 동등조인에서 <b>공통 필드 하나를 제거</b> → A · B · C · D",
+            "<b>세타조인</b> (theta join) — 비교 연산자 <code>&gt; &gt;= = &lt;&gt; &lt;= &lt;</code> · <code>R1.A &gt;= C</code> → 3행",
+            "✍️ 조인 = 2개 이상의 테이블에서 일치하는 행 검색 · SQL 은 38 · 39쪽 그대로" ],
+          note: "결과는 MySQL 8.4 로 실행한 값 · 🤖 <code>R1 NATURAL JOIN S1</code> 도 자연조인과 같은 결과 · 행 순서는 상관없음" }
+    ];
+
+    var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
+        note = document.getElementById("note"), pos = document.getElementById("pos"), box = document.getElementById("box");
+    var S = { fig: 0, step: 0, timers: [] };   // step 0 = 전체
+
+    function svgOf(i) { return document.querySelector('svg[data-fig="' + FIGS[i].id + '"]'); }
+    function parts(svgEl) { return Array.prototype.slice.call(svgEl.querySelectorAll("[data-s]")); }
+    function clearTimers() { S.timers.forEach(clearTimeout); S.timers = []; }
+
+    function drawIn(root) {                       // 선이 그려지듯이 (stroke-dashoffset)
+        var list = root.matches && root.matches(".d") ? [root] : [];
+        list = list.concat(Array.prototype.slice.call(root.querySelectorAll(".d")));
+        list.forEach(function (p) {
+            if (!p.getTotalLength) return;
+            var L; try { L = p.getTotalLength(); } catch (e) { return; }
+            if (!L) return;
+            p.style.transition = "none"; p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+            p.getBoundingClientRect();
+            p.style.transition = "stroke-dashoffset 0.9s ease"; p.style.strokeDashoffset = 0;
+            setTimeout(function () { p.style.strokeDasharray = ""; }, 1000);
+        });
+    }
+
+    function renderCap() {
+        var f = FIGS[S.fig];
+        cap.innerHTML = "";
+        f.steps.forEach(function (t, i) {
+            var li = document.createElement("li"); li.innerHTML = t;
+            if (S.step && i + 1 === S.step) li.className = "cur";
+            else if (S.step && i + 1 > S.step) li.className = "later";
+            li.addEventListener("click", function () { go(i + 1); });
+            cap.appendChild(li);
+        });
+        pos.textContent = S.step ? S.step + " / " + f.steps.length + " 단계" : "전체 " + f.steps.length + " 단계";
+    }
+
+    function apply(animateNew) {                  // 지금 단계에 맞게 보이기 · 숨기기
+        var svgEl = svgOf(S.fig);
+        parts(svgEl).forEach(function (g) {
+            var k = +g.getAttribute("data-s");
+            var wasOff = g.classList.contains("off");
+            var show = !S.step || k <= S.step;
+            g.classList.toggle("off", !show);
+            g.classList.toggle("hl", !!S.step && k === S.step);
+            if (show && wasOff && animateNew) drawIn(g);
+        });
+        renderCap();
+    }
+
+    function drawAll() {                          // 전체를 단계 순서대로 그리면서 보여 주기
+        clearTimers();
+        var svgEl = svgOf(S.fig), n = FIGS[S.fig].steps.length;
+        S.step = 0;
+        parts(svgEl).forEach(function (g) { g.classList.add("off"); g.classList.remove("hl"); });
+        drawIn(svgEl);
+        renderCap();
+        for (var k = 1; k <= n; k++) (function (k) {
+            S.timers.push(setTimeout(function () {
+                parts(svgEl).forEach(function (g) { if (+g.getAttribute("data-s") === k) { g.classList.remove("off"); drawIn(g); } });
+            }, 350 + (k - 1) * 650));
+        })(k);
+    }
+
+    function go(step) {
+        clearTimers();
+        var n = FIGS[S.fig].steps.length;
+        S.step = Math.max(1, Math.min(n, step));
+        apply(true);
+    }
+
+    function show(i, draw) {
+        clearTimers();
+        S.fig = i; S.step = 0;
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (s) {   // SVG 는 .hidden 속성이 없어서 attribute 로
+            if (s.getAttribute("data-fig") === FIGS[i].id) s.removeAttribute("hidden"); else s.setAttribute("hidden", "");
+        });
+        Array.prototype.forEach.call(tabsBox.children, function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+        src.innerHTML = "📄 " + FIGS[i].src;
+        note.innerHTML = FIGS[i].note || "";
+        if (draw) drawAll(); else { parts(svgOf(i)).forEach(function (g) { g.classList.remove("off", "hl"); }); renderCap(); }
+        tell();
+    }
+
+    // 주차로 골라 보기 — ?week=5 = 그 주차 그림만 · ?weeks=1-7 = 그 범위 (주차 페이지 · 중간고사 · 기말고사 · 완전정리가 같은 그림 파일을 나눠 씀 · README 🎨)
+    (function () {
+        var q = location.search, m1 = /[?&]week=(\d+)/.exec(q), m2 = /[?&]weeks=(\d+)-(\d+)/.exec(q);
+        if (!m1 && !m2) return;
+        var lo = m1 ? +m1[1] : +m2[1], hi = m1 ? +m1[1] : +m2[2];
+        var keep = FIGS.filter(function (f) { return [].concat(f.week).some(function (w) { return w >= lo && w <= hi; }); });
+        if (keep.length) FIGS = keep;
+    })();
+
+    // 그림 검사 — 콘솔에서 figCheck() → 글자끼리 겹침 · 600 폭 밖으로 넘침 목록 (없으면 [] · 폰 폭에서도 한 번 더)
+    window.figCheck = function () {
+        var out = [];
+        Array.prototype.forEach.call(document.querySelectorAll("svg[data-fig]"), function (sv) {
+            var wasHidden = sv.hasAttribute("hidden"); sv.removeAttribute("hidden");
+            var vb = sv.viewBox.baseVal, ts = Array.prototype.map.call(sv.querySelectorAll("text"), function (t) { return { t: t, b: t.getBBox() }; });
+            ts.forEach(function (o) { if (o.b.x < -1 || o.b.x + o.b.width > vb.width + 1) out.push(sv.getAttribute("data-fig") + " 넘침: " + o.t.textContent.slice(0, 24)); });
+            for (var i = 0; i < ts.length; i++) for (var j = i + 1; j < ts.length; j++) {
+                var a = ts[i].b, c = ts[j].b, ox = Math.min(a.x + a.width, c.x + c.width) - Math.max(a.x, c.x), oy = Math.min(a.y + a.height, c.y + c.height) - Math.max(a.y, c.y);
+                if (ox > 2 && oy > 3) out.push(sv.getAttribute("data-fig") + " 겹침: " + ts[i].t.textContent.slice(0, 16) + " × " + ts[j].t.textContent.slice(0, 16));
+            }
+            if (wasHidden) sv.setAttribute("hidden", "");
+        });
+        return out;
+    };
+
+    FIGS.forEach(function (f, i) {
+        var b = document.createElement("button"); b.type = "button"; b.textContent = f.tab;
+        b.addEventListener("click", function () { show(i, true); try { history.replaceState(null, "", "#" + f.id); } catch (e) {} });
+        tabsBox.appendChild(b);
+    });
+    document.getElementById("redraw").addEventListener("click", function () { drawAll(); });
+    document.getElementById("all").addEventListener("click", function () { clearTimers(); S.step = 0; apply(false); });
+    document.getElementById("prev").addEventListener("click", function () { go(S.step ? S.step - 1 : 1); });
+    document.getElementById("next").addEventListener("click", function () { go(S.step ? S.step + 1 : 1); });
+    document.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") go(S.step + 1); else if (e.key === "ArrowLeft") go(S.step ? S.step - 1 : 1); });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) {} }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    var start = 0, h = (location.hash || "").slice(1);
+    FIGS.forEach(function (f, i) { if (f.id === h) start = i; });
+    show(start, false);
+    // 처음 화면에 보일 때 한 번 그리면서 보여 주기
+    if (window.IntersectionObserver) {
+        var done = false;
+        new IntersectionObserver(function (es) { if (!done && es[0].isIntersecting) { done = true; drawAll(); } }, { threshold: 0.3 }).observe(document.querySelector(".stage"));
+    }
+})();
+</script>
+<script src="../../figink.js?v=202610292237"></script>
+</body>
+</html>
