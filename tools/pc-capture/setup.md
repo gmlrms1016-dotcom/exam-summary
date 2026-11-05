@@ -11,6 +11,7 @@ $base = "https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture"
 $d = Join-Path $env:USERPROFILE ".claude\tools"
 New-Item -ItemType Directory -Force -Path $d | Out-Null
 Invoke-WebRequest "$base/vmcapture.ps1" -OutFile (Join-Path $d "vmcapture.ps1") -UseBasicParsing
+Invoke-WebRequest "$base/vmtype.ps1" -OutFile (Join-Path $d "vmtype.ps1") -UseBasicParsing
 Invoke-WebRequest "$base/CLAUDE-capture.md" -OutFile (Join-Path $d "CLAUDE-capture.md") -UseBasicParsing
 $md = Join-Path $env:USERPROFILE ".claude\CLAUDE.md"
 $rule = [IO.File]::ReadAllText((Join-Path $d "CLAUDE-capture.md"), [Text.Encoding]::UTF8)
@@ -25,7 +26,7 @@ if ($old -notmatch "vmcapture-rule") {
 - 이미 규칙이 있으면 다시 붙이지 않아요 (표시 `vmcapture-rule`)
 
 ## 2. 시험 캡처
-VMware Workstation 을 켠 상태에서:
+VMware Workstation 을 켠 상태에서 (안 켜져 있으면 ERROR 로 끝남 → 사용자에게 VMware 를 열어 달라고 하기):
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vmcapture.ps1"
