@@ -47,6 +47,24 @@ public static class VmCap {
     [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, UIntPtr extra);
     [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr hWnd, IntPtr hdc, uint flags);
     [DllImport("dwmapi.dll")] public static extern int DwmGetWindowAttribute(IntPtr hWnd, int attr, out RECT rect, int size);
+    // 2026-11-08: Get-Process 의 MainWindowTitle 이 비어 "VMware window not found" 가 나던 것 → 보이는 창을 모두 훑기
+    public delegate bool EnumProc(IntPtr hWnd, IntPtr lParam);
+    [DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc cb, IntPtr lParam);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr hWnd, System.Text.StringBuilder sb, int max);
+    [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr hWnd);
+    [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint pid);
+    public static System.Collections.Generic.List<string> Windows() {
+        var list = new System.Collections.Generic.List<string>();
+        EnumWindows(delegate (IntPtr h, IntPtr l) {
+            if (IsWindowVisible(h)) {
+                var sb = new System.Text.StringBuilder(512);
+                GetWindowText(h, sb, 512);
+                if (sb.Length > 0) { uint pid; GetWindowThreadProcessId(h, out pid); list.Add(h.ToInt64() + "|" + pid + "|" + sb.ToString()); }
+            }
+            return true;
+        }, IntPtr.Zero);
+        return list;
+    }
 }
 "@
 
@@ -71,9 +89,25 @@ if ($Process -or $Window) {
     if ($Title) { $procs = @($procs | Where-Object { $_.MainWindowTitle -like "*$Title*" }) }
     $what = "VMware window (is VMware Workstation open? does -Title match the window title?)"
 }
-if ($procs.Count -eq 0) { Write-Output "ERROR: $what not found"; exit 1 }
-$p = $procs[0]
-$hWnd = $p.MainWindowHandle
+$hWnd = [IntPtr]::Zero; $winTitle = ""
+if ($procs.Count -gt 0) { $hWnd = $procs[0].MainWindowHandle; $winTitle = $procs[0].MainWindowTitle }
+else {
+    # 못 찾으면 EnumWindows 로 보이는 창을 모두 훑음 (2026-11-05 학교 PC: MainWindowTitle 이 비어 VMware 창을 못 찾았음)
+    foreach ($line in [VmCap]::Windows()) {
+        $parts = $line.Split([char]'|', 3)
+        $wh = [IntPtr]::new([long]$parts[0]); $wpid = [int]$parts[1]; $wt = $parts[2]
+        $pname = ""; try { $pname = (Get-Process -Id $wpid -ErrorAction Stop).ProcessName } catch { }
+        if ($Process -or $Window) {
+            $hit = $true
+            if ($Process -and -not ($pname -like $Process)) { $hit = $false }
+            if ($Window -and -not ($wt -like "*$Window*")) { $hit = $false }
+        } else {
+            $hit = ($wt -match "VMware") -and ((-not $Title) -or ($wt -like "*$Title*"))
+        }
+        if ($hit) { $hWnd = $wh; $winTitle = $wt; break }
+    }
+}
+if ($hWnd -eq [IntPtr]::Zero) { Write-Output "ERROR: $what not found"; exit 1 }
 
 # 3) 최소화돼 있으면 되살림 (PrintWindow 는 최소화된 창을 못 그림) · 화면 복사 방식만 앞으로 가져옴
 if ([VmCap]::IsIconic($hWnd)) { [void][VmCap]::ShowWindow($hWnd, 9); Start-Sleep -Milliseconds 600 }
@@ -134,4 +168,4 @@ $dir = Split-Path -Parent $Out
 if ($dir -and -not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir | Out-Null }
 $bmp.Save($Out, [System.Drawing.Imaging.ImageFormat]::Png)
 $bmp.Dispose()
-Write-Output ("SAVED: {0} | {1} x {2} px | DPI: {3} | method: {4} | window: {5}" -f $Out, $cw, $ch, $dpi, $used, $p.MainWindowTitle)
+Write-Output ("SAVED: {0} | {1} x {2} px | DPI: {3} | method: {4} | window: {5}" -f $Out, $cw, $ch, $dpi, $used, $winTitle)

@@ -19,5 +19,12 @@
   - **디스크를 바꾸는 명령(fdisk · parted · mkfs · mdadm · dd · wipefs 등) · 재부팅 · 끄기는 쓰지 않는다**(스크립트도 거부함) → 원격제어로 화면을 보면서 하거나, 사용자가 직접 치고 Claude 는 vmcapture.ps1 로 찍기만
   - 키를 보내기 전에 매번 맨 앞 창이 그 VMware 창인지 확인하고 아니면 멈춤 · 한 글자씩 40ms · 출력이 다 나와 화면이 멈춘 뒤 찍음 · 끝나면 Ctrl+Alt 로 입력을 풀어 줌
 - **원격제어(Computer use)** 는 Claude 앱 설정 → This computer → Computer use 에서 사용자가 직접 켠다 (기본 꺼짐 · 보안 설정이라 Claude 가 켜지 않음) · **켠 뒤에는 새 세션에서** 시작 (이미 열려 있던 세션에는 도구가 안 들어옴 · 2026-11-05)
+  - 새 세션에서 ToolSearch 로 computer-use 도구를 불러오고 `request_access("VMware Workstation Pro")` → full 허용
+  - **VM 안에 입력**: `type` 은 VM 에 글자가 안 들어감(Enter 만) → `key` 로 한 글자씩 — 대문자 `shift+l` · `*` = `shift+8` · `>` = `shift+period` · `"` = `shift+'` · `#` = `shift+3` · `|` = `shift+backslash` · `=` 는 `"="` 그대로(`equal` 은 틀린 키 이름)
+  - 포커스가 자주 빠짐("Claude's own window still has keyboard focus") → **입력 전마다 VM 콘솔 클릭** · 글자 화면(응급 셸)은 글자가 늦게 찍히니 **명령마다 2~5초** 기다리기
+  - `open_application(VMware)` 이 빈 Home 창을 하나 더 열면 닫기 · 작업 표시줄 클릭은 File Explorer 허용이 따로 필요 · 백신(알약) 팝업이 앞을 가릴 수 있음
+  - **비밀번호(로그인 · 응급 모드)는 Claude 가 넣지 않음** → 그 단계에서 사용자에게 입력해 달라고
+- **원격제어 중 캡처**: 화면 가장자리에 주황 빛이 켜지므로 **창을 가장자리에서 띄우고**(예: 50, 40) 찍기 · 마우스를 탭 위에서 치워 툴팁 X · VMware 라이브러리 패널을 닫으면 콘솔이 넓게 찍힘 · `VMware window not found` 가 나오면 최신 vmcapture.ps1(창 제목이 비어도 EnumWindows 로 찾음)로 다시 받기
+- 도구용 ps1 은 **UTF-8 BOM 필수** (BOM 없으면 Windows PowerShell 5.1 이 한글 경로를 깨뜨려 엉뚱한 폴더에 저장)
 - 워드(docx)에 넣을 때도 원본 PNG 그대로 — python-docx 는 `width` 만 지정(비율 유지 · 다시 저장 · 압축 X) · 워드는 파일 → 옵션 → 고급 → 이미지 크기 및 품질 → "파일의 이미지 압축 안 함"
 - 스크립트가 없으면(PC 초기화 등) iCloud `동양미래대학교/Claude설정/`(또는 `Claude설정.zip`)을 내려받아 `프롬프트.txt` 대로 하거나 https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 대로 다시 설치하고 찍는다
