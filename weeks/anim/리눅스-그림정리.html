@@ -482,6 +482,70 @@
   <g data-s="4"><text x="40" y="356" class="s" style="fill:var(--ap)">test4 → hard 에서 멈춤 → Disk quota exceeded</text></g>
 </svg>
 
+<!-- ⑳ RAID 종류 한눈에 (10주차) -->
+<svg data-fig="raid" viewBox="0 0 600 524" role="img" aria-label="RAID 방식별 최소 디스크 개수 · 쓸 수 있는 용량 · 고장 허용 비교" hidden>
+  <g data-s="1"><text x="22" y="34" class="s">방식</text><text x="262" y="34" text-anchor="middle" class="s">최소 디스크</text><text x="392" y="34" text-anchor="middle" class="s">용량 (1TB×N)</text><text x="525" y="34" text-anchor="middle" class="s">고장 허용</text>
+    <rect x="8" y="50" width="584" height="64" rx="10" style="fill:var(--mid);fill-opacity:.16;stroke:var(--mid);stroke-width:2"/><text x="22" y="80" class="b">단순 볼륨</text><text x="22" y="104" class="s">RAID 아님</text><text x="262" y="92" text-anchor="middle" class="b">1개</text><text x="392" y="92" text-anchor="middle" class="b">1TB</text><text x="525" y="92" text-anchor="middle" class="b" style="fill:var(--ap)">✗</text>
+    <rect x="8" y="122" width="584" height="64" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="22" y="152" class="b">Linear RAID</text><text x="22" y="176" class="s">앞 디스크부터 채움</text><text x="262" y="164" text-anchor="middle" class="b">2개 이상</text><text x="392" y="164" text-anchor="middle" class="b">N</text><text x="525" y="164" text-anchor="middle" class="b" style="fill:var(--ap)">✗</text>
+    <text x="22" y="504" class="s">N = 디스크 개수 · 1TB 디스크 N개 기준 (교재 그림 6-23)</text></g>
+  <g data-s="2"><rect x="8" y="194" width="584" height="64" rx="10" style="fill:var(--ap);fill-opacity:.12;stroke:var(--ap);stroke-width:2"/><text x="22" y="224" class="b">RAID 0</text><text x="22" y="248" class="s">스트라이핑 · 가장 빠름</text><text x="262" y="236" text-anchor="middle" class="b">2개 이상</text><text x="392" y="236" text-anchor="middle" class="b">N</text><text x="525" y="236" text-anchor="middle" class="b" style="fill:var(--ap)">✗</text></g>
+  <g data-s="3"><rect x="8" y="266" width="584" height="64" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><text x="22" y="296" class="b">RAID 1</text><text x="22" y="320" class="s">미러링 · 효율 50%</text><text x="262" y="308" text-anchor="middle" class="b">2개</text><text x="392" y="308" text-anchor="middle" class="b">N / 2</text><text x="525" y="308" text-anchor="middle" class="b" style="fill:var(--te)">1개</text></g>
+  <g data-s="4"><rect x="8" y="338" width="584" height="64" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/><text x="22" y="368" class="b">RAID 5</text><text x="22" y="392" class="s">패리티 1개분</text><text x="262" y="380" text-anchor="middle" class="b">3개 이상</text><text x="392" y="380" text-anchor="middle" class="b">N − 1</text><text x="525" y="380" text-anchor="middle" class="b" style="fill:var(--te)">1개</text>
+    <rect x="8" y="410" width="584" height="64" rx="10" style="fill:var(--fr);fill-opacity:.14;stroke:var(--fr);stroke-width:2"/><text x="22" y="440" class="b">RAID 6</text><text x="22" y="464" class="s">패리티 2개분</text><text x="262" y="452" text-anchor="middle" class="b">4개 이상</text><text x="392" y="452" text-anchor="middle" class="b">N − 2</text><text x="525" y="452" text-anchor="middle" class="b" style="fill:var(--te)">2개</text></g>
+</svg>
+
+<!-- ㉑ Linear · RAID 0 · RAID 1 저장 방식 (10주차) -->
+<svg data-fig="store" viewBox="0 0 600 524" role="img" aria-label="안녕하세요?우재남입니다 12바이트를 Linear RAID · RAID 0 · RAID 1 에 저장하는 모습" hidden>
+  <g data-s="1"><text x="100" y="30" text-anchor="middle" class="b" style="fill:var(--inh)">Linear RAID</text>
+    <rect x="15" y="46" width="170" height="74" rx="14" style="fill:var(--inh);fill-opacity:.2;stroke:var(--inh);stroke-width:2"/><text x="100" y="78" text-anchor="middle" class="b">안녕하세요?</text><text x="100" y="106" text-anchor="middle" class="b">우재남입니다</text>
+    <rect x="15" y="130" width="170" height="74" rx="14" style="fill:var(--inh);fill-opacity:.05;stroke:var(--inh);stroke-width:2;stroke-dasharray:6 5"/>
+    <rect x="15" y="214" width="170" height="74" rx="14" style="fill:var(--inh);fill-opacity:.05;stroke:var(--inh);stroke-width:2;stroke-dasharray:6 5"/>
+    <text x="100" y="322" text-anchor="middle" class="b">12초</text><text x="100" y="346" text-anchor="middle" class="s">12바이트</text></g>
+  <g data-s="2"><text x="300" y="30" text-anchor="middle" class="b" style="fill:var(--ap)">RAID 0</text>
+    <rect x="215" y="46" width="170" height="74" rx="14" style="fill:var(--ap);fill-opacity:.14;stroke:var(--ap);stroke-width:2"/><text x="300" y="91" text-anchor="middle" class="b">안 세 우 입</text>
+    <rect x="215" y="130" width="170" height="74" rx="14" style="fill:var(--ap);fill-opacity:.14;stroke:var(--ap);stroke-width:2"/><text x="300" y="175" text-anchor="middle" class="b">녕 요 재 니</text>
+    <rect x="215" y="214" width="170" height="74" rx="14" style="fill:var(--ap);fill-opacity:.14;stroke:var(--ap);stroke-width:2"/><text x="300" y="259" text-anchor="middle" class="b">하 ? 남 다</text>
+    <text x="300" y="322" text-anchor="middle" class="b" style="fill:var(--ap)">4초</text><text x="300" y="346" text-anchor="middle" class="s">12바이트</text></g>
+  <g data-s="3"><path d="M224,138 L376,196 M376,138 L224,196" style="stroke:var(--ap);stroke-width:5;stroke-linecap:round;fill:none"/>
+    <rect x="10" y="366" width="580" height="78" rx="10" style="fill:var(--ap);fill-opacity:.1;stroke:var(--ap);stroke-width:2"/><text x="300" y="398" text-anchor="middle" class="b">디스크 2 고장 → 안X하세X?우X남입X다</text><text x="300" y="428" text-anchor="middle" class="s">RAID 0 = 전부 잃음 · Linear 도 결함 허용 ✗</text></g>
+  <g data-s="4"><text x="500" y="30" text-anchor="middle" class="b" style="fill:var(--te)">RAID 1</text>
+    <rect x="415" y="46" width="170" height="74" rx="14" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="500" y="78" text-anchor="middle" class="b">안녕하세요?</text><text x="500" y="106" text-anchor="middle" class="b">우재남입니다</text>
+    <rect x="415" y="130" width="170" height="74" rx="14" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="500" y="162" text-anchor="middle" class="b">안녕하세요?</text><text x="500" y="190" text-anchor="middle" class="b">우재남입니다</text>
+    <text x="500" y="322" text-anchor="middle" class="b">12초</text><text x="500" y="346" text-anchor="middle" class="s">24바이트</text>
+    <rect x="10" y="456" width="580" height="56" rx="10" style="fill:var(--te);fill-opacity:.1;stroke:var(--te);stroke-width:2"/><text x="300" y="490" text-anchor="middle" class="s">RAID 1 = 하나가 고장 나도 남은 1개에 그대로 → 결함 허용</text></g>
+</svg>
+
+<!-- ㉒ RAID 5 짝수 패리티 · 복구 (10주차) -->
+<svg data-fig="parity" viewBox="0 0 600 494" role="img" aria-label="RAID 5 디스크 4개에 짝수 패리티를 채우고 sdb 가 고장 나면 복구하는 과정" hidden>
+  <g data-s="1"><text x="300" y="28" text-anchor="middle" class="s">RAID 5 · 디스크 4개 · 데이터 000 111 010 011</text>
+    <rect x="92" y="72" width="96" height="236" rx="12" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:1.5"/><rect x="197" y="72" width="96" height="236" rx="12" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:1.5"/><rect x="302" y="72" width="96" height="236" rx="12" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:1.5"/><rect x="407" y="72" width="96" height="236" rx="12" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:1.5"/>
+    <text x="140" y="62" text-anchor="middle" class="b m">sda</text><text x="245" y="62" text-anchor="middle" class="b m">sdb</text><text x="350" y="62" text-anchor="middle" class="b m">sdc</text><text x="455" y="62" text-anchor="middle" class="b m">sdd</text>
+    <text x="46" y="111" text-anchor="middle" class="s">1행</text><text x="46" y="169" text-anchor="middle" class="s">2행</text><text x="46" y="227" text-anchor="middle" class="s">3행</text><text x="46" y="285" text-anchor="middle" class="s">4행</text>
+    <text x="140" y="111" text-anchor="middle" class="b m">0</text><text x="245" y="111" text-anchor="middle" class="b m">0</text><text x="350" y="111" text-anchor="middle" class="b m">0</text>
+    <text x="140" y="169" text-anchor="middle" class="b m">1</text><text x="245" y="169" text-anchor="middle" class="b m">1</text><text x="455" y="169" text-anchor="middle" class="b m">1</text>
+    <text x="140" y="227" text-anchor="middle" class="b m">0</text><text x="350" y="227" text-anchor="middle" class="b m">1</text><text x="455" y="227" text-anchor="middle" class="b m">0</text>
+    <text x="245" y="285" text-anchor="middle" class="b m">0</text><text x="350" y="285" text-anchor="middle" class="b m">1</text><text x="455" y="285" text-anchor="middle" class="b m">1</text>
+    <rect x="433" y="85" width="44" height="40" rx="6" style="fill:none;stroke:var(--oc);stroke-width:2.5;stroke-dasharray:5 4"/><rect x="328" y="143" width="44" height="40" rx="6" style="fill:none;stroke:var(--oc);stroke-width:2.5;stroke-dasharray:5 4"/><rect x="223" y="201" width="44" height="40" rx="6" style="fill:none;stroke:var(--oc);stroke-width:2.5;stroke-dasharray:5 4"/><rect x="118" y="259" width="44" height="40" rx="6" style="fill:none;stroke:var(--oc);stroke-width:2.5;stroke-dasharray:5 4"/>
+    <text x="20" y="366" class="s">□ = 패리티 자리 · 행마다 다른 디스크 (sdd → sdc → sdb → sda)</text></g>
+  <g data-s="2"><text x="455" y="111" text-anchor="middle" class="b m" style="fill:var(--oc)">0</text><text x="350" y="169" text-anchor="middle" class="b m" style="fill:var(--oc)">1</text><text x="245" y="227" text-anchor="middle" class="b m" style="fill:var(--oc)">1</text><text x="140" y="285" text-anchor="middle" class="b m" style="fill:var(--oc)">0</text>
+    <text x="20" y="394" class="s" style="fill:var(--ink)">짝수 패리티 = 한 행의 1 개수가 짝수가 되게 □ 를 채움</text>
+    <text x="20" y="422" class="s">예) 1행 0+0+0+P → P=0 · 2행 1+1+P+1 → P=1</text></g>
+  <g data-s="3"><path d="M203,80 L287,302 M287,80 L203,302" style="stroke:var(--ap);stroke-width:4;stroke-linecap:round;fill:none;opacity:.85"/><text x="245" y="334" text-anchor="middle" class="b" style="fill:var(--ap)">고장</text></g>
+  <g data-s="4"><text x="548" y="62" text-anchor="middle" class="s b" style="fill:var(--te)">sdb 예측</text>
+    <text x="514" y="111" text-anchor="middle" class="s">→</text><text x="514" y="169" text-anchor="middle" class="s">→</text><text x="514" y="227" text-anchor="middle" class="s">→</text><text x="514" y="285" text-anchor="middle" class="s">→</text>
+    <text x="552" y="111" text-anchor="middle" class="b m" style="fill:var(--te)">0</text><text x="552" y="169" text-anchor="middle" class="b m" style="fill:var(--te)">1</text><text x="552" y="227" text-anchor="middle" class="b m" style="fill:var(--te)">1</text><text x="552" y="285" text-anchor="middle" class="b m" style="fill:var(--te)">0</text>
+    <text x="20" y="450" class="s" style="fill:var(--ink)">sdb 를 몰라도 행마다 짝수가 되게 계산 → 0 · 1 · 1 · 0 복구</text>
+    <text x="20" y="478" class="s">1개 고장까지 복구 · 2개 동시 고장은 ✗ → RAID 6</text></g>
+</svg>
+
+<!-- ㉓ Linear RAID 고장 → 복구 (10주차 · VITAMIN QUIZ 6-2) -->
+<svg data-fig="fix" viewBox="0 0 600 452" role="img" aria-label="Linear RAID 를 만들고 디스크를 빼서 고장 낸 뒤 새 디스크로 복구하는 순서" hidden>
+  <g data-s="1"><rect x="8" y="8" width="584" height="100" rx="12" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><circle cx="44" cy="40" r="19" style="fill:var(--inh)"/><text x="44" y="47" text-anchor="middle" class="b w">1</text><text x="76" y="46" class="b">구축 — /dev/md9 → /raidLinear</text><text x="76" y="74" class="s">fdisk (t → fd) → mdadm --create … --level=linear</text><text x="76" y="98" class="s">mkfs.ext4 → mount → fstab · mdadm.conf → testFile</text></g>
+  <g data-s="2"><path d="M292,110 L300,118 L308,110 Z" style="fill:var(--ink2)"/><rect x="8" y="120" width="584" height="100" rx="12" style="fill:var(--ap);fill-opacity:.12;stroke:var(--ap);stroke-width:2"/><circle cx="44" cy="152" r="19" style="fill:var(--ap)"/><text x="44" y="159" text-anchor="middle" class="b w">2</text><text x="76" y="158" class="b">고장 — 2GB 디스크(SCSI 0:1) Remove</text><text x="76" y="186" class="s">부팅 → /dev/md9 를 기다리다 시간 초과 → 응급 모드</text><text x="76" y="210" class="s">mdadm --run → not enough drives (디스크 1개로 ✗)</text></g>
+  <g data-s="3"><path d="M292,222 L300,230 L308,222 Z" style="fill:var(--ink2)"/><rect x="8" y="232" width="584" height="100" rx="12" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/><circle cx="44" cy="264" r="19" style="fill:var(--oc)"/><text x="44" y="271" text-anchor="middle" class="b w">3</text><text x="76" y="270" class="b">조치 — 일단 부팅되게</text><text x="76" y="298" class="s">mdadm --stop /dev/md9 → fstab 의 md9 줄에 #</text><text x="76" y="322" class="s">reboot → 정상 부팅 (/raidLinear 없음)</text></g>
+  <g data-s="4"><path d="M292,334 L300,342 L308,334 Z" style="fill:var(--ink2)"/><rect x="8" y="344" width="584" height="100" rx="12" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><circle cx="44" cy="376" r="19" style="fill:var(--te)"/><text x="44" y="383" text-anchor="middle" class="b w">4</text><text x="76" y="382" class="b">복구 — 새 2GB 디스크로 다시</text><text x="76" y="410" class="s">fdisk → --create (y) → mkfs → mdadm.conf → # 지우기</text><text x="76" y="434" class="s">/raidLinear 다시 마운트 · testFile ✗ (결함 허용 없음)</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -635,7 +699,35 @@
             "<b>test1 · test2</b> (각 15,866,696 B ≈ 15.5MB) → 합 ≈ 31MB · 아직 soft 아래",
             "<b>test3</b> → ≈ 46,488 KB · <b>soft 를 넘었지만 복사됨</b> — 유예 기간(기본 7일) 동안만 허용",
             "<b>test4</b> → hard 51,200 KB 에서 멈춤 → <code>Disk quota exceeded</code> · test4 는 4,808,704 B 만 쓰인 잘린 파일" ],
-          note: "순서: fstab <code>defaults,usrquota,grpquota</code> → <code>tune2fs -O quota</code> → 다시 마운트 → <code>quotacheck</code> → <code>quotaon</code> → <code>edquota</code> → <code>quota</code> · <code>repquota</code> · <code>edquota -p blackpink mamamoo</code> = 한도 복사" }
+          note: "순서: fstab <code>defaults,usrquota,grpquota</code> → <code>tune2fs -O quota</code> → 다시 마운트 → <code>quotacheck</code> → <code>quotaon</code> → <code>edquota</code> → <code>quota</code> · <code>repquota</code> · <code>edquota -p blackpink mamamoo</code> = 한도 복사" },
+        { id: "raid", week: 10, tab: "⑳ RAID 종류", src: "10주차 · 📖 교재 397쪽 그림 6-23 각 RAID 방식 비교 · ✍️ 필기 “claude야 정리해”",
+          steps: [
+            "<b>단순 볼륨</b> = 디스크 1개 그대로 (RAID 아님) · <b>Linear RAID</b> = 앞 디스크를 다 채운 뒤 다음 · 크기가 달라도 전부 사용",
+            "<b>RAID 0</b> = 스트라이핑 · 모든 디스크에 동시에 → 가장 빠름 · 하나만 고장 나도 <b>전부 잃음</b>",
+            "<b>RAID 1</b> = 미러링 · 같은 데이터 2벌 → 1개 고장 나도 됨 (결함 허용) · 쓸 수 있는 용량은 절반",
+            "<b>RAID 5</b> = 패리티 1개분 (최소 3개 · N − 1 · 1개까지) · <b>RAID 6</b> = 패리티 2개분 (최소 4개 · N − 2 · 2개까지)" ],
+          note: "📖 실무에서 주로 쓰는 것 = Linear · 0 · 1 · 5 · 6 · 1+0 (RAID 1 로 묶은 것을 다시 RAID 0) · Linear 를 뺀 나머지는 같은 용량의 디스크를 쓰는 게 일반적" },
+        { id: "store", week: 10, tab: "㉑ 저장 방식", src: "10주차 · 📖 398 ~ 400쪽 그림 6-24 · 6-25 — ‘안녕하세요?우재남입니다’ (12바이트 · 한 글자 1초)",
+          steps: [
+            "<b>Linear RAID</b> — 첫 디스크에 12바이트를 다 채움 → <b>12초</b> · 다음 디스크는 앞이 다 찬 뒤에야 씀",
+            "<b>RAID 0</b> — 3개 디스크에 한 글자씩 번갈아 <b>동시에</b> → <b>4초</b> (스트라이핑 · 가장 빠름)",
+            "<b>RAID 0 고장</b> — 디스크 하나가 고장 나면 ‘안X하세X?우X남입X다’ → 원래 데이터를 알 수 없음 = <b>전부 잃음</b>",
+            "<b>RAID 1</b> — 같은 12바이트를 2개에 똑같이 (24바이트 사용 · 공간 효율 50%) → 하나가 고장 나도 그대로 = <b>결함 허용</b>" ],
+          note: "📖 실제로는 비트 · 블록 단위로 저장하지만 이해하기 쉽게 글자 단위로 · RAID 1 은 2개에 동시에 쓰므로 속도는 그대로(12초) · 📖 RAID 0 은 “빠른 성능을 요구하되 혹시 전부 잃어버려도 큰 문제가 되지 않는 데이터”에" },
+        { id: "parity", week: 10, tab: "㉒ 패리티", src: "10주차 · 📖 401 ~ 403쪽 그림 6-26 ~ 6-28 · ✍️ 필기 “짝수가 되어야함” = 짝수 패리티 (디스크 개수 아님)",
+          steps: [
+            "12비트 <b>000 111 010 011</b> 을 디스크 4개에 — 행마다 한 칸(□)은 <b>패리티 자리</b> (sdd → sdc → sdb → sda 로 돌아가며)",
+            "<b>짝수 패리티</b> — 한 행의 1 개수가 짝수가 되게 □ 를 채움 → 0 · 1 · 1 · 0",
+            "<b>sdb 고장</b> — sdb 에 있던 값을 모름",
+            "<b>복구</b> — 행마다 ‘나머지 + ? = 짝수’ 로 계산 → sdb = <b>0110</b> 그대로 · 2개가 동시에 고장 나면 복구 ✗ → RAID 6" ],
+          note: "📖 RAID 5 = 최소 3개 (대개 5개 이상) · 쓸 수 있는 용량 N − 1 (1TB × 4개 → 3TB · 10개 → 9TB) · RAID 6 = 패리티 2개 · 최소 4개 · N − 2 (10개 → 8TB)" },
+        { id: "fix", week: 10, tab: "㉓ 고장·복구", src: "10주차 · 수업 로그 · 과제 1 📖 VITAMIN QUIZ 6-2 (426쪽 · Server(B)) · 🖼️ 제출 캡처의 실제 출력",
+          steps: [
+            "<b>구축</b> — 파티션 타입 <code>fd</code> → <code>mdadm --create /dev/md9 --level=linear --raid-devices=2 /dev/sdb1 /dev/sdc1</code> → 포맷 · 마운트 · fstab · mdadm.conf → testFile 복사",
+            "<b>고장</b> — 디스크 하나를 빼면 부팅 때 /dev/md9 를 기다리다(1분 30초) <b>응급 모드</b> · <code>mdadm --run</code> = not enough drives (Linear 는 하나로 작동 ✗)",
+            "<b>조치</b> — <code>mdadm --stop /dev/md9</code> → fstab 의 md9 줄에 <code>#</code> → <code>reboot</code> = 정상 부팅 (RAID 는 꺼진 채)",
+            "<b>복구</b> — 새 디스크 → fdisk(fd) → <code>--create</code>(y) → <code>mkfs.ext4</code> → mdadm.conf 다시 → fstab <code>#</code> 지우기 → 장치는 복구 · <b>testFile 은 ✗</b>" ],
+          note: "📖 426쪽 “결함 허용이 없는 Linear RAID이므로 기존의 testFile은 복구할 수 없었다.” · 이 생성 → 고장 → 복원 순서는 RAID 0 · 1 · 5 · 6 · 1+0 도 거의 같음" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

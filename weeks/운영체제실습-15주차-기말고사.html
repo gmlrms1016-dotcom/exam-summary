@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202611041620"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>운영체제실습 15주차 · 기말고사 시험문제 정리 (9주차 반영)</title>
-    <meta name="description" content="운영체제실습 15주차 정리 — 기말고사 시험문제 정리 (9주차 반영)">
+    <title>운영체제실습 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)</title>
+    <meta name="description" content="운영체제실습 15주차 정리 — 기말고사 시험문제 정리 (9 · 10주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="운영체제실습 15주차 · 기말고사 시험문제 정리 (9주차 반영)">
+    <meta property="og:title" content="운영체제실습 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)">
     <meta property="og:description" content="운영체제실습 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -99,10 +99,10 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🐧 운영체제실습 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 · 10주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>디스크 추가 · 파티션 · 마운트 · fstab · 쿼터 (6장)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../운영체제실습-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 1장 ~ 7장 · 객관식(시험 예시 1~10번) + sh 문제 + 호스트 / 게스트 운영체제 설명 1문제였어요.</div>
@@ -110,7 +110,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/리눅스-그림정리.html?weeks=9-15#disk" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/리눅스-그림정리.html?weeks=9-15#disk" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차(6장 디스크) — ⑮ 디스크 추가 · ⑯ 마운트하면 가려짐 · ⑰ fstab 6칸 · ⑱ 이름 바뀜 → 응급 모드 · ⑲ 쿼터 soft · hard · ⑬ vi 모드</li></ul>
+<ul><li>9주차(6장 디스크) — ⑮ 디스크 추가 · ⑯ 마운트하면 가려짐 · ⑰ fstab 6칸 · ⑱ 이름 바뀜 → 응급 모드 · ⑲ 쿼터 soft · hard · ⑬ vi 모드</li><li>10주차(6장 RAID) — ⑳ RAID 종류 · ㉑ Linear · RAID 0 · RAID 1 저장 방식 · ㉒ RAID 5 짝수 패리티 · ㉓ Linear RAID 고장 → 복구</li></ul>
 </section>
 <section class="card" id="s2">
 <h2>9주차 · 6장 디스크 관리와 사용자별 공간 할당</h2>
@@ -129,8 +129,26 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 로그 · 캡처는 <a href="운영체제실습-9주차.html">9주차</a> · 문제는 🔒 실제시험.</div>
 </section>
+<section class="card" id="s3">
+<h2>10주차 · 6장 RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>RAID · 하드웨어 vs 소프트웨어</td><td>여러 디스크를 <b>하나처럼</b> · 하드웨어 RAID = 컨트롤러 장비 · 안정적 · <b>비쌈</b> · 소프트웨어 RAID = <b>운영체제</b> 지원 · 저렴 (<code>mdadm</code>)</td><td>⑳</td></tr>
+<tr><td>RAID 종류</td><td>기본 7가지 = Linear · RAID 0 ~ 5 · 실무 = <b>Linear · 0 · 1 · 5 · 6 · 1+0</b> · 단순 볼륨은 <b>RAID 아님</b></td><td>⑳</td></tr>
+<tr><td>최소 디스크 · 용량</td><td>Linear 2개↑ · N / RAID 0 2개↑ · N / RAID 1 2개 · N/2 / RAID 5 <b>3개↑ · N−1</b> / RAID 6 <b>4개↑ · N−2</b></td><td>⑳</td></tr>
+<tr><td>Linear vs RAID 0</td><td>Linear = 앞 디스크를 <b>다 채운 뒤</b> 다음 (12초 · 크기 달라도 전부) · RAID 0 = <b>스트라이핑</b> 동시에 (4초 · 가장 빠름 · 하나만 고장 나도 <b>전부 잃음</b> → 잃어도 되는 데이터)</td><td>㉑</td></tr>
+<tr><td>RAID 1</td><td><b>미러링</b> · 같은 데이터 2벌 → <b>결함 허용</b> · 공간 효율 50% · 속도 변화 없음</td><td>㉑</td></tr>
+<tr><td>RAID 5 · 6</td><td><b>짝수 패리티</b> = 한 행의 1 개수가 짝수가 되게 (0+0+0+P → P=0) → 디스크 1개 고장 복구 · RAID 6 = 패리티 2개 → 2개 동시 고장까지 · 속도 약간 ↓</td><td>㉒</td></tr>
+<tr><td>VMware SCSI</td><td>슬롯 4개 × 15개 (0:7 제외) = <b>60개</b> · 디스크 종류는 <b>SCSI</b> 로</td><td></td></tr>
+<tr><td>Linear RAID 명령</td><td><code>fdisk</code>(<b>t → fd</b>) → <code>mdadm --create /dev/md9 --level=linear --raid-devices=2 /dev/sdb1 /dev/sdc1</code> → <code>mdadm --detail</code> → <code>mkfs.ext4 /dev/md9</code> → <code>mount /dev/md9 /raidLinear</code> → fstab · <code>mdadm --detail --scan &gt; /etc/mdadm.conf</code></td><td>㉓</td></tr>
+<tr><td>고장 → 복구</td><td>디스크를 빼면 <b>응급 모드</b> · <code>mdadm --run</code> = not enough drives → <code>mdadm --stop</code> + fstab <code>#</code> → 새 디스크 · 다시 <code>--create</code>(y) · mkfs → <b>장치는 복구 · 데이터(testFile)는 ✗</b></td><td>㉓</td></tr>
+<tr><td>RAID 0 명령</td><td><code>mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sdb1 /dev/sdc1</code> → <code>/raid0</code> · detail = raid0 · <b>Chunk Size 512K</b></td><td></td></tr>
+</tbody></table>
+<div class="tip">자세한 로그 · 캡처는 <a href="운영체제실습-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
+</section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>디스크 추가 · 파티션 · 마운트 · fstab · 쿼터 (6장)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a><span></span></nav>
 
     <p class="wk-src">노션 「운영체제실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

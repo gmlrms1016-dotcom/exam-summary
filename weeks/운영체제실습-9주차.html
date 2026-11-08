@@ -102,7 +102,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>디스크 추가 · 파티션 · 마운트 · fstab · 쿼터 (6장)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="운영체제실습-10주차.html">다음 · <b>10주차</b> ›<br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a></nav>
 
 <div class="tip">수업: <b>10/29(목)</b> · 교재 『이것이 리눅스다』 Chapter 06 <b>디스크 관리와 사용자별 공간 할당</b> · ✍️ 노션 9주차 필기 = 수업 실습 로그 그대로(<code>linux_disk.txt</code>) + 과제 2개(VITAMIN QUIZ 6-1 · 6-9)를 하며 겪은 실수 · 해결 메모<br>정리 범위 = 노션 필기(로그) + 제출 워드 캡처(🖼️) + 내 실수 메모. <b>[보충]</b> = 로그에 없던 단계 · 📖 = 교재 사진 · 🤖 = 교재 · 로그에 없는 설명. 로그 상자는 <b>명령을 누르면 출력이 펼쳐져요</b>.</div>
 <section class="card" id="s1">
@@ -747,7 +747,7 @@ UUID=0c9daa77-fddb-466a-a9ca-920232579830  /mydata  ext4  defaults  0  0   ← f
 <ol><li>새 디스크 순서: (VM 끄고) 추가 → <code>fdisk</code> 파티션 → <code>mkfs.ext4</code> 포맷 → <code>mkdir</code> → <code>mount</code> → <code>/etc/fstab</code> 등록 → <code>reboot</code> · <code>df</code> 로 확인</li><li>fstab 한 줄 6칸 = <b>장치 · 마운트 위치 · 파일 시스템 · 옵션 · dump · fsck 순서</b> — 예) <code>/dev/sdb1 /mydata ext4 defaults 0 0</code></li><li>fdisk 키: <code>n</code> 새로 · <code>p</code> primary(Select) / print(Command) · <code>d</code> 삭제 · <code>w</code> 저장 — <b>w 전까지는 디스크가 안 바뀜</b></li><li>마운트하면 그 디렉터리의 원래 내용은 <b>가려질 뿐</b> — umount 하면 다시 보임 (test1 ↔ test2)</li><li>장치 이름(sda · sdb · sdc)은 부팅 · 디스크 추가 · 제거에 따라 <b>바뀔 수 있음</b> → <code>df</code> 로 / 장치 확인 · fstab 엔 <b>UUID</b>(<code>blkid</code>)가 안전</li><li>fstab 의 장치를 못 찾으면 부팅 중 마운트 실패 → <b>응급 모드</b> → root 로그인 → <code>vi /etc/fstab</code> 에서 그 줄을 고치거나 <code>#</code> 주석 → <code>reboot</code> (데이터는 그대로)</li><li><code>/</code> 로 시작 = <b>절대경로</b> · 아니면 지금 위치 기준 <b>상대경로</b> (<code>mydata/test1</code> = /root/mydata/test1 · <code>vi etc/fstab</code> = /root/etc/fstab)</li><li>vi: 명령 모드 ↔ 입력 모드(<code>i</code> · <code>o</code>) · <b>Esc 먼저</b> → <code>:wq</code> 저장 · <code>:q!</code> 저장 안 함 · <code>G</code> 맨 아래 · <code>dd</code> 줄 삭제 · <code>u</code> 되돌리기</li><li>쿼터 순서: fstab 옵션 <code>defaults,usrquota,grpquota</code> → <code>tune2fs -O quota</code> → 다시 마운트 → <code>quotacheck</code> · <code>quotaon</code> → <code>edquota -u</code> 로 한도 → <code>quota</code> · <code>repquota</code> · <code>edquota -p A B</code> = 한도 복사</li><li><b>soft</b> = 유예 기간(기본 7일) 동안 넘을 수 있음 · <b>hard</b> = 절대 못 넘음(<code>Disk quota exceeded</code>) · 단위 KB (40960 = 40MB · 51200 = 50MB) · 0 = 제한 없음</li></ol>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-8주차-중간고사.html">‹ 이전 · <b>8주차 중간고사</b><br><small>중간고사 시험문제 정리 (1~7주차 반영)</small></a><a class="next" href="운영체제실습-10주차.html">다음 · <b>10주차</b> ›<br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a></nav>
 
     <p class="wk-src">노션 「운영체제실습 · 9주차」 페이지를 정리한 내용입니다.</p>
 
