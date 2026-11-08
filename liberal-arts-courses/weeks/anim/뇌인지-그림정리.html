@@ -532,6 +532,144 @@
   <g data-s="3"><text x="300" y="290" text-anchor="middle" class="s">톰 미첼 (1997) — 경험 E 로 작업 T 의 성능 P 가 좋아짐</text><rect x="20" y="306" width="176" height="74" rx="10" style="fill:var(--inh);fill-opacity:.16;stroke:var(--inh);stroke-width:2"/><text x="108" y="336" text-anchor="middle" class="b">T · 작업</text><text x="108" y="364" text-anchor="middle" class="s">스팸 거르기</text><rect x="212" y="306" width="176" height="74" rx="10" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/><text x="300" y="336" text-anchor="middle" class="b">P · 성능</text><text x="300" y="364" text-anchor="middle" class="s">맞힌 비율</text><rect x="404" y="306" width="176" height="74" rx="10" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="492" y="336" text-anchor="middle" class="b">E · 경험</text><text x="492" y="364" text-anchor="middle" class="s">스팸 지정 메일</text></g>
 </svg>
 
+<!-- ⑳ 머신러닝 시스템의 종류 (8장 2 · 3쪽) -->
+<svg data-fig="mltypes" viewBox="0 0 600 440" role="img" aria-label="머신러닝 시스템의 분류 기준 세 가지와 스팸 필터 예" hidden>
+  <g data-s="1"><rect x="10" y="10" width="150" height="90" rx="10" style="fill:var(--main);fill-opacity:.12;stroke:var(--main);stroke-width:2"/><text x="85" y="49" text-anchor="middle" class="b">훈련 지도</text><text x="85" y="77" text-anchor="middle" class="b">여부</text>
+    <rect x="172" y="22" width="100" height="66" rx="8" style="fill:var(--inh);fill-opacity:.16;stroke:var(--inh);stroke-width:2"/><text x="222" y="51" text-anchor="middle" class="b">지도</text><text x="222" y="77" text-anchor="middle" class="s">레이블 O</text>
+    <rect x="278" y="22" width="100" height="66" rx="8" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="328" y="51" text-anchor="middle" class="b">비지도</text><text x="328" y="77" text-anchor="middle" class="s">레이블 X</text>
+    <rect x="384" y="22" width="100" height="66" rx="8" style="fill:var(--oc);fill-opacity:.18;stroke:var(--oc);stroke-width:2"/><text x="434" y="51" text-anchor="middle" class="b">준지도</text><text x="434" y="77" text-anchor="middle" class="s">일부만</text>
+    <rect x="490" y="22" width="100" height="66" rx="8" style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:2"/><text x="540" y="51" text-anchor="middle" class="b">강화</text><text x="540" y="77" text-anchor="middle" class="s">보상 · 벌점</text></g>
+  <g data-s="2"><rect x="10" y="115" width="150" height="90" rx="10" style="fill:var(--main);fill-opacity:.12;stroke:var(--main);stroke-width:2"/><text x="85" y="154" text-anchor="middle" class="b">실시간 훈련</text><text x="85" y="182" text-anchor="middle" class="b">여부</text>
+    <rect x="172" y="127" width="206" height="66" rx="8" style="fill:var(--inh);fill-opacity:.16;stroke:var(--inh);stroke-width:2"/><text x="275" y="156" text-anchor="middle" class="b">온라인 학습</text><text x="275" y="182" text-anchor="middle" class="s">조금씩 점진적으로</text>
+    <rect x="384" y="127" width="206" height="66" rx="8" style="fill:var(--oc);fill-opacity:.18;stroke:var(--oc);stroke-width:2"/><text x="487" y="156" text-anchor="middle" class="b">배치 학습</text><text x="487" y="182" text-anchor="middle" class="s">전체를 한 번에 · 오프라인</text></g>
+  <g data-s="3"><rect x="10" y="220" width="150" height="90" rx="10" style="fill:var(--main);fill-opacity:.12;stroke:var(--main);stroke-width:2"/><text x="85" y="259" text-anchor="middle" class="b">예측 모델</text><text x="85" y="287" text-anchor="middle" class="b">사용 여부</text>
+    <rect x="172" y="232" width="206" height="66" rx="8" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="275" y="261" text-anchor="middle" class="b">사례 기반</text><text x="275" y="287" text-anchor="middle" class="s">샘플과 비교 (유사도)</text>
+    <rect x="384" y="232" width="206" height="66" rx="8" style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:2"/><text x="487" y="261" text-anchor="middle" class="b">모델 기반</text><text x="487" y="287" text-anchor="middle" class="s">패턴 → 예측 모델</text></g>
+  <g data-s="4"><rect class="d" x="167" y="17" width="110" height="76" rx="10" style="fill:none;stroke:var(--ap);stroke-width:3"/><rect class="d" x="167" y="122" width="216" height="76" rx="10" style="fill:none;stroke:var(--ap);stroke-width:3"/><rect class="d" x="379" y="227" width="216" height="76" rx="10" style="fill:none;stroke:var(--ap);stroke-width:3"/>
+    <text x="300" y="346" text-anchor="middle" class="b">분류 기준은 서로 배타적이지 않음 → 함께 씀</text>
+    <rect x="60" y="362" width="480" height="68" rx="10" style="fill:var(--ap);fill-opacity:.1;stroke:var(--ap);stroke-width:2"/><text x="300" y="388" text-anchor="middle" class="s">최첨단 스팸 필터 (심층 신경망 · 실시간 학습)</text><text x="300" y="418" text-anchor="middle" class="b">= 지도 + 온라인 + 모델 기반</text></g>
+</svg>
+
+<!-- ㉑ 지도 · 비지도 · 준지도 학습 (8장 4 ~ 6쪽) -->
+<svg data-fig="superv" viewBox="0 0 600 330" role="img" aria-label="지도 학습 비지도 학습 준지도 학습의 레이블 차이" hidden>
+  <g data-s="1"><rect x="5" y="8" width="190" height="314" rx="12" style="fill:var(--inh);fill-opacity:.07;stroke:var(--inh);stroke-width:2"/><text x="100" y="40" text-anchor="middle" class="b">지도 학습</text><text x="100" y="66" text-anchor="middle" class="s">레이블 = 답 있음</text>
+    <g style="fill:var(--te)"><path d="M48,99 L57,115 L39,115 Z"/><path d="M95,129 L104,145 L86,145 Z"/><path d="M140,95 L149,111 L131,111 Z"/><path d="M182,83 L191,99 L173,99 Z"/><path d="M52,187 L61,203 L43,203 Z"/><path d="M92,173 L101,189 L83,189 Z"/><path d="M128,151 L137,167 L119,167 Z"/></g>
+    <g style="fill:var(--oc)"><rect x="150" y="162" width="16" height="16"/><rect x="170" y="196" width="16" height="16"/><rect x="138" y="214" width="16" height="16"/><rect x="90" y="242" width="16" height="16"/></g>
+    <text x="100" y="270" text-anchor="middle" class="s">분류 — 스팸 필터</text><text x="100" y="296" text-anchor="middle" class="s">회귀 — 중고차 가격 ★</text></g>
+  <g data-s="2"><rect x="205" y="8" width="190" height="314" rx="12" style="fill:var(--te);fill-opacity:.07;stroke:var(--te);stroke-width:2"/><text x="300" y="40" text-anchor="middle" class="b">비지도 학습</text><text x="300" y="66" text-anchor="middle" class="s">레이블 없음</text>
+    <g style="fill:var(--ink2)"><circle cx="248" cy="109" r="7"/><circle cx="295" cy="139" r="7"/><circle cx="340" cy="105" r="7"/><circle cx="382" cy="93" r="7"/><circle cx="252" cy="197" r="7"/><circle cx="292" cy="183" r="7"/><circle cx="328" cy="161" r="7"/><circle cx="358" cy="170" r="7"/><circle cx="378" cy="204" r="7"/><circle cx="346" cy="222" r="7"/><circle cx="298" cy="250" r="7"/></g>
+    <ellipse class="d" cx="300" cy="148" rx="72" ry="72" style="fill:none;stroke:var(--te);stroke-width:2;stroke-dasharray:7 5"/>
+    <text x="300" y="270" text-anchor="middle" class="s">군집 · 시각화</text><text x="300" y="296" text-anchor="middle" class="s">차원 축소 · 이상치 …</text></g>
+  <g data-s="3"><rect x="405" y="8" width="190" height="314" rx="12" style="fill:var(--oc);fill-opacity:.08;stroke:var(--oc);stroke-width:2"/><text x="500" y="40" text-anchor="middle" class="b">준지도 학습</text><text x="500" y="66" text-anchor="middle" class="s">일부만 레이블</text>
+    <g style="fill:var(--ink2)"><circle cx="495" cy="139" r="7"/><circle cx="540" cy="105" r="7"/><circle cx="452" cy="197" r="7"/><circle cx="528" cy="161" r="7"/><circle cx="558" cy="170" r="7"/><circle cx="578" cy="204" r="7"/><circle cx="498" cy="250" r="7"/></g>
+    <g style="fill:var(--te)"><path d="M448,99 L457,115 L439,115 Z"/><path d="M582,83 L591,99 L573,99 Z"/></g>
+    <g style="fill:var(--oc)"><rect x="484" y="175" width="16" height="16" style="stroke:var(--ink2);stroke-width:1"/><rect x="538" y="214" width="16" height="16" style="stroke:var(--ink2);stroke-width:1"/></g>
+    <path class="d" d="M455,147 L469,161 M469,147 L455,161" style="stroke:var(--ap);stroke-width:3.5;fill:none;stroke-linecap:round"/><text x="462" y="136" text-anchor="middle" class="b" style="fill:var(--ap)">?</text>
+    <text x="500" y="270" text-anchor="middle" class="s">구글 포토 — 가족</text><text x="500" y="296" text-anchor="middle" class="s">몇 장만 레이블</text></g>
+</svg>
+
+<!-- ㉒ 🔥 선형 회귀 · 오차 · MSE (8장 4쪽 ✍️ ★ “선형 회귀 계산 문제 객관식 2~3문제” · 칠판 사진) -->
+<svg data-fig="linreg" viewBox="0 0 600 530" role="img" aria-label="선형 회귀 직선 y는 ax 더하기 b, 오차 e는 y 빼기 y햇, 평균 제곱 오차 MSE 계산" hidden>
+  <g><path class="ax" d="M50,300 L50,40"/><path d="M44,46 L50,32 L56,46 Z" style="fill:var(--ink2)"/><path class="ax" d="M50,300 L318,300"/><path d="M314,294 L328,300 L314,306 Z" style="fill:var(--ink2)"/>
+    <text x="60" y="36" class="s">y (타깃)</text><path class="ln" d="M115,296 L115,304 M180,296 L180,304 M245,296 L245,304"/><text x="115" y="322" text-anchor="middle" class="s">1</text><text x="180" y="322" text-anchor="middle" class="s">2</text><text x="245" y="322" text-anchor="middle" class="s">3</text><text x="320" y="342" text-anchor="end" class="s">x (특성)</text>
+    <g style="fill:var(--ink)"><circle cx="115" cy="196" r="6"/><circle cx="180" cy="222" r="6"/><circle cx="245" cy="92" r="6"/></g>
+    <rect x="348" y="30" width="244" height="212" rx="10" style="fill:var(--main);fill-opacity:.06;stroke:var(--ink2);stroke-width:1.2"/><text x="374" y="60" text-anchor="middle" class="b">x</text><text x="422" y="60" text-anchor="middle" class="b">y</text><path class="ln" d="M354,72 L586,72"/>
+    <text x="374" y="100" text-anchor="middle">1</text><text x="422" y="100" text-anchor="middle">4</text><text x="374" y="136" text-anchor="middle">2</text><text x="422" y="136" text-anchor="middle">3</text><text x="374" y="172" text-anchor="middle">3</text><text x="422" y="172" text-anchor="middle">8</text><path class="ln" d="M354,188 L586,188"/></g>
+  <g data-s="1"><path class="d" d="M50,274 L310,66" style="stroke:var(--inh);stroke-width:3;fill:none"/><text x="262" y="50" text-anchor="middle" class="b" style="fill:var(--inh)">ŷ = 2x + 1</text>
+    <text x="300" y="368" text-anchor="middle" class="s">① 모델 y = ax + b — a 기울기 · b 절편 (데이터로 찾는 값)</text></g>
+  <g data-s="2"><g style="fill:var(--card);stroke:var(--inh);stroke-width:2.5"><circle cx="115" cy="222" r="6"/><circle cx="180" cy="170" r="6"/><circle cx="245" cy="118" r="6"/></g>
+    <text x="470" y="60" text-anchor="middle" class="b" style="fill:var(--inh)">ŷ</text><text x="470" y="100" text-anchor="middle" style="fill:var(--inh)">3</text><text x="470" y="136" text-anchor="middle" style="fill:var(--inh)">5</text><text x="470" y="172" text-anchor="middle" style="fill:var(--inh)">7</text>
+    <text x="300" y="398" text-anchor="middle" class="s">② 예측값 ŷ = 식에 x 를 넣은 값 (직선 위의 점)</text></g>
+  <g data-s="3"><path class="d" d="M115,202 L115,216 M180,176 L180,216 M245,98 L245,112" style="stroke:var(--ap);stroke-width:3;fill:none"/>
+    <text x="104" y="215" text-anchor="end" class="s" style="fill:var(--ap)">+1</text><text x="190" y="202" class="s" style="fill:var(--ap)">−2</text><text x="235" y="108" text-anchor="end" class="s" style="fill:var(--ap)">+1</text>
+    <text x="518" y="60" text-anchor="middle" class="b" style="fill:var(--ap)">e</text><text x="518" y="100" text-anchor="middle" style="fill:var(--ap)">+1</text><text x="518" y="136" text-anchor="middle" style="fill:var(--ap)">−2</text><text x="518" y="172" text-anchor="middle" style="fill:var(--ap)">+1</text>
+    <text x="300" y="428" text-anchor="middle" class="s">③ 오차 e = y − ŷ (실제 값 − 예측값)</text></g>
+  <g data-s="4"><text x="374" y="216" text-anchor="middle" class="b">합</text><text x="518" y="216" text-anchor="middle" class="b" style="fill:var(--ap)">0</text>
+    <text x="300" y="458" text-anchor="middle" class="s">④ 그냥 더하면 1 + (−2) + 1 = 0 → 그래서 제곱</text></g>
+  <g data-s="5"><text x="566" y="60" text-anchor="middle" class="b">e²</text><text x="566" y="100" text-anchor="middle">1</text><text x="566" y="136" text-anchor="middle">4</text><text x="566" y="172" text-anchor="middle">1</text><text x="566" y="216" text-anchor="middle" class="b">6</text>
+    <text x="300" y="492" text-anchor="middle" class="b" style="fill:var(--ap)">★ MSE = (1/n) Σ (y − ŷ)²</text>
+    <text x="300" y="520" text-anchor="middle" class="s">= (1² + (−2)² + 1²) ÷ 3 = 6 ÷ 3 = 2 · 평균 제곱 오차</text></g>
+</svg>
+
+<!-- ㉓ 강화 학습 (8장 7쪽 그림 ① ~ ⑥) -->
+<svg data-fig="rl" viewBox="0 0 600 390" role="img" aria-label="강화 학습 — 에이전트가 관찰하고 행동해 보상이나 벌점을 받고 정책을 고침" hidden>
+  <g><text x="300" y="28" text-anchor="middle" class="s">에이전트가 가장 큰 보상을 받는 쪽으로 스스로 학습</text>
+    <rect x="20" y="92" width="180" height="150" rx="12" style="fill:var(--main);fill-opacity:.12;stroke:var(--main);stroke-width:2"/><text x="110" y="128" text-anchor="middle" class="b">에이전트</text><text x="110" y="152" text-anchor="middle" class="s">(학습 시스템)</text>
+    <rect x="400" y="92" width="180" height="150" rx="12" style="fill:var(--oc);fill-opacity:.12;stroke:var(--oc);stroke-width:2"/><text x="490" y="128" text-anchor="middle" class="b">환경</text>
+    <path d="M452,212 C434,202 438,176 452,152 C466,176 470,202 452,212 Z" style="fill:var(--ap)"/><path d="M452,210 C444,203 446,190 452,180 C458,190 460,203 452,210 Z" style="fill:var(--oc)"/>
+    <rect x="514" y="182" width="34" height="28" rx="5" style="fill:var(--inh);opacity:.85"/><path d="M520,160 L542,160 L542,172" style="stroke:var(--ink2);stroke-width:4;fill:none;stroke-linecap:round"/><circle cx="542" cy="177" r="3" style="fill:var(--inh)"/>
+    <text x="452" y="234" text-anchor="middle" class="s">불</text><text x="531" y="234" text-anchor="middle" class="s">물</text></g>
+  <g data-s="1"><path class="d" d="M398,118 L212,118" style="stroke:var(--inh);stroke-width:2.5;fill:none"/><path d="M214,111 L200,118 L214,125 Z" style="fill:var(--inh)"/><text x="300" y="108" text-anchor="middle" class="s">① 관찰</text></g>
+  <g data-s="2"><text x="300" y="58" text-anchor="middle" class="s">정책 = 상황마다 어떤 행동을 고를지 정한 전략</text><text x="110" y="196" text-anchor="middle" class="s">② 정책에 따라</text><text x="110" y="220" text-anchor="middle" class="s">행동을 선택</text></g>
+  <g data-s="3"><path class="d" d="M204,168 L388,168" style="stroke:var(--main);stroke-width:2.5;fill:none"/><path d="M386,161 L400,168 L386,175 Z" style="fill:var(--main)"/><text x="300" y="158" text-anchor="middle" class="s">③ 행동 실행!</text></g>
+  <g data-s="4"><path class="d" d="M398,218 L212,218" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M214,211 L200,218 L214,225 Z" style="fill:var(--ap)"/><text x="300" y="208" text-anchor="middle" class="s" style="fill:var(--ap)">④ 보상 · 벌점 (−50점)</text></g>
+  <g data-s="5"><path class="d" d="M70,244 C70,290 150,290 150,256" style="stroke:var(--fr);stroke-width:2.5;fill:none"/><path d="M144,258 L150,244 L156,258 Z" style="fill:var(--fr)"/>
+    <text x="20" y="314" class="s">⑤ 정책 수정 (학습 단계)</text><text x="20" y="338" class="s">불 = 안 좋군! 다음엔 피해야지</text></g>
+  <g data-s="6"><text x="300" y="376" text-anchor="middle" class="b" style="fill:var(--main)">⑥ 최적의 정책을 찾을 때까지 반복</text></g>
+</svg>
+
+<!-- ㉔ 배치 학습 vs 온라인 학습 (8장 8 · 9쪽) -->
+<svg data-fig="batchonline" viewBox="0 0 600 420" role="img" aria-label="배치 학습과 온라인 학습 비교" hidden>
+  <g><path class="dash" d="M300,14 L300,356"/></g>
+  <g data-s="1"><text x="150" y="34" text-anchor="middle" class="b">배치 학습</text>
+    <rect x="40" y="52" width="220" height="74" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><g style="fill:var(--inh)"><circle cx="66" cy="70" r="4"/><circle cx="92" cy="82" r="4"/><circle cx="118" cy="68" r="4"/><circle cx="146" cy="80" r="4"/><circle cx="172" cy="70" r="4"/><circle cx="198" cy="84" r="4"/><circle cx="224" cy="68" r="4"/><circle cx="80" cy="92" r="4"/><circle cx="132" cy="94" r="4"/><circle cx="186" cy="94" r="4"/><circle cx="236" cy="90" r="4"/></g><text x="150" y="116" text-anchor="middle" class="s">훈련 세트 전체</text>
+    <path class="d" d="M150,128 L150,146" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M143,144 L150,156 L157,144 Z" style="fill:var(--ink2)"/>
+    <rect x="40" y="158" width="220" height="50" rx="10" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="150" y="189" text-anchor="middle" class="s">오프라인에서 한 번에 훈련</text>
+    <path class="d" d="M150,210 L150,226" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M143,224 L150,236 L157,224 Z" style="fill:var(--ink2)"/>
+    <rect x="40" y="238" width="220" height="56" rx="10" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="150" y="262" text-anchor="middle" class="s">제품 시스템에 적용</text><text x="150" y="285" text-anchor="middle" class="s">(더 이상 학습 X)</text>
+    <text x="150" y="322" text-anchor="middle" class="s" style="fill:var(--ap)">단점 ① 컴퓨팅 자원이 충분할 때만</text><text x="150" y="348" text-anchor="middle" class="s" style="fill:var(--ap)">② 새 데이터 → 처음부터 다시</text></g>
+  <g data-s="2"><text x="450" y="34" text-anchor="middle" class="b">온라인 학습</text><text x="450" y="60" text-anchor="middle" class="s">적은 양의 데이터 = 미니배치</text>
+    <g style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"><rect x="330" y="74" width="66" height="44" rx="8"/><rect x="417" y="74" width="66" height="44" rx="8"/><rect x="504" y="74" width="66" height="44" rx="8"/></g>
+    <g style="fill:var(--te)"><circle cx="350" cy="90" r="4"/><circle cx="374" cy="102" r="4"/><circle cx="440" cy="102" r="4"/><circle cx="462" cy="88" r="4"/><circle cx="524" cy="92" r="4"/><circle cx="550" cy="100" r="4"/></g>
+    <path class="d" d="M363,120 L430,150 M450,120 L450,150 M537,120 L470,150" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M443,144 L450,156 L457,144 Z" style="fill:var(--ink2)"/>
+    <rect x="330" y="158" width="240" height="50" rx="10" style="fill:var(--card);stroke:var(--te);stroke-width:2"/><text x="450" y="189" text-anchor="middle" class="s">조금씩 점진적으로 훈련</text>
+    <path class="d" d="M450,210 L450,226" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M443,224 L450,236 L457,224 Z" style="fill:var(--ink2)"/>
+    <rect x="330" y="238" width="240" height="56" rx="10" style="fill:var(--card);stroke:var(--te);stroke-width:2"/><text x="450" y="262" text-anchor="middle" class="s">새 데이터도</text><text x="450" y="285" text-anchor="middle" class="s">실시간으로 이어서 학습</text>
+    <text x="450" y="322" text-anchor="middle" class="s" style="fill:var(--ap)">단점 ① 나쁜 데이터 → 성능 점점↓</text><text x="450" y="348" text-anchor="middle" class="s" style="fill:var(--ap)">② 지속적인 모니터링 필요</text></g>
+  <g data-s="3"><text x="300" y="386" text-anchor="middle" class="s">온라인 예: 주식가격 · 스마트폰 · 외부 메모리 학습</text><text x="300" y="410" text-anchor="middle" class="s">(실시간 반영 · 제한된 자원 · 매우 큰 데이터셋)</text></g>
+</svg>
+
+<!-- ㉕ 사례 기반 학습 vs 모델 기반 학습 (8장 10 · 11쪽) -->
+<svg data-fig="instmodel" viewBox="0 0 600 384" role="img" aria-label="사례 기반 학습 KNN 과 모델 기반 학습 선형 모델" hidden>
+  <g><path class="dash" d="M300,12 L300,376"/></g>
+  <g data-s="1"><text x="150" y="30" text-anchor="middle" class="b">사례 기반 학습</text><text x="150" y="56" text-anchor="middle" class="s">샘플을 기억 → 유사도로 예측</text>
+    <path class="ax" d="M20,290 L20,80 M20,290 L284,290"/>
+    <g style="fill:none;stroke:var(--ink2);stroke-width:1.6"><path d="M48,99 L57,115 L39,115 Z"/><path d="M95,129 L104,145 L86,145 Z"/><path d="M140,95 L149,111 L131,111 Z"/><path d="M182,83 L191,99 L173,99 Z"/><path d="M52,187 L61,203 L43,203 Z"/><path d="M200,141 L209,157 L191,157 Z"/><path d="M210,203 L219,219 L201,219 Z"/>
+      <rect x="230" y="88" width="16" height="16"/><rect x="254" y="142" width="16" height="16"/><rect x="222" y="180" width="16" height="16"/><rect x="250" y="228" width="16" height="16"/><rect x="167" y="254" width="16" height="16"/><rect x="152" y="264" width="16" height="16"/></g>
+    <path class="d" d="M118,215 L95,186 M118,215 L128,170 M118,215 L102,244" style="stroke:var(--ap);stroke-width:2;fill:none"/>
+    <g style="fill:var(--te)"><path d="M92,173 L101,189 L83,189 Z"/><path d="M128,151 L137,167 L119,167 Z"/></g><rect x="90" y="242" width="16" height="16" style="fill:var(--oc)"/>
+    <path d="M110,207 L126,223 M126,207 L110,223" style="stroke:var(--ink);stroke-width:3.5;fill:none;stroke-linecap:round"/>
+    <text x="150" y="322" text-anchor="middle" class="s">가까운 3개 = 세모 2 · 네모 1</text><text x="150" y="348" text-anchor="middle" class="s">→ 새 샘플(✕)은 세모 (KNN)</text></g>
+  <g data-s="2"><text x="450" y="30" text-anchor="middle" class="b">모델 기반 학습</text><text x="450" y="56" text-anchor="middle" class="s">모델을 먼저 정함 → 훈련 → 예측</text>
+    <path class="ax" d="M330,290 L330,92 M330,290 L584,290"/><text x="336" y="84" class="s">삶의 만족도</text><text x="584" y="314" text-anchor="end" class="s">1인당 GDP</text>
+    <g style="fill:var(--inh)"><circle cx="366" cy="170" r="3.5"/><circle cx="368" cy="178" r="3.5"/><circle cx="380" cy="192" r="3.5"/><circle cx="381" cy="174" r="3.5"/><circle cx="394" cy="168" r="3.5"/><circle cx="400" cy="178" r="3.5"/><circle cx="403" cy="194" r="3.5"/><circle cx="407" cy="188" r="3.5"/><circle cx="413" cy="176" r="3.5"/><circle cx="434" cy="160" r="3.5"/><circle cx="440" cy="174" r="3.5"/><circle cx="450" cy="170" r="3.5"/><circle cx="460" cy="172" r="3.5"/><circle cx="472" cy="142" r="3.5"/><circle cx="479" cy="144" r="3.5"/><circle cx="481" cy="160" r="3.5"/><circle cx="490" cy="152" r="3.5"/><circle cx="494" cy="150" r="3.5"/><circle cx="498" cy="142" r="3.5"/><circle cx="504" cy="144" r="3.5"/><circle cx="505" cy="154" r="3.5"/><circle cx="530" cy="146" r="3.5"/><circle cx="534" cy="140" r="3.5"/><circle cx="536" cy="150" r="3.5"/><circle cx="539" cy="140" r="3.5"/><circle cx="553" cy="146" r="3.5"/></g>
+    <path class="d" d="M330,193 L570,134" style="stroke:var(--ap);stroke-width:3;fill:none"/>
+    <text x="340" y="244" class="s" style="fill:var(--ap)">θ₀ = 4.85</text><text x="340" y="268" class="s" style="fill:var(--ap)">θ₁ = 4.91 × 10⁻⁵</text>
+    <text x="450" y="340" text-anchor="middle" class="s">만족도 = θ₀ + θ₁ × GDP</text></g>
+  <g data-s="3"><path d="M490,288 L490,158 M486,154 L334,154" style="stroke:var(--te);stroke-width:2;stroke-dasharray:6 5;fill:none"/><circle cx="490" cy="154" r="7" style="fill:var(--te)"/>
+    <text x="450" y="368" text-anchor="middle" class="s" style="fill:var(--te)">GDP 40,000 → 6.814</text></g>
+</svg>
+
+<!-- ㉖ 주요 도전 과제 · 데이터 불일치 · 공짜 점심 없음 (8장 12 · 15 · 16쪽) -->
+<svg data-fig="challenge" viewBox="0 0 600 440" role="img" aria-label="머신러닝의 주요 도전 과제 여섯 가지, 데이터 불일치, 공짜 점심 없음" hidden>
+  <g data-s="1"><text x="300" y="24" text-anchor="middle" class="s">12쪽 · 머신러닝의 주요 도전 과제 6가지</text>
+    <g style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"><rect x="10" y="38" width="186" height="70" rx="10"/><rect x="207" y="38" width="186" height="70" rx="10"/><rect x="404" y="38" width="186" height="70" rx="10"/><rect x="10" y="116" width="186" height="70" rx="10"/></g>
+    <g style="fill:var(--fr);fill-opacity:.16;stroke:var(--fr);stroke-width:2"><rect x="207" y="116" width="186" height="70" rx="10"/><rect x="404" y="116" width="186" height="70" rx="10"/></g>
+    <text x="103" y="68" text-anchor="middle" class="b">충분하지 않은 양</text><text x="103" y="94" text-anchor="middle" class="s">훈련 데이터</text>
+    <text x="300" y="68" text-anchor="middle" class="b">대표성 없는</text><text x="300" y="94" text-anchor="middle" class="s">훈련 데이터</text>
+    <text x="497" y="68" text-anchor="middle" class="b">낮은 품질의</text><text x="497" y="94" text-anchor="middle" class="s">데이터</text>
+    <text x="103" y="146" text-anchor="middle" class="b">관련이 없는</text><text x="103" y="172" text-anchor="middle" class="s">특성</text>
+    <text x="300" y="146" text-anchor="middle" class="b">과대적합</text><text x="300" y="172" text-anchor="middle" class="s">훈련 데이터에 너무 맞춤</text>
+    <text x="497" y="146" text-anchor="middle" class="b">과소적합</text><text x="497" y="172" text-anchor="middle" class="s">너무 단순해 못 배움</text></g>
+  <g data-s="2"><text x="300" y="226" text-anchor="middle" class="b">데이터 불일치 (15쪽)</text>
+    <rect x="20" y="240" width="230" height="54" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/><text x="135" y="273" text-anchor="middle" class="s">훈련: 인터넷 꽃 사진</text>
+    <path class="d" d="M254,267 L336,267" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path d="M334,260 L348,267 L334,274 Z" style="fill:var(--ink2)"/>
+    <rect x="350" y="240" width="230" height="54" rx="10" style="fill:var(--ap);fill-opacity:.12;stroke:var(--ap);stroke-width:2"/><text x="465" y="273" text-anchor="middle" class="s">실전: 직접 찍은 사진</text>
+    <text x="300" y="318" text-anchor="middle" class="s" style="fill:var(--ap)">성능이 낮으면 → 데이터 불일치 · 훈련-개발 세트로 확인</text></g>
+  <g data-s="3"><rect x="60" y="336" width="480" height="96" rx="12" style="fill:var(--fr);fill-opacity:.1;stroke:var(--fr);stroke-width:2"/>
+    <text x="300" y="366" text-anchor="middle" class="b">공짜 점심 없음 (No free lunch)</text><text x="300" y="394" text-anchor="middle" class="s">가장 알맞은 모델은 미리 알 수 없음</text><text x="300" y="420" text-anchor="middle" class="s">→ 여러 모델 · 하이퍼파라미터 튜닝으로 확인</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -686,7 +824,55 @@
             "<b>전통적인 프로그래밍</b> — 특정 단어가 들어가면 스팸 → 새 스팸 단어가 생기면 개발자가 규칙을 업데이트 → <b>유지보수가 어려움</b>",
             "<b>머신러닝</b> — 사용자가 스팸으로 지정한 메일에 ‘For U’ 가 자주 나오면 그 단어가 든 메일을 스팸으로 <b>스스로 학습</b> · 새 데이터에 쉽게 적응",
             "<b>톰 미첼 (1997)</b> — 작업 T 의 성능 P 가 경험 E 로 향상되면 학습한 것 · 🤖 스팸으로 바꾸면 T = 스팸 거르기 · P = 맞힌 비율 · E = 스팸 지정 메일" ],
-          note: "아서 새뮤얼 (1959) — 명시적인 프로그래밍 없이 컴퓨터가 학습하는 능력을 갖추게 하는 연구 분야" }
+          note: "아서 새뮤얼 (1959) — 명시적인 프로그래밍 없이 컴퓨터가 학습하는 능력을 갖추게 하는 연구 분야" },
+        { id: "mltypes", week: 10, tab: "⑳ ML 종류", src: "10주차 · 8장 2 · 3쪽 — 머신러닝 시스템의 종류 (분류 기준 3가지)",
+          steps: [
+            "<b>훈련 지도 여부</b> — 사람의 감독 아래 훈련하는지 → <b>지도 · 비지도 · 준지도 · 강화</b> 학습",
+            "<b>실시간 훈련 여부</b> — 실시간으로 점진적인 학습을 하는지 → <b>온라인 학습 · 배치 학습</b>",
+            "<b>예측 모델 사용 여부</b> — 알고 있는 데이터와 비교하는지 · 패턴을 찾아 예측 모델을 만드는지 → <b>사례 기반 · 모델 기반</b>",
+            "<b>분류 기준은 서로 배타적이지 않음</b> — 최첨단 스팸 필터(심층 신경망 · 실시간 학습) = <b>지도 + 온라인 + 모델 기반</b>" ],
+          note: "📄 3쪽 슬라이드 표기는 ‘비베타성 · 상호 베타적’ (맞춤법은 ‘배타’)" },
+        { id: "superv", week: 10, tab: "㉑ 지도·비지도", src: "10주차 · 8장 4 ~ 6쪽 — 지도 · 비지도 · 준지도 학습",
+          steps: [
+            "<b>지도 학습</b> — 훈련 데이터에 <b>레이블</b>(원하는 답)이 있음 · <b>분류</b>(스팸 필터) · <b>회귀</b>(특성 = 주행거리 · 연식 · 브랜드 → 타깃 = 중고차 가격)",
+            "<b>비지도 학습</b> — 레이블이 <b>없음</b> · 계층 군집 · 시각화 · 차원 축소 · 특성 추출 · 이상치 탐지 · 특이치 탐지 · 연관 규칙 학습",
+            "<b>준지도 학습</b> — <b>일부만</b> 레이블 · 비지도로 군집을 나눈 뒤 지도 학습 · 구글 포토 = 가족 사진 몇 장에만 레이블 → 모든 사진에서 가족 확인" ],
+          note: "✍️ 4쪽 회귀 옆 ★ “선형 회귀 계산하는 문제 객관식에 2~3문제 나옴” → ㉒ 선형 회귀 탭 · 🤖 그림 속 세모 · 네모 = 레이블(답) 종류" },
+        { id: "linreg", week: 10, tab: "㉒ 🔥 선형 회귀", src: "🔥 10주차 · 8장 4쪽 ✍️ ★ “선형 회귀 계산하는 문제 객관식에 2~3문제 나옴” · 칠판 사진 (y = ax + b · e = y − ŷ · MSE)",
+          steps: [
+            "<b>모델</b> y = <b>a</b>x + <b>b</b> — a = 기울기 · b = 절편 (칠판에 동그라미 · 데이터로 찾는 값)",
+            "<b>예측값 ŷ</b> (와이 햇) — 식에 x 를 넣은 값 = 직선 위의 점 · 🤖 예) ŷ = 2x + 1 → x = 1, 2, 3 이면 3, 5, 7",
+            "<b>오차 e = y − ŷ</b> (실제 값 − 예측값) · 🤖 예) 4 − 3 = +1 · 3 − 5 = −2 · 8 − 7 = +1",
+            "그냥 더하면 <b>+ 와 − 가 서로 지워짐</b> (1 + (−2) + 1 = 0) → 그래서 <b>제곱</b>해서 더함",
+            "★ <b>MSE</b>(평균 제곱 오차) = (1/n) Σ (y − ŷ)² = (1 + 4 + 1) ÷ 3 = <b>2</b> · 작을수록 직선이 데이터에 잘 맞음" ],
+          note: "칠판: y = ⓐx + ⓑ · e = y − ŷ · ⓜⓢⓔ = (1/n) Σ (y − ŷ)² (✍️ ‘평균 제곱 오차’ ★) · 🤖 x · y 숫자는 계산 연습용 예시 (칠판 그래프의 실제 값은 사진에서 안 보임)" },
+        { id: "rl", week: 10, tab: "㉓ 강화 학습", src: "10주차 · 8장 7쪽 — 강화 학습 (그림 ① ~ ⑥)",
+          steps: [
+            "<b>① 관찰</b> — 에이전트(학습 시스템)가 환경을 관찰",
+            "<b>② 정책에 따라 행동 선택</b> — 정책 = 주어진 상황에서 어떤 행동을 고를지 정한 전략",
+            "<b>③ 행동 실행</b>",
+            "<b>④ 보상 또는 벌점</b> (그림: 불 → −50점)",
+            "<b>⑤ 정책 수정</b> (학습 단계) — 벌점 받은 행동은 피하도록",
+            "<b>⑥ 반복</b> — 시간이 지나면서 가장 큰 보상을 얻는 <b>최상의 정책</b>을 스스로 학습" ],
+          note: "📄 7쪽 — 에이전트가 취한 행동에 보상 또는 벌점을 주어 가장 큰 보상을 받는 방향으로 유도" },
+        { id: "batchonline", week: 10, tab: "㉔ 배치·온라인", src: "10주차 · 8장 8 · 9쪽 — 배치 학습 vs 온라인 학습",
+          steps: [
+            "<b>배치 학습</b> — 훈련 세트 <b>전체</b>로 <b>오프라인</b>에서 훈련 → 더 학습하지 않고 제품 시스템에 적용 · 단점: 컴퓨팅 자원이 충분할 때만 · 새 데이터가 오면 <b>처음부터 다시</b>",
+            "<b>온라인 학습</b> — 적은 양의 데이터(<b>미니배치</b>)로 <b>점진적</b>으로 훈련 · 단점: 나쁜 데이터가 들어오면 성능이 점점 떨어짐 · 지속적인 모니터링 필요",
+            "<b>온라인 학습 예</b> — 주식가격 시스템(실시간 반영) · 스마트폰(제한된 자원) · 외부 메모리 학습(매우 큰 데이터셋)" ],
+          note: "📄 9쪽 끝 — 학습률(Learning Rate) · 🤖 학습률 = 새 데이터에 얼마나 빨리 적응할지 (크면 빨리 적응 · 예전 데이터는 빨리 잊음)" },
+        { id: "instmodel", week: 10, tab: "㉕ 사례·모델", src: "10주차 · 8장 10 · 11쪽 — 사례 기반 학습 vs 모델 기반 학습",
+          steps: [
+            "<b>사례 기반 학습</b> — 샘플을 <b>기억</b>하는 것이 훈련의 전부 → 기존 샘플과의 <b>유사도</b>로 예측 · 예) <b>KNN</b> 알고리즘 (🤖 가까운 3개 중 많은 쪽)",
+            "<b>모델 기반 학습</b> — 모델을 먼저 정한 뒤 훈련 세트로 훈련 → 새 데이터 예측 · 예) <b>선형 모델</b> — OECD 1인당 GDP 와 삶의 만족도 (θ₀ = 4.85 · θ₁ = 4.91 × 10⁻⁵)",
+            "🤖 <b>예측</b> — 만족도 = θ₀ + θ₁ × GDP → GDP 40,000 이면 4.85 + 40,000 × 4.91 × 10⁻⁵ = 4.85 + 1.964 = <b>6.814</b>" ],
+          note: "📄 11쪽 — 효용 함수 · 비용 함수 (🤖 효용 = 모델이 얼마나 좋은지 · 비용 = 얼마나 나쁜지 → 선형 회귀는 비용(오차)을 가장 작게 하는 θ 를 찾음)" },
+        { id: "challenge", week: 10, tab: "㉖ 도전 과제", src: "10주차 · 8장 12 · 15 · 16쪽 — 주요 도전 과제 · 데이터 불일치 · 공짜 점심 없음",
+          steps: [
+            "<b>주요 도전 과제 6가지</b> — 충분하지 않은 양의 훈련 데이터 · 대표성 없는 훈련 데이터 · 낮은 품질의 데이터 · 관련이 없는 특성 · <b>과대적합</b> · <b>과소적합</b>",
+            "<b>데이터 불일치</b> — 인터넷 꽃 사진으로 훈련 → 직접 찍은 사진으로 성능이 낮게 나옴 → <b>훈련-개발 세트</b>로 확인 (훈련-개발 세트는 좋은데 테스트 세트가 나쁘면 불일치)",
+            "<b>공짜 점심 없음</b>(No free lunch) — 가장 알맞은 모델을 <b>미리 알 수 없음</b> → 여러 모델 · 하이퍼파라미터 튜닝으로 확인" ],
+          note: "🤖 과대적합 = 훈련 데이터에 너무 맞춰 새 데이터에 약함 · 과소적합 = 모델이 너무 단순해 제대로 못 배움 · ✍️ 13쪽(검증) · 14쪽(하이퍼파라미터 튜닝과 교차 검증)은 PDF 에 큰 ✗ 표시" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

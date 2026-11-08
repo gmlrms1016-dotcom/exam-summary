@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../../theme.js?v=202611041620"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>인공지능과뇌인지과학 15주차 · 기말고사 시험문제 정리 (9주차 반영)</title>
-    <meta name="description" content="인공지능과뇌인지과학 15주차 정리 — 기말고사 시험문제 정리 (9주차 반영)">
+    <title>인공지능과뇌인지과학 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)</title>
+    <meta name="description" content="인공지능과뇌인지과학 15주차 정리 — 기말고사 시험문제 정리 (9 · 10주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="인공지능과뇌인지과학 15주차 · 기말고사 시험문제 정리 (9주차 반영)">
+    <meta property="og:title" content="인공지능과뇌인지과학 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)">
     <meta property="og:description" content="인공지능과뇌인지과학 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
@@ -99,18 +99,19 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🧠 인공지능과뇌인지과학 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 · 10주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-9주차.html">‹ 이전 · <b>9주차</b><br><small>머신러닝 1 — 인공지능 정의 · 특성 · 역사 · 유형 (7장)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-10주차.html">‹ 이전 · <b>10주차</b><br><small>머신러닝 2 — 머신러닝 시스템의 종류 · 🔥 선형 회귀(MSE) · 도전 과제 (8장)</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../인공지능과뇌인지과학-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 OX 10 · 객관식 10 · 단답형 10 · 보너스 5점(총 35점 · 단답형은 부분 점수 없음)이었어요.</div>
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">10주차</span><b>선형 회귀 계산하는 문제 객관식에 2~3문제 나옴</b> — ✍️ 8장 4쪽 회귀 옆 ★ · 칠판 <code>y = ax + b</code> · <code>e = y − ŷ</code> · <code>MSE = (1/n) Σ (y − ŷ)²</code> (평균 제곱 오차 ★)</li></ol></dd></dl></section>
 <section class="card" id="s1">
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/뇌인지-그림정리.html?weeks=9-15#aiml" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/뇌인지-그림정리.html?weeks=9-15#aiml" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차(7장 머신러닝 1) — AI ⊃ 머신러닝 ⊃ 딥러닝 · 특성 4가지 · 발전의 역사 · 약한 / 강한 · 수준 1~4 · 전통 프로그래밍 vs 머신러닝</li></ul>
+<ul><li>9주차(7장 머신러닝 1) — AI ⊃ 머신러닝 ⊃ 딥러닝 · 특성 4가지 · 발전의 역사 · 약한 / 강한 · 수준 1~4 · 전통 프로그래밍 vs 머신러닝</li><li>10주차(8장 머신러닝 2) — ⑳ 시스템의 종류 · ㉑ 지도 · 비지도 · 준지도 · ㉒ 🔥 선형 회귀 · MSE · ㉓ 강화 학습 · ㉔ 배치 · 온라인 · ㉕ 사례 · 모델 기반 · ㉖ 도전 과제</li></ul>
 </section>
 <section class="card" id="s2">
 <h2>9주차 · 7장 머신러닝 1</h2>
@@ -128,8 +129,26 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 표는 <a href="인공지능과뇌인지과학-9주차.html">9주차</a> · 문제는 🔒 실제시험.</div>
 </section>
+<section class="card" id="s3">
+<h2>10주차 · 8장 머신러닝 2</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>🔥 선형 회귀</td><td>모델 <b>y = ax + b</b> (a 기울기 · b 절편) · 예측값 <b>ŷ</b> = 식에 x 대입 · 오차 <b>e = y − ŷ</b> (실제 − 예측)</td><td>㉒</td></tr>
+<tr><td>🔥 MSE</td><td><b>평균 제곱 오차</b> = (1/n) Σ (y − ŷ)² — 오차를 <b>제곱</b>해 더하고 <b>n 으로 나눔</b> · 작을수록 잘 맞음 · 예) 오차 1 · −2 · 1 → (1 + 4 + 1) ÷ 3 = <b>2</b> (그냥 더하면 0 · 안 나누면 6 = 함정)</td><td>㉒</td></tr>
+<tr><td>🔥 선형 모델 예측</td><td>삶의 만족도 = <b>4.85 + 4.91 × 10⁻⁵ × GDP</b> → GDP 40,000 이면 <b>6.814</b></td><td>㉕</td></tr>
+<tr><td>분류 기준 3가지</td><td>훈련 지도 여부 · 실시간 훈련 여부 · 예측 모델 사용 여부 — <b>배타적이지 않음</b> (스팸 필터 = 지도 + 온라인 + 모델 기반)</td><td>⑳</td></tr>
+<tr><td>지도 · 비지도 · 준지도</td><td>지도 = <b>레이블</b> 있음(분류 · 회귀) · 비지도 = 없음(군집 · 차원 축소 · 이상치 탐지) · 준지도 = 일부만(구글 포토)</td><td>㉑</td></tr>
+<tr><td>회귀 용어</td><td><b>특성</b>(feature) = 예측 변수 → <b>타깃</b>(target) 수치 예측 · 중고차: 주행거리 · 연식 · 브랜드 → 가격</td><td>㉑</td></tr>
+<tr><td>강화 학습</td><td><b>에이전트</b> · 보상 / 벌점 · <b>정책</b> = 상황마다 어떤 행동을 고를지</td><td>㉓</td></tr>
+<tr><td>배치 vs 온라인</td><td>배치 = 전체 · 오프라인 · 새 데이터면 처음부터 / 온라인 = <b>미니배치</b> · 점진적 · 나쁜 데이터 주의 · 모니터링</td><td>㉔</td></tr>
+<tr><td>사례 vs 모델 기반</td><td>사례 = 기억 · <b>유사도</b>(<b>KNN</b>) / 모델 = 모델을 정해 훈련 → 예측(선형 모델)</td><td>㉕</td></tr>
+<tr><td>도전 과제</td><td>데이터 양 · 대표성 · 품질 · 관련 없는 특성 · 과대적합 · 과소적합 · 데이터 불일치 · <b>공짜 점심 없음</b></td><td>㉖</td></tr>
+</tbody></table>
+<div class="tip">자세한 표 · 계산 연습은 <a href="인공지능과뇌인지과학-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
+</section>
 
-    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-9주차.html">‹ 이전 · <b>9주차</b><br><small>머신러닝 1 — 인공지능 정의 · 특성 · 역사 · 유형 (7장)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-10주차.html">‹ 이전 · <b>10주차</b><br><small>머신러닝 2 — 머신러닝 시스템의 종류 · 🔥 선형 회귀(MSE) · 도전 과제 (8장)</small></a><span></span></nav>
 
     <p class="wk-src">노션 「인공지능과뇌인지과학」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

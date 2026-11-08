@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인공지능과뇌인지과학 10주차 · 머신러닝 2 — 머신러닝 시스템의 종류 · 🔥 선형 회귀(MSE) · 도전 과제 (8장)</title>
+    <meta name="description" content="인공지능과뇌인지과학 10주차 정리 — 머신러닝 2 — 머신러닝 시스템의 종류 · 🔥 선형 회귀(MSE) · 도전 과제 (8장)">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="인공지능과뇌인지과학 10주차 · 머신러닝 2 — 머신러닝 시스템의 종류 · 🔥 선형 회귀(MSE) · 도전 과제 (8장)">
+    <meta property="og:description" content="인공지능과뇌인지과학 10주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../../icon-180.png">
+    <link rel="stylesheet" href="../../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../인공지능과뇌인지과학.html">← 인공지능과뇌인지과학 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🧠 인공지능과뇌인지과학 · 10주차</h1>
+        <p>머신러닝 2 — 머신러닝 시스템의 종류 · 🔥 선형 회귀(MSE) · 도전 과제 (8장)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-9주차.html">‹ 이전 · <b>9주차</b><br><small>머신러닝 1 — 인공지능 정의 · 특성 · 역사 · 유형 (7장)</small></a><a class="next" href="인공지능과뇌인지과학-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10주차 반영)</small></a></nav>
+
+<div class="tip">자료: <b>인공지능과_뇌인지과학_8장.pdf</b> (17쪽) · 칠판 사진 1장 — 노션 10주차는 비어 있어서 <b>PDF 펜 필기</b>(✍️ 4쪽 ★ 메모 · 13 · 14쪽 ✗)와 <b>칠판 사진</b>으로 정리했어요. 📄 = 강의자료 · ✍️ = 내 필기 · 🤖 = 강의자료에 없는 설명.<br>🔥 ✍️ 4쪽 회귀 옆 ★ “<b>선형 회귀 계산하는 문제 객관식에 2~3문제 나옴</b>” → <b>3절</b> 계산 연습</div>
+<section class="card" id="s1">
+<h2>🎨 10주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/뇌인지-그림정리.html?week=10" title="10주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/뇌인지-그림정리.html?week=10" target="_blank" rel="noopener">🎬 10주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+<ul><li>⑳ 머신러닝 시스템의 종류 · ㉑ 지도 · 비지도 · 준지도 · ㉒ 🔥 선형 회귀 · 오차 · MSE · ㉓ 강화 학습 · ㉔ 배치 · 온라인 · ㉕ 사례 · 모델 기반 · ㉖ 도전 과제</li></ul>
+</section>
+<section class="card" id="s2">
+<h2>✍️ 내 필기 (PDF 펜 · 칠판)</h2>
+<table class="ref">
+<tbody>
+<tr><th>어디</th><th>✍️ 필기</th><th>정리</th></tr>
+<tr><td>4쪽 지도 학습 — <b>회귀</b> 옆</td><td>★ + “<b>선형 회귀 계산하는 문제 객관식에 2~3문제 나옴</b>”</td><td>🔥 시험 → 3절</td></tr>
+<tr><td>칠판 사진</td><td>직선 그래프 · <code>y = ⓐx + ⓑ</code> · <code>e = y − ŷ</code> · <code>ⓂⓈⒺ = (1/n) Σ (y − ŷ)²</code> · ✍️ “평균 제곱 오차” ★</td><td>3절</td></tr>
+<tr><td>13쪽 검증 · 14쪽 하이퍼파라미터 튜닝과 교차 검증</td><td>쪽 전체에 큰 <b>✗</b></td><td>🤖 글은 없고 ✗ 만 — 수업에서 넘어간 쪽으로 보여 6절에 짧게만</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s3">
+<h2>1. 머신러닝 시스템의 종류 (2 · 3쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th>📄 분류 기준</th><th>📄 무엇을 보나</th><th>📄 종류</th></tr>
+<tr><td><b>훈련 지도 여부</b></td><td>사람의 <b>감독</b> 하에 훈련하는 것인지 아닌지</td><td><b>지도 · 비지도 · 준지도 · 강화</b> 학습</td></tr>
+<tr><td><b>실시간 훈련 여부</b></td><td><b>실시간</b>으로 점진적인 학습을 하는지 아닌지</td><td><b>온라인 학습 · 배치 학습</b></td></tr>
+<tr><td><b>예측 모델 사용 여부</b></td><td>알고 있는 데이터 포인트와 새 데이터 포인트를 <b>비교</b>하는지 · 과학자처럼 훈련 데이터셋에서 <b>패턴을 발견해 예측 모델</b>을 만드는지</td><td><b>사례 기반 학습 · 모델 기반 학습</b></td></tr>
+</tbody></table>
+<ul><li>📄 3쪽 — 분류 기준은 <b>서로 배타적이지 않음</b> (슬라이드 표기는 ‘베타’) → 함께 쓸 수 있음</li><li>📄 <b>최첨단 스팸 필터</b> = 심층 신경망 모델로 스팸 · 스팸이 아닌 메일에서 <b>실시간으로 학습</b> → <b>지도 학습 + 온라인 학습 + 모델 기반 학습</b></li></ul>
+</section>
+<section class="card" id="s4">
+<h2>2. 훈련 지도 여부 — 지도 · 비지도 · 준지도 · 강화 (4 ~ 7쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th>📄 종류</th><th>📄 뜻</th><th>📄 예</th></tr>
+<tr><td><b>지도 학습</b> (Supervised Learning)</td><td>알고리즘에 주입하는 훈련 데이터에 <b>레이블(Label)</b> 이라는 원하는 <b>답이 포함</b></td><td><b>분류</b>(Classification) — 스팸 필터 (많은 메일 샘플 + 스팸인지 아닌지의 정보) · <b>회귀</b>(Regression) — 중고차 가격 예측</td></tr>
+<tr><td><b>비지도 학습</b> (Unsupervised Learning)</td><td>훈련 데이터에 <b>레이블이 없는</b> 학습</td><td>계층 군집 · 시각화 · 차원 축소 · 특성 추출 · 이상치 탐지 · 특이치 탐지 · 연관 규칙 학습</td></tr>
+<tr><td><b>준지도 학습</b></td><td><b>일부만</b> 레이블이 있는 데이터를 학습 · 비지도 학습으로 군집을 나눈 뒤 샘플로 지도 학습 · 대부분 지도 + 비지도를 <b>혼합</b></td><td>구글 포토 호스팅 — 가족 사진 몇 장에만 레이블 → 모든 사진에서 가족 사진 확인</td></tr>
+<tr><td><b>강화 학습</b></td><td><b>에이전트</b>(학습 시스템)가 취한 행동에 <b>보상 또는 벌점</b> → 가장 큰 보상을 받는 방향으로 유도</td><td>환경 관찰 → 행동 실행 → 보상 · 벌점 → 시간이 지나면서 <b>정책</b>(최상의 전략)을 스스로 학습</td></tr>
+</tbody></table>
+<ul><li>📄 <b>회귀</b> = <b>예측 변수</b>(predictor variable)라 부르는 <b>특성</b>(feature)을 사용해 <b>타깃</b>(target) 수치를 예측하는 작업 — 중고차: 특성 = 주행거리 · 연식 · 브랜드 → 타깃 = <b>가격</b></li><li>📄 <b>정책</b> = 주어진 상황에서 에이전트가 <b>어떤 행동을 선택해야 할지</b> 정의</li><li>🤖 분류 = <b>정해진 종류 중 하나</b>로 나눔(스팸 / 정상) · 회귀 = <b>숫자</b>를 예측(가격)</li></ul>
+</section>
+<section class="card" id="s5">
+<h2>3. 🔥 선형 회귀 · 오차 · MSE (4쪽 ✍️ ★ · 칠판)</h2>
+<p>✍️ 4쪽 ★ “<b>선형 회귀 계산하는 문제 객관식에 2~3문제 나옴</b>”</p>
+<table class="ref">
+<tbody>
+<tr><th>칠판</th><th>뜻</th></tr>
+<tr><td><code>y = ax + b</code> (a · b 에 동그라미)</td><td><b>선형 회귀 모델</b> — 특성 x 로 타깃 y 를 예측하는 <b>직선</b> · <b>a = 기울기</b> · <b>b = 절편</b> (🤖 데이터로 찾아내는 값)</td></tr>
+<tr><td><code>ŷ</code> (와이 햇)</td><td>🤖 <b>예측값</b> = 식에 x 를 넣어 나온 값 (직선 위의 점)</td></tr>
+<tr><td><code>e = y − ŷ</code></td><td><b>오차</b> = <b>실제 값 − 예측값</b></td></tr>
+<tr><td><code>MSE = (1/n) Σ (y − ŷ)²</code> (MSE 에 동그라미)</td><td>✍️ <b>평균 제곱 오차</b> ★ (Mean Squared Error) — 오차를 <b>제곱</b>해서 더한 뒤 개수 n 으로 나눔 · 🤖 <b>작을수록</b> 직선이 데이터에 잘 맞음</td></tr>
+</tbody></table>
+<ul><li>🤖 왜 제곱? — 오차는 <b>+ 도 − 도</b> 나와서(칠판 오른쪽의 2 · −2 처럼) 그냥 더하면 서로 지워짐 → 제곱하면 모두 양수</li><li>📄 11쪽 모델 기반 학습의 <b>선형 모델</b>도 같은 모양 — 삶의 만족도 = <b>θ₀ + θ₁ × 1인당 GDP</b> (θ₀ = <b>4.85</b> · θ₁ = <b>4.91 × 10⁻⁵</b>)</li></ul>
+<p><b>🤖 계산 연습 (시험 대비 · 직접 계산해 확인한 값)</b></p>
+<table class="ref">
+<tbody>
+<tr><th>문제</th><th>풀이</th><th>답</th></tr>
+<tr><td>① ŷ = 3x + 2 · x = 4 일 때 예측값</td><td>3 × 4 + 2</td><td><b>14</b></td></tr>
+<tr><td>② 실제 값 y = 10 · 예측값 ŷ = 7 일 때 오차</td><td>e = y − ŷ = 10 − 7</td><td><b>3</b></td></tr>
+<tr><td>③ 오차가 2 · −2 · 1 · −1 일 때 MSE</td><td>(4 + 4 + 1 + 1) ÷ 4 = 10 ÷ 4</td><td><b>2.5</b></td></tr>
+<tr><td>④ 데이터 (1, 4) · (2, 3) · (3, 8) · ŷ = 2x + 1 의 MSE</td><td>ŷ = 3 · 5 · 7 → e = +1 · −2 · +1 → e² = 1 · 4 · 1 → 6 ÷ 3</td><td><b>2</b></td></tr>
+<tr><td>⑤ 같은 데이터 · ŷ = 2x 의 MSE</td><td>ŷ = 2 · 4 · 6 → e = 2 · −1 · 2 → e² = 4 · 1 · 4 → 9 ÷ 3</td><td><b>3</b> → ④(2)보다 큼 = <b>④ 모델이 더 잘 맞음</b></td></tr>
+<tr><td>⑥ 11쪽 모델 · GDP 40,000 의 삶의 만족도</td><td>4.85 + 40,000 × 4.91 × 10⁻⁵ = 4.85 + 1.964</td><td><b>6.814</b></td></tr>
+</tbody></table>
+<ul><li>⚠️ 함정 — ④ 에서 오차를 그냥 더하면 1 + (−2) + 1 = <b>0</b> · 제곱만 하고 안 나누면 <b>6</b> (MSE 는 <b>평균</b> = n 으로 나누기까지)</li></ul>
+</section>
+<section class="card" id="s6">
+<h2>4. 실시간 훈련 여부 — 배치 학습 vs 온라인 학습 (8 · 9쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th></th><th>📄 배치 학습</th><th>📄 온라인 학습</th></tr>
+<tr><td>방법</td><td>주어진 훈련 세트 <b>전체</b>를 사용해 <b>오프라인</b>에서 훈련 → 먼저 훈련시킨 뒤 더 학습 없이 제품 시스템에 적용</td><td><b>적은 양의 데이터(미니배치 · mini-batch)</b> 로 <b>점진적</b>으로 훈련</td></tr>
+<tr><td>단점</td><td>컴퓨팅 자원(cpu · gpu · 메모리 · 저장장치 등)이 <b>충분할 때만</b> · 새 데이터가 들어오면 <b>처음부터 새롭게</b> 학습</td><td><b>나쁜 데이터</b>가 주입되면 성능이 점진적으로 떨어질 수 있음 · <b>지속적인 시스템 모니터링</b> 필요</td></tr>
+<tr><td>예</td><td>—</td><td><b>주식가격</b> 시스템(실시간 반영) · <b>스마트폰</b>(제한된 자원) · <b>외부 메모리 학습</b>(매우 큰 데이터셋)</td></tr>
+</tbody></table>
+<ul><li>📄 9쪽 끝 <b>학습률(Learning Rate)</b> — 🤖 새 데이터에 얼마나 빨리 적응할지 정하는 값 (크면 빨리 적응하지만 예전 데이터를 빨리 잊음)</li></ul>
+</section>
+<section class="card" id="s7">
+<h2>5. 예측 모델 사용 여부 — 사례 기반 vs 모델 기반 (10 · 11쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th></th><th>📄 사례 기반 학습</th><th>📄 모델 기반 학습</th></tr>
+<tr><td>방법</td><td>샘플을 <b>기억</b>하는 것이 훈련의 전부 → 예측할 때 기존 샘플과의 <b>유사도</b> 측정</td><td>모델을 <b>미리 지정</b>한 뒤 훈련 세트로 훈련 → 훈련된 모델로 새 데이터 예측</td></tr>
+<tr><td>예</td><td><b>KNN</b> 알고리즘 (🤖 가장 가까운 k 개 이웃 중 많은 쪽으로)</td><td><b>선형 모델</b> 학습 — OECD 국가의 <b>1인당 GDP</b> 와 <b>삶의 만족도</b> 관계 · 효용 함수 · 비용 함수</td></tr>
+</tbody></table>
+<ul><li>📄 11쪽 그래프 — θ₀ = 4.85 · θ₁ = 4.91 × 10⁻⁵ → 🤖 GDP 가 1 만큼 늘 때 만족도가 θ₁ 만큼 오름 (3절 ⑥)</li><li>🤖 효용 함수 = 모델이 얼마나 <b>좋은지</b> · 비용 함수 = 얼마나 <b>나쁜지</b>(오차) → 선형 회귀는 비용(예: MSE)을 가장 작게 하는 θ 를 찾음</li></ul>
+</section>
+<section class="card" id="s8">
+<h2>6. 머신러닝의 주요 도전 과제 (12 ~ 16쪽)</h2>
+<ul><li>📄 12쪽 <b>6가지</b> — 충분하지 않은 양의 훈련 데이터 · 대표성 없는 훈련 데이터 · 낮은 품질의 데이터 · 관련이 없는 특성 · <b>과대적합</b> · <b>과소적합</b><ul><li>🤖 과대적합 = 훈련 데이터에 <b>너무 딱 맞춰</b> 새 데이터에 약함 · 과소적합 = 모델이 <b>너무 단순</b>해 제대로 못 배움</li></ul></li><li>📄 15쪽 <b>데이터 불일치</b> — 훈련 데이터가 실전 데이터를 완벽하게 대변하지 못할 때 · 예) 인터넷 꽃 사진으로 훈련 → 직접 찍은 사진으로 성능이 낮게 나옴 · 확인: <b>훈련-개발 세트</b>(훈련 데이터의 일부)로 평가가 좋은데 <b>테스트 세트</b> 성능이 나쁘면 불일치</li><li>📄 16쪽 <b>공짜 점심 없음</b>(No free lunch) — 주어진 데이터셋에 가장 적절한 모델을 <b>미리 알 수 없음</b> → 다양한 모델 · 하이퍼파라미터 튜닝으로 확인</li><li>✍️ ✗ 13쪽 <b>검증</b> — 훈련 세트 <b>80%</b> · 테스트 세트 <b>20%</b> · 검증 기준 = <b>일반화 오차</b>(새 샘플에 대한 오류 비율) · 과대 적합 = 훈련 오차에 비해 일반화 오차가 높은 경우</li><li>✍️ ✗ 14쪽 — <b>하이퍼파라미터</b> = 알고리즘 학습 모델에 쓰는 파라미터 · 훈련 과정에 변하지 않음 · <b>교차 검증</b> = 여러 검증 세트로 예비표본(홀드아웃) 검증을 반복 (정확하지만 훈련 시간이 늘어남)</li></ul>
+</section>
+<section class="card" id="s9">
+<h2>7. 논의 (17쪽)</h2>
+<ul><li>머신러닝을 어떻게 정의할 수 있는가? · 우리 생활에서 머신러닝이 적용된 것은? · 머신러닝이 들어오기 전과 후의 삶의 변화와 그에 대한 생각</li><li>🤖 연결 — 정의 = 9주차 아서 새뮤얼 · 톰 미첼 · 생활 = 스팸 필터 · 추천 시스템 · 구글 포토(준지도) · 중고차 가격(회귀)</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-9주차.html">‹ 이전 · <b>9주차</b><br><small>머신러닝 1 — 인공지능 정의 · 특성 · 역사 · 유형 (7장)</small></a><a class="next" href="인공지능과뇌인지과학-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「인공지능과뇌인지과학 · 10주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../../ink.js?v=202611041620"></script>
+</body>
+</html>
