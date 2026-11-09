@@ -188,6 +188,45 @@
   <g data-s="5"><rect x="10" y="298" width="580" height="64" rx="10" style="fill:var(--ap);fill-opacity:0.14;stroke:var(--ap);stroke-width:2"/><text x="24" y="338" text-anchor="start" class="s m">short t[10];</text><text x="368" y="338" text-anchor="start" class="s">쓰레기값 (VS: -13108)</text></g>
 </svg>
 
+<!-- ⑩ 배열명 = 시작 주소 · *(array1 + i) == array1[i] (11주차 · 교수님 엑셀) -->
+<svg data-fig="ptrarr" viewBox="0 0 600 372" role="img" aria-label="배열 이름은 시작 주소이고 포인터로 칸을 읽음" hidden>
+  <g><text x="300" y="32" text-anchor="middle" class="b m">int array1[5] = {10,20,30,40,50};</text></g>
+  <g data-s="1"><rect x="40" y="56" width="104" height="66" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="92" y="98" text-anchor="middle" class="b">10</text><text x="92" y="148" text-anchor="middle" class="b m" style="fill:var(--main)">[0]</text><rect x="144" y="56" width="104" height="66" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="196" y="98" text-anchor="middle" class="b">20</text><text x="196" y="148" text-anchor="middle" class="b m" style="fill:var(--main)">[1]</text><rect x="248" y="56" width="104" height="66" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="300" y="98" text-anchor="middle" class="b">30</text><text x="300" y="148" text-anchor="middle" class="b m" style="fill:var(--main)">[2]</text><rect x="352" y="56" width="104" height="66" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="404" y="98" text-anchor="middle" class="b">40</text><text x="404" y="148" text-anchor="middle" class="b m" style="fill:var(--main)">[3]</text><rect x="456" y="56" width="104" height="66" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="508" y="98" text-anchor="middle" class="b">50</text><text x="508" y="148" text-anchor="middle" class="b m" style="fill:var(--main)">[4]</text></g>
+  <g data-s="2"><text x="92" y="178" text-anchor="middle" class="s">100</text><text x="92" y="204" text-anchor="middle" class="s">+0</text><text x="196" y="178" text-anchor="middle" class="s">104</text><text x="196" y="204" text-anchor="middle" class="s">+1</text><text x="300" y="178" text-anchor="middle" class="s">108</text><text x="300" y="204" text-anchor="middle" class="s">+2</text><text x="404" y="178" text-anchor="middle" class="s">112</text><text x="404" y="204" text-anchor="middle" class="s">+3</text><text x="508" y="178" text-anchor="middle" class="s">116</text><text x="508" y="204" text-anchor="middle" class="s">+4</text><text x="300" y="234" text-anchor="middle" class="s">주소(예) — int 1칸 = 4바이트라 4씩 · +1 = 한 칸 뒤</text></g>
+  <g data-s="3"><path d="M26,268 L38,128" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M31.6,128.6 L39,116 L44.8,129.6 Z" style="fill:var(--ap)"/><text x="44" y="284" class="b" style="fill:var(--ap)">array1 == &amp;array1[0] → 배열명 = 시작 주소</text></g>
+  <g data-s="4"><rect x="244" y="52" width="112" height="74" rx="6" style="fill:none;stroke:var(--oc);stroke-width:3.5"/><text x="300" y="322" text-anchor="middle" class="b m" style="fill:var(--oc)">*(array1 + 2) == array1[2] == 30</text><text x="300" y="354" text-anchor="middle" class="s">array1 + 2 = 주소 108 → * = 그 칸의 값</text></g>
+</svg>
+
+<!-- ⑪ 함수에 배열 보내기 — 9쪽 int v1[] · 12쪽 int* v1 (11주차) -->
+<svg data-fig="arrfunc" viewBox="0 0 600 420" role="img" aria-label="함수에 배열 이름을 보내면 시작 주소가 전달되어 같은 칸을 읽음" hidden>
+  <g data-s="1"><rect x="8" y="8" width="584" height="156" rx="12" style="fill:var(--inh);fill-opacity:.05;stroke:var(--inh);stroke-width:2"/><text x="24" y="36" class="b">main</text><text x="120" y="36" class="s m">int array1[] = {10, 20, 30, 40, 50};</text><text x="24" y="96" class="b m">array1</text><rect x="150" y="60" width="72" height="56" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="186" y="96" text-anchor="middle" class="b">10</text><text x="186" y="142" text-anchor="middle" class="s m">[0]</text><rect x="222" y="60" width="72" height="56" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="258" y="96" text-anchor="middle" class="b">20</text><text x="258" y="142" text-anchor="middle" class="s m">[1]</text><rect x="294" y="60" width="72" height="56" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="330" y="96" text-anchor="middle" class="b">30</text><text x="330" y="142" text-anchor="middle" class="s m">[2]</text><rect x="366" y="60" width="72" height="56" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="402" y="96" text-anchor="middle" class="b">40</text><text x="402" y="142" text-anchor="middle" class="s m">[3]</text><rect x="438" y="60" width="72" height="56" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="474" y="96" text-anchor="middle" class="b">50</text><text x="474" y="142" text-anchor="middle" class="s m">[4]</text></g>
+  <g data-s="2"><text x="330" y="204" class="b m" style="fill:var(--ap)">test(array1);</text><text x="330" y="230" class="s">→ v1 = 시작 주소 (배열 복사 X)</text>
+    <rect x="8" y="250" width="584" height="160" rx="12" style="fill:var(--te);fill-opacity:.06;stroke:var(--te);stroke-width:2"/><text x="24" y="278" class="b">test</text><text x="120" y="278" class="s m">void test(int* v1)</text>
+    <rect x="110" y="300" width="190" height="56" rx="8" style="fill:var(--ap);fill-opacity:.12;stroke:var(--ap);stroke-width:2"/><text x="24" y="336" class="b m">v1</text><text x="205" y="334" text-anchor="middle" class="s">array1 의 주소</text>
+    <path d="M180,298 C180,230 162,200 162,128" style="stroke:var(--ap);stroke-width:2.5;fill:none;stroke-dasharray:7 5"/><path d="M156,131 L162,118 L168,131 Z" style="fill:var(--ap)"/></g>
+  <g data-s="3"><text x="330" y="322" class="s m" style="fill:var(--ink)">v1[i] == *(v1 + i)</text><text x="330" y="348" class="s">→ main 의 칸을 그대로 읽음</text></g>
+  <g data-s="4"><text x="24" y="392" class="s">9쪽 int v1[] = 12쪽 int* v1 — 둘 다 주소를 받음 · 결과 같음</text></g>
+</svg>
+
+<!-- ⑫ 포인터 & · * — w11-ex01_05-pointer-03.c (🔥 숫자만 바꿔서 기말) -->
+<svg data-fig="addrop" viewBox="0 0 600 430" role="img" aria-label="포인터 a2 가 a1 을 가리켜 *a2 에 쓰면 a1 이 바뀌고 a3 는 값만 복사" hidden>
+  <g data-s="1"><text x="120" y="34" text-anchor="middle" class="b m">a1</text><text x="120" y="58" text-anchor="middle" class="s">int</text><rect x="40" y="70" width="160" height="60" rx="8" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="120" y="107" text-anchor="middle" class="s">값</text></g>
+  <g data-s="3"><text x="300" y="34" text-anchor="middle" class="b m">a3</text><text x="300" y="58" text-anchor="middle" class="s">int (복사본)</text><rect x="220" y="70" width="160" height="60" rx="8" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2;stroke-dasharray:6 4"/><text x="300" y="107" text-anchor="middle" class="s">값</text></g>
+  <g data-s="2"><text x="480" y="34" text-anchor="middle" class="b m">a2</text><text x="480" y="58" text-anchor="middle" class="s">int* (주소)</text><rect x="400" y="70" width="160" height="60" rx="8" style="fill:var(--ap);fill-opacity:.12;stroke:var(--ap);stroke-width:2"/><text x="480" y="107" text-anchor="middle" class="b m">&amp;a1</text>
+    <path d="M480,132 C480,176 120,176 120,140" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M114,142 L120,130 L126,142 Z" style="fill:var(--ap)"/><text x="300" y="186" text-anchor="middle" class="s" style="fill:var(--ap)">가리킴</text></g>
+  <g data-s="1"><text x="24" y="214" class="s m" style="fill:var(--ink)">int a1 = 100;</text><text x="320" y="214" class="s">a1 = 100</text></g><g data-s="2"><text x="24" y="248" class="s m" style="fill:var(--ink)">int* a2 = &amp;a1;</text><text x="320" y="248" class="s">a2 → a1 을 가리킴</text></g><g data-s="3"><text x="24" y="282" class="s m" style="fill:var(--ink)">int a3 = a1;</text><text x="320" y="282" class="s">a3 = 100 (값만 복사)</text></g><g data-s="4"><text x="24" y="316" class="s m" style="fill:var(--ink)">a3 = 1000;</text><text x="320" y="316" class="s">a3 = 1000 · a1 은 100 그대로</text></g><g data-s="5"><text x="24" y="350" class="s m" style="fill:var(--ink)">*a2 = 2000;</text><text x="320" y="350" class="s" style="fill:var(--ap)">a1 = 2000 ★ (*a2 = a1)</text></g>
+  <g data-s="5"><text x="300" y="404" text-anchor="middle" class="s">출력 a1: 100 · a3: 1000 · a1: 2000 · *a2: 2000</text></g>
+</svg>
+
+<!-- ⑬ 함수가 배열을 돌려줄 때 — 지역 배열 vs static (13쪽) -->
+<svg data-fig="staticret" viewBox="0 0 600 344" role="img" aria-label="지역 배열은 함수가 끝나면 사라져 쓰레기값 static 배열은 남아 1 2 3" hidden>
+  <g data-s="1"><text x="150" y="30" text-anchor="middle" class="b">지역 배열 (왼쪽)</text><text x="450" y="30" text-anchor="middle" class="b">static 배열 (오른쪽)</text><rect x="30" y="50" width="80" height="56" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="70" y="86" text-anchor="middle" class="b">1</text><rect x="110" y="50" width="80" height="56" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="150" y="86" text-anchor="middle" class="b">2</text><rect x="190" y="50" width="80" height="56" style="fill:var(--inh);fill-opacity:0.16;stroke:var(--inh);stroke-width:2"/><text x="230" y="86" text-anchor="middle" class="b">3</text><rect x="330" y="50" width="80" height="56" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="370" y="86" text-anchor="middle" class="b">1</text><rect x="410" y="50" width="80" height="56" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="450" y="86" text-anchor="middle" class="b">2</text><rect x="490" y="50" width="80" height="56" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/><text x="530" y="86" text-anchor="middle" class="b">3</text>
+    <text x="150" y="134" text-anchor="middle" class="s m">int array2[3]</text><text x="450" y="134" text-anchor="middle" class="s m">static int array2[3]</text></g>
+  <g data-s="2"><text x="150" y="168" text-anchor="middle" class="s">return array2 → array3</text><text x="450" y="168" text-anchor="middle" class="s">return array2 → array3</text></g>
+  <g data-s="3"><path d="M30,50 L270,106 M270,50 L30,106" style="stroke:var(--ap);stroke-width:4;fill:none;stroke-linecap:round;opacity:.85"/><text x="150" y="206" text-anchor="middle" class="b" style="fill:var(--ap)">함수 끝 → 사라짐</text><text x="150" y="238" text-anchor="middle" class="s">읽으면 쓰레기값</text><text x="150" y="264" text-anchor="middle" class="s m">-858993460 (VS)</text></g>
+  <g data-s="4"><text x="450" y="206" text-anchor="middle" class="b" style="fill:var(--te)">함수가 끝나도 남음</text><text x="450" y="238" text-anchor="middle" class="s">출력 1 · 2 · 3</text><text x="300" y="318" text-anchor="middle" class="s">지역 배열 주소를 돌려주면 위험 → static 으로</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -269,7 +308,36 @@
             "쉼표 초기화 — <code>short student[10] = { 0, };</code> → <b>모두 0</b> (11쪽 ex01_01-array7 → <b>10 0</b>)",
             "크기 생략 — <code>int c[] = {10,20,30};</code> → 값 개수만큼 <b>3칸</b> (12쪽)",
             "초기화 안 함 — <code>short student[10];</code> → 자동으로 초기화되지 않음 → <b>쓰레기값</b> (10쪽 VS 결과 <b>10 -13108</b>)" ],
-          note: "⚠️ 필기 <code>{10.20.30.40.50};;</code> → 값 사이는 쉼표 · ; 하나 · 배열끼리 <code>y = x;</code> 는 오류 → 원소 하나씩 복사" }
+          note: "⚠️ 필기 <code>{10.20.30.40.50};;</code> → 값 사이는 쉼표 · ; 하나 · 배열끼리 <code>y = x;</code> 는 오류 → 원소 하나씩 복사" },
+        { id: "ptrarr", week: 11, tab: "⑩ 배열명=주소", src: "11주차 ✍️ 필기 “배열 명 == 배열의 시작 주소” · 📄 4 · 10쪽 · 🖥️ 교수님 엑셀 (사진)",
+          steps: [
+            "<code>int array1[5] = {10,20,30,40,50};</code> — 같은 자료형이 <b>연속</b>으로 5칸",
+            "주소(예) 100 · 104 · 108 · 112 · 116 — <code>int</code> 1칸 = <b>4바이트</b> · 포인터로는 <b>+0 ~ +4</b> (한 칸씩)",
+            "<b>배열 변수</b> <code>array1 == &amp;array1[0]</code> — 배열 이름 = <b>시작 주소</b>",
+            "<b>포인터 변수</b> <code>*(array1 + 2) == array1[2]</code> = 30 — 주소 + 2칸 → <code>*</code> 로 그 칸의 값" ],
+          note: "⚠️ 필기 <code>count ==&amp;count[0],&amp;count[1],…</code> → 정확히는 <code>count == &amp;count[0]</code> · <code>count + i == &amp;count[i]</code>" },
+        { id: "arrfunc", week: 11, tab: "⑪ 배열→함수", src: "🔥 11주차 ✍️ “강의자료 9페이지 · 12페이지 시험문제 외우기” — w11-ex01_01-array.c · w11-ex01_03-pointer.c",
+          steps: [
+            "<b>main</b> — <code>int array1[] = {10, 20, 30, 40, 50};</code>",
+            "<code>test(array1);</code> — 배열 <b>이름(시작 주소)</b>만 보냄 → <code>v1</code> 이 array1 을 가리킴 (배열을 복사하지 않음)",
+            "함수 안에서 <code>v1[i]</code> == <code>*(v1 + i)</code> → main 의 칸을 <b>그대로</b> 읽음 (10 ~ 50 · array2 면 100 ~ 500)",
+            "🔥 9쪽 <code>void test(int v1[])</code> + <code>v1[i]</code> = 12쪽 <code>void test(int* v1)</code> + <code>*(v1 + i)</code> — 결과 같음" ],
+          note: "✍️ 9쪽 시험 메모 <code>printf(\"%d\", );</code> = 값 · <code>printf(\"%p\", );</code> = 주소 (함수 안의 v1 과 main 의 array1 은 같은 주소)" },
+        { id: "addrop", week: 11, tab: "⑫ 🔥 & · *", src: "🔥 11주차 ✍️ 수업 파일 w11-ex01_05-pointer-03.c “강의자료에 없음 · 숫자만 바꿔서 기말고사 시험문제”",
+          steps: [
+            "<code>int a1 = 100;</code> — 일반 변수 (값 = value)",
+            "<code>int* a2 = &amp;a1;</code> — 포인터 변수에 a1 의 <b>주소</b> (<code>&amp;</code> = 주소 지정 연산자) → a2 가 a1 을 가리킴",
+            "<code>int a3 = a1;</code> — a1 의 <b>값만 복사</b> (따로 노는 사본)",
+            "<code>a3 = 1000;</code> — 사본만 바뀜 → <b>a1 은 100 그대로</b>",
+            "<code>*a2 = 2000;</code> — a2 가 가리키는 곳(= a1)에 씀 → <b>a1 = 2000</b> · 출력 100 · 1000 · 2000 · 2000" ],
+          note: "🔥 숫자만 바꿔 연습 — a1 = 7 · a3 = 70 · *a2 = 700 이면 → 7 · 70 · 700 · 700 · ✍️ 일반 변수 = 값(value) · 참조 변수 = 방의 주소(key)" },
+        { id: "staticret", week: 11, tab: "⑬ static", src: "11주차 📄 13쪽 [실습 1-04] 함수의 반환타입으로 배열을 넘긴 경우 (static) · ✍️ 수업 PC 실행 결과",
+          steps: [
+            "<code>int* test2()</code> 안의 배열 — 왼쪽 <code>int array2[3]</code> (지역) · 오른쪽 <code>static int array2[3]</code>",
+            "<code>return array2;</code> → main 의 <code>int* array3</code> 가 그 주소를 받음",
+            "왼쪽 — 지역 배열은 <b>함수가 끝나면 사라짐</b> → 그 주소로 읽으면 쓰레기값 (수업 PC: 1 · -858993460 · -858993460)",
+            "오른쪽 — <b>static</b> 은 함수가 끝나도 남음 → 1 · 2 · 3 그대로" ],
+          note: "🤖 지역 변수의 주소를 돌려주면 VS 경고 C4172 · 결과는 정의되지 않음(컴퓨터마다 다름) · -858993460 = VS 디버그가 빈 스택에 채우는 0xCCCCCCCC" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

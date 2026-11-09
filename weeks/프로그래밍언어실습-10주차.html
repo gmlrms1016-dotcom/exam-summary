@@ -102,7 +102,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>배열 (ch08) — 선언 · 초기화 · for 로 출력 · sizeof · 2차원 · 배열 복사</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>빌드 · 메모리 공간 · 변수의 유효범위 (ch10 지역 · 전역변수)</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>빌드 · 메모리 공간 · 변수의 유효범위 (ch10 지역 · 전역변수)</small></a><a class="next" href="프로그래밍언어실습-11주차.html">다음 · <b>11주차</b> ›<br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a></nav>
 
 <div class="tip">자료: 노션 필기(11/2) · <b>C-Lect10-ch08-배열-stu.pdf</b> (16쪽) · 수업 파일(arrayassign · array4 · ex01_00-array3 · array5 · array06 · 퀴즈 2개) · PDF 펜 필기 없음. ✍️ = 내 필기 · 수업 코드 · ⚠️ = 정정 · 🤖 = 강의자료에 없는 설명. 코드 주석과 ▶ 출력 결과는 전부 직접 컴파일 · 실행한 값입니다 (주소 · 쓰레기값은 실행할 때마다 달라요).</div>
 <div class="tip">🔥 <b>기말고사 (✍️ 노션)</b> — “C-Lect10-ch08-배열 <b>8페이지 왼쪽 코드를 오른쪽으로 바꾸는 게 기말고사 문제</b> + <b>14페이지 sizeof 문제</b>” → 아래 ① ② 를 먼저 보세요.</div>
@@ -448,7 +448,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 <ul><li>배열 = 같은 자료형 · <b>연속</b> 공간 · 첨자 <b>0 ~ 칸수-1</b> · 배열이름 = <b>시작주소</b> (<code>count == &amp;count[0]</code>)</li><li>🔥 8쪽: printf 여러 줄 → <b><code>for (i = 0; i &lt; 3; i++) printf("array1[%d]: %d\n", i, array1[i]);</code></b></li><li>🔥 14쪽: <code>sizeof(count)</code> = 전체 <b>20</b> · <code>sizeof(count[0])</code> = <b>4</b> · 칸 수 = 전체 / 원소 · 2차원 <code>[2][3]</code> = <b>24 · 12 · 4</b></li><li>초기화: <code>{0,}</code> = 모두 0 · 일부만 쓰면 <b>나머지 0</b> · 크기 생략 가능 · 초기화 안 하면 <b>쓰레기값</b> · 배열끼리 <b><code>y = x;</code> 는 오류</b> → 원소 하나씩</li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>빌드 · 메모리 공간 · 변수의 유효범위 (ch10 지역 · 전역변수)</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>빌드 · 메모리 공간 · 변수의 유효범위 (ch10 지역 · 전역변수)</small></a><a class="next" href="프로그래밍언어실습-11주차.html">다음 · <b>11주차</b> ›<br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a></nav>
 
     <p class="wk-src">노션 「프로그래밍언어실습 · 10주차」 페이지를 정리한 내용입니다.</p>
 

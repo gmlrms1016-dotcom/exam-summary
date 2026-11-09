@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍언어실습 11주차 · 포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</title>
+    <meta name="description" content="프로그래밍언어실습 11주차 정리 — 포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="프로그래밍언어실습 11주차 · 포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL">
+    <meta property="og:description" content="프로그래밍언어실습 11주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../프로그래밍언어실습.html">← 프로그래밍언어실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>💾 프로그래밍언어실습 · 11주차</h1>
+        <p>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>배열 (ch08) — 선언 · 초기화 · for 로 출력 · sizeof · 2차원 · 배열 복사</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+
+<div class="tip">자료: 노션 필기(11/9) · <b>C-Lect11-w11-포인터1-stu.pdf</b> (22쪽) · 수업 파일 <code>w11.sln</code> (실습 10개) · 퀴즈 정답 슬라이드 사진 3장(강의자료에 없음) · 교수님 엑셀 설명 사진 2장 · 내 퀴즈 설명 엑셀 · 제출 워드. PDF 펜 필기 없음. ✍️ = 내 필기 · 수업 코드 · ⚠️ = 정정 · 🤖 = 강의자료에 없는 설명. 코드 주석과 ▶ 출력은 직접 컴파일 · 실행한 값이고, <b>주소 · 쓰레기값처럼 실행마다 다른 값</b>은 수업 PC(Visual Studio · Debug x64) 캡처 값을 함께 적었어요.</div>
+<div class="tip">🔥 <b>기말고사 (✍️ 노션)</b> — ① <b>오류 수정 문제</b> “다음 코드를 보고 오류가 나는 곳을 수정하시오 (1. 컴파일 시간 2. 런타임)” <code>short student[count];</code> ② <b>강의자료 9페이지 외우기</b> (배열과 함수 · 매개변수에 배열을 보냄 · <code>printf("%d", )</code> · <code>printf("%p", )</code>) ③ <b>강의자료 12페이지 외우기</b> (매개변수가 포인터) ④ <b>실습한 코드 = “다음 실행 결과는?” 예상문제</b> ⑤ 수업 파일 <code>w11-ex01_05-pointer-03.c</code> 맨 위 주석 “<b>강의자료에 없음 · 숫자만 바꿔서 기말고사 시험문제</b>” → 아래 ① ~ ④ 를 먼저 보세요.</div>
+<section class="card" id="s1">
+<h2>🎨 11주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-그림정리.html?week=11" title="11주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-그림정리.html?week=11" target="_blank" rel="noopener">🎬 11주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+<ul><li>배열명 = 시작 주소 · <code>*(array1 + i) == array1[i]</code> · 포인터 변수 <code>&amp;</code> · <code>*</code> · 함수에 배열(주소) 보내기 · 지역 배열 반환 vs <code>static</code></li></ul>
+</section>
+<section class="card" id="s2">
+<h2>① 🔥 기말고사 — 오류 수정: 배열 크기는 컴파일 시간에 (4쪽)</h2>
+<p>✍️ 노션 “다음 코드를 보고 오류가 나는 곳을 수정하시오 — 1. 컴파일 시간 2. 런타임”</p>
+<p>📄 4쪽 주의 — 오류 나는 코드</p>
+<pre><code class="language-c">int count = 10;          // count 는 '변수' → 값이 실행할 때(런타임) 정해짐
+short student[count];    // ❌ error — 배열 칸 수는 컴파일할 때 알아야 하는데 변수로 줌</code></pre>
+<p>✅ 고친 코드 ① — 칸 수를 <b>숫자(상수)</b> 로</p>
+<pre><code class="language-c">short student[10];       // ✅ ok — 10 은 컴파일 시간에 정해진 값</code></pre>
+<p>✅ 고친 코드 ② — ✍️ <b><code>#define</code></b> 으로 이름 붙인 상수</p>
+<pre><code class="language-c">#define MAX 10           // 전처리기가 컴파일 전에 MAX 를 10 으로 바꿈
+short student[MAX];      // ✅ ok — 컴파일러가 보는 코드는 short student[10];</code></pre>
+<ul><li>📄 4쪽 — <b>일반 변수</b>는 컴파일 시간에 자료형으로 크기가 정해지지만, <b>배열 변수</b>는 크기를 알아야 하므로 <b>원소 개수를 컴파일 시간 전에 알 수 있어야</b> 한다 → <code>자료형 배열명[원소개수];</code></li><li>🤖 “1. 컴파일 시간 2. 런타임” = 배열 칸 수는 <b>컴파일 시간</b>에 정해져야 하는데 <code>count</code> 는 <b>실행(런타임)</b> 때 값이 정해지는 변수라서 오류</li><li>⚠️ 팩트체크 — <b>Visual Studio(수업 환경)는 컴파일 오류</b> (C2057 상수 식이 필요합니다). 🤖 gcc · clang 은 C99 의 <b>가변 길이 배열(VLA)</b> 로 지역 배열이면 통과해요 (직접 확인: <code>clang -std=c11</code> 통과 · <code>-std=c89 -pedantic-errors</code> 는 “variable length arrays are a C99 feature” 오류) → 시험 답은 수업대로 <b>상수로 고치기</b></li></ul>
+</section>
+<section class="card" id="s3">
+<h2>② 🔥 기말고사 — 9쪽 [실습 1-01] 매개변수가 배열 타입 (외우기)</h2>
+<p>📄 9쪽 · ✍️ “매개변수에 배열을 보냄 · <code>printf("%d", );</code> · <code>printf("%p", );</code>”</p>
+<pre><code class="language-c">// w11-ex01_01-array.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+void test(int v1[]) {                               // 매개변수가 배열 타입 — 받는 것은 배열의 '시작 주소'
+    int i;                                          // 반복에 쓸 첨자
+    for (i = 0; i &lt; 5; i++) {                       // i = 0 → 4 (5번)
+        printf("v1[%d]: %d\n", i, v1[i]);           // v1[0] = 보낸 배열의 0번 칸 → 10 (array2 면 100) …
+    }                                               // for 끝
+}                                                   // test 끝 (반환값 없음 → void)
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int array1[] = {10, 20, 30, 40, 50};            // 크기 생략 → 값 5개라 5칸
+    int array2[] = {100, 200, 300, 400, 500};       // 5칸
+    test(array1);                                   // 배열 이름 = 시작 주소 → test 의 v1 이 array1 을 가리킴
+    printf("--------------------\n");               // 구분선
+    test(array2);                                   // 이번엔 array2 의 시작 주소 → 100 ~ 500 출력
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">v1[0]: 10
+v1[1]: 20
+v1[2]: 30
+v1[3]: 40
+v1[4]: 50
+--------------------
+v1[0]: 100
+v1[1]: 200
+v1[2]: 300
+v1[3]: 400
+v1[4]: 500</code></pre>
+<ul><li>함수에 배열을 보낼 때는 <b>배열 이름만</b> (<code>test(array1)</code> · 대괄호 X) → 📄 8쪽 “함수 호출할 때 배열의 주소값을 전달하면 함수 안에서 배열을 사용할 수 있다”</li><li>✍️ <code>printf("%d", )</code> = <b>값</b>(정수) · <code>printf("%p", )</code> = <b>주소</b>(포인터) — 🤖 함수 안에서 <code>printf("%p\n", v1);</code> 을 찍으면 main 의 <code>printf("%p\n", array1);</code> 과 <b>같은 주소</b> (주소 자체는 실행마다 다름)</li></ul>
+</section>
+<section class="card" id="s4">
+<h2>③ 🔥 기말고사 — 12쪽 [실습 1-03] 매개변수가 포인터 (외우기)</h2>
+<pre><code class="language-c">// w11-ex01_03-pointer.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+void test(int* v1) {                                // 매개변수가 포인터 — int 칸의 주소를 받음 (9쪽 int v1[] 와 같은 뜻)
+    int i;                                          // 반복에 쓸 첨자
+    for (i = 0; i &lt; 5; i++) {                       // i = 0 → 4 (5번)
+        printf("*(v1 + %d): %d\n", i, *(v1 + i));   // v1 + i = i칸 뒤 주소 → * 로 그 칸의 값 → 10, 20 … (array2 면 100 …)
+    }                                               // for 끝
+}                                                   // test 끝
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int array1[] = {10, 20, 30, 40, 50};            // 5칸
+    int array2[] = {100, 200, 300, 400, 500};       // 5칸
+    test(array1);                                   // array1 의 시작 주소를 v1 에
+    printf("--------------------\n");               // 구분선
+    test(array2);                                   // array2 의 시작 주소를 v1 에
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">*(v1 + 0): 10
+*(v1 + 1): 20
+*(v1 + 2): 30
+*(v1 + 3): 40
+*(v1 + 4): 50
+--------------------
+*(v1 + 0): 100
+*(v1 + 1): 200
+*(v1 + 2): 300
+*(v1 + 3): 400
+*(v1 + 4): 500</code></pre>
+<table class="ref">
+<tbody>
+<tr><th></th><th>9쪽 (배열 타입)</th><th>12쪽 (포인터)</th></tr>
+<tr><td>매개변수</td><td><b><code>int v1[]</code></b></td><td><b><code>int* v1</code></b></td></tr>
+<tr><td>칸 읽기</td><td><b><code>v1[i]</code></b></td><td><b><code>*(v1 + i)</code></b></td></tr>
+<tr><td>출력 서식</td><td><code>"v1[%d]: %d\n"</code></td><td><code>"*(v1 + %d): %d\n"</code></td></tr>
+<tr><td>받는 것</td><td>둘 다 <b>배열의 시작 주소</b> → 결과 값은 같음 (10 ~ 50 / 100 ~ 500)</td><td></td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s5">
+<h2>④ 🔥 기말고사 — 강의자료에 없음 · 숫자만 바꿔서 (✍️ w11-ex01_05-pointer-03.c)</h2>
+<p>✍️ 수업 파일 맨 위 주석 “(강의자료에 없음)(숫자만 바꿔서 기말고사 시험문제)”</p>
+<pre><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;                                   // printf (&lt; 앞 공백은 없어도 됨)
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int a1 = 100;                                   // 일반 변수 a1 = 100
+    int* a2 = &amp;a1;                                  // 포인터 변수 a2 = a1 의 '주소' → a2 가 a1 을 가리킴
+    int a3 = a1;                                    // 일반 변수 a3 = a1 의 '값' 100 을 복사 (주소 X)
+
+    a3 = 1000;                                      // a3 만 1000 으로 → 복사본이라 a1 은 그대로 100
+    printf("a1: %d\n", a1);                         // a1 = 100 → "a1: 100"
+    printf("a3: %d\n", a3);                         // a3 = 1000 → "a3: 1000"
+
+    *a2 = 2000;                                     // a2 가 가리키는 곳(= a1)에 2000 → a1 이 2000 으로 바뀜
+    printf("a1: %d\n", a1);                         // a1 = 2000 → "a1: 2000"
+    printf("*a2: %d\n", *a2);                       // *a2 = a2 가 가리키는 a1 의 값 = 2000 → "*a2: 2000"
+
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">a1: 100
+a3: 1000
+a1: 2000
+*a2: 2000</code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>줄</th><th>a1</th><th>a3</th><th>a2 (가리키는 곳)</th><th>핵심</th></tr>
+<tr><td><code>int a1 = 100;</code></td><td>100</td><td></td><td></td><td></td></tr>
+<tr><td><code>int* a2 = &amp;a1;</code></td><td>100</td><td></td><td><b>a1</b></td><td><code>&amp;</code> = 주소</td></tr>
+<tr><td><code>int a3 = a1;</code></td><td>100</td><td>100</td><td>a1</td><td><b>값만 복사</b></td></tr>
+<tr><td><code>a3 = 1000;</code></td><td><b>100</b></td><td>1000</td><td>a1</td><td>복사본을 바꿔도 a1 은 그대로</td></tr>
+<tr><td><code>*a2 = 2000;</code></td><td><b>2000</b></td><td>1000</td><td>a1</td><td><code>*a2</code> 에 쓰면 = <b>a1 에 쓰는 것</b></td></tr>
+</tbody></table>
+<ul><li>🔥 숫자만 바꿔 연습 — <code>a1 = 7</code> · <code>a3 = 70</code> · <code>*a2 = 700</code> 이면 → <code>a1: 7</code> · <code>a3: 70</code> · <code>a1: 700</code> · <code>*a2: 700</code></li><li>🤖 일반 변수 복사(<code>a3 = a1</code>)는 <b>따로 노는 사본</b> · 포인터(<code>a2 = &amp;a1</code>)는 <b>같은 칸을 가리키는 열쇠</b> → ✍️ “일반 변수 = 값(value) · 참조 변수 = 방의 주소(key)”</li></ul>
+</section>
+<section class="card" id="s6">
+<h2>1. ✍️ [이론] 배열 · 포인터 (노션 + 4 · 8 · 10 · 14쪽 · 교수님 엑셀)</h2>
+<ul><li>✍️ <b>배열 변수 = 주소 값을 가지고 있다</b> · <b>배열명 == 배열의 시작 주소</b> · <code>[]</code> 를 사용</li><li>✍️ <code>int count[5];</code> → <code>count == &amp;count[0]</code> · ⚠️ 필기 “<code>count ==&amp;count[0],&amp;count[1],&amp;count[2],&amp;count[3],&amp;count[4]</code>” 는 칸마다 주소가 있다는 뜻 — 정확히는 <code>count == &amp;count[0]</code> 이고 <b><code>count + i == &amp;count[i]</code></b></li><li>📄 4쪽 — 배열 = 같은 자료형의 기억장소가 <b>연속적</b>으로 나열 · 1차원 <code>int student1[5];</code> (한 학생 국 · 영 · 수 · 총점 · 평균) · 2차원 <code>int student2[50][5];</code> (한 반 50명) · 3차원 <code>int student2[3][50][5];</code> (3개 반)</li><li>📄 10쪽 — 배열의 주소값 = 포인터 변수 · 배열은 <code>[ ]</code> 로도, <b>포인터 변수로도</b> 관리 가능 · 배열 주소를 가진 포인터는 <b>첫 번째 칸</b>을 가리킴 (+0 · +1 · +2 …)</li></ul>
+<p>🖥️ 교수님 엑셀 (사진) — <code>int array1[5] = {10,20,30,40,50};</code></p>
+<table class="ref">
+<tbody style="min-width:405px;">
+<tr><th>첨자</th><th>[0]</th><th>[1]</th><th>[2]</th><th>[3]</th><th>[4]</th></tr>
+<tr><td>값</td><td>10</td><td>20</td><td>30</td><td>40</td><td>50</td></tr>
+<tr><td>주소 (예)</td><td>100</td><td>104</td><td>108</td><td>112</td><td>116</td></tr>
+<tr><td>포인터</td><td>+0</td><td>+1</td><td>+2</td><td>+3</td><td>+4</td></tr>
+</tbody></table>
+<ul><li>배열 변수 <b><code>array1 == &amp;array1[0]</code></b> · 포인터 변수 <b><code>*(array1 + 0) == array1[0]</code></b> … <b><code>*(array1 + 4) == array1[4]</code></b></li><li>🤖 주소가 4씩 늘어나는 이유 = <code>int</code> 1칸 = <b>4바이트</b> · <code>array1 + 1</code> 은 주소 +1 이 아니라 <b>한 칸(4바이트) 뒤</b></li></ul>
+<p>✍️ 포인터</p>
+<ul><li>✍️ <b>포인터 변수 = 주소 값을 가지고 있는 변수</b></li><li>✍️ 자료형 ① <b>일반 변수</b> = 값을 저장 (value) — short · int · float · char ② <b>참조 변수</b> = 방의 주소를 저장 (key) — <b>주소 지정 연산자 <code>&amp;</code></b> · <b>포인터 연산자 <code>*</code></b></li><li>📄 14쪽 — 포인터 변수 선언은 <b><code>*</code> 를 붙여서</b> · 담을 주소는 <b><code>&amp;</code> 연산자</b>로 · 사용할 때 <code>*</code> 를 붙이면 그 주소의 기억장소에 접근 · <b>기본자료형 변수 = 일반 변수</b> · <b>참조자료형 변수 = 포인터 변수</b></li><li>✍️ 진도 — <b>11주차</b> 배열 + 함수(1교시) · 배열 · 포인터 / <b>12주차</b> 함수 포인터 · 함수에서 포인터 사용</li></ul>
+</section>
+<section class="card" id="s7">
+<h2>2. [실습 1-02] 포인터로 배열 읽기 (11쪽)</h2>
+<pre><code class="language-c">// w11-ex01_02-pointer.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int array1[] = { 10, 20, 30, 40, 50 };          // 5칸
+    printf("array1[0]: %d\n", array1[0]);           // 첨자로 0번 칸 → 10
+    printf("array1[1]: %d\n", array1[1]);           // 1번 칸 → 20
+    printf("array1[2]: %d\n", array1[2]);           // 2번 칸 → 30
+    printf("--------------------\n");               // 구분선
+    printf("*(array1 + 0): %d\n", *(array1));       // array1 = 시작 주소 → * 로 그 칸 = 10 (글자는 + 0 이지만 코드는 *(array1))
+    printf("*(array1 + 1): %d\n", *(array1 + 1));   // 시작 주소 + 1칸 → 20
+    printf("*(array1 + 2): %d\n", *(array1 + 2));   // 시작 주소 + 2칸 → 30
+    printf("--------------------\n");               // 구분선
+    for (int i = 0; i &lt; 5; i++)                     // i = 0 → 4 (for 안에서 i 선언 — C99 부터)
+        printf("array1[%d]: %d\n", i, array1[i]);   // 첨자로 → 10 ~ 50
+    printf("--------------------\n");               // 구분선
+    for (int i = 0; i &lt; 5; i++) {                   // 같은 일을 포인터로
+        printf("*(array1 + %d): %d\n", i, *(array1 + i));   // *(array1 + i) == array1[i] → 10 ~ 50
+    }                                               // for 끝
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">array1[0]: 10
+array1[1]: 20
+array1[2]: 30
+--------------------
+*(array1 + 0): 10
+*(array1 + 1): 20
+*(array1 + 2): 30
+--------------------
+array1[0]: 10
+array1[1]: 20
+array1[2]: 30
+array1[3]: 40
+array1[4]: 50
+--------------------
+*(array1 + 0): 10
+*(array1 + 1): 20
+*(array1 + 2): 30
+*(array1 + 3): 40
+*(array1 + 4): 50</code></pre>
+</section>
+<section class="card" id="s8">
+<h2>3. 🔥 [실습 1-04] 함수가 배열을 돌려줄 때 — <code>static</code> (13쪽)</h2>
+<p>📄 8쪽 “함수 안에서 배열의 주소값을 반환하면, 함수를 호출한 쪽에서 배열 사용할 수 있다” — 단, <b>지역 배열</b>이면 함수가 끝날 때 사라져요.</p>
+<p>✅ <code>static</code> 을 붙인 코드 (✍️ 수업 파일 <code>w11-ex01_04-pointer-static.c</code>)</p>
+<pre><code class="language-c">// w11-ex01_04-pointer-static.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int* test2() {                                      // 반환형 int* = int 칸의 주소를 돌려줌 (함수 반환타입으로 배열을 넘긴 경우)
+    static int array2[3] = {1,2,3};                 // static → 함수가 끝나도 사라지지 않는 배열 (프로그램 끝까지 유지)
+    return array2;                                  // 배열 이름 = 시작 주소를 돌려줌
+}                                                   // test2 끝 — array2 는 그대로 남아 있음
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int *array3 = test2();                          // 돌려받은 주소를 포인터 array3 에
+    for(int i = 0; i &lt; 3; i++)                      // i = 0 → 2
+        printf("*(array3 + %d): %d\n",              // 서식 — 칸 번호와 값
+                      i, *(array3 + i));            // array2 의 i번 칸 → 1, 2, 3
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">*(array3 + 0): 1
+*(array3 + 1): 2
+*(array3 + 2): 3</code></pre>
+<p>❌ <code>static</code> 이 없는 코드 (13쪽 왼쪽 · ✍️ <code>w11-ex01_04-pointer.c</code>) — <code>int array2[3] = {1,2,3};</code> 만 다름</p>
+<p>▶ 수업 PC 실행 결과 (Visual Studio · Debug x64 캡처)</p>
+<pre class="io"><code class="language-text">*(array3 + 0): 1
+*(array3 + 1): -858993460
+*(array3 + 2): -858993460</code></pre>
+<ul><li>지역 배열 <code>array2</code> 는 <b>test2 가 끝나면 사라진 공간</b> → 그 주소로 읽으면 <b>쓰레기값</b> (🤖 정의되지 않은 동작 — 컴퓨터 · 실행마다 다름 · <code>-858993460</code> = Visual Studio 디버그 모드가 빈 스택에 채우는 값 <code>0xCCCCCCCC</code>)</li><li>🤖 컴파일러도 경고해요 — VS <b>C4172</b> (지역 변수의 주소를 반환) · clang “address of stack memory … returned”</li><li>🔥 해결 = <b><code>static</code></b> — 지역 배열이 함수가 끝나도 남아 있어서 1 · 2 · 3 이 그대로</li></ul>
+</section>
+<section class="card" id="s9">
+<h2>4. [실습 2-01] 포인터 변수 <code>&amp;</code> · <code>*</code> (16쪽)</h2>
+<pre><code class="language-c">// w11-ex01_05-pointer-01.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int a1 = 100;                                   // 일반 변수 a1 = 100
+    int *a2 = &amp;a1;                                  // 포인터 변수 a2 = a1 의 주소 (&amp; = 주소 지정 연산자)
+    printf("a1: %d\n", a1);                         // 값 100 → "a1: 100"
+    printf("a2: %p\n", a2);                         // %p = 주소 → a1 이 있는 곳의 주소 (실행마다 다름)
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<p>▶ 수업 PC 실행 결과 (주소는 실행마다 다름)</p>
+<pre class="io"><code class="language-text">a1: 100
+a2: 00000001000FF614</code></pre>
+<ul><li>📄 16쪽 [WorkC] 프로젝트명 ex01 · 위치 <code>C:\WorkC</code> · 솔루션명 <b>w11</b></li><li>🤖 <code>%p</code> 모양은 컴퓨터마다 달라요 — Windows 는 <code>00000001000FF614</code> 처럼 16자리 · 맥은 <code>0x16d…</code> 처럼 <code>0x</code> 로 시작</li></ul>
+</section>
+<section class="card" id="s10">
+<h2>5. [실습 2-02] 함수에서 포인터로 값 돌려받기 (17쪽)</h2>
+<pre><code class="language-c">// w11-ex01_07-pointer-2.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int test1() {                                       // 값 하나는 return 으로 돌려줄 수 있음
+    return 100;                                     // 100 을 돌려줌
+}                                                   // test1 끝
+
+void test2(int* v1) {                               // 주소를 받아서 그 칸에 직접 씀
+    *v1 = 100;                                      // v1 이 가리키는 곳(= main 의 a2)에 100
+}                                                   // test2 끝
+
+void test3(int* v1, int* v2) {                      // 주소 2개 → 값 2개를 한 번에 돌려받는 효과
+    *v1 = 1000;                                     // 첫 번째 주소(= a3)에 1000
+    *v2 = 2000;                                     // 두 번째 주소(= a4)에 2000
+}                                                   // test3 끝
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int a1 = test1();                               // return 값 100 → a1 = 100
+    printf("a1: %d\n", a1);                         // "a1: 100"
+
+    int a2;                                         // 아직 값 없음
+    test2(&amp;a2);                                     // a2 의 주소를 보냄 → 함수가 a2 에 100 을 씀
+    printf("a2: %d\n", a2);                         // "a2: 100"
+
+    int a3;                                         // 아직 값 없음
+    int a4;                                         // 아직 값 없음
+    test3(&amp;a3, &amp;a4);                                // 주소 2개 → a3 = 1000 · a4 = 2000
+    printf("a3: %d\n", a3);                         // "a3: 1000"
+    printf("a4: %d\n", a4);                         // "a4: 2000"
+
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">a1: 100
+a2: 100
+a3: 1000
+a4: 2000</code></pre>
+<ul><li>⚠️ 슬라이드(17쪽)는 <code>int test2(int* v1)</code> · <code>int test3(…)</code> 인데 <b>return 이 없어요</b> → 돌려줄 값이 없는 함수는 <b><code>void</code></b> 가 맞음 (✍️ 수업 파일처럼) · 🤖 VS 는 C4716(값을 반환해야 합니다) 경고</li><li>🤖 <code>return</code> 은 값을 <b>하나만</b> 돌려줄 수 있음 → 여러 값을 돌려받고 싶으면 <b>주소를 보내서</b> 함수가 직접 쓰게 (test3)</li></ul>
+</section>
+<section class="card" id="s11">
+<h2>6. [실습 3-01] 포인터 변수 <code>NULL</code> (18쪽)</h2>
+<p>📄 18쪽 왼쪽 — 주소를 넣지 않은 포인터</p>
+<pre><code class="language-c">int *pt;                 // ❌ 주소를 안 넣음 → 예상하지 못한 값(쓰레기 주소)
+printf("pt: %p\n", pt);  // 수업 PC: pt: CCCCCCCCCCCCCCCC</code></pre>
+<p>📄 18쪽 오른쪽 — <b><code>NULL</code></b> 을 넣은 포인터</p>
+<pre><code class="language-c">// w11-ex01_06-pointer-null.c
+#include &lt;stdio.h&gt;                                  // printf · NULL 을 쓰기 위한 표준 입출력 헤더
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int *pt = NULL;                                 // 아직 가리킬 곳이 없으면 NULL(의미가 없는 값 = 주소 0)
+    printf("pt: %p\n", pt);                         // NULL 주소 → Windows 0000000000000000 · 맥 0x0
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<p>▶ 수업 PC 실행 결과</p>
+<pre class="io"><code class="language-text">pt: 0000000000000000</code></pre>
+<ul><li>📄 포인터 변수를 선언하고 주소값을 넣지 않을 때는 <b>NULL</b> 을 넣어 준다 — 안 넣으면 <b>예상하지 못한 값</b>이 들어 있을 수 있음</li><li>📄 <b>NULL = 의미가 없는 값</b> · 기본자료형은 <b>void</b> · 참조자료형은 <b>NULL</b> 사용</li><li>✍️ 수업 PC — 왼쪽 코드는 Visual Studio 가 <b>SDL 검사(C4700 초기화되지 않은 지역 변수)</b> 로 빌드를 막고, 풀어도 <b>런타임 검사(Run-Time Check Failure #3)</b> 창이 떠요 → 그 프로젝트만 둘 다 끄고 실행하니 <code>CCCCCCCCCCCCCCCC</code> (🤖 디버그 모드가 빈 공간에 채우는 값)</li><li>🤖 맥(clang)은 <code>0x0</code> 으로 찍혀요 — <code>%p</code> 모양은 컴퓨터마다 다름</li></ul>
+</section>
+<section class="card" id="s12">
+<h2>7. ✍️ 수업 퀴즈 (19 ~ 22쪽 · 정답 슬라이드는 강의자료에 없음 → 사진)</h2>
+<h3>Quiz 1번 (배열) — int 10칸 배열을 모두 0 으로 저장하고 출력 (for 문)</h3>
+<pre><code class="language-c">// quiz-w11-01.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int student[10];                                // int 10칸 — 아직 초기화 안 함 = 쓰레기값
+    int i;                                          // 반복에 쓸 첨자
+    for (i = 0; i &lt; 10; i++)                        // i = 0 → 9
+        student[i] = 0;                             // 칸마다 0 저장
+    for (i = 0; i &lt; 10; i++) {                      // 다시 0 → 9
+        printf("student[%d]: %d\n", i, student[i] = 0);   // student[i] = 0 은 '대입식' → 값 0 이 출력됨
+    }                                               // for 끝
+    printf("\n");                                   // 빈 줄 하나 더
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">student[0]: 0
+student[1]: 0
+student[2]: 0
+student[3]: 0
+student[4]: 0
+student[5]: 0
+student[6]: 0
+student[7]: 0
+student[8]: 0
+student[9]: 0
+</code></pre>
+<ul><li>🤖 printf 안의 <code>student[i] = 0</code> 은 비교(<code>==</code>)가 아니라 <b>대입</b> — 대입식의 값(0)이 찍혀요 (정답 슬라이드 그대로)</li></ul>
+<h3>Quiz 2번 (포인터) — q-pointer01.c · 실행 결과와 실행 순서</h3>
+<pre><code class="language-c">// q-pointer01.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {   // 원본은 main() — 반환형을 안 쓴 옛 C · Visual Studio 는 실행되지만 clang 21 은 오류 → int main(void) 로
+    int a[] = {10,20,30,40,50};                     // a[0] ~ a[4]
+    int i = 0;                                      // 0번 칸부터
+    while (i &lt; 5) {                                 // i 가 5 보다 작은 동안
+        *(a + i) += 10;                             // a[i] 에 10 더하기 (*(a + i) == a[i])
+        printf("%d ", a[i]);                        // 바뀐 값 + 공백
+        i = i + 2;                                  // 2칸씩 → 0, 2, 4, 6(끝)
+    }                                               // while 끝
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">20 40 60 </code></pre>
+<table class="ref">
+<tbody style="min-width:587px;">
+<tr><th>단계</th><th>i</th><th><code>*(a + i)</code></th><th>계산</th><th>출력</th><th>다음 i</th></tr>
+<tr><td>1</td><td>0</td><td>a[0]</td><td>10 + 10 = <b>20</b></td><td><code>20 </code></td><td>2</td></tr>
+<tr><td>2</td><td>2</td><td>a[2]</td><td>30 + 10 = <b>40</b></td><td><code>20 40 </code></td><td>4</td></tr>
+<tr><td>3</td><td>4</td><td>a[4]</td><td>50 + 10 = <b>60</b></td><td><code>20 40 60 </code></td><td>6</td></tr>
+<tr><td>4</td><td>6</td><td>—</td><td>6 &lt; 5 거짓</td><td>while 끝</td><td></td></tr>
+</tbody></table>
+<h3>Quiz 3번 (포인터) — q-pointer02.c · 실행 결과와 실행 순서</h3>
+<pre><code class="language-c">// q-pointer02.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+void func(int* a) {                                 // 배열의 시작 주소를 받음 → a 로 바꾸면 main 의 arr1 이 바뀜
+    int x = 1;                                      // 한 번에 움직일 칸 (처음엔 +1)
+    for (int i = 0; i &gt;= 0; i += x) {               // i 가 0 이상인 동안 x 만큼 이동
+        *(a + i) += i;                              // a[i] 에 i 더하기
+        if (i &gt;= 4)                                 // 끝 칸(4)에 닿으면
+            x = -1;                                 // 방향을 거꾸로 (-1)
+    }                                               // for 끝 — i = -1 이 되면 멈춤
+}                                                   // func 끝
+
+int main(void) {   // 원본은 main() — 반환형을 안 쓴 옛 C → int main(void) 로
+    int arr1[] = {1,2,3,2,1};                       // arr1[0] ~ arr1[4]
+    func(arr1);                                     // 시작 주소를 보냄 → 함수가 arr1 을 직접 바꿈
+    for (int i = 4; i &gt;= 0; i--) {                  // 4번 칸부터 거꾸로
+        printf("%d ", arr1[i]);                     // 값 + 공백
+    }                                               // for 끝
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">5 8 7 4 1 </code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>단계</th><th>x</th><th>i</th><th>계산</th><th>arr1 (0 ~ 4)</th></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>a[0] = 1 + 0 = 1</td><td>1 2 3 2 1</td></tr>
+<tr><td>2</td><td>1</td><td>1</td><td>a[1] = 2 + 1 = 3</td><td>1 3 3 2 1</td></tr>
+<tr><td>3</td><td>1</td><td>2</td><td>a[2] = 3 + 2 = 5</td><td>1 3 5 2 1</td></tr>
+<tr><td>4</td><td>1</td><td>3</td><td>a[3] = 2 + 3 = 5</td><td>1 3 5 5 1</td></tr>
+<tr><td>5</td><td>1 → <b>-1</b></td><td>4</td><td>a[4] = 1 + 4 = 5 · i ≥ 4 → x = -1</td><td>1 3 5 5 5</td></tr>
+<tr><td>6</td><td>-1</td><td>3</td><td>a[3] = 5 + 3 = 8</td><td>1 3 5 8 5</td></tr>
+<tr><td>7</td><td>-1</td><td>2</td><td>a[2] = 5 + 2 = 7</td><td>1 3 7 8 5</td></tr>
+<tr><td>8</td><td>-1</td><td>1</td><td>a[1] = 3 + 1 = 4</td><td>1 4 7 8 5</td></tr>
+<tr><td>9</td><td>-1</td><td>0</td><td>a[0] = 1 + 0 = 1</td><td>1 4 7 8 5</td></tr>
+<tr><td>10</td><td>-1</td><td>-1</td><td>i ≥ 0 거짓 → 끝</td><td><b>거꾸로 출력 → 5 8 7 4 1</b></td></tr>
+</tbody></table>
+<ul><li>🤖 끝 칸 a[4] 는 갈 때 한 번만 더해지고(+4), 나머지 칸은 <b>갈 때 · 올 때 두 번</b> 더해져요 (a[0] 은 +0 두 번)</li></ul>
+</section>
+<section class="card" id="s13">
+<h2>8. 📝 수업중 제출 (11주차 Quiz)</h2>
+<ul><li><b>A. 수업 실습</b> — 실습 소스 · 실행 결과를 캡처해 워드 · <b>B. Quiz 풀이</b> — 1번 코드 · 2 · 3번 실행 결과와 실행 순서 설명</li><li>파일 이름 <b><code>제출-11주차-학번-이름-작성날짜</code></b> → ✍️ <code>제출-11주차-20232629-윤희근-20261109.docx</code> 제출함 (실습 10개 · 퀴즈 풀이 표)</li></ul>
+</section>
+<section class="card" id="s14">
+<h2>9. 한 줄 정리</h2>
+<ul><li>🔥 <b>배열 칸 수 = 컴파일 시간에 정해져야</b> → <code>short student[count];</code> ❌ → <code>short student[10];</code> · <code>#define MAX 10</code> → <code>short student[MAX];</code> ✅ (Visual Studio)</li><li>배열명 = <b>시작 주소</b> (<code>array1 == &amp;array1[0]</code>) · <b><code>*(array1 + i) == array1[i]</code></b> · <code>int</code> 1칸 = 4바이트 → 주소 +4</li><li>🔥 함수에 배열 = <b>이름(주소)만</b> 보냄 — 9쪽 <code>void test(int v1[])</code> + <code>v1[i]</code> / 12쪽 <code>void test(int* v1)</code> + <code>*(v1 + i)</code> → 결과 같음</li><li>포인터 변수 = 주소를 가진 변수 · <b><code>&amp;</code> 주소 지정 연산자</b> · <b><code>*</code> 포인터 연산자</b>(선언할 때 · 값을 읽고 쓸 때) · <code>%p</code> = 주소 출력</li><li>🔥 <code>int* a2 = &amp;a1;</code> → <b><code>*a2 = 2000;</code> 은 a1 을 바꿈</b> · <code>int a3 = a1;</code> 은 값만 복사 (pointer-03 · 숫자만 바뀜)</li><li>🔥 지역 배열 주소를 돌려주면 <b>쓰레기값</b> → <b><code>static</code></b> 으로 · 주소를 안 넣은 포인터는 <b><code>NULL</code></b></li><li>퀴즈 결과: 2번 <b><code>20 40 60 </code></b> · 3번 <b><code>5 8 7 4 1 </code></b></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>배열 (ch08) — 선언 · 초기화 · for 로 출력 · sizeof · 2차원 · 배열 복사</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「프로그래밍언어실습 · 11주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202611041620"></script>
+</body>
+</html>

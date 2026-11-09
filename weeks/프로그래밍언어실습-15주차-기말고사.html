@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202611041620"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로그래밍언어실습 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)</title>
-    <meta name="description" content="프로그래밍언어실습 15주차 정리 — 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <title>프로그래밍언어실습 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</title>
+    <meta name="description" content="프로그래밍언어실습 15주차 정리 — 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="프로그래밍언어실습 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <meta property="og:title" content="프로그래밍언어실습 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)">
     <meta property="og:description" content="프로그래밍언어실습 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -99,10 +99,10 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>💾 프로그래밍언어실습 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9 · 10주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>배열 (ch08) — 선언 · 초기화 · for 로 출력 · sizeof · 2차원 · 배열 복사</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../프로그래밍언어실습-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 지금까지 알려 준 것: 중간고사 때 ✍️ “9장도 함수에서 <b>배열은 빼고 배열을 기말고사에</b>” (7주차) → <b>8장 배열 · 함수 속 배열은 기말</b>.</div>
@@ -110,7 +110,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-그림정리.html?weeks=9-15#build" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-그림정리.html?weeks=9-15#build" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차 — ① 빌드 · ② 메모리 4영역 · ③ 블록 범위 (scope1_5.c) · ④ 지역 우선 (02-1global.c)</li><li>10주차 — ⑤ 1차원 배열 · ⑥ 2차원 배열 · ⑦ 🔥 8쪽 for · ⑧ ✍️ 지그재그 · ⑨ 초기화 규칙</li></ul>
+<ul><li>9주차 — ① 빌드 · ② 메모리 4영역 · ③ 블록 범위 (scope1_5.c) · ④ 지역 우선 (02-1global.c)</li><li>10주차 — ⑤ 1차원 배열 · ⑥ 2차원 배열 · ⑦ 🔥 8쪽 for · ⑧ ✍️ 지그재그 · ⑨ 초기화 규칙</li><li>11주차 — ⑩ 배열명 = 주소 · ⑪ 🔥 배열 → 함수 (9쪽 · 12쪽) · ⑫ 🔥 &amp; · * (pointer-03) · ⑬ static</li></ul>
 </section>
 <section class="card" id="s2">
 <h2>9주차 · 빌드 · 메모리 공간 · 변수의 유효범위</h2>
@@ -143,6 +143,31 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
 </section>
 <section class="card" id="s4">
+<h2>11주차 · 포인터 1 — 🔥 ✍️ “오류 수정 · 9페이지 · 12페이지 외우기 · 실습 코드 = 실행 결과 문제 · pointer-03 숫자만 바꿔서”</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>🔥 오류 수정 (4쪽)</td><td><code>int count = 10; short student[count];</code> ❌ → <code>short student[10];</code> 또는 <code>#define MAX 10</code> + <code>short student[MAX];</code> — 배열 칸 수는 <b>컴파일 시간</b>에 (count 는 런타임에 정해지는 변수) · Visual Studio 오류 C2057 (⚠️ gcc · clang 은 C99 VLA 로 통과)</td><td></td></tr>
+<tr><td>🔥 9쪽 외우기</td><td><code>void test(int v1[])</code> + `printf("v1[%d]: %d</td><td></td></tr>
+</tbody></table>
+<p>", i, v1[i]);<code> · </code>test(array1);<code> → </code>v1[0]: 10<code> ~ </code>v1[4]: 50<code> / </code>--------------------<code> / </code>v1[0]: 100<code> ~ </code>v1[4]: 500<code> · ✍️ </code>%d<code> = 값 · </code>%p` = 주소 | ⑪ |</p>
+<table class="ref">
+<tbody>
+<tr><th>🔥 12쪽 외우기</th><th><code>void test(int* v1)</code> + `printf("*(v1 + %d): %d</th></tr>
+</tbody></table>
+<p>", i, *(v1 + i));<code> → </code>*(v1 + 0): 10` ~ … (결과는 9쪽과 같음) | ⑪ |</p>
+<table class="ref">
+<tbody>
+<tr><th>🔥 pointer-03 (강의자료에 없음 · 숫자만 바꿔서)</th><th><code>int* a2 = &amp;a1; int a3 = a1; a3 = 1000;</code> → a1 그대로 · <code>*a2 = 2000;</code> → <b>a1 = 2000</b> · 출력 <code>a1: 100</code> / <code>a3: 1000</code> / <code>a1: 2000</code> / <code>*a2: 2000</code></th><th>⑫</th></tr>
+<tr><td>배열명 = 주소</td><td><code>array1 == &amp;array1[0]</code> · <code>*(array1 + i) == array1[i]</code> · int 1칸 = 4바이트</td><td>⑩</td></tr>
+<tr><td>static (13쪽)</td><td>지역 배열 주소를 return → 쓰레기값 (VS <code>1 · -858993460 · -858993460</code>) · <code>static int array2[3]</code> → <code>1 · 2 · 3</code></td><td>⑬</td></tr>
+<tr><td>포인터로 값 돌려받기 (17쪽)</td><td><code>test2(&amp;a2);</code> → <code>*v1 = 100;</code> 이 a2 에 씀 · <code>test3(&amp;a3, &amp;a4);</code> → <code>a3: 1000</code> · <code>a4: 2000</code> · 반환값 없으면 <code>void</code></td><td></td></tr>
+<tr><td>NULL (18쪽)</td><td>주소를 안 넣을 포인터는 <code>int *pt = NULL;</code> · <code>%p</code> 출력 VS <code>0000000000000000</code> (안 넣으면 <code>CCCCCCCCCCCCCCCC</code>)</td><td></td></tr>
+<tr><td>✍️ 수업 퀴즈 실행 결과</td><td>q-pointer01 → <b><code>20 40 60 </code></b> (i = 0, 2, 4 에 +10) · q-pointer02 → <b><code>5 8 7 4 1 </code></b> (끝 칸 4 에서 방향을 바꿔 돌아오며 +i 를 한 번 더)</td><td></td></tr>
+</tbody></table>
+<div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-11주차.html">11주차</a> · 문제는 🔒 실제시험.</div>
+</section>
+<section class="card" id="s5">
 <h2>🎓 튜터링 3회차 (10/29) — 배열 합 · 0~9 중 가장 많이 나온 수</h2>
 <div class="tip">자료: <code>8주차_중간고사/튜터링/3회차/c.c</code> (CP949 저장) — 프로그램 2개가 한 파일에 있어요(앞의 1개는 주석 처리). 아래 결과는 전부 <b>직접 컴파일 · 실행</b>한 값이에요.<br>기말 범위 <b>8장 배열</b>과 이어지는 문제 (중간고사 때 ✍️ “배열을 기말고사에”). <code>#define _CRT_SECURE_NO_WARNINGS</code> 는 이번엔 밑줄까지 맞게 썼어요 (1회차 정정 참고).</div>
 <h3>① 정수 4개 입력 → 그대로 출력 · 합</h3>
@@ -211,7 +236,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 <ul><li><b>빈도수 배열</b> — 입력한 수(0~9)를 <b>칸 번호</b>로 써서 <code>count[n]++</code> → 숫자마다 if 를 10개 쓸 필요가 없음</li><li><b>최댓값 찾기 패턴</b> — <code>max</code> 를 첫 칸(0)으로 두고 <code>i = 1</code> 부터 비교해 더 크면 바꿈 (배열 최댓값 · 최솟값 문제에 그대로 씀)</li><li><code>while (1)</code> + <code>break</code> — 몇 번 입력할지 모를 때 <b>끝 신호(-1)</b> 로 멈추는 방법</li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>배열 (ch08) — 선언 · 초기화 · for 로 출력 · sizeof · 2차원 · 배열 복사</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><span></span></nav>
 
     <p class="wk-src">노션 「프로그래밍언어실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 
