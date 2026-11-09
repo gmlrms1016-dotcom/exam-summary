@@ -10,7 +10,16 @@
   - **VMware 과제 캡처는 제목 줄을 그대로 둔다** — "Server(B) - VMware Workstation" 같은 원래 제목 (2026-11-05 사용자 결정)
   - 그 밖의 창은 제목 글자를 내 이름 영어 `yunhuigeun` 만 (경로 · 명령 · 자동화 흔적 글자 X) — 콘솔(cmd)은 실행 전에 `title yunhuigeun` · VS Code 는 설정 `window.title` = `"yunhuigeun"`
   - 제목을 바꿀 수 없는 그 밖의 창(Visual Studio 등)은 어떻게 찍을지 사용자에게 먼저 묻는다
+  - **UAC 가 꺼진 PC** 는 `title yunhuigeun` 을 해도 "관리자: yunhuigeun" · VS 제목에 "(관리자)" 가 붙음 → 그대로 찍을지 먼저 묻는다 (2026-11-09: VS 디버그 콘솔 그대로 · 사용자 선택)
 - **VS Code 소스 캡처는 탐색기(사이드바) 닫고** 깔끔하게 · **코드는 창에 딱 맞게**(짧으면 확대 · 길면 축소 · 가로세로 안 잘리는 데까지) · **50줄이 넘으면 나눠 찍기** (2026-11-04 사용자)
+- **Visual Studio(C 수업 실습) 소스 · 실행 = `vscapture.ps1`** (2026-11-09 — 학교 PC 가 손으로 하던 방법을 도구로 · 먼저 `-DryRun` · VS 에 솔루션이 열려 있어야 함)
+  `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vscapture.ps1" -Mode src -File "<c 파일>" -Out "<src_이름>.png"`
+  `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vscapture.ps1" -Mode run -Project "<프로젝트>" -Out "<run_이름>.png"`
+  - src = DTE(VS 자동화)로 파일 열기 → 솔루션 탐색기로 포커스(편집기 커서 없앰) → vmcapture `-Process devenv`
+  - run = 시작 프로젝트 바꾸기 → 디버그하지 않고 시작(Ctrl+F5) → 새 디버그 콘솔 창 높이를 출력에 맞춤(`-Height` 로 직접 · `-NoFit` 안 바꿈) → 여러 장(`-Shots 4`) 중 **커서가 꺼진 장면**
+  - 워드는 문제마다 1열 3행 표 (문제 · 소스 · 실행) · 원본 PNG 그대로
+  - 수업 실습 코드는 **맨 위에 파일 이름 주석 한 줄만** · 한 슬라이드에 코드 2개면 두 번째에 `-static` · `-null` 처럼 붙임 · 주차 솔루션 하나(`w11.sln`)
+  - 오류를 보여 주는 강의 코드(초기화 안 된 변수 등)는 VS 가 SDL 검사(C4700) · 런타임 검사(RTC #3)로 막음 → **그 프로젝트만** 속성에서 끄고 실행 (소스는 원문 그대로)
 - 소스코드를 캡처할 때는 **소스 안에 커서가 보이지 않게** — 편집기 밖(솔루션 탐색기 등)을 눌러 포커스를 빼서 커서가 사라진 걸 확인하고 찍는다 (커서가 있으면 깔끔하지 않음 · 2026-11-03 사용자)
 - 명령의 출력이 다 나온 뒤에 찍는다 · 찍은 뒤 스크립트가 알려 준 px 크기가 창 크기와 맞는지 확인하고, **찍은 그림을 열어 보고**(가려짐 · 덜 나온 출력) 사용자에게 저장 경로 · 크기를 알린다
 - **VM 안에 명령을 쳐서 하나씩 찍기** = `vmtype.ps1` (원격제어 Computer use 가 꺼져 있을 때 · 2026-11-05)
@@ -27,4 +36,4 @@
 - **원격제어 중 캡처**: 화면 가장자리에 주황 빛이 켜지므로 **창을 가장자리에서 띄우고**(예: 50, 40) 찍기 · 마우스를 탭 위에서 치워 툴팁 X · VMware 라이브러리 패널을 닫으면 콘솔이 넓게 찍힘 · `VMware window not found` 가 나오면 최신 vmcapture.ps1(창 제목이 비어도 EnumWindows 로 찾음)로 다시 받기
 - 도구용 ps1 은 **UTF-8 BOM 필수** (BOM 없으면 Windows PowerShell 5.1 이 한글 경로를 깨뜨려 엉뚱한 폴더에 저장)
 - 워드(docx)에 넣을 때도 원본 PNG 그대로 — python-docx 는 `width` 만 지정(비율 유지 · 다시 저장 · 압축 X) · 워드는 파일 → 옵션 → 고급 → 이미지 크기 및 품질 → "파일의 이미지 압축 안 함"
-- 스크립트가 없으면(PC 초기화 등) iCloud `동양미래대학교/Claude설정/`(또는 `Claude설정.zip`)을 내려받아 `프롬프트.txt` 대로 하거나 https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 대로 다시 설치하고 찍는다
+- 스크립트가 없으면(PC 초기화 등) iCloud `동양미래대학교/Claude설정.zip` 을 내려받아 풀고 `프롬프트.txt` 대로 하거나 https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 대로 다시 설치하고 찍는다

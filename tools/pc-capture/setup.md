@@ -12,6 +12,7 @@ $d = Join-Path $env:USERPROFILE ".claude\tools"
 New-Item -ItemType Directory -Force -Path $d | Out-Null
 Invoke-WebRequest "$base/vmcapture.ps1" -OutFile (Join-Path $d "vmcapture.ps1") -UseBasicParsing
 Invoke-WebRequest "$base/vmtype.ps1" -OutFile (Join-Path $d "vmtype.ps1") -UseBasicParsing
+Invoke-WebRequest "$base/vscapture.ps1" -OutFile (Join-Path $d "vscapture.ps1") -UseBasicParsing
 Invoke-WebRequest "$base/CLAUDE-capture.md" -OutFile (Join-Path $d "CLAUDE-capture.md") -UseBasicParsing
 $md = Join-Path $env:USERPROFILE ".claude\CLAUDE.md"
 $rule = [IO.File]::ReadAllText((Join-Path $d "CLAUDE-capture.md"), [Text.Encoding]::UTF8)
@@ -40,4 +41,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\to
 
 ## 참고
 - 학교 PC · PC방처럼 재부팅 때 초기화되면 1번이 지워질 수 있어요 → 같은 한 줄로 다시 설치 (또는 iCloud `동양미래대학교/Claude설정.zip` 의 `프롬프트.txt`)
-- 원본: `exam-summary/tools/pc-capture/` (vmcapture.ps1 · CLAUDE-capture.md · 이 파일)
+- 원본: `exam-summary/tools/pc-capture/` (vmcapture.ps1 · vmtype.ps1 · vscapture.ps1 · CLAUDE-capture.md · 이 파일)
