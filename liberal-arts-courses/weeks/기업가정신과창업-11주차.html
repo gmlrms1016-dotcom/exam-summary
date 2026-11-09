@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업가정신과창업 11주차 · 창업아이템 2 — 창업아이디어 개발 · 마인드맵 · 브레인스토밍 · SCAMPER (7강)</title>
+    <meta name="description" content="기업가정신과창업 11주차 정리 — 창업아이템 2 — 창업아이디어 개발 · 마인드맵 · 브레인스토밍 · SCAMPER (7강)">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="기업가정신과창업 11주차 · 창업아이템 2 — 창업아이디어 개발 · 마인드맵 · 브레인스토밍 · SCAMPER (7강)">
+    <meta property="og:description" content="기업가정신과창업 11주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../../icon-180.png">
+    <link rel="stylesheet" href="../../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../기업가정신과창업.html">← 기업가정신과창업 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🚀 기업가정신과창업 · 11주차</h1>
+        <p>창업아이템 2 — 창업아이디어 개발 · 마인드맵 · 브레인스토밍 · SCAMPER (7강)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="기업가정신과창업-10주차.html">‹ 이전 · <b>10주차</b><br><small>창업아이템 1 — 창업기회의 발견 (PEST) · 창업자의 SWOT · 아이템 탐색 (6강)</small></a><a class="next" href="기업가정신과창업-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+
+<div class="tip">수업: <b>11/9(월)</b> · 자료: <b>원격_NEW_수업_9주_7강_창업아이템2.pdf</b> (18쪽 · 9주차 폴더) — ✍️ 노션 필기 “오늘 강의자료: <b>원격_NEW_수업_9주_7강_창업아이템2</b>”<br>🔥 ✍️ <b>“기말고사에 창업아이템 아이디어 써야 함”</b> → 아래 6절 SCAMPER 로 내 아이디어를 미리 만들어 두기<br>PDF 펜 필기는 없어서(3쪽 제목 옆 짧은 선 하나) 수업한 강의자료 핵심을 정리했어요. 11주차 폴더의 9강(자금조달) 자료는 이번 수업에서 안 썼어요. 📄 = 강의자료 · 🤖 = 강의자료에 없는 설명.<br>🧑‍🤝‍🧑 <b>수업 활동</b> — 조별 <b>SCAMPER</b> 로 창업아이디어 발전시키기 (우리 조 주제: <b>스마트 물품보관함</b>)</div>
+<section class="card" id="s1">
+<h2>🎨 11주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/기업가정신과창업-그림정리.html?week=11" title="11주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/기업가정신과창업-그림정리.html?week=11" target="_blank" rel="noopener">🎬 11주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+<ul><li>⑪ 아이디어 발굴의 의미 · 원천 · ⑫ 브레인스토밍 4규칙 · 진행 · ⑬ 🔥 SCAMPER 7가지</li></ul>
+</section>
+<section class="card" id="s2">
+<h2>1. 창업아이디어 개발 — 발굴의 의미 (3쪽)</h2>
+<ul><li>📄 <b>아이디어 발굴</b> = 우리 고객의 <b>불편한 요소</b> · <b>개선시키고 싶은 요소</b> · <b>가치있게 하고 싶은 요소</b>를 찾아 <b>변화시키는 활동</b></li><li>📄 세 원이 겹치는 곳에서 찾기</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>📄 질문</th><th>📄 무엇을 보나</th></tr>
+<tr><td>내가 <b>잘하는</b> 것?</td><td>남보다 높은 성과</td></tr>
+<tr><td>내가 <b>좋아하는</b> 것?</td><td>설레임 · 즐거움</td></tr>
+<tr><td><b>고객이 원하는</b> 것?</td><td>불편 · 개선 · 가치</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s3">
+<h2>2. 아이디어 발굴의 원천 (4쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th>📄 원천</th><th>내용</th></tr>
+<tr><td>창업 성공 / 실패 <b>기사</b></td><td>기사 내용의 <b>타인의</b> 창업아이디어</td></tr>
+<tr><td><b>창의적 사고</b></td><td>시장과 고객의 문제해결 · 가치구현이 가능한 <b>자신의</b> 창업아이디어</td></tr>
+<tr><td><b>외부</b> 공모전 · 경진대회</td><td>수상 내용의 <b>타인의</b> 창업아이디어</td></tr>
+</tbody></table>
+<ul><li>📄 세 가지를 모아 → <b>나만의 창업아이디어 발굴</b></li></ul>
+</section>
+<section class="card" id="s4">
+<h2>3. 아이디어 개발 프로세스 (5쪽)</h2>
+<ul><li>📄 의사결정을 위해서는 <b>[문제인식 → 해결책 제시 → 시행]</b> 의 방법을 따르게 됨</li><li>📄 사람마다 해석과 결론이 다를 수 있기 때문에 결론은 <b>각자 다르게</b> 나타날 수도 있음</li></ul>
+</section>
+<section class="card" id="s5">
+<h2>4. 창업아이디어 개발 방법 ① 마인드 맵 (6 · 7쪽)</h2>
+<ul><li>📄 <b>마인드 맵(마음의 지도)</b> — 우리가 어떤 일을 <b>시행(do)하기 전에 계획</b>을 해 보는 단계 · <b>우리 마음 속에 지도를 그려봄</b> · 그 상황에 대한 전반적인 인지와 해결 방법을 <b>한 눈에</b> 볼 수 있도록 그려보는 것</li><li>📄 7쪽 사례 — 가운데 <b>‘자기소개’</b> → 가지로 취미(운동) · 특기(노래) · 성격 · 좋아하는 과목 · 좋아하는 연예인 · 지망 대학 · 장래희망 …</li><li>🤖 가운데에 주제 하나 → 생각나는 것을 가지로 뻗어 나가며 적기</li></ul>
+</section>
+<section class="card" id="s6">
+<h2>5. 창업아이디어 개발 방법 ② 브레인스토밍 (8 ~ 12쪽)</h2>
+<ul><li>📄 <b>정의</b> — 어떤 문제를 해결함에 있어 <b>일체의 판단이나 비판을 배제</b>하는 <b>자유로운 분위기</b>에서 머리 속에 떠오르는 <b>다양한 생각과 아이디어를 쏟아냄</b>으로써 창의적인 아이디어를 만들어내는 기법</li><li>📄 8쪽 그림 — 가운데 <b>Problem Theme</b> → 개선점 → 대안 …</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>📄 기본 규칙 (9쪽)</th><th>뜻</th></tr>
+<tr><td><b>비판금지</b> (Support)</td><td>어떠한 아이디어라도 비판이나 평가는 하지 않도록 한다</td></tr>
+<tr><td><b>자유분방</b> (Silly)</td><td>자유분방하게 아이디어를 내놓는 분위기를 조성한다</td></tr>
+<tr><td><b>질보단 양</b> (Speed)</td><td>가능한 많은 아이디어가 나오는 것이 중요하다</td></tr>
+<tr><td><b>결합과 개선</b> (Synergy)</td><td>이미 제안된 아이디어들을 결합해 개선된 아이디어를 창출해낸다</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>📄 단계</th><th>할 일</th></tr>
+<tr><td><b>계획</b> (10쪽)</td><td>참가자 구성(진행자 · 기록자 · 아이디어 발표자 등) · 장소 섭외(평소 익숙한 곳보다 <b>새로운 장소</b> · <b>원형이나 U자형</b> 좌석) · 시간(<b>30분 ~ 1시간</b> · <b>아침 회의</b>가 더 효과적) · 준비물(화이트보드 · 보드마카 · 포스트잇 · 시계 · 녹음기 등)</td></tr>
+<tr><td><b>진행 ①</b> (11쪽)</td><td><b>분위기 조성</b> — 진행자가 <b>ice breaking</b> 으로 자유로운 분위기 · <b>규칙 복습</b> — 4가지 기본 규칙 · <b>과정 설명</b> — 주제 · 시간 · 아이디어 할당량(1인 1회 1개 등) · 발표 방법(자유발언식 · 순환식) · <b>워밍업</b> — 예) 연필의 용도를 가능한 많이</td></tr>
+<tr><td><b>진행 ②</b> (12쪽)</td><td><b>브레인스토밍</b> — 정해진 룰에 따라 자유롭게 · <b>짐 버리기(load dumping)</b> — 잘 알려진 아이디어를 <b>먼저</b> 제안해 마음속에서 지워 버림 · 진행자는 막히면 질문을 던지거나 휴식 · 기록자는 <b>이름 대신 번호</b>로 기록 · <b>정리</b> — 중복 · 현실 가능성 없는 것 제거 → 가장 적합하고 <b>실현 가능성이 높은</b> 아이디어를 최종 결정</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s7">
+<h2>6. 🔥 창업아이디어 개발 방법 ③ SCAMPER (13 ~ 15쪽)</h2>
+<p>📄 <b>기존 아이디어</b>에 7가지 질문을 던져 새 아이디어를 만드는 발굴 도구 (14쪽 그림 · 15쪽 표 4-4 스캠퍼의 구성 내용)</p>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>📄 약자</th><th>📄 의미 · 질문 (13쪽)</th><th>📄 설명 (15쪽)</th><th>📄 예 (15쪽)</th></tr>
+<tr><td><b>S</b></td><td><b>Substitute</b> (대체하기) — 다른 것으로 바꿔볼 수 있을까?</td><td>다른 재료 · 요소 · 원동력 · 프로세스 등</td><td>연탄재 벽돌 · 종이컵 · 나무젓가락</td></tr>
+<tr><td><b>C</b></td><td><b>Combine</b> (결합하기) — 다른 것과 합쳐볼 수 있을까?</td><td>혼합 · 조립 · 작동 · 단위 · 방법 · 아이디어 등의 결합</td><td>지우개 달린 연필 · 필터 달린 담배 · 시계겸용 라디오 · 보온겸용 밥솥</td></tr>
+<tr><td><b>A</b></td><td><b>Adapt</b> (차용 · 적용하기) — 다른 것에 적용해볼 수 있을까?</td><td>다른 용도 · 과거의 적용 · 다른 아이디어의 도용</td><td>산우엉 가시 → 매직테이프(벨크로) · 장미덩굴 → 철조망</td></tr>
+<tr><td><b>M</b></td><td><b>Modify · Magnify · Minify</b> (변경 · 확대 · 축소) — 크기 · 모양 · 색깔 등을 바꿔볼 수 있을까?</td><td>뜻 · 색깔 · 동작 · 모양 변형 · 더 크게 · 높게 · 강하게 · 두껍게 · 과장되게</td><td>종이비누 · 포스트잇(Post-it)</td></tr>
+<tr><td><b>P</b></td><td><b>Put to other uses</b> (다른 용도 · 다르게 활용하기) — 다른 용도로 사용할 수 있을까?</td><td>원래의 용도를 바꾸기</td><td>톱밥 → 장작 · 쓰레기 → 블록 · 건설재료 · 폐 타이어 → 발전소의 원료</td></tr>
+<tr><td><b>E</b></td><td><b>Eliminate</b> (제거하기) — 불필요한 것을 제거해볼 수 있을까?</td><td>취소 · 분리 · 가볍게 · 짧게 · 여러 개로 나누기</td><td>트랜지스터 · 노트북</td></tr>
+<tr><td><b>R</b></td><td><b>Reverse · Rearrange</b> (반대로 · 다시 배열) — 반대로 하거나 순서를 바꿔볼 수 있을까?</td><td>방향 바꾸기 · 거꾸로 · 용도의 교환</td><td>벙어리장갑 → 다섯 발가락 양말</td></tr>
+</tbody></table>
+<ul><li>⚠️ 같은 글자도 쪽마다 우리말이 조금 달라요 — A = 13 · 14쪽 <b>차용</b> / 15쪽 <b>적용</b> · P = 14쪽 <b>전용</b> / 15쪽 <b>다르게 활용하기</b> · R = 14쪽 <b>역전</b>(Reverse) · <b>재배열</b>(Rearrange) → 시험엔 영어 단어로 기억하면 안전</li><li>📄 15쪽 출처: 김진수 · 이정명(2014) 『창조경제 시대의 기업가정신과 창업론』</li></ul>
+<p>🧑‍🤝‍🧑 <b>수업 활동 — 우리 조 SCAMPER: 스마트 물품보관함</b> (조별 활동지 사진)</p>
+<table class="ref">
+<tbody>
+<tr><th>글자</th><th>우리 조 아이디어</th></tr>
+<tr><td><b>S</b> 대체</td><td>따로 보관함을 두는 대신 <b>24시간 편의점 · 세탁소</b> 같은 곳에 위탁 → 물품 보관 <b>위치를 대체</b></td></tr>
+<tr><td><b>C</b> 결합</td><td>비밀번호를 직접 기억 → <b>스마트폰 앱</b>으로 보관 · 확인 · 분실 위험 → <b>IoT 센서</b> 결합 · 안전 보관 → <b>알림 · 이용내역</b> 제공</td></tr>
+<tr><td><b>A</b> 차용</td><td><b>스마트 물류창고(AGV)</b> 원리 — 짐을 넣으면 안의 로봇팔이나 컨베이어 벨트가 빈 칸을 찾아 자동으로 옮겨 정리하는 <b>입체 자동 보관함</b></td></tr>
+<tr><td><b>M</b> 변경 · 확대 · 축소</td><td>Modify = 이동식 · 칸막이 · 슬라이딩 도어로 <b>구조 변형</b> · Magnify = 옆 수납공간 연결 · 모듈 추가로 <b>수납 능력 확대</b> · Minify = 접이식 구조 · 소형 부품으로 <b>부피 축소</b></td></tr>
+<tr><td><b>P</b> 다르게 활용</td><td>짐 맡기는 곳 → <b>무인 전달 공간</b> — 만나지 않고 물건 주고받기 · 빌리기 · 나누기 (중고거래 · 세탁 · 수선 · 가게 픽업 · 나눔 · 대여) · 시간 맞춰 만날 필요 없음 · 벽면의 빈 보관함도 활용 → 공간 낭비 줄어듦</td></tr>
+</tbody></table>
+<ul><li>🤖 E(제거) · R(반대로) 는 활동지 사진에 없어요 — 기말 대비로 직접 채워 보기 (예: E = 열쇠 · 카드 없애고 앱만 · R = 보관함이 사람에게 오는 배송형)</li></ul>
+</section>
+<section class="card" id="s8">
+<h2>7. 아이디어 발상 기법 사례 (16 · 17쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th>📄 기법</th><th>📄 예</th></tr>
+<tr><td><b>더하기</b> — 물건 + 물건 · 방법 + 방법 · 물건 + 방법</td><td>지우개 달린 연필 · 라이트펜 · 목걸이 시계 · 보온겸용 밥솥</td></tr>
+<tr><td><b>빼기</b> — 성분 · 재료 · 방법 · 과정을 빼되 오히려 더 나아져야 바른 발명</td><td>무선전화기 · 무설탕 쥬스 · 씨없는 수박</td></tr>
+<tr><td><b>모양 바꾸기</b></td><td>꼬부라진 물파스 주둥이 · 올록볼록 화장지 · 숟가락 달린 빨대</td></tr>
+<tr><td><b>남의 아이디어 빌리기</b> — 기능이 더 추가되도록 해야 좋은 발명</td><td>쥐잡는 틀 → 바퀴벌레 잡는 틀 · 파리 끈끈이 → 바퀴벌레 끈끈이</td></tr>
+<tr><td><b>폐품 활용하기</b> — 버리는 자원을 활용</td><td>조개껍질 → 동물사료 · 볏짚과 왕겨 → 완충용 포장재 · 폐 PET병 → 양식장 부유기</td></tr>
+<tr><td><b>크기를 변화시키기</b> — 큰 것을 작게 · 작은 것을 크게</td><td>소형 TV · 접는 우산 · 접는 책상 · 접는 자전거 · 소형 라디오 · 자동차용 냉장고</td></tr>
+<tr><td><b>반대로 하기</b> — 거꾸로 하거나 위치를 바꿈</td><td>벙어리장갑 · 발가락 양말 · 공중에서 돌아가는 팽이</td></tr>
+</tbody></table>
+<ul><li>🤖 SCAMPER 와 짝지으면 — 더하기 = <b>C</b> · 빼기 = <b>E</b> · 모양 · 크기 바꾸기 = <b>M</b> · 남의 아이디어 빌리기 = <b>A</b> · 폐품 활용 = <b>P</b> · 반대로 하기 = <b>R</b></li></ul>
+</section>
+<section class="card" id="s9">
+<h2>🎯 시험 포인트 (예상)</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th></tr>
+<tr><td>🔥 ✍️ 기말 서술</td><td><b>창업아이템 아이디어를 써야 함</b> → 고객의 불편 · 개선 · 가치 + 내가 잘하는 것 · 좋아하는 것 · 고객이 원하는 것 + SCAMPER 로 다듬기</td></tr>
+<tr><td>아이디어 발굴</td><td>고객의 <b>불편한 요소 · 개선시키고 싶은 요소 · 가치있게 하고 싶은 요소</b>를 찾아 변화시키는 활동</td></tr>
+<tr><td>발굴의 원천</td><td>기사(타인) · 창의적 사고(자신) · 공모전 · 경진대회(타인)</td></tr>
+<tr><td>개발 프로세스</td><td><b>문제인식 → 해결책 제시 → 시행</b></td></tr>
+<tr><td>마인드 맵</td><td>시행(do)하기 전 계획 · 마음 속 지도 · 한 눈에</td></tr>
+<tr><td>브레인스토밍 4규칙</td><td><b>비판금지(Support) · 자유분방(Silly) · 질보단 양(Speed) · 결합과 개선(Synergy)</b></td></tr>
+<tr><td>짐 버리기</td><td>load dumping — 잘 알려진 아이디어를 먼저 내서 지워 버림 · 기록자는 이름 대신 번호</td></tr>
+<tr><td>🔥 SCAMPER</td><td><b>S</b> Substitute · <b>C</b> Combine · <b>A</b> Adapt · <b>M</b> Modify · Magnify · Minify · <b>P</b> Put to other uses · <b>E</b> Eliminate · <b>R</b> Reverse · Rearrange</td></tr>
+<tr><td>SCAMPER 예</td><td>지우개 달린 연필 = C · 산우엉 가시 → 벨크로 = A · 폐 타이어 → 발전소 원료 = P · 노트북 = E · 다섯 발가락 양말 = R</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s10">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../기업가정신과창업-실제시험.html">🔒 기업가정신과창업 실제시험 — 11주차(7강) 문제까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="기업가정신과창업-15주차-기말고사.html">기말고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="기업가정신과창업-10주차.html">‹ 이전 · <b>10주차</b><br><small>창업아이템 1 — 창업기회의 발견 (PEST) · 창업자의 SWOT · 아이템 탐색 (6강)</small></a><a class="next" href="기업가정신과창업-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「기업가정신과창업 · 11주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../../ink.js?v=202611041620"></script>
+</body>
+</html>
