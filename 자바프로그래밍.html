@@ -21,7 +21,7 @@
 
     <header class="page-head">
         <h1>자바프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 10주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체 + 생성자 · this + this() · 오버로딩 · 접근 지정자 · static · 객체 배열 · 상속 · 생성자 호출 순서 · super() · toString</p>
+        <p>1주차 ~ 11주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체 + 생성자 · this + this() · 오버로딩 · 접근 지정자 · static · 객체 배열 · 상속 · 생성자 호출 순서 · super() · toString · 오버라이딩 · 동적 바인딩 · 추상 클래스 · 인터페이스</p>
     </header>
 
     <div id="week-nav" data-subject="자바프로그래밍"></div>
@@ -67,6 +67,7 @@
         <a href="#s34">34.객체배열</a>
         <a href="#s35">35.상속·super()</a>
         <a href="#s36">36.과제·toString</a>
+        <a href="#s37">37.오버라이딩·인터페이스</a>
         <a href="#quiz">✏️퀴즈</a>
         <a href="#output">🖥️출력맞히기</a>
         <a href="#code">💻코딩테스트</a>
@@ -2101,9 +2102,405 @@ class TextBook extends Book {
         </div>
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#assign" title="그림 — 과제 · toString" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#assign" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 과제 · toString — 새 창으로 크게 보기</a></p></div>
     </section>
+    <section class="card" id="s37">
+        <h2>37. 11주차 — 오버라이딩 · 동적 바인딩 · 추상 클래스 · 인터페이스<span class="week">11주차</span></h2>
+        <div class="tip">수업 11/10(화) · 5장_상속.pdf <b>32 ~ 62쪽</b> (✍️ 노션 “강의자료 32페이지부터 시작”) · 코드 주석과 출력은 javac · java 로 직접 실행한 결과 · 자세한 정리는 <a href="weeks/자바프로그래밍-11주차.html" target="_blank" rel="noopener">11주차 페이지</a></div>
+        <h3>① 메소드 오버라이딩 — Weapon → Cannon (예제 5-6 · Overriding.java)</h3>
+        <pre><code class="language-java">// Overriding.java — 메소드 오버라이딩 · 기본 무기 1 → 대포 10 (5장 41쪽 예제 5-6)
+class Weapon {                                  // 슈퍼 클래스 — 기본 무기
+    protected int fire() {                      // 살상 능력을 돌려주는 메소드
+        return 1;                               // 기본 무기 → 1
+    }                                           // fire 끝
+}                                               // Weapon 끝
+class Cannon extends Weapon {                   // 서브 클래스 — 대포 (Weapon 상속)
+    @Override                                   // 부모 fire() 를 다시 쓴다는 표시 (이름 · 매개변수가 다르면 컴파일 오류로 알려 줌)
+    protected int fire() {                      // 이름 · 매개변수 · 리턴 타입이 부모와 같음 → 오버라이딩
+        return 10;                              // 대포 → 10
+    }                                           // fire 끝
+}                                               // Cannon 끝
+public class 연습 {                              // 원래 이름 Overriding → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Weapon weapon;                          // 슈퍼 클래스 타입 레퍼런스 변수 (아직 객체 없음)
+        weapon = new Weapon();                  // Weapon 객체를 가리킴
+        System.out.println(&quot;기본 무기의 살상 능력은 &quot; + weapon.fire());   // Weapon 의 fire() → 1 → &quot;기본 무기의 살상 능력은 1&quot;
+        weapon = new Cannon();                  // 같은 변수가 이제 Cannon 객체를 가리킴 (업캐스팅)
+        System.out.println(&quot;대포의 살상 능력은 &quot; + weapon.fire());     // 변수 타입은 Weapon 이지만 실제 객체는 Cannon → 오버라이딩된 fire() → 10
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">기본 무기의 살상 능력은 1
+대포의 살상 능력은 10</code></pre>
+        <div class="tip"><b>메소드 오버라이딩</b> = 슈퍼 클래스의 메소드를 서브 클래스에서 <b>재정의</b> — 이름 · 매개변수 타입 및 개수 · 리턴 타입 등 <b>모든 것을 동일하게</b> (32쪽) · 목적 = <b>다형성</b> (35쪽) · <code>@Override</code> 는 선택(붙이면 실수를 컴파일 오류로 잡아 줌) · 접근 범위를 좁히면 <code>attempting to assign weaker access privileges</code> (javac 확인)</div>
+        <h3>② Animal → Dog · Cat (Main.java)</h3>
+        <pre><code class="language-java">// Main.java — 부모 타입 변수로 자식 객체를 가리키고 sound() 호출 (수업 예제 Animal → Dog · Cat)
+class Animal {                                  // 슈퍼 클래스
+    void sound() {                              // 기본 소리
+        System.out.println(&quot;소리를 냅니다.&quot;);      // 부모 버전 (이 예제에서는 안 불림)
+    }                                           // sound 끝
+}                                               // Animal 끝
+class Dog extends Animal {                      // Animal 상속
+    @Override                                   // 부모 sound() 를 다시 씀
+    void sound() {                              // 이름 · 매개변수 같음
+        System.out.println(&quot;멍멍 소리를 냅니다.&quot;);  // Dog 버전
+    }                                           // sound 끝
+}                                               // Dog 끝
+class Cat extends Animal {                      // Animal 상속
+    @Override                                   // 부모 sound() 를 다시 씀
+    void sound() {                              // 이름 · 매개변수 같음
+        System.out.println(&quot;미야오 소리를 냅니다.&quot;); // Cat 버전
+    }                                           // sound 끝
+}                                               // Cat 끝
+public class 연습 {                              // 원래 이름 Main → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Animal a1 = new Dog();                  // 부모 타입 변수 a1 → 실제 객체는 Dog (업캐스팅)
+        a1.sound();                             // 실제 객체 Dog 의 sound() → &quot;멍멍 소리를 냅니다.&quot;
+        Animal a2 = new Cat();                  // 부모 타입 변수 a2 → 실제 객체는 Cat
+        a2.sound();                             // 실제 객체 Cat 의 sound() → &quot;미야오 소리를 냅니다.&quot;
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">멍멍 소리를 냅니다.
+미야오 소리를 냅니다.</code></pre>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#override" title="그림 — 오버라이딩 · 동적 바인딩" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#override" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 오버라이딩 · 동적 바인딩 — 새 창으로 크게 보기</a></p></div>
+        <h3>③ 동적 바인딩 — paint() 안의 draw() 도 실제 객체 것 (39쪽)</h3>
+        <pre><code class="language-java">// 동적 바인딩 — paint() 안의 draw() 도 실제 객체의 것이 불림 (5장 39쪽 그림 코드)
+class Shape {                                   // 슈퍼 클래스
+    public void paint() {                       // 그리기
+        draw();                                 // 여기 draw() 는 ‘지금 이 객체’의 draw() → 실행할 때 정해짐
+    }                                           // paint 끝
+    public void draw() {                        // 부모 버전
+        System.out.println(&quot;Shape&quot;);            // &quot;Shape&quot;
+    }                                           // draw 끝
+}                                               // Shape 끝
+class Circle extends Shape {                    // Shape 상속
+    @Override                                   // draw() 를 다시 씀
+    public void draw() {                        // 자식 버전
+        System.out.println(&quot;Circle&quot;);           // &quot;Circle&quot;
+    }                                           // draw 끝
+}                                               // Circle 끝
+public class 연습 {                              // 39쪽은 Shape · Circle 에 main 이 따로 → 한 파일로 합침
+    public static void main(String[] args) {    // 프로그램 시작
+        Shape a = new Shape();                  // Shape 객체
+        a.paint();                              // Shape 의 paint() → draw() → 객체가 Shape → Shape 의 draw() → &quot;Shape&quot;
+        Shape b = new Circle();                 // 변수 타입은 Shape · 실제 객체는 Circle
+        b.paint();                              // paint() 는 부모 것 → 그 안의 draw() 는 실제 객체 Circle 의 draw() (동적 바인딩) → &quot;Circle&quot;
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">Shape
+Circle</code></pre>
+        <table class="ref">
+            <tr><th>비교 (42쪽)</th><th>메소드 오버로딩</th><th>메소드 오버라이딩</th></tr>
+            <tr><td>선언</td><td>같은 클래스나 상속 관계에서 동일한 이름의 메소드 중복 작성</td><td>서브 클래스에서 슈퍼 클래스의 메소드와 동일한 이름의 메소드 재작성</td></tr>
+            <tr><td>관계</td><td>동일한 클래스 내 혹은 상속 관계</td><td>상속 관계</td></tr>
+            <tr><td>조건</td><td>이름은 같고 <b>매개변수 타입이나 개수가 달라야</b></td><td>이름 · 매개변수 타입과 개수 · <b>리턴 타입이 모두 동일</b></td></tr>
+            <tr><td>바인딩</td><td><b>정적</b> — 컴파일 시에 결정</td><td><b>동적</b> — 실행 시간에 오버라이딩된 메소드를 찾아 호출</td></tr>
+        </table>
+        <div class="tip"><b>super</b>.메소드() = 슈퍼 클래스의 메소드 호출 · 서브 클래스에서만 · 컴파일러가 <b>정적 바인딩</b>으로 처리 (40쪽)</div>
+        <h3>④ 추상 클래스 — Calculator → GoodCal (예제 5-7 · CalcMain.java)</h3>
+        <pre><code class="language-java">// CalcMain.java — 추상 클래스 Calculator 의 추상 메소드 3개를 GoodCal 이 구현 (5장 49 · 50쪽 예제 5-7)
+abstract class Calculator {                     // 추상 클래스 — abstract 메소드가 있으니 클래스 앞에도 abstract 필수
+    abstract int add(int a, int b);             // 추상 메소드 — 몸체 없이 ; → 자식이 꼭 구현
+    abstract int subtact(int a, int b);         // 수업 파일 그대로 subtact (교재는 subtract) — 부모 · 자식 이름만 같으면 문제없음
+    abstract double average(int[] arr);         // 배열 평균 → double
+}                                               // Calculator 끝
+class GoodCal extends Calculator {              // 추상 클래스 상속 → 추상 메소드 3개를 모두 구현해야 일반 클래스
+    @Override                                   // add 구현
+    int add(int a, int b) {                     // a=2, b=3
+        return a + b;                           // 2 + 3 → 5
+    }                                           // add 끝
+    @Override                                   // subtact 구현
+    int subtact(int a, int b) {                 // a=2, b=3
+        return a - b;                           // 2 - 3 → -1
+    }                                           // subtact 끝
+    @Override                                   // average 구현
+    double average(int[] arr) {                 // arr = {2, 3, 4}
+        double sum = 0;                         // 합계를 double 로 → 나눗셈도 실수 나눗셈
+        for (int i = 0; i &lt; arr.length; i++) {  // i = 0, 1, 2
+            sum += arr[i];                      // 0 → 2 → 5 → 9
+        }                                       // for 끝 → sum = 9.0
+        return sum / arr.length;                // 9.0 / 3 → 3.0
+    }                                           // average 끝
+}                                               // GoodCal 끝
+public class 연습 {                              // 원래 이름 CalcMain → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        GoodCal c = new GoodCal();              // 구현한 클래스로 객체 생성 (new Calculator() 는 컴파일 오류)
+        System.out.println(c.add(2, 3));        // 5
+        System.out.println(c.subtact(2, 3));    // -1
+        System.out.println(c.average(new int[] {2, 3, 4}));   // 배열을 그 자리에서 만들어 넘김 → 9.0 / 3 → 3.0
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">5
+-1
+3.0</code></pre>
+        <div class="tip"><b>추상 메소드</b> = 선언만 있고 구현 없음(<code>abstract</code> · 몸체 없이 <code>;</code>) · 추상 메소드가 하나라도 있으면 클래스 앞에 <b>abstract 필수</b> · 추상 메소드 없이도 abstract class 가능 (43쪽) · <b>객체 생성 불가</b> <code>Calculator is abstract; cannot be instantiated</code> (45쪽) · 다 구현 안 하면 자식도 abstract (46쪽) · 용도 = <b>설계와 구현 분리</b> (48쪽)</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#abstract" title="그림 — 추상 클래스" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#abstract" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 추상 클래스 — 새 창으로 크게 보기</a></p></div>
+        <h3>⑤ 인터페이스 — PhoneInterface → SamsungPhone · IPhone (PhoneMain.java)</h3>
+        <pre><code class="language-java">// PhoneInterface.java + PhoneMain.java — 인터페이스: 상수 · 추상 메소드 · default 메소드 (5장 54 ~ 57쪽)
+interface PhoneInterface {                      // 인터페이스 선언 (수업 파일은 public interface → 한 파일에 합치려고 public 뺌)
+    int TIMEOUT = 10000;                        // 상수 — public static final 이 생략된 것 → 값 못 바꿈
+    void sendCall();                            // 추상 메소드 — public abstract 생략
+    void receiveCall();                         // 추상 메소드
+    default void printLogo() {                  // default 메소드 — 코드가 있음 → 구현 클래스가 자동으로 물려받음
+        System.out.println(&quot;** Phone **&quot;);      // 로고 출력
+    }                                           // printLogo 끝
+}                                               // PhoneInterface 끝
+class SamsungPhone implements PhoneInterface {  // implements = 인터페이스 구현 → 추상 메소드 2개를 모두 구현
+    @Override                                   // sendCall 구현
+    public void sendCall() {                    // public 꼭 (인터페이스 메소드는 public → 빼면 컴파일 오류)
+        System.out.println(&quot;갤럭시 전화를 겁니다. 띠리리리링&quot;);   // 삼성 버전
+    }                                           // sendCall 끝
+    @Override                                   // receiveCall 구현
+    public void receiveCall() {                 // public
+        System.out.println(&quot;갤럭시 전화를 받습니다.&quot;);          // 삼성 버전
+    }                                           // receiveCall 끝
+}                                               // SamsungPhone 끝
+class IPhone implements PhoneInterface {        // 같은 인터페이스를 다르게 구현 (규격은 같고 구현은 회사마다)
+    @Override                                   // sendCall 구현
+    public void sendCall() {                    // public
+        System.out.println(&quot;아이폰 전화를 겁니다. 띠리리리링&quot;);   // 아이폰 버전
+    }                                           // sendCall 끝
+    @Override                                   // receiveCall 구현
+    public void receiveCall() {                 // public
+        System.out.println(&quot;아이폰 전화를 받습니다.&quot;);          // 아이폰 버전
+    }                                           // receiveCall 끝
+}                                               // IPhone 끝
+public class 연습 {                              // 원래 이름 PhoneMain → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        SamsungPhone gal24 = new SamsungPhone();// 삼성 폰 객체
+        gal24.printLogo();                      // SamsungPhone 에 안 썼지만 default 메소드를 물려받음 → &quot;** Phone **&quot;
+        gal24.sendCall();                       // &quot;갤럭시 전화를 겁니다. 띠리리리링&quot;
+        gal24.receiveCall();                    // &quot;갤럭시 전화를 받습니다.&quot;
+        System.out.println();                   // 빈 줄
+        IPhone ip16 = new IPhone();             // 아이폰 객체
+        ip16.sendCall();                        // &quot;아이폰 전화를 겁니다. 띠리리리링&quot;
+        ip16.receiveCall();                     // &quot;아이폰 전화를 받습니다.&quot;
+        System.out.println(PhoneInterface.TIMEOUT);   // 상수는 인터페이스이름.상수 로 → 10000 (🤖 수업 파일엔 없는 줄)
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">** Phone **
+갤럭시 전화를 겁니다. 띠리리리링
+갤럭시 전화를 받습니다.
+
+아이폰 전화를 겁니다. 띠리리리링
+아이폰 전화를 받습니다.
+10000</code></pre>
+        <table class="ref">
+            <tr><th>인터페이스 구성 요소 (54쪽)</th><th>특징</th></tr>
+            <tr><td>상수</td><td>public 만 · <code>public static final</code> 생략</td></tr>
+            <tr><td>추상 메소드</td><td><code>public abstract</code> 생략 가능</td></tr>
+            <tr><td>default 메소드</td><td>코드가 있는 메소드 · 구현 클래스에 <b>자동 상속</b> · public 만</td></tr>
+            <tr><td>private 메소드</td><td>인터페이스 안의 다른 메소드에서만 호출 (Java 9)</td></tr>
+            <tr><td>static 메소드</td><td>public · private 지정 가능 · 생략하면 public</td></tr>
+        </table>
+        <div class="tip">인터페이스 = 클래스가 구현해야 할 메소드들이 선언되는 <b>추상형</b> · <b>필드(멤버 변수) 선언 불가</b> (52쪽) · <b>객체 생성 불가</b> · 레퍼런스 변수는 가능 · 구현 클래스는 <b>모든 추상 메소드를 반드시 구현</b> · 구현할 때 <b>public 생략하면 오류</b> (55 · 60쪽) · ⚠️ 52쪽은 static 메소드를 Java 9 줄에 적었지만 <b>Java 8</b> 부터 됨 (Java 8 javac 로 확인 · Java 9 는 private)</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#iface" title="그림 — 인터페이스" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#iface" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 인터페이스 — 새 창으로 크게 보기</a></p></div>
+        <h3>⑥ 인터페이스 상속 · 다중 구현 — SmartPhone (예제 5-9 · InterfaceEx.java)</h3>
+        <pre><code class="language-java">// InterfaceEx.java — 인터페이스 상속(extends) + 클래스 상속과 인터페이스 다중 구현을 동시에 (5장 61쪽 예제 5-9)
+interface PhoneInterface {                      // 기본 전화 규격 (PhoneInterface.java 와 같음)
+    int TIMEOUT = 10000;                        // 상수 (public static final 생략)
+    void sendCall();                            // 추상 메소드
+    void receiveCall();                         // 추상 메소드
+    default void printLogo() {                  // default 메소드 → 구현 클래스에 자동 상속
+        System.out.println(&quot;** Phone **&quot;);      // 로고
+    }                                           // printLogo 끝
+}                                               // PhoneInterface 끝
+interface MobilePhoneInterface extends PhoneInterface {   // 인터페이스가 인터페이스를 상속 → extends
+    void sendSMS();                             // 새 추상 메소드 (sendCall · receiveCall 은 물려받음)
+    void receiveSMS();                          // 새 추상 메소드
+}                                               // MobilePhoneInterface 끝 → 추상 메소드 모두 4개
+interface MP3Interface {                        // 음악 규격
+    public void play();                         // public 을 써도 되고 생략해도 같음
+    public void stop();                         // 추상 메소드
+}                                               // MP3Interface 끝
+class PDA {                                     // 보통 클래스
+    public int calculate(int x, int y) {        // 계산기 기능
+        return x + y;                           // 3 + 5 → 8
+    }                                           // calculate 끝
+}                                               // PDA 끝
+class SmartPhone extends PDA implements MobilePhoneInterface, MP3Interface {   // 클래스 하나 상속 + 인터페이스 두 개 구현
+    @Override                                   // PhoneInterface 에서 온 것
+    public void sendCall() {                    // public 꼭
+        System.out.println(&quot;따르릉따르릉~~&quot;);      // 전화 걸기
+    }                                           // sendCall 끝
+    @Override                                   // PhoneInterface 에서 온 것
+    public void receiveCall() {                 // public
+        System.out.println(&quot;전화 왔어요.&quot;);        // 전화 받기
+    }                                           // receiveCall 끝
+    @Override                                   // MobilePhoneInterface 에서 새로 생긴 것
+    public void sendSMS() {                     // public
+        System.out.println(&quot;문자 갑니다.&quot;);        // 문자 보내기
+    }                                           // sendSMS 끝
+    @Override                                   // MobilePhoneInterface 에서 새로 생긴 것
+    public void receiveSMS() {                  // public
+        System.out.println(&quot;문자 왔어요.&quot;);        // 문자 받기
+    }                                           // receiveSMS 끝
+    @Override                                   // MP3Interface 에서 온 것
+    public void play() {                        // public
+        System.out.println(&quot;음악 연주합니다.&quot;);     // 재생
+    }                                           // play 끝
+    @Override                                   // MP3Interface 에서 온 것
+    public void stop() {                        // public
+        System.out.println(&quot;음악 중단합니다.&quot;);     // 정지
+    }                                           // stop 끝
+    public void schedule() {                    // 인터페이스에 없는 SmartPhone 만의 메소드 추가
+        System.out.println(&quot;일정 관리합니다.&quot;);     // 일정
+    }                                           // schedule 끝
+}                                               // SmartPhone 끝 → 추상 메소드 6개를 모두 구현해서 일반 클래스
+public class 연습 {                              // 원래 이름 InterfaceEx → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        SmartPhone phone = new SmartPhone();    // 스마트폰 객체
+        phone.printLogo();                      // PhoneInterface 의 default 메소드 → &quot;** Phone **&quot;
+        phone.sendCall();                       // &quot;따르릉따르릉~~&quot;
+        phone.play();                           // &quot;음악 연주합니다.&quot;
+        System.out.println(&quot;3과 5를 더하면 &quot; + phone.calculate(3, 5));   // PDA 에서 물려받은 calculate → 8
+        phone.schedule();                       // 자기 메소드 → &quot;일정 관리합니다.&quot;
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">** Phone **
+따르릉따르릉~~
+음악 연주합니다.
+3과 5를 더하면 8
+일정 관리합니다.</code></pre>
+        <div class="tip">인터페이스끼리는 <b>extends</b> (여러 개도 가능 · 58쪽) · 클래스는 <b>extends 하나 + implements 여러 개</b> (60 · 61쪽) · 클래스를 둘 extends 하면 <code>'{' expected</code> 컴파일 오류</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#multi" title="그림 — 인터페이스 다중 구현" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#multi" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 인터페이스 다중 구현 — 새 창으로 크게 보기</a></p></div>
+        <h3>⑦ 추상 클래스 vs 인터페이스 (62쪽)</h3>
+        <table class="ref">
+            <tr><th></th><th>추상 클래스</th><th>인터페이스</th></tr>
+            <tr><td>공통</td><td>객체 생성 불가 · 상속을 위한 슈퍼 클래스로만 · 다형성</td><td>(같음)</td></tr>
+            <tr><td>목적</td><td>대부분 구현해 두고, 서브 클래스에서 구현할 수밖에 없는 기능만 추상 메소드로</td><td>기능을 모두 공개한 <b>표준화 문서</b> · 모든 추상 메소드를 만들도록</td></tr>
+            <tr><td>구성</td><td>추상 + 일반 메소드 · 상수 · <b>변수 필드 O</b></td><td><b>변수 필드 X</b> · 상수 · 추상 · default · static · protected 불가 · <b>다중 상속 지원</b></td></tr>
+        </table>
+        <div class="tip">⚠️ 62쪽 인터페이스 칸의 “일반 메소드” — default 없이 몸체를 쓰면 <code>interface abstract methods cannot have body</code> 컴파일 오류 (javac 확인)</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#absvsif" title="그림 — 추상 클래스 vs 인터페이스" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#absvsif" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 추상 클래스 vs 인터페이스 — 새 창으로 크게 보기</a></p></div>
+        <h3>📌 교수님 문제 ① 예제2 리모컨 (Main2.java · 수업 사진)</h3>
+        <pre><code class="language-java">// Main2.java — 예제2 리모컨: RemoteControl 인터페이스 하나로 TV · 에어컨을 켜고 끄기 (교수님 예제 · 수업 사진)
+interface RemoteControl {                       // 리모컨 규격
+    void turnOn();                              // 켜기 (public abstract 생략)
+    void turnOff();                             // 끄기
+}                                               // RemoteControl 끝
+class TV implements RemoteControl {             // TV 가 리모컨 규격을 구현
+    @Override                                   // turnOn 구현
+    public void turnOn() {                      // public 꼭
+        System.out.println(&quot;TV를 켭니다.&quot;);       // TV 켜기
+    }                                           // turnOn 끝
+    @Override                                   // turnOff 구현
+    public void turnOff() {                     // public
+        System.out.println(&quot;TV를 끕니다.&quot;);       // TV 끄기
+    }                                           // turnOff 끝
+}                                               // TV 끝
+class AirConditioner implements RemoteControl { // 에어컨도 같은 규격을 구현
+    @Override                                   // turnOn 구현
+    public void turnOn() {                      // public
+        System.out.println(&quot;에어컨을 켭니다.&quot;);    // 에어컨 켜기
+    }                                           // turnOn 끝
+    @Override                                   // turnOff 구현
+    public void turnOff() {                     // public
+        System.out.println(&quot;에어컨을 끕니다.&quot;);    // 에어컨 끄기
+    }                                           // turnOff 끝
+}                                               // AirConditioner 끝
+public class 연습 {                              // 원래 이름 Main2 (사진은 Main) → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        RemoteControl tvRemote = new TV();      // 인터페이스 타입 변수 → TV 객체
+        RemoteControl airRemote = new AirConditioner();   // 같은 타입 변수 → 에어컨 객체
+        tvRemote.turnOn();                      // 실제 객체 TV 의 turnOn → &quot;TV를 켭니다.&quot;
+        airRemote.turnOn();                     // 실제 객체 에어컨의 turnOn → &quot;에어컨을 켭니다.&quot;
+        tvRemote.turnOff();                     // &quot;TV를 끕니다.&quot;
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">TV를 켭니다.
+에어컨을 켭니다.
+TV를 끕니다.</code></pre>
+        <h3>📌 교수님 문제 ② 3형식 [메서드 완성하기] — 도형 면적 (Main3.java)</h3>
+        <div class="tip">[문제] Shape 인터페이스를 구현한 Circle(반지름 5) · Rectangle(가로 4 · 세로 5)의 <code>calculateArea()</code> 내부 로직을 완성 · 힌트: 원 = 반지름 × 반지름 × 3.14 (Math.PI 가능) · 정답 실행 결과는 아래 (3.14 를 쓰면 원 면적 78.5)</div>
+        <pre><code class="language-java">// Main3.java — 3형식 [메서드 완성하기] 정답 (수업 파일 Main3.java)
+interface Shape {                               // 도형 규격
+    double calculateArea();                     // 면적을 돌려주는 추상 메소드
+}                                               // Shape 끝
+class Circle implements Shape {                 // 원
+    double radius = 5;                          // 반지름 5
+    @Override                                   // 수업 파일은 @Override 를 붙임 (문제지는 없음 · 선택)
+    public double calculateArea() {             // public 꼭
+        return radius * radius * Math.PI;       // [작성란] 5 × 5 × π → 78.53981633974483
+    }                                           // calculateArea 끝
+}                                               // Circle 끝
+class Rectangle implements Shape {              // 사각형
+    double width = 4;                           // 가로 4
+    double height = 5;                          // 세로 5
+    @Override                                   // 구현
+    public double calculateArea() {             // public
+        return width * height;                  // [작성란] 4.0 × 5.0 → 20.0 (double 끼리라 .0)
+    }                                           // calculateArea 끝
+}                                               // Rectangle 끝
+public class 연습 {                              // 원래 이름 Main3 → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Shape myCircle = new Circle();          // 인터페이스 타입 변수 → Circle 객체
+        Shape myRectangle = new Rectangle();    // 인터페이스 타입 변수 → Rectangle 객체
+        System.out.println(&quot;원 면적: &quot; + myCircle.calculateArea());       // Circle 의 것 → &quot;원 면적: 78.53981633974483&quot;
+        System.out.println(&quot;사각형 면적: &quot; + myRectangle.calculateArea()); // Rectangle 의 것 → &quot;사각형 면적: 20.0&quot;
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">원 면적: 78.53981633974483
+사각형 면적: 20.0</code></pre>
+        <h3>📌 교수님 문제 ③ 5형식 [전체 코딩하기] — 요리하기 (Main5.java)</h3>
+        <div class="tip">[문제] ① 반환 타입 · 매개변수 없는 <code>cook()</code> 을 가진 Cookable 인터페이스 ② RamenCooker — "물을 끓이고 스프와 면을 넣습니다." ③ SteakCooker — "고기를 굽습니다." ④ main 에서 <b>Cookable 타입 레퍼런스 변수</b>로 두 객체를 만들고 cook() 호출 · 직접 풀어 보기 → <a href="#code">💻 코딩테스트</a></div>
+        <pre><code class="language-java">// Main5.java — 5형식 [전체 코딩하기] 정답 (수업 파일 Main5.java)
+interface Cookable {                            // 1. 인터페이스 Cookable
+    void cook();                                // 반환 타입 void · 매개변수 없음 (public abstract 생략)
+}                                               // Cookable 끝
+class RamenCooker implements Cookable {         // 2. Cookable 구현
+    @Override                                   // cook 구현
+    public void cook() {                        // public 꼭
+        System.out.println(&quot;물을 끓이고 스프와 면을 넣습니다.&quot;);   // 라면
+    }                                           // cook 끝
+}                                               // RamenCooker 끝
+class SteakCooker implements Cookable {         // 3. Cookable 구현
+    @Override                                   // cook 구현
+    public void cook() {                        // public
+        System.out.println(&quot;고기를 굽습니다.&quot;);    // 스테이크
+    }                                           // cook 끝
+}                                               // SteakCooker 끝
+public class 연습 {                              // 4. 원래 이름 Main5 → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Cookable ramen = new RamenCooker();     // Cookable 타입 레퍼런스 변수 → RamenCooker 객체
+        Cookable steak = new SteakCooker();     // Cookable 타입 레퍼런스 변수 → SteakCooker 객체
+        ramen.cook();                           // &quot;물을 끓이고 스프와 면을 넣습니다.&quot;
+        steak.cook();                           // &quot;고기를 굽습니다.&quot;
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+        <pre class="io"><code class="language-text">물을 끓이고 스프와 면을 넣습니다.
+고기를 굽습니다.</code></pre>
+        <h3>괄호넣기 — 인터페이스 키워드 ( ① ) ( ② ) ( ③ )</h3>
+        <pre><code class="language-java">interface Cookable {
+    void cook();
+}
+class RamenCooker ( ① ) Cookable {
+    ( ② ) void cook() {
+        System.out.println(&quot;물을 끓이고 스프와 면을 넣습니다.&quot;);
+    }
+}
+( ③ ) class Calculator {
+    ( ③ ) int add(int a, int b);
+}</code></pre>
+        <div class="quiz-item" data-answers="implements" data-explain="클래스가 인터페이스를 구현할 때 implements · 인터페이스끼리 상속할 때는 extends">
+            <p class="quiz-q"><span class="quiz-cat">①</span>클래스가 인터페이스를 <b>구현</b>할 때 쓰는 키워드 ( ① ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="public" data-explain="인터페이스의 추상 메소드는 public abstract 가 생략된 것 → 구현할 때 public 을 빼면 attempting to assign weaker access privileges 컴파일 오류">
+            <p class="quiz-q"><span class="quiz-cat">②</span>인터페이스의 메소드를 구현할 때 <b>꼭 붙여야 하는</b> 접근 지정자 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="abstract" data-explain="몸체 없는 추상 메소드 앞에 abstract · 추상 메소드가 하나라도 있으면 클래스 앞에도 abstract 필수">
+            <p class="quiz-q"><span class="quiz-cat">③</span>추상 클래스 · 추상 메소드를 선언하는 키워드 ( ③ ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+    </section>
 
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 37 · 주관식 37<span class="week">2~10주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 42 · 주관식 42<span class="week">2~11주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -2403,6 +2800,46 @@ class TextBook extends Book {
             <button class="opt" type="button" data-opt="D"><b>D.</b> 실행 중 NullPointerException</button>
             <div class="mcq-exp"><b>정답 B</b> — private = 그 클래스 안에서만 (서브 클래스도 X · 10쪽) → 부모의 생성자(<code>super(x, y)</code>)나 메소드(<code>showPoint()</code>)를 거쳐서 · javac 로 확인</div>
         </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">38</span>11주차 — <b>메소드 오버라이딩</b>이 성립하려면 슈퍼 클래스의 메소드와 무엇이 같아야 하나?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 메소드 이름만 같으면 된다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 이름 · 매개변수 타입과 개수 · 리턴 타입이 모두 같아야 한다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 이름은 같고 매개변수 개수는 달라야 한다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 리턴 타입만 같으면 된다</button>
+            <div class="mcq-exp"><b>정답 B</b> — 오버라이딩 = 이름 · 매개변수 타입 및 개수 · 리턴 타입 등 모든 것을 동일하게 (5장 32 · 42쪽) · C 는 <b>오버로딩</b> 조건</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">39</span>11주차 Overriding.java — <code>Weapon weapon = new Cannon();</code> 다음 <code>weapon.fire()</code> 의 결과는? (Weapon 의 fire() 는 1, Cannon 의 fire() 는 10 을 리턴)</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 1 — 변수 타입이 Weapon 이라서</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 10 — 실제 객체 Cannon 의 오버라이딩된 메소드</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 컴파일 오류</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 11</button>
+            <div class="mcq-exp"><b>정답 B</b> — 실행할 메소드를 실행 시간에 실제 객체를 보고 정함 = <b>동적 바인딩</b> (39쪽) · 수업 결과 “대포의 살상 능력은 10” (java 로 확인)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">40</span>11주차 추상 클래스 — 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>new Calculator()</code> 처럼 추상 클래스로도 객체를 만들 수 있다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 추상 메소드가 하나라도 있으면 클래스 앞에 abstract 를 반드시 붙인다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 추상 메소드도 몸체 <code>{ }</code> 를 가져야 한다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 추상 클래스 타입의 레퍼런스 변수는 선언할 수 없다</button>
+            <div class="mcq-exp"><b>정답 B</b> (43쪽) — A 는 컴파일 오류 <code>Calculator is abstract; cannot be instantiated</code> (45쪽) · C 추상 메소드는 몸체 없이 <code>;</code> · D 레퍼런스 변수 선언은 가능</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">41</span>11주차 인터페이스 — <code>interface PhoneInterface { int TIMEOUT = 10000; }</code> 에서 <code>TIMEOUT</code> 앞에 <b>생략된</b> 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> public abstract</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> private static</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> public static final</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> protected final</button>
+            <div class="mcq-exp"><b>정답 C</b> — 인터페이스의 상수는 public 만 허용 · <code>public static final</code> 생략 (54쪽) → 값을 바꾸면 <code>cannot assign a value to final variable TIMEOUT</code> · A 는 추상 메소드에 생략된 것</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">42</span>11주차 — 다음 중 <b>컴파일되는</b> 선언은? (A · B · MP3Interface · J 는 인터페이스, PDA · B 는 상황에 맞는 클래스라고 가정)</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>class C extends PDA, B { }</code></button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>class SmartPhone extends PDA implements MobilePhoneInterface, MP3Interface { … }</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>class C implements A extends PDA { }</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>interface I implements J { }</code></button>
+            <div class="mcq-exp"><b>정답 B</b> (예제 5-9) — 클래스는 extends <b>하나</b> + implements <b>여러 개</b> 순서 · A 클래스 다중 상속 X · C extends 가 implements 보다 먼저 · D 인터페이스끼리는 <code>extends</code> — A · C · D 모두 javac <code>'{' expected</code></div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers=".class|class" data-explain=".java → javac 컴파일 → .class (JVM 이 실행)">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>자바 소스를 컴파일하면 만들어지는 <b>바이트코드 파일</b>의 확장자는?</p>
@@ -2626,10 +3063,40 @@ class TextBook extends Book {
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
+        <div class="quiz-item" data-answers="동적 바인딩|동적바인딩|dynamic binding|다이나믹 바인딩|런타임 바인딩" data-full="동적 바인딩" data-explain="5장 39쪽 · 반대로 오버로딩 · super.메소드() 는 정적 바인딩(컴파일 시 결정 · 40 · 42쪽)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 38</span>11주차 — 실행할 메소드를 <b>실행 시(run time)</b>에 결정해서 오버라이딩된 메소드가 항상 호출되는 것은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="추상 메소드|추상메소드|추상 메서드|추상메서드|abstract method|abstract 메소드" data-full="추상 메소드" data-explain="5장 43쪽 · 서브 클래스에서 오버라이딩하여 구현해야 함 · 하나라도 있으면 클래스도 abstract">
+            <p class="quiz-q"><span class="quiz-cat">주관식 39</span>11주차 — 선언되어 있으나 <b>구현되어 있지 않은</b>(몸체 없이 ; 로 끝나는) 메소드로, abstract 로 선언하는 것은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="default 메소드|default|디폴트 메소드|디폴트|default method|default 메서드|디폴트 메서드" data-full="default 메소드" data-explain="5장 54쪽 · Java 8 부터 · SamsungPhone 에 안 써도 gal24.printLogo() → ** Phone **">
+            <p class="quiz-q"><span class="quiz-cat">주관식 40</span>11주차 PhoneInterface 의 <code>printLogo()</code> 처럼 인터페이스 안에 <b>코드가 작성</b>되어 있고 구현 클래스에 <b>자동 상속</b>되는 메소드는? (키워드)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="extends|익스텐즈" data-explain="5장 58쪽 · 인터페이스끼리는 extends (여러 개 가능) · 클래스가 인터페이스를 구현할 때는 implements">
+            <p class="quiz-q"><span class="quiz-cat">주관식 41</span>11주차 — 인터페이스가 <b>다른 인터페이스를 상속</b>할 때 쓰는 키워드는? (<code>interface MobilePhoneInterface ___ PhoneInterface</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="78.5" data-explain="5 × 5 × 3.14 = 78.5 (java 로 확인) · Math.PI 를 쓰면 78.53981633974483">
+            <p class="quiz-q"><span class="quiz-cat">주관식 42</span>11주차 3형식 [메서드 완성하기] — 힌트대로 원의 면적을 <code>radius * radius * 3.14</code> 로 계산하면, 반지름 <code>radius = 5</code> 인 Circle 의 <code>calculateArea()</code> 가 돌려주는 값은?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
     </section>
 
     <section class="card" id="output">
-        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~10주차</span></h2>
+        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~11주차</span></h2>
         <div class="tip">📝 시험의 <b>“실행결과를 쓰시오”</b> 대비 — 코드를 눈으로 따라가며 화면에 찍힐 결과를 적고 <b>확인</b>을 누르세요. 줄마다 <b>Enter</b>, 띄어쓰기 개수·빈 줄은 채점에서 무시하고 <b>글자·숫자·기호</b>는 정확히 봐요 (칸수 문제만 띄어쓰기까지). <code>print</code> 는 줄을 안 바꾸고 <code>println</code> 은 바꿔요. 정답은 모두 <b>실제로 실행한 결과</b>예요.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="oq-score"></div>
@@ -3294,10 +3761,109 @@ public class Main {
 </script>
             <div class="oq-why">💡 <b>풀이</b> — <code>m.toString()</code> → <code>super.toString()</code> 자바 + " " + 11 → <b>자바 11</b> · <code>b.toString() + m.toString()</code> → 웹 + 자바 11 → <b>웹자바 11</b> (사이에 칸 없음)</div>
         </div>
+        <div class="oq" id="oq-oj28">
+            <p class="oq-q"><span class="oq-no">28</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">11주차</span></p>
+            <pre><code class="language-java">class Shape {
+    public void paint() {
+        draw();
+    }
+    public void draw() {
+        System.out.println(&quot;Shape&quot;);
+    }
+}
+class Line extends Shape {
+    public void draw() {
+        System.out.println(&quot;Line&quot;);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Shape a = new Shape();
+        Shape b = new Line();
+        a.paint();
+        b.paint();
+        b.draw();
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+Shape
+Line
+Line
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — <code>a.paint()</code> → Shape 객체의 draw() → <b>Shape</b> · <code>b.paint()</code> → paint() 는 부모 것이지만 그 안의 <code>draw()</code> 는 실제 객체 Line 의 것(<b>동적 바인딩</b> · 5장 39쪽) → <b>Line</b> · <code>b.draw()</code> → <b>Line</b></div>
+        </div>
+        <div class="oq" id="oq-oj29">
+            <p class="oq-q"><span class="oq-no">29</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">11주차</span></p>
+            <pre><code class="language-java">abstract class Calc {
+    abstract int run(int a, int b);
+    int twice(int a, int b) {
+        return run(a, b) * 2;
+    }
+}
+class Add extends Calc {
+    int run(int a, int b) {
+        return a + b;
+    }
+}
+class Sub extends Calc {
+    int run(int a, int b) {
+        return a - b;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Calc c = new Add();
+        System.out.println(c.twice(3, 4));
+        c = new Sub();
+        System.out.println(c.twice(3, 4));
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+14
+-2
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — 추상 클래스에도 일반 메소드(twice)가 있을 수 있음 (43쪽) · <code>run</code> 은 실제 객체 것 → Add: (3 + 4) × 2 = <b>14</b> · Sub: (3 − 4) × 2 = <b>-2</b></div>
+        </div>
+        <div class="oq" id="oq-oj30">
+            <p class="oq-q"><span class="oq-no">30</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">11주차</span></p>
+            <pre><code class="language-java">interface Phone {
+    int TIMEOUT = 3;
+    int call();
+    default int logo() {
+        return 1;
+    }
+}
+class Galaxy implements Phone {
+    public int call() {
+        return TIMEOUT * 10;
+    }
+}
+class IPhone implements Phone {
+    public int call() {
+        return 7;
+    }
+    public int logo() {
+        return 2;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Phone p = new Galaxy();
+        System.out.println(p.logo() + &quot; &quot; + p.call());
+        p = new IPhone();
+        System.out.println(p.logo() + &quot; &quot; + p.call());
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+1 30
+2 7
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — Galaxy 는 logo() 를 안 써서 <b>default 메소드</b>를 물려받음 → 1 · 상수 TIMEOUT 3 × 10 = 30 → <b>1 30</b> · IPhone 은 logo() 를 다시 씀 → 2 · call() 7 → <b>2 7</b></div>
+        </div>
     </section>
 
     <section class="card" id="code">
-        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~10주차</span></h2>
+        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~11주차</span></h2>
         <div class="tip">📝 문제를 읽고 <b>전체 소스코드</b>를 붙여넣은 뒤 <b>▶ 채점하기</b>를 누르세요. 입력 예 말고도 <b>숨은 테스트</b> 여러 개로 실제로 실행해서 출력이 모두 같아야 통과예요. Java 는 인터넷의 채점 서버(Wandbox · OpenJDK)에서 실행돼요. <code>package</code> 줄이나 클래스 이름은 그대로 붙여넣어도 괜찮아요. 입력은 <code>Scanner</code> 로 받습니다.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드를 채점 문제로 만든 것 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="ct-score"></div>
@@ -3843,6 +4409,97 @@ public class Main {
         TextBook t = new TextBook(title, pages, school);
         System.out.println(t.toString());
         sc.close();
+    }
+}
+</script>
+        </div>
+        <div class="ct" id="ct-j18" data-lang="java" data-must="[&quot;interface\\s+Shape&quot;, &quot;implements\\s+Shape&quot;, &quot;calculateArea\\s*\\(&quot;]" data-must-msg="interface Shape · implements Shape · calculateArea() 를 써야 해요.">
+            <p class="ct-q"><span class="ct-no">18</span>3형식 [메서드 완성하기] — 도형 면적 (Shape 인터페이스)<span class="ct-tag">11주차 · 교수님 3형식 · 인터페이스</span></p>
+            <p class="ct-desc">반지름 · 가로 · 세로(실수)를 입력받아요. <code>double calculateArea()</code> 하나를 가진 <b>Shape 인터페이스</b>를 만들고, Circle(반지름) · Rectangle(가로 · 세로)이 <b>implements Shape</b> 해서 면적을 돌려주게 완성하세요 (원 = 반지름 × 반지름 × <code>Math.PI</code>). main 에서 <b>Shape 타입 변수</b>로 두 객체를 만들어 아래처럼 출력 · 교수님 3형식 문제(반지름 5 · 가로 4 · 세로 5)를 입력으로 바꾼 것 · <code>public class Main</code></p>
+            <div class="ct-ex"><pre class="io ct-in"><code>5
+4
+5</code></pre><pre class="io ct-out"><code>원 면적: 78.53981633974483
+사각형 면적: 20.0</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="3형식 [메서드 완성하기] — 도형 면적 (Shape 인터페이스) 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "5\n4\n5\n", "expect": "원 면적: 78.53981633974483\n사각형 면적: 20.0\n"}, {"stdin": "2\n3\n7\n", "expect": "원 면적: 12.566370614359172\n사각형 면적: 21.0\n"}, {"stdin": "1.5\n2.5\n4\n", "expect": "원 면적: 7.0685834705770345\n사각형 면적: 10.0\n"}, {"stdin": "10\n0.5\n8\n", "expect": "원 면적: 314.1592653589793\n사각형 면적: 4.0\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+import java.util.Scanner;
+
+interface Shape {                               // 도형 규격
+    double calculateArea();                     // 면적
+}
+
+class Circle implements Shape {
+    double radius;
+    Circle(double radius) {
+        this.radius = radius;
+    }
+    public double calculateArea() {             // public 꼭
+        return radius * radius * Math.PI;       // 반지름 × 반지름 × π
+    }
+}
+
+class Rectangle implements Shape {
+    double width;
+    double height;
+    Rectangle(double width, double height) {
+        this.width = width;
+        this.height = height;
+    }
+    public double calculateArea() {
+        return width * height;                  // 가로 × 세로
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double r = sc.nextDouble();             // 반지름
+        double w = sc.nextDouble();             // 가로
+        double h = sc.nextDouble();             // 세로
+        Shape myCircle = new Circle(r);         // 인터페이스 타입 변수
+        Shape myRectangle = new Rectangle(w, h);
+        System.out.println("원 면적: " + myCircle.calculateArea());
+        System.out.println("사각형 면적: " + myRectangle.calculateArea());
+        sc.close();
+    }
+}
+</script>
+        </div>
+        <div class="ct" id="ct-j19" data-lang="java" data-must="[&quot;interface\\s+Cookable&quot;, &quot;implements\\s+Cookable[\\s\\S]*implements\\s+Cookable&quot;, &quot;Cookable\\s+\\w+\\s*=\\s*new\\s+RamenCooker&quot;, &quot;Cookable\\s+\\w+\\s*=\\s*new\\s+SteakCooker&quot;]" data-must-msg="interface Cookable · implements Cookable 두 번 · Cookable 타입 변수로 new RamenCooker() · new SteakCooker() 를 써야 해요.">
+            <p class="ct-q"><span class="ct-no">19</span>5형식 [전체 코딩하기] — 요리하기 (Cookable)<span class="ct-tag">11주차 · 교수님 5형식 · 인터페이스</span></p>
+            <p class="ct-desc">① 반환 타입 · 매개변수가 없는 <code>cook()</code> 을 가진 <b>Cookable 인터페이스</b> ② <b>RamenCooker</b> — cook() 이 "물을 끓이고 스프와 면을 넣습니다." 출력 ③ <b>SteakCooker</b> — "고기를 굽습니다." 출력 ④ main 에서 <b>Cookable 타입 레퍼런스 변수</b>로 두 객체를 만들고 cook() 호출 (입력 없음 · <code>public class Main</code>)</p>
+            <div class="ct-ex"><pre class="io ct-in"><code>(입력 없음)</code></pre><pre class="io ct-out"><code>물을 끓이고 스프와 면을 넣습니다.
+고기를 굽습니다.</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="5형식 [전체 코딩하기] — 요리하기 (Cookable) 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "", "expect": "물을 끓이고 스프와 면을 넣습니다.\n고기를 굽습니다.\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+interface Cookable {
+    void cook();                                // 반환 타입 없음 · 매개변수 없음
+}
+
+class RamenCooker implements Cookable {
+    public void cook() {
+        System.out.println("물을 끓이고 스프와 면을 넣습니다.");
+    }
+}
+
+class SteakCooker implements Cookable {
+    public void cook() {
+        System.out.println("고기를 굽습니다.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Cookable ramen = new RamenCooker();     // Cookable 타입 레퍼런스 변수
+        Cookable steak = new SteakCooker();
+        ramen.cook();
+        steak.cook();
     }
 }
 </script>

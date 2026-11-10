@@ -266,6 +266,109 @@
     <text x="14" y="470" class="s">println(t1) 만 써도 toString() 이 자동으로 불림</text></g>
 </svg>
 
+<svg data-fig="override" viewBox="0 0 600 470" role="img" aria-label="Weapon 타입 변수 weapon 이 Weapon 객체와 Cannon 객체를 가리킬 때 fire 결과" hidden>
+  <g data-s="1"><rect x="16" y="14" width="250" height="78" rx="10" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/>
+    <text x="141" y="44" text-anchor="middle" class="b m">Weapon</text><text x="141" y="76" text-anchor="middle" class="s m">fire() → 1</text>
+    <path class="ln" d="M141,128 L141,96"/><path d="M135,106 L141,95 L147,106 Z" style="fill:var(--ink2)"/>
+    <text x="152" y="118" class="s m">extends</text>
+    <rect x="16" y="130" width="250" height="78" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="141" y="160" text-anchor="middle" class="b m">Cannon</text><text x="141" y="192" text-anchor="middle" class="s m">@Override fire() → 10</text></g>
+  <g data-s="2"><rect x="334" y="14" width="250" height="78" rx="10" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/>
+    <text x="459" y="44" text-anchor="middle" class="s b">Weapon 객체</text><text x="459" y="76" text-anchor="middle" class="s m">fire() → 1</text>
+    <rect x="16" y="262" width="200" height="54" rx="8" style="fill:var(--hl);fill-opacity:.25;stroke:var(--ink2);stroke-width:2"/>
+    <text x="116" y="295" text-anchor="middle" class="s m b">Weapon weapon</text>
+    <path class="ln" d="M216,272 L330,70"/><text x="262" y="160" class="s b">①</text>
+    <text x="16" y="358" class="s m">① weapon.fire() → 1</text></g>
+  <g data-s="3"><rect x="334" y="130" width="250" height="122" rx="10" style="fill:var(--inh);fill-opacity:.10;stroke:var(--inh);stroke-width:2"/>
+    <text x="459" y="154" text-anchor="middle" class="s b">Cannon 객체</text>
+    <rect x="350" y="166" width="218" height="34" rx="6" style="fill:var(--card);stroke:var(--ink2);stroke-width:1.4"/>
+    <text x="459" y="189" text-anchor="middle" class="s m">Weapon 부분 fire()</text>
+    <rect x="350" y="208" width="218" height="34" rx="6" style="fill:var(--inh);fill-opacity:.25;stroke:var(--inh);stroke-width:1.4"/>
+    <text x="459" y="231" text-anchor="middle" class="s m">Cannon 부분 fire()</text>
+    <path class="ln" d="M216,296 L330,236" style="stroke:var(--inh);stroke-width:2.4"/><text x="270" y="292" class="s b">②</text></g>
+  <g data-s="4"><path class="ln" d="M568,183 C596,192 596,214 572,224" style="stroke:var(--te);stroke-width:2.6"/>
+    <text x="16" y="394" class="s m b">② weapon.fire() → 10</text>
+    <text x="16" y="428" class="s">변수 타입(Weapon)이 아니라 실제 객체 Cannon 의 fire()</text>
+    <text x="16" y="458" class="s">= 동적 바인딩 · 실행할 때 결정 (39쪽)</text></g>
+</svg>
+
+<svg data-fig="abstract" viewBox="0 0 600 470" role="img" aria-label="추상 클래스 Calculator 는 객체를 못 만들고 GoodCal 이 추상 메소드를 모두 구현" hidden>
+  <g data-s="1"><rect x="110" y="14" width="380" height="150" rx="10" style="fill:var(--card);stroke:var(--ink2);stroke-width:2;stroke-dasharray:7 5"/>
+    <text x="300" y="44" text-anchor="middle" class="b m">abstract class Calculator</text>
+    <text x="130" y="80" class="s m">abstract int add(a, b);</text>
+    <text x="130" y="110" class="s m">abstract int subtact(a, b);</text>
+    <text x="130" y="140" class="s m">abstract double average(arr);</text></g>
+  <g data-s="2"><text x="16" y="200" class="s m b" style="fill:var(--te)">new Calculator()  ✕</text>
+    <text x="300" y="200" class="s">객체 생성 불가 · 컴파일 오류 (45쪽)</text></g>
+  <g data-s="3"><path class="ln" d="M300,248 L300,168"/><path d="M294,178 L300,167 L306,178 Z" style="fill:var(--ink2)"/>
+    <text x="310" y="232" class="s m">extends</text>
+    <rect x="110" y="250" width="380" height="130" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="300" y="280" text-anchor="middle" class="b m">class GoodCal</text>
+    <text x="130" y="312" class="s m">add → a + b</text>
+    <text x="130" y="340" class="s m">subtact → a - b</text>
+    <text x="130" y="368" class="s m">average → sum / arr.length</text></g>
+  <g data-s="4"><text x="16" y="418" class="s m b">new GoodCal()  ✓</text>
+    <text x="200" y="418" class="s m">5 · -1 · 3.0</text></g>
+  <g data-s="5"><text x="16" y="456" class="s">하나라도 안 만들면 GoodCal 도 abstract 로 선언해야 해요 (46쪽)</text></g>
+</svg>
+
+<svg data-fig="iface" viewBox="0 0 600 480" role="img" aria-label="PhoneInterface 의 상수 추상 메소드 default 메소드와 이를 구현한 SamsungPhone IPhone" hidden>
+  <g data-s="1"><rect x="90" y="12" width="420" height="168" rx="10" style="fill:var(--card);stroke:var(--te);stroke-width:2.2"/>
+    <text x="300" y="42" text-anchor="middle" class="b m">interface PhoneInterface</text>
+    <text x="110" y="78" class="s b">상수</text><text x="190" y="78" class="s m">int TIMEOUT = 10000;</text>
+    <text x="110" y="112" class="s b">추상</text><text x="190" y="112" class="s m">void sendCall();</text>
+    <text x="190" y="138" class="s m">void receiveCall();</text>
+    <text x="110" y="168" class="s b">default</text><text x="190" y="168" class="s m">void printLogo() { … }</text></g>
+  <g data-s="2"><rect x="12" y="250" width="280" height="96" rx="10" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <text x="152" y="278" text-anchor="middle" class="s b m">SamsungPhone</text>
+    <text x="24" y="306" class="s m">public void sendCall()</text><text x="24" y="332" class="s m">public void receiveCall()</text>
+    <path class="ln" d="M152,248 L240,184" style="stroke-dasharray:6 5"/><text x="96" y="226" class="s m">implements</text></g>
+  <g data-s="3"><rect x="308" y="250" width="280" height="96" rx="10" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:2"/>
+    <text x="448" y="278" text-anchor="middle" class="s b m">IPhone</text>
+    <text x="320" y="306" class="s m">public void sendCall()</text><text x="320" y="332" class="s m">public void receiveCall()</text>
+    <path class="ln" d="M448,248 L360,184" style="stroke-dasharray:6 5"/></g>
+  <g data-s="4"><text x="12" y="384" class="s m b">gal24.printLogo()</text><text x="210" y="384" class="s">→ ** Phone ** (default 자동 상속)</text></g>
+  <g data-s="5"><text x="12" y="420" class="s m b" style="fill:var(--te)">new PhoneInterface()  ✕</text><text x="300" y="420" class="s">객체 생성 불가</text>
+    <text x="12" y="456" class="s m b">PhoneInterface p = new IPhone();  ✓</text></g>
+</svg>
+
+<svg data-fig="multi" viewBox="0 0 600 490" role="img" aria-label="SmartPhone 은 PDA 를 상속하고 MobilePhoneInterface 와 MP3Interface 를 구현" hidden>
+  <g data-s="1"><rect x="12" y="12" width="270" height="66" rx="10" style="fill:var(--card);stroke:var(--te);stroke-width:2"/>
+    <text x="147" y="38" text-anchor="middle" class="s b m">PhoneInterface</text><text x="147" y="64" text-anchor="middle" class="s m">sendCall · receiveCall</text>
+    <rect x="318" y="12" width="270" height="66" rx="10" style="fill:var(--card);stroke:var(--te);stroke-width:2"/>
+    <text x="453" y="38" text-anchor="middle" class="s b m">MP3Interface</text><text x="453" y="64" text-anchor="middle" class="s m">play · stop</text></g>
+  <g data-s="2"><rect x="12" y="132" width="270" height="70" rx="10" style="fill:var(--card);stroke:var(--te);stroke-width:2"/>
+    <text x="147" y="158" text-anchor="middle" class="s b m">MobilePhoneInterface</text><text x="147" y="186" text-anchor="middle" class="s m">+ sendSMS · receiveSMS</text>
+    <path class="ln" d="M147,130 L147,82"/><path d="M141,92 L147,81 L153,92 Z" style="fill:var(--ink2)"/><text x="156" y="112" class="s m">extends</text></g>
+  <g data-s="3"><rect x="318" y="132" width="270" height="70" rx="10" style="fill:var(--hl);fill-opacity:.2;stroke:var(--ink2);stroke-width:2"/>
+    <text x="453" y="158" text-anchor="middle" class="s b m">class PDA</text><text x="453" y="186" text-anchor="middle" class="s m">calculate(x, y)</text></g>
+  <g data-s="4"><rect x="120" y="272" width="360" height="74" rx="10" style="fill:var(--inh);fill-opacity:.16;stroke:var(--inh);stroke-width:2.4"/>
+    <text x="300" y="300" text-anchor="middle" class="s b m">class SmartPhone</text><text x="300" y="330" text-anchor="middle" class="s m">+ schedule()</text>
+    <path class="ln" d="M400,270 L453,206"/><text x="438" y="246" class="s m">extends</text>
+    <path class="ln" d="M200,270 L147,206" style="stroke-dasharray:6 5"/>
+    <path class="ln" d="M480,300 L596,300 L596,45 L590,45" style="stroke-dasharray:6 5"/><text x="210" y="246" class="s m">implements</text></g>
+  <g data-s="5"><text x="12" y="388" class="s">클래스는 extends 하나만 · 인터페이스는 implements 여러 개</text>
+    <text x="12" y="420" class="s">구현할 추상 메소드 = 4개(Mobile) + 2개(MP3) = 6개 · 모두 public</text>
+    <text x="12" y="452" class="s">calculate() 는 PDA 에서 물려받음 → 3과 5를 더하면 8</text></g>
+</svg>
+
+<svg data-fig="absvsif" viewBox="0 0 600 480" role="img" aria-label="추상 클래스와 인터페이스 비교 표" hidden>
+  <g data-s="1"><rect x="150" y="12" width="215" height="44" rx="8" style="fill:var(--inh);fill-opacity:.18;stroke:var(--inh);stroke-width:2"/>
+    <text x="257" y="41" text-anchor="middle" class="s b">추상 클래스</text>
+    <rect x="375" y="12" width="215" height="44" rx="8" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/>
+    <text x="482" y="41" text-anchor="middle" class="s b">인터페이스</text>
+    <text x="12" y="98" class="s b">선언</text><text x="160" y="98" class="s m">abstract class</text><text x="385" y="98" class="s m">interface</text></g>
+  <g data-s="2"><text x="12" y="146" class="s b">자식이 쓰는 말</text><text x="160" y="146" class="s m">extends (하나)</text><text x="385" y="146" class="s m">implements (여러 개)</text></g>
+  <g data-s="3"><text x="12" y="194" class="s b">메소드</text><text x="160" y="194" class="s">추상 + 일반 메소드</text><text x="385" y="194" class="s">추상 · default · static</text></g>
+  <g data-s="4"><text x="12" y="242" class="s b">필드</text><text x="160" y="242" class="s">상수 · 변수 필드 O</text><text x="385" y="242" class="s">상수만 · 변수 필드 X</text></g>
+  <g data-s="5"><text x="12" y="290" class="s b">객체 생성</text><text x="160" y="290" class="s m b" style="fill:var(--te)">new ✕</text><text x="385" y="290" class="s m b" style="fill:var(--te)">new ✕</text>
+    <text x="12" y="338" class="s b">공통 목적</text><text x="160" y="338" class="s">상속을 위한 슈퍼 클래스 · 다형성 실현 (62쪽)</text></g>
+  <g data-s="6"><text x="12" y="392" class="s">인터페이스는 protected 접근 지정 불가 · 다중 상속 지원</text>
+    <text x="12" y="426" class="s">추상 클래스 = 대부분 구현 + 꼭 필요한 것만 추상</text>
+    <text x="12" y="458" class="s">인터페이스 = 기능을 모두 공개한 표준화 문서 (62쪽)</text></g>
+</svg>
+
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -353,7 +456,47 @@
             "과제 3 · 4 — <b>Book</b>(제목 · 페이지수 · 저자 · printInfo · toString) → <b>Magazine</b>(발매일) · <b>TextBook</b>(학년학기 · 학교)",
             "생성자 첫 줄 <code>super(name,addr,phone)</code> — 부모의 private 필드는 <b>부모 생성자</b>가 채움 · 출력은 내 필드 print → <code>super.printInfo()</code> → 내 필드 println = <b>한 줄</b>",
             "TextBook 은 toString 을 <b>다시 써서</b> <code>super.toString()</code> + 학년학기 · 학교 · <code>println(t1)</code> 만 써도 toString() 이 자동으로 불림" ],
-          note: "🤖 toString 안에서 <code>super.</code> 없이 <code>toString()</code> 을 부르면 자기 자신을 끝없이 불러 <b>StackOverflowError</b> · public 을 빼면 <code>attempting to assign weaker access privileges</code> (둘 다 javac · java 로 확인) · 같은 이름으로 다시 쓰기 = <b>메소드 오버라이딩</b> (5장 32쪽)" }
+          note: "🤖 toString 안에서 <code>super.</code> 없이 <code>toString()</code> 을 부르면 자기 자신을 끝없이 불러 <b>StackOverflowError</b> · public 을 빼면 <code>attempting to assign weaker access privileges</code> (둘 다 javac · java 로 확인) · 같은 이름으로 다시 쓰기 = <b>메소드 오버라이딩</b> (5장 32쪽)" },
+        { id: "override", week: 11, tab: "⑩ 오버라이딩", src: "5장 32 · 39 · 41쪽 — 메소드 오버라이딩 · 동적 바인딩 · 예제 5-6 Weapon → Cannon · 11주차 수업 파일 Overriding.java",
+          steps: [
+            "Cannon 이 Weapon 의 <code>fire()</code> 를 <b>이름 · 매개변수 · 리턴 타입</b>까지 똑같이 다시 씀 = <b>메소드 오버라이딩</b> (32쪽)",
+            "① <code>weapon = new Weapon();</code> → Weapon 객체 → <code>fire()</code> → <b>1</b>",
+            "② <code>weapon = new Cannon();</code> → 변수 타입은 Weapon 인데 실제 객체는 <b>Cannon</b> (안에 Weapon 부분 + Cannon 부분)",
+            "<code>weapon.fire()</code> → 실행할 때 실제 객체를 보고 <b>Cannon 의 fire()</b> → <b>10</b> = <b>동적 바인딩</b> (39쪽)" ],
+          note: "🤖 접근 범위를 좁히면 (protected → private) <code>attempting to assign weaker access privileges</code> · <code>@Override</code> 는 선택이지만 붙이면 이름 · 매개변수 실수를 컴파일 오류로 잡아 줌 (둘 다 javac 로 확인) · super.fire() 는 정적 바인딩으로 부모 것 (40쪽)" },
+        { id: "abstract", week: 11, tab: "⑪ 추상 클래스", src: "5장 43 ~ 50쪽 — 추상 메소드 · 추상 클래스 · 객체 생성 불가 · 상속 2가지 · 예제 5-7 Calculator → GoodCalc · 11주차 수업 파일 CalcMain.java",
+          steps: [
+            "<b>abstract class Calculator</b> — 추상 메소드 3개 (몸체 <code>{ }</code> 없이 <code>;</code>) · 추상 메소드가 하나라도 있으면 클래스 앞에 <b>abstract 필수</b> (43쪽)",
+            "<code>new Calculator()</code> → <b>컴파일 오류</b> — 추상 클래스는 객체를 만들 수 없음 (45쪽)",
+            "<b>GoodCal extends Calculator</b> — 추상 메소드 3개를 <b>모두 구현</b>(오버라이딩) → 일반 클래스 (46쪽 구현 상속)",
+            "<code>new GoodCal()</code> ✓ → <code>add(2,3)</code> 5 · <code>subtact(2,3)</code> -1 · <code>average({2,3,4})</code> 3.0",
+            "하나라도 안 만들면 → GoodCal 도 <b>abstract</b> 로 선언해야 함 (46쪽 단순 상속)" ],
+          note: "수업 파일의 메소드 이름은 <code>subtact</code>(교재는 subtract) — 부모 · 자식이 같은 이름이라 문제없음 · javac: <code>Calculator is abstract; cannot be instantiated</code> · 추상 메소드가 없어도 abstract class 로 선언할 수 있음 (43쪽 ②)" },
+        { id: "iface", week: 11, tab: "⑫ 인터페이스", src: "5장 51 ~ 57쪽 — 인터페이스 구성 요소(상수 · 추상 · default) · 특징 · implements · 11주차 수업 파일 PhoneInterface.java · PhoneMain.java",
+          steps: [
+            "<b>interface PhoneInterface</b> — 상수 <code>TIMEOUT</code>(public static final 생략) · 추상 메소드(public abstract 생략) · <b>default</b> 메소드 (54쪽)",
+            "<b>SamsungPhone implements</b> — 추상 메소드를 <b>모두</b> 구현 · <b>public 꼭</b> (빼면 컴파일 오류 · 60쪽)",
+            "<b>IPhone implements</b> — 같은 규격 · 다른 구현 (51쪽 “회사마다 구현은 다름”)",
+            "<code>gal24.printLogo()</code> → 안 썼는데도 <b>** Phone **</b> — default 메소드는 구현 클래스에 <b>자동 상속</b>",
+            "<code>new PhoneInterface()</code> ✕ (객체 생성 불가) · <code>PhoneInterface p = new IPhone();</code> ✓ (레퍼런스 변수는 가능 · 55쪽)" ],
+          note: "javac: public 을 빼면 <code>attempting to assign weaker access privileges; was public</code> · 상수에 대입하면 <code>cannot assign a value to final variable TIMEOUT</code> · default 없이 몸체를 쓰면 <code>interface abstract methods cannot have body</code>" },
+        { id: "multi", week: 11, tab: "⑬ 다중 구현", src: "5장 58 ~ 61쪽 — 인터페이스 상속(extends) · 다중 인터페이스 구현 · 예제 5-9 SmartPhone · 11주차 수업 파일 InterfaceEx.java",
+          steps: [
+            "인터페이스 둘 — <b>PhoneInterface</b>(sendCall · receiveCall) · <b>MP3Interface</b>(play · stop)",
+            "<b>MobilePhoneInterface extends PhoneInterface</b> — 인터페이스끼리는 <b>extends</b> · sendSMS · receiveSMS 추가 → 추상 메소드 4개 (58쪽)",
+            "<b>class PDA</b> — 보통 클래스 · <code>calculate(x, y)</code>",
+            "<b>class SmartPhone extends PDA implements MobilePhoneInterface, MP3Interface</b> — 클래스는 <b>하나만</b> extends · 인터페이스는 <b>여러 개</b> implements (60 · 61쪽)",
+            "구현할 추상 메소드 4 + 2 = <b>6개</b>(모두 public) · <code>calculate(3, 5)</code> 는 PDA 에서 물려받아 <b>8</b> · <code>schedule()</code> 은 SmartPhone 만의 메소드" ],
+          note: "🤖 클래스를 둘 extends 하면 javac <code>'{' expected</code> (클래스 다중 상속 X) · 인터페이스는 <code>interface A extends B, C</code> 처럼 여러 개 상속 가능 (58쪽 MusicPhoneInterface)" },
+        { id: "absvsif", week: 11, tab: "⑭ 추상 vs 인터페이스", src: "5장 62쪽 — 추상 클래스와 인터페이스 비교 (유사점 · 차이점)",
+          steps: [
+            "선언 — <code>abstract class</code> / <code>interface</code>",
+            "자식 쪽 — 추상 클래스는 <b>extends</b> (하나) · 인터페이스는 클래스가 <b>implements</b> (여러 개)",
+            "메소드 — 추상 클래스는 추상 + <b>일반</b> 메소드 · 인터페이스는 추상 · default · static (+ private)",
+            "필드 — 추상 클래스는 상수 · <b>변수 필드 O</b> · 인터페이스는 <b>변수 필드 X</b> (상수만)",
+            "공통 — 둘 다 <b>객체 생성 불가</b> · 상속을 위한 슈퍼 클래스로만 · <b>다형성</b> 실현",
+            "목적 — 추상 클래스 = 대부분 구현해 두고 꼭 필요한 것만 추상 · 인터페이스 = 기능을 모두 공개한 <b>표준화 문서</b> · protected 불가 · 다중 상속 지원" ],
+          note: "⚠️ 62쪽 인터페이스 칸에 “일반 메소드” 도 있지만 default 없이 몸체를 쓰면 컴파일 오류 (javac 확인) — 코드가 있는 건 default · static · private 만 (54쪽)" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
