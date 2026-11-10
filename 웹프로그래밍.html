@@ -22,7 +22,7 @@
 
     <header class="page-head">
         <h1>웹프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 10주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29 · 10/13 · 10/27 · 11/3) · 강의시간에 나온 내용 전부 정리</p>
+        <p>1주차 ~ 11주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29 · 10/13 · 10/27 · 11/3 · 11/10) · 강의시간에 나온 내용 전부 정리</p>
     </header>
 
     <div id="week-nav" data-subject="웹프로그래밍"></div>
@@ -72,6 +72,7 @@
         <a href="#s38">38.🔥이벤트4요소</a>
         <a href="#s39">39.요소순회·JSON</a>
         <a href="#s40">40.🔥배열메서드·CRUD</a>
+        <a href="#s41">41.🎮두더지·map·filter</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1597,6 +1598,217 @@ findexIndex : 1
         </table>
         <div class="tip">🤖 HTTP · SQL 칸은 CRUD 를 설명할 때 흔히 짝짓는 표 (위키백과 CRUD — Update 는 통째로 바꾸면 PUT · 일부만 고치면 PATCH) · 오늘 배열 메서드로 보면 C = push · unshift / R = forEach · includes · indexOf · findIndex / U = findIndex 로 찾은 칸에 <code>arr[i] = 새 값</code> / D = pop · shift<br><span class="wk-tag note">✍️ 필기</span> — “다음주에 서버 백엔드 요청해서 화면에 투두리스트 나오게 하기” → <a href="#s39">39번</a> 요청 · 응답 · JSON 흐름 그대로: 요청 → 응답(JSON 텍스트) → <code>JSON.parse</code> → 객체 배열 → forEach 로 li 를 만들어 화면에 (🤖 흐름 정리 · 다음 주에 쓸 코드는 아직 몰라요)</div>
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#crud" title="그림 — 프런트엔드 · 백엔드 · CRUD" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#crud" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 프런트엔드 · 백엔드 · CRUD — 새 창으로 크게 보기</a></p></div>
+    </section>
+    <section class="card" id="s41">
+        <h2>41. 🎮 11주차 — 미니게임 과제 · 두더지잡기(setInterval · Math.random) · 선택 삭제 · map · filter<span class="week">11주차</span></h2>
+        <div class="tip"><span class="wk-tag note">✍️ 필기</span> 과제 — <b>수업시간에 했던 두더지게임 같은 미니게임 1개</b> · 수업에서 언급한 <b>내장객체 · 함수 범위 안</b> · <b>200줄 이하</b> · <b>겹치지 않는 주제</b>일수록 높은 점수 · 제출 <b>11/17(화) 09:55</b> 까지 (⚠️ 필기는 “200줄 미만”, 공지는 “이하”) · 자세한 정리는 <a href="weeks/웹프로그래밍-11주차.html" target="_blank" rel="noopener">11주차 페이지</a></div>
+        <p>수업 파일 <b>1110_01 source.html</b> (두더지잡기) · <b>1027_01_event.html</b> (선택 수정 · 삭제 버튼 추가) · <b>1110_02.js</b> (filter · map) · 결과는 크롬 · node 로 직접 확인했어요.</p>
+        <h3>두더지잡기 게임 — 1초마다 랜덤 위치 · 누르면 점수 (1110_01 source.html)</h3>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;                                                  &lt;!-- HTML5 문서 --&gt;
+&lt;html lang=&quot;ko&quot;&gt;                                                 &lt;!-- 문서 시작 · 한국어 --&gt;
+&lt;head&gt;                                                           &lt;!-- 문서 정보 --&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;                                         &lt;!-- 한글이 안 깨지게 --&gt;
+  &lt;title&gt;두더지잡기 게임&lt;/title&gt;                                    &lt;!-- 탭 제목 --&gt;
+  &lt;style&gt;                                                        /* CSS 시작 */
+    body {                                                       /* 페이지 전체 */
+      font-family: &#x27;Segoe UI&#x27;, Tahoma, Geneva, Verdana, sans-serif;   /* 글꼴 (앞에서부터 있는 것) */
+      background-color: #f0f2f5;                                 /* 연한 회색 배경 */
+      margin: 0;                                                 /* 바깥 여백 없앰 */
+      padding: 20px;                                             /* 안쪽 여백 20px */
+      display: flex;                                             /* 자식들을 flex 로 배치 */
+      flex-direction: column;                                    /* 위 → 아래로 */
+      align-items: center;                                       /* 가로 가운데 */
+    }                                                            /* body 끝 */
+    #score-board {                                               /* 점수 줄 */
+      font-size: 24px;                                           /* 큰 글자 */
+      font-weight: bold;                                         /* 굵게 */
+      margin-bottom: 20px;                                       /* 아래 여백 */
+      color: #0056b3;                                            /* 파란 글자 */
+    }                                                            /* #score-board 끝 */
+    #game-board {                                                /* 게임 판 */
+      width: 600px;                                              /* 폭 600px */
+      height: 400px;                                             /* 높이 400px */
+      background-color: #222;                                    /* 검은 판 */
+      border-radius: 10px;                                       /* 모서리 둥글게 */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);                 /* 그림자 */
+      position: relative;                                        /* ★ 안의 absolute 요소가 이 판을 기준으로 위치 */
+      overflow: hidden;                                          /* 판 밖으로 나간 부분은 안 보이게 */
+    }                                                            /* #game-board 끝 */
+    #target {                                                    /* 두더지(빨간 네모) */
+      width: 50px;                                               /* 폭 50px */
+      height: 50px;                                              /* 높이 50px */
+      background-color: #ff4757;                                 /* 빨강 */
+      border-radius: 8px;                                        /* 모서리 둥글게 */
+      cursor: pointer;                                           /* 손가락 커서 */
+      box-shadow: 0 0 10px rgba(255, 71, 87, 0.8);               /* 빨간 빛 */
+      position: absolute;                                        /* ★ 판(relative) 기준으로 left · top 자리에 */
+      top: 0;                                                    /* 처음엔 판 맨 위 */
+      left: 0;                                                   /* 처음엔 판 맨 왼쪽 */
+      transition: transform 0.1s;                                /* transform 이 바뀔 때 0.1초 동안 부드럽게 (이 코드는 transform 을 안 바꿈) */
+    }                                                            /* #target 끝 */
+  &lt;/style&gt;                                                       &lt;!-- CSS 끝 --&gt;
+&lt;/head&gt;                                                          &lt;!-- 문서 정보 끝 --&gt;
+&lt;body&gt;                                                           &lt;!-- 화면에 보이는 부분 --&gt;
+  &lt;h1&gt;두더지잡기 게임&lt;/h1&gt;                                         &lt;!-- 제목 --&gt;
+  &lt;div id=&quot;score-board&quot;&gt;점수: &lt;span id=&quot;score&quot;&gt;0&lt;/span&gt;&lt;/div&gt;    &lt;!-- 점수 — 숫자 칸만 span 으로 --&gt;
+  &lt;div id=&quot;xy_board&quot;&gt;클릭위치 : &lt;span id=&quot;xy&quot;&gt;&lt;/span&gt;&lt;/div&gt;       &lt;!-- 오늘 더한 줄 — 판을 누른 위치 --&gt;
+  &lt;div id=&quot;game-board&quot;&gt;                                          &lt;!-- 게임 판 --&gt;
+    &lt;div id=&quot;target&quot;&gt;&lt;/div&gt;                                      &lt;!-- 두더지 — 판 안에 --&gt;
+  &lt;/div&gt;                                                         &lt;!-- 판 끝 --&gt;
+&lt;script&gt;                                                         // 원본은 여기가 비어 있었음 → 수업에서 채움
+  var gameBoard = document.getElementById(&#x27;game-board&#x27;);         // 판 요소
+  var target = document.getElementById(&#x27;target&#x27;);                // 두더지 요소
+  var scoreDisplay = document.getElementById(&#x27;score&#x27;);           // 점수 숫자 칸
+  var xyDisplay = document.getElementById(&#x27;xy&#x27;);                 // 클릭 위치 칸
+  var score=0;                                                   // 점수 0 에서 시작
+
+  function moveTarget(){                                         // 두더지를 랜덤 위치로 옮기는 함수
+    var maxX=gameBoard.clientWidth-target.clientWidth;           // 600 - 50 → 550 (넘치지 않는 가장 큰 left)
+    var maxY=gameBoard.clientHeight-target.clientHeight;         // 400 - 50 → 350 (가장 큰 top)
+    var randomX=Math.floor(Math.random()*maxX);                  // 0 이상 1 미만 × 550 → 0 ~ 549.99… → 내림 → 0 ~ 549
+    var randomY=Math.floor(Math.random()*maxY);                  // 같은 방법 → 0 ~ 349
+    target.style.left=randomX+&#x27;px&#x27;;                              // 숫자 + &#x27;px&#x27; → 예: &quot;123px&quot; (단위가 없으면 무시됨)
+    target.style.top=randomY+&#x27;px&#x27;;                               // 예: &quot;45px&quot;
+    target.style.display=&#x27;block&#x27;;                                // 숨었던 두더지를 다시 보이게
+  };                                                             // moveTarget 끝 (뒤의 ; 는 없어도 됨)
+
+  target.addEventListener(&#x27;click&#x27;,function(){                    // 두더지를 누르면
+    score++;                                                     // 점수 1 올림
+    scoreDisplay.innerText=score;                                // 화면 점수 칸에 새 점수
+    target.style.display=&#x27;none&#x27;;                                 // 맞힌 두더지는 숨김 → 다음 moveTarget 때 다시 나타남
+  });                                                            // 두더지 클릭 끝
+
+  gameBoard.addEventListener(&#x27;click&#x27;,function(e){                // 판을 누르면 (e = 이벤트 객체)
+    xyDisplay.innerHTML=&quot;x:&quot;+e.clientX+&quot;, y:&quot;+e.clientY;         // 누른 곳의 좌표 → 예: &quot;x:123, y:45&quot;
+  });                                                            // 판 클릭 끝
+  setInterval(moveTarget,1000);                                  // 1000ms(1초)마다 moveTarget 을 되풀이 — 함수 이름만 (괄호 X)
+&lt;/script&gt;                                                        &lt;!-- 스크립트 끝 --&gt;
+&lt;/body&gt;                                                          &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                          &lt;!-- 문서 끝 --&gt;</code></pre>
+        <div class="tip">▶ 크롬 확인 — 판 600 × 400 · 두더지 50 × 50 → left <b>0 ~ 549px</b> · top <b>0 ~ 349px</b> (판 밖으로 안 나감) · 누르면 점수 1 · <code>display: none</code> → 다음 1초 뒤 다시 보임 · 판을 누르면 <code>클릭위치 : x:123, y:45</code></div>
+        <table class="ref">
+            <tr><th>핵심</th><th>뜻 · 확인</th></tr>
+            <tr><td><code>position: relative</code> (판) + <code>absolute</code> (두더지)</td><td>두더지의 left · top 이 <b>판 왼쪽 위</b> 기준 · <code>overflow: hidden</code> = 판 밖은 안 보이게</td></tr>
+            <tr><td><code>clientWidth − target.clientWidth</code></td><td>600 − 50 = 550 → 두더지가 판 밖으로 안 나가는 최댓값</td></tr>
+            <tr><td><code>Math.floor(Math.random() * 550)</code></td><td>random = 0 이상 1 미만 · floor = 내림 → <b>0 ~ 549</b></td></tr>
+            <tr><td><code>style.left = 값 + 'px'</code></td><td>🤖 단위 없이 숫자만 넣으면 <b>무시</b>돼요 (크롬 확인)</td></tr>
+            <tr><td><code>setInterval(moveTarget, 1000)</code></td><td>1초마다 되풀이 · 함수 <b>이름만</b> — 🤖 <code>moveTarget()</code> 처럼 괄호를 붙이면 한 번만 실행</td></tr>
+            <tr><td><code>e.clientX</code> · <code>e.clientY</code></td><td>누른 곳 좌표 — 🤖 브라우저 창 왼쪽 위 기준 · 두더지를 눌러도 판 click 이 같이 실행(버블링)</td></tr>
+        </table>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#mole" title="그림 — 두더지 좌표" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#mole" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 두더지 좌표 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#interval" title="그림 — setInterval 흐름" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#interval" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — setInterval 흐름 — 새 창으로 크게 보기</a></p></div>
+        <h3>✍️ 할 일 목록 — 선택 삭제 + for…of 를 map 으로 (1027_01_event.html)</h3>
+        <pre><code class="language-html">&lt;!--저번주차 소스코드(저번주차 원본 참고)--&gt;                         &lt;!-- 교수님 메모 그대로 --&gt;
+&lt;!DOCTYPE html&gt;                                                  &lt;!-- HTML5 문서 --&gt;
+&lt;html&gt;                                                           &lt;!-- 문서 시작 --&gt;
+&lt;head&gt;                                                           &lt;!-- 문서 정보 --&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;                                       &lt;!-- 한글 --&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;   &lt;!-- 폰 화면 폭에 맞춤 --&gt;
+    &lt;title&gt;Document&lt;/title&gt;                                      &lt;!-- 탭 제목 --&gt;
+    &lt;style&gt;                                                      /* CSS 시작 */
+        #add-btn{ padding: 5px 10px; border: 0; background: #f80; color: white; border-radius: 5px; }      /* 추가 버튼 — 주황 */
+        #edit-btn{ padding: 5px 10px; border: 0; background: #38c; color: white; border-radius: 5px; }     /* 수정 버튼 — 파랑 */
+        #delete-btn{ padding: 5px 10px; border: 0; background: #e33; color: white; border-radius: 5px; }   /* 삭제 버튼 — 빨강 */
+        ul{ padding: 0; list-style-position: inside; }           /* 목록 — 왼쪽 들여쓰기 없앰 */
+        li{ border-bottom: 1px solid #999; padding: 5px 0; }     /* 항목마다 아래 회색 줄 */
+        .active{ background: #abc; }                             /* 누른 항목 — 연한 파랑 */
+    &lt;/style&gt;                                                     &lt;!-- CSS 끝 --&gt;
+&lt;/head&gt;                                                          &lt;!-- 문서 정보 끝 --&gt;
+&lt;body&gt;                                                           &lt;!-- 화면 --&gt;
+    &lt;h1 id=&#x27;title&#x27; &gt;할일 목록&lt;/h1&gt;                                 &lt;!-- 제목 — 누른 항목 글자로 바뀜 --&gt;
+    &lt;button id=&quot;add-btn&quot;&gt;목록 추가&lt;/button&gt;                         &lt;!-- 추가 --&gt;
+    &lt;button id=&quot;edit-btn&quot;&gt;선택 수정&lt;/button&gt;                        &lt;!-- 오늘 더함 — 아직 기능 없음 --&gt;
+    &lt;button id=&quot;delete-btn&quot;&gt;선택 삭제&lt;/button&gt;                      &lt;!-- 오늘 더함 --&gt;
+    &lt;ul id=&#x27;list&#x27;&gt;                                               &lt;!-- 목록 --&gt;
+        &lt;li&gt;제목 1&lt;/li&gt;                                          &lt;!-- 항목 1 --&gt;
+        &lt;li&gt;제목 2&lt;/li&gt;                                          &lt;!-- 항목 2 --&gt;
+        &lt;li&gt;제목 3&lt;/li&gt;                                          &lt;!-- 항목 3 --&gt;
+        &lt;li&gt;제목 4&lt;/li&gt;                                          &lt;!-- 항목 4 --&gt;
+    &lt;/ul&gt;                                                        &lt;!-- 목록 끝 --&gt;
+    &lt;script&gt;                                                     // 스크립트 시작
+        let title = document.getElementById(&#x27;title&#x27;);            // h1
+        let addBtn = document.getElementById(&#x27;add-btn&#x27;);         // 추가 버튼
+        let editBtn = document.getElementById(&#x27;edit-btn&#x27;);       // 수정 버튼 (변수만 · 리스너 없음)
+        let deleteBtn = document.getElementById(&#x27;delete-btn&#x27;);   // 삭제 버튼
+        let list = document.getElementById(&#x27;list&#x27;);              // ul
+        deleteBtn.addEventListener(&#x27;click&#x27;,()=&gt;{                 // 삭제 버튼을 누르면 (화살표 함수)
+            var selectedItem=document.querySelector(&quot;#list .active&quot;);   // #list 안에서 class 가 active 인 첫 요소 · 없으면 null
+            if (selectedItem){                                   // 찾았으면 (null 이면 falsy → else)
+                selectedItem.remove();                           // 그 li 를 문서에서 지움
+            }                                                    // if 끝
+            else {                                               // 아무것도 안 골랐으면
+                alert(&#x27;삭제할 항목을 먼저 클릭해서 선택해주세요.&#x27;);      // 알림 창
+            }                                                    // else 끝
+        });                                                      // 삭제 끝
+        list.addEventListener(&#x27;click&#x27;, activeItem);              // ul 하나에 리스너 (이벤트 위임 · 10주차)
+        function activeItem(e){                                  // 누른 항목 표시 함수
+           console.log(e);                                       // 이벤트 객체 확인용
+           if(e.target.nodeName == &#x27;LI&#x27;){                        // 실제로 누른 게 li 일 때만
+                title.innerHTML = e.target.innerText;            // 제목 ← 누른 항목 글자 (10주차는 innerHTML)
+                let liArray=e.target.parentNode.children;        // 부모 ul 의 자식들 = HTMLCollection (배열 아님)
+                /*for문을 map으로 바꾸기
+                for( let item of liArray ){
+                    item.removeAttribute(&#x27;class&#x27;);
+                }
+                liArray.map((it)=&gt;{
+                    it.removeAttribute(&#x27;class&#x27;);
+                });
+
+                Array.form(liArray).map((it)=&gt;{
+                    it.removeAttribute(&#x27;class&#x27;);
+                });
+                */                                               // ↑ 수업에서 차례로 써 본 것 (주석) — 아래 표 참고
+                [...liArray].map((it)=&gt;{                         // spread 로 진짜 배열로 펼친 뒤 map — 하나씩
+                    it.removeAttribute(&#x27;class&#x27;);                 // 모든 li 의 class 지움 (파란 표시 해제)
+                });                                              // map 끝
+                e.target.setAttribute(&#x27;class&#x27;, &#x27;active&#x27;);        // 방금 누른 li 만 active → 파란 표시
+           }                                                     // if 끝
+        };                                                       // activeItem 끝
+        addBtn.addEventListener(&#x27;click&#x27; ,function(){             // 추가 버튼 (10주차 그대로)
+           let txt=prompt(&quot;할 일  입력&quot;);                          // 입력 창
+           list.innerHTML += &#x27;&lt;li&gt;&#x27;+txt+&#x27;&lt;/li&gt;&#x27;;                 // 목록 끝에 li 추가
+        } );                                                     // 추가 끝
+    &lt;/script&gt;                                                    &lt;!-- 스크립트 끝 --&gt;
+&lt;/body&gt;                                                          &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                          &lt;!-- 문서 끝 --&gt;</code></pre>
+        <div class="tip">▶ 크롬 확인 — 안 고르고 <b>선택 삭제</b> → <code>삭제할 항목을 먼저 클릭해서 선택해주세요.</code> · 제목 1 을 누르고 선택 삭제 → 제목 2 · 3 · 4 만 남음 · <b>선택 수정</b>은 아직 리스너가 없어요</div>
+        <table class="ref">
+            <tr><th>주석 속 시도</th><th>크롬 결과</th><th>왜</th></tr>
+            <tr><td><code>for (let item of liArray)</code></td><td>됨</td><td>HTMLCollection 도 for…of 로 돌 수 있음</td></tr>
+            <tr><td><code>liArray.map(…)</code></td><td><code>TypeError: liArray.map is not a function</code></td><td><code>children</code> = <b>HTMLCollection</b>(유사 배열) — 배열 메서드 없음</td></tr>
+            <tr><td><code>Array.form(liArray)</code></td><td><code>TypeError: Array.form is not a function</code></td><td>⚠️ 오타 → <code>Array.from</code></td></tr>
+            <tr><td><code>[...liArray].map(…)</code></td><td>됨 (최종 코드)</td><td>spread 로 펼친 <b>새 배열</b>에 map</td></tr>
+        </table>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#htmlcoll" title="그림 — 유사 배열 · 선택 삭제" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#htmlcoll" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 유사 배열 · 선택 삭제 — 새 창으로 크게 보기</a></p></div>
+        <h3>✍️ 앞으로 많이 쓸 함수 — 배열 변형 메서드 filter · map (1110_02.js)</h3>
+        <div class="tip"><span class="wk-tag note">✍️ 필기</span> “앞으로 많이 쓸 함수 5개 · 배열 변형 메서드 · 1. <b>filter</b> : 기존 배열에서 조건을 만족하는 요소들만 필터링하여 새로운 배열로 반환 · 2. <b>map</b> : 배열의 모든 요소를 순회하면서, 각각 콜백함수를 실행하고 그 결과값들을 모아서 새로운 배열로 반환” · ⚠️ 수업 파일 그대로면 <code>arr2.map</code> 이 <code>let arr2</code> 보다 먼저라 <code>ReferenceError: Cannot access 'arr2' before initialization</code> (node 확인 · arr1 의 오타로 보임)</div>
+        <pre><code class="language-javascript">// 1110_02.js 를 고쳐서 바로 실행되게 — map 과 filter 는 원본을 안 바꾸고 새 배열을 돌려줌
+let arr1 = [1, 2, 3];                                    // 원본 배열
+let newMapArr1 = arr1.map((item) =&gt; {                    // map: 요소를 하나씩 콜백에 넣음 (item = 1, 2, 3)
+    return item * 2;                                     // 1→2 · 2→4 · 3→6 → 결과를 모아 새 배열
+});                                                      // map 끝
+console.log(newMapArr1);                                 // [ 2, 4, 6 ]
+console.log(arr1);                                       // [ 1, 2, 3 ] — 원본은 그대로
+let nums = [1, 2, 3, 4, 5];                              // filter 연습용 배열
+let odd = nums.filter((item) =&gt; {                        // filter: 콜백이 true 를 돌려준 요소만 남김
+    return item % 2 === 1;                               // 1 % 2 → 1 → true · 2 % 2 → 0 → false …
+});                                                      // filter 끝
+console.log(odd);                                        // [ 1, 3, 5 ]
+let big = nums.filter((item) =&gt; item &gt; 3);               // 한 줄 화살표 함수 — { return } 생략: 4 &gt; 3 · 5 &gt; 3 만 true
+console.log(big);                                        // [ 4, 5 ]
+console.log(nums.map((item) =&gt; item &gt; 3));               // map 은 콜백 결과를 그대로 모음 → true/false 배열</code></pre>
+        <pre class="io"><code class="language-text">[ 2, 4, 6 ]
+[ 1, 2, 3 ]
+[ 1, 3, 5 ]
+[ 4, 5 ]
+[ false, false, false, true, true ]</code></pre>
+        <table class="ref">
+            <tr><th>메서드</th><th>콜백 결과로</th><th>결과</th><th>원본</th></tr>
+            <tr><td><b>map</b></td><td>그대로 모음</td><td>같은 길이 새 배열</td><td>그대로</td></tr>
+            <tr><td><b>filter</b></td><td>true 인 요소만 남김</td><td>같거나 짧은 새 배열</td><td>그대로</td></tr>
+            <tr><td>forEach (10주차)</td><td>쓰지 않음</td><td>undefined</td><td>그대로</td></tr>
+        </table>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#mapfilter" title="그림 — map · filter" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#mapfilter" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — map · filter — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="quiz">

@@ -247,6 +247,79 @@
     <text x="300" y="451" text-anchor="middle" class="s b">✍️ 다음 주 — 백엔드에 요청해서 화면에 투두리스트</text></g>
 </svg>
 
+<svg data-fig="mole" viewBox="0 0 600 480" role="img" aria-label="600 x 400 게임 판 안에서 50 x 50 두더지가 놓일 수 있는 범위" hidden>
+  <g data-s="1"><rect x="20" y="20" width="420" height="280" rx="8" style="fill:#222;stroke:var(--ink2);stroke-width:2"/>
+    <text x="30" y="292" class="s m" style="fill:#ddd">#game-board 600 × 400</text>
+    <text x="456" y="44" class="s m b">relative</text><text x="456" y="70" class="s">= 기준 판</text>
+    <text x="456" y="110" class="s m">overflow:</text><text x="456" y="134" class="s m">hidden</text></g>
+  <g data-s="2"><rect x="20" y="20" width="35" height="35" rx="5" style="fill:#ff4757"/>
+    <text x="64" y="44" class="s m" style="fill:#ddd">left 0 · top 0</text>
+    <text x="456" y="178" class="s m b">absolute</text><text x="456" y="204" class="s">판 기준 위치</text></g>
+  <g data-s="3"><rect x="20" y="20" width="385" height="245" rx="4" style="fill:var(--hl);fill-opacity:.18;stroke:var(--hl);stroke-width:1.6;stroke-dasharray:6 5"/>
+    <path class="ln" d="M20,258 L405,258"/><text x="160" y="250" class="s m" style="fill:#ddd">maxX = 600 − 50 = 550</text>
+    <path class="ln" d="M398,20 L398,265"/><text x="230" y="140" class="s m" style="fill:#ddd">maxY = 400 − 50 = 350</text></g>
+  <g data-s="4"><rect x="250" y="70" width="35" height="35" rx="5" style="fill:#ff4757"/>
+    <text x="20" y="346" class="s m">Math.floor(Math.random() * 550) → 0 ~ 549</text>
+    <text x="20" y="378" class="s m">style.left = randomX + 'px'</text></g>
+  <g data-s="5"><text x="20" y="420" class="s">'px' 없이 숫자만 넣으면 무시돼요 (크롬 확인)</text>
+    <text x="20" y="452" class="s">left 0 ~ 549 · top 0 ~ 349 → 판 밖으로 안 나가요</text></g>
+</svg>
+
+<svg data-fig="interval" viewBox="0 0 600 470" role="img" aria-label="setInterval 이 1초마다 moveTarget 을 부르고 클릭하면 점수가 오르고 숨는 흐름" hidden>
+  <g data-s="1"><path class="ln" d="M30,120 L580,120"/>
+    <text x="30" y="150" class="s m">0초</text><text x="190" y="150" class="s m">1초</text><text x="350" y="150" class="s m">2초</text><text x="510" y="150" class="s m">3초</text>
+    <text x="20" y="40" class="s m b">setInterval(moveTarget, 1000)</text></g>
+  <g data-s="2"><rect x="176" y="70" width="44" height="34" rx="6" style="fill:#ff4757"/><rect x="336" y="70" width="44" height="34" rx="6" style="fill:#ff4757"/><rect x="496" y="70" width="44" height="34" rx="6" style="fill:#ff4757"/>
+    <text x="20" y="196" class="s">1초마다 moveTarget → 새 위치 + display 'block'</text></g>
+  <g data-s="3"><text x="262" y="100" class="b" style="fill:var(--te)">✓</text>
+    <text x="20" y="240" class="s m">클릭 → score++ → innerText</text>
+    <text x="20" y="270" class="s m">→ display 'none' (숨김)</text></g>
+  <g data-s="4"><text x="20" y="314" class="s">다음 1초가 되면 다시 나타나요 (위치도 새로)</text></g>
+  <g data-s="5"><text x="20" y="360" class="s m">판 클릭 → e.clientX · e.clientY</text>
+    <text x="20" y="392" class="s">좌표는 브라우저 창 왼쪽 위 기준</text>
+    <text x="20" y="424" class="s">두더지를 눌러도 판 click 이 같이 실행 (버블링)</text>
+    <text x="20" y="456" class="s">setInterval(moveTarget()) 처럼 괄호를 붙이면 한 번만 실행</text></g>
+</svg>
+
+<svg data-fig="mapfilter" viewBox="0 0 600 470" role="img" aria-label="map 은 같은 길이 새 배열 filter 는 true 인 요소만 남긴 새 배열" hidden>
+  <g data-s="1"><text x="20" y="40" class="s m b">arr1 = [1, 2, 3]</text>
+    <rect x="20" y="56" width="50" height="44" rx="6" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="45" y="85" text-anchor="middle" class="m">1</text>
+    <rect x="76" y="56" width="50" height="44" rx="6" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="101" y="85" text-anchor="middle" class="m">2</text>
+    <rect x="132" y="56" width="50" height="44" rx="6" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="157" y="85" text-anchor="middle" class="m">3</text></g>
+  <g data-s="2"><text x="210" y="85" class="s m">→ map →</text><text x="20" y="130" class="s m">map(item ⇒ item * 2)</text>
+    <rect x="400" y="56" width="50" height="44" rx="6" style="fill:var(--inh);fill-opacity:.2;stroke:var(--inh);stroke-width:2"/><text x="425" y="85" text-anchor="middle" class="m">2</text>
+    <rect x="456" y="56" width="50" height="44" rx="6" style="fill:var(--inh);fill-opacity:.2;stroke:var(--inh);stroke-width:2"/><text x="481" y="85" text-anchor="middle" class="m">4</text>
+    <rect x="512" y="56" width="50" height="44" rx="6" style="fill:var(--inh);fill-opacity:.2;stroke:var(--inh);stroke-width:2"/><text x="537" y="85" text-anchor="middle" class="m">6</text>
+    <text x="20" y="160" class="s">map = 결과를 모은 같은 길이 새 배열 · 원본 그대로</text></g>
+  <g data-s="3"><text x="20" y="204" class="s m b">nums = [1, 2, 3, 4, 5]</text>
+    <text x="20" y="236" class="s m">filter(item ⇒ item % 2 === 1)</text>
+    <text x="20" y="266" class="s m">1 ✓ · 2 ✕ · 3 ✓ · 4 ✕ · 5 ✓</text>
+    <text x="330" y="266" class="s m b">→ [1, 3, 5]</text>
+    <text x="20" y="298" class="s">filter = true 인 요소만 남긴 새 배열</text></g>
+  <g data-s="4"><text x="20" y="346" class="s m">nums.map(item ⇒ item &gt; 3)</text>
+    <text x="20" y="378" class="s m">→ [false, false, false, true, true]</text></g>
+  <g data-s="5"><text x="20" y="424" class="s">forEach 는 하나씩 실행만 · 돌려주는 값 undefined</text>
+    <text x="20" y="456" class="s">✍️ 앞으로 많이 쓸 함수 5개 중 오늘은 2개</text></g>
+</svg>
+
+<svg data-fig="htmlcoll" viewBox="0 0 600 480" role="img" aria-label="HTMLCollection 은 map 이 없어서 spread 로 배열로 바꾼 뒤 map 과 선택 삭제" hidden>
+  <g data-s="1"><text x="20" y="36" class="s m b">e.target.parentNode.children</text>
+    <rect x="20" y="50" width="330" height="54" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2;stroke-dasharray:6 5"/>
+    <text x="34" y="84" class="s m">HTMLCollection [li, li, li, li]</text></g>
+  <g data-s="2"><text x="370" y="84" class="s m b" style="fill:var(--te)">.map ✕</text>
+    <text x="20" y="134" class="s">배열처럼 생긴 것(유사 배열) · 배열 메서드 없음</text>
+    <text x="20" y="162" class="s m">TypeError: liArray.map is not a function</text></g>
+  <g data-s="3"><text x="20" y="210" class="s m b">[...liArray] 또는 Array.from(liArray)</text>
+    <rect x="20" y="224" width="330" height="54" rx="8" style="fill:var(--inh);fill-opacity:.16;stroke:var(--inh);stroke-width:2"/>
+    <text x="34" y="258" class="s m">Array [li, li, li, li]</text><text x="370" y="258" class="s m b">.map ✓</text>
+    <text x="20" y="306" class="s">⚠️ 주석의 Array.form 은 오타 → Array.from</text></g>
+  <g data-s="4"><text x="20" y="352" class="s m">map(it ⇒ it.removeAttribute('class'))</text>
+    <text x="20" y="382" class="s m">e.target.setAttribute('class', 'active')</text></g>
+  <g data-s="5"><text x="20" y="428" class="s m">querySelector('#list .active') → remove()</text>
+    <text x="20" y="460" class="s">아무것도 안 골랐으면 null → alert</text></g>
+</svg>
+
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -318,7 +391,39 @@
             "서버가 <b>응답</b> — 할 일 목록을 <b>JSON 텍스트</b>로 돌려줌 (9주차 요청 · 응답)",
             "🤖 <b>CRUD</b> = Create(생성) · Read(조회) · Update(수정) · Delete(삭제) — 데이터를 다루는 기본 4가지 · HTTP 요청 방식 · SQL 과 흔히 짝지음 (위키백과 CRUD)",
             "✍️ 다음 주 — 백엔드에 요청해서 화면에 <b>투두리스트</b> 나오게 하기" ],
-          note: "1주차 필기: 프런트엔드 = 클라이언트(웹브라우저)에서 실행되는 기술 · 백엔드 = 서버에서 실행되는 기술 · 🤖 HTTP · SQL 칸은 설명을 위한 짝이에요 (수업 코드에 나온 것은 아님)" }
+          note: "1주차 필기: 프런트엔드 = 클라이언트(웹브라우저)에서 실행되는 기술 · 백엔드 = 서버에서 실행되는 기술 · 🤖 HTTP · SQL 칸은 설명을 위한 짝이에요 (수업 코드에 나온 것은 아님)" },
+        { id: "mole", week: 11, tab: "⑧ 두더지 좌표", src: "11주차 수업 파일 1110_01 source.html — #game-board(relative) · #target(absolute) · moveTarget()",
+          steps: [
+            "게임 판 <code>#game-board</code> 600 × 400 · <b>position: relative</b> = 안쪽 absolute 요소의 기준 · <code>overflow: hidden</code> = 판 밖은 안 보이게",
+            "두더지 <code>#target</code> 50 × 50 · <b>position: absolute</b> → <code>left</code> · <code>top</code> 이 판 왼쪽 위 기준",
+            "<code>maxX = clientWidth − target 폭 = 550</code> · <code>maxY = 350</code> — 이보다 크면 판 밖으로 나감",
+            "<code>Math.random()</code> 0 이상 1 미만 × 550 → <code>Math.floor</code> 내림 → <b>0 ~ 549</b> → <code>style.left = randomX + 'px'</code>",
+            "크롬 확인 — 300번 옮겨 보니 left 0 ~ 549 · top 0 ~ 349 · <code>'px'</code> 없이 숫자만 넣으면 <b>무시</b>" ],
+          note: "🤖 판 크기를 바꿔도 clientWidth · clientHeight 로 계산해서 코드를 안 고쳐도 돼요 · 원본 파일은 이 HTML · CSS 뼈대에 빈 script 였고 수업에서 채웠어요" },
+        { id: "interval", week: 11, tab: "⑨ setInterval 흐름", src: "11주차 수업 파일 1110_01 source.html — setInterval(moveTarget,1000) · target · gameBoard click",
+          steps: [
+            "<code>setInterval(moveTarget, 1000)</code> — <b>1000ms(1초)마다</b> moveTarget 을 되풀이 (6주차 타이머) · 함수 <b>이름만</b> 넘김",
+            "moveTarget → 새 랜덤 위치 + <code>display = 'block'</code> (보이게)",
+            "두더지 클릭 → <code>score++</code> → <code>scoreDisplay.innerText = score</code> → <code>display = 'none'</code> (숨김)",
+            "다음 1초가 되면 moveTarget 이 다시 보이게 → 또 누를 수 있음",
+            "판 클릭 → <code>e.clientX</code> · <code>e.clientY</code> (브라우저 창 기준) · 두더지를 눌러도 판의 click 이 같이 실행 (<b>이벤트 버블링</b>)" ],
+          note: "🤖 크롬 확인 — <code>setInterval(moveTarget(), 1000)</code> 처럼 괄호를 붙이면 지금 한 번 실행된 결과(undefined)를 넘겨서 되풀이되지 않음 · 멈추려면 clearInterval(아이디) (6주차)" },
+        { id: "mapfilter", week: 11, tab: "⑩ map · filter", src: "11주차 수업 파일 1110_02.js — ✍️ 앞으로 많이 쓸 함수 5개 · 배열 변형 메서드 1. filter 2. map",
+          steps: [
+            "원본 배열 <code>arr1 = [1, 2, 3]</code>",
+            "<b>map</b> — 모든 요소를 콜백에 넣고 그 <b>결과값을 모아</b> 새 배열 → <code>[2, 4, 6]</code> · 원본은 그대로",
+            "<b>filter</b> — 콜백이 <b>true</b> 인 요소만 남긴 새 배열 → 홀수만 <code>[1, 3, 5]</code>",
+            "map 에 조건을 넣으면 걸러지지 않고 true / false 가 모임 → <code>[false, false, false, true, true]</code>",
+            "forEach(10주차)는 돌려주는 값이 없음(undefined) · ✍️ “5개” 중 오늘 2개" ],
+          note: "⚠️ 수업 파일 그대로 실행하면 <code>arr2.map</code> 이 <code>let arr2</code> 보다 먼저라 <code>ReferenceError: Cannot access 'arr2' before initialization</code> (node 확인) → arr1 의 오타로 보임" },
+        { id: "htmlcoll", week: 11, tab: "⑪ 유사 배열 · 선택 삭제", src: "11주차 1027_01_event.html — for…of 를 map 으로 바꾸기(주석 속 시도) · deleteBtn",
+          steps: [
+            "<code>e.target.parentNode.children</code> = <b>HTMLCollection</b> — li 들이 들어 있지만 배열이 아님",
+            "그래서 <code>liArray.map(…)</code> → <code>TypeError: liArray.map is not a function</code> (크롬 확인)",
+            "<code>[...liArray]</code> (spread · 7주차) 또는 <code>Array.from(liArray)</code> → <b>진짜 배열</b> → map 됨 · ⚠️ 주석의 <code>Array.form</code> 은 오타",
+            "모든 li 의 class 를 지우고 → 누른 li 만 <code>setAttribute('class', 'active')</code>",
+            "선택 삭제 — <code>querySelector('#list .active')</code> 로 찾아 <code>remove()</code> · 안 골랐으면 <b>null</b> → alert" ],
+          note: "🤖 여기서 map 은 새 배열을 안 쓰니 forEach 가 더 알맞아요(관례) · 선택 수정 버튼은 아직 리스너가 없어요" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
