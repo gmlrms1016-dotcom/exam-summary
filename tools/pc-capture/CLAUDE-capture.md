@@ -41,4 +41,4 @@
 - **원격제어 중 캡처**: 화면 가장자리에 주황 빛이 켜지므로 **창을 가장자리에서 띄우고**(예: 50, 40) 찍기 · 마우스를 탭 위에서 치워 툴팁 X · VMware 라이브러리 패널을 닫으면 콘솔이 넓게 찍힘 · `VMware window not found` 가 나오면 최신 vmcapture.ps1(창 제목이 비어도 EnumWindows 로 찾음)로 다시 받기
 - 도구용 ps1 은 **UTF-8 BOM 필수** (BOM 없으면 Windows PowerShell 5.1 이 한글 경로를 깨뜨려 엉뚱한 폴더에 저장)
 - 워드(docx)에 넣을 때도 원본 PNG 그대로 — python-docx 는 `width` 만 지정(비율 유지 · 다시 저장 · 압축 X) · 워드는 파일 → 옵션 → 고급 → 이미지 크기 및 품질 → "파일의 이미지 압축 안 함"
-- 스크립트가 없으면(PC 초기화 등) iCloud `동양미래대학교/Claude설정.zip` 을 내려받아 풀고 `프롬프트.txt` 대로 하거나 https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 대로 다시 설치하고 찍는다
+- 스크립트가 없으면(PC 초기화 등) iCloud `동양미래대학교/Claude과제머신.zip` 을 내려받아 풀고 `프롬프트.txt` 대로 하거나 https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 대로 다시 설치하고 찍는다

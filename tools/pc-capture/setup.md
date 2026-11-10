@@ -40,5 +40,5 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\to
 “캡처 설정 끝 — 이제부터 캡처는 VMware 창만 · 원래 픽셀 크기 PNG 로 찍어요 (규칙 파일: %USERPROFILE%\.claude\CLAUDE.md)” + 시험 캡처 경로 · 크기
 
 ## 참고
-- 학교 PC · PC방처럼 재부팅 때 초기화되면 1번이 지워질 수 있어요 → 같은 한 줄로 다시 설치 (또는 iCloud `동양미래대학교/Claude설정.zip` 의 `프롬프트.txt`)
+- 학교 PC · PC방처럼 재부팅 때 초기화되면 1번이 지워질 수 있어요 → 같은 한 줄로 다시 설치 (또는 iCloud `동양미래대학교/Claude과제머신.zip` 의 `프롬프트.txt`)
 - 원본: `exam-summary/tools/pc-capture/` (vmcapture.ps1 · vmtype.ps1 · vscapture.ps1 · CLAUDE-capture.md · 이 파일)
