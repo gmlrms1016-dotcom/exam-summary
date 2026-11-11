@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202611041620"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)</title>
-    <meta name="description" content="데이터베이스관리 15주차 정리 — 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <title>데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</title>
+    <meta name="description" content="데이터베이스관리 15주차 정리 — 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <meta property="og:title" content="데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)">
     <meta property="og:description" content="데이터베이스관리 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -99,15 +99,18 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🗄️ 데이터베이스관리 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9 · 10주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-11주차.html">‹ 이전 · <b>11주차</b><br><small>🔥 직원 집계 (3번부터 시험) · 🔥 NULL 과 SUM (기말) · 집합 연산 · 내부조인 / 외부조인</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../데이터베이스관리-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>📊 성적 비율</dt><dd><span class="wk-chip">출석 20%</span><span class="wk-chip">중간 30%</span><span class="wk-chip"><b>기말 30%</b></span><span class="wk-chip">과제 20%</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">10주차</span><b>(MySQL) 기말고사에 합집합만 나옴</b> — 관계대수 집합 연산 중 <b>합집합 <code>UNION</code></b></li><li><span class="wk-exam-wk">10주차</span><b>강의자료 28페이지</b> — 프로젝션 π 예제</li><li><span class="wk-exam-wk">6주차</span>무결성 제약조건 중 <b>키 · 도메인 제약조건은 기말고사</b> (개체 · 참조 무결성은 중간고사였음)</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>📊 성적 비율</dt><dd><span class="wk-chip">출석 20%</span><span class="wk-chip">중간 30%</span><span class="wk-chip"><b>기말 30%</b></span><span class="wk-chip">과제 20%</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">11주차</span><b>직원 퀴즈 3번부터 시험문제</b> — Quiz 11-1 3 ~ 6번 (<code>COUNT(DISTINCT 직책)</code> · 직책별 <code>AVG</code> · <code>COUNT</code> · <code>WHERE</code> + <code>GROUP BY</code> + <code>HAVING</code>)</li><li><span class="wk-exam-wk">11주차</span><b>기말고사 문제 <code>SELECT sum(col2) FROM tab1;</code></b> — Quiz 11-3 NULL 과 SUM (실습 엑셀 “중요! 기말고사 시험문제” · 정답 ③)</li><li><span class="wk-exam-wk">11주차</span>예제5-8-2 <b>시험에 나옴</b> — <code>COUNT(*)</code> · <code>COUNT(주소)</code> · <code>COUNT(DISTINCT 주소)</code></li><li><span class="wk-exam-wk">10주차</span><b>(MySQL) 기말고사에 합집합만 나옴</b> — 관계대수 집합 연산 중 <b>합집합 <code>UNION</code></b></li><li><span class="wk-exam-wk">10주차</span><b>강의자료 28페이지</b> — 프로젝션 π 예제</li><li><span class="wk-exam-wk">6주차</span>무결성 제약조건 중 <b>키 · 도메인 제약조건은 기말고사</b> (개체 · 참조 무결성은 중간고사였음)</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
 <tbody>
 <tr><th>찍어 준 것</th><th>핵심 · 답</th></tr>
+<tr><td><b>직원 퀴즈 3번부터</b> (11주차)</td><td>3) <code>SELECT COUNT(DISTINCT 직책) FROM 직원;</code> → <b>4</b> · 4) <code>SELECT 직책, AVG(연봉) FROM 직원 GROUP BY 직책;</code> → 팀장 3600 · 과장 2900 · 대리 2350 · 사원 1900 · 5) <code>SELECT 직책, COUNT(*) FROM 직원 GROUP BY 직책;</code> · 6) <code>… WHERE 연봉&gt;=2500 GROUP BY 직책 HAVING COUNT(*)&gt;=2;</code> → <b>과장 2</b> (행 조건 WHERE → 그룹 조건 HAVING · WHERE 를 빼면 대리도 나옴)</td></tr>
+<tr><td><b>sum(col2) — tab1</b> (11주차)</td><td>칸끼리 연산(+)에 NULL 이 있으면 → <b>NULL</b> · 집계함수는 NULL 을 <b>빼고</b> 계산 → ① <code>sum(col2)</code> <b>90</b> · ② <code>sum(col1+col2+col3)</code> <b>140</b> · ③ <code>sum(col2+col3)</code> <b>90</b> ⭕ · ④ <code>sum(col2)+sum(col3)</code> <b>110</b> → 정답 <b>③</b></td></tr>
+<tr><td><b>예제5-8-2</b> (11주차)</td><td>univDB 학생 7명 → <code>COUNT(*)</code> <b>7</b> · <code>COUNT(주소)</code> <b>6</b> (주소 NULL 만 빠짐 · '미정' 은 값이라 셈) · <code>COUNT(DISTINCT 주소)</code> <b>5</b> (경기 분당 2명은 한 번)</td></tr>
 <tr><td><b>합집합만 나옴</b> (10주차)</td><td>합집합 <b>∪</b> = SQL <b><code>UNION</code></b> — 두 SELECT 결과를 합치고 <b>중복은 한 번만</b> · <b><code>UNION ALL</code></b> = 중복까지 모두 · 두 릴레이션은 <b>합병 가능</b>(속성 개수 · 도메인이 같아야) — 열 개수가 다르면 ERROR 1222 · 사원 {1 고길동, 2 이순신} ∪ 직원 {2 이순신, 3 둘리} → 1 고길동 · 2 이순신 · 3 둘리 (UNION ALL 은 4행)</td></tr>
 <tr><td><b>강의자료 28페이지</b> (10주차)</td><td>프로젝션 <b>π</b> = 원하는 <b>열</b>(속성)을 검색 · 관계대수식 <code>π 고객이름,등급,적립금 (고객)</code> → SQL <code>SELECT 고객이름, 등급, 적립금 FROM 고객;</code> → 행 수는 그대로 · 열만 3개 (실렉션 σ 는 행을 고름)</td></tr>
 <tr><td><b>키 · 도메인 제약조건</b> (6주차)</td><td>키 제약조건 = 키는 중복된 값을 갖지 않는다 (<code>UNIQUE</code>) · 도메인 제약조건 = 값의 범위 · 기본값 지정 (<code>CHECK</code> · <code>DEFAULT</code> — 10주차 Quiz 10-2 <code>적립금 int DEFAULT 0</code>)</td></tr>
@@ -116,9 +119,23 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-그림정리.html?weeks=9-15#order" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-그림정리.html?weeks=9-15#order" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차 — ① SELECT 실행 순서 · ② GROUP BY · HAVING · ③ COUNT 와 NULL</li><li>10주차 — ④ 🔥 합집합 UNION · ⑤ 실렉션 σ · 프로젝션 π · ⑥ 조인 4가지</li></ul>
+<ul><li>9주차 — ① SELECT 실행 순서 · ② GROUP BY · HAVING · ③ COUNT 와 NULL</li><li>10주차 — ④ 🔥 합집합 UNION · ⑤ 실렉션 σ · 프로젝션 π · ⑥ 조인 4가지</li><li>11주차 — ⑦ 🔥 직원 GROUP BY · ⑧ 🔥 NULL 과 SUM · ⑨ 집합 연산 R · S · ⑩ 내부 · 외부조인</li></ul>
 </section>
 <section class="card" id="s2">
+<h2>11주차 · 🔥 직원 집계 · NULL 과 SUM / 집합 연산 · 내부조인 · 외부조인</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>🔥 ✍️ 직원 퀴즈 3 ~ 6번</td><td><code>COUNT(DISTINCT 직책)</code> <b>4</b> · <code>GROUP BY 직책</code> + <code>AVG(연봉)</code> / <code>COUNT(*)</code> · <code>WHERE 연봉&gt;=2500 GROUP BY 직책 HAVING COUNT(*)&gt;=2</code> → <b>과장 2</b></td><td>⑦</td></tr>
+<tr><td>🔥 ✍️ Quiz 11-3 tab1</td><td>칸끼리 <code>+</code> 에 NULL → NULL · 집계함수는 NULL 제외 → ① 90 · ② 140 · ③ <b>90 (정답)</b> · ④ 110</td><td>⑧</td></tr>
+<tr><td>🔥 ✍️ 예제5-8-2</td><td><code>COUNT(*)</code> 7 · <code>COUNT(주소)</code> 6 · <code>COUNT(DISTINCT 주소)</code> 5 — '미정' 은 값 · NULL 만 빠짐</td><td></td></tr>
+<tr><td>Quiz 11-4 집합 연산</td><td><code>π B,C(R) ∪ π B,C(S)</code> = <code>UNION</code> → 4행 · ∩ <code>INTERSECT</code> → 1행 · − (<code>MINUS</code> 는 MySQL ERROR 1064 → <code>EXCEPT</code>) → 2행 · <code>R × S</code> → 12행</td><td>⑨</td></tr>
+<tr><td>✍️ 내부조인 · 외부조인</td><td>내부 = <b>일치하는 행</b> (세타 · 동등 · 자연) · 외부 = <b>일치하지 않는 행도</b> (왼쪽 · 오른쪽 · 완전) · 방법1 <code>FROM A, B WHERE</code> = 방법2 <code>A INNER JOIN B ON</code></td><td>⑩</td></tr>
+<tr><td>✍️ freshman · dmember</td><td>동등 2행 · 자연 2행 3열 (<code>freshman.name</code> 으로 — <code>name</code> 만 쓰면 ERROR 1052) · 왼쪽 3행 (조영수 NULL) · 오른쪽 3행 (NULL 이진영) · 완전 = 왼쪽 <code>UNION</code> 오른쪽 → <b>4행</b> (<code>FULL OUTER JOIN</code> 은 MySQL ERROR 1064 · ⚠️ 19쪽 답안처럼 뒤쪽을 <code>dmember LEFT JOIN freshman</code> 로 쓰면 열이 엇갈림)</td><td>⑩</td></tr>
+</tbody></table>
+<div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-11주차.html">11주차</a> · 문제는 🔒 실제시험.</div>
+</section>
+<section class="card" id="s3">
 <h2>10주차 · 🔥 관계대수 — 합집합 · 프로젝션 · 조인 / 널 값과 집계함수</h2>
 <table class="ref">
 <tbody>
@@ -132,7 +149,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s3">
+<section class="card" id="s4">
 <h2>9주차 · SELECT 문법 — LIKE · NULL · ORDER BY · 집계함수 · GROUP BY · HAVING</h2>
 <table class="ref">
 <tbody>
@@ -147,7 +164,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-9주차.html">9주차</a> · 문제는 🔒 실제시험.</div>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-11주차.html">‹ 이전 · <b>11주차</b><br><small>🔥 직원 집계 (3번부터 시험) · 🔥 NULL 과 SUM (기말) · 집합 연산 · 내부조인 / 외부조인</small></a><span></span></nav>
 
     <p class="wk-src">노션 「데이터베이스관리」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

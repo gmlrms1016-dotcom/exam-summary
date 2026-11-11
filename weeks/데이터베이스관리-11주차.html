@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 11주차 · 🔥 직원 집계 (3번부터 시험) · 🔥 NULL 과 SUM (기말) · 집합 연산 · 내부조인 / 외부조인</title>
+    <meta name="description" content="데이터베이스관리 11주차 정리 — 🔥 직원 집계 (3번부터 시험) · 🔥 NULL 과 SUM (기말) · 집합 연산 · 내부조인 / 외부조인">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="데이터베이스관리 11주차 · 🔥 직원 집계 (3번부터 시험) · 🔥 NULL 과 SUM (기말) · 집합 연산 · 내부조인 / 외부조인">
+    <meta property="og:description" content="데이터베이스관리 11주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 11주차</h1>
+        <p>🔥 직원 집계 (3번부터 시험) · 🔥 NULL 과 SUM (기말) · 집합 연산 · 내부조인 / 외부조인</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><a class="next" href="데이터베이스관리-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+
+<div class="tip">수업: <b>11/11(수)</b> · 자료: 노션 11주차 필기 · <code>up-dy262DB1-w11-수업요약-stu.txt</code>(수업요약 원본) · 실습 엑셀 <code>dy262DB1-SQL실습02-w11-stu.xlsx</code> · 강의자료 <b>DB-Lect11-SQL-join</b> (27쪽 · PDF 펜 필기 없음) — 원본 txt 에 없고 <b>내가 노션 · 엑셀에 쓴 것은 ✍️</b>. 결과 표는 전부 이 맥 <b>MySQL 8.4</b> 로 직접 실행한 값이에요 (행 순서는 MySQL 이 정한 순서 · 릴레이션의 투플은 순서가 없어요). 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
+<div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> — ① “직원테이블 퀴즈 <b>3번문제</b>(직책의 개수를 중복없이 검색하시오)<b>부터 시험문제</b>” (1번) · ② “<b>기말고사 문제</b> <code>SELECT sum(col2) FROM tab1;</code>” · 엑셀 “<b>중요! 기말고사 시험문제</b>” (3번) · ③ 예제5-8-2 “<b>시험에 나옴</b>” (8번) → <a href="데이터베이스관리-15주차-기말고사.html">기말고사 정리</a> 맨 위 카드에 넣었어요.</div>
+<section class="card" id="s1">
+<h2>🎨 11주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-그림정리.html?week=11" title="11주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-그림정리.html?week=11" target="_blank" rel="noopener">🎬 11주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
+<h2>1. 🔥 [Quiz 11-1] 직원 — 집계함수 · GROUP BY · HAVING (강의자료 4쪽) · 3번부터 시험</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “직원테이블 퀴즈 3번문제(직책의 개수를 중복없이 검색하시오)부터 시험문제” → <b>3 · 4 · 5 · 6번</b></p>
+<table class="ref">
+<tbody style="min-width:283px;">
+<tr><th>직원코드</th><th>성명</th><th>직책</th><th>연봉</th></tr>
+<tr><td>161353</td><td>김미나</td><td>대리</td><td>2300</td></tr>
+<tr><td>181323</td><td>최영락</td><td>사원</td><td>1900</td></tr>
+<tr><td>151453</td><td>홍진호</td><td>과장</td><td>2800</td></tr>
+<tr><td>135485</td><td>구준표</td><td>과장</td><td>3000</td></tr>
+<tr><td>104895</td><td>김나래</td><td>팀장</td><td>3600</td></tr>
+<tr><td>165484</td><td>김하늘</td><td>대리</td><td>2400</td></tr>
+</tbody></table>
+<pre><code class="language-sql">drop table if exists 직원;                                   -- 있으면 지우고 새로 만들기
+create table 직원 (
+    직원코드  varchar(8)   NOT NULL ,                        -- 직원 번호 (기본키)
+    성명      varchar(20)  NOT NULL ,                        -- 이름은 꼭 입력
+    직책      varchar(10) ,                                  -- 대리 · 사원 · 과장 · 팀장
+    연봉      int ,                                          -- 숫자 → MAX · AVG 계산 가능
+    PRIMARY KEY(직원코드)                                      -- 직원코드로 행을 구별
+);
+insert into 직원 values('161353','김미나','대리',2300);      -- 6명 입력 (수업요약 그대로)
+insert into 직원 values('181323','최영락','사원',1900);
+insert into 직원 values('151453','홍진호','과장',2800);
+insert into 직원 values('135485','구준표','과장',3000);
+insert into 직원 values('104895','김나래','팀장',3600);
+insert into 직원 values('165484','김하늘','대리',2400);
+SELECT MAX(연봉) FROM 직원;                                  -- 1) 최대 연봉 → 6명 중 가장 큰 값
+SELECT COUNT(*) FROM 직원;                                   -- 2) 사원수 → 행 개수</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>MAX(연봉)</th></tr>
+<tr><td>3600</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>COUNT(*)</th></tr>
+<tr><td>6</td></tr>
+</tbody></table>
+<h3>🔥 3) 직책의 개수를 중복없이 검색하시오</h3>
+<pre><code class="language-sql">SELECT COUNT(DISTINCT 직책)                                  -- ② 같은 직책은 한 번만 세기
+FROM 직원;                                                   -- ① 직책 6칸 = 대리 · 사원 · 과장 · 과장 · 팀장 · 대리 → 종류 4개</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>COUNT(DISTINCT 직책)</th></tr>
+<tr><td>4</td></tr>
+</tbody></table>
+<h3>🔥 4) 직책별 연봉의 평균 · 5) 직책별 사원수</h3>
+<pre><code class="language-sql">SELECT 직책, AVG(연봉)                                       -- ③ 묶음마다 평균 (대리 = (2300 + 2400) ÷ 2)
+FROM 직원                                                    -- ① 직원에서
+GROUP BY 직책;                                               -- ② 같은 직책끼리 한 묶음
+SELECT 직책, COUNT(*)                                        -- ③ 묶음마다 행 수
+FROM 직원                                                    -- ① 직원에서
+GROUP BY 직책;                                               -- ② 같은 직책끼리</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>직책</th><th>AVG(연봉)</th></tr>
+<tr><td>팀장</td><td>3600.0000</td></tr>
+<tr><td>과장</td><td>2900.0000</td></tr>
+<tr><td>대리</td><td>2350.0000</td></tr>
+<tr><td>사원</td><td>1900.0000</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>직책</th><th>COUNT(*)</th></tr>
+<tr><td>팀장</td><td>1</td></tr>
+<tr><td>과장</td><td>2</td></tr>
+<tr><td>대리</td><td>2</td></tr>
+<tr><td>사원</td><td>1</td></tr>
+</tbody></table>
+<h3>🔥 6) 연봉이 2500 이상인 사원이 2명 이상인 직책의 사원수</h3>
+<pre><code class="language-sql">SELECT 직책, COUNT(*)                                        -- ⑤ 직책 · 사원수
+FROM 직원                                                    -- ① 직원에서
+WHERE 연봉&gt;=2500                                             -- ② 행 조건 먼저 → 홍진호 2800 · 구준표 3000 · 김나래 3600 만 남음
+GROUP BY 직책                                                -- ③ 직책끼리 → 과장 {2800, 3000} · 팀장 {3600}
+HAVING COUNT(*)&gt;=2;                                          -- ④ 그룹 조건 → 2명 이상인 과장만</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>직책</th><th>COUNT(*)</th></tr>
+<tr><td>과장</td><td>2</td></tr>
+</tbody></table>
+<div class="tip">✍️ 내 SQL 답 6개 모두 ✅ (MySQL 8.4 로 실행) · 🤖 6) 에서 <code>WHERE 연봉&gt;=2500</code> 을 빼면 대리(2300 · 2400)도 2명이라 <b>과장 2 · 대리 2</b> 가 나와요 — “연봉이 2500 이상인 사원” = 행 조건 <b>WHERE</b> · “2명 이상인 직책” = 그룹 조건 <b>HAVING</b> (<a href="데이터베이스관리-9주차.html">9주차 실행 순서</a>) · AVG 는 MySQL 이 3600.0000 처럼 소수 4자리로 보여 줘요 · 그룹의 행 순서는 MySQL 이 정함 (ORDER BY 를 써야 보장).</div>
+</section>
+<section class="card" id="s3">
+<h2>2. [Quiz 11-0] 고객 = 10주차 Quiz 10-2 (강의자료 3쪽 · w10 1교시)</h2>
+<ul><li>수업요약 “[Quiz11-0] 고객 (w10 1교시 수업)” — 10주차 <b>Quiz 10-2 와 같은 문제</b> → 조건 · SQL · 결과는 <a href="데이터베이스관리-10주차.html">10주차 6번</a></li><li>✍️ 노션 10주차 페이지 맨 아래에 붙인 “실습한 SQL코드” (fruit 2-1 ~ 2-7 · 고객 2-1 ~ 2-4) 를 MySQL 8.4 로 다시 실행 → <b>10주차 페이지 결과와 모두 같아요</b> ✅</li></ul>
+<pre><code class="language-sql">SELECT 등급, AVG(적립금) FROM 고객                            -- ✍️ 고객 2-4 내 답 (AVG 뒤를 한 칸 띄움)
+GROUP BY 등급 HAVING AVG (적립금)&gt;=1000;                      -- AVG 는 띄워도 됨 → gold 3500 · vip 2500
+SELECT COUNT (*) FROM 고객;                                   -- 🤖 COUNT 를 띄우면 → ERROR 1064
+SELECT SUM (적립금) FROM 고객;                                -- 🤖 SUM 을 띄우면 → ERROR 1630 (FUNCTION …SUM does not exist)</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>등급</th><th>AVG(적립금)</th></tr>
+<tr><td>gold</td><td>3500.0000</td></tr>
+<tr><td>vip</td><td>2500.0000</td></tr>
+</tbody></table>
+<div class="tip">🤖 MySQL 은 <code>COUNT</code> · <code>SUM</code> · <code>MAX</code> · <code>MIN</code> 같은 함수는 이름과 <code>(</code> 사이에 공백이 있으면 함수로 안 봐요 (<code>MAX (적립금)</code> 도 ERROR 1630 · 이 맥 MySQL 8.4 로 확인) · <code>AVG</code> 는 띄워도 되지만 시험 답안은 <b>붙여 쓰기</b> (<code>AVG(적립금)</code>) 가 안전해요.</div>
+</section>
+<section class="card" id="s4">
+<h2>3. 🔥 [Quiz 11-3] NULL 과 SUM — 기말고사 문제 (강의자료 6쪽)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “-- 1) <b>기말고사 문제</b> <code>SELECT sum(col2) FROM tab1;</code>” · 실습 엑셀 quiz-3 시트 “<b>중요! 기말고사 시험문제</b>”</p>
+<div class="tip">다음 중 테이블 tab1 에 아래와 같은 데이터가 존재할 경우에 대한 설명으로 가장 적절한 것은? (각 칼럼의 타입은 number 이다.)<br>① <code>select sum(col2) from tab1</code> 의 결과는 NULL 이다. · ② <code>select sum(col1 + col2 + col3) from tab1</code> 의 결과는 185 이다. · ③ <code>select sum(col2 + col3) from tab1</code> 의 결과는 90 이다. · ④ <code>select sum(col2) + sum(col3) from tab1</code> 의 결과는 90 이다.</div>
+<table class="ref">
+<tbody>
+<tr><th>col1</th><th>col2</th><th>col3</th></tr>
+<tr><td>10</td><td>20</td><td>NULL</td></tr>
+<tr><td>15</td><td>NULL</td><td>NULL</td></tr>
+<tr><td>50</td><td>70</td><td>20</td></tr>
+</tbody></table>
+<pre><code class="language-sql">CREATE TABLE tab1 (col1 int, col2 int, col3 int);           -- 문제의 number 는 Oracle 자료형 → MySQL 은 int 로
+INSERT INTO tab1 VALUES (10, 20, NULL);                      -- 1행
+INSERT INTO tab1 VALUES (15, NULL, NULL);                    -- 2행
+INSERT INTO tab1 VALUES (50, 70, 20);                        -- 3행
+SELECT col1, col2, col3, col1+col2+col3, col2+col3 FROM tab1;   -- 🤖 행마다 먼저 더해 보기 → NULL 이 섞인 행은 NULL</code></pre>
+<table class="ref">
+<tbody style="min-width:565px;">
+<tr><th>col1</th><th>col2</th><th>col3</th><th>col1+col2+col3</th><th>col2+col3</th></tr>
+<tr><td>10</td><td>20</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>
+<tr><td>15</td><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>
+<tr><td>50</td><td>70</td><td>20</td><td>140</td><td>90</td></tr>
+</tbody></table>
+<pre><code class="language-sql">select sum(col2) from tab1;                                  -- ① 집계함수는 NULL 을 빼고 → 20 + 70 = 90
+select sum(col1 + col2 + col3) from tab1;                    -- ② 행마다 NULL · NULL · 140 → NULL 을 빼고 합 → 140
+select sum(col2 + col3) from tab1;                           -- ③ 행마다 NULL · NULL · 90 → 90
+select sum(col2) + sum(col3) from tab1;                      -- ④ 열마다 따로 합 → 90 + 20 = 110</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>보기</th><th>결과 (MySQL)</th><th>판단</th></tr>
+<tr><td>① <code>sum(col2)</code></td><td><b>90</b></td><td>✕ — NULL 이 아니라 90</td></tr>
+<tr><td>② <code>sum(col1 + col2 + col3)</code></td><td><b>140</b></td><td>✕ — 185 가 아니라 140</td></tr>
+<tr><td>🔥 ③ <code>sum(col2 + col3)</code></td><td><b>90</b></td><td>⭕ <b>정답</b></td></tr>
+<tr><td>④ <code>sum(col2) + sum(col3)</code></td><td><b>110</b></td><td>✕ — 90 이 아니라 110</td></tr>
+</tbody></table>
+<div class="tip">6쪽 정리 — 1. <b>컬럼 간 연산</b>할 때 NULL 이 포함되면 항상 <b>NULL</b> 을 반환 · 2. 집계함수(SUM() · AVG() · MIN() · MAX() · COUNT())는 여러 행을 읽어 집계할 때 <b>NULL 값을 연산 대상에서 제외</b> (결과는 정상 반환)</div>
+<div class="tip">✍️ 엑셀 답 “① X 90나옴 · ② X 140 나옴 · ③ O 90나옴 · ④ X 110나옴” → 전부 ✅ (MySQL 로 확인) · 정답 <b>③</b> · 🤖 ② 의 185 = 10 + 20 + 15 + 50 + 70 + 20 (NULL 을 0 처럼 보고 다 더한 값) 함정 — 실제로는 1 · 2행 전체가 NULL 이 되어 합에서 빠져요.</div>
+</section>
+<section class="card" id="s5">
+<h2>4. [Quiz 11-4] 관계대수 — 집합 연산 R · S (강의자료 7쪽)</h2>
+<div class="tip">다음을 관계대수로 나타내고 SQL 문법과 실행결과를 작성하라 · 노트(엑셀)에 실행결과를 작성하시오</div>
+<table class="ref">
+<tbody>
+<tr><th>R.A</th><th>R.B</th><th>R.C</th></tr>
+<tr><td>a1</td><td>b1</td><td>c1</td></tr>
+<tr><td>a2</td><td>b1</td><td>c1</td></tr>
+<tr><td>a3</td><td>b1</td><td>c2</td></tr>
+<tr><td>a4</td><td>b2</td><td>c3</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>S.B</th><th>S.C</th><th>S.D</th></tr>
+<tr><td>b1</td><td>c1</td><td>d1</td></tr>
+<tr><td>b1</td><td>c1</td><td>d2</td></tr>
+<tr><td>b2</td><td>c2</td><td>d3</td></tr>
+</tbody></table>
+<pre><code class="language-sql">CREATE TABLE R (A char(2), B char(2), C char(2));           -- R(A, B, C)
+CREATE TABLE S (B char(2), C char(2), D char(2));           -- S(B, C, D) — B · C 가 공통
+INSERT INTO R VALUES ('a1','b1','c1'), ('a2','b1','c1'), ('a3','b1','c2'), ('a4','b2','c3');   -- 슬라이드(7쪽) 값
+INSERT INTO S VALUES ('b1','c1','d1'), ('b1','c1','d2'), ('b2','c2','d3');
+SELECT R.B, R.C FROM R UNION SELECT S.B, S.C FROM S;        -- 1) B · C 열만 뽑아 합치고 중복은 한 번만
+SELECT R.B, R.C FROM R INTERSECT SELECT S.B, S.C FROM S;    -- 2) 양쪽에 다 있는 것
+SELECT R.B, R.C FROM R EXCEPT SELECT S.B, S.C FROM S;       -- 3) 슬라이드는 MINUS → MySQL 은 EXCEPT
+SELECT * FROM R, S;                                          -- 4) 모든 짝</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>문제 (7쪽)</th><th>관계대수식</th><th>결과 (MySQL 8.4)</th></tr>
+<tr><td>1) <code>UNION</code></td><td>π B,C (R) ∪ π B,C (S)</td><td><b>4행</b> — (b1, c1) · (b1, c2) · (b2, c3) · (b2, c2)</td></tr>
+<tr><td>2) <code>INTERSECT</code></td><td>π B,C (R) ∩ π B,C (S)</td><td><b>1행</b> — (b1, c1)</td></tr>
+<tr><td>3) <code>MINUS</code></td><td>π B,C (R) − π B,C (S)</td><td>⚠️ <code>MINUS</code> → ERROR 1064 · <code>EXCEPT</code> → <b>2행</b> (b1, c2) · (b2, c3)</td></tr>
+<tr><td>4) <code>FROM R, S</code></td><td>R × S</td><td><b>12행</b> (4 × 3) · 열 6개 (A · B · C · B · C · D)</td></tr>
+</tbody></table>
+<div class="tip">✍️ 내 1) 답 <code>SELECT R.B,R.C FROM R UNION SELECT S.B,S.C FROM S</code> ✅ (끝에 <code>;</code> 만 더하기) · 🤖 <code>UNION ALL</code> 이면 중복까지 7행 · ⚠️ 수업요약 txt 의 R INSERT 3행은 <code>('a2','b1','c2')</code> 라 슬라이드의 <b>a3</b> 와 달라요 (오타로 보임) — 1) ~ 3) 은 B · C 만 써서 결과가 같고 4) 의 A 열만 달라져요 (위 결과는 슬라이드 값) · 🤖 MySQL <b>8.0.31+</b> 는 <code>INTERSECT</code> · <code>EXCEPT</code> 지원 (이 맥 8.4 로 확인 · 학교 MySQL 이 낮은 버전이면 오류) · 기말은 <b>합집합만</b> (10주차 🔥).</div>
+</section>
+<section class="card" id="s6">
+<h2>5. 조인 요약 — 내부조인 · 외부조인 (강의자료 11 · 12쪽)</h2>
+<p><span class="wk-tag note">✍️ 필기</span></p>
+<ul><li>조인 : 두 개 이상의 테이블에서 원하는 결과를 검색 (공통 필드)</li><li>1) <b>내부조인</b>(INNER JOIN) : 2개 이상의 테이블에서 <b>일치하는 행</b> 검색</li><li>2) <b>외부조인</b>(OUTER JOIN) : 2개 이상의 테이블에서 <b>일치하지 않는 행도</b> 검색</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>조인</th><th>종류</th><th>MySQL</th></tr>
+<tr><td><b>내부조인</b></td><td>세타조인 (theta) · 동등조인 (equi) · 자연조인 (natural)</td><td><code>INNER JOIN … ON</code> · <code>NATURAL JOIN</code></td></tr>
+<tr><td><b>외부조인</b></td><td>왼쪽 (left) · 오른쪽 (right) · 완전 (full) 외부조인</td><td><code>LEFT OUTER JOIN</code> · <code>RIGHT OUTER JOIN</code> · 완전 = 왼쪽 <code>UNION</code> 오른쪽</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>쓰는 법 (12쪽)</th><th>모양</th></tr>
+<tr><td>방법1</td><td><code>SELECT … FROM 테이블1, 테이블2 WHERE 테이블1.키 = 테이블2.키 AND …</code></td></tr>
+<tr><td>방법2</td><td><code>SELECT … FROM 테이블1 INNER JOIN 테이블2 ON 테이블1.키 = 테이블2.키 WHERE … AND …</code></td></tr>
+<tr><td>외부조인</td><td>방법2 모양 — <code>FROM 테이블1 LEFT OUTER JOIN 테이블2 ON …</code> (수업 답안도 방법2)</td></tr>
+</tbody></table>
+<div class="tip">🤖 방법1 처럼 <code>WHERE 테이블1.키 = 테이블2.키</code> 로 짝을 맞추면 짝 없는 행은 빠져서 <b>내부조인</b>(동등조인) 결과가 돼요 — 짝 없는 행을 살리는 외부조인은 <code>LEFT/RIGHT OUTER JOIN … ON</code> 으로.</div>
+</section>
+<section class="card" id="s7">
+<h2>6. [실습] freshman · dmember — 조인 6가지 (강의자료 13 ~ 19쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th>freshman.name</th><th>address</th></tr>
+<tr><td>김광식</td><td>서울</td></tr>
+<tr><td>김현정</td><td>대전</td></tr>
+<tr><td>조영수</td><td>대전</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>dmember.name</th><th>dept_name</th></tr>
+<tr><td>김광식</td><td>컴퓨터공학과</td></tr>
+<tr><td>김현정</td><td>산업공학과</td></tr>
+<tr><td>이진영</td><td>전자공학과</td></tr>
+</tbody></table>
+<pre><code class="language-sql">CREATE TABLE freshman (name VARCHAR(12) NOT NULL, address VARCHAR(9));       -- 신입생 (이름 · 주소)
+CREATE TABLE dmember (name VARCHAR(12) NOT NULL, dept_name VARCHAR(30));     -- 학과 회원 (이름 · 학과)
+INSERT INTO freshman VALUES('김광식','서울'), ('김현정','대전'), ('조영수','대전');
+INSERT INTO dmember VALUES('김광식','컴퓨터공학과'), ('김현정','산업공학과'), ('이진영','전자공학과');
+SELECT * FROM freshman, dmember;                             -- 1. 카티션 프로덕트 — 조건 없이 모든 짝 (= CROSS JOIN)</code></pre>
+<p>→ 3 × 3 = <b>9행</b> · 열 4개 (name · address · name · dept_name) — <code>SELECT * FROM freshman CROSS JOIN dmember;</code> 도 9행</p>
+<h3>2. 동등조인 · 3. 자연조인</h3>
+<pre><code class="language-sql">SELECT * FROM freshman, dmember                              -- 2. 동등조인 방법1 — FROM 에 두 테이블
+WHERE freshman.name = dmember.name;                          -- 이름이 같은 짝만
+SELECT * FROM freshman INNER JOIN dmember                    -- 2. 동등조인 방법2 — INNER JOIN
+ON freshman.name = dmember.name;                             -- ON 에 조건 → 결과 같음
+SELECT freshman.name, address, dept_name                     -- 3. 자연조인 — 같은 name 은 한 번만 (freshman.name)
+FROM freshman INNER JOIN dmember
+ON freshman.name = dmember.name;                             -- 방법1 (WHERE) 로 써도 같음</code></pre>
+<table class="ref">
+<tbody style="min-width:400px;">
+<tr><th>name</th><th>address</th><th>name</th><th>dept_name</th></tr>
+<tr><td>김광식</td><td>서울</td><td>김광식</td><td>컴퓨터공학과</td></tr>
+<tr><td>김현정</td><td>대전</td><td>김현정</td><td>산업공학과</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>name</th><th>address</th><th>dept_name</th></tr>
+<tr><td>김광식</td><td>서울</td><td>컴퓨터공학과</td></tr>
+<tr><td>김현정</td><td>대전</td><td>산업공학과</td></tr>
+</tbody></table>
+<div class="tip">✍️ 내 필기 (방법1 · 방법2) ✅ · 🤖 <code>SELECT * FROM freshman NATURAL JOIN dmember;</code> 도 같은 3열 2행 · ⚠️ 자연조인에서 <code>freshman.</code> 을 빼고 <code>SELECT name, …</code> 이라 쓰면 <b>ERROR 1052</b> (Column 'name' in field list is ambiguous — 두 테이블에 다 있어서) → <code>테이블.열</code> 로 써야 해요.</div>
+<h3>4. 왼쪽 외부조인 · 5. 오른쪽 외부조인</h3>
+<pre><code class="language-sql">SELECT * FROM freshman LEFT OUTER JOIN dmember               -- 4. 왼쪽(freshman) 행은 짝이 없어도 모두
+ON freshman.name = dmember.name;                             -- 조영수는 짝이 없어 dmember 쪽이 NULL
+SELECT * FROM freshman RIGHT OUTER JOIN dmember              -- 5. 오른쪽(dmember) 행은 모두
+ON freshman.name = dmember.name;                             -- 이진영은 짝이 없어 freshman 쪽이 NULL</code></pre>
+<table class="ref">
+<tbody style="min-width:400px;">
+<tr><th>name</th><th>address</th><th>name</th><th>dept_name</th></tr>
+<tr><td>김광식</td><td>서울</td><td>김광식</td><td>컴퓨터공학과</td></tr>
+<tr><td>김현정</td><td>대전</td><td>김현정</td><td>산업공학과</td></tr>
+<tr><td>조영수</td><td>대전</td><td>NULL</td><td>NULL</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:400px;">
+<tr><th>name</th><th>address</th><th>name</th><th>dept_name</th></tr>
+<tr><td>김광식</td><td>서울</td><td>김광식</td><td>컴퓨터공학과</td></tr>
+<tr><td>김현정</td><td>대전</td><td>김현정</td><td>산업공학과</td></tr>
+<tr><td>NULL</td><td>NULL</td><td>이진영</td><td>전자공학과</td></tr>
+</tbody></table>
+<h3>6. 완전 외부조인 — MySQL 은 UNION 으로</h3>
+<pre><code class="language-sql">SELECT * FROM freshman FULL OUTER JOIN dmember               -- ⚠️ MySQL 에는 이 문법이 없음 → ERROR 1064
+ON freshman.name = dmember.name;
+SELECT * FROM freshman LEFT OUTER JOIN dmember               -- ✍️ 내 필기 — 왼쪽 외부조인
+ON freshman.name = dmember.name
+UNION                                                        -- 두 결과를 합치고 겹치는 2행(김광식 · 김현정)은 한 번만
+SELECT * FROM freshman RIGHT OUTER JOIN dmember              -- + 오른쪽 외부조인 (열 순서가 같음)
+ON freshman.name = dmember.name;</code></pre>
+<table class="ref">
+<tbody style="min-width:400px;">
+<tr><th>name</th><th>address</th><th>name</th><th>dept_name</th></tr>
+<tr><td>김광식</td><td>서울</td><td>김광식</td><td>컴퓨터공학과</td></tr>
+<tr><td>김현정</td><td>대전</td><td>김현정</td><td>산업공학과</td></tr>
+<tr><td>조영수</td><td>대전</td><td>NULL</td><td>NULL</td></tr>
+<tr><td>NULL</td><td>NULL</td><td>이진영</td><td>전자공학과</td></tr>
+</tbody></table>
+<div class="tip">✍️ 내 필기 (LEFT … UNION … RIGHT) ✅ · 실습 엑셀 “외부조인-답안” 시트의 결과와 같아요 · 19쪽 “방법2) <b>문법 없다</b>” 도 맞아요 (<code>FULL OUTER JOIN</code> → ERROR 1064).</div>
+<div class="tip">⚠️ <b>19쪽 답안</b> 은 UNION 뒤쪽을 <code>SELECT * FROM dmember LEFT OUTER JOIN freshman …</code> 로 썼어요 → 열 순서가 (name, <b>dept_name</b>, name, <b>address</b>) 로 바뀌어서 UNION 이 열을 <b>위치대로</b> 합치면 아래처럼 엇갈린 <b>6행</b> 이 나와요 (MySQL 8.4 로 확인). 뒤쪽은 <code>freshman RIGHT OUTER JOIN dmember</code> 로 (또는 열 이름을 같은 순서로 적어서) 써야 해요.</div>
+<table class="ref">
+<tbody style="min-width:400px;">
+<tr><th>name</th><th>address</th><th>name</th><th>dept_name</th></tr>
+<tr><td>김광식</td><td>서울</td><td>김광식</td><td>컴퓨터공학과</td></tr>
+<tr><td>김현정</td><td>대전</td><td>김현정</td><td>산업공학과</td></tr>
+<tr><td>조영수</td><td>대전</td><td>NULL</td><td>NULL</td></tr>
+<tr><td>김광식</td><td><b>컴퓨터공학과</b></td><td>김광식</td><td><b>서울</b></td></tr>
+<tr><td>김현정</td><td><b>산업공학과</b></td><td>김현정</td><td><b>대전</b></td></tr>
+<tr><td>이진영</td><td><b>전자공학과</b></td><td>NULL</td><td>NULL</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s8">
+<h2>7. 📖 예습 — 강의자료 8 · 9 · 10쪽 (Quiz 11-5 · 11-6 · 11-7)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “8,9,10페이지 예습해오기” · 표는 강의자료 · 실습 엑셀 값 · 결과는 MySQL 8.4 로 미리 실행해 둔 값이에요.</p>
+<h3>[Quiz 11-5] R1 · R2 — 관계대수 (8쪽)</h3>
+<table class="ref">
+<tbody style="min-width:466px;">
+<tr><th>R1.A</th><th>R1.B</th><th>R1.C</th><th></th><th>R2.A</th><th>R2.B</th><th>R2.C</th></tr>
+<tr><td>a1</td><td>b1</td><td>c1</td><td></td><td>a1</td><td>b1</td><td>c1</td></tr>
+<tr><td>a2</td><td>b3</td><td>c3</td><td></td><td>a2</td><td>b3</td><td>c3</td></tr>
+<tr><td>a3</td><td>b4</td><td>c2</td><td></td><td>a3</td><td>b3</td><td>c1</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>연산 (8쪽 표)</th><th>SQL (MySQL)</th><th>결과</th></tr>
+<tr><td>실렉션 σ A='a1' or A='a2' (R1)</td><td><code>SELECT * FROM R1 WHERE A='a1' OR A='a2';</code></td><td>(a1, b1, c1) · (a2, b3, c3)</td></tr>
+<tr><td>프로젝션 π A,B (R2)</td><td><code>SELECT A, B FROM R2;</code></td><td>(a1, b1) · (a2, b3) · (a3, b3)</td></tr>
+<tr><td>합집합 R1 ∪ R2</td><td><code>SELECT * FROM R1 UNION SELECT * FROM R2;</code></td><td>4행 — 앞 3행 + (a3, b3, c1) · 겹치는 2행은 한 번만</td></tr>
+<tr><td>차집합 R1 − R2</td><td><code>SELECT * FROM R1 EXCEPT SELECT * FROM R2;</code></td><td>(a3, b4, c2)</td></tr>
+<tr><td>조인 R1 ⋈ R1.C=R2.C R2</td><td><code>SELECT * FROM R1 INNER JOIN R2 ON R1.C = R2.C;</code></td><td>3행 — (a1 b1 c1 · a1 b1 c1) · (a2 b3 c3 · a2 b3 c3) · (a1 b1 c1 · a3 b3 c1)</td></tr>
+</tbody></table>
+<h3>[Quiz 11-6] omember · group_ex — 외부조인 (9쪽)</h3>
+<table class="ref">
+<tbody style="min-width:643px;">
+<tr><th>omember.id</th><th>groupid</th><th></th><th>group_ex.groupid</th><th>position</th></tr>
+<tr><td>100</td><td>A</td><td></td><td>A</td><td>서울</td></tr>
+<tr><td>101</td><td>B</td><td></td><td>B</td><td>대구</td></tr>
+<tr><td>102</td><td>A</td><td></td><td>C</td><td>광주</td></tr>
+<tr><td>103</td><td>F</td><td></td><td>D</td><td>부산</td></tr>
+<tr><td></td><td></td><td></td><td>E</td><td>대전</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>조인 (<code>ON omember.groupid = group_ex.groupid</code>)</th><th>결과</th></tr>
+<tr><td>1. 카티션 프로덕트</td><td>4 × 5 = <b>20행</b></td></tr>
+<tr><td>2. 동등조인 <code>INNER JOIN</code></td><td><b>3행</b> — 100 A A 서울 · 101 B B 대구 · 102 A A 서울</td></tr>
+<tr><td>3. 자연조인 <code>NATURAL JOIN</code></td><td>3행 — groupid · id · position (A 100 서울 · A 102 서울 · B 101 대구)</td></tr>
+<tr><td>4. 왼쪽 외부조인</td><td><b>4행</b> — 위 3행 + <b>103 F NULL NULL</b> (F 그룹이 없음)</td></tr>
+<tr><td>5. 오른쪽 외부조인</td><td><b>6행</b> — 위 3행 + <b>NULL NULL C 광주 · NULL NULL D 부산 · NULL NULL E 대전</b></td></tr>
+<tr><td>6. 완전 외부조인 (왼쪽 UNION 오른쪽)</td><td><b>7행</b> — 3 + 1 + 3</td></tr>
+</tbody></table>
+<div class="tip">⚠️ 수업요약 txt 의 omember 마지막 INSERT 는 <code>('102', 'F')</code> 인데 실습 엑셀은 <b>103 F</b> (오타로 보임 · id 만 다르고 결과 모양은 같음) — 위는 엑셀 값.</div>
+<h3>[Quiz 11-7] emp · project — 외부조인 (10쪽)</h3>
+<table class="ref">
+<tbody style="min-width:487px;">
+<tr><th>emp.ename</th><th>pno</th><th></th><th>project.pno</th><th>pname</th></tr>
+<tr><td>홍길동</td><td>101</td><td></td><td>101</td><td>작전중</td></tr>
+<tr><td>임꺽정</td><td>102</td><td></td><td>102</td><td>특공대</td></tr>
+<tr><td>박찬호</td><td>101</td><td></td><td>103</td><td>유레카</td></tr>
+<tr><td>박찬호</td><td>103</td><td></td><td>104</td><td>다모여</td></tr>
+<tr><td>신동엽</td><td>NULL</td><td></td><td></td><td></td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>조인 (<code>ON emp.pno = project.pno</code>)</th><th>결과</th></tr>
+<tr><td>1. 카티션 프로덕트</td><td>5 × 4 = <b>20행</b></td></tr>
+<tr><td>2. 동등조인 <code>INNER JOIN</code></td><td><b>4행</b> — 홍길동 101 작전중 · 임꺽정 102 특공대 · 박찬호 101 작전중 · 박찬호 103 유레카</td></tr>
+<tr><td>3. 자연조인 <code>NATURAL JOIN</code></td><td>4행 — pno · ename · pname</td></tr>
+<tr><td>4. 왼쪽 외부조인</td><td><b>5행</b> — 위 4행 + <b>신동엽 NULL NULL NULL</b></td></tr>
+<tr><td>5. 오른쪽 외부조인</td><td><b>5행</b> — 위 4행 + <b>NULL NULL 104 다모여</b></td></tr>
+<tr><td>6. 완전 외부조인 (왼쪽 UNION 오른쪽)</td><td><b>6행</b> — 4 + 1 + 1</td></tr>
+</tbody></table>
+<div class="tip">🤖 신동엽의 pno 는 NULL → <code>NULL = 101</code> 은 참이 아니라서 어떤 프로젝트와도 짝이 안 맞아요 (외부조인에서만 살아남음).</div>
+</section>
+<section class="card" id="s9">
+<h2>8. 🔥 univDB — 예제 5-8-2 · 예제 5-9 (과제02 범위)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “예제5-8-2) 전체학생수, 주소를 입력한 학생수, 주소의 종류를 중복없이 검색한 개수를 검색하시오 <b>--시험에 나옴</b>”</p>
+<table class="ref">
+<tbody style="min-width:657px;">
+<tr><th>학번</th><th>이름</th><th>주소</th><th>학년</th><th>나이</th><th>성별</th><th>휴대폰번호</th><th>소속학과</th></tr>
+<tr><td>s001</td><td>김연아</td><td>서울 서초</td><td>4</td><td>23</td><td>여</td><td>010-1111-2222</td><td>컴퓨터</td></tr>
+<tr><td>s002</td><td>홍길동</td><td>미정</td><td>1</td><td>26</td><td>남</td><td>NULL</td><td>통계</td></tr>
+<tr><td>s003</td><td>이승엽</td><td>NULL</td><td>3</td><td>30</td><td>남</td><td>NULL</td><td>정보통신</td></tr>
+<tr><td>s004</td><td>이영애</td><td>경기 분당</td><td>2</td><td>NULL</td><td>여</td><td>010-4444-5555</td><td>정보통신</td></tr>
+<tr><td>s005</td><td>송윤아</td><td>경기 분당</td><td>4</td><td>23</td><td>여</td><td>010-6666-7777</td><td>컴퓨터</td></tr>
+<tr><td>s006</td><td>홍길동</td><td>서울 종로</td><td>2</td><td>26</td><td>남</td><td>010-8888-9999</td><td>컴퓨터</td></tr>
+<tr><td>s007</td><td>이은진</td><td>경기 과천</td><td>1</td><td>23</td><td>여</td><td>010-2222-3333</td><td>경영</td></tr>
+</tbody></table>
+<pre><code class="language-sql">SELECT COUNT(*), COUNT(주소), COUNT(DISTINCT 주소)           -- 🔥 ✍️ 내 답 — 행 수 · 주소가 NULL 이 아닌 수 · 주소 종류
+FROM 학생;                                                   -- 학생 7명 (sql-univDB 스크립트로 만든 univDB)</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>COUNT(*)</th><th>COUNT(주소)</th><th>COUNT(DISTINCT 주소)</th></tr>
+<tr><td>7</td><td>6</td><td>5</td></tr>
+</tbody></table>
+<div class="tip">🔥 <code>COUNT(*)</code> = <b>7</b> (모든 행) · <code>COUNT(주소)</code> = <b>6</b> (이승엽의 주소 NULL 만 빠짐 · 홍길동의 <b>'미정' 은 값</b>이라 셈 — 주소의 DEFAULT 가 '미정') · <code>COUNT(DISTINCT 주소)</code> = <b>5</b> (경기 분당 2명 → 한 번 · NULL 은 빼고) — 서울 서초 · 미정 · 경기 분당 · 서울 종로 · 경기 과천</div>
+<pre><code class="language-sql">SELECT 성별, AVG(나이)                                        -- ✍️ 예제5-9 내 답 — 여학생의 평균 나이
+FROM 학생
+WHERE 성별='여';                                              -- 여 4명 중 나이가 NULL 인 이영애는 AVG 에서 빠짐 → (23 + 23 + 23) ÷ 3</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>성별</th><th>AVG(나이)</th></tr>
+<tr><td>여</td><td>23.0000</td></tr>
+</tbody></table>
+<div class="tip">🤖 집계함수와 보통 열(성별)을 GROUP BY 없이 같이 쓰면 보통 <b>ERROR 1140</b> (ONLY_FULL_GROUP_BY) 인데, 이건 WHERE 가 성별을 '여' 하나로 정해서 MySQL 8.4 가 받아 줘요 — 같은 자리에 <code>이름</code> 을 쓰면 ERROR 1140 · 안전하게는 <code>SELECT AVG(나이) …</code> 만 · ⚠️ HW02 txt 주석의 학생(학번, 이름, 주소, 학년, 나이, 휴대폰번호, 소속학과) 에는 <b>성별</b> 이 빠져 있지만 실제 스키마에는 <code>성별 char(1) NOT NULL</code> 이 있어요.</div>
+</section>
+<section class="card" id="s10">
+<h2>9. 📝 과제02 — 교재 5장 SELECT (01) (강의자료 20 ~ 27쪽 · 과제.txt)</h2>
+<table class="ref">
+<tbody>
+<tr><th>항목</th><th>내용</th></tr>
+<tr><td>할 일</td><td>실습하여 답안을 워드에 작성 (MySQL 사용) — 1) 문제 풀이하여 답안 작성 (<b>문제와 답안 모두</b>) · 2) (MySQL) <b>실행결과 화면캡처</b></td></tr>
+<tr><td>범위</td><td><code>HW02-univDB-select-01.txt</code> [실습 1] ~ [실습 4] — 예제5-1 ~ 5-23 (기본 SELECT · DISTINCT · 정렬 · 집계함수 · GROUP BY · LIKE · NULL · 집합 · 조인 · 외부조인) · “과제2 는 여기까지 제출!”</td></tr>
+<tr><td>준비</td><td><code>sql-univDB-mysql-txt.txt</code> 실행 → univDB (학생 7 · 과목 5 · 수강 9) · 작성한 SQL 파일은 각자 따로 보관</td></tr>
+<tr><td>제출</td><td>eClass-과제 첨부파일 · 파일명 <b><code>과제02-분반_이름_학번-작성날짜.doc</code></b> (또는 hwp) — 예) 과제02-Y1_홍길동_26229999-제출날짜</td></tr>
+<tr><td>마감</td><td>자료에 없음 (eClass 확인)</td></tr>
+</tbody></table>
+<div class="tip">그 아래 예제5-22 (셀프 조인) · 5-17a ~ e (서브질의 · IN · EXISTS · NOT EXISTS) 는 <b>12주차 수업</b> — “과제2 는 아닙니다 · 단, <b>기말고사에는 포함</b>됩니다”.</div>
+</section>
+<section class="card" id="s11">
+<h2>⚠️ 정정 · 팩트체크</h2>
+<ul><li><b>19쪽 완전외부조인 답안</b> — UNION 뒤쪽 <code>dmember LEFT OUTER JOIN freshman</code> 은 열 순서가 달라 열이 엇갈린 6행 → <code>freshman RIGHT OUTER JOIN dmember</code> 로 (6번 · MySQL 8.4 로 확인)</li><li><code>FULL OUTER JOIN</code> — MySQL 에 없음 (ERROR 1064) → 왼쪽 <code>UNION</code> 오른쪽 (19쪽 “문법 없다” 맞음)</li><li>Quiz 11-4 3) <code>MINUS</code> — Oracle 문법 → MySQL ERROR 1064 · MySQL 8.0.31+ 는 <code>EXCEPT</code> (<code>INTERSECT</code> 도)</li><li>수업요약 txt 의 오타로 보이는 값 — R 3행 <code>('a2','b1','c2')</code> (슬라이드는 a3) · omember <code>('102','F')</code> (엑셀은 103)</li><li>HW02 txt 주석의 학생 속성 목록에 <b>성별</b> 이 빠짐 (실제 스키마에는 있음)</li><li>함수 이름 뒤 공백 — <code>AVG (적립금)</code> 은 되지만 <code>COUNT (*)</code> ERROR 1064 · <code>SUM (…)</code> · <code>MAX (…)</code> ERROR 1630 → 붙여 쓰기</li><li>Quiz 11-3 의 number 는 Oracle 자료형 — MySQL 에서는 int 로 실행 (결과 같음)</li></ul>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로 · 실습 엑셀 메모)</summary>
+<pre><code class="language-text">직원테이블 퀴즈 3번문제(직책의 개수를 중복없이 검색하시오)부터 시험문제
+
+-- 답안
+-- [Quiz11-1]  (MySQL) 실습: (직원)
+-- 1) 최대 연봉을 구하시오
+SELECT MAX(연봉)
+FROM 직원;
+-- 2) 사원수를 구하시오
+SELECT COUNT(*)
+FROM 직원;
+-- 3) 직책의 개수를 중복없이 검색하시오
+SELECT COUNT(DISTINCT 직책) 
+FROM 직원;
+-- 4) 직책별 연봉의 평균을 구하시오
+SELECT 직책,AVG(연봉)
+FROM 직원
+GROUP BY 직책;
+-- 5) 직책별 사원수를 구하시오
+SELECT 직책,COUNT(*)
+FROM 직원
+GROUP BY 직책;
+-- 6) 연봉이 2500 이상인 사원이 2명 이상인 직책의 사원수를 구하시오
+SELECT 직책,COUNT(*)
+FROM 직원
+WHERE 연봉&gt;=2500
+GROUP BY 직책
+HAVING COUNT(*)&gt;=2;
+
+8,9,10페이지 예습해오기
+
+#NULL
+NULL 값과 산술연산한 결과값은 NULL이다
+
+#집계함수
+AVG(필드): NULL 제외
+-- 1) 기말고사 문제
+SELECT sum(col2)
+FROM tab1;
+# [요약] 조인 (join)
+
+조인 : 두 개 이상의 테이블에서 원하는 결과를 검색
+       (공통 필드)
+
+1) 내부조인(INNER JOIN):2개 이상의 테이블에서 일치하는 행 검색 
+2) 외부조인(OUTER JOIN):2개 이상의 테이블에서 일치하는지 않는 행도 검색
+
+내부조인: 세타조인, 동등조인, 자연조인
+(theta join, equi join, natural join)
+          
+외부조인: 왼쪽외부조인, 오른쪽외부조인, 완전외부조인
+(left outer join, right outer join, full outer join)
+
+[실습1] 내부조인
+방법1
+SELECT
+FROM
+WHERE
+
+방법2
+SELECT
+FROM
+ON
+
+SELECT * FROM 학생;
+-- 예제5-8-2) 전체학생수, 주소를 입력한 학생수, 주소의 종류를 중복없이 검색한 개수를 
+-- 검색하시오 --시험에 나옴
+SELECT COUNT(*),COUNT(주소),COUNT(DISTINCT 주소)
+FROM 학생;
+-- 예제5-9) 여 학생의 평균 나이를 검색하시오
+SELECT 성별,AVG(나이)
+FROM 학생
+WHERE 성별='여';
+
+-- [실습 1] freshman, dmember
+-- 1. 내부조인
+-- 1-1) 동등 조인(equi join)
+-- 방법1
+SELECT *
+FROM freshman,dmember 
+WHERE freshman.name=dmember.name;
+-- 방법2
+SELECT *
+FROM freshman INNER JOIN dmember 
+ON freshman.name=dmember.name;
+-- 1-2) 자연 조인(natural join)
+-- 방법1
+SELECT freshman.name,address,dept_name
+FROM freshman,dmember 
+WHERE freshman.name=dmember.name;
+-- 방법2
+SELECT freshman.name,address,dept_name
+FROM freshman INNER JOIN dmember 
+ON freshman.name=dmember.name;
+
+-- 2. 외부조인
+--      2-1) 왼쪽   외부조인
+SELECT *
+FROM   freshman LEFT OUTER JOIN dmember
+ON freshman.name = dmember.name;
+--      2-2) 오른쪽 외부조인
+SELECT *
+FROM   freshman RIGHT OUTER JOIN dmember
+ON freshman.name = dmember.name;
+--      2-3) 완전    외부조인
+SELECT *
+FROM   freshman LEFT OUTER JOIN dmember
+ON freshman.name = dmember.name
+UNION
+SELECT *
+FROM   freshman RIGHT OUTER JOIN dmember
+ON freshman.name = dmember.name;
+
+-- [QUIZ 11-4]
+-- 1)
+SELECT R.B,R.C
+FROM R
+UNION
+SELECT S.B,S.C
+FROM S
+
+(실습 엑셀 quiz-3 시트) 중요! 기말고사 시험문제
+① X 90나옴   ② X 140 나옴   ③ O 90나옴   ④ X 110나옴</code></pre>
+<div class="tip">노션에는 이 밖에 10주차 페이지 맨 아래에 fruit · 고객 실습 SQL 을 붙였어요 (2번에서 다시 실행해 확인).</div>
+</details>
+</section>
+<section class="card" id="s12">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../데이터베이스관리-실제시험.html">🔒 데이터베이스관리 실제시험 — 11주차 🔥 직원 집계 · NULL 과 SUM · 조인 문제까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="데이터베이스관리-15주차-기말고사.html">기말고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><a class="next" href="데이터베이스관리-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리 · 11주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202611041620"></script>
+</body>
+</html>
