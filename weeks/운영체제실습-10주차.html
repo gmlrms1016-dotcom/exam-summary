@@ -102,7 +102,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>디스크 추가 · 파티션 · 마운트 · fstab · 쿼터 (6장)</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>디스크 추가 · 파티션 · 마운트 · fstab · 쿼터 (6장)</small></a><a class="next" href="운영체제실습-11주차.html">다음 · <b>11주차</b> ›<br><small>원격 접속 — 🔥 텔넷 서버 · XRDP 원격 데스크톱 + 🔥 LVM 개념</small></a></nav>
 
 <div class="tip">수업: <b>11/5(목)</b> · 교재 『이것이 리눅스다』 Chapter 06 <b>디스크 관리와 사용자별 공간 할당</b> — RAID (396 ~ 405쪽 · VITAMIN QUIZ 6-2 426쪽) · ✍️ 노션 10주차 필기 = 수업 메모 · RAID 종류(“claude야 정리해”) · Linear RAID 명령 메모 · 고장 → 복구 로그 + 과제(워드 캡처 30장)<br>정리 범위 = 노션 필기(로그) + 제출 워드 캡처(🖼️). <b>[보충]</b> = 필기에 없던 단계 · 📖 = 교재 · 🤖 = 교재 · 필기에 없는 설명. 로그 상자는 <b>명령을 누르면 출력이 펼쳐져요</b>.</div>
 <section class="card" id="s1">
@@ -624,7 +624,7 @@ tmpfs             370680     124   370556    1% /run/user/0
 <ol><li><b>RAID</b> = 여러 디스크를 <b>하나처럼</b> · 하드웨어 RAID(컨트롤러 장비 · 안정적 · <b>비쌈</b>) vs 소프트웨어 RAID(<b>운영체제</b> 지원 · 저렴 · 이번 실습 <code>mdadm</code>)</li><li>기본 7가지 = Linear · RAID 0 ~ 5 · 실무 = <b>Linear · 0 · 1 · 5 · 6 · 1+0</b> · 단순 볼륨은 <b>RAID 아님</b></li><li><b>Linear</b> = 앞 디스크를 <b>다 채운 뒤</b> 다음 · 크기가 달라도 전부 사용(100TB + 1TB = 101TB) · <b>결함 허용 ✗</b></li><li><b>RAID 0</b> = <b>스트라이핑</b> · 동시에 저장 → <b>가장 빠름</b>(12초 → 4초) · 하나만 고장 나도 <b>전부 잃음</b> → “잃어도 큰 문제 없는 데이터” · 최소 2개 · 용량 N</li><li><b>RAID 1</b> = <b>미러링</b> · 같은 데이터 2벌 → <b>결함 허용</b> · 공간 효율 <b>50%</b> · 속도 변화 없음 · 최소 2개</li><li><b>RAID 5</b> = <b>패리티</b> · <b>최소 3개</b> · 용량 <b>N − 1</b> · <b>1개</b> 고장까지 복구 · <b>짝수 패리티</b> = 행의 1 개수가 짝수가 되게 채움 (0+0+0+P → P=0)</li><li><b>RAID 6</b> = 패리티 <b>2개</b> · <b>최소 4개</b> · 용량 <b>N − 2</b> · <b>2개</b> 동시 고장까지 · RAID 5 보다 신뢰도 ↑ 속도 약간 ↓ · <b>RAID 1+0</b> = 미러링 후 스트라이핑</li><li>VMware <b>SCSI 60개</b> = 슬롯 4개 × 15개(0:7 제외) · 디스크 추가 땐 <b>SCSI</b> 로</li><li>Linear RAID 순서: <code>fdisk</code>(<b>t → fd</b>) → <code>mdadm --create /dev/md9 --level=linear --raid-devices=2 /dev/sdb1 /dev/sdc1</code> → <code>mdadm --detail</code> → <code>mkfs.ext4 /dev/md9</code> → <code>mount</code> → <code>/etc/fstab</code> → <code>mdadm --detail --scan &gt; /etc/mdadm.conf</code></li><li>디스크 고장 → fstab 의 md9 를 못 찾아 <b>응급 모드</b> · <code>mdadm --run</code> = <b>not enough drives</b> → <code>mdadm --stop</code> + fstab <code>#</code> 로 부팅 → 새 디스크 · 다시 <code>--create</code>(y) · <code>mkfs</code> · mdadm.conf · fstab <code>#</code> 지우기 → <b>장치는 복구 · 데이터(testFile)는 복구 ✗</b></li></ol>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>디스크 추가 · 파티션 · 마운트 · fstab · 쿼터 (6장)</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-9주차.html">‹ 이전 · <b>9주차</b><br><small>디스크 추가 · 파티션 · 마운트 · fstab · 쿼터 (6장)</small></a><a class="next" href="운영체제실습-11주차.html">다음 · <b>11주차</b> ›<br><small>원격 접속 — 🔥 텔넷 서버 · XRDP 원격 데스크톱 + 🔥 LVM 개념</small></a></nav>
 
     <p class="wk-src">노션 「운영체제실습 · 10주차」 페이지를 정리한 내용입니다.</p>
 

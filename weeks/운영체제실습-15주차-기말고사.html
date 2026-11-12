@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202611041620"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>운영체제실습 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)</title>
-    <meta name="description" content="운영체제실습 15주차 정리 — 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <title>운영체제실습 15주차 · 기말고사 시험문제 정리 (9 ~ 11주차 반영)</title>
+    <meta name="description" content="운영체제실습 15주차 정리 — 기말고사 시험문제 정리 (9 ~ 11주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="운영체제실습 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <meta property="og:title" content="운영체제실습 15주차 · 기말고사 시험문제 정리 (9 ~ 11주차 반영)">
     <meta property="og:description" content="운영체제실습 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -99,10 +99,10 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🐧 운영체제실습 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9 · 10주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 ~ 11주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>원격 접속 — 🔥 텔넷 서버 · XRDP 원격 데스크톱 + 🔥 LVM 개념</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../운영체제실습-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 1장 ~ 7장 · 객관식(시험 예시 1~10번) + sh 문제 + 호스트 / 게스트 운영체제 설명 1문제였어요.</div>
@@ -147,8 +147,12 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 로그 · 캡처는 <a href="운영체제실습-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
 </section>
+<section class="card" id="s4">
+<h2>11주차 · 원격 접속 (텔넷 · XRDP) + 🔥 LVM 개념</h2>
+<ul><li>✍️ <b>“LVM 실습은 안 하지만 시험에 개념은 출제함”</b> — 물리 볼륨(파티션) → 볼륨 그룹(합침) → 논리 볼륨(나눔) · pvcreate → vgcreate → lvcreate → mkfs.ext4 → mount · Rocky 기본 설치 = LVM (📖 462 ~ 464쪽)</li><li>텔넷 서버 — <code>dnf -y install telnet-server</code> → <code>adduser teluser</code> · <code>passwd teluser</code> → 방화벽 → <code>systemctl start telnet.socket</code> → active (listening) · <b>포트 23</b></li><li>글자 화면 방화벽 — <code>firewall-cmd --permanent --add-service=telnet</code> → <code>firewall-cmd --reload</code> (그래픽 = <code>firewall-config</code>)</li><li>XRDP — <code>dnf -y install epel-release</code> → <code>dnf -y install tiger*.rpm xrdp*.rpm</code> → <code>systemctl start</code> · <code>enable xrdp</code> → <b>3389</b> 허용 → Windows <code>mstsc</code> → rocky</li><li>🎬 <a href="anim/리눅스-그림정리.html?week=11">11주차 그림</a></li></ul>
+</section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>원격 접속 — 🔥 텔넷 서버 · XRDP 원격 데스크톱 + 🔥 LVM 개념</small></a><span></span></nav>
 
     <p class="wk-src">노션 「운영체제실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

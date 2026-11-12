@@ -20,7 +20,7 @@
 
     <header class="page-head">
         <h1>운영체제실습 · 완전 정리</h1>
-        <p>1주차 ~ 10주차 Rocky Linux · 명령어 + 마운트 + 권한 + 사용자·그룹 관리 + 패키지 설치(rpm·dnf) + 작업 예약(cron·at) + 프로세스·작업 제어 + 셸 스크립트 + 도전문제 + 디스크·fstab·쿼터 + RAID 총정리</p>
+        <p>1주차 ~ 11주차 Rocky Linux · 명령어 + 마운트 + 권한 + 사용자·그룹 관리 + 패키지 설치(rpm·dnf) + 작업 예약(cron·at) + 프로세스·작업 제어 + 셸 스크립트 + 도전문제 + 디스크·fstab·쿼터 + RAID 총정리 + 원격 접속(텔넷 · XRDP) · 🔥 LVM 개념</p>
     </header>
 
     <div id="week-nav" data-subject="운영체제실습"></div>
@@ -60,6 +60,7 @@
         <a href="#s20">20.쿼터(9주차)</a>
         <a href="#s21">21.RAID 종류(10주차)</a>
         <a href="#s22">22.Linear RAID·RAID 0(10주차)</a>
+        <a href="#s23">23.원격 접속·텔넷·XRDP·LVM(11주차)</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1606,6 +1607,22 @@ exit 0                                    # 정상 종료</code></pre>
             <tr><td>실수</td><td><code>deadm</code> · <code>mdeadm</code> → 명령 없음 (정답 <code>mdadm</code>) · <code>--raid-devices=2/dev/…</code> 띄어쓰기 · OS 디스크 sda 를 넣으면 안 됨 · alias 는 터미널을 닫으면 사라짐</td></tr>
         </table>
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#fix" title="그림 — Linear RAID 고장 → 복구" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#fix" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — Linear RAID 고장 → 복구 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s23">
+        <h2>23. 원격 접속 — 🔥 텔넷 서버 · XRDP · 🔥 LVM 개념<span class="week">11주차</span></h2>
+        <p>11/12(목) — 과제 VITAMIN QUIZ 8-1(Server(B) 텔넷 → Windows) · 8-2(Client XRDP → 원격 데스크톱) · ✍️ “LVM 실습은 안 하지만 시험에 개념은 출제함”. 로그 · 명령은 <a href="weeks/운영체제실습-11주차.html" target="_blank" rel="noopener">11주차 페이지</a>.</p>
+        <table class="ref">
+            <tr><th>주제</th><th>핵심</th></tr>
+            <tr><td>텔넷 서버</td><td><code>dnf -y install telnet-server</code> → <code>adduser</code> · <code>passwd teluser</code> → 방화벽 → <code>systemctl start telnet.socket</code> → active (listening) · Listen [::]:23</td></tr>
+            <tr><td>글자 화면 방화벽</td><td><code>firewall-cmd --permanent --add-service=telnet</code> → <code>firewall-cmd --reload</code> · 그래픽 = <code>firewall-config</code></td></tr>
+            <tr><td>Windows 접속</td><td>PowerShell <code>telnet 192.168.111.200</code> (60초 안에 로그인) · 원격 데스크톱 <code>mstsc /v:IP</code></td></tr>
+            <tr><td>XRDP</td><td>rpm 3개 → <code>dnf -y install epel-release</code> → <code>dnf -y install tiger*.rpm xrdp*.rpm</code> → <code>systemctl start</code> · <code>enable xrdp</code> → 3389 허용 → rocky</td></tr>
+            <tr><td>🔥 LVM</td><td>논리 디스크 관리자 · 물리 볼륨(파티션) → 볼륨 그룹(합침) → 논리 볼륨(나눔) · pvcreate → vgcreate → lvcreate · Rocky 기본 설치 = LVM</td></tr>
+        </table>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#telnet" title="그림 — 텔넷 서버" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#telnet" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 텔넷 서버 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#xrdp" title="그림 — XRDP 원격 데스크톱" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#xrdp" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — XRDP 원격 데스크톱 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#lvm" title="그림 — LVM 개념" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#lvm" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — LVM 개념 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="quiz">

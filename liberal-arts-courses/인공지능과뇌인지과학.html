@@ -15,7 +15,7 @@
 
     <header class="page-head">
         <h1>인공지능과뇌인지과학 · 완전 정리</h1>
-        <p>1주차 ~ 10주차 · OT(평가·과제) + 인지과학 형성 역사 + 인지과학의 출범 + 인지신경과학 1(연구 방법) · 2(뉴런) · 3(약물 · 뇌의 구조 · 대뇌피질 4개 엽) + 시지각 1(광수용체 · 수용장) + 머신러닝 1(정의 · 역사 · 유형) · 2(시스템 종류 · 🔥 선형 회귀 MSE) + ✍️ PDF 필기</p>
+        <p>1주차 ~ 11주차 · OT(평가·과제) + 인지과학 형성 역사 + 인지과학의 출범 + 인지신경과학 1(연구 방법) · 2(뉴런) · 3(약물 · 뇌의 구조 · 대뇌피질 4개 엽) + 시지각 1(광수용체 · 수용장) + 머신러닝 1(정의 · 역사 · 유형) · 2(시스템 종류 · 🔥 선형 회귀 MSE) + ✍️ PDF 필기 + 머신러닝 3(🔥 경사하강법 · 학습률 · SVM · 11주차)</p>
     </header>
 
     <div id="week-nav" data-subject="인공지능과뇌인지과학"></div>
@@ -47,6 +47,7 @@
         <a href="#s20">20.🔥광수용체·수용장(7주차)</a>
         <a href="#s21">21.머신러닝1(9주차)</a>
         <a href="#s22">22.🔥머신러닝2·선형회귀(10주차)</a>
+        <a href="#s23">23.🔥머신러닝3·경사하강법(11주차)</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -360,6 +361,24 @@
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/뇌인지-그림정리.html#batchonline" title="그림 — 배치 학습 vs 온라인 학습" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/뇌인지-그림정리.html#batchonline" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 배치 학습 vs 온라인 학습 — 새 창으로 크게 보기</a></p></div>
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/뇌인지-그림정리.html#instmodel" title="그림 — 사례 기반 vs 모델 기반" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/뇌인지-그림정리.html#instmodel" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 사례 기반 vs 모델 기반 — 새 창으로 크게 보기</a></p></div>
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/뇌인지-그림정리.html#challenge" title="그림 — 주요 도전 과제" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/뇌인지-그림정리.html#challenge" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 주요 도전 과제 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s23">
+        <h2>23. 머신러닝 3 — 🔥 경사하강법 · 학습률 · 특성 스케일링 · SVM (9장)<span class="week">11주차</span></h2>
+        <p>11/12(목) — 노션은 비어 있고 ✍️ PDF 펜 필기 9 · 11 · 15 · 20쪽 (MSE 식 · 끝나는 지점 · 학습률은 양수 작은 값 · C 는 무조건 양수). 자세한 건 <a href="weeks/인공지능과뇌인지과학-11주차.html" target="_blank" rel="noopener">11주차 페이지</a>.</p>
+        <table class="ref">
+            <tr><th>주제</th><th>핵심</th></tr>
+            <tr><td>경사하강법</td><td>파라미터를 조금씩 반복 조정 · 기준 = 비용 함수 줄이기 · θ(new) = θ(old) − η · ∇θ MSE · ✍️ 끝나는 지점을 미리 정해야 함</td></tr>
+            <tr><td>주요 개념</td><td>최적 학습 모델 · 파라미터(편향 · 가중치) · 비용함수(MSE = ✍️ 평균 제곱 오차 · θᵀx = 예측한 y) · 전역 최솟값</td></tr>
+            <tr><td>학습률 η</td><td>✍️ 양수 · 작은 값 · 너무 작으면 너무 느리게 수렴 · 너무 크면 수렴하지 않음 · 선형 회귀 MSE = 볼록 함수(지역 최솟값 없음)</td></tr>
+            <tr><td>특성 스케일링</td><td>스케일 통일 → 빠른 학습 · ✍️ y = ax + b → θ₁ · θ₂</td></tr>
+            <tr><td>SVM</td><td>마진 = 도로의 경계 · 서포트 벡터 = 도로 양쪽 경계의 샘플 · 하드 마진(모두 도로 밖 · 이상치에 민감) · ✍️ C 무조건 양수 · 클수록 도로 폭↓ · C=inf → 하드 마진</td></tr>
+            <tr><td>그 밖</td><td>아나콘다 · 주피터 노트북(대화형 툴) · intercept_ = 절편 · coef_ = 기울기 · 그리드 서치 · 티처블 머신</td></tr>
+        </table>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/뇌인지-그림정리.html#gd" title="그림 — 경사하강법" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/뇌인지-그림정리.html#gd" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 경사하강법 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/뇌인지-그림정리.html#lr" title="그림 — 학습률 크기" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/뇌인지-그림정리.html#lr" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 학습률 크기 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/뇌인지-그림정리.html#scaling" title="그림 — 특성 스케일링" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/뇌인지-그림정리.html#scaling" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 특성 스케일링 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/뇌인지-그림정리.html#svm" title="그림 — SVM" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/뇌인지-그림정리.html#svm" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — SVM — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="quiz">

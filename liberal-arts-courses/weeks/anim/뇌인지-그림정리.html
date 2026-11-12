@@ -670,6 +670,37 @@
     <text x="300" y="366" text-anchor="middle" class="b">공짜 점심 없음 (No free lunch)</text><text x="300" y="394" text-anchor="middle" class="s">가장 알맞은 모델은 미리 알 수 없음</text><text x="300" y="420" text-anchor="middle" class="s">→ 여러 모델 · 하이퍼파라미터 튜닝으로 확인</text></g>
 </svg>
 
+<!-- ㉗ 경사하강법 (9장 8 ~ 11쪽 · ✍️ 11쪽) -->
+<svg data-fig="gd" viewBox="0 0 600 420" role="img" aria-label="경사하강법 — 비용 곡선을 따라 학습 스텝으로 최솟값까지 내려감" hidden>
+  <g data-s="1"><path class="ax" d="M60,300 L60,40 M60,300 L580,300"/><text x="68" y="36" text-anchor="start" class="s">비용</text><text x="584" y="292" text-anchor="end" class="b">θ</text><path class="d" d="M80,70 Q330,450 560,70" style="stroke:var(--ink2);stroke-width:3;fill:none"/><circle cx="120" cy="126" r="7" style="fill:var(--inh)"/><path d="M120,134 L120,300" style="stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:5 4;fill:none"/><text x="120" y="322" text-anchor="middle" class="s">임의의 초깃값</text></g>
+  <g data-s="2"><path class="d" d="M120,126 Q150,128 169,182 M169,182 Q196,180 214,220 M214,220 Q234,214 248,241 M248,241 Q264,236 277,252 M277,252 Q290,246 301,258 M301,258 Q311,250 320,260" style="stroke:var(--inh);stroke-width:2;fill:none"/><g style="fill:var(--inh)"><circle cx="169" cy="182" r="6"/><circle cx="214" cy="220" r="6"/><circle cx="248" cy="241" r="6"/><circle cx="277" cy="252" r="6"/><circle cx="301" cy="258" r="6"/><circle cx="320" cy="260" r="6"/></g><text x="200" y="150" text-anchor="start" class="s">학습 스텝</text></g>
+  <g data-s="3"><circle cx="345" cy="260" r="8" style="fill:var(--oc)"/><path d="M345,268 L345,300" style="stroke:var(--oc);stroke-width:1.5;stroke-dasharray:5 4;fill:none"/><text x="345" y="324" text-anchor="middle" class="b">θ̂</text><text x="358" y="290" text-anchor="start" class="s" style="fill:var(--oc)">최솟값</text></g>
+  <g data-s="4"><text x="300" y="362" text-anchor="middle" class="b">θ(new) = θ(old) − η · ∇θ MSE(θ(old))</text><text x="300" y="390" text-anchor="middle" class="s" style="fill:var(--ap)">✍️ η = 학습률은 양수, 작은 값</text><text x="300" y="414" text-anchor="middle" class="s" style="fill:var(--ap)">✍️ 끝없이 돌아가니 끝나는 지점을 미리 정해야 함</text></g>
+</svg>
+
+<!-- ㉘ 학습률이 작을 때 · 알맞을 때 · 클 때 (9장 12 ~ 14쪽) -->
+<svg data-fig="lr" viewBox="0 0 600 324" role="img" aria-label="학습률이 너무 작으면 느리게, 알맞으면 최솟값에, 너무 크면 수렴하지 않음" hidden>
+  <g data-s="1"><text x="100" y="30" text-anchor="middle" class="b">너무 작은 학습률</text><path d="M18,60 Q100,300 182,60" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path class="d" d="M28,87 L33,99 L38,111 L43,121 L48,131" style="stroke:var(--inh);stroke-width:2;fill:none"/><g style="fill:var(--inh)"><circle cx="28" cy="87" r="5"/><circle cx="33" cy="99" r="5"/><circle cx="38" cy="111" r="5"/><circle cx="43" cy="121" r="5"/><circle cx="48" cy="131" r="5"/></g><text x="100" y="218" text-anchor="middle" class="s">조금씩만 움직임</text><text x="100" y="242" text-anchor="middle" class="s" style="fill:var(--inh)">→ 너무 느리게 수렴</text></g>
+  <g data-s="2"><text x="298" y="30" text-anchor="middle" class="b">알맞은 학습률</text><path d="M216,60 Q298,300 380,60" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path class="d" d="M232,103 L265,161 L285,177 L295,180 L298,180" style="stroke:var(--te);stroke-width:2;fill:none"/><g style="fill:var(--te)"><circle cx="232" cy="103" r="5"/><circle cx="265" cy="161" r="5"/><circle cx="285" cy="177" r="5"/><circle cx="295" cy="180" r="5"/><circle cx="298" cy="180" r="5"/></g><text x="298" y="218" text-anchor="middle" class="s">점점 작게 내려감</text><text x="298" y="242" text-anchor="middle" class="s" style="fill:var(--te)">→ 최솟값에 도착</text></g>
+  <g data-s="3"><text x="496" y="30" text-anchor="middle" class="b">너무 큰 학습률</text><path d="M414,60 Q496,300 578,60" style="stroke:var(--ink2);stroke-width:2.5;fill:none"/><path class="d" d="M463,161 L545,137 L434,111 L573,74" style="stroke:var(--ap);stroke-width:2;fill:none"/><g style="fill:var(--ap)"><circle cx="463" cy="161" r="5"/><circle cx="545" cy="137" r="5"/><circle cx="434" cy="111" r="5"/><circle cx="573" cy="74" r="5"/></g><text x="496" y="218" text-anchor="middle" class="s">골짜기를 넘나들며 위로</text><text x="496" y="242" text-anchor="middle" class="s" style="fill:var(--ap)">→ 수렴하지 않음</text></g>
+  <g data-s="4"><text x="300" y="284" text-anchor="middle" class="b">선형 회귀의 MSE = 볼록 함수 (지역 최솟값 없음)</text><text x="300" y="312" text-anchor="middle" class="s">→ 학습률이 너무 크지 않으면 언젠가 전역 최솟값</text></g>
+</svg>
+
+<!-- ㉙ 특성 스케일링 (9장 15쪽 · ✍️ y = ax + b) -->
+<svg data-fig="scaling" viewBox="0 0 600 410" role="img" aria-label="특성 스케일을 통일하면 곧장 최솟값으로, 다르면 돌아서 오래 걸림" hidden>
+  <g data-s="1"><text x="155" y="24" text-anchor="middle" class="b">스케일 통일</text><path class="ax" d="M30,330 L30,40 M30,330 L282,330"/><text x="36" y="52" text-anchor="start" class="s">θ₂</text><text x="280" y="322" text-anchor="end" class="s">θ₁</text><g style="fill:var(--inh);stroke:var(--inh);stroke-width:1.5"><circle cx="155" cy="185" r="110" style="fill-opacity:.10"/><circle cx="155" cy="185" r="80" style="fill-opacity:.10"/><circle cx="155" cy="185" r="50" style="fill-opacity:.10"/><circle cx="155" cy="185" r="20" style="fill-opacity:.10"/></g><path class="d" d="M77,107 L99,129 L121,151 L140,170 L155,185" style="stroke:var(--te);stroke-width:2;fill:none"/><g style="fill:var(--te)"><circle cx="77" cy="107" r="5"/><circle cx="99" cy="129" r="5"/><circle cx="121" cy="151" r="5"/><circle cx="140" cy="170" r="5"/><circle cx="155" cy="185" r="5"/></g><text x="155" y="360" text-anchor="middle" class="s" style="fill:var(--te)">곧장 최솟값 → 빠름</text></g>
+  <g data-s="2"><text x="455" y="24" text-anchor="middle" class="b">스케일 다름</text><path class="ax" d="M320,330 L320,40 M320,330 L590,330"/><text x="326" y="52" text-anchor="start" class="s">θ₂</text><text x="588" y="322" text-anchor="end" class="s">θ₁</text><g style="fill:var(--inh);stroke:var(--inh);stroke-width:1.5"><ellipse cx="465" cy="190" rx="130" ry="50" style="fill-opacity:.10"/><ellipse cx="465" cy="190" rx="95" ry="36" style="fill-opacity:.10"/><ellipse cx="465" cy="190" rx="60" ry="23" style="fill-opacity:.10"/><ellipse cx="465" cy="190" rx="25" ry="9" style="fill-opacity:.10"/></g><path class="d" d="M360,158 L366,180 L376,192 L395,196 L420,194 L445,192 L465,190" style="stroke:var(--ap);stroke-width:2;fill:none"/><g style="fill:var(--ap)"><circle cx="360" cy="158" r="5"/><circle cx="366" cy="180" r="5"/><circle cx="376" cy="192" r="5"/><circle cx="395" cy="196" r="5"/><circle cx="420" cy="194" r="5"/><circle cx="445" cy="192" r="5"/><circle cx="465" cy="190" r="5"/></g><text x="455" y="360" text-anchor="middle" class="s" style="fill:var(--ap)">돌아서 감 → 오래 걸림</text></g>
+  <g data-s="3"><text x="300" y="398" text-anchor="middle" class="s" style="fill:var(--ap)">✍️ y = ax + b → a = θ₁ · b = θ₂ (찾을 파라미터 2개)</text></g>
+</svg>
+
+<!-- ㉚ SVM — 도로 · 마진 · 서포트 벡터 · C (9장 16 ~ 20쪽) -->
+<svg data-fig="svm" viewBox="0 0 600 396" role="img" aria-label="SVM 결정 경계와 도로 경계, 서포트 벡터, 하이퍼파라미터 C" hidden>
+  <g data-s="1"><path class="d" d="M100,190 L590,190" style="stroke:var(--ink);stroke-width:3;fill:none"/><text x="8" y="195" text-anchor="start" class="s">결정 경계</text><g style="fill:var(--te)"><path d="M150,61 L159,77 L141,77 Z"/><path d="M230,101 L239,117 L221,117 Z"/><path d="M300,51 L309,67 L291,67 Z"/><path d="M380,91 L389,107 L371,107 Z"/><path d="M470,61 L479,77 L461,77 Z"/><path d="M545,106 L554,122 L536,122 Z"/><path d="M260,141 L269,157 L251,157 Z"/><path d="M430,141 L439,157 L421,157 Z"/></g><g style="fill:var(--inh)"><rect x="153" y="293" width="14" height="14"/><rect x="233" y="263" width="14" height="14"/><rect x="323" y="303" width="14" height="14"/><rect x="393" y="273" width="14" height="14"/><rect x="493" y="298" width="14" height="14"/><rect x="553" y="258" width="14" height="14"/><rect x="333" y="223" width="14" height="14"/></g></g>
+  <g data-s="2"><path class="d" d="M100,150 L590,150 M100,230 L590,230" style="stroke:var(--ink2);stroke-width:2;stroke-dasharray:8 6;fill:none"/><text x="8" y="155" text-anchor="start" class="s">도로 경계</text><text x="8" y="235" text-anchor="start" class="s">도로 경계</text><path d="M112,158 L112,222" style="stroke:var(--ap);stroke-width:2;fill:none"/><path d="M106,162 L112,152 L118,162 Z M106,218 L112,228 L118,218 Z" style="fill:var(--ap)"/><text x="345" y="30" text-anchor="middle" class="b" style="fill:var(--ap)">마진 = 도로 폭 → 최대가 되게 학습</text></g>
+  <g data-s="3"><g style="fill:none;stroke:var(--ap);stroke-width:2.5"><circle cx="260" cy="150" r="15"/><circle cx="430" cy="150" r="15"/><circle cx="340" cy="230" r="15"/></g><text x="452" y="176" text-anchor="start" class="b" style="fill:var(--ap)">서포트 벡터</text></g>
+  <g data-s="4"><text x="300" y="356" text-anchor="middle" class="s">C 클수록 → 마진 오류↓ · 도로 폭↓ · C = float(“inf”) → 하드 마진</text><text x="300" y="382" text-anchor="middle" class="s" style="fill:var(--ap)">✍️ C 는 무조건 양수 · 하드 마진 = 모두 도로 밖 · 이상치에 민감</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -872,7 +903,34 @@
             "<b>주요 도전 과제 6가지</b> — 충분하지 않은 양의 훈련 데이터 · 대표성 없는 훈련 데이터 · 낮은 품질의 데이터 · 관련이 없는 특성 · <b>과대적합</b> · <b>과소적합</b>",
             "<b>데이터 불일치</b> — 인터넷 꽃 사진으로 훈련 → 직접 찍은 사진으로 성능이 낮게 나옴 → <b>훈련-개발 세트</b>로 확인 (훈련-개발 세트는 좋은데 테스트 세트가 나쁘면 불일치)",
             "<b>공짜 점심 없음</b>(No free lunch) — 가장 알맞은 모델을 <b>미리 알 수 없음</b> → 여러 모델 · 하이퍼파라미터 튜닝으로 확인" ],
-          note: "🤖 과대적합 = 훈련 데이터에 너무 맞춰 새 데이터에 약함 · 과소적합 = 모델이 너무 단순해 제대로 못 배움 · ✍️ 13쪽(검증) · 14쪽(하이퍼파라미터 튜닝과 교차 검증)은 PDF 에 큰 ✗ 표시" }
+          note: "🤖 과대적합 = 훈련 데이터에 너무 맞춰 새 데이터에 약함 · 과소적합 = 모델이 너무 단순해 제대로 못 배움 · ✍️ 13쪽(검증) · 14쪽(하이퍼파라미터 튜닝과 교차 검증)은 PDF 에 큰 ✗ 표시" },
+        { id: "gd", week: 11, tab: "㉗ 경사하강법", src: "11주차 · 9장 8 ~ 11쪽 — 경사하강법 · ✍️ 11쪽 필기",
+          steps: [
+            "<b>기본 아이디어</b> — 파라미터를 조금씩 반복적으로 조정 · 조정 기준 = <b>비용 함수의 크기 줄이기</b> · θ 는 <b>임의의 초깃값</b>에서 시작",
+            "<b>학습 스텝</b> — 기울기(∇θ MSE)의 반대 방향으로 조금씩 내려감 · (배치 크기로) 학습 → MSE(θ) 계산 → θ 갱신을 반복",
+            "<b>최솟값 θ̂</b> — 비용함수가 가질 수 있는 최솟값 = <b>전역 최솟값</b> (9쪽)",
+            "θ(new) = θ(old) − <b>η</b> · ∇θ MSE(θ(old)) · ✍️ η = <b>학습률은 양수, 작은 값</b> · ✍️ 알고리즘은 끝없이 돌아가서 <b>끝나는 지점을 미리 정해야 함</b>" ],
+          note: "✍️ 9쪽 MSE(θ) = (1/m) Σ (θᵀx⁽ⁱ⁾ − y⁽ⁱ⁾)² — θᵀx⁽ⁱ⁾ = 예측한 y · 평균 제곱 오차 · 🤖 끝나는 지점 = 10쪽 ‘지정된 오차 범위 안으로 수렴’(허용 오차)이나 반복 횟수" },
+        { id: "lr", week: 11, tab: "㉘ 학습률 크기", src: "11주차 · 9장 12 ~ 14쪽 — 학습률이 너무 작을 때 · 클 때 · 선형 회귀와 학습률",
+          steps: [
+            "<b>너무 작으면</b> — 비용 함수가 전역 최솟값에 <b>너무 느리게 수렴</b> (12쪽)",
+            "<b>알맞으면</b> — 점점 작게 내려가 최솟값에 도착",
+            "<b>너무 크면</b> — 비용 함수가 <b>수렴하지 않음</b> (13쪽 · 🤖 골짜기를 넘나들며 점점 위로)",
+            "<b>선형 회귀</b> — 비용함수(MSE)가 <b>볼록 함수</b> = 지역 최솟값 없음 → 학습률이 너무 크지 않으면 언젠가는 전역 최솟값에 수렴 (14쪽)" ],
+          note: "📄 14쪽 — 선형 회귀가 아니면 시작점에 따라 전역 최솟값에 수렴하지 못할 수도 (🤖 작은 골짜기 = 지역 최솟값에 갇힘 · 8쪽 그림)" },
+        { id: "scaling", week: 11, tab: "㉙ 특성 스케일링", src: "11주차 · 9장 15쪽 — 특성 스케일링 · ✍️ y = ax + b",
+          steps: [
+            "<b>스케일 통일</b> — 동그란 등고선 → 곧장 가운데(최솟값)로 → <b>빠른 학습</b>",
+            "<b>스케일 다름</b> — 길쭉한 타원 → 먼저 가파른 쪽으로 내려간 뒤 긴 골짜기를 따라 천천히 → 오래 걸림",
+            "✍️ y = ax + b → a = θ₁ · b = θ₂ — 그림의 두 축 = 찾아야 할 파라미터 두 개" ],
+          note: "🤖 번호는 자료마다 달라요 — 10주차 11쪽은 θ₀ = 절편 · θ₁ = 기울기 · 6쪽 코드 intercept_(절편) · coef_(기울기) · 📄 17쪽 SVM 도 특성 스케일을 조정하면 결정 경계가 훨씬 좋아짐" },
+        { id: "svm", week: 11, tab: "㉚ SVM", src: "11주차 · 9장 16 ~ 20쪽 — 서포트 벡터 머신 · ✍️ 20쪽 C 는 무조건 양수",
+          steps: [
+            "<b>결정 경계</b> — 두 클래스로부터 <b>최대한 멀리 떨어져 있는</b> 경계를 찾는 분류기 = SVM",
+            "<b>마진</b>(margin) = 클래스를 구분하는 <b>도로의 경계</b> · 라지 마진 분류 = 마진 폭을 최대로",
+            "<b>서포트 벡터</b> = 도로의 <b>양쪽 경계에 위치하는 샘플</b> · 서포트 벡터 사이 간격(도로 폭)이 최대가 되도록 학습",
+            "<b>C</b> — ✍️ 무조건 양수 · 클수록 마진 오류를 적게 = 도로 폭을 작게 · C = float(“inf”) → <b>하드 마진</b>(모두 도로 밖 · 선형적으로 구분될 때만 · 이상치에 민감)" ],
+          note: "📄 20쪽 그림 C = 1 (도로 넓음 · 마진 오류 많음) vs C = 100 (도로 좁음) · ✍️ hinge · dual=True 두 줄은 PDF 에 큰 ✗" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

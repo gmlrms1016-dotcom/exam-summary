@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../../theme.js?v=202611041620"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>인공지능과뇌인지과학 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)</title>
-    <meta name="description" content="인공지능과뇌인지과학 15주차 정리 — 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <title>인공지능과뇌인지과학 15주차 · 기말고사 시험문제 정리 (9 ~ 11주차 반영)</title>
+    <meta name="description" content="인공지능과뇌인지과학 15주차 정리 — 기말고사 시험문제 정리 (9 ~ 11주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="인공지능과뇌인지과학 15주차 · 기말고사 시험문제 정리 (9 · 10주차 반영)">
+    <meta property="og:title" content="인공지능과뇌인지과학 15주차 · 기말고사 시험문제 정리 (9 ~ 11주차 반영)">
     <meta property="og:description" content="인공지능과뇌인지과학 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
@@ -99,10 +99,10 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🧠 인공지능과뇌인지과학 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9 · 10주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 ~ 11주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-10주차.html">‹ 이전 · <b>10주차</b><br><small>머신러닝 2 — 머신러닝 시스템의 종류 · 🔥 선형 회귀(MSE) · 도전 과제 (8장)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-11주차.html">‹ 이전 · <b>11주차</b><br><small>머신러닝 3 — 🔥 경사하강법 · 학습률 · 특성 스케일링 · SVM (9장)</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../인공지능과뇌인지과학-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 OX 10 · 객관식 10 · 단답형 10 · 보너스 5점(총 35점 · 단답형은 부분 점수 없음)이었어요.</div>
@@ -147,8 +147,12 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 표 · 계산 연습은 <a href="인공지능과뇌인지과학-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
 </section>
+<section class="card" id="s4">
+<h2>11주차 · 9장 머신러닝 3</h2>
+<ul><li>✍️ 9쪽 MSE(θ) = (1/m) Σ (θᵀx⁽ⁱ⁾ − y⁽ⁱ⁾)² — θᵀx⁽ⁱ⁾ = <b>예측한 y</b> · <b>평균 제곱 오차</b></li><li>✍️ 11쪽 경사하강법 — θ(new) = θ(old) − η · ∇θ MSE · <b>끝나는 지점을 미리 정해야 함</b> · η = <b>학습률은 양수, 작은 값</b></li><li>학습률 너무 작음 → 너무 느리게 수렴 · 너무 큼 → 수렴하지 않음 · 선형 회귀 MSE = <b>볼록 함수</b>(지역 최솟값 없음) → 언젠가 전역 최솟값</li><li>특성 스케일링 = 스케일 통일 → 빠른 학습 · <code>intercept_</code> = 절편 · <code>coef_</code> = 기울기</li><li>SVM — 마진 = 도로의 경계 · 서포트 벡터 = 도로 양쪽 경계의 샘플 · 하드 마진(모두 도로 밖 · 이상치에 민감) · ✍️ <b>C 는 무조건 양수</b> · 클수록 마진 오류↓ 도로 폭↓ · C=inf → 하드 마진</li><li>🎬 <a href="anim/뇌인지-그림정리.html?week=11">11주차 그림</a></li></ul>
+</section>
 
-    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-10주차.html">‹ 이전 · <b>10주차</b><br><small>머신러닝 2 — 머신러닝 시스템의 종류 · 🔥 선형 회귀(MSE) · 도전 과제 (8장)</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-11주차.html">‹ 이전 · <b>11주차</b><br><small>머신러닝 3 — 🔥 경사하강법 · 학습률 · 특성 스케일링 · SVM (9장)</small></a><span></span></nav>
 
     <p class="wk-src">노션 「인공지능과뇌인지과학」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 
