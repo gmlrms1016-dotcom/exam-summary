@@ -3,7 +3,9 @@
 - 캡처는 새 코드를 짜지 말고 이 스크립트로 찍는다:
   `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vmcapture.ps1" -Out "<저장할 경로>.png"`
   - VM 탭을 고를 때 `-Title "Server(B)"` · VMware 말고 다른 창은 `-Process code`(프로세스 이름) · `-Window yunhuigeun`(제목 글자)
-  - 기본은 PrintWindow — 창이 스스로 그리게 해서 **다른 창(Claude 앱 등)에 가려져 있어도 깨끗** (2026-11-05 학교 PC: 화면 복사 방식은 Claude 창에 가려진 채 찍혔는데 오류가 안 났음) · `-Method Screen` 은 그 창이 맨 앞이 아니면 ERROR
+  - **VMware 창은 앞으로 가져와 화면에서 복사(Screen)가 기본** (2026-11-12 학교 PC: VMware 가 뒤에 있을 때 PrintWindow 가 몇 분 전 콘솔을 찍어 오류 화면이 과제 캡처로 저장될 뻔함) · 그 밖의 창(`-Process` · `-Window` — 텔넷 · 원격 데스크톱 · VS Code …)은 PrintWindow — 창이 스스로 그리게 해서 다른 창에 가려져 있어도 깨끗 · **찍은 뒤 꼭 그림을 열어 지금 화면인지 확인**
+  - 원격 데스크톱(mstsc)은 첫 확인 창(인증서 등)을 누른 뒤 찍기 (안 누르면 `could not read window size (w=0 h=0)`) · 창이 작으면 가로 스크롤바가 같이 찍히므로 `mstsc /v:IP /w:1280 /h:800` 처럼 크기를 정하거나 최대화 뒤 찍기
+  - 출력이 긴 명령(dnf install …)은 터미널 창을 최대화한 뒤 실행 · 한 화면을 넘으면 앞이 사라지므로 나눠 찍기
 - 스크립트가 하는 일: ① 캡처 전에 `SetProcessDpiAwarenessContext(-4)`(안 되면 스레드만)로 DPI 인식 ② 그 창 영역만 ③ 원래 픽셀 크기 그대로 ④ PNG
 - 금지: 크기 줄이기(resize · thumbnail · 비율 축소) · JPG/JPEG · 전체 화면을 찍고 자르기 · 화면 배율을 무시한 좌표
 - **제목 줄은 살린다** — 닫기 · 최소화 · 최대화가 있는 맨 윗줄까지 창 통째로 (2026-11-04 사용자) · `-Client`(제목 줄 빼기)는 쓰지 않는다
@@ -11,9 +13,8 @@
   - **단 VMware 글자 화면(CUI · Server(B) 등)은 글자 부분만 딱 맞게 자른다** (2026-11-13 사용자: “검은 화면에 작은 글씨라 글자가 너무 작음”) — `vmcapture.ps1 ... -TextOnly` → 제목 줄 · 메뉴 · 라이브러리 · 검은 여백 없이 글자 + 검은 여백 12px (`vmtype.ps1` 은 기본으로 자름)
     - 워드에 넣을 때 폭 = 출력의 `word width …cm` (python-docx `width=Cm(…)`) — 그림마다 글자 크기가 비슷하게 · 본문 폭(17cm)보다 넓은 출력만 본문 폭
     - 그래픽 화면(GNOME) VM 은 예전처럼 창 통째로 (`-TextOnly` 를 쓰면 ERROR 로 알려 줌)
-  - 그 밖의 창은 제목 글자를 내 이름 영어 `yunhuigeun` 만 (경로 · 명령 · 자동화 흔적 글자 X) — 콘솔(cmd)은 실행 전에 `title yunhuigeun` · VS Code 는 설정 `window.title` = `"yunhuigeun"`
-  - 제목을 바꿀 수 없는 그 밖의 창(Visual Studio 등)은 어떻게 찍을지 사용자에게 먼저 묻는다
-  - **UAC 가 꺼진 PC** 는 `title yunhuigeun` 을 해도 "관리자: yunhuigeun" · VS 제목에 "(관리자)" 가 붙음 → 그대로 찍을지 먼저 묻는다 (2026-11-09: VS 디버그 콘솔 그대로 · 사용자 선택)
+  - **학교 · 공용 PC 는 창 제목을 바꾸지 않는다 — 원래 제목 그대로** (2026-11-12 사용자: “관리자가 왜 내 이름이야 · 학교 컴퓨터인데 · 내 이름 빼라고” — UAC 가 꺼진 학교 PC 에서 `title` 로 이름을 넣으면 "관리자: …" 가 붙음) · 예: `Telnet 192.168.111.200` · `192.168.111.128: 원격 데스크톱 연결` · cmd 는 사용자 폴더에서 열기(프롬프트에 과제 폴더 경로가 안 보이게)
+  - Visual Studio 제목의 "(관리자)" 는 그대로 찍는다 (2026-11-09 사용자 선택)
 - **VS Code 소스 캡처는 탐색기(사이드바) 닫고** 깔끔하게 · **코드는 창에 딱 맞게**(짧으면 확대 · 길면 축소 · 가로세로 안 잘리는 데까지) · **50줄이 넘으면 나눠 찍기** (2026-11-04 사용자)
   - **짧은 코드는 확대 단축키(Ctrl + `+` · Visual Studio 는 Ctrl+Shift+. = View.ZoomIn)로 가로가 잘리기 직전까지 키워서 글자를 키운다** — 글자 크기 상한 없음 · 모든 언어 과목 · 세로가 먼저 차면 거기까지 (2026-11-13 사용자: 프로그래밍언어실습 11주차 제출본 글자가 작았음)
 - **Visual Studio(C 수업 실습) 소스 · 실행 = `vscapture.ps1`** (2026-11-09 — 학교 PC 가 손으로 하던 방법을 도구로 · 같은 날 제출 워드를 보고 소스 캡처를 고침 · 먼저 `-DryRun` · VS 에 솔루션이 열려 있어야 함)
@@ -33,10 +34,14 @@
 - 명령의 출력이 다 나온 뒤에 찍는다 · 찍은 뒤 스크립트가 알려 준 px 크기가 창 크기와 맞는지 확인하고, **찍은 그림을 열어 보고**(가려짐 · 덜 나온 출력) 사용자에게 저장 경로 · 크기를 알린다
 - **VM 안에 명령을 쳐서 하나씩 찍기** = `vmtype.ps1` (원격제어 Computer use 가 꺼져 있을 때 · 2026-11-05)
   `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vmtype.ps1" -Title "Server(B)" -Commands "df -h;;ls -l /etc | head -20" -Names "B01_df;;B02_ls" -OutDir "<폴더>"` (먼저 `-DryRun`)
-  - 글자만 나오는 콘솔 VM(Server(B) 같은)에서만 — **그래픽 화면(GNOME) VM 에는 쓰지 않는다** (무슨 키가 들어갔는지 확인할 수 없음 · fdisk 에 q 가 안 먹고 도움말이 떴음)
+  - 글자 콘솔 VM(Server(B))과 **그래픽(GNOME) VM 의 터미널** 모두 — 원격제어로 한 글자씩 치는 것보다 빠르고 정확 (2026-11-13 사용자: “뭐가 뭔지 모르니까 오타 안 나고 빠르게 쳐 주는 걸로”)
+    - GNOME 은 터미널을 VM 안 맨 앞에 열고 **영어 입력 상태**에서 · `-KeepWindow`(그래픽 화면은 창 통째로) · **첫 명령은 짧은 것(`whoami`)으로 쳐서 그림에서 영어로 잘 들어갔는지 확인한 뒤 나머지** (한글 입력이면 글자가 깨짐 · 2026-11-12: 영어로는 잘 들어감 · 2026-11-05: fdisk 에 q 가 안 먹었음 — 디스크 명령은 어차피 거부)
   - **디스크를 바꾸는 명령(fdisk · parted · mkfs · mdadm · dd · wipefs 등) · 재부팅 · 끄기는 쓰지 않는다**(스크립트도 거부함) → 원격제어로 화면을 보면서 하거나, 사용자가 직접 치고 Claude 는 vmcapture.ps1 로 찍기만
   - 키를 보내기 전에 매번 맨 앞 창이 그 VMware 창인지 확인하고 아니면 멈춤 · 한 글자씩 40ms · 출력이 다 나와 화면이 멈춘 뒤 찍음 · 끝나면 Ctrl+Alt 로 입력을 풀어 줌
   - 찍은 그림은 **글자 부분만 딱 맞게** 잘려서 저장됨 (2026-11-13 · 창 통째로는 `-KeepWindow`) · 워드 폭 = 출력의 `word width`
+  - **vmtype 은 화면의 프롬프트를 못 읽음** → 보내기 전에 `vmcapture.ps1 -TextOnly` 로 찍어 열어 보고 root 프롬프트(`#`)인지 확인 · su 가 실패했으면 멈추기 (2026-11-12: rocky 상태에 dnf 를 보내 오류 · su 실패 뒤에도 다음 명령을 보냄) · dnf 는 저장소가 느려 오래 걸림(`-TimeoutMs` 기본 3분) → 찍은 그림에서 `Complete!` 확인 · 끝나면 Ctrl · Alt · Shift 를 모두 떼어 줌
+  - VMware 는 창 하나에 탭(Client · Server · Server(B)) — `-Title` 은 지금 열린 탭만 찾으므로 다른 VM 은 사용자에게 탭을 눌러 달라고 하기
+  - 텍스트 모드 VM(Server(B))은 `localhost login:` 에 **root 로 바로 로그인**이 빠름 (rocky → su - 보다) · 비밀번호는 사용자가
 - **원격제어(Computer use)** 는 Claude 앱 설정 → This computer → Computer use 에서 사용자가 직접 켠다 (기본 꺼짐 · 보안 설정이라 Claude 가 켜지 않음) · **켠 뒤에는 새 세션에서** 시작 (이미 열려 있던 세션에는 도구가 안 들어옴 · 2026-11-05)
   - 새 세션에서 ToolSearch 로 computer-use 도구를 불러오고 `request_access("VMware Workstation Pro")` → full 허용
   - **VM 안에 입력**: `type` 은 VM 에 글자가 안 들어감(Enter 만) → `key` 로 한 글자씩 — 대문자 `shift+l` · `*` = `shift+8` · `>` = `shift+period` · `"` = `shift+'` · `#` = `shift+3` · `|` = `shift+backslash` · `=` 는 `"="` 그대로(`equal` 은 틀린 키 이름)
@@ -46,4 +51,5 @@
 - **원격제어 중 캡처**: 화면 가장자리에 주황 빛이 켜지므로 **창을 가장자리에서 띄우고**(예: 50, 40) 찍기 · 마우스를 탭 위에서 치워 툴팁 X · VMware 라이브러리 패널을 닫으면 콘솔이 넓게 찍힘 · `VMware window not found` 가 나오면 최신 vmcapture.ps1(창 제목이 비어도 EnumWindows 로 찾음)로 다시 받기
 - 도구용 ps1 은 **UTF-8 BOM 필수** (BOM 없으면 Windows PowerShell 5.1 이 한글 경로를 깨뜨려 엉뚱한 폴더에 저장)
 - 워드(docx)에 넣을 때도 원본 PNG 그대로 — python-docx 는 `width` 만 지정(비율 유지 · 다시 저장 · 압축 X) · 워드는 파일 → 옵션 → 고급 → 이미지 크기 및 품질 → "파일의 이미지 압축 안 함"
+- **과제 워드는 깔끔하게** (2026-11-13 사용자: “회색 글씨로 짜잘하게 설명 글씨 · 제목 등등 쓰는데 내가 수정했어”) — 글자는 전부 검은색 · 회색 · 작은 설명 글씨 · 제목 스타일(파란 글씨) · 단계 제목 · 그림 설명(캡션) X · 과목 양식에 있는 줄만 · 과목별 양식은 규칙(CLAUDE.md 의 "📝 과제 워드") · 메모리 — 양식이 없으면 만들기 전에 묻기
 - 스크립트가 없으면(PC 초기화 등) iCloud `동양미래대학교/Claude과제머신.zip` 을 내려받아 풀고 `프롬프트.txt` 대로 하거나 https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md 대로 다시 설치하고 찍는다

@@ -2,7 +2,9 @@
   vmtype.ps1 — VMware 의 글자 콘솔 VM 에 명령을 하나씩 쳐서, 출력이 다 나오면 그 창을 찍기 (다른 컴퓨터 Claude Code 용 · 2026-11-05)
   왜: 원격제어(Computer use)가 꺼져 있으면 VM 에 입력할 방법이 없음 → 2026-11-05 학교 PC 에서 임시 스크립트로 명령 10개를 쳐서 캡처한 것을 도구로
   ⚠️ 쓰면 안 되는 곳 (2026-11-05 학교 PC 에서 확인):
-     · 그래픽 화면(GNOME) VM — 무슨 키가 들어갔는지 확인할 수 없음 (GNOME 터미널의 fdisk 에 q 를 보냈더니 나가지 않고 도움말이 뜸)
+     · (2026-11-13 바뀜) 그래픽 화면(GNOME) VM 은 터미널에서 조건부로 씀 — 사용자: "뭐가 뭔지 모르니까 오타 안 나고 빠르게 쳐 주는 걸로"
+       터미널을 VM 안 맨 앞에 열고(포커스) 영어 입력 상태 · -KeepWindow · 첫 명령(whoami)을 그림으로 확인한 뒤 나머지 · 한글 입력이면 글자가 깨짐
+       (2026-11-05: GNOME 터미널의 fdisk 에 q 를 보냈더니 나가지 않고 도움말이 뜸 · 2026-11-12: GNOME 터미널에 영어로는 잘 들어감)
      · 디스크를 바꾸는 명령 (fdisk · parted · mkfs · mdadm · dd · wipefs · pvcreate 등) · 재부팅 · 끄기 → 이 도구가 거부함
        → 원격제어(Computer use)로 화면을 보면서 하거나, 사용자가 직접 치고 Claude 는 vmcapture.ps1 로 찍기만 (키 안 보냄)
   하는 일 (명령마다):
@@ -16,7 +18,10 @@
   사용:
     powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vmtype.ps1" -Title "Server(B)" -Commands "df -h;;ls -l /etc | head -20" -OutDir "C:\경로\캡처" -Names "B01_df;;B02_ls"
     -Commands · -Names 는 ;; 로 나눔 (powershell -File 로 배열을 넘기면 "a,b" 한 문자열로 합쳐짐) · 명령은 영어로만
-    -DryRun   키는 안 보내고 무엇을 할지만 출력 (먼저 이걸로 확인)
+    -DryRun   키는 안 보내고 무엇을 할지만 출력 (먼저 이걸로 확인 · -Commands 는 꼭 있어야 함: -Commands "hostname" -DryRun)
+    -TimeoutMs 180000  한 명령을 기다리는 최대 시간 (기본 3분 — 2026-11-12: dnf 가 저장소가 느려 30초로는 짧았음)
+  ⚠️ 화면의 프롬프트를 읽지 못함 → 보내기 전에 vmcapture.ps1 -TextOnly 로 찍어 열어 보고 root 프롬프트(#)인지 확인 · su 가 실패했으면 멈추기
+     (2026-11-12: rocky 상태에 dnf 를 보내 오류 · su 실패 뒤에도 다음 명령을 보냄) · 오래 걸리는 명령은 찍은 그림에서 끝났는지(Complete! 등) 확인
     -KeepWindow  글자 부분만 자르지 않고 창 통째로 (제목 줄 그대로) · -PageCm 17 = 워드 본문 폭(cm) = word width 의 최대값
   출력은 영어 (Claude Code 가 읽을 때 한글이 깨지지 않게): SAVED: 경로 | 가로 x 세로 px | text only … | word width …cm | cmd: … · 문제가 있으면 ERROR: …
   word width = 글자 줄 간격(보통 16px)이 워드에서 0.42cm(본문 글자쯤)가 되는 폭 · 본문 폭보다 넓은 출력만 본문 폭 → 그림마다 글자 크기가 비슷하게
@@ -28,7 +33,7 @@ param(
     [string]$Names = "",
     [int]$CharDelayMs = 40,
     [int]$StableMs = 1500,
-    [int]$TimeoutMs = 30000,
+    [int]$TimeoutMs = 180000,
     [switch]$KeepWindow,
     [double]$PageCm = 17.0,
     [switch]$DryRun
@@ -170,7 +175,7 @@ function Save-Frame($frame, $path) {              # DWM 의 보이는 테두리�
     $info = ("{0} x {1} px" -f $vw, $vh)
     if (-not $KeepWindow) {                       # 글자 부분만 딱 맞게 (검은 글자 화면을 못 찾으면 창 통째로 + 경고)
         $tb = [VmType]::TextBox($outBmp, 12)
-        if ($null -eq $tb) { $info += " | WARNING: no black text screen found - saved the whole window" }
+        if ($null -eq $tb) { $info += " | no black text screen (graphic GUI?) - saved the whole window (GNOME: use -KeepWindow)" }
         else {
             $crop = $outBmp.Clone((New-Object System.Drawing.Rectangle($tb[0], $tb[1], $tb[2], $tb[3])), [System.Drawing.Imaging.PixelFormat]::Format24bppRgb)
             $outBmp.Dispose(); $outBmp = $crop
@@ -185,6 +190,8 @@ function Save-Frame($frame, $path) {              # DWM 의 보이는 테두리�
 function Release-Input {                          # Ctrl+Alt = VM 이 잡은 입력을 풀어 줌
     [VmType]::keybd_event(0x11, 0, 0, [UIntPtr]::Zero); [VmType]::keybd_event(0x12, 0, 0, [UIntPtr]::Zero)
     [VmType]::keybd_event(0x12, 0, 2, [UIntPtr]::Zero); [VmType]::keybd_event(0x11, 0, 2, [UIntPtr]::Zero)
+    # 2026-11-12: 끝난 뒤 Ctrl 이 눌린 채 남아 텔넷에 teluser 를 치니 ^T^E^L 이 찍힘 → Shift · Ctrl · Alt (왼 · 오른쪽까지) 모두 떼기
+    foreach ($vk in 0x10, 0x11, 0x12, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5) { [VmType]::keybd_event([byte]$vk, 0, 2, [UIntPtr]::Zero) }
 }
 function Stop-IfNotFront($what) {                 # 맨 앞이 그 VMware 창이 아니면 키를 안 보내고 멈춤
     if ([VmType]::GetForegroundWindow() -ne $hWnd) { Release-Input; Write-Output ("ERROR: VMware is no longer in front - stopped before " + $what + " (nothing was typed into another window)"); exit 1 }
