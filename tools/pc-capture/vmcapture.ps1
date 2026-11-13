@@ -6,6 +6,8 @@
            ② 그 창만 — PrintWindow(PW_RENDERFULLCONTENT) 로 창이 스스로 그리게 함 → 다른 창(Claude 앱 등)에 가려져 있어도 깨끗
               (2026-11-05 학교 PC: 화면 복사 방식은 Claude 창에 가려진 채 찍혔고 오류도 안 났음)
            ③ DWM 의 보이는 테두리로 자르기 (그림자 · 투명 테두리 X) — 제목 줄은 그대로 (VMware 과제 = 원래 제목 그대로 · 사용자 2026-11-05)
+           ③-1 -TextOnly: 검은 글자 화면(CUI · Server(B) 등)은 글자 부분만 딱 맞게 — 검은 콘솔 영역을 먼저 찾고 그 안의 글자 테두리 + 검은 여백 12px
+               (2026-11-13 사용자: "검은 화면에 작은 글씨라 글자가 너무 작음" · 제목 줄 · 메뉴 · 라이브러리 · 검은 여백 X)
            ④ 원래 픽셀 크기 그대로 (줄이기 X)  ⑤ PNG (JPG X)
   사용:
     powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vmcapture.ps1" -Out "C:\경로\과제1.png"
@@ -14,8 +16,11 @@
     -Window yunhuigeun   VMware 말고 제목에 이 글자가 있는 아무 창
     -Method Screen       예전 방식(화면에서 복사) — 찍기 전에 그 창이 맨 앞인지 확인하고 아니면 ERROR
     -Client              창 테두리 · 제목 줄을 빼고 안쪽만 (규칙상 보통 안 씀 — 제목 줄은 살림)
+    -TextOnly            글자 화면(CUI)은 글자 부분만 잘라 저장 + 워드에 넣을 폭(word width …cm) 알려 줌 · 그래픽 화면(GNOME)에 쓰면 ERROR (그때는 빼고 찍기)
+    -PageCm 17           워드 본문 폭(cm) = word width 의 최대값 (기본 17)
     -Out 을 안 주면 바탕화면에 capture_날짜_시각.png
-  출력은 영어 한 줄 (Claude Code 가 읽을 때 한글이 깨지지 않게): SAVED: 경로 | 가로 x 세로 px | DPI: … | method: … | window: …
+  출력은 영어 한 줄 (Claude Code 가 읽을 때 한글이 깨지지 않게): SAVED: 경로 | 가로 x 세로 px | DPI: … | method: … | window: … (-TextOnly 면 | text only: … | word width …cm)
+  word width = 글자 줄 간격(보통 16px)이 워드에서 0.42cm(본문 글자쯤)가 되는 폭 · 본문 폭보다 넓은 출력만 본문 폭 → 그림마다 글자 크기가 비슷하게
 #>
 param(
     [string]$Out = "",
@@ -23,13 +28,17 @@ param(
     [string]$Process = "",
     [string]$Window = "",
     [ValidateSet("PrintWindow", "Screen")] [string]$Method = "PrintWindow",
-    [switch]$Client
+    [switch]$Client,
+    [switch]$TextOnly,
+    [double]$PageCm = 17.0
 )
 $ErrorActionPreference = "Stop"
 
 Add-Type -AssemblyName System.Drawing
-Add-Type @"
+Add-Type -ReferencedAssemblies System.Drawing @"
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 public static class VmCap {
     [StructLayout(LayoutKind.Sequential)] public struct RECT { public int Left, Top, Right, Bottom; }
@@ -64,6 +73,57 @@ public static class VmCap {
             return true;
         }, IntPtr.Zero);
         return list;
+    }
+    // 2026-11-13 -TextOnly: 검은 글자 화면(CUI)에서 글자 부분만 { x, y, 폭, 높이, 줄 간격 } · 검은 글자 화면이 없으면 null
+    //   ① 25% 넘게 검정(가장 밝은 채널 < 16)인 가로줄이 가장 길게 이어진 곳 = 콘솔 위아래 → 그 안에서 같은 방법으로 왼쪽 · 오른쪽
+    //      (메뉴 · 라이브러리 · 상태 줄은 밝아서 빠짐 · 콘솔 가장자리의 얇은 밝은 선은 2px 안쪽으로 줄여서 뺌)
+    //   ② 콘솔 안의 밝은 픽셀(> 90) = 글자 → 그 테두리  ③ 98% 넘게 검정인 곳으로만 여백 넓히기  ④ 글자 줄이 시작되는 간격의 가운데 값 = 줄 간격
+    public static int[] TextBox(Bitmap b, int margin) {
+        int W = b.Width, H = b.Height;
+        BitmapData bd = b.LockBits(new Rectangle(0, 0, W, H), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+        int st = bd.Stride; byte[] px = new byte[st * H];
+        Marshal.Copy(bd.Scan0, px, 0, px.Length); b.UnlockBits(bd);
+        byte[] m = new byte[W * H];
+        for (int y = 0; y < H; y++) for (int x = 0; x < W; x++) { int i = y * st + x * 3; m[y * W + x] = Math.Max(px[i], Math.Max(px[i + 1], px[i + 2])); }
+        bool[] rows = new bool[H];
+        for (int y = 0; y < H; y++) { int n = 0; for (int x = 0; x < W; x++) if (m[y * W + x] < 16) n++; rows[y] = n * 4 >= W; }
+        int[] ry = Longest(rows); int ya = ry[0], yb = ry[1];
+        if (yb - ya < 40) return null;
+        int hh = yb - ya + 1; bool[] cols = new bool[W];
+        for (int x = 0; x < W; x++) { int n = 0; for (int y = ya; y <= yb; y++) if (m[y * W + x] < 16) n++; cols[x] = n * 4 >= hh; }
+        int[] rx = Longest(cols); int xa = rx[0], xb = rx[1];
+        if (xb - xa < 80) return null;
+        xa += 2; xb -= 2; ya += 2; yb -= 2;
+        int x0 = W, y0 = H, x1 = -1, y1 = -1; bool[] lit = new bool[H];
+        for (int y = ya; y <= yb; y++) for (int x = xa; x <= xb; x++) if (m[y * W + x] > 90) {
+            lit[y] = true; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+        }
+        if (x1 < 0) return null;
+        for (int k = 0; k < margin; k++) {
+            if (x0 > xa && AllDark(m, W, x0 - 1, x0 - 1, y0, y1)) x0--;
+            if (x1 < xb && AllDark(m, W, x1 + 1, x1 + 1, y0, y1)) x1++;
+            if (y0 > ya && AllDark(m, W, x0, x1, y0 - 1, y0 - 1)) y0--;
+            if (y1 < yb && AllDark(m, W, x0, x1, y1 + 1, y1 + 1)) y1++;
+        }
+        var gaps = new System.Collections.Generic.List<int>(); int prev = -1;
+        for (int y = ya + 1; y <= yb; y++) if (lit[y] && !lit[y - 1]) { if (prev >= 0 && y - prev >= 8 && y - prev <= 64) gaps.Add(y - prev); prev = y; }
+        gaps.Sort();
+        int pitch = gaps.Count > 0 ? gaps[gaps.Count / 2] : 0;
+        return new int[] { x0, y0, x1 - x0 + 1, y1 - y0 + 1, pitch };
+    }
+    static int[] Longest(bool[] f) {                 // 가장 길게 이어진 true 구간 { 시작, 끝 } (없으면 { 0, -1 })
+        int bs = 0, be = -1, s = -1;
+        for (int i = 0; i <= f.Length; i++) {
+            bool v = i < f.Length && f[i];
+            if (v && s < 0) s = i;
+            if (!v && s >= 0) { if (i - 1 - s > be - bs) { bs = s; be = i - 1; } s = -1; }
+        }
+        return new int[] { bs, be };
+    }
+    static bool AllDark(byte[] m, int W, int xs, int xe, int ys, int ye) {   // 그 줄이 98% 넘게 검정인지
+        int tot = 0, d = 0;
+        for (int y = ys; y <= ye; y++) for (int x = xs; x <= xe; x++) { tot++; if (m[y * W + x] < 16) d++; }
+        return d * 100 >= tot * 98;
     }
 }
 "@
@@ -160,6 +220,19 @@ if ($Method -eq "PrintWindow") {
     $g.Dispose()
 }
 
+# 5-1) -TextOnly: 검은 글자 화면(CUI)은 글자 부분만 딱 맞게 (2026-11-13 사용자: "검은 화면에 작은 글씨라 글자가 너무 작음")
+$textMsg = ""
+if ($TextOnly) {
+    $tb = [VmCap]::TextBox($bmp, 12)
+    if ($null -eq $tb) { $bmp.Dispose(); Write-Output "ERROR: -TextOnly found no black text screen (CUI) in this window - is the VM showing a text console? (graphic GNOME VM: capture without -TextOnly)"; exit 1 }
+    $crop = $bmp.Clone((New-Object System.Drawing.Rectangle($tb[0], $tb[1], $tb[2], $tb[3])), [System.Drawing.Imaging.PixelFormat]::Format24bppRgb)
+    $bmp.Dispose(); $bmp = $crop
+    $pitch = $tb[4]; if ($pitch -le 0) { $pitch = 16 }
+    $wordCm = [Math]::Min($PageCm, $tb[2] * 0.42 / $pitch)
+    $textMsg = (" | text only: {0}x{1} at {2},{3} of window {4}x{5} | line {6}px | word width {7:0.0}cm" -f $tb[2], $tb[3], $tb[0], $tb[1], $cw, $ch, $pitch, $wordCm)
+    $cw = $tb[2]; $ch = $tb[3]
+}
+
 # 6) PNG 저장 (줄이기 X · JPG X)
 if (-not $Out) { $Out = Join-Path ([Environment]::GetFolderPath("Desktop")) ("capture_" + (Get-Date -Format "yyyyMMdd_HHmmss") + ".png") }
 if (-not [IO.Path]::IsPathRooted($Out)) { $Out = Join-Path (Get-Location).Path $Out }      # 상대 경로 → 지금 PowerShell 위치 기준
@@ -168,4 +241,4 @@ $dir = Split-Path -Parent $Out
 if ($dir -and -not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir | Out-Null }
 $bmp.Save($Out, [System.Drawing.Imaging.ImageFormat]::Png)
 $bmp.Dispose()
-Write-Output ("SAVED: {0} | {1} x {2} px | DPI: {3} | method: {4} | window: {5}" -f $Out, $cw, $ch, $dpi, $used, $winTitle)
+Write-Output ("SAVED: {0} | {1} x {2} px | DPI: {3} | method: {4} | window: {5}{6}" -f $Out, $cw, $ch, $dpi, $used, $winTitle, $textMsg)

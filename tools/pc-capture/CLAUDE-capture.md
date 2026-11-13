@@ -1,4 +1,4 @@
-<!-- vmcapture-rule (2026-10-29 · 2026-11-05 고침 · https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md) -->
+<!-- vmcapture-rule (2026-10-29 · 2026-11-05 · 2026-11-13 고침 · https://gmlrms1016-dotcom.github.io/exam-summary/tools/pc-capture/setup.md) -->
 ## 📸 화면 캡처 규칙 — 항상 지킴 (사용자가 따로 말하지 않아도)
 - 캡처는 새 코드를 짜지 말고 이 스크립트로 찍는다:
   `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vmcapture.ps1" -Out "<저장할 경로>.png"`
@@ -8,14 +8,18 @@
 - 금지: 크기 줄이기(resize · thumbnail · 비율 축소) · JPG/JPEG · 전체 화면을 찍고 자르기 · 화면 배율을 무시한 좌표
 - **제목 줄은 살린다** — 닫기 · 최소화 · 최대화가 있는 맨 윗줄까지 창 통째로 (2026-11-04 사용자) · `-Client`(제목 줄 빼기)는 쓰지 않는다
   - **VMware 과제 캡처는 제목 줄을 그대로 둔다** — "Server(B) - VMware Workstation" 같은 원래 제목 (2026-11-05 사용자 결정)
+  - **단 VMware 글자 화면(CUI · Server(B) 등)은 글자 부분만 딱 맞게 자른다** (2026-11-13 사용자: “검은 화면에 작은 글씨라 글자가 너무 작음”) — `vmcapture.ps1 ... -TextOnly` → 제목 줄 · 메뉴 · 라이브러리 · 검은 여백 없이 글자 + 검은 여백 12px (`vmtype.ps1` 은 기본으로 자름)
+    - 워드에 넣을 때 폭 = 출력의 `word width …cm` (python-docx `width=Cm(…)`) — 그림마다 글자 크기가 비슷하게 · 본문 폭(17cm)보다 넓은 출력만 본문 폭
+    - 그래픽 화면(GNOME) VM 은 예전처럼 창 통째로 (`-TextOnly` 를 쓰면 ERROR 로 알려 줌)
   - 그 밖의 창은 제목 글자를 내 이름 영어 `yunhuigeun` 만 (경로 · 명령 · 자동화 흔적 글자 X) — 콘솔(cmd)은 실행 전에 `title yunhuigeun` · VS Code 는 설정 `window.title` = `"yunhuigeun"`
   - 제목을 바꿀 수 없는 그 밖의 창(Visual Studio 등)은 어떻게 찍을지 사용자에게 먼저 묻는다
   - **UAC 가 꺼진 PC** 는 `title yunhuigeun` 을 해도 "관리자: yunhuigeun" · VS 제목에 "(관리자)" 가 붙음 → 그대로 찍을지 먼저 묻는다 (2026-11-09: VS 디버그 콘솔 그대로 · 사용자 선택)
 - **VS Code 소스 캡처는 탐색기(사이드바) 닫고** 깔끔하게 · **코드는 창에 딱 맞게**(짧으면 확대 · 길면 축소 · 가로세로 안 잘리는 데까지) · **50줄이 넘으면 나눠 찍기** (2026-11-04 사용자)
+  - **짧은 코드는 확대 단축키(Ctrl + `+` · Visual Studio 는 Ctrl+Shift+. = View.ZoomIn)로 가로가 잘리기 직전까지 키워서 글자를 키운다** — 글자 크기 상한 없음 · 모든 언어 과목 · 세로가 먼저 차면 거기까지 (2026-11-13 사용자: 프로그래밍언어실습 11주차 제출본 글자가 작았음)
 - **Visual Studio(C 수업 실습) 소스 · 실행 = `vscapture.ps1`** (2026-11-09 — 학교 PC 가 손으로 하던 방법을 도구로 · 같은 날 제출 워드를 보고 소스 캡처를 고침 · 먼저 `-DryRun` · VS 에 솔루션이 열려 있어야 함)
   `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vscapture.ps1" -Mode src -File "<c 파일>" -Out "<src_이름>.png"`
   `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vscapture.ps1" -Mode run -Project "<프로젝트>" -Out "<run_이름>.png"`
-  - src = **VS 창 통째로 찍되 깔끔하게** (11주차 제출: 솔루션 탐색기 · 출력 창 · 다른 탭이 같이 찍히고 코드가 작았음) — 다른 탭 닫기(바뀐 내용은 저장) → 그 파일만 열기 → 도구 창(솔루션 탐색기 · 출력 · 오류 목록 …) 숨기기 → 현재 줄 강조 잠깐 끄기 → 창을 화면 크기로 → **코드가 다 보이는 데까지 확대**(VS 가 알려 주는 보이는 줄 · 칸 수로 재서 · 줄 높이 약 64px 까지) → **창 폭 · 높이를 코드에 맞춤** → 여러 장 중 **커서가 꺼진 장면** → 확대 · 도구 창 · 강조 · 창 위치 되돌림
+  - src = **VS 창 통째로 찍되 깔끔하게** (11주차 제출: 솔루션 탐색기 · 출력 창 · 다른 탭이 같이 찍히고 코드가 작았음) — 다른 탭 닫기(바뀐 내용은 저장) → 그 파일만 열기 → 도구 창(솔루션 탐색기 · 출력 · 오류 목록 …) 숨기기 → 현재 줄 강조 잠깐 끄기 → 창을 화면 크기로 → **가로(또는 세로)가 잘리기 직전까지 확대**(VS 가 알려 주는 보이는 줄 · 칸 수로 재서 · 글자 크기 상한 없음 — 2026-11-13 사용자) → **창 폭 · 높이를 코드에 맞춤** → 여러 장 중 **커서가 꺼진 장면** → 확대 · 도구 창 · 강조 · 창 위치 되돌림
   - **50줄이 넘으면 나눠 찍기** = `-Lines 1-45` · `-Lines 46-90` (그 줄을 맨 위로) → `src_이름_1.png` · `_2.png` · 출력의 `fit: skipped (…)` 는 확대 · 창 맞추기만 못 한 것(그림은 찍힘) → 그 글을 그대로 사용자에게 알리기
   - run = 시작 프로젝트 바꾸기 → 디버그하지 않고 시작(Ctrl+F5) → 새 디버그 콘솔 창 높이를 출력에 맞춤(`-Height` 로 직접 · `-NoFit` 안 바꿈) → 여러 장(`-Shots 5`) 중 **커서가 꺼진 장면** · 입력이 필요한 프로그램(scanf)은 사용자가 입력한 뒤 vmcapture `-Window` 로
   - **실행 캡처는 Ctrl+F5 로 뜨는 창 그대로** (2026-11-09 사용자: “출력결과는 그냥 ctrl+F5 해서 나오는 거처럼”) — 경로가 길어 `…종료되었습니다.` 줄이 두 줄이 돼도 그대로 · 내용을 고치거나 자르지 않음
@@ -32,6 +36,7 @@
   - 글자만 나오는 콘솔 VM(Server(B) 같은)에서만 — **그래픽 화면(GNOME) VM 에는 쓰지 않는다** (무슨 키가 들어갔는지 확인할 수 없음 · fdisk 에 q 가 안 먹고 도움말이 떴음)
   - **디스크를 바꾸는 명령(fdisk · parted · mkfs · mdadm · dd · wipefs 등) · 재부팅 · 끄기는 쓰지 않는다**(스크립트도 거부함) → 원격제어로 화면을 보면서 하거나, 사용자가 직접 치고 Claude 는 vmcapture.ps1 로 찍기만
   - 키를 보내기 전에 매번 맨 앞 창이 그 VMware 창인지 확인하고 아니면 멈춤 · 한 글자씩 40ms · 출력이 다 나와 화면이 멈춘 뒤 찍음 · 끝나면 Ctrl+Alt 로 입력을 풀어 줌
+  - 찍은 그림은 **글자 부분만 딱 맞게** 잘려서 저장됨 (2026-11-13 · 창 통째로는 `-KeepWindow`) · 워드 폭 = 출력의 `word width`
 - **원격제어(Computer use)** 는 Claude 앱 설정 → This computer → Computer use 에서 사용자가 직접 켠다 (기본 꺼짐 · 보안 설정이라 Claude 가 켜지 않음) · **켠 뒤에는 새 세션에서** 시작 (이미 열려 있던 세션에는 도구가 안 들어옴 · 2026-11-05)
   - 새 세션에서 ToolSearch 로 computer-use 도구를 불러오고 `request_access("VMware Workstation Pro")` → full 허용
   - **VM 안에 입력**: `type` 은 VM 에 글자가 안 들어감(Enter 만) → `key` 로 한 글자씩 — 대문자 `shift+l` · `*` = `shift+8` · `>` = `shift+period` · `"` = `shift+'` · `#` = `shift+3` · `|` = `shift+backslash` · `=` 는 `"="` 그대로(`equal` 은 틀린 키 이름)

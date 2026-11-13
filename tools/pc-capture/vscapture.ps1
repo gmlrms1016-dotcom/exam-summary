@@ -7,7 +7,9 @@
                      → 창을 화면 크기로 → 코드가 다 보이는 데까지 확대(View.ZoomIn · 길면 ZoomOut)
                      → 창 폭 · 높이를 코드에 맞게 줄이기 (VS 가 알려 주는 '보이는 줄 · 칸 수'로 재서 — 색 짐작 X)
                      → 현재 줄 강조 테두리 잠깐 끄기 · 여러 장 찍어 깜빡이는 커서가 꺼진 장면 고르기
-                     → 확대 · 도구 창 · 강조 · 창 위치 되돌리기 (글자는 줄 높이 약 64px = 글자 약 40px 까지만)
+                     → 확대 · 도구 창 · 강조 · 창 위치 되돌리기
+                     글자 크기 상한 없음 — 짧은 코드는 가로(또는 세로)가 잘리기 직전까지 키움 (2026-11-13 사용자: "소스코드가 짧으면
+                     ctrl + + 같은 단축키로 가로가 잘리기 직전까지 키워서 글자를 키워" · 전에는 줄 높이 64px = 글자 약 40px 에서 멈췄음)
   실행 (-Mode run) : 시작 프로젝트 바꾸기 → 디버그하지 않고 시작(Ctrl+F5) → 새로 뜬 디버그 콘솔 창
                      → 창 높이를 출력에 맞게 줄이기 → 여러 장 찍어 커서가 꺼진 장면 고르기
   캡처 자체는 같은 폴더의 vmcapture.ps1 (PrintWindow · DPI 인식 · 원본 PNG · 제목 줄 살림 · 다른 창에 가려져도 깨끗)
@@ -320,13 +322,13 @@ if ($Mode -eq "src") {
                 }
                 if (-not (Fits)) { throw "code does not fit even when zoomed out" }
                 $n = 0
-                while ($n -lt 12) {                                     # 2) 한 단계 더 키워도 들어가면 키우기 (짧으면 크게)
+                while ($n -lt 30) {                                     # 2) 한 단계 더 키워도 들어가면 키우기 (짧으면 가로 · 세로가 잘리기 직전까지 · VS 최대 400%)
                     $bf = PaneHW
                     if (($bf[0] / 1.12) -lt $script:needLines -or ($bf[1] / 1.12) -lt $script:needCols) { break }
                     Zoom 1; $n++; $af = PaneHW
                     if ($af[0] -ge $bf[0] -and $af[1] -ge $bf[1]) { $script:zoom -= 1; break }   # 더 안 커짐 (최대 확대)
                     if (-not (Fits)) { Zoom -1; break }
-                    if ((((Get-Size)[1] - 230) / [Math]::Max(1, $af[0])) -gt 64) { Zoom -1; break }   # 줄 높이 64px 넘음 = 글자 약 40px
+                    # (2026-11-13) 글자 크기 상한(줄 높이 64px)은 뺌 — 사용자: 가로가 잘리기 직전까지 키우기
                 }
                 $lo = 480; $hi = (Get-Size)[0]                          # 3) 창 폭을 코드에 맞게 (이분 탐색)
                 while ($hi - $lo -gt 8) {
