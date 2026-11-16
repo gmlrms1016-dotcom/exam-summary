@@ -102,7 +102,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>배열 (ch08) — 선언 · 초기화 · for 로 출력 · sizeof · 2차원 · 배열 복사</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>배열 (ch08) — 선언 · 초기화 · for 로 출력 · sizeof · 2차원 · 배열 복사</small></a><a class="next" href="프로그래밍언어실습-12주차.html">다음 · <b>12주차</b> ›<br><small>포인터 2 (w12) — 이중 포인터 · 배열 포인터 · 포인터 배열 · 함수 포인터 · void 포인터 · 포인터 연산</small></a></nav>
 
 <div class="tip">자료: 노션 필기(11/9) · <b>C-Lect11-w11-포인터1-stu.pdf</b> (22쪽) · 수업 파일 <code>w11.sln</code> (실습 10개) · 퀴즈 정답 슬라이드 사진 3장(강의자료에 없음) · 교수님 엑셀 설명 사진 2장 · 내 퀴즈 설명 엑셀 · 제출 워드. PDF 펜 필기 없음. ✍️ = 내 필기 · 수업 코드 · ⚠️ = 정정 · 🤖 = 강의자료에 없는 설명. 코드 주석과 ▶ 출력은 직접 컴파일 · 실행한 값이고, <b>주소 · 쓰레기값처럼 실행마다 다른 값</b>은 수업 PC(Visual Studio · Debug x64) 캡처 값을 함께 적었어요.</div>
 <div class="tip">🔥 <b>기말고사 (✍️ 노션)</b> — ① <b>오류 수정 문제</b> “다음 코드를 보고 오류가 나는 곳을 수정하시오 (1. 컴파일 시간 2. 런타임)” <code>short student[count];</code> ② <b>강의자료 9페이지 외우기</b> (배열과 함수 · 매개변수에 배열을 보냄 · <code>printf("%d", )</code> · <code>printf("%p", )</code>) ③ <b>강의자료 12페이지 외우기</b> (매개변수가 포인터) ④ <b>실습한 코드 = “다음 실행 결과는?” 예상문제</b> ⑤ 수업 파일 <code>w11-ex01_05-pointer-03.c</code> 맨 위 주석 “<b>강의자료에 없음 · 숫자만 바꿔서 기말고사 시험문제</b>” → 아래 ① ~ ④ 를 먼저 보세요.</div>
@@ -496,7 +496,7 @@ int main(void) {   // 원본은 main() — 반환형을 안 쓴 옛 C → int ma
 <ul><li>🔥 <b>배열 칸 수 = 컴파일 시간에 정해져야</b> → <code>short student[count];</code> ❌ → <code>short student[10];</code> · <code>#define MAX 10</code> → <code>short student[MAX];</code> ✅ (Visual Studio)</li><li>배열명 = <b>시작 주소</b> (<code>array1 == &amp;array1[0]</code>) · <b><code>*(array1 + i) == array1[i]</code></b> · <code>int</code> 1칸 = 4바이트 → 주소 +4</li><li>🔥 함수에 배열 = <b>이름(주소)만</b> 보냄 — 9쪽 <code>void test(int v1[])</code> + <code>v1[i]</code> / 12쪽 <code>void test(int* v1)</code> + <code>*(v1 + i)</code> → 결과 같음</li><li>포인터 변수 = 주소를 가진 변수 · <b><code>&amp;</code> 주소 지정 연산자</b> · <b><code>*</code> 포인터 연산자</b>(선언할 때 · 값을 읽고 쓸 때) · <code>%p</code> = 주소 출력</li><li>🔥 <code>int* a2 = &amp;a1;</code> → <b><code>*a2 = 2000;</code> 은 a1 을 바꿈</b> · <code>int a3 = a1;</code> 은 값만 복사 (pointer-03 · 숫자만 바뀜)</li><li>🔥 지역 배열 주소를 돌려주면 <b>쓰레기값</b> → <b><code>static</code></b> 으로 · 주소를 안 넣은 포인터는 <b><code>NULL</code></b></li><li>퀴즈 결과: 2번 <b><code>20 40 60 </code></b> · 3번 <b><code>5 8 7 4 1 </code></b></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>배열 (ch08) — 선언 · 초기화 · for 로 출력 · sizeof · 2차원 · 배열 복사</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>배열 (ch08) — 선언 · 초기화 · for 로 출력 · sizeof · 2차원 · 배열 복사</small></a><a class="next" href="프로그래밍언어실습-12주차.html">다음 · <b>12주차</b> ›<br><small>포인터 2 (w12) — 이중 포인터 · 배열 포인터 · 포인터 배열 · 함수 포인터 · void 포인터 · 포인터 연산</small></a></nav>
 
     <p class="wk-src">노션 「프로그래밍언어실습 · 11주차」 페이지를 정리한 내용입니다.</p>
 

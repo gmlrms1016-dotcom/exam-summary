@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그래밍언어실습 12주차 · 포인터 2 (w12) — 이중 포인터 · 배열 포인터 · 포인터 배열 · 함수 포인터 · void 포인터 · 포인터 연산</title>
+    <meta name="description" content="프로그래밍언어실습 12주차 정리 — 포인터 2 (w12) — 이중 포인터 · 배열 포인터 · 포인터 배열 · 함수 포인터 · void 포인터 · 포인터 연산">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="프로그래밍언어실습 12주차 · 포인터 2 (w12) — 이중 포인터 · 배열 포인터 · 포인터 배열 · 함수 포인터 · void 포인터 · 포인터 연산">
+    <meta property="og:description" content="프로그래밍언어실습 12주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../프로그래밍언어실습.html">← 프로그래밍언어실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>💾 프로그래밍언어실습 · 12주차</h1>
+        <p>포인터 2 (w12) — 이중 포인터 · 배열 포인터 · 포인터 배열 · 함수 포인터 · void 포인터 · 포인터 연산</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</small></a></nav>
+
+<div class="tip">자료: 노션 필기(11/16) · <b>C-Lect12-w12-포인터2-stu-pdf-v1.0.1.pdf</b> (24쪽 · 11/16 저녁에 19쪽을 고친 판) · 수업 파일 <code>w12.sln</code> (main.c 하나에 이중 · 배열 · 함수 · void 포인터를 주석으로 바꿔 가며 실행) · 교수님 화면 사진 1장(배열 포인터 이론 + 엑셀 메모리 그림) · 실습 요약 PDF(교재 11장 · 과제04). PDF 펜 필기 없음. ✍️ = 내 필기 · 수업 코드 · ⚠️ = 정정 · 🤖 = 강의자료에 없는 설명. 코드 주석과 ▶ 출력은 이 맥(clang · 64비트)에서 직접 컴파일 · 실행한 값이고, 주소처럼 <b>실행마다 다른 값</b>은 그렇다고 적었어요.</div>
+<div class="tip">🔥 <b>기말고사 (✍️ 노션)</b> — ① “<b>오늘 한 거 실행결과 기말고사 예상문제</b>” = 수업에서 실행한 4개 (이중 포인터 · 배열 포인터 · 함수 포인터 · void 형 포인터) ② “<b>강의자료 5페이지 기말고사 예상문제</b>” + 노션 <code>//시험문제</code> (<code>printf("%d %d %d", *ptr, ptr, i)</code>) ③ “<b><code>++ptr</code> 이 1004번지 / 1001번지가 나오는 방법 공부하기</b>” ④ “<b>포인터 종류 공부하기</b>” → 아래 ① ~ ⑥ 을 먼저 보세요.</div>
+<section class="card" id="s1">
+<h2>🎨 12주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-그림정리.html?week=12" title="12주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-그림정리.html?week=12" target="_blank" rel="noopener">🎬 12주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+<ul><li>이중 포인터 <code>pptr → ptr → i</code> · 배열 포인터 <code>ptr + 1</code> = 한 줄(12바이트) · 포인터 배열 <code>ptr[0] → i</code> · <code>++ptr</code> = 자료형 크기만큼 · 함수 · void 포인터</li></ul>
+</section>
+<section class="card" id="s2">
+<h2>① 🔥 기말고사 — 5쪽 [실습 1-01] 포인터 변수</h2>
+<p>✍️ 노션 “강의자료 5페이지 기말고사 예상문제”</p>
+<pre><code class="language-c">// ex_01-pointer1.c — 📄 5쪽 [실습 1-01] 포인터 변수 (🔥 ✍️ “강의자료 5페이지 기말고사 예상문제”)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i = 10;                                 // 일반 변수 i ← 값 10
+    int* ptr;                                   // 포인터 변수 ptr — int 형 기억장소의 '주소'를 저장
+    ptr = &amp;i;                                   // &amp;i = i 의 주소 → ptr 에 저장 → ptr 이 i 를 가리킴
+    i = 50;                                     // i 를 직접 바꿈 → i = 50 (ptr 은 여전히 i 를 가리킴)
+    *ptr = 100;                                 // *ptr = ptr 이 가리키는 곳 = i → i 에 100 저장 → i = 100
+    printf("i = %d \n", i);                     // i = 100 → "i = 100 " (%d 뒤 공백도 그대로 찍힘)
+    printf("*ptr = %d\n", *ptr);                // *ptr → 가리키는 i 의 값 → 100
+    return 0;                                   // 0 을 돌려주며 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">i = 100 
+*ptr = 100</code></pre>
+<ul><li>순서: <code>i = 10</code> → <code>ptr = &amp;i</code> → <code>i = 50</code> → <code>*ptr = 100</code> (ptr 이 가리키는 <b>i 에</b> 씀) → <b>i 도 *ptr 도 100</b></li><li>첫 줄 끝에 공백이 하나 있어요 (<code>"i = %d \n"</code> 의 <code>%d</code> 뒤 공백)</li></ul>
+<h3>✍️ 노션 <code>//시험문제</code> — <code>printf("%d %d %d", *ptr, ptr, i)</code></h3>
+<pre><code class="language-c">// ✍️ 노션 “//시험문제” — 강의자료 5쪽 변형 (필기의 prt=&amp;i; 는 ptr=&amp;i; 오타)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i;                                      // 일반 변수 i
+    int *ptr;                                   // 포인터 변수 ptr
+    i = 10;                                     // i ← 10
+    ptr = &amp;i;                                   // ptr ← i 의 주소
+    printf("%d %d %d\n", *ptr, ptr, i);         // *ptr = 10 · ptr = 주소를 %d(10진수)로 → 실행마다 다름 · i = 10
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">10 1875614584 10</code></pre>
+<ul><li><b>첫째 · 셋째 = 10</b> (<code>*ptr</code> · <code>i</code>) · <b>가운데 = i 의 주소를 <code>%d</code>(10진수)로 찍은 값 → 실행마다 달라요</b></li><li>⚠️ 필기의 <code>prt=&amp;i;</code> 는 <code>ptr=&amp;i;</code> 오타 (prt 는 선언하지 않은 이름 → 컴파일 오류)</li><li>⚠️ 팩트체크 — 주소는 <code>%p</code> 로 찍는 게 맞아요. <code>%d</code> 에 포인터를 주면 clang 경고 <code>format specifies type 'int' but the argument has type 'int *'</code> (실행은 되지만 표준에서는 정의되지 않은 동작) → 시험 답은 “<b>10 · (i 의 주소) · 10</b>”</li></ul>
+</section>
+<section class="card" id="s3">
+<h2>② 🔥 기말고사 — 수업 실행 ① 이중 포인터 (19쪽 [실습 3-01])</h2>
+<p>✍️ 노션 “오늘 한 거 실행결과 기말고사 예상문제” · <code>ptr = &amp;i; //여기가 중요함</code></p>
+<pre><code class="language-c">// ex_05-pointer1.c — 📄 19쪽 [실습 3-01] 이중 포인터 (v1.0.1 · 🔥 ✍️ “오늘 한 거 실행결과 기말고사 예상문제”)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i = 10;                                 // 일반 변수 i ← 10
+    int* ptr;                                   // 포인터 ptr — int 의 주소를 저장
+    int** pptr;                                 // 이중 포인터 pptr — int* 형 변수(ptr)의 주소를 저장
+    ptr = &amp;i;                                   // ✍️ “여기가 중요함” — ptr ← i 의 주소 → ptr 이 i 를 가리킴
+    pptr = &amp;ptr;                                // pptr ← ptr 의 주소 → pptr → ptr → i
+    printf("*ptr = %d\n", *ptr);                // *ptr = ptr 이 가리키는 i → 10
+    **pptr = 11;                                // *pptr = ptr → **pptr = *ptr = i → i 에 11 저장
+    printf("i = %d, *ptr = %d, **ptr = %d\n",  i, *ptr, **pptr); // i = 11 · *ptr = i = 11 · **pptr = i = 11
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">*ptr = 10
+i = 11, *ptr = 11, **ptr = 11</code></pre>
+<ul><li><code>pptr → ptr → i</code> — <code>*pptr</code> = ptr (i 의 주소) · <code>**pptr</code> = i</li><li><code>**pptr = 11;</code> 은 <b>i 를 바꿈</b> → i · <code>*ptr</code> · <code>**pptr</code> 모두 11</li><li>⚠️ <b>강의자료가 고쳐졌어요 (v1.0.1)</b> — 처음 올라온 판의 19쪽은 <code>int* ptr, i = 10;</code> 다음 줄에 <code>int *ptr;</code> 가 또 있고, <code>printf</code> 에 <code>**ptr</code> (ptr 은 <code>int*</code> 라 별 두 개 불가) → clang 컴파일 오류 3개 (<code>redefinition of 'ptr'</code> · <code>indirection requires pointer operand ('int' invalid)</code> × 2). 11/16 저녁 v1.0.1 에서 위 코드처럼 고쳐짐</li><li>✍️ 수업 main.c 는 예전 판을 보고 쳐서 <code>**pptr</code> 로는 고쳤지만 <code>int* ptr;</code> 가 두 번 → clang <code>redefinition of 'ptr'</code> 오류 · 두 번째 줄을 지우면 실행돼요 (첫 출력 줄은 <code>**ptr = 10</code>)</li></ul>
+</section>
+<section class="card" id="s4">
+<h2>③ 🔥 기말고사 — 수업 실행 ② 배열 포인터 (22쪽 [실습 3-03])</h2>
+<p>✍️ 노션 “강의자료 22페이지 <code>int (*ptr)[3];</code>” · 수업 main.c 는 <code>%2d</code></p>
+<pre><code class="language-c">// ex_07-pointer1.c — 📄 22쪽 [실습 3-03] 배열 포인터 (🔥 ✍️ 수업 main.c 는 %d 대신 %2d)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int nArray[2][3] = { {1,2,3}, {4,5,6} };    // 2행 3열 — 메모리에는 1 2 3 4 5 6 이 한 줄로 (행 우선)
+    int (*ptr)[3];                              // 배열 포인터 — '열이 3개인 int 배열' 한 줄(12바이트)을 가리킴
+    int i, j;                                   // i = 행 첨자 · j = 열 첨자
+    ptr = nArray;                               // 2차원 배열 이름 = 0행(int[3])의 시작 주소 → ptr 이 0행을 가리킴
+    for (i = 0; i &lt; 2; i++) {                   // i = 0, 1 → 행 2개
+        for (j = 0; j &lt; 3; j++) {               // j = 0, 1, 2 → 열 3개
+            printf("%2d", ptr[i][j]);           // ptr[i][j] = nArray[i][j] → 2칸 폭 오른쪽 정렬 (1 → " 1")
+        }                                       // 안쪽 for 끝 → 한 행을 다 찍음
+        printf("\n");                           // 한 행이 끝나면 줄바꿈
+    }                                           // 바깥 for 끝 → 다음 행
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text"> 1 2 3
+ 4 5 6</code></pre>
+<ul><li>강의자료 그대로 <code>printf("%d", ...)</code> 면 띄어쓰기 없이 <code>123</code> / <code>456</code> (✍️ 수업에서는 <code>%2d</code> → 2칸 오른쪽 정렬)</li><li><code>int (*ptr)[3]</code> = <b>열이 3개인 int 배열</b>을 가리키는 포인터 → <code>ptr[i][j]</code> 로 2차원 배열처럼 씀</li></ul>
+<h3>🖥️ 교수님 엑셀 (사진) — <code>ptr + 1</code> 은 한 줄(12바이트) 뒤</h3>
+<pre><code class="language-c">// 🤖 배열 포인터는 +1 하면 '한 줄(열 3개 = 12바이트)' 건너뜀 — 교수님 엑셀(ptr = 100 → ptr + 1 = 112) 확인
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int nArray[2][3] = { {1,2,3}, {4,5,6} };    // 2행 3열 배열
+    int (*ptr)[3] = nArray;                     // 배열 포인터 ← 0행의 주소
+    printf("%d\n", (int)sizeof(*ptr));          // *ptr = int[3] 한 줄 → 3 × 4 = 12
+    printf("%d\n", (int)((char*)(ptr + 1) - (char*)ptr)); // ptr + 1 은 몇 바이트 뒤? → 12 (100 → 112)
+    printf("%d %d %d\n", **ptr, *ptr[1], (*ptr)[1]); // **ptr = nArray[0][0] = 1 · *ptr[1] = *(ptr[1]) = nArray[1][0] = 4 · (*ptr)[1] = nArray[0][1] = 2
+    printf("%d %d\n", (*(ptr + 1))[0], *(*(ptr + 1) + 2)); // (*(ptr+1))[0] = nArray[1][0] = 4 · *(*(ptr+1)+2) = nArray[1][2] = 6
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">12
+12
+1 4 2
+4 6</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>주소 (가정)</th><th>값</th><th>같은 칸을 부르는 이름</th></tr>
+<tr><td>100</td><td>1</td><td><code>nArray[0][0]</code> · <code>ptr[0][0]</code> · <code>(*ptr)[0]</code> · <code>**ptr</code></td></tr>
+<tr><td>104</td><td>2</td><td><code>nArray[0][1]</code> · <code>(*ptr)[1]</code></td></tr>
+<tr><td>108</td><td>3</td><td><code>nArray[0][2]</code> · <code>(*ptr)[2]</code></td></tr>
+<tr><td>112</td><td>4</td><td><code>nArray[1][0]</code> · <code>ptr[1][0]</code> · <code>*ptr[1]</code> · <code>(*(ptr+1))[0]</code></td></tr>
+<tr><td>116</td><td>5</td><td><code>nArray[1][1]</code> · <code>(*(ptr+1))[1]</code></td></tr>
+<tr><td>120</td><td>6</td><td><code>nArray[1][2]</code> · <code>(*(ptr+1))[2]</code></td></tr>
+</tbody></table>
+<ul><li>✍️ 교수님 화면 — 배열 포인터 = <b>순수 포인터</b> · 일정한 열의 크기를 가지는 2차원 배열의 기억장소 주소를 저장하는 포인터 변수 · 같은 자료형과 열의 개수를 가지는 배열의 주소를 저장</li><li>⚠️ 사진 속 엑셀의 112 칸 <code>(*ptr)[1]</code> 은 <b>104 칸(값 2)</b> 이에요 — 112 칸은 <code>*ptr[1]</code> (실행: <code>(*ptr)[1]</code> = 2 · <code>*ptr[1]</code> = 4) · 120 칸의 <code>nArray[0][2]</code> 는 <code>nArray[1][2]</code> 오타</li><li>⚠️ 엑셀 · 노션의 “포인터 변수 4byte” = 32비트 기준 · 이 맥(64비트)과 수업 PC 의 x64 빌드는 포인터가 <b>8바이트</b> (<code>sizeof(int*)</code> = 8 · 아래 ⑥)</li></ul>
+</section>
+<section class="card" id="s5">
+<h2>④ 🔥 기말고사 — 수업 실행 ③ 함수 포인터 (✍️ main.c · 16쪽 요약은 빈칸)</h2>
+<pre><code class="language-c">// ✍️ 수업 main.c — 함수 포인터 (🔥 오늘 실행결과 · 📄 16쪽 [요약] 함수 포인터는 빈칸 → 노션 필기)
+#include&lt;stdio.h&gt;                               // printf 를 쓰기 위한 표준 입출력 헤더 (&lt; 앞 공백은 없어도 됨)
+
+int add(int i) {                                // int 하나를 받아 int 를 돌려주는 함수
+    return i+1;                                 // 받은 값 + 1 을 돌려줌
+}                                               // add 끝
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int(*pfunc)(int);                           // 함수 포인터 — (int 를 받고 int 를 돌려주는) 함수의 주소를 저장
+    int result;                                 // 호출 결과를 담을 변수
+    pfunc=add;                                  // 함수 이름 add = 함수의 시작 주소 → pfunc 이 add 를 가리킴
+    result = pfunc(11);                         // pfunc(11) = add(11) 호출 → 11 + 1 → 12
+    printf("result = %d\n", result);            // result = 12
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">result = 12</code></pre>
+<ul><li>✍️ 함수 포인터 = 함수의 기억장소 주소를 저장하고 그 주소의 함수를 호출 · <b>반환할 자료형과 매개변수 형식이 모두 같아야</b> · 함수 포인터는 이름만 대신하는 것</li><li><code>int (*pfunc)(int)</code> 괄호가 꼭 필요 — 🤖 <code>int *pfunc(int);</code> 는 “int* 를 돌려주는 <b>함수 선언</b>”이 돼서 <code>pfunc = add;</code> 가 오류 (clang <code>non-object type 'int *(int)' is not assignable</code>)</li></ul>
+</section>
+<section class="card" id="s6">
+<h2>⑤ 🔥 기말고사 — 수업 실행 ④ void 형 포인터 (24쪽 [실습 3-04])</h2>
+<pre><code class="language-c">// ex_09-pointer1.c — 📄 24쪽 [실습 3-04] void 형 포인터 (🔥 오늘 실행결과 · ✍️ 수업 main.c 와 같음)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    void* vptr;                                 // void 형 포인터 — 어떤 자료형의 주소든 저장 (가리키는 '형'은 모름)
+    int i = 10;                                 // int 변수
+    char ch = 'a';                              // char 변수
+    float fr = 3.14f;                           // float 변수 (f = float 상수)
+    vptr = &amp;i;                                  // int 의 주소 저장 → 형변환 없이 대입 가능
+    printf("%d\n", *((int*)vptr));              // (int*) 로 형변환 → int 로 읽음 → 10
+    vptr = &amp;ch;                                 // 이번엔 char 의 주소 저장
+    printf("%c\n", *((char*)vptr));             // (char*) 로 형변환 → 'a'
+    vptr = &amp;fr;                                 // 이번엔 float 의 주소 저장
+    printf("%f\n", *((float*)vptr));            // (float*) 로 형변환 → 3.14 → %f 는 소수 6자리 → 3.140000
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">10
+a
+3.140000</code></pre>
+<ul><li>✍️ void 형 포인터 = <b>모든 자료형의 주소를 저장</b> · 단, 쓸 때 <b>반드시 형변환</b> (type casting)</li><li>⚠️ 팩트체크 — 형변환 없이 <code>*vptr</code> 하면 clang 오류 <code>argument type 'void' is incomplete</code> (가리키는 곳의 크기를 몰라서) → “반드시” 맞음</li><li><code>%f</code> 는 소수 6자리 → <code>3.140000</code></li></ul>
+</section>
+<section class="card" id="s7">
+<h2>⑥ ✍️ 포인터 연산 — <code>++ptr</code> 이 1004번지 · 1001번지 (11쪽 [실습 2-01])</h2>
+<p>✍️ 노션 “<code>printf("%p",++ptr);</code> 출력이 어떻게 하면 1004번지가 나오는지, 어떻게 하면 1001번지가 나오는지 공부하기” · 📄 11쪽 “포인터 연산 (포인터 변수의 자료형 크기에 맞춰 증감)”</p>
+<pre><code class="language-c">// ✍️ 노션 “++ptr 이 1004번지 · 1001번지가 나오는 방법 공부하기” · 📄 11쪽 [실습 2-01] 포인터 연산
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i = 10;                                 // int 변수 (4바이트)
+    char ch = 'a';                              // char 변수 (1바이트)
+    int* ip = &amp;i;                               // int 포인터 ← i 의 주소 (1000번지라고 하면)
+    char* cp = &amp;ch;                             // char 포인터 ← ch 의 주소 (1000번지라고 하면)
+    printf("%d\n", (int)((char*)(ip + 1) - (char*)ip)); // int* + 1 → sizeof(int) = 4 바이트 뒤 → 4 (1000 → 1004)
+    printf("%d\n", (int)((char*)(cp + 1) - (char*)cp)); // char* + 1 → sizeof(char) = 1 바이트 뒤 → 1 (1000 → 1001)
+    printf("%d %d\n", (int)sizeof(int*), (int)sizeof(char*)); // 포인터 변수 자체의 크기 → 64비트 → 8 8
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">4
+1
+8 8</code></pre>
+<ul><li><b><code>int*</code></b> 는 +1 하면 int 크기(4)만큼 → 1000 → <b>1004</b> · <b><code>char*</code></b> 는 1만큼 → 1000 → <b>1001</b></li><li>포인터 변수 자체의 크기는 가리키는 자료형과 상관없이 같아요 (64비트 = 8)</li></ul>
+<p>📄 11쪽 그대로 — 주소는 실행마다 달라요 (이 맥에서 한 번 실행)</p>
+<pre><code class="language-c">// ex_04-pointer1.c — 📄 11쪽 [실습 2-01] 포인터 변수 연산 (주소는 실행마다 다름)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int* ptr, i = 10;                           // ptr = int 포인터 · i = 10
+    ptr = &amp;i;                                   // ptr ← i 의 주소
+    printf("i = %d, *ptr = %d\n", i, *ptr);     // i = 10 · *ptr = 10
+    printf("ptr = %p\n", ptr);                  // i 의 주소 (16진수 · 실행마다 다름)
+    ++ptr;                                      // ptr 을 1 증가 → int 크기(4)만큼 → 주소 + 4 (ptr 은 이제 i 를 안 가리킴)
+    printf("ptr = %p\n", ptr);                  // 위 주소 + 4
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">i = 10, *ptr = 10
+ptr = 0x16eff5b6c
+ptr = 0x16eff5b70</code></pre>
+<ul><li>두 번째 주소 = 첫 번째 주소 <b>+ 4</b> (16진수 끝자리로 확인 · 예: <code>…cac</code> → <code>…cb0</code> = ac + 4 = b0 · c(12) + 4 = 16 → 0 쓰고 1 올림)</li><li>⚠️ 팩트체크 — 노션의 <code>printf("%p",++ptr); printf("%d %d",i,*ptr); //10 10</code> 은 아니에요. <code>++ptr</code> 은 <b>ptr 자체를 바꾸므로</b> 그 뒤 <code>*ptr</code> 은 i 가 아닌 다음 칸 → 쓰레기값(정의되지 않은 동작). ptr 을 그대로 두려면 <code>printf("%p", ptr + 1);</code> (<code>ptr + 1</code> 은 계산만 · ptr 은 그대로 → <code>*ptr</code> = 10)</li><li>⚠️ 팩트체크 — 노션 “포인터 변수의 연산: <code>+,-,*,/,++,--</code>” 중 <b><code>*</code> · <code>/</code> 는 안 돼요</b> (clang <code>ptr * 2</code> · <code>ptr / 2</code> → <code>invalid operands to binary expression ('int *' and 'int')</code>) · 📄 11쪽 “<code>*, -, ++, --</code>” 의 <code>*</code> 도 <code>+</code> 로 읽기 · 🤖 포인터끼리 빼기(<code>q - ptr</code>)는 됨 → 사이의 칸 수</li></ul>
+</section>
+<section class="card" id="s8">
+<h2>1. ✍️ [이론] 포인터 종류 (9쪽 표 · 노션 “공부하기”)</h2>
+<table class="ref">
+<tbody>
+<tr><th>종류</th><th>선언</th><th>뜻 (✍️ 노션 · 📄 9쪽)</th></tr>
+<tr><td>일반 포인터</td><td><code>int* ptr;</code></td><td>변수의 기억장소 주소를 값으로 저장</td></tr>
+<tr><td>이중 포인터</td><td><code>int** pptr;</code></td><td>포인터 변수의 기억장소 주소를 값으로 저장 · 이중 포인터도 포인터 (자료형이 <code>int*</code> · <code>char*</code>)</td></tr>
+<tr><td>배열 포인터</td><td><code>int (*ptr)[3];</code></td><td>열이 3개인 int 배열의 주소를 저장하는 <b>포인터</b> (2차원 배열용 · “순수 포인터”)</td></tr>
+<tr><td>포인터 배열</td><td><code>int* ptr[3];</code></td><td>같은 자료형의 주소를 여러 개 모은 <b>배열</b> (✍️ <code>int *ptr;</code> 이 3개 있다고 생각)</td></tr>
+<tr><td>함수 포인터</td><td><code>int (*pfunc)(int);</code></td><td>함수의 주소를 저장 → 그 함수를 호출</td></tr>
+<tr><td>void 형 포인터</td><td><code>void* vptr;</code></td><td>모든 자료형의 주소를 저장 · 쓸 때 형변환</td></tr>
+</tbody></table>
+<ul><li>⚠️ <b>9쪽 표는 배열 포인터 · 포인터 배열 이름이 서로 바뀌어 있어요</b> — 표에는 “배열포인터 <code>int *ptr[3];</code>” · “포인터배열 <code>int (*ptr)[3];</code>” 인데, 22쪽 [실습] 배열 포인터 = <code>int (*ptr)[3]</code> · 23쪽 [실습] 포인터 배열 = <code>int* ptr[3]</code> · ✍️ 노션 · 교수님 화면(사진)도 22 · 23쪽과 같아요 → <b>위 표가 맞음</b> (v1.0.1 에서도 9쪽은 그대로)</li><li>🤖 외우는 법 — 이름의 <b>뒤 낱말이 정체</b>: 배열 포인터 = 결국 <b>포인터</b> 1개 (<code>(*ptr)</code> 괄호가 먼저 → 포인터) · 포인터 배열 = 결국 <b>배열</b> (<code>ptr[3]</code> 가 먼저 → 칸 3개짜리 배열)</li><li>✍️ 포인터 선언 주의 — <code>int* p;</code> <code>int * p;</code> <code>int *p;</code> 셋 다 같음 · <b>두 개 이상</b>은 <code>int *p, *q;</code> 처럼 각각 <code>*</code> (확인: <code>int* p, q;</code> 면 q 는 그냥 int → <code>sizeof</code> 가 8 · 4)</li><li>✍️ 일반 변수 = <b>값</b>이 저장 (<code>int i;</code> 4byte) · 포인터 변수 = <b>주소</b>가 저장 (<code>int *ptr;</code>) · <code>&amp;</code> 주소 연산자 · <code>*</code> 간접접근 연산자(역참조 연산자)</li><li>📄 4쪽 주의 — 포인터 연산자 <code>*</code> 는 곱하기(산술 연산자)와 같은 글자 → 헷갈림 주의</li></ul>
+</section>
+<section class="card" id="s9">
+<h2>2. [실습 1-02 · 1-03] 주소 연산자 · 포인터로 값 바꾸기 (6 · 7쪽)</h2>
+<pre><code class="language-c">// ex_02-pointer1.c — 📄 6쪽 [실습 1-02] 주소 연산자 (주소는 실행마다 다름)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i, j;                                   // 일반 변수 2개
+    i = 10;                                     // i ← 10
+    j = 20;                                     // j ← 20
+    int *ptr1;                                  // 포인터 선언 — * 를 이름 쪽에 붙임
+    int* ptr2;                                  // 포인터 선언 — * 를 자료형 쪽에 붙임 (둘 다 같음)
+    printf("i = %d \n", i);                     // 10
+    printf("j = %d \n", j);                     // 20
+    printf("i 주소= %p\n", &amp;i);                 // &amp;i = i 의 주소 (16진수 · 실행마다 다름)
+    printf("j 주소= %p\n", &amp;j);                 // &amp;j = j 의 주소
+    ptr1 = &amp;i;                                  // ptr1 ← i 의 주소
+    ptr2 = &amp;j;                                  // ptr2 ← j 의 주소
+    printf("*ptr1  = %d\n", *ptr1);             // *ptr1 = i → 10
+    printf("*ptr2  = %d\n", *ptr2);             // *ptr2 = j → 20
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">i = 10 
+j = 20 
+i 주소= 0x16cf0db88
+j 주소= 0x16cf0db84
+*ptr1  = 10
+*ptr2  = 20</code></pre>
+<ul><li>주소 두 줄은 실행마다 달라요 · <code>int *ptr1;</code> 과 <code>int* ptr2;</code> 는 같은 선언</li></ul>
+<pre><code class="language-c">// ex_03-pointer1.c — 📄 7쪽 [실습 1-03] 포인터 변수를 사용한 일반 변수 값 변경
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i;                                      // 일반 변수
+    int* ptr;                                   // 포인터 변수
+    i = 10;                                     // i ← 10
+    printf("i = %d \n", i);                     // 10
+    printf("&amp;i = %p \n", &amp;i);                   // i 의 주소 (실행마다 다름)
+    ptr = &amp;i;                                   // ptr ← i 의 주소
+    printf("ptr = %p\n", ptr);                  // ptr 에 든 값 = i 의 주소 → 바로 위 &amp;i 와 같음
+    printf("*ptr = %d\n", *ptr);                // *ptr = i → 10
+    i = 50;                                     // i 를 직접 바꿈 → 50
+    printf("i = %d \n", i);                     // 50
+    printf("*ptr = %d\n", *ptr);                // ptr 은 i 를 가리키니 → 50
+    *ptr = 100;                                 // ptr 이 가리키는 곳(i) ← 100 → i = 100
+    printf("i = %d \n", i);                     // 100
+    printf("*ptr = %d\n", *ptr);                // 100
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">i = 10 
+&amp;i = 0x16eee5b88 
+ptr = 0x16eee5b88
+*ptr = 10
+i = 50 
+*ptr = 50
+i = 100 
+*ptr = 100</code></pre>
+<ul><li><code>&amp;i</code> 와 <code>ptr</code> 이 같은 주소 → ptr 이 i 를 가리킴 · i 를 바꾸면 <code>*ptr</code> 도 바뀌고, <code>*ptr</code> 에 쓰면 i 가 바뀜</li></ul>
+</section>
+<section class="card" id="s10">
+<h2>3. [실습 3-02] 배열과 포인터 · 문자열 배열 (20 · 21쪽)</h2>
+<pre><code class="language-c">// ex_05-pointer1.c — 📄 20쪽 [실습 3-02] 1차원 배열과 포인터 (슬라이드 제목은 '배열포인터')
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    static int array1[5] = {10,20,30,40,50};    // int 5칸 배열
+    int i, *ptr;                                // i = 첨자 · ptr = int 포인터
+    ptr = array1;                               // 배열 이름 = 첫 칸의 주소 → ptr ← &amp;array1[0]
+    for(i=0;i&lt;5;i++)                            // i = 0 ~ 4
+        printf("array1[%d] = %d\n", i, *(ptr+i)); // ptr + i = i 번째 칸의 주소 → *(ptr+i) = array1[i]
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">array1[0] = 10
+array1[1] = 20
+array1[2] = 30
+array1[3] = 40
+array1[4] = 50</code></pre>
+<ul><li><code>*(ptr+i)</code> = <code>array1[i]</code> (11주차 <code>*(array1 + i)</code> 와 같은 원리)</li></ul>
+<pre><code class="language-c">// ex_06-pointer1.c — 📄 21쪽 [실습 3-02] 2차원 char 배열(문자열 4개)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i;                                      // 반복 첨자
+    static char name[4][5] = {"kim","Lee","Park","Choi"}; // 문자열 4개 × 5칸 (가장 긴 "Park" · "Choi" = 4글자 + \0)
+    for (i = 0; i &lt; 4; i++) {                   // i = 0 ~ 3
+        printf("%s\n", name[i]);                // name[i] = i 번째 줄(문자열)의 시작 주소 → 그 문자열
+    }                                           // for 끝
+    printf("name + 2 = %s\n", name + 2);        // name + 2 = 2번째 줄(5칸 × 2 = 10바이트 뒤)의 주소 → "Park"
+    printf("name[0] + 2 = %s\n", name[0] + 2);  // name[0] + 2 = "kim" 의 2번째 글자 주소 → 'm' 부터 → "m"
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">kim
+Lee
+Park
+Choi
+name + 2 = Park
+name[0] + 2 = m</code></pre>
+<ul><li><code>name + 2</code> = 2번째 <b>줄</b>(5칸 × 2 = 10바이트 뒤) → <code>Park</code> · <code>name[0] + 2</code> = 0번째 줄의 2번째 <b>글자</b> → <code>kim</code> 의 <code>m</code> 부터 → <code>m</code></li><li>🤖 clang 은 <code>name + 2</code> 를 <code>%s</code> 에 주면 경고 (<code>char (*)[5]</code> 형) — 주소는 같아서 결과는 <code>Park</code> · 경고 없이 쓰려면 <code>name[2]</code></li></ul>
+</section>
+<section class="card" id="s11">
+<h2>4. [실습 3-03] 포인터 배열 (23쪽)</h2>
+<pre><code class="language-c">// ex_08-pointer1.c — 📄 23쪽 [실습 3-03] 포인터 배열
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i = 3, j = 4, k = 5;                    // 일반 변수 3개
+    int* ptr[3];                                // 포인터 배열 — int* 칸이 3개 (✍️ int *ptr; 이 3개 있다고 생각)
+    ptr[0] = &amp;i;                                // 0번 칸 ← i 의 주소
+    ptr[1] = &amp;j;                                // 1번 칸 ← j 의 주소
+    ptr[2] = &amp;k;                                // 2번 칸 ← k 의 주소
+    printf("*ptr[0]=%d, *ptr[1]=%d, *ptr[2]=%d\n", *ptr[0], *ptr[1], *ptr[2]); // [] 가 * 보다 먼저 → *(ptr[0]) = i = 3 · 4 · 5
+    *ptr[0] = 6;                                // ptr[0] 이 가리키는 i ← 6
+    *ptr[1] = 7;                                // ptr[1] 이 가리키는 j ← 7
+    *ptr[2] = 8;                                // ptr[2] 가 가리키는 k ← 8
+    printf("*ptr[0]=%d, *ptr[1]=%d, *ptr[2]=%d\n", *ptr[0], *ptr[1], *ptr[2]); // 6 · 7 · 8
+    printf("i=%d, j=%d, k=%d\n", i,j,k);        // 포인터로 바꿨으니 원래 변수도 6 · 7 · 8
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">*ptr[0]=3, *ptr[1]=4, *ptr[2]=5
+*ptr[0]=6, *ptr[1]=7, *ptr[2]=8
+i=6, j=7, k=8</code></pre>
+<ul><li><code>*ptr[0]</code> = <code>*(ptr[0])</code> — <code>[]</code> 가 <code>*</code> 보다 먼저 → 0번 칸의 주소로 가서 값 (i)</li><li>포인터로 바꾸면 원래 변수 i · j · k 도 6 · 7 · 8</li></ul>
+<h3>✍️ 포인터 배열 활용 — 길이가 다른 문자열 (노션)</h3>
+<p>✍️ “각각의 문자열을 별도의 기억장소에 저장하고 해당 문자열의 시작주소만 따로 관리 · 2차원 배열에서 길이가 서로 다른 문자열을 저장시킬 때 기억장소의 낭비를 가져올 수 있다 (가장 긴 문자열에 맞춰야 해서)”</p>
+<pre><code class="language-c">// ✍️ 노션 — 포인터 배열 활용 1: 길이가 다른 문자열 (static char *name[3] = {"HI","GOOD","MORNING"};)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    static char *name[3] = {"HI", "GOOD", "MORNING"}; // 포인터 배열 — 문자열 3개의 '시작 주소'만 저장 (글자는 따로)
+    char name2[3][8] = {"HI", "GOOD", "MORNING"};      // 2차원 배열 — 가장 긴 "MORNING"(7 + \0 = 8칸)에 맞춰 3줄 × 8칸
+    int i;                                      // 반복 첨자
+    for (i = 0; i &lt; 3; i++) {                   // i = 0 ~ 2
+        printf("%s %s\n", name[i], name2[i]);   // 둘 다 같은 문자열이 찍힘
+    }                                           // for 끝
+    printf("%d\n", (int)sizeof(name2));         // 2차원 배열 = 3 × 8 = 24바이트 (HI 뒤 5칸 · GOOD 뒤 3칸이 빈 채 낭비)
+    printf("%d\n", (int)sizeof(name));          // 포인터 배열 = 주소 3개 × 8바이트(64비트) = 24 (글자는 따로 3 + 5 + 8 = 16바이트)
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">HI HI
+GOOD GOOD
+MORNING MORNING
+24
+24</code></pre>
+<ul><li>2차원 배열 <code>name2[3][8]</code> 은 모든 줄이 8칸 → <code>HI</code> 뒤 5칸 · <code>GOOD</code> 뒤 3칸이 빈 채 낭비</li><li>포인터 배열 <code>name[3]</code> 은 <b>주소 3개만</b> 갖고, 글자(<code>HI\0</code> · <code>GOOD\0</code> · <code>MORNING\0</code> = 3 + 5 + 8 = 16바이트)는 따로 딱 맞게</li><li>⚠️ 노션 “name 에 <code>H, I, \0, G, O, O, D, \0, M, O, R, …</code> 가 들어 있다” → name 에는 <b>주소 3개</b>가 들어 있고, 글자들은 따로 저장돼요 (따로 놓인 문자열을 각 주소가 가리킴)</li><li>🤖 64비트에서는 주소 하나가 8바이트라 이 예처럼 짧은 문자열은 전체 크기가 비슷해요 — 길이 차이가 클수록(긴 문자열 하나 · 짧은 문자열 여러 개) 포인터 배열이 아껴요</li></ul>
+</section>
+<section class="card" id="s12">
+<h2>5. 📝 과제04 (HW04) — 교재 11장 실습 17개</h2>
+<ul><li>📄 12주차 <code>과제.txt</code> — 교재 11장 실습(요약-w12-실습 PDF)의 <b>17개</b> (<code>01address.c</code> ~ <code>13aryptr.c</code> · <code>lab1basicptr.c</code> ~ <code>lab4mtable.c</code>)를 ① 문제 ② C 소스 ③ 실행 결과 화면 캡처로 워드에 작성 → 파일 이름 <b><code>과제04-w12-학번-이름-작성날짜.doc</code></b></li><li>오늘 배운 이중 포인터 · 배열 포인터(<code>12tdaryptr.c</code> · <code>13aryptr.c</code> · <code>lab4mtable.c</code>)가 그대로 들어 있어요</li></ul>
+</section>
+<section class="card" id="s13">
+<h2>6. 한 줄 정리</h2>
+<ul><li>🔥 5쪽 — <code>ptr = &amp;i;</code> 뒤 <code>*ptr = 100;</code> → <b>i 도 100</b> · <code>printf("%d %d %d", *ptr, ptr, i)</code> → <code>10 (주소) 10</code> (주소는 <code>%p</code> 가 맞음)</li><li>🔥 이중 포인터 <code>int** pptr = &amp;ptr;</code> → <code>**pptr</code> = i · <code>**pptr = 11;</code> → i = 11 · 출력 <code>*ptr = 10</code> / <code>i = 11, *ptr = 11, **ptr = 11</code></li><li>🔥 배열 포인터 <b><code>int (*ptr)[3]</code></b> = 포인터 1개 (+1 → 한 줄 12바이트) · 포인터 배열 <b><code>int* ptr[3]</code></b> = 주소 3칸짜리 배열 (⚠️ 9쪽 표는 이름이 바뀜)</li><li>🔥 함수 포인터 <code>int (*pfunc)(int); pfunc = add;</code> → <code>pfunc(11)</code> = 12 · void 포인터는 <b>형변환</b>해서 읽기 (<code>*((int*)vptr)</code>)</li><li>포인터 연산 = 자료형 크기만큼 — <code>int*</code> +1 → <b>1004</b> · <code>char*</code> +1 → <b>1001</b> · <code>++ptr</code> 은 ptr 을 바꾸고 <code>ptr + 1</code> 은 안 바꿈 · <code>*</code> <code>/</code> 는 안 됨</li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「프로그래밍언어실습 · 12주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202611041620"></script>
+</body>
+</html>

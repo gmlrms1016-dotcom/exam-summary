@@ -37,7 +37,7 @@
 
     <header class="page-head">
         <h1>프로그래밍언어실습 · 완전 정리</h1>
-        <p>1주차 ~ 11주차 C 언어 · 실행과정 · 출력 · 함수 · 변수 · 자료형 · 서식 · 상수 · scanf · 연산자 · 조건 · 반복 · 함수 · 헤더파일 · 시험 예고 · 빌드 · 메모리 공간 · 지역 · 전역변수 · 배열 · 포인터 — <b>예제 코드 + 실제 출력 결과</b> 중심</p>
+        <p>1주차 ~ 12주차 C 언어 · 실행과정 · 출력 · 함수 · 변수 · 자료형 · 서식 · 상수 · scanf · 연산자 · 조건 · 반복 · 함수 · 헤더파일 · 시험 예고 · 빌드 · 메모리 공간 · 지역 · 전역변수 · 배열 · 포인터 · 이중 · 배열 포인터 — <b>예제 코드 + 실제 출력 결과</b> 중심</p>
     </header>
 
     <div id="week-nav" data-subject="프로그래밍언어실습"></div>
@@ -86,6 +86,7 @@
         <a href="#s37">37.★지역·전역변수</a>
         <a href="#s38">38.★배열·sizeof</a>
         <a href="#s39">39.★포인터1(11주차)</a>
+        <a href="#s40">40.★포인터2(12주차)</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -3927,6 +3928,64 @@ a1: 2000
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#arrfunc" title="그림 — 🔥 함수에 배열 보내기 (9쪽 · 12쪽)" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#arrfunc" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 함수에 배열 보내기 (9쪽 · 12쪽) — 새 창으로 크게 보기</a></p></div>
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#addrop" title="그림 — 🔥 포인터 &amp; · * (pointer-03)" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#addrop" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 포인터 &amp; · * (pointer-03) — 새 창으로 크게 보기</a></p></div>
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#staticret" title="그림 — 지역 배열 vs static (13쪽)" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#staticret" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 지역 배열 vs static (13쪽) — 새 창으로 크게 보기</a></p></div>
+    </section>
+
+    <section class="card" id="s40">
+        <h2>40. ★ 포인터 2 — 이중 · 배열 포인터 · 포인터 배열 · 함수 · void 포인터 · 포인터 연산<span class="week">12주차</span></h2>
+        <div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> 기말고사 — ① <b>오늘 한 거 실행결과 = 기말고사 예상문제</b> (이중 · 배열 · 함수 · void 포인터) ② <b>강의자료 5페이지</b> ③ <code>++ptr</code> 이 <b>1004번지 · 1001번지</b>가 나오는 방법 ④ <b>포인터 종류</b> 공부하기 → 자세한 건 <a href="weeks/프로그래밍언어실습-12주차.html" target="_blank" rel="noopener">12주차 페이지</a></div>
+        <table class="ref">
+<tbody>
+<tr><th>주제</th><th>핵심</th></tr>
+<tr><td>🔥 5쪽 [실습 1-01]</td><td><code>ptr = &amp;i; i = 50; *ptr = 100;</code> → <b>i 도 100</b> · 출력 <code>i = 100 </code> / <code>*ptr = 100</code> · ✍️ 노션 시험문제 <code>printf("%d %d %d", *ptr, ptr, i)</code> → <code>10 (i 의 주소) 10</code> (⚠️ 주소는 <code>%p</code> 가 맞음)</td></tr>
+<tr><td>🔥 이중 포인터</td><td><code>int** pptr = &amp;ptr;</code> → <code>**pptr</code> = i · <code>**pptr = 11;</code> → <code>i = 11, *ptr = 11, **ptr = 11</code> · ⚠️ 처음 올라온 19쪽은 <code>int *ptr;</code> 두 번 · <code>**ptr</code> → 컴파일 오류 (11/16 v1.0.1 에서 고쳐짐)</td></tr>
+<tr><td>🔥 배열 포인터</td><td><code>int (*ptr)[3];</code> = 열 3개짜리 한 줄을 가리키는 <b>포인터</b> · <code>ptr = nArray;</code> → <code>ptr[i][j]</code> · <code>ptr + 1</code> = <b>12바이트 뒤</b> · <code>(*ptr)[1]</code> = 2 · <code>*ptr[1]</code> = 4</td></tr>
+<tr><td>포인터 배열</td><td><code>int* ptr[3];</code> = 주소 3칸짜리 <b>배열</b> · <code>*ptr[0] = 6;</code> → i = 6 · ✍️ 길이가 다른 문자열 <code>static char *name[3]</code> · ⚠️ 강의자료 9쪽 표는 배열 포인터 · 포인터 배열 이름이 바뀜</td></tr>
+<tr><td>🔥 함수 포인터</td><td><code>int (*pfunc)(int); pfunc = add;</code> → <code>pfunc(11)</code> = <b>12</b> · 반환 자료형 · 매개변수 형식이 같아야 · 괄호를 빼면 함수 선언</td></tr>
+<tr><td>🔥 void 형 포인터</td><td>모든 자료형의 주소 · 쓸 때 <b>형변환</b> <code>*((int*)vptr)</code> 10 · <code>*((char*)vptr)</code> a · <code>*((float*)vptr)</code> 3.140000 · 형변환 없이 <code>*vptr</code> → 오류</td></tr>
+<tr><td>✍️ ++ptr 1004 · 1001</td><td><code>int*</code> +1 → 4바이트 (1000 → 1004) · <code>char*</code> +1 → 1바이트 (1001) · <code>++ptr</code> 은 ptr 이 바뀜 · <code>ptr + 1</code> 은 계산만 · ⚠️ <code>*</code> · <code>/</code> 는 안 됨 · 포인터 크기 64비트 = 8바이트</td></tr>
+</tbody>
+        </table>
+        <h3>🔥 이중 포인터 — 19쪽 [실습 3-01] (v1.0.1)</h3>
+        <pre><code class="language-c">// ex_05-pointer1.c — 📄 19쪽 [실습 3-01] 이중 포인터 (v1.0.1 · 🔥 ✍️ “오늘 한 거 실행결과 기말고사 예상문제”)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i = 10;                                 // 일반 변수 i ← 10
+    int* ptr;                                   // 포인터 ptr — int 의 주소를 저장
+    int** pptr;                                 // 이중 포인터 pptr — int* 형 변수(ptr)의 주소를 저장
+    ptr = &amp;i;                                   // ✍️ “여기가 중요함” — ptr ← i 의 주소 → ptr 이 i 를 가리킴
+    pptr = &amp;ptr;                                // pptr ← ptr 의 주소 → pptr → ptr → i
+    printf("*ptr = %d\n", *ptr);                // *ptr = ptr 이 가리키는 i → 10
+    **pptr = 11;                                // *pptr = ptr → **pptr = *ptr = i → i 에 11 저장
+    printf("i = %d, *ptr = %d, **ptr = %d\n",  i, *ptr, **pptr); // i = 11 · *ptr = i = 11 · **pptr = i = 11
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+        <pre class="io"><code class="language-text">*ptr = 10
+i = 11, *ptr = 11, **ptr = 11</code></pre>
+        <h3>🔥 배열 포인터 — 22쪽 [실습 3-03] (✍️ 수업은 %2d)</h3>
+        <pre><code class="language-c">// ex_07-pointer1.c — 📄 22쪽 [실습 3-03] 배열 포인터 (🔥 ✍️ 수업 main.c 는 %d 대신 %2d)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int nArray[2][3] = { {1,2,3}, {4,5,6} };    // 2행 3열 — 메모리에는 1 2 3 4 5 6 이 한 줄로 (행 우선)
+    int (*ptr)[3];                              // 배열 포인터 — '열이 3개인 int 배열' 한 줄(12바이트)을 가리킴
+    int i, j;                                   // i = 행 첨자 · j = 열 첨자
+    ptr = nArray;                               // 2차원 배열 이름 = 0행(int[3])의 시작 주소 → ptr 이 0행을 가리킴
+    for (i = 0; i &lt; 2; i++) {                   // i = 0, 1 → 행 2개
+        for (j = 0; j &lt; 3; j++) {               // j = 0, 1, 2 → 열 3개
+            printf("%2d", ptr[i][j]);           // ptr[i][j] = nArray[i][j] → 2칸 폭 오른쪽 정렬 (1 → " 1")
+        }                                       // 안쪽 for 끝 → 한 행을 다 찍음
+        printf("\n");                           // 한 행이 끝나면 줄바꿈
+    }                                           // 바깥 for 끝 → 다음 행
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+        <pre class="io"><code class="language-text"> 1 2 3
+ 4 5 6</code></pre>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#dblptr" title="그림 — 🔥 이중 포인터 pptr → ptr → i" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#dblptr" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 이중 포인터 pptr → ptr → i — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#arrptr" title="그림 — 🔥 배열 포인터 ptr + 1 = 12바이트" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#arrptr" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 배열 포인터 ptr + 1 = 12바이트 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#ptrarr2" title="그림 — 포인터 배열 vs 배열 포인터" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#ptrarr2" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 포인터 배열 vs 배열 포인터 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#ptrinc" title="그림 — ✍️ ++ptr 1004 · 1001" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#ptrinc" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — ✍️ ++ptr 1004 · 1001 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/프로그래밍언어실습-그림정리.html#funcvoid" title="그림 — 🔥 함수 포인터 · void 형 포인터" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/프로그래밍언어실습-그림정리.html#funcvoid" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 함수 포인터 · void 형 포인터 — 새 창으로 크게 보기</a></p></div>
     </section>
 
     <section class="card" id="quiz">

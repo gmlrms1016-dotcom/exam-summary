@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202611041620"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로그래밍언어실습 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</title>
-    <meta name="description" content="프로그래밍언어실습 15주차 정리 — 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)">
+    <title>프로그래밍언어실습 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</title>
+    <meta name="description" content="프로그래밍언어실습 15주차 정리 — 기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="프로그래밍언어실습 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)">
+    <meta property="og:title" content="프로그래밍언어실습 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)">
     <meta property="og:description" content="프로그래밍언어실습 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -99,10 +99,10 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>💾 프로그래밍언어실습 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-12주차.html">‹ 이전 · <b>12주차</b><br><small>포인터 2 (w12) — 이중 포인터 · 배열 포인터 · 포인터 배열 · 함수 포인터 · void 포인터 · 포인터 연산</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../프로그래밍언어실습-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
 <div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 지금까지 알려 준 것: 중간고사 때 ✍️ “9장도 함수에서 <b>배열은 빼고 배열을 기말고사에</b>” (7주차) → <b>8장 배열 · 함수 속 배열은 기말</b>.</div>
@@ -110,7 +110,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-그림정리.html?weeks=9-15#build" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-그림정리.html?weeks=9-15#build" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차 — ① 빌드 · ② 메모리 4영역 · ③ 블록 범위 (scope1_5.c) · ④ 지역 우선 (02-1global.c)</li><li>10주차 — ⑤ 1차원 배열 · ⑥ 2차원 배열 · ⑦ 🔥 8쪽 for · ⑧ ✍️ 지그재그 · ⑨ 초기화 규칙</li><li>11주차 — ⑩ 배열명 = 주소 · ⑪ 🔥 배열 → 함수 (9쪽 · 12쪽) · ⑫ 🔥 &amp; · * (pointer-03) · ⑬ static</li></ul>
+<ul><li>9주차 — ① 빌드 · ② 메모리 4영역 · ③ 블록 범위 (scope1_5.c) · ④ 지역 우선 (02-1global.c)</li><li>10주차 — ⑤ 1차원 배열 · ⑥ 2차원 배열 · ⑦ 🔥 8쪽 for · ⑧ ✍️ 지그재그 · ⑨ 초기화 규칙</li><li>11주차 — ⑩ 배열명 = 주소 · ⑪ 🔥 배열 → 함수 (9쪽 · 12쪽) · ⑫ 🔥 &amp; · * (pointer-03) · ⑬ static</li><li>12주차 — ⑭ 🔥 이중 포인터 · ⑮ 🔥 배열 포인터 · ⑯ 포인터 배열 · ⑰ ✍️ ++ptr (1004 · 1001) · ⑱ 🔥 함수 · void 포인터</li></ul>
 </section>
 <section class="card" id="s2">
 <h2>9주차 · 빌드 · 메모리 공간 · 변수의 유효범위</h2>
@@ -168,6 +168,24 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-11주차.html">11주차</a> · 문제는 🔒 실제시험.</div>
 </section>
 <section class="card" id="s5">
+<h2>12주차 · 포인터 2 — 🔥 ✍️ “오늘 한 거 실행결과 = 기말고사 예상문제 · 강의자료 5페이지 · ++ptr 1004 / 1001 · 포인터 종류 공부하기”</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>🔥 5쪽 [실습 1-01]</td><td><code>ptr = &amp;i; i = 50; *ptr = 100;</code> → <b>i 도 100</b> · 출력 <code>i = 100 </code> (끝에 공백) / <code>*ptr = 100</code></td><td></td></tr>
+<tr><td>🔥 ✍️ 노션 시험문제</td><td><code>printf("%d %d %d", *ptr, ptr, i)</code> → <code>10 (i 의 주소) 10</code> · 가운데는 실행마다 다름 · ⚠️ 주소는 <code>%p</code> 가 맞음 (<code>%d</code> 는 경고) · 필기 <code>prt</code> → <code>ptr</code> 오타</td><td></td></tr>
+<tr><td>🔥 이중 포인터 (19쪽 v1.0.1)</td><td><code>int** pptr = &amp;ptr;</code> → <code>**pptr</code> = i · <code>**pptr = 11;</code> → 출력 <code>*ptr = 10</code> / <code>i = 11, *ptr = 11, **ptr = 11</code> · ⚠️ 처음 올라온 판은 <code>int *ptr;</code> 두 번 · <code>**ptr</code> → 컴파일 오류 (11/16 고쳐짐)</td><td>⑭</td></tr>
+<tr><td>🔥 배열 포인터 (22쪽)</td><td><code>int (*ptr)[3]; ptr = nArray;</code> → <code>ptr[i][j]</code> = <code>nArray[i][j]</code> · <code>%2d</code> → <code> 1 2 3</code> / <code> 4 5 6</code> (<code>%d</code> 면 <code>123</code> / <code>456</code>) · <code>ptr + 1</code> = <b>12바이트 뒤</b> · <code>(*ptr)[1]</code> = 2 · <code>*ptr[1]</code> = 4</td><td>⑮</td></tr>
+<tr><td>🔥 함수 포인터 (✍️ main.c)</td><td><code>int (*pfunc)(int); pfunc = add;</code> → <code>pfunc(11)</code> → <b><code>result = 12</code></b> · 반환 자료형 · 매개변수 형식이 같아야 · 괄호를 빼면 함수 선언이 됨</td><td>⑱</td></tr>
+<tr><td>🔥 void 형 포인터 (24쪽)</td><td><code>*((int*)vptr)</code> <b>10</b> · <code>*((char*)vptr)</code> <b>a</b> · <code>*((float*)vptr)</code> <b>3.140000</b> · 형변환 없이 <code>*vptr</code> → 컴파일 오류</td><td>⑱</td></tr>
+<tr><td>✍️ <code>++ptr</code> 1004 · 1001</td><td><code>int*</code> +1 → <b>4바이트</b> (1000 → 1004) · <code>char*</code> +1 → <b>1바이트</b> (1000 → 1001) · <code>++ptr</code> 은 ptr 이 바뀜 · <code>ptr + 1</code> 은 계산만 · ⚠️ 포인터에 <code>*</code> · <code>/</code> 는 안 됨</td><td>⑰</td></tr>
+<tr><td>✍️ 포인터 종류</td><td>일반 <code>int*</code> · 이중 <code>int**</code> · 배열 포인터 <code>int (*ptr)[3]</code> · 포인터 배열 <code>int* ptr[3]</code> · 함수 <code>int (*pfunc)(int)</code> · void <code>void*</code> · ⚠️ 9쪽 표는 배열 포인터 · 포인터 배열 이름이 바뀜</td><td>⑯</td></tr>
+<tr><td>포인터 배열 (23쪽)</td><td><code>ptr[0] = &amp;i;</code> … <code>*ptr[0] = 6;</code> → <code>i=6, j=7, k=8</code> · ✍️ 길이가 다른 문자열 <code>static char *name[3]</code> (주소만 저장)</td><td>⑯</td></tr>
+<tr><td>✍️ 선언 주의</td><td><code>int *p, *q;</code> 처럼 각각 <code>*</code> (<code>int* p, q;</code> 면 q 는 int) · 포인터 크기 64비트 = 8바이트 (엑셀 · 필기의 4바이트 = 32비트 기준)</td><td></td></tr>
+</tbody></table>
+<div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-12주차.html">12주차</a> · 문제는 🔒 실제시험.</div>
+</section>
+<section class="card" id="s6">
 <h2>🎓 튜터링 3회차 (10/29) — 배열 합 · 0~9 중 가장 많이 나온 수</h2>
 <div class="tip">자료: <code>8주차_중간고사/튜터링/3회차/c.c</code> (CP949 저장) — 프로그램 2개가 한 파일에 있어요(앞의 1개는 주석 처리). 아래 결과는 전부 <b>직접 컴파일 · 실행</b>한 값이에요.<br>기말 범위 <b>8장 배열</b>과 이어지는 문제 (중간고사 때 ✍️ “배열을 기말고사에”). <code>#define _CRT_SECURE_NO_WARNINGS</code> 는 이번엔 밑줄까지 맞게 썼어요 (1회차 정정 참고).</div>
 <h3>① 정수 4개 입력 → 그대로 출력 · 합</h3>
@@ -236,7 +254,7 @@ int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int 
 <ul><li><b>빈도수 배열</b> — 입력한 수(0~9)를 <b>칸 번호</b>로 써서 <code>count[n]++</code> → 숫자마다 if 를 10개 쓸 필요가 없음</li><li><b>최댓값 찾기 패턴</b> — <code>max</code> 를 첫 칸(0)으로 두고 <code>i = 1</code> 부터 비교해 더 크면 바꿈 (배열 최댓값 · 최솟값 문제에 그대로 씀)</li><li><code>while (1)</code> + <code>break</code> — 몇 번 입력할지 모를 때 <b>끝 신호(-1)</b> 로 멈추는 방법</li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-12주차.html">‹ 이전 · <b>12주차</b><br><small>포인터 2 (w12) — 이중 포인터 · 배열 포인터 · 포인터 배열 · 함수 포인터 · void 포인터 · 포인터 연산</small></a><span></span></nav>
 
     <p class="wk-src">노션 「프로그래밍언어실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 
