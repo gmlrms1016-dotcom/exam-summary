@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹프로그래밍 12주차 · &lt;11월 17일&gt; 🔥 HTTP 메시지 구조 · 이벤트 핸들러 3가지 · onload · fetch · DNS · 요청 방식 · CRUD · 기말 = 필기 + 실기</title>
+    <meta name="description" content="웹프로그래밍 12주차 정리 — &lt;11월 17일&gt; 🔥 HTTP 메시지 구조 · 이벤트 핸들러 3가지 · onload · fetch · DNS · 요청 방식 · CRUD · 기말 = 필기 + 실기">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="웹프로그래밍 12주차 · &lt;11월 17일&gt; 🔥 HTTP 메시지 구조 · 이벤트 핸들러 3가지 · onload · fetch · DNS · 요청 방식 · CRUD · 기말 = 필기 + 실기">
+    <meta property="og:description" content="웹프로그래밍 12주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../웹프로그래밍.html">← 웹프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🕸️ 웹프로그래밍 · 12주차</h1>
+        <p>&lt;11월 17일&gt; 🔥 HTTP 메시지 구조 · 이벤트 핸들러 3가지 · onload · fetch · DNS · 요청 방식 · CRUD · 기말 = 필기 + 실기</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-11주차.html">‹ 이전 · <b>11주차</b><br><small>&lt;11월 10일&gt; 🎮 미니게임 과제 · 두더지잡기(setInterval · Math.random · 위치) · 선택 삭제 · 배열 변형 map · filter</small></a><a class="next" href="웹프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</small></a></nav>
+
+<div class="tip">자료: 수업 필기(노션) + 캡처 1장(🔥 HTTP 메시지 — 구글 검색) · <b>1117_01_event.html</b> (이벤트 핸들러 3가지 · window.onload) · <b>1117_02_fetch.html</b> (fetch) (강의자료 · 원본 txt 없음) · 코드 주석과 ▶ 결과는 크롬(앱 브라우저) · jsdom(브라우저와 같은 DOM) · node · curl 로 직접 확인한 값이에요. 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
+<div class="tip">📌 오늘 한 것 — ✍️ <b>기말고사 = 필기 + 실기</b> → ✍️ 이벤트는 클릭 · 스크롤 말고도 <b>요청 · 응답 · onload</b> 도 이벤트 → <b>이벤트 핸들러 등록 3가지</b> (addEventListener · DOM 프로퍼티 · HTML 속성) + <code>window.onload</code> → <b>fetch</b> 로 서버에 요청 → 🔥 <b>HTTP 메시지 구조</b> (시험문제) → ✍️ <b>DNS</b> · <b>요청 방식</b> (GET · POST · PUT · DELETE) · <b>CRUD</b> · <b>단일 스레드 · 멀티 스레드</b></div>
+<section class="card" id="s1">
+<h2>🎨 12주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-그림정리.html?week=12" title="12주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-그림정리.html?week=12" target="_blank" rel="noopener">🎬 12주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
+<h2>1. 🔥 ✍️ 기말고사 — 필기 + 실기 둘 다</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “기말고사 필기와 실기 둘다 봄 · 필기는 중간고사 처럼 이론 맞히기 · 실기는 미니게임 만들기 (주제는 아직 안 정해지고 뭐가 나올지 모름)”</p>
+<table class="ref">
+<tbody>
+<tr><th>기말고사</th><th>내용 (필기 그대로)</th></tr>
+<tr><td><b>필기</b></td><td>중간고사처럼 <b>이론 맞히기</b></td></tr>
+<tr><td><b>실기</b></td><td><b>미니게임 만들기</b> — 주제는 아직 안 정해짐 (뭐가 나올지 모름)</td></tr>
+</tbody></table>
+<ul><li>⚠️ 10주차 필기 “기말고사는 필기가 아닌 실기로 시행함” → 오늘(12주차) <b>필기 + 실기 둘 다</b>로 바뀌었어요 · <a href="웹프로그래밍-15주차-기말고사.html">기말고사 정리</a> 맨 위 카드도 고쳤어요</li><li>🤖 실기 연습 = 11주차 미니게임 과제 (두더지게임 같은 미니게임 · 배운 내장객체 · 함수만 · 200줄 이하) — 과제의 뜻도 “배운 범위에서 1 ~ 2시간 안에 만들 수 있는 기말 문제 후보” 였어요 (11/15)</li></ul>
+</section>
+<section class="card" id="s3">
+<h2>2. ✍️ 이벤트 — 클릭 · 스크롤 말고도 요청 · 응답 · onload</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “이벤트는 클릭, 스크롤 이외에도 리퀘스트, 리스판스도 이벤트임 onload 도”</p>
+<table class="ref">
+<tbody>
+<tr><th>이벤트 (사건)</th><th>언제 일어나나</th><th>오늘 코드</th></tr>
+<tr><td>click</td><td>누를 때 (9주차 이벤트 4요소)</td><td>버튼 3개 (3번)</td></tr>
+<tr><td>scroll</td><td>화면을 굴릴 때</td><td>—</td></tr>
+<tr><td>load (<b>onload</b>)</td><td>페이지를 <b>이미지까지 다 불러왔을 때</b></td><td><code>window.onload = () =&gt; { … }</code> (3번)</td></tr>
+<tr><td>요청 · 응답</td><td>서버에 <b>요청</b>을 보내고 · <b>응답</b>이 도착했을 때</td><td><code>fetch(주소)</code> (4번)</td></tr>
+</tbody></table>
+<ul><li>⚠️ <b>팩트체크</b> — 맞아요, 이벤트 = 웹에서 일어나는 <b>사건</b>(9주차)이라 사용자 동작 말고도 로딩 끝 · 응답 도착도 이벤트로 다뤄요. 🤖 다만 오늘 쓴 <code>fetch</code> 는 응답 도착을 <code>click</code> 같은 <b>이벤트 이름이 아니라 Promise</b>(나중에 결과를 주겠다는 약속 객체)로 알려 줘요 — node 로 <code>fetch(…) instanceof Promise</code> → <code>true</code> (then 은 아직 안 배움)</li><li>⚠️ 필기 <code>리스판스</code> 는 보통 <b>리스폰스</b>(response · 응답)라고 써요</li></ul>
+</section>
+<section class="card" id="s4">
+<h2>3. 이벤트 핸들러 등록 3가지 · window.onload (1117_01_event.html)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> (수업 파일 주석) — “myButton 처럼 addEventListener 이 <b>많이 쓰고 활용하는 것을 가장 추천함</b> · 방식: 버블링” · 3번 버튼 <code>onclick</code> 속성 안에 “세미콜론 있어도 없어도 문제없음”</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;                                                     &lt;!-- HTML5 문서 --&gt;
+&lt;html lang="ko"&gt;                                                    &lt;!-- 문서 시작 · 한국어 --&gt;
+&lt;head&gt;                                                              &lt;!-- 문서 정보 --&gt;
+    &lt;meta charset="UTF-8"&gt;                                          &lt;!-- 한글이 안 깨지게 --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;   &lt;!-- 폰 화면 폭에 맞춤 --&gt;
+    &lt;title&gt;1117_01_event.html&lt;/title&gt;                               &lt;!-- 탭 제목 --&gt;
+    &lt;script&gt;                                                        // head 의 script — 이때는 아직 body(img · button)가 안 만들어짐
+        window.onload = () =&gt; {                                     // load 이벤트 핸들러 — 페이지를 이미지까지 다 불러온 뒤에 실행
+            const image = document.getElementById('image');         // 이제는 body 의 &lt;img id="image"&gt; 를 찾을 수 있음
+            image.src = 'https://www.dongyang.ac.kr/sites/dmu/images/common/logo_b.svg';   // 학교 로고 주소 → 빈 그림에 로고가 뜸
+            image.width = 200;                                      // 폭 200px
+            image.height = 200;                                     // 높이 200px
+        };                                                          // onload 에 함수를 대입한 문장 끝 → ;
+    &lt;/script&gt;                                                       &lt;!-- head script 끝 --&gt;
+&lt;/head&gt;                                                             &lt;!-- 문서 정보 끝 --&gt;
+&lt;body&gt;                                                              &lt;!-- 화면 --&gt;
+    &lt;img id="image"&gt;&lt;br&gt;                                            &lt;!-- 처음엔 src 없는 빈 그림 → onload 에서 채움 --&gt;
+    &lt;button id="myButton"&gt;1번 이벤트핸들러 실행&lt;/button&gt;                &lt;!-- ① addEventListener 로 연결 --&gt;
+    &lt;button id="myButton2"&gt;2번 이벤트핸들러 실행&lt;/button&gt;               &lt;!-- ② onclick 프로퍼티로 연결 --&gt;
+    &lt;button onclick="btnClick3()"&gt;3번 이벤트핸들러 실행&lt;/button&gt;         &lt;!-- ③ HTML 속성에 실행할 코드를 바로 씀 --&gt;
+    &lt;script&gt;                                                        // body 끝의 script — 버튼들이 이미 만들어진 뒤라 바로 찾음
+        const button = document.querySelector("#myButton");         // ① 1번 버튼
+        button.addEventListener('click', function () {               // ① addEventListener('이벤트 이름', 핸들러) — ✍️ 가장 추천
+            alert("addEventListener() 메서드 방식의 핸들러!");          // 누르면 알림창
+        });                                                         // 리스너 등록 끝
+        const button2 = document.querySelector("#myButton2");        // ② 2번 버튼
+        button2.onclick = function () {                              // ② DOM 프로퍼티 — 요소의 onclick 에 함수를 대입
+            alert("DOM 프로퍼티 방식의 핸들러!");                      // 누르면 알림창
+        };                                                          // 대입문 끝 → ;
+        function btnClick3() {                                      // ③ HTML 속성 onclick="btnClick3()" 이 부르는 함수
+            alert('HTML 속성 방식의 핸들러!');                         // 누르면 알림창
+        }                                                           // btnClick3 끝
+    &lt;/script&gt;                                                       &lt;!-- script 끝 --&gt;
+&lt;/body&gt;                                                             &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                             &lt;!-- 문서 끝 --&gt;</code></pre>
+<div class="tip">▶ 크롬(앱 브라우저)에서 직접 열고 눌러 본 결과 — 페이지가 다 열리면 학교 로고가 <b>200 × 200</b> 으로 뜸 · 1번 → 알림 <code>addEventListener() 메서드 방식의 핸들러!</code> · 2번 → <code>DOM 프로퍼티 방식의 핸들러!</code> · 3번 → <code>HTML 속성 방식의 핸들러!</code></div>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>방식</th><th>쓰는 법</th><th>같은 이벤트에 핸들러 여러 개</th><th>특징 (확인)</th></tr>
+<tr><td>① <b>addEventListener</b> (메서드)</td><td><code>button.addEventListener('click', 함수)</code></td><td><b>됨</b> — 등록한 순서대로 <b>모두</b> 실행</td><td>✍️ 가장 추천 · 이벤트 이름에 <b>on 을 안 붙임</b> (<code>'onclick'</code> 이라고 쓰면 눌러도 실행 안 됨)</td></tr>
+<tr><td>② <b>DOM 프로퍼티</b></td><td><code>button2.onclick = 함수</code></td><td><b>안 됨</b> — 다시 대입하면 앞의 것을 <b>덮어씀</b></td><td>간단 · 함수 <b>이름만</b> 대입 (괄호 X)</td></tr>
+<tr><td>③ <b>HTML 속성</b></td><td><code>&lt;button onclick="btnClick3()"&gt;</code></td><td>속성은 하나</td><td>HTML 안에 JS 코드를 씀 · <b>괄호 <code>()</code> 를 붙여야 실행</b> (<code>onclick="btnClick3"</code> 은 아무 일도 안 일어남)</td></tr>
+</tbody></table>
+<ul><li>✍️ “세미콜론 있어도 없어도 문제없음” — 맞아요: <code>onclick="btnClick3();"</code> · <code>onclick="btnClick3()"</code> 둘 다 알림이 떠요 (jsdom 확인)</li><li>⚠️ <b>팩트체크</b> “방식: 버블링” — addEventListener 는 <b>기본이 버블링 단계</b>(누른 요소 → 부모 쪽으로 올라가며 실행)이고, 세 번째 값에 <code>true</code> 를 주면 <b>캡처링 단계</b>(부모 → 누른 요소)로 바뀌어요. ② ③ 방식도 버블링 단계에서 실행돼요 → 그래서 진짜 차이는 “<b>여러 개를 달 수 있느냐</b>” 예요 (jsdom 확인 · 아래 표)</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>버튼을 눌렀을 때 실행 순서 (jsdom 확인)</th><th>등록한 것</th></tr>
+<tr><td>1</td><td>부모 div — <code>addEventListener('click', …, true)</code> (캡처링)</td></tr>
+<tr><td>2 · 3</td><td>버튼 — <code>addEventListener</code> 2개 (둘 다 실행)</td></tr>
+<tr><td>4</td><td>버튼 — <code>onclick</code> 을 두 번 대입 → <b>두 번째만</b> 실행 (첫째는 덮어써짐)</td></tr>
+<tr><td>5</td><td>부모 div — <code>addEventListener('click', …)</code> (기본 = 버블링 → 버튼 다음)</td></tr>
+</tbody></table>
+<h3>window.onload — 왜 필요할까</h3>
+<table class="ref">
+<tbody>
+<tr><th>상황</th><th>결과 (확인)</th></tr>
+<tr><td>head 의 script 에서 <b>onload 없이</b> <code>document.getElementById('image')</code></td><td>아직 img 가 안 만들어져서 <b>null</b> → <code>image.width = 200</code> 에서 <code>TypeError: Cannot set properties of null (setting 'width')</code> (jsdom 확인)</td></tr>
+<tr><td><code>window.onload = () =&gt; { … }</code> 안에서</td><td>페이지를 다 불러온 <b>뒤</b> 실행 → img 를 찾음 → 로고가 200 × 200 (크롬 확인)</td></tr>
+<tr><td>🤖 다른 방법</td><td>script 를 <b>body 맨 끝</b>에 두기 — 오늘 버튼 코드처럼 (그때는 버튼이 이미 있음)</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s5">
+<h2>4. fetch — 서버에 요청 보내기 (1117_02_fetch.html)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> (수업 파일 주석) — “뜻: users 의 id 가 1번인 사람을 불러와 주세요 · 2번째 파라미터 생략 가능” · “.com 까지 URI 전체가 URL”</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;                                                     &lt;!-- HTML5 문서 --&gt;
+&lt;html lang="ko"&gt;                                                    &lt;!-- 문서 시작 --&gt;
+&lt;head&gt;                                                              &lt;!-- 문서 정보 --&gt;
+    &lt;meta charset="UTF-8"&gt;                                          &lt;!-- 한글 --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;   &lt;!-- 폰 폭 --&gt;
+    &lt;title&gt;1117_02_fetch.html&lt;/title&gt;                               &lt;!-- 탭 제목 --&gt;
+    &lt;script&gt;                                                        // 페이지를 열자마자 실행
+        fetch('https://jsonplaceholder.typicode.com/users/1');      // 이 주소로 요청을 보냄 → users 중 id 가 1번인 사람 · 2번째 파라미터(옵션) 생략 → GET
+    &lt;/script&gt;                                                       &lt;!-- script 끝 --&gt;
+&lt;/head&gt;                                                             &lt;!-- 문서 정보 끝 --&gt;
+&lt;body&gt;                                                              &lt;!-- 화면 (비어 있음) --&gt;
+&lt;/body&gt;                                                             &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                             &lt;!-- 문서 끝 --&gt;</code></pre>
+<div class="tip">▶ 화면에는 아무것도 안 나와요 — 요청만 보내고 <b>응답을 받아 쓰는 코드는 아직 없어요</b>. 🤖 응답이 왔는지는 크롬 개발자 도구(F12) → <b>Network</b> 탭에서 이름이 <code>1</code> 인 요청을 누르면 보여요 (상태 200 · 응답 JSON).</div>
+<p>🤖 같은 주소에 curl 로 직접 요청해서 받은 <b>실제 응답</b> (헤더 · 바디 일부)</p>
+<pre><code class="language-text">HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 509
+Connection: keep-alive
+
+{
+  "id": 1,
+  "name": "Leanne Graham",
+  "username": "Bret",
+  …
+}</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>주소 부분</th><th><code>https://jsonplaceholder.typicode.com/users/1</code> 에서</th><th>뜻</th></tr>
+<tr><td>프로토콜</td><td><code>https://</code></td><td>🤖 HTTP 규칙으로 주고받음 (s = 암호화)</td></tr>
+<tr><td>도메인 (호스트)</td><td><code>jsonplaceholder.typicode.com</code></td><td>서버 이름 → <b>DNS</b> 가 IP 로 바꿈 (6번)</td></tr>
+<tr><td>경로</td><td><code>/users/1</code></td><td>서버 안에서 무엇을 — <b>users 중 1번</b></td></tr>
+</tbody></table>
+<ul><li>✍️ “2번째 파라미터 생략 가능” — 맞아요: <code>fetch(주소, 옵션)</code> 의 옵션을 빼면 요청 방식은 <b>GET</b> (node: <code>new Request(주소).method</code> → <code>GET</code> · <code>{ method: 'POST' }</code> 를 주면 → <code>POST</code>)</li><li>⚠️ <b>팩트체크</b> “.com 까지 URI 전체가 URL” — 이 말은 두 가지로 쓰여요. ① 표준(RFC 3986): <b>URI</b> = 자원을 가리키는 이름 전부 · <b>URL</b> = 그중 <b>위치(주소)</b> 로 가리키는 것 → <code>https://jsonplaceholder.typicode.com/users/1</code> <b>전체가 URL 이자 URI</b> ② HTTP 요청 시작 줄 <code>GET /users/1 HTTP/1.1</code> 에서는 <code>.com</code> 뒤의 <code>/users/1</code> 을 <b>요청 URI</b>(Request-URI · RFC 2616)라고 불러요 → 필기 “.com 까지 · 뒤는 URI · 전체가 URL” 은 ② 뜻으로 보면 맞아요 (교수님이 어느 뜻으로 말했는지는 확인 못 함) · 🤖 <code>.com</code> 까지(<code>https://jsonplaceholder.typicode.com</code>)는 <b>출처(origin)</b> = 프로토콜 + 도메인 (node <code>new URL(…).origin</code> 확인)</li></ul>
+</section>
+<section class="card" id="s6">
+<h2>5. 🔥 HTTP 메시지 구조 (시험문제)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — 구글 검색 “http메시지 구조가 뭐야” 캡처 + “구글 검색 캡처한거 claude 가 그림 그려서 정리하고 사진은 지워도 됨 (<b>시험문제</b>)”</p>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-그림정리.html?week=12#httpmsg" title="🔥 HTTP 메시지 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-그림정리.html?week=12#httpmsg" target="_blank" rel="noopener">🎬 🔥 HTTP 메시지 그림 — 새 창으로 크게 보기</a></p></div>
+<ul><li><b>HTTP 메시지</b> = 클라이언트(웹 브라우저 등)와 서버가 데이터를 주고받을 때 쓰는 <b>정해진 형식의 데이터 단위</b></li><li>종류 <b>2가지</b> — <b>요청(Request) 메시지</b> (클라이언트 → 서버) · <b>응답(Response) 메시지</b> (서버 → 클라이언트)</li><li>구조 <b>4부분</b> — 위에서부터 순서대로 <b>시작 줄 → 헤더 → 빈 줄 → 바디</b></li></ul>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>순서</th><th>부분</th><th>하는 일</th><th>요청 예 (fetch users/1)</th><th>응답 예</th></tr>
+<tr><td>①</td><td><b>시작 줄</b> (Start Line)</td><td>메시지의 <b>목적</b> — 요청은 <b>방식 · 주소 · 버전</b> · 응답은 <b>버전 · 상태 코드 · 상태 글</b></td><td><code>GET /users/1 HTTP/1.1</code></td><td><code>HTTP/1.1 200 OK</code></td></tr>
+<tr><td>②</td><td><b>헤더</b> (Header)</td><td>메시지에 대한 <b>부가 정보</b>(메타데이터) · <code>이름: 값</code> 줄 여러 개</td><td><code>Host: jsonplaceholder.typicode.com</code></td><td><code>Content-Type: application/json; charset=utf-8</code></td></tr>
+<tr><td>③</td><td><b>빈 줄</b> (Empty Line · CRLF)</td><td><b>헤더가 끝났다</b>는 표시 → 헤더와 바디를 <b>구분</b></td><td>(빈 줄)</td><td>(빈 줄)</td></tr>
+<tr><td>④</td><td><b>바디</b> (Message Body)</td><td>실제로 보내거나 돌려받는 <b>데이터</b> (payload) · <b>선택 사항</b> — 없을 수도 있음</td><td>없음 (GET)</td><td><code>{"id": 1, "name": "Leanne Graham", …}</code></td></tr>
+</tbody></table>
+<ul><li>⚠️ <b>팩트체크</b> — 캡처(구글 AI 개요 · 출처 MDN) 내용은 MDN “HTTP messages” 와 같아요 (시작 줄은 <b>한 줄</b> · 헤더와 바디는 <b>선택</b> · 빈 줄로 헤더 끝을 알림) · 표의 요청 · 응답 줄은 curl 로 jsonplaceholder 에 직접 요청해서 받은 <b>실제 값</b>이에요 (헤더는 일부만)</li><li>🤖 <b>CRLF</b> = 줄 끝 표시 두 글자 <code>\r</code> (Carriage Return) + <code>\n</code> (Line Feed) — 빈 줄 = CRLF 만 있는 줄 · 🤖 응답 시작 줄의 <b>200</b> = 상태 코드(성공 · OK)</li><li>🤖 요청 방식(GET · POST …)은 요청 메시지 <b>시작 줄의 맨 앞</b>에 들어가요 (7번)</li></ul>
+</section>
+<section class="card" id="s7">
+<h2>6. ✍️ DNS — 도메인 이름을 IP 주소로</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “url 주소를 입력하고 ip 주소로 자동으로 바꿔서 웹사이트를 들어가게 해 주는 게 Domain Name System”</p>
+<ul><li><b>DNS</b> (Domain Name System) — 사람이 외우기 쉬운 <b>도메인 이름</b>(<code>naver.com</code>)을 컴퓨터가 쓰는 <b>IP 주소</b>로 바꿔 주는 시스템 → 1주차 “웹서비스 프로세스” 슬라이드의 <code>http://210.89.160.88/news.html</code> <b>혹은</b> <code>http://naver.com/news.html</code> 이 같은 서버로 가는 이유</li><li>⚠️ <b>팩트체크</b> — 정확히는 URL <b>전체</b>가 아니라 그 안의 <b>도메인 이름</b>만 IP 로 바꿔요 (<code>/users/1</code> 같은 경로는 그대로 서버에 보냄)</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>순서 (🤖)</th><th>하는 일</th></tr>
+<tr><td>1</td><td>주소창에 <code>https://jsonplaceholder.typicode.com/users/1</code> 입력 (또는 <code>fetch</code>)</td></tr>
+<tr><td>2</td><td><b>DNS</b> 에 <code>jsonplaceholder.typicode.com</code> 의 IP 를 물어봄 → IP 주소를 받음</td></tr>
+<tr><td>3</td><td>그 IP 의 서버에 <b>요청 메시지</b> <code>GET /users/1 HTTP/1.1</code> 을 보냄 (5번)</td></tr>
+<tr><td>4</td><td>서버가 <b>응답 메시지</b> <code>HTTP/1.1 200 OK</code> + JSON 바디를 돌려줌 → 브라우저가 받음</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s8">
+<h2>7. ✍️ 요청 방식 · CRUD</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “요청방식: get, post, put, delete” · “CRUD (CREATE, READ, UPDATE, DELETE)”</p>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>요청 방식 (HTTP 메서드)</th><th>하는 일 🤖</th><th>CRUD 짝 🤖</th><th>fetch 로 🤖</th></tr>
+<tr><td><b>GET</b></td><td>가져오기 (조회)</td><td><b>R</b>ead</td><td><code>fetch(주소)</code> — 2번째 파라미터를 빼면 GET</td></tr>
+<tr><td><b>POST</b></td><td>새로 만들기 (보내서 저장)</td><td><b>C</b>reate</td><td><code>fetch(주소, { method: 'POST' })</code></td></tr>
+<tr><td><b>PUT</b></td><td>고치기 (통째로 바꿈)</td><td><b>U</b>pdate</td><td><code>{ method: 'PUT' }</code></td></tr>
+<tr><td><b>DELETE</b></td><td>지우기</td><td><b>D</b>elete</td><td><code>{ method: 'DELETE' }</code></td></tr>
+</tbody></table>
+<ul><li><b>CRUD</b> = <b>C</b>reate(생성) · <b>R</b>ead(조회) · <b>U</b>pdate(수정) · <b>D</b>elete(삭제) — 데이터를 다루는 기본 4가지 (10주차 필기 “CRUD 가 무엇인가” 와 같음)</li><li>⚠️ <b>관례 · 필수 아님</b> — GET ↔ Read 처럼 짝짓는 건 흔한 약속(REST 방식)이에요 · 서버가 꼭 이렇게 만들어야 하는 규칙은 아니에요 (10주차 그림 ⑦ 과 같은 표)</li></ul>
+</section>
+<section class="card" id="s9">
+<h2>8. ✍️ 단일 스레드 · 멀티 스레드 (6주차 복습)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “멀티스레드 단일스레드 차이” (⚠️ 필기 오타 <code>멀티스레스 · 단일스레스</code> → <b>스레드</b>)</p>
+<table class="ref">
+<tbody>
+<tr><th>구분</th><th>단일 스레드 (single thread)</th><th>멀티 스레드 (multi thread)</th></tr>
+<tr><td>뜻</td><td>일하는 흐름(스레드)이 <b>1개</b> → 한 번에 한 가지 일</td><td>스레드가 <b>여러 개</b> → 여러 일을 동시에</td></tr>
+<tr><td>예</td><td><b>자바스크립트</b> (브라우저 · Node.js 의 JS 실행)</td><td>🤖 스레드를 여러 개 만드는 프로그램 (예: 자바의 Thread)</td></tr>
+<tr><td>장점</td><td>구조가 단순 · 같은 데이터를 동시에 고치는 충돌이 없음</td><td>여러 작업을 동시에 처리</td></tr>
+<tr><td>단점</td><td>오래 걸리는 일을 붙잡고 기다리면 뒤의 일이 모두 멈춤 → <b>그래서 JS 는 비동기</b></td><td>스레드끼리 데이터가 꼬이지 않게 관리하기 어려움</td></tr>
+</tbody></table>
+<ul><li>🤖 오늘 fetch 와 연결 — 서버 응답은 언제 올지 몰라요 → 단일 스레드인 JS 는 응답을 <b>기다리지 않고</b> 다음 코드를 먼저 실행하고, 응답이 오면 그때 처리해요 (6주차 setTimeout 과 같은 <b>비동기</b>)</li></ul>
+<pre><code class="language-js">// 단일 스레드 — 기다리는 일(타이머 · 서버 응답)은 맡겨 두고 다음 줄을 먼저 실행 (6주차 setTimeout)
+console.log("1. 요청 보냄");                    // 첫 번째로 찍힘
+setTimeout(() =&gt; {                             // 1초 뒤에 실행할 함수를 맡겨 둠 (응답이 1초 뒤에 온다고 생각)
+    console.log("3. 응답 도착 → 처리");         // 1초 뒤 → 세 번째로 찍힘
+}, 1000);                                      // 1000ms = 1초 · 기다리지 않고 바로 다음 줄로
+console.log("2. 기다리지 않고 다음 코드");       // 두 번째로 찍힘</code></pre>
+<pre class="io"><code class="language-text">1. 요청 보냄
+2. 기다리지 않고 다음 코드
+3. 응답 도착 → 처리</code></pre>
+</section>
+<section class="card" id="s10">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li>🔒 이 과목의 퀴즈 · 출력 결과 · 코드 작성은 <a href="../웹프로그래밍-실제시험.html">실제시험</a>에 있어요 (12주차: 🔥 HTTP 메시지 구조 · 이벤트 핸들러 3가지 · onload · fetch · DNS · 요청 방식 · CRUD · 스레드)</li><li><a href="웹프로그래밍-15주차-기말고사.html">기말고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="웹프로그래밍-11주차.html">‹ 이전 · <b>11주차</b><br><small>&lt;11월 10일&gt; 🎮 미니게임 과제 · 두더지잡기(setInterval · Math.random · 위치) · 선택 삭제 · 배열 변형 map · filter</small></a><a class="next" href="웹프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「웹프로그래밍 · 12주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202611041620"></script>
+</body>
+</html>

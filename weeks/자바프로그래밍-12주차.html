@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바프로그래밍 12주차 · 6장 패키지 · Object(toString · equals) · Wrapper · String — ✍️ 43쪽 e == f 가 false 인 이유</title>
+    <meta name="description" content="자바프로그래밍 12주차 정리 — 6장 패키지 · Object(toString · equals) · Wrapper · String — ✍️ 43쪽 e == f 가 false 인 이유">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="자바프로그래밍 12주차 · 6장 패키지 · Object(toString · equals) · Wrapper · String — ✍️ 43쪽 e == f 가 false 인 이유">
+    <meta property="og:description" content="자바프로그래밍 12주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../자바프로그래밍.html">← 자바프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>☕ 자바프로그래밍 · 12주차</h1>
+        <p>6장 패키지 · Object(toString · equals) · Wrapper · String — ✍️ 43쪽 e == f 가 false 인 이유</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-11주차.html">‹ 이전 · <b>11주차</b><br><small>5장 상속 (2) — 메소드 오버라이딩 · 동적 바인딩 · 추상 클래스 · 인터페이스</small></a><a class="next" href="자바프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</small></a></nav>
+
+<div class="tip">수업: <b>11/17(화)</b> · 자료: <b>6장.pdf</b> — 수업 소스(예제 6-5 · 6-7)와 필기(43쪽)로 보면 <b>2 ~ 50쪽</b> (51쪽부터 StringBuffer · StringTokenizer · Math · Calendar 는 아직 — 확인 못 함) · 수업 소스 <b>Tools · Point + Main · Car + CarMain · FishBread + MainFish · WrapperEx · StringEx</b> · ✍️ 노션 필기 2줄. PDF 펜 필기는 없어요. 코드 주석과 ▶ 출력 결과는 전부 javac · java 로 직접 실행한 결과예요 (여러 파일로 나뉜 수업 소스를 복사해 바로 실행되게 <code>연습.java</code> 한 파일로 합쳤어요 · <code>package test;</code> 는 뺐어요). 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
+<div class="tip">📌 오늘 한 것 — <b>패키지</b>(같은 이름 클래스 충돌 → 디렉터리로 구분 · import · 경로명) → ✍️ <b>같은 패키지에 같은 이름 X</b> → <b>Object 클래스 · toString()</b> 오버라이딩 (Point · Car · 붕어빵 + getter · setter) → <b>== vs equals()</b> → <b>Wrapper 클래스</b> (예제 6-5) · <b>박싱 · 언박싱</b> → <b>String</b> — 리터럴 vs <code>new String()</code> (✍️ <b>43쪽 질문</b>) · String 메소드 (예제 6-7)</div>
+<section class="card" id="s1">
+<h2>🎨 12주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/자바프로그래밍-그림정리.html?week=12" title="12주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/자바프로그래밍-그림정리.html?week=12" target="_blank" rel="noopener">🎬 12주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
+<h2>1. 패키지 — 같은 이름 클래스 구분 · import (6장 2 ~ 8 · 18 · 26쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th>말</th><th>뜻 (6장)</th></tr>
+<tr><td>패키지가 필요한 이유 (2쪽)</td><td>3명이 나눠서 개발하면 <b>같은 이름의 클래스</b>(<code>Tools.class</code>)가 생길 수 있음 → <b>합칠 때 오류</b></td></tr>
+<tr><td><b>패키지</b> (4쪽)</td><td>서로 관련된 클래스와 인터페이스의 컴파일된 클래스 파일들을 <b>하나의 디렉터리에 묶어 놓은 것</b></td></tr>
+<tr><td>모듈 (4 · 19쪽)</td><td>여러 패키지와 이미지 등의 자원을 모아 놓은 컨테이너 · <b>Java 9</b> 에서 도입 · 모듈 파일(.jmod)</td></tr>
+<tr><td><b>경로명</b> (4 · 6쪽)</td><td>패키지명과 클래스명을 <b>점(.)으로 연결</b> — <code>Project.FileIO.Tools</code> · <code>Project.UI.Tools</code> · <code>java.util.Scanner</code> (패키지 java.util + 클래스 Scanner)</td></tr>
+<tr><td><code>package 패키지명;</code> (8쪽)</td><td>컴파일한 클래스 파일을 <b>패키지명의 디렉터리에 저장</b>하라는 지시 · <b>소스 파일의 첫 줄</b>에 선언 · <code>package UI;</code> → Tools 의 경로명은 <code>UI.Tools</code></td></tr>
+<tr><td><b>import</b> (7쪽)</td><td>다른 패키지의 클래스 사용 — import 를 안 쓰면 <b>전체 경로명</b> (<code>java.util.Scanner scanner = new java.util.Scanner(System.in);</code>) · <code>import java.util.Scanner;</code> = 그 클래스만 · <code>import java.util.*;</code> = 패키지 안의 모든 클래스 (<b>하위 패키지는 포함 X</b>)</td></tr>
+<tr><td>디폴트 패키지 (18쪽)</td><td>package 선언문 없이 만든 클래스의 패키지 = <b>현재 디렉터리</b></td></tr>
+<tr><td>패키지 특징 (18쪽)</td><td>계층구조 · 패키지별 접근 제한 · <b>서로 다른 패키지에는 이름이 같은 클래스 · 인터페이스 가능</b> · 높은 소프트웨어 재사용성</td></tr>
+<tr><td><b>java.lang</b> (26쪽)</td><td>스트링 · 수학 함수 · 입출력 등 기본 클래스 · <b>자동으로 import</b> (import 문 필요 없음) · java.util = 날짜 · 시간 등 유틸리티 · java.io = 입출력</td></tr>
+</tbody></table>
+<p><span class="wk-tag note">✍️ 필기</span> — “동일한 패키지 밑에 동일한 이름의 .java 는 생성이 불가능함”</p>
+<ul><li>🤖 javac 로 확인 — 같은 패키지 <code>test</code> 에 <code>Point</code> 가 있는데 다른 파일에 <code>class Point { }</code> 를 또 쓰면 <code>error: duplicate class: test.Point</code> · 같은 이름의 public 클래스를 다른 파일 이름에 쓰면 <code>class Point is public, should be declared in a file named Point.java</code></li><li><b>다른 패키지</b>면 같은 이름도 돼요 (18쪽) — <code>a.Tools</code> · <code>b.Tools</code> 를 한 프로그램에서 경로명으로 구분해 씀 (javac 확인)</li></ul>
+<h3>Tools.java — import · java.lang.String (수업 소스 + 확인용 줄)</h3>
+<pre><code class="language-java">// Tools.java — 패키지 · import · 경로명 (수업 소스 + 확인용 줄 · package test; 는 뺌)
+import java.util.Scanner;                       // java.util 패키지의 Scanner 를 이 파일에서 이름만으로 쓰겠다고 알림
+public class 연습 {                              // 원래 이름 Tools → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Scanner sc = new Scanner(System.in);    // import 했으니 Scanner 만 써도 됨 (import 를 빼면 cannot find symbol)
+        java.lang.String school = "동양미래대학교";   // 수업 소스 — String 의 전체 경로명 java.lang.String 으로 써도 됨
+        String school2 = "동양미래대학교";            // java.lang 은 자동 import → 보통은 String 만 씀 (26쪽)
+        java.util.Scanner sc2 = new java.util.Scanner(System.in);   // import 없이 쓰려면 전체 경로명 (7쪽)
+        System.out.println(school + " " + school2);  // 같은 String → "동양미래대학교 동양미래대학교"
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">동양미래대학교 동양미래대학교</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>이렇게 쓰면 (🤖 javac 로 확인)</th><th>결과</th></tr>
+<tr><td><code>import java.util.Scanner;</code> 를 빼고 <code>Scanner sc = …</code></td><td>컴파일 오류 <code>cannot find symbol … class Scanner</code></td></tr>
+<tr><td>import 없이 <code>java.util.Scanner sc = new java.util.Scanner(System.in);</code></td><td>됨 (전체 경로명 · 7쪽)</td></tr>
+<tr><td><code>java.lang.String school = …</code></td><td>됨 — String 의 경로명 (java.lang 은 자동 import 라 보통 <code>String</code> 만 씀)</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s3">
+<h2>2. Object 클래스 · toString() — 객체를 문자열로 (6장 28 ~ 31쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th>말</th><th>뜻 (6장)</th></tr>
+<tr><td><b>Object</b> (28쪽)</td><td>java.lang 패키지에 포함 · <b>모든 클래스의 수퍼 클래스</b> — 모든 클래스에 <b>강제 상속</b> (10주차 “최상위 조상”)</td></tr>
+<tr><td>주요 메소드 (28쪽)</td><td><code>boolean equals(Object obj)</code> 같으면 true · <code>Class getClass()</code> · <code>int hashCode()</code> · <b><code>String toString()</code></b> 문자열 표현 · notify · notifyAll · wait (스레드)</td></tr>
+<tr><td><b>toString()</b> (30쪽)</td><td>객체를 <b>문자열로 반환</b> · Object 에 구현된 것은 <code>클래스이름@16진수 해시코드</code> → 예제 6-1 <code>Point@15db9742</code> (해시코드는 실행마다 다를 수 있음)</td></tr>
+<tr><td>자동 변환 (30쪽)</td><td><b>‘객체 + 문자열’ → ‘객체.toString() + 문자열’</b> · <code>System.out.println(p)</code> → <code>System.out.println(p.toString())</code></td></tr>
+<tr><td>그래서 (30쪽)</td><td>개발자는 <b>자신만의 toString() 작성</b> 필요 = Object 의 toString() <b>오버라이딩</b> (11주차)</td></tr>
+</tbody></table>
+<h3>① Point + Main — toString() 오버라이딩 · getter/setter · == (수업 소스)</h3>
+<pre><code class="language-java">// Point.java + Main.java — toString() 오버라이딩 · getter/setter · == 비교 (수업 소스를 한 파일로)
+class Point {                                   // 점 클래스 (수업은 public class Point — 한 파일로 합쳐서 public 뺌)
+    private int x, y;                           // 속성 — private 라 밖에서 p1.x 로 못 씀
+    Point() {}                                  // 기본 생성자 (수업 주석 “생성자”)
+    Point(int x, int y) {                       // 매개변수 생성자 — new Point(2, 3)
+        this.x = x;                             // this.x(필드) = x(매개변수) → 2
+        this.y = y;                             // this.y = y → 3
+    }                                           // 생성자 끝
+    @Override                                   // Object 의 toString() 을 다시 씀 (오버라이딩 · 11주차)
+    public String toString() {                  // public 꼭 (빼면 weaker access privileges 오류)
+        return ("x : " + x + "\t" + "y : " + y);   // "x : 2" + 탭 + "y : 3" 을 이어 붙인 문자열을 돌려줌
+    }                                           // toString 끝
+    public int getX() {                         // getter — x 값 꺼내기
+        return x;                               // x 돌려줌
+    }                                           // getX 끝
+    public void setX(int x) {                   // setter — x 값 바꾸기
+        this.x = x;                             // 필드 x = 매개변수 x
+    }                                           // setX 끝
+    public int getY() {                         // getter — y
+        return y;                               // y 돌려줌
+    }                                           // getY 끝
+    public void setY(int y) {                   // setter — y
+        this.y = y;                             // 필드 y = 매개변수 y
+    }                                           // setY 끝
+}                                               // Point 끝
+public class 연습 {                              // 원래 이름 Main → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Point p1 = new Point(2, 3);             // p1 → (2, 3) 객체
+        System.out.println(p1);                 // 객체만 넣어도 p1.toString() 자동 호출 → x : 2 (탭) y : 3
+        System.out.println(p1.toString());      // 직접 불러도 같음 → x : 2 (탭) y : 3
+        Point p2 = new Point(2, 3);             // 값은 같지만 new 로 만든 다른 객체
+        if (p1 == p2) {                         // == 는 레퍼런스(주소) 비교 → 서로 다른 객체 → false
+            System.out.println("p1과 p2는 같습니다.");     // 실행 안 됨
+        }                                       // if 끝
+        else if (p1 != p2) {                    // != → true
+            System.out.println("p1과 p2는 같지않습니다.");  // 이 줄 실행
+        }                                       // else if 끝
+        else {                                  // == 도 != 도 아닌 경우는 없음
+            System.out.println("error");        // 실행될 일 없음
+        }                                       // else 끝
+        p1.setX(4);                             // setter 로 x = 4
+        p1.setY(5);                             // y = 5
+        System.out.println("\np1.setX(4) and p1.setY(5) after\n" + p1.toString());   // \n 빈 줄 → 안내 줄 → x : 4 (탭) y : 5
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">x : 2	y : 3
+x : 2	y : 3
+p1과 p2는 같지않습니다.
+
+p1.setX(4) and p1.setY(5) after
+x : 4	y : 5</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>이렇게 쓰면 (🤖 javac 로 확인)</th><th>결과</th></tr>
+<tr><td>toString() 을 <b>안 쓰면</b></td><td>Object 의 것 → <code>Point@</code> + 16진수 해시코드 (30쪽) · 패키지 안의 클래스면 <code>test.Point@…</code> 처럼 <b>패키지 이름까지</b></td></tr>
+<tr><td><code>public</code> 을 빼고 <code>String toString()</code></td><td>컴파일 오류 <code>attempting to assign weaker access privileges; was public</code> (Object 의 toString 이 public)</td></tr>
+<tr><td><code>p1 == p2</code></td><td><b>false</b> — 값이 같아도 <code>new</code> 로 만든 <b>다른 객체</b> (3번)</td></tr>
+<tr><td><code>p1.equals(p2)</code> (equals 를 안 쓴 Point)</td><td><b>false</b> — Object 의 equals 는 <code>==</code> 처럼 레퍼런스 비교 (3번)</td></tr>
+</tbody></table>
+<h3>② Car + CarMain — "car1" + car1 (수업 소스)</h3>
+<pre><code class="language-java">// Car.java + CarMain.java — "car1" + car1 → car1.toString() 자동 호출 (수업 소스를 한 파일로)
+class Car {                                     // 자동차 클래스
+    private String juin;                        // 소유주 (수업 변수 이름 그대로 · juin = 주인)
+    private String model;                       // 모델
+    private int year;                           // 연식
+    Car() {}                                    // 기본 생성자
+    Car(String juin, String model, int year) {  // 매개변수 생성자
+        this.juin = juin;                       // 필드 = 매개변수 → "아빠차"
+        this.model = model;                     // → "BMW"
+        this.year = year;                       // → 2023
+    }                                           // 생성자 끝
+    @Override                                   // Object 의 toString() 오버라이딩
+    public String toString() {                  // 객체를 문자열로
+        return ("\t소유주 : " + juin + "\t모델 : " + model + "\t연식 : " + year);   // 탭 + 소유주 : 아빠차 + 탭 + 모델 : BMW + 탭 + 연식 : 2023
+    }                                           // toString 끝
+    public String getJuin() {                   // getter (수업 소스의 model · year getter/setter 는 안 써서 뺌)
+        return juin;                            // 소유주 돌려줌
+    }                                           // getJuin 끝
+    public void setJuin(String juin) {          // setter
+        this.juin = juin;                       // 소유주 바꿈
+    }                                           // setJuin 끝
+}                                               // Car 끝
+public class 연습 {                              // 원래 이름 CarMain → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Car car1 = new Car("아빠차", "BMW", 2023);     // car1 객체
+        Car car2 = new Car("엄마차", "벤츠", 2020);    // car2 객체
+        System.out.println("car1" + car1);      // 문자열 + 객체 → "car1" + car1.toString() 으로 자동 변환 (30쪽)
+        System.out.println("car2" + car2.toString());   // 직접 불러도 같은 모양
+        car1.setJuin("내차");                     // 주인 수정 (setter)
+        System.out.println("\ncar1.setJuin(\"내차\") after\ncar1" + car1);   // \" = 큰따옴표 글자 · 빈 줄 → 안내 → 바뀐 car1
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">car1	소유주 : 아빠차	모델 : BMW	연식 : 2023
+car2	소유주 : 엄마차	모델 : 벤츠	연식 : 2020
+
+car1.setJuin("내차") after
+car1	소유주 : 내차	모델 : BMW	연식 : 2023</code></pre>
+<h3>③ FishBread + MainFish — 붕어빵 가격 인상 (수업 소스)</h3>
+<pre><code class="language-java">// FishBread.java + MainFish.java — 붕어빵 맛 · 가격 · toString() · setter 로 가격 인상 (수업 소스를 한 파일로)
+class FishBread {                               // 붕어빵 클래스 (수업은 public class — 합쳐서 public 뺌)
+    private String flavor;                      // 맛
+    private int price;                          // 가격
+    FishBread() {}                              // 기본 생성자
+    FishBread(String flavor, int price) {       // 매개변수 생성자
+        this.flavor = flavor;                   // 맛 = "팥" …
+        this.price = price;                     // 가격 = 1000 …
+    }                                           // 생성자 끝
+    @Override                                   // Object 의 toString() 오버라이딩
+    public String toString() {                  // 객체를 문자열로
+        return ("맛 : " + flavor + "\n가격 : " + price + "원\n");   // "맛 : 팥" → 줄바꿈 → "가격 : 1000원" → 줄바꿈 (끝의 \n 때문에 println 하면 빈 줄이 하나 더)
+    }                                           // toString 끝
+    public void setPrice(int price) {           // setter — 가격 바꾸기 (수업 소스의 다른 getter/setter 는 안 써서 뺌)
+        this.price = price;                     // 2000 → 2500 …
+    }                                           // setPrice 끝
+}                                               // FishBread 끝
+public class 연습 {                              // 원래 이름 MainFish → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        FishBread f1 = new FishBread("팥", 1000);       // 팥 1000원
+        FishBread f2 = new FishBread("슈크림", 2000);    // 슈크림 2000원
+        FishBread f3 = new FishBread("치즈", 3000);      // 치즈 3000원
+        System.out.println(f1);                 // f1.toString() 자동 → 맛 : 팥 / 가격 : 1000원 / (빈 줄)
+        System.out.println(f2);                 // 맛 : 슈크림 / 가격 : 2000원 / (빈 줄)
+        System.out.println(f3);                 // 맛 : 치즈 / 가격 : 3000원 / (빈 줄)
+        System.out.println("\n슈크림과 치즈의 물가가 상승해서 각각 500원씩 가격 인상하겠습니다.");   // 맨 앞 \n → 빈 줄 하나 더
+        f2.setPrice(2500);                      // 슈크림 2000 → 2500
+        f3.setPrice(3500);                      // 치즈 3000 → 3500
+        System.out.println(f1);                 // 팥은 그대로 1000원
+        System.out.println(f2);                 // 슈크림 2500원
+        System.out.println(f3);                 // 치즈 3500원
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">맛 : 팥
+가격 : 1000원
+
+맛 : 슈크림
+가격 : 2000원
+
+맛 : 치즈
+가격 : 3000원
+
+
+슈크림과 치즈의 물가가 상승해서 각각 500원씩 가격 인상하겠습니다.
+맛 : 팥
+가격 : 1000원
+
+맛 : 슈크림
+가격 : 2500원
+
+맛 : 치즈
+가격 : 3500원</code></pre>
+<div class="tip">🤖 빈 줄이 많은 이유 — toString() 끝의 <code>\n</code> + println 의 줄바꿈 = 객체마다 <b>빈 줄 1개</b> · 안내 문장 맨 앞의 <code>\n</code> 때문에 그 위에 빈 줄이 하나 더</div>
+</section>
+<section class="card" id="s4">
+<h2>3. == vs equals() — ✍️ 43쪽 질문 (6장 32 · 33 · 42 ~ 44쪽)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “강의자료 43페이지에서 if(e==f) 의 결과가 false 가 나오는 이유는? equals() 로 비교하면 true 가 나온다?”</p>
+<p>🤖 <b>답 — 네, <code>e.equals(f)</code> 는 true 예요</b> (java 로 확인)</p>
+<ul><li><code>==</code> 연산자 = <b>두 개의 레퍼런스 비교</b> (32쪽) → <b>같은 객체</b>를 가리켜야 true</li><li><code>boolean equals(Object obj)</code> = <b>객체 내용이 같은지 비교</b> (32쪽) → String 의 equals 는 글자가 같으면 true</li><li>43쪽 그림 — <b>리터럴</b>(<code>String a = "Hello";</code>)은 <b>JVM 이 리터럴 테이블에서 관리 · 응용프로그램 안에서 공유</b> → a 와 c 는 <b>같은 객체</b> / <b><code>new String("Hello")</code></b> 는 <b>힙 메모리에 String 객체를 새로</b> 만듦 → e 와 f 는 내용("Java")은 같지만 <b>서로 다른 객체</b> → <code>e == f</code> <b>false</b> · <code>e.equals(f)</code> <b>true</b></li></ul>
+<pre><code class="language-java">// 43쪽 — 스트링 리터럴과 new String() · == 와 equals() 비교 (✍️ 필기 질문 확인)
+public class 연습 {                              // 43쪽 코드에 비교하는 줄을 더함
+    public static void main(String[] args) {    // 프로그램 시작
+        String a = "Hello";                     // 리터럴 → JVM 의 스트링 리터럴 테이블에 "Hello"
+        String b = "Java";                      // 리터럴 → 테이블에 "Java"
+        String c = "Hello";                     // 같은 리터럴 → a 와 같은 "Hello" 를 공유 (같은 객체)
+        String d = new String("Hello");         // new → 힙 메모리에 새 "Hello" 객체
+        String e = new String("Java");          // new → 힙에 새 "Java" 객체
+        String f = new String("Java");          // new → 또 다른 새 "Java" 객체 (e 와 다른 객체)
+        System.out.println(a == c);             // a · c 는 같은 객체 → 주소가 같음 → true
+        System.out.println(e == f);             // ✍️ 질문 — 내용은 같아도 서로 다른 객체(주소가 다름) → false
+        System.out.println(e.equals(f));        // ✍️ 질문 — equals 는 내용 비교 → "Java" 와 "Java" → true
+        System.out.println(a == d);             // 테이블의 "Hello" vs 힙의 "Hello" → 다른 객체 → false
+        System.out.println(a.equals(d));        // 내용 "Hello" 같음 → true
+        System.out.println(b.equals(e));        // 내용 "Java" 같음 → true
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">true
+false
+true
+false
+true
+true</code></pre>
+<ul><li>⚠️ <b>팩트체크</b> (44 · 46쪽 “스트링 비교 시 <b>반드시</b> equals() 사용 · == 사용하면 안 됨”) — <code>==</code> 를 써도 <b>컴파일 오류는 안 나요</b> (javac 확인). 주소를 비교해서 <b>내용이 같아도 false 가 될 수 있으니</b>(<code>e == f</code>) 내용을 비교할 때는 equals() 를 쓰라는 뜻이에요 · 리터럴끼리는 <code>a == c</code> 가 true 라서 더 헷갈려요</li></ul>
+<h3>예제 6-3 — Point 에 equals() 작성 (33쪽)</h3>
+<pre><code class="language-java">// 예제 6-3 (33쪽) — Point 에 equals() 작성 · 두 점의 좌표가 같으면 true
+class Point {                                   // 점 클래스
+    private int x, y;                           // 좌표
+    public Point(int x, int y) {                // 생성자
+        this.x = x;                             // 필드 x = 매개변수 x
+        this.y = y;                             // 필드 y = 매개변수 y
+    }                                           // 생성자 끝
+    public boolean equals(Object obj) {         // Object 의 equals(Object) 를 오버라이딩 — 매개변수 타입이 Object 라야 함
+        Point p = (Point) obj;                  // Object 로 받은 것을 Point 로 바꿈 (다운캐스팅) → p.x · p.y 를 쓰려고
+        if (x == p.x &amp;&amp; y == p.y)               // 내 좌표와 p 의 좌표가 둘 다 같으면 (같은 클래스라 p.x 처럼 private 도 됨)
+            return true;                        // → true
+        else                                    // 하나라도 다르면
+            return false;                       // → false
+    }                                           // equals 끝
+}                                               // Point 끝
+public class 연습 {                              // 원래 이름 EqualsEx → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        Point a = new Point(2, 3);              // (2, 3)
+        Point b = new Point(2, 3);              // 같은 좌표 · 다른 객체
+        Point c = new Point(3, 4);              // 다른 좌표
+        if (a == b)                             // 레퍼런스 비교 → 다른 객체 → false
+            System.out.println("a==b");         // 실행 안 됨
+        if (a.equals(b))                        // 내용 비교 → 2==2 &amp;&amp; 3==3 → true
+            System.out.println("a is equal to b");   // 이 줄만 실행
+        if (a.equals(c))                        // 2==3 → false
+            System.out.println("a is equal to c");   // 실행 안 됨
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">a is equal to b</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>비교</th><th>Point (equals 안 씀 · 수업 Main)</th><th>Point (예제 6-3 · equals 씀)</th></tr>
+<tr><td><code>a == b</code> (같은 좌표 · 다른 객체)</td><td>false</td><td>false</td></tr>
+<tr><td><code>a.equals(b)</code></td><td><b>false</b> (Object 의 equals = 레퍼런스 비교)</td><td><b>true</b> (좌표 비교)</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s5">
+<h2>4. Wrapper 클래스 · 박싱 · 언박싱 (6장 35 ~ 41쪽)</h2>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>기본 타입</th><th>byte</th><th>short</th><th>int</th><th>long</th><th>char</th><th>float</th><th>double</th><th>boolean</th></tr>
+<tr><td><b>Wrapper 클래스</b> (35쪽)</td><td>Byte</td><td>Short</td><td><b>Integer</b></td><td>Long</td><td><b>Character</b></td><td>Float</td><td>Double</td><td>Boolean</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>말</th><th>뜻 (6장)</th></tr>
+<tr><td>Wrapper 클래스 (35쪽)</td><td>자바의 <b>기본 타입을 클래스화한 8개 클래스</b> · 이름이 Wrapper 인 클래스는 <b>없음</b> · 용도 = <b>기본 타입의 값을 객체로</b> 다룰 수 있게 함</td></tr>
+<tr><td>객체 생성 (36쪽)</td><td><code>Integer.valueOf(10)</code> · <code>Character.valueOf('c')</code> · 문자열로도 <code>Integer.valueOf("10")</code> · Java 9 부터 <code>new Integer(10)</code> 같은 <b>생성자 방식은 폐기</b>(deprecated)</td></tr>
+<tr><td>주요 메소드 (37쪽)</td><td><b>많은 메소드가 static</b> → <code>Integer.parseInt(…)</code> 처럼 클래스 이름으로 호출 · <code>parseInt</code> · <code>toBinaryString</code> · <code>toHexString</code> · <code>toOctalString</code> · <code>bitCount</code> · <code>valueOf</code></td></tr>
+<tr><td>기본 타입 값 꺼내기 (38쪽)</td><td><code>i.intValue()</code> → 10 · <code>c.charValue()</code> · <code>d.doubleValue()</code> · <code>b.booleanValue()</code></td></tr>
+<tr><td>문자열 → 기본 타입 (38쪽)</td><td><code>Integer.parseInt("123")</code> → 123 · <code>Boolean.parseBoolean("true")</code> → true · <code>Double.parseDouble("3.14")</code> → 3.14</td></tr>
+<tr><td>기본 타입 → 문자열 (38쪽)</td><td><code>Integer.toString(123)</code> → "123" · <code>Integer.toHexString(123)</code> → "7b" (123 = 64+32+16+8+2+1 = 111 1011 → 0111 1011 → 7b) · <code>Double.toString(3.14)</code> → "3.14"</td></tr>
+</tbody></table>
+<h3>WrapperEx — 수업 소스 (예제 6-5 일부 + 수업에서 더한 String 줄)</h3>
+<pre><code class="language-java">// WrapperEx.java — Wrapper 클래스 활용 (수업 소스 · 예제 6-5 일부 + 수업에서 더한 String 줄)
+public class 연습 {                              // 원래 이름 WrapperEx → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        int result = Integer.parseInt("100");   // 문자열 "100" → 정수 100 (static 메소드 → 클래스 이름으로 바로 호출)
+        System.out.println(result);             // 100
+        char cha = Character.toLowerCase('A');  // 'A' → 소문자 'a'
+        System.out.println(cha);                // a
+        String school = "동양미래대학교";          // 리터럴로 String 생성 (42쪽)
+        String name = "홍길동";                   // 리터럴 (수업 소스는 내 이름 — 공개 사이트라 바꿈 · 출력 안 함)
+        String dept = new String("컴소과");       // new String 으로 생성 (42쪽 · 출력 안 함)
+        System.out.println(school + " : " + school.length() + "자");   // length() = 글자 수 7 → "동양미래대학교 : 7자"
+        char c1 = '4', c2 = 'F';                // 문자 두 개
+        if (Character.isDigit(c1)) {            // '4' 는 숫자 → true
+            System.out.println(c1 + "는 숫자");   // "4는 숫자"
+        }                                       // if 끝
+        if (Character.isAlphabetic(c2)) {       // 'F' 는 영문자 → true
+            System.out.println(c2 + "는 영문자");  // "F는 영문자"
+        }                                       // if 끝
+        Double d = Double.valueOf(3.14);        // 기본 타입 3.14 → Double 객체 (36쪽 · 박싱)
+        System.out.println(d.toString());       // Double 객체 → 문자열 "3.14"
+        System.out.println(Double.parseDouble("3.14"));   // 문자열 "3.14" → 실수 3.14
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">100
+a
+동양미래대학교 : 7자
+4는 숫자
+F는 영문자
+3.14
+3.14</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>예제 6-5 의 나머지 줄 (39쪽 · 🤖 java 로 확인)</th><th>결과</th><th>풀이</th></tr>
+<tr><td><code>Integer.parseInt("-123")</code></td><td>-123</td><td>문자열 → 정수</td></tr>
+<tr><td><code>Integer.toHexString(28)</code></td><td>1c</td><td>28 = 16+8+4 = 11100 → 0001 1100 → <b>1c</b> (16진수 문자열)</td></tr>
+<tr><td><code>Integer.toBinaryString(28)</code></td><td>11100</td><td>28 = 16+8+4 → <b>11100</b> (2진수 문자열)</td></tr>
+<tr><td><code>Integer.bitCount(28)</code></td><td>3</td><td>11100 에서 <b>1 의 개수</b></td></tr>
+<tr><td><code>Boolean.toString(4 &gt; 3)</code></td><td>true</td><td>불린 true → 문자열 "true"</td></tr>
+<tr><td><code>Boolean.parseBoolean("false")</code></td><td>false</td><td>문자열 → 불린 false</td></tr>
+</tbody></table>
+<ul><li>⚠️ <b>39쪽 주석 정정</b> — <code>toHexString(28) // 정수 28을 2진수 문자열로</code> · <code>toBinaryString(28) // 28을 16진수 문자열로</code> → 두 주석이 <b>서로 바뀜</b> (Hex = <b>16진수</b> 1c · Binary = <b>2진수</b> 11100 · 출력은 맞음)</li><li>⚠️ 38쪽 오타 <code>Charater.toString('a')</code> → <b>Character</b> · <code>Double f = …; double dd = d.doubleValue();</code> 처럼 변수 이름이 어긋난 줄도 있어요 (f ↔ d)</li></ul>
+<h3>박싱 · 언박싱 (40 · 41쪽)</h3>
+<table class="ref">
+<tbody>
+<tr><th>말</th><th>뜻 (40쪽)</th><th>코드</th></tr>
+<tr><td><b>박싱</b> (boxing)</td><td>기본 타입의 값 → <b>Wrapper 객체</b>로 변환</td><td><code>Integer ten = Integer.valueOf(10);</code></td></tr>
+<tr><td><b>언박싱</b> (unboxing)</td><td>Wrapper 객체에 들어 있는 <b>기본 타입의 값을 빼내는 것</b></td><td><code>int n = ten.intValue();</code></td></tr>
+<tr><td><b>자동</b> 박싱 · 언박싱 (JDK 1.5 부터)</td><td>컴파일러가 알아서 바꿔 줌</td><td><code>Integer ten = 10;</code> · <code>int n = ten;</code></td></tr>
+</tbody></table>
+<pre><code class="language-java">// 예제 6-6 (41쪽) — 자동 박싱 · 자동 언박싱 (JDK 1.5 부터)
+public class 연습 {                              // 원래 이름 AutoBoxingUnBoxingEx → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        int n = 10;                             // 기본 타입 int 10
+        Integer intObject = n;                  // 자동 박싱 — 컴파일러가 Integer.valueOf(10) 으로 바꿔 줌 → Integer 객체
+        System.out.println("intObject = " + intObject);   // 객체 + 문자열 → toString() → "intObject = 10"
+        int m = intObject + 10;                 // 자동 언박싱 — intObject.intValue() 로 10 을 꺼냄 → 10 + 10 = 20
+        System.out.println("m = " + m);         // "m = 20"
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text">intObject = 10
+m = 20</code></pre>
+</section>
+<section class="card" id="s6">
+<h2>5. String — 생성 · 특징 · 메소드 (6장 42 ~ 50쪽)</h2>
+<table class="ref">
+<tbody>
+<tr><th>말</th><th>뜻 (6장)</th></tr>
+<tr><td>String (42쪽)</td><td><code>java.lang.String</code> · <b>하나의 문자열</b> 표현 · 리터럴 <code>"abcd"</code> · <code>new String(char 배열)</code> · <code>new String("abcd")</code></td></tr>
+<tr><td>리터럴 vs new (43쪽)</td><td>리터럴 = <b>JVM 이 관리 · 공유</b> / <code>new String()</code> = <b>힙 메모리에 새 객체</b> (3번 그림)</td></tr>
+<tr><td><b>수정 불가능</b> (44쪽)</td><td><code>String t = s.concat("Java");</code> → s 는 그대로 "Hello" · t 만 <b>새 문자열</b> "HelloJava" (javac 확인)</td></tr>
+<tr><td>비교 (44 · 46쪽)</td><td>내용 비교는 <b>equals()</b> · 사전 순서는 <code>compareTo()</code> — 같으면 <b>0</b> · 앞이면 <b>음수</b> · 뒤면 <b>양수</b> (<code>"Java".compareTo("C++")</code> → 양수 · 🤖 실제 값 7 = 'J'(74) − 'C'(67))</td></tr>
+<tr><td><code>+</code> 연결 (47쪽)</td><td>객체는 <code>toString()</code> · 기본 타입은 문자열로 바꿔 연결 → <code>"abcd" + 1 + true + 3.13e-2 + 'E' + "fgh"</code> → <b>abcd1true0.0313Efgh</b> (javac 확인)</td></tr>
+<tr><td><code>concat()</code> (47 · 48쪽)</td><td>기존 객체에 붙지 않고 <b>새 문자열 객체</b>를 리턴 → <code>s1 = s1.concat(s2)</code> 이면 원래 "abcd" 는 <b>가비지</b></td></tr>
+<tr><td><code>trim()</code> (49쪽)</td><td><b>앞 뒤</b> 공백 문자(tab · enter · space) 제거 · <b>중간 공백은 그대로</b> (<code>"   abcd def   "</code> → "abcd def")</td></tr>
+<tr><td><code>charAt(int)</code> (49쪽)</td><td>그 인덱스의 문자 (<code>"class".charAt(2)</code> → 'a') · 🤖 <code>"class"</code> 의 's' 개수 세기 → 2 (javac 확인)</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>주요 메소드 (45쪽)</th><th>하는 일</th></tr>
+<tr><td><code>length()</code></td><td>길이(문자 개수)</td></tr>
+<tr><td><code>contains(s)</code></td><td>s 가 들어 있으면 true</td></tr>
+<tr><td><code>concat(str)</code></td><td>뒤에 str 을 덧붙인 <b>새</b> 문자열</td></tr>
+<tr><td><code>replace(target, replacement)</code></td><td>target 을 replacement 로 바꾼 문자열</td></tr>
+<tr><td><code>split(regex)</code></td><td>기준으로 나눠 <b>String 배열</b>로</td></tr>
+<tr><td><code>substring(beginIndex)</code></td><td>beginIndex 부터 <b>끝까지</b></td></tr>
+<tr><td><code>toLowerCase()</code> · <code>toUpperCase()</code></td><td>소문자 · 대문자로</td></tr>
+<tr><td><code>trim()</code></td><td>앞뒤 공백 제거</td></tr>
+<tr><td><code>charAt(index)</code></td><td>그 인덱스의 문자</td></tr>
+</tbody></table>
+<h3>예제 6-7 · StringEx — a 가 바뀌는 과정 (수업 소스 = 교재 예제)</h3>
+<pre><code class="language-java">// 예제 6-7 (50쪽) · StringEx.java — String 메소드 활용 · a 가 바뀌는 과정 (수업 소스 = 교재 예제 그대로)
+public class 연습 {                              // 원래 이름 StringEx → 파일 이름도 연습.java
+    public static void main(String[] args) {    // 프로그램 시작
+        String a = new String(" C#");           // a = " C#" (맨 앞 공백 포함 3글자)
+        String b = new String(",C++ ");         // b = ",C++ " (맨 뒤 공백 포함 5글자)
+        System.out.println(a + "의 길이는 " + a.length());   // 공백 + C + # = 3 → " C#의 길이는 3" (앞 공백 그대로 출력)
+        System.out.println(a.contains("#"));    // " C#" 에 "#" 이 있음 → true
+        a = a.concat(b);                        // " C#" + ",C++ " → 새 문자열 " C#,C++ " 을 a 에 다시 대입 (원래 문자열은 안 바뀜)
+        System.out.println(a);                  // " C#,C++ " (앞뒤 공백 그대로)
+        a = a.trim();                           // 앞뒤 공백 제거 → "C#,C++"
+        System.out.println(a);                  // "C#,C++"
+        a = a.replace("C#", "Java");            // "C#" 을 "Java" 로 → "Java,C++"
+        System.out.println(a);                  // "Java,C++"
+        String s[] = a.split(",");              // "," 기준으로 나눔 → s[0] = "Java" · s[1] = "C++"
+        for (int i = 0; i &lt; s.length; i++)      // i = 0, 1 (s.length = 2)
+            System.out.println("분리된 문자열" + i + ": " + s[i]);   // "분리된 문자열0: Java" → "분리된 문자열1: C++"
+        a = a.substring(5);                     // "Java,C++" 의 인덱스 5 부터 끝까지 → J0 a1 v2 a3 ,4 C5 → "C++"
+        System.out.println(a);                  // "C++"
+        char c = a.charAt(2);                   // "C++" 의 인덱스 2 → C0 +1 +2 → '+'
+        System.out.println(c);                  // +
+    }                                           // main 끝
+}                                               // 연습 끝</code></pre>
+<pre class="io"><code class="language-text"> C#의 길이는 3
+true
+ C#,C++ 
+C#,C++
+Java,C++
+분리된 문자열0: Java
+분리된 문자열1: C++
+C++
++</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>줄</th><th>a 의 값</th></tr>
+<tr><td>처음</td><td><code>" C#"</code> (3글자 · 앞 공백)</td></tr>
+<tr><td><code>a.concat(b)</code></td><td><code>" C#,C++ "</code> (앞뒤 공백)</td></tr>
+<tr><td><code>a.trim()</code></td><td><code>"C#,C++"</code></td></tr>
+<tr><td><code>a.replace("C#","Java")</code></td><td><code>"Java,C++"</code></td></tr>
+<tr><td><code>a.split(",")</code></td><td>배열 <code>{"Java", "C++"}</code> (a 는 그대로)</td></tr>
+<tr><td><code>a.substring(5)</code></td><td><code>"C++"</code> (J0 a1 v2 a3 ,4 <b>C5</b> …)</td></tr>
+<tr><td><code>a.charAt(2)</code></td><td><code>'+'</code> (C0 +1 <b>+2</b>)</td></tr>
+</tbody></table>
+<ul><li>⚠️ 47쪽 오타 — <code>"I love ".concat("Java.")</code> 는 <code>"I Love Java."</code> 가 아니라 <b>"I love Java."</b> (소문자 l 그대로 · javac 확인)</li></ul>
+</section>
+<section class="card" id="s7">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../자바프로그래밍.html#quiz">자바프로그래밍 과목 페이지 — 퀴즈 (12주차 패키지 · toString · == · equals · Wrapper · String)</a></li><li><a href="../자바프로그래밍.html#output">🖥️ 출력 결과 맞히기 — == · equals · String 메소드 · Wrapper</a></li><li><a href="../자바프로그래밍.html#code">💻 코딩테스트 — toString() 오버라이딩 붕어빵 · equals() 작성</a></li><li><a href="자바프로그래밍-15주차-기말고사.html">기말고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-11주차.html">‹ 이전 · <b>11주차</b><br><small>5장 상속 (2) — 메소드 오버라이딩 · 동적 바인딩 · 추상 클래스 · 인터페이스</small></a><a class="next" href="자바프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「자바프로그래밍 · 12주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202611041620"></script>
+</body>
+</html>

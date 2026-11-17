@@ -319,6 +319,118 @@
     <text x="20" y="460" class="s">아무것도 안 골랐으면 null → alert</text></g>
 </svg>
 
+<!-- ⑫ 이벤트 핸들러 3가지 — 12주차 1117_01_event.html -->
+<svg data-fig="handler3" viewBox="0 0 600 500" role="img" aria-label="이벤트 핸들러를 다는 세 가지 방법 addEventListener DOM 프로퍼티 HTML 속성" hidden>
+  <g data-s="1"><rect x="14" y="14" width="572" height="124" rx="12" style="fill:var(--te);fill-opacity:.12;stroke:var(--te);stroke-width:2"/>
+    <text x="30" y="46" class="b">① addEventListener</text><text x="330" y="46" class="s b" style="fill:var(--te)">✍️ 가장 추천</text>
+    <text x="30" y="78" class="s m">button.addEventListener('click', 함수)</text>
+    <text x="30" y="106" class="s">여러 개 달면 → 모두 실행 (등록한 순서)</text>
+    <text x="30" y="130" class="s">이벤트 이름에 on 을 안 붙임 ('click')</text></g>
+  <g data-s="2"><rect x="14" y="150" width="572" height="104" rx="12" style="fill:var(--inh);fill-opacity:.12;stroke:var(--inh);stroke-width:2"/>
+    <text x="30" y="182" class="b">② DOM 프로퍼티</text>
+    <text x="30" y="214" class="s m">button2.onclick = 함수;</text>
+    <text x="30" y="242" class="s">다시 대입하면 덮어씀 → 마지막 하나만 실행</text></g>
+  <g data-s="3"><rect x="14" y="266" width="572" height="104" rx="12" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/>
+    <text x="30" y="298" class="b">③ HTML 속성</text>
+    <text x="30" y="330" class="s m">&lt;button onclick="btnClick3()"&gt;</text>
+    <text x="30" y="358" class="s">괄호 () 를 꼭 붙임 · 세미콜론은 있어도 없어도 OK</text></g>
+  <g data-s="4"><text x="30" y="404" class="s b">누르면 → 세 가지 모두 알림이 떠요 (크롬 확인)</text>
+    <text x="30" y="436" class="s">차이 = 같은 이벤트에 여러 개를 달 수 있느냐</text></g>
+  <g data-s="5"><text x="30" y="476" class="s">⚠️ 기본 = 버블링 · 세 번째 값 true 면 캡처링</text></g>
+</svg>
+
+<!-- ⑬ onload 순서 — 12주차 1117_01_event.html -->
+<svg data-fig="onload" viewBox="0 0 600 500" role="img" aria-label="페이지를 읽는 순서와 window onload 가 실행되는 때" hidden>
+  <g data-s="1"><rect x="14" y="14" width="572" height="76" rx="10" style="fill:var(--ap);fill-opacity:.1;stroke:var(--ap);stroke-width:2"/>
+    <text x="30" y="44" class="s b">① head 의 script — 아직 img 가 없음</text>
+    <text x="30" y="76" class="s m">getElementById('image') → null ✕</text></g>
+  <g data-s="2"><path class="ln" d="M300,92 L300,108"/><rect x="14" y="110" width="572" height="72" rx="10" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/>
+    <text x="30" y="140" class="s b">② body 를 읽으며 img · 버튼 3개 생성</text>
+    <text x="30" y="170" class="s m">&lt;img id="image"&gt; · &lt;button&gt; × 3</text></g>
+  <g data-s="3"><path class="ln" d="M300,184 L300,200"/><rect x="14" y="202" width="572" height="72" rx="10" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2"/>
+    <text x="30" y="232" class="s b">③ body 끝 script — 버튼이 이미 있음</text>
+    <text x="30" y="262" class="s m">addEventListener · onclick 등록</text></g>
+  <g data-s="4"><path class="ln" d="M300,276 L300,292"/><rect x="14" y="294" width="572" height="72" rx="10" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/>
+    <text x="30" y="324" class="s b">④ 로고 그림까지 다 받음 → load 이벤트</text>
+    <text x="30" y="354" class="s">✍️ onload 도 이벤트</text></g>
+  <g data-s="5"><path class="ln" d="M300,368 L300,384"/><rect x="14" y="386" width="572" height="100" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/>
+    <text x="30" y="416" class="s b">⑤ window.onload 실행 → img 를 찾음 ✓</text>
+    <text x="30" y="446" class="s m">image.src = 로고 · width · height = 200</text>
+    <text x="30" y="474" class="s">로고가 200 × 200 으로 뜸 (크롬 확인)</text></g>
+</svg>
+
+<!-- ⑭ 🔥 HTTP 메시지 구조 — 12주차 ✍️ 구글 캡처 (시험문제) · 예는 jsonplaceholder 실제 요청 · 응답 -->
+<svg data-fig="httpmsg" viewBox="0 0 600 560" role="img" aria-label="HTTP 요청 메시지와 응답 메시지는 시작 줄 헤더 빈 줄 바디 네 부분" hidden>
+  <g><text x="20" y="30" class="b">요청 메시지</text><text x="170" y="30" class="s">클라이언트 → 서버</text>
+    <text x="20" y="246" class="b">응답 메시지</text><text x="170" y="246" class="s">서버 → 클라이언트</text></g>
+  <g data-s="1"><rect x="14" y="44" width="572" height="40" rx="6" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="26" y="70" class="s b">① 시작 줄</text><text x="140" y="70" class="s m">GET /users/1 HTTP/1.1</text>
+    <rect x="14" y="260" width="572" height="40" rx="6" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/>
+    <text x="26" y="286" class="s b">① 시작 줄</text><text x="140" y="286" class="s m">HTTP/1.1 200 OK</text><text x="340" y="286" class="s">(200 = 성공)</text></g>
+  <g data-s="2"><rect x="14" y="88" width="572" height="40" rx="6" style="fill:var(--inh);fill-opacity:.16;stroke:var(--inh);stroke-width:2"/>
+    <text x="26" y="114" class="s b">② 헤더</text><text x="140" y="114" class="s m">Host: jsonplaceholder.typicode.com</text>
+    <rect x="14" y="304" width="572" height="40" rx="6" style="fill:var(--inh);fill-opacity:.16;stroke:var(--inh);stroke-width:2"/>
+    <text x="26" y="330" class="s b">② 헤더</text><text x="140" y="330" class="s m">Content-Type: application/json</text></g>
+  <g data-s="3"><rect x="14" y="132" width="572" height="32" rx="6" style="fill:none;stroke:var(--ink2);stroke-width:2;stroke-dasharray:6 5"/>
+    <text x="26" y="154" class="s b">③ 빈 줄</text><text x="140" y="154" class="s">(CRLF — 헤더 끝)</text>
+    <rect x="14" y="348" width="572" height="32" rx="6" style="fill:none;stroke:var(--ink2);stroke-width:2;stroke-dasharray:6 5"/>
+    <text x="26" y="370" class="s b">③ 빈 줄</text><text x="140" y="370" class="s">(CRLF — 헤더 끝)</text></g>
+  <g data-s="4"><rect x="14" y="168" width="572" height="40" rx="6" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/>
+    <text x="26" y="194" class="s b">④ 바디</text><text x="140" y="194" class="s">없음 (GET · 바디는 선택)</text>
+    <rect x="14" y="384" width="572" height="44" rx="6" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/>
+    <text x="26" y="412" class="s b">④ 바디</text><text x="140" y="412" class="s m">{"id": 1, "name": "Leanne Graham", …}</text></g>
+  <g data-s="5"><text x="20" y="468" class="s b">🔥 순서 = 시작 줄 → 헤더 → 빈 줄 → 바디</text>
+    <text x="20" y="500" class="s">빈 줄 = 헤더 끝 표시 · 바디는 없을 수도 있음</text>
+    <text x="20" y="532" class="s">✍️ 시험문제 — 구글 캡처를 그림으로 정리</text></g>
+</svg>
+
+<!-- ⑮ DNS · URL — 12주차 ✍️ DNS 필기 · 1117_02_fetch.html · 1주차 웹서비스 프로세스 -->
+<svg data-fig="dns" viewBox="0 0 600 500" role="img" aria-label="주소를 프로토콜 도메인 경로로 나누고 DNS 가 도메인을 IP 로 바꾼 뒤 서버에 요청하고 응답을 받음" hidden>
+  <g data-s="1"><rect x="14" y="20" width="100" height="40" rx="6" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/><text x="24" y="46" class="s m">https://</text>
+    <rect x="118" y="20" width="318" height="40" rx="6" style="fill:var(--inh);fill-opacity:.18;stroke:var(--inh);stroke-width:2"/><text x="128" y="46" class="s m">jsonplaceholder.typicode.com</text>
+    <rect x="440" y="20" width="110" height="40" rx="6" style="fill:var(--te);fill-opacity:.2;stroke:var(--te);stroke-width:2"/><text x="450" y="46" class="s m">/users/1</text>
+    <text x="24" y="86" class="s">프로토콜</text><text x="128" y="86" class="s">도메인 (호스트)</text><text x="450" y="86" class="s">경로</text></g>
+  <g><rect x="14" y="120" width="170" height="240" rx="12" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/>
+    <text x="30" y="152" class="b">브라우저</text><text x="30" y="180" class="s">주소창 · fetch</text>
+    <rect x="410" y="120" width="176" height="96" rx="12" style="fill:var(--oc);fill-opacity:.14;stroke:var(--oc);stroke-width:2"/>
+    <text x="426" y="152" class="b">DNS</text><text x="426" y="182" class="s">도메인 → IP 주소</text>
+    <rect x="410" y="264" width="176" height="96" rx="12" style="fill:var(--inh);fill-opacity:.12;stroke:var(--inh);stroke-width:2"/>
+    <text x="426" y="296" class="b">서버</text><text x="426" y="326" class="s">그 IP 의 웹 서버</text></g>
+  <g data-s="2"><path d="M188,176 L400,176" style="stroke:var(--oc);stroke-width:3;fill:none"/><path d="M398,169 L410,176 L398,183 Z" style="fill:var(--oc)"/>
+    <text x="198" y="164" class="s">① 도메인의 IP 는?</text>
+    <path d="M408,206 L196,206" style="stroke:var(--oc);stroke-width:3;fill:none"/><path d="M196,199 L184,206 L196,213 Z" style="fill:var(--oc)"/>
+    <text x="198" y="234" class="s">② IP 주소 알려 줌</text></g>
+  <g data-s="3"><path d="M188,300 L400,300" style="stroke:var(--inh);stroke-width:3;fill:none"/><path d="M398,293 L410,300 L398,307 Z" style="fill:var(--inh)"/>
+    <text x="198" y="288" class="s m">③ GET /users/1</text></g>
+  <g data-s="4"><path d="M408,334 L196,334" style="stroke:var(--te);stroke-width:3;fill:none"/><path d="M196,327 L184,334 L196,341 Z" style="fill:var(--te)"/>
+    <text x="198" y="360" class="s m">④ 200 OK + JSON</text></g>
+  <g data-s="5"><text x="20" y="408" class="s">1주차: http://210.89.160.88/news.html 혹은</text>
+    <text x="20" y="438" class="s">http://naver.com/news.html → 같은 서버 (DNS)</text>
+    <text x="20" y="474" class="s b">⚠️ DNS 는 도메인 이름만 IP 로 · 경로는 그대로</text></g>
+</svg>
+
+<!-- ⑯ 단일 · 멀티 스레드 — 12주차 ✍️ “멀티스레드 단일스레드 차이” (6주차 표) -->
+<svg data-fig="thread" viewBox="0 0 600 520" role="img" aria-label="단일 스레드는 한 줄로 차례대로 실행하고 기다리는 일은 브라우저가 맡으며 멀티 스레드는 여러 줄이 동시에" hidden>
+  <g data-s="1"><text x="20" y="34" class="b">단일 스레드 (자바스크립트)</text>
+    <path class="ax" d="M20,84 L586,84"/>
+    <rect x="20" y="62" width="128" height="44" rx="8" style="fill:var(--inh);fill-opacity:.25;stroke:var(--inh);stroke-width:2"/><text x="84" y="91" text-anchor="middle" class="s">요청 보냄</text>
+    <rect x="156" y="62" width="128" height="44" rx="8" style="fill:var(--inh);fill-opacity:.25;stroke:var(--inh);stroke-width:2"/><text x="220" y="91" text-anchor="middle" class="s">다음 코드</text>
+    <rect x="292" y="62" width="128" height="44" rx="8" style="fill:var(--inh);fill-opacity:.25;stroke:var(--inh);stroke-width:2"/><text x="356" y="91" text-anchor="middle" class="s">클릭 처리</text></g>
+  <g data-s="2"><path class="ln" d="M84,106 L84,128"/><path class="ln" d="M504,128 L504,106"/>
+    <rect x="70" y="128" width="450" height="44" rx="8" style="fill:none;stroke:var(--oc);stroke-width:2;stroke-dasharray:6 5"/>
+    <text x="295" y="156" text-anchor="middle" class="s">브라우저가 대신 기다림 (fetch · setTimeout)</text>
+    <rect x="452" y="62" width="128" height="44" rx="8" style="fill:var(--te);fill-opacity:.3;stroke:var(--te);stroke-width:2"/><text x="516" y="91" text-anchor="middle" class="s">응답 처리</text></g>
+  <g data-s="3"><text x="20" y="216" class="b">멀티 스레드</text>
+    <text x="20" y="254" class="s m">스레드 1</text><rect x="120" y="232" width="180" height="34" rx="8" style="fill:var(--oc);fill-opacity:.3"/><text x="210" y="254" text-anchor="middle" class="s">일 A</text>
+    <text x="20" y="298" class="s m">스레드 2</text><rect x="120" y="276" width="220" height="34" rx="8" style="fill:var(--oc);fill-opacity:.3"/><text x="230" y="298" text-anchor="middle" class="s">일 B</text>
+    <text x="20" y="342" class="s m">스레드 3</text><rect x="120" y="320" width="150" height="34" rx="8" style="fill:var(--oc);fill-opacity:.3"/><text x="195" y="342" text-anchor="middle" class="s">일 C</text>
+    <text x="370" y="298" class="s">→ 동시에 진행</text></g>
+  <g data-s="4"><text x="20" y="392" class="s">단일 = 일꾼 1명 · 한 번에 한 가지 (JS)</text>
+    <text x="20" y="422" class="s">멀티 = 일꾼 여러 명 · 동시에 (예: 자바 Thread)</text></g>
+  <g data-s="5"><text x="20" y="464" class="s b">오래 걸리는 일을 붙잡고 기다리면 → 화면이 멈춤</text>
+    <text x="20" y="496" class="s">그래서 JS 는 기다리지 않음 = 비동기 (6주차)</text></g>
+</svg>
+
 
     </div>
     <div class="ctl">
@@ -423,7 +535,47 @@
             "<code>[...liArray]</code> (spread · 7주차) 또는 <code>Array.from(liArray)</code> → <b>진짜 배열</b> → map 됨 · ⚠️ 주석의 <code>Array.form</code> 은 오타",
             "모든 li 의 class 를 지우고 → 누른 li 만 <code>setAttribute('class', 'active')</code>",
             "선택 삭제 — <code>querySelector('#list .active')</code> 로 찾아 <code>remove()</code> · 안 골랐으면 <b>null</b> → alert" ],
-          note: "🤖 여기서 map 은 새 배열을 안 쓰니 forEach 가 더 알맞아요(관례) · 선택 수정 버튼은 아직 리스너가 없어요" }
+          note: "🤖 여기서 map 은 새 배열을 안 쓰니 forEach 가 더 알맞아요(관례) · 선택 수정 버튼은 아직 리스너가 없어요" },
+        { id: "handler3", week: 12, tab: "⑫ 핸들러 3가지", src: "12주차 수업 파일 1117_01_event.html — myButton(addEventListener) · myButton2(onclick) · onclick=\"btnClick3()\"",
+          steps: [
+            "<b>① addEventListener</b> — <code>button.addEventListener('click', 함수)</code> · ✍️ “많이 쓰고 활용하는 것을 가장 추천” · 같은 이벤트에 <b>여러 개</b> 달면 등록한 순서대로 모두 실행",
+            "<b>② DOM 프로퍼티</b> — <code>button2.onclick = 함수;</code> · 다시 대입하면 앞의 것을 <b>덮어씀</b> (jsdom 확인: 두 번째만 실행)",
+            "<b>③ HTML 속성</b> — <code>&lt;button onclick=\"btnClick3()\"&gt;</code> · 속성에는 실행할 <b>코드</b>를 써서 괄호 <code>()</code> 를 붙임 · ✍️ 세미콜론은 있어도 없어도 문제없음",
+            "크롬에서 세 버튼을 눌러 보니 세 가지 모두 알림이 떠요 — 진짜 차이는 <b>핸들러를 여러 개 달 수 있느냐</b>",
+            "⚠️ 수업 주석 “방식: 버블링” — addEventListener 는 <b>기본이 버블링</b>(세 번째 값 true 면 캡처링) · ② ③ 도 버블링 단계에서 실행" ],
+          note: "🤖 jsdom 확인 — <code>addEventListener('onclick', …)</code> 처럼 on 을 붙이면 눌러도 실행 안 됨 · <code>onclick=\"btnClick3\"</code> (괄호 없음)도 실행 안 됨" },
+        { id: "onload", week: 12, tab: "⑬ onload 순서", src: "12주차 1117_01_event.html — head 의 window.onload = () => { … } · body 끝 script",
+          steps: [
+            "① head 의 script 가 먼저 실행 — 이때는 body 의 <code>&lt;img id=\"image\"&gt;</code> 가 <b>아직 없음</b> → onload 없이 찾으면 <b>null</b>",
+            "② 브라우저가 body 를 읽으며 img · 버튼 3개를 만듦",
+            "③ body 끝 script — 버튼이 이미 있어서 바로 찾아 핸들러를 등록",
+            "④ 로고 그림까지 다 받으면 <b>load 이벤트</b> — ✍️ “onload 도 이벤트”",
+            "⑤ <code>window.onload</code> 에 넣은 함수 실행 → img 를 찾아 src · 200 × 200 → 로고가 뜸 (크롬 확인)" ],
+          note: "🤖 jsdom 확인 — onload 없이 head 에서 <code>image.width = 200</code> → <code>TypeError: Cannot set properties of null (setting 'width')</code> · 다른 방법 = script 를 body 맨 끝에" },
+        { id: "httpmsg", week: 12, tab: "⑭ 🔥 HTTP 메시지", src: "12주차 ✍️ 구글 캡처 “http메시지 구조가 뭐야” — claude 가 그림 그려서 정리 (시험문제) · 예는 jsonplaceholder 에 curl 로 직접 요청한 실제 값",
+          steps: [
+            "<b>① 시작 줄</b> — 메시지의 목적 · 요청 = <b>방식 · 주소 · 버전</b> <code>GET /users/1 HTTP/1.1</code> · 응답 = <b>버전 · 상태 코드 · 상태 글</b> <code>HTTP/1.1 200 OK</code>",
+            "<b>② 헤더</b> — 메시지에 대한 <b>부가 정보</b>(메타데이터) · <code>이름: 값</code> 줄 여러 개 (<code>Host</code> · <code>Content-Type</code>)",
+            "<b>③ 빈 줄</b> (CRLF) — <b>헤더가 끝났다</b>는 표시 → 헤더와 바디를 구분",
+            "<b>④ 바디</b> — 실제로 보내거나 돌려받는 <b>데이터</b> · <b>선택 사항</b> (GET 요청은 보통 없음 · 응답은 JSON)",
+            "🔥 순서 = <b>시작 줄 → 헤더 → 빈 줄 → 바디</b> · HTTP 메시지는 <b>요청 · 응답</b> 2가지" ],
+          note: "⚠️ 팩트체크 — 캡처(구글 AI 개요 · 출처 MDN) 내용은 MDN “HTTP messages” 와 같음 · 그림의 줄은 실제 값 (헤더는 일부만) · 🤖 200 = 성공 · CRLF = 줄 끝 두 글자 <code>\\r\\n</code>" },
+        { id: "dns", week: 12, tab: "⑮ DNS · URL", src: "12주차 ✍️ “url주소를 입력하고 ip주소로 자동으로 바꿔서 … Domain Name System” · 1117_02_fetch.html · 1주차 웹서비스 프로세스 (5쪽)",
+          steps: [
+            "주소 해부 — <code>https://</code> 프로토콜 · <code>jsonplaceholder.typicode.com</code> <b>도메인</b> · <code>/users/1</code> 경로 (✍️ users 의 id 가 1번인 사람)",
+            "<b>DNS</b> 에 도메인의 IP 를 물어봐서 → <b>IP 주소</b>를 받음",
+            "그 IP 의 서버에 <b>요청 메시지</b> <code>GET /users/1 HTTP/1.1</code> (fetch 2번째 파라미터 생략 = GET)",
+            "서버가 <b>응답 메시지</b> <code>HTTP/1.1 200 OK</code> + JSON 바디를 돌려줌",
+            "1주차 슬라이드 — <code>http://210.89.160.88/news.html</code> 혹은 <code>http://naver.com/news.html</code> → 같은 서버 · ⚠️ DNS 가 바꾸는 건 <b>도메인 이름만</b>" ],
+          note: "⚠️ 필기 “.com 까지 URI 전체가 URL” — 표준(RFC 3986)은 주소 전체가 URL 이자 URI · 요청 시작 줄에서는 <code>/users/1</code> 을 요청 URI 라고도 불러요 (RFC 2616) · 🤖 ① ~ ④ 순서는 설명용" },
+        { id: "thread", week: 12, tab: "⑯ 단일 · 멀티 스레드", src: "12주차 ✍️ “멀티스레드 단일스레드 차이” (6주차 표 복습) · fetch · setTimeout",
+          steps: [
+            "<b>단일 스레드</b> — 일하는 흐름이 <b>1개</b> → 요청 보냄 · 다음 코드 · 클릭 처리를 <b>한 줄로 차례대로</b> (자바스크립트)",
+            "응답처럼 언제 올지 모르는 일은 <b>브라우저가 대신 기다림</b> → 응답이 오면 그때 <b>응답 처리</b> (비동기)",
+            "<b>멀티 스레드</b> — 스레드가 <b>여러 개</b> → 일 A · B · C 를 <b>동시에</b>",
+            "단일 = 일꾼 1명 · 한 번에 한 가지 / 멀티 = 일꾼 여러 명 · 동시에 (🤖 예: 자바 Thread)",
+            "오래 걸리는 일을 붙잡고 기다리면 화면이 멈춤 → 그래서 JS 는 <b>기다리지 않음</b> (6주차 setTimeout 과 같은 비동기)" ],
+          note: "🤖 node 확인 — <code>console.log(\"요청\"); setTimeout(…, 0); console.log(\"다음\");</code> → 요청 · 다음 · (타이머) 순서 · ⚠️ 필기 오타 “멀티스레스 · 단일스레스” → 스레드" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202611041620"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자바프로그래밍 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</title>
-    <meta name="description" content="자바프로그래밍 15주차 정리 — 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)">
+    <title>자바프로그래밍 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</title>
+    <meta name="description" content="자바프로그래밍 15주차 정리 — 기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="자바프로그래밍 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11주차 반영)">
+    <meta property="og:title" content="자바프로그래밍 15주차 · 기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)">
     <meta property="og:description" content="자바프로그래밍 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -99,17 +99,17 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>☕ 자바프로그래밍 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-11주차.html">‹ 이전 · <b>11주차</b><br><small>5장 상속 (2) — 메소드 오버라이딩 · 동적 바인딩 · 추상 클래스 · 인터페이스</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-12주차.html">‹ 이전 · <b>12주차</b><br><small>6장 패키지 · Object(toString · equals) · Wrapper · String — ✍️ 43쪽 e == f 가 false 인 이유</small></a><span></span></nav>
 
-<div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 필기평가1 <b>30점</b> · 직무수행능력평가 (실습 중심)였어요. 9 · 10 · 11주차 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a> 에 있어요.</div>
+<div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 필기평가1 <b>30점</b> · 직무수행능력평가 (실습 중심)였어요. 9 · 10 · 11 · 12주차 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a> 에 있어요.</div>
 <section class="card" id="s1">
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/자바프로그래밍-그림정리.html?weeks=9-15#thiscall" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/자바프로그래밍-그림정리.html?weeks=9-15#thiscall" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차 — ① this() · ② 메소드 오버로딩 · ③ 접근 지정자 · ④ static · ⑤ 객체 배열</li><li>10주차 — ⑥ 상속 객체 · ⑦ 생성자 호출 순서 · ⑧ super() 고르기 · ⑨ 과제 상속 · toString</li><li>11주차 — ⑩ 오버라이딩 · 동적 바인딩 · ⑪ 추상 클래스 · ⑫ 인터페이스 · ⑬ 상속 + 다중 구현 · ⑭ 추상 클래스 vs 인터페이스</li></ul>
+<ul><li>9주차 — ① this() · ② 메소드 오버로딩 · ③ 접근 지정자 · ④ static · ⑤ 객체 배열</li><li>10주차 — ⑥ 상속 객체 · ⑦ 생성자 호출 순서 · ⑧ super() 고르기 · ⑨ 과제 상속 · toString</li><li>11주차 — ⑩ 오버라이딩 · 동적 바인딩 · ⑪ 추상 클래스 · ⑫ 인터페이스 · ⑬ 상속 + 다중 구현 · ⑭ 추상 클래스 vs 인터페이스</li><li>12주차 — ⑮ 패키지 · import · ⑯ Object · toString · ⑰ == vs equals · ⑱ Wrapper · 박싱 · ⑲ String 메소드</li></ul>
 </section>
 <section class="card" id="s2">
 <h2>9주차 · 4장 클래스 — this() · 오버로딩 · 접근 지정자 · static · 객체 배열</h2>
@@ -157,8 +157,23 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="자바프로그래밍-11주차.html">11주차</a> · 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a>.</div>
 </section>
+<section class="card" id="s5">
+<h2>12주차 · 6장 — 패키지 · Object(toString · equals) · Wrapper · 박싱 · String</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>패키지 · import</td><td>같은 이름 클래스 충돌 → <b>디렉터리(패키지)</b> 로 구분 · 경로명 <code>java.util.Scanner</code> (점으로 연결) · <code>package 이름;</code> = <b>첫 줄</b> · <code>import java.util.Scanner;</code> · <code>import java.util.*;</code> (하위 패키지 X) · import 없으면 <b>전체 경로명</b> · <b>java.lang 은 자동 import</b> (2 ~ 8 · 26쪽)</td><td>⑮</td></tr>
+<tr><td>✍️ 같은 패키지 · 같은 이름</td><td><b>만들 수 없음</b> — javac <code>duplicate class: test.Point</code> · <b>다른 패키지면 OK</b> (18쪽)</td><td>⑮</td></tr>
+<tr><td>Object · toString()</td><td><b>모든 클래스의 수퍼 클래스</b> (강제 상속) · <code>객체 + 문자열</code> → <code>객체.toString() + 문자열</code> 자동 · 안 쓰면 <code>Point@15db9742</code> · 오버라이딩할 때 public 빼면 오류 (28 · 30쪽) · 수업 Point · Car · 붕어빵</td><td>⑯</td></tr>
+<tr><td>✍️ == vs equals() (43쪽 질문)</td><td><code>==</code> = <b>레퍼런스(주소)</b> 비교 · <code>equals()</code> = <b>내용</b> 비교 · 리터럴은 공유 → <code>a == c</code> <b>true</b> · <code>new String</code> 은 힙에 새 객체 → <code>e == f</code> <b>false</b> · <code>e.equals(f)</code> <b>true</b> · equals 를 안 쓴 Point 는 equals 도 false (32 · 43쪽)</td><td>⑰</td></tr>
+<tr><td>Wrapper 클래스</td><td>기본 타입 8개를 클래스로 — <b>int → Integer · char → Character</b> · 많은 메소드가 <b>static</b> — <code>Integer.parseInt("100")</code> → 100 · <code>toHexString(28)</code> → 1c · <code>toBinaryString(28)</code> → 11100 (⚠️ 39쪽 주석은 서로 바뀜)</td><td>⑱</td></tr>
+<tr><td>박싱 · 언박싱</td><td><b>박싱</b> = 기본 타입 → Wrapper 객체 <code>Integer.valueOf(10)</code> · <b>언박싱</b> = 값 빼내기 <code>intValue()</code> · 자동 (JDK 1.5 부터) <code>Integer ten = 10;</code> → 예제 6-6 <code>m = 20</code> (40 · 41쪽)</td><td>⑱</td></tr>
+<tr><td>String 메소드</td><td><b>수정 불가</b> (concat 은 새 문자열) · 예제 6-7 — <code>" C#"</code> 길이 <b>3</b> · concat → <code>" C#,C++ "</code> · trim → <code>"C#,C++"</code> · replace → <code>"Java,C++"</code> · split → Java / C++ · substring(5) → <b>C++</b> · charAt(2) → <b>+</b></td><td>⑲</td></tr>
+</tbody></table>
+<div class="tip">자세한 코드 · 실행 결과는 <a href="자바프로그래밍-12주차.html">12주차</a> · 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a>.</div>
+</section>
 
-    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-11주차.html">‹ 이전 · <b>11주차</b><br><small>5장 상속 (2) — 메소드 오버라이딩 · 동적 바인딩 · 추상 클래스 · 인터페이스</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-12주차.html">‹ 이전 · <b>12주차</b><br><small>6장 패키지 · Object(toString · equals) · Wrapper · String — ✍️ 43쪽 e == f 가 false 인 이유</small></a><span></span></nav>
 
     <p class="wk-src">노션 「자바프로그래밍」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

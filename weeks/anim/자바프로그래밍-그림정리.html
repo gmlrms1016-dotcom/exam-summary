@@ -368,6 +368,134 @@
     <text x="12" y="458" class="s">인터페이스 = 기능을 모두 공개한 표준화 문서 (62쪽)</text></g>
 </svg>
 
+<!-- ⑮ 패키지 · import — 6장 2 · 4 · 7 · 8 · 18 · 26쪽 · 12주차 Tools.java -->
+<svg data-fig="package" viewBox="0 0 600 560" role="img" aria-label="세 개발자의 같은 이름 Tools 클래스를 패키지로 구분하고 import 와 경로명으로 쓰기" hidden>
+  <g data-s="1"><rect x="14" y="14" width="182" height="158" rx="10" style="fill:var(--oc);fill-opacity:.12;stroke:var(--oc);stroke-width:2"/>
+    <text x="28" y="42" class="s b">FileIO 작업</text>
+    <text x="28" y="74" class="s m">WebFile</text><text x="28" y="102" class="s m">FileCopy</text><text x="28" y="130" class="s m">FileRW</text><text x="28" y="158" class="s m b" style="fill:var(--ap)">Tools</text>
+    <rect x="209" y="14" width="182" height="158" rx="10" style="fill:var(--inh);fill-opacity:.12;stroke:var(--inh);stroke-width:2"/>
+    <text x="223" y="42" class="s b">Graphic 작업</text>
+    <text x="223" y="74" class="s m">Shape</text><text x="223" y="102" class="s m">Line</text><text x="223" y="130" class="s m">Rect</text><text x="223" y="158" class="s m">Circle</text>
+    <rect x="404" y="14" width="182" height="158" rx="10" style="fill:var(--te);fill-opacity:.12;stroke:var(--te);stroke-width:2"/>
+    <text x="418" y="42" class="s b">UI 작업</text>
+    <text x="418" y="74" class="s m">Main</text><text x="418" y="102" class="s m b" style="fill:var(--ap)">Tools</text><text x="418" y="130" class="s m">GUI</text><text x="418" y="158" class="s m">EventHandler</text>
+    <text x="20" y="204" class="s b" style="fill:var(--ap)">같은 이름 Tools → 합칠 때 오류 (2쪽)</text></g>
+  <g data-s="2"><text x="20" y="242" class="s b">패키지 = 디렉터리로 묶기 → 경로명은 점(.)으로</text>
+    <rect x="14" y="256" width="280" height="42" rx="8" style="fill:var(--oc);fill-opacity:.18;stroke:var(--oc);stroke-width:2"/><text x="26" y="284" class="s m">Project.FileIO.Tools</text>
+    <rect x="306" y="256" width="280" height="42" rx="8" style="fill:var(--te);fill-opacity:.18;stroke:var(--te);stroke-width:2"/><text x="318" y="284" class="s m">Project.UI.Tools</text></g>
+  <g data-s="3"><text x="20" y="334" class="s b">다른 패키지의 클래스 쓰기 (7쪽)</text>
+    <text x="20" y="364" class="s m">import java.util.Scanner;</text>
+    <text x="20" y="394" class="s">import 를 안 쓰면 → 전체 경로명</text>
+    <text x="20" y="424" class="s m">java.util.Scanner sc = new java.util.Scanner(…);</text></g>
+  <g data-s="4"><text x="20" y="462" class="s">java.lang 은 자동 import → String = java.lang.String</text></g>
+  <g data-s="5"><text x="20" y="504" class="s b" style="fill:var(--ap)">✍️ 같은 패키지 · 같은 이름 → duplicate class 오류</text>
+    <text x="20" y="536" class="s">다른 패키지면 OK — a.Tools · b.Tools (18쪽)</text></g>
+</svg>
+
+<!-- ⑯ Object · toString — 6장 28 · 30쪽 · 12주차 Point.java · Car.java · FishBread.java -->
+<svg data-fig="tostring" viewBox="0 0 600 540" role="img" aria-label="모든 클래스의 수퍼 클래스 Object 와 toString 오버라이딩 그리고 객체 더하기 문자열 자동 변환" hidden>
+  <g data-s="1"><rect x="120" y="14" width="360" height="96" rx="12" style="fill:var(--oc);fill-opacity:.16;stroke:var(--oc);stroke-width:2"/>
+    <text x="300" y="44" text-anchor="middle" class="b">Object (java.lang)</text>
+    <text x="300" y="72" text-anchor="middle" class="s">모든 클래스의 수퍼 클래스 · 강제 상속</text>
+    <text x="300" y="98" text-anchor="middle" class="s m">toString · equals · hashCode</text></g>
+  <g data-s="2"><path class="ln" d="M300,166 L300,124"/><path d="M292,126 L300,112 L308,126 Z" style="fill:var(--card);stroke:var(--ink2);stroke-width:1.6"/>
+    <text x="316" y="146" class="s">extends 안 써도 상속</text>
+    <rect x="120" y="166" width="360" height="104" rx="12" style="fill:var(--inh);fill-opacity:.12;stroke:var(--inh);stroke-width:2"/>
+    <text x="140" y="196" class="s m b">class Point</text>
+    <text x="140" y="226" class="s m">@Override</text>
+    <text x="140" y="254" class="s m">public String toString()</text></g>
+  <g data-s="3"><text x="20" y="308" class="s b">객체 + 문자열 → 객체.toString() + 문자열 (30쪽)</text>
+    <text x="20" y="340" class="s m">println(p)  →  println(p.toString())</text>
+    <text x="20" y="370" class="s m">"car1" + car1  →  "car1" + car1.toString()</text></g>
+  <g data-s="4"><rect x="14" y="392" width="280" height="76" rx="10" style="fill:var(--card);stroke:var(--ink2);stroke-width:2;stroke-dasharray:6 5"/>
+    <text x="26" y="420" class="s">안 쓰면 (Object 것 · 30쪽)</text><text x="26" y="452" class="s m">Point@15db9742</text>
+    <rect x="306" y="392" width="280" height="76" rx="10" style="fill:var(--te);fill-opacity:.16;stroke:var(--te);stroke-width:2"/>
+    <text x="318" y="420" class="s">오버라이딩하면 (수업)</text><text x="318" y="452" class="s m">x : 2 [탭] y : 3</text></g>
+  <g data-s="5"><text x="20" y="500" class="s">public 을 빼면 → weaker access privileges 오류</text>
+    <text x="20" y="530" class="s">Car · 붕어빵도 같은 방법 (수업 소스)</text></g>
+</svg>
+
+<!-- ⑰ == vs equals — 6장 32 · 43 · 44쪽 · ✍️ 43쪽 질문 -->
+<svg data-fig="equals" viewBox="0 0 600 600" role="img" aria-label="스트링 리터럴은 테이블에서 공유하고 new String 은 힙에 새 객체를 만들어 e == f 는 false e.equals(f) 는 true" hidden>
+  <g data-s="1"><text x="330" y="22" class="s b">리터럴 테이블 (JVM · 공유)</text>
+    <rect x="320" y="32" width="266" height="164" rx="12" style="fill:var(--oc);fill-opacity:.1;stroke:var(--oc);stroke-width:2"/>
+    <rect x="380" y="50" width="140" height="36" rx="6" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="450" y="74" text-anchor="middle" class="s m">"Hello"</text>
+    <rect x="380" y="110" width="140" height="36" rx="6" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="450" y="134" text-anchor="middle" class="s m">"Java"</text>
+    <text x="24" y="75" class="b m">a</text><rect x="50" y="51" width="54" height="34" rx="4" style="fill:var(--schwann);fill-opacity:.22;stroke:var(--schwann);stroke-width:2"/><circle cx="77" cy="68" r="5" style="fill:var(--ink)"/>
+    <path class="ln" d="M77,68 L374,68"/><text x="118" y="60" class="s m">"Hello"</text>
+    <text x="24" y="135" class="b m">b</text><rect x="50" y="111" width="54" height="34" rx="4" style="fill:var(--schwann);fill-opacity:.22;stroke:var(--schwann);stroke-width:2"/><circle cx="77" cy="128" r="5" style="fill:var(--ink)"/>
+    <path class="ln" d="M77,128 L374,128"/><text x="118" y="120" class="s m">"Java"</text>
+    <text x="24" y="189" class="b m">c</text><rect x="50" y="165" width="54" height="34" rx="4" style="fill:var(--schwann);fill-opacity:.22;stroke:var(--schwann);stroke-width:2"/><circle cx="77" cy="182" r="5" style="fill:var(--ink)"/>
+    <path d="M77,182 L374,80" style="stroke:var(--ap);stroke-width:2;fill:none"/><text x="118" y="222" class="s m">"Hello" → 공유</text></g>
+  <g data-s="2"><text x="330" y="252" class="s b">힙 메모리 (new 마다 새 객체)</text>
+    <rect x="320" y="262" width="266" height="186" rx="12" style="fill:var(--inh);fill-opacity:.1;stroke:var(--inh);stroke-width:2"/>
+    <rect x="380" y="280" width="140" height="36" rx="6" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="450" y="304" text-anchor="middle" class="s m">"Hello"</text>
+    <rect x="380" y="340" width="140" height="36" rx="6" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="450" y="364" text-anchor="middle" class="s m">"Java"</text>
+    <rect x="380" y="400" width="140" height="36" rx="6" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="450" y="424" text-anchor="middle" class="s m">"Java"</text>
+    <text x="24" y="305" class="b m">d</text><rect x="50" y="281" width="54" height="34" rx="4" style="fill:var(--schwann);fill-opacity:.22;stroke:var(--schwann);stroke-width:2"/><circle cx="77" cy="298" r="5" style="fill:var(--ink)"/>
+    <path class="ln" d="M77,298 L374,298"/><text x="112" y="290" class="s m">new String("Hello")</text>
+    <text x="24" y="365" class="b m">e</text><rect x="50" y="341" width="54" height="34" rx="4" style="fill:var(--schwann);fill-opacity:.22;stroke:var(--schwann);stroke-width:2"/><circle cx="77" cy="358" r="5" style="fill:var(--ink)"/>
+    <path class="ln" d="M77,358 L374,358"/><text x="112" y="350" class="s m">new String("Java")</text>
+    <text x="24" y="425" class="b m">f</text><rect x="50" y="401" width="54" height="34" rx="4" style="fill:var(--schwann);fill-opacity:.22;stroke:var(--schwann);stroke-width:2"/><circle cx="77" cy="418" r="5" style="fill:var(--ink)"/>
+    <path class="ln" d="M77,418 L374,418"/><text x="112" y="410" class="s m">new String("Java")</text></g>
+  <g data-s="3"><text x="20" y="486" class="s m">a == c → true</text><text x="240" y="486" class="s">같은 객체 (주소 같음)</text>
+    <text x="20" y="518" class="s m b" style="fill:var(--ap)">e == f → false</text><text x="240" y="518" class="s">다른 객체 (주소 비교)</text></g>
+  <g data-s="4"><text x="20" y="550" class="s m b" style="fill:var(--te)">e.equals(f) → true</text><text x="240" y="550" class="s">내용 "Java" 를 비교</text></g>
+  <g data-s="5"><text x="20" y="584" class="s">✍️ 43쪽 질문의 답 · 내용 비교는 equals() · == 도 오류는 아님</text></g>
+</svg>
+
+<!-- ⑱ Wrapper · 박싱 — 6장 35 · 37 · 38 · 40쪽 · 12주차 WrapperEx.java -->
+<svg data-fig="wrapper" viewBox="0 0 600 560" role="img" aria-label="기본 타입 8개와 Wrapper 클래스 그리고 박싱과 언박싱" hidden>
+  <g data-s="1">
+    <rect x="14" y="14" width="139" height="88" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="83" y="44" text-anchor="middle" class="s m">byte</text><path class="ln" d="M83,52 L83,68"/><text x="83" y="90" text-anchor="middle" class="s m b">Byte</text>
+    <rect x="157" y="14" width="139" height="88" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="226" y="44" text-anchor="middle" class="s m">short</text><path class="ln" d="M226,52 L226,68"/><text x="226" y="90" text-anchor="middle" class="s m b">Short</text>
+    <rect x="300" y="14" width="139" height="88" rx="8" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/><text x="369" y="44" text-anchor="middle" class="s m">int</text><path class="ln" d="M369,52 L369,68"/><text x="369" y="90" text-anchor="middle" class="s m b">Integer</text>
+    <rect x="443" y="14" width="139" height="88" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="512" y="44" text-anchor="middle" class="s m">long</text><path class="ln" d="M512,52 L512,68"/><text x="512" y="90" text-anchor="middle" class="s m b">Long</text>
+    <rect x="14" y="110" width="139" height="88" rx="8" style="fill:var(--oc);fill-opacity:.2;stroke:var(--oc);stroke-width:2"/><text x="83" y="140" text-anchor="middle" class="s m">char</text><path class="ln" d="M83,148 L83,164"/><text x="83" y="186" text-anchor="middle" class="s m b">Character</text>
+    <rect x="157" y="110" width="139" height="88" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="226" y="140" text-anchor="middle" class="s m">float</text><path class="ln" d="M226,148 L226,164"/><text x="226" y="186" text-anchor="middle" class="s m b">Float</text>
+    <rect x="300" y="110" width="139" height="88" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="369" y="140" text-anchor="middle" class="s m">double</text><path class="ln" d="M369,148 L369,164"/><text x="369" y="186" text-anchor="middle" class="s m b">Double</text>
+    <rect x="443" y="110" width="139" height="88" rx="8" style="fill:var(--card);stroke:var(--ink2);stroke-width:2"/><text x="512" y="140" text-anchor="middle" class="s m">boolean</text><path class="ln" d="M512,148 L512,164"/><text x="512" y="186" text-anchor="middle" class="s m b">Boolean</text>
+    <text x="20" y="228" class="s">위 = 기본 타입 · 아래 = Wrapper 클래스 (35쪽)</text></g>
+  <g data-s="2"><text x="20" y="262" class="s b">Wrapper 라는 클래스는 없음 · 기본 타입 값을 객체로</text></g>
+  <g data-s="3"><text x="20" y="302" class="s m">int n</text>
+    <rect x="20" y="314" width="100" height="44" rx="4" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="70" y="343" text-anchor="middle" class="m">10</text>
+    <text x="452" y="302" class="s">Integer 객체</text>
+    <rect x="450" y="308" width="136" height="56" rx="12" style="fill:var(--inh);fill-opacity:.14;stroke:var(--inh);stroke-width:2"/>
+    <rect x="474" y="316" width="88" height="40" rx="4" style="fill:var(--card);stroke:var(--inh);stroke-width:2"/><text x="518" y="343" text-anchor="middle" class="m">10</text>
+    <path d="M126,324 L438,324" style="stroke:var(--te);stroke-width:3;fill:none"/><path d="M434,317 L446,324 L434,331 Z" style="fill:var(--te)"/>
+    <text x="140" y="314" class="s m">박싱 Integer.valueOf(10)</text>
+    <path d="M444,348 L134,348" style="stroke:var(--oc);stroke-width:3;fill:none"/><path d="M136,341 L124,348 L136,355 Z" style="fill:var(--oc)"/>
+    <text x="140" y="378" class="s m">언박싱 ten.intValue()</text></g>
+  <g data-s="4"><text x="20" y="420" class="s b">자동 박싱 · 언박싱 (JDK 1.5 부터)</text>
+    <text x="20" y="450" class="s m">Integer ten = 10;  int n = ten;</text></g>
+  <g data-s="5"><text x="20" y="490" class="s b">많은 메소드가 static → 클래스 이름으로 호출</text>
+    <text x="20" y="520" class="s m">Integer.parseInt("100") → 100</text>
+    <text x="20" y="548" class="s m">toHexString(28) → 1c · toBinaryString(28) → 11100</text></g>
+</svg>
+
+<!-- ⑲ String 메소드 — 6장 44 · 45 · 48 · 49 · 50쪽 · 예제 6-7 · 12주차 StringEx.java -->
+<svg data-fig="strmeth" viewBox="0 0 600 530" role="img" aria-label="예제 6-7 에서 문자열 a 가 concat trim replace split substring charAt 으로 바뀌는 과정" hidden>
+  <g data-s="1"><text x="20" y="40" class="s m">new String(" C#")</text><text x="252" y="40" class="s">→</text><text x="300" y="40" class="m">" C#"</text><text x="430" y="40" class="s">길이 3</text></g>
+  <g data-s="2"><text x="20" y="96" class="s m">.concat(b)</text><text x="252" y="96" class="s">→</text><text x="300" y="96" class="m">" C#,C++ "</text><text x="470" y="96" class="s">새 문자열</text>
+    <text x="20" y="146" class="s m">.trim()</text><text x="252" y="146" class="s">→</text><text x="300" y="146" class="m">"C#,C++"</text><text x="470" y="146" class="s">앞뒤 공백 ✕</text></g>
+  <g data-s="3"><text x="20" y="206" class="s m">.replace("C#","Java")</text><text x="252" y="206" class="s">→</text><text x="300" y="206" class="m">"Java,C++"</text>
+    <text x="20" y="256" class="s m">.split(",")</text><text x="252" y="256" class="s">→</text><text x="300" y="256" class="m">{"Java", "C++"}</text></g>
+  <g data-s="4"><text x="20" y="318" class="s m">substring(5)</text>
+    <rect x="170" y="290" width="46" height="42" style="fill:var(--card);stroke:var(--ink2);stroke-width:1.6"/><text x="193" y="318" text-anchor="middle" class="m">J</text>
+    <rect x="216" y="290" width="46" height="42" style="fill:var(--card);stroke:var(--ink2);stroke-width:1.6"/><text x="239" y="318" text-anchor="middle" class="m">a</text>
+    <rect x="262" y="290" width="46" height="42" style="fill:var(--card);stroke:var(--ink2);stroke-width:1.6"/><text x="285" y="318" text-anchor="middle" class="m">v</text>
+    <rect x="308" y="290" width="46" height="42" style="fill:var(--card);stroke:var(--ink2);stroke-width:1.6"/><text x="331" y="318" text-anchor="middle" class="m">a</text>
+    <rect x="354" y="290" width="46" height="42" style="fill:var(--card);stroke:var(--ink2);stroke-width:1.6"/><text x="377" y="318" text-anchor="middle" class="m">,</text>
+    <rect x="400" y="290" width="46" height="42" style="fill:var(--te);fill-opacity:.3;stroke:var(--te);stroke-width:2"/><text x="423" y="318" text-anchor="middle" class="m">C</text>
+    <rect x="446" y="290" width="46" height="42" style="fill:var(--te);fill-opacity:.3;stroke:var(--te);stroke-width:2"/><text x="469" y="318" text-anchor="middle" class="m">+</text>
+    <rect x="492" y="290" width="46" height="42" style="fill:var(--te);fill-opacity:.3;stroke:var(--te);stroke-width:2"/><text x="515" y="318" text-anchor="middle" class="m">+</text>
+    <text x="193" y="358" text-anchor="middle" class="s m">0</text><text x="239" y="358" text-anchor="middle" class="s m">1</text><text x="285" y="358" text-anchor="middle" class="s m">2</text><text x="331" y="358" text-anchor="middle" class="s m">3</text>
+    <text x="377" y="358" text-anchor="middle" class="s m">4</text><text x="423" y="358" text-anchor="middle" class="s m b">5</text><text x="469" y="358" text-anchor="middle" class="s m">6</text><text x="515" y="358" text-anchor="middle" class="s m">7</text>
+    <text x="20" y="402" class="s m">a.substring(5)</text><text x="252" y="402" class="s">→</text><text x="300" y="402" class="m">"C++"</text><text x="430" y="402" class="s">5부터 끝까지</text></g>
+  <g data-s="5"><text x="20" y="456" class="s m">a.charAt(2)</text><text x="252" y="456" class="s">→</text><text x="300" y="456" class="m">'+'</text><text x="430" y="456" class="s">C0 +1 +2</text>
+    <text x="20" y="508" class="s">String 은 수정 불가 → 다시 대입: a = a.concat(b)</text></g>
+</svg>
+
 
     </div>
     <div class="ctl">
@@ -496,7 +624,47 @@
             "필드 — 추상 클래스는 상수 · <b>변수 필드 O</b> · 인터페이스는 <b>변수 필드 X</b> (상수만)",
             "공통 — 둘 다 <b>객체 생성 불가</b> · 상속을 위한 슈퍼 클래스로만 · <b>다형성</b> 실현",
             "목적 — 추상 클래스 = 대부분 구현해 두고 꼭 필요한 것만 추상 · 인터페이스 = 기능을 모두 공개한 <b>표준화 문서</b> · protected 불가 · 다중 상속 지원" ],
-          note: "⚠️ 62쪽 인터페이스 칸에 “일반 메소드” 도 있지만 default 없이 몸체를 쓰면 컴파일 오류 (javac 확인) — 코드가 있는 건 default · static · private 만 (54쪽)" }
+          note: "⚠️ 62쪽 인터페이스 칸에 “일반 메소드” 도 있지만 default 없이 몸체를 쓰면 컴파일 오류 (javac 확인) — 코드가 있는 건 default · static · private 만 (54쪽)" },
+        { id: "package", week: 12, tab: "⑮ 패키지 · import", src: "6장 2 · 4 · 7 · 8 · 18 · 26쪽 — 패키지 개념과 필요성 · 경로명 · import · java.lang · 12주차 수업 파일 Tools.java · ✍️ 같은 패키지 같은 이름 X",
+          steps: [
+            "3명이 나눠 개발 → FileIO 와 UI 에 <b>같은 이름</b> <code>Tools.class</code> → 합칠 때 오류 (2쪽)",
+            "<b>패키지</b> = 관련 클래스 파일을 <b>디렉터리</b>로 묶기 → 경로명 <code>Project.FileIO.Tools</code> · <code>Project.UI.Tools</code> (점으로 연결 · 4쪽)",
+            "다른 패키지 클래스 — <code>import java.util.Scanner;</code> 또는 import 없이 <b>전체 경로명</b> <code>java.util.Scanner</code> (7쪽)",
+            "<b>java.lang</b> 은 자동 import → 수업 Tools.java 의 <code>java.lang.String school</code> = 그냥 <code>String school</code> (26쪽)",
+            "✍️ 같은 패키지 · 같은 이름 클래스는 X → javac <code>duplicate class: test.Point</code> · 다른 패키지면 OK (18쪽)" ],
+          note: "🤖 javac 확인 — import 를 빼고 <code>Scanner</code> → <code>cannot find symbol</code> · <code>a.Tools</code> · <code>b.Tools</code> 는 한 프로그램에서 경로명으로 구분해 씀" },
+        { id: "tostring", week: 12, tab: "⑯ Object · toString", src: "6장 28 · 30쪽 — Object 클래스 · 객체를 문자열로 변환 · 12주차 수업 파일 Point.java · Main.java · Car.java · FishBread.java",
+          steps: [
+            "<b>Object</b> — java.lang · <b>모든 클래스의 수퍼 클래스</b> (강제 상속) · equals · hashCode · <b>toString</b> … (28쪽)",
+            "Point 는 extends 를 안 써도 Object 를 상속 → <code>@Override public String toString()</code> 으로 다시 씀",
+            "<b>객체 + 문자열 → 객체.toString() + 문자열</b> 자동 변환 · <code>println(p)</code> 도 <code>p.toString()</code> (30쪽)",
+            "안 쓰면 Object 의 것 <code>Point@15db9742</code> (클래스이름@해시코드 · 30쪽 예) · 쓰면 수업 결과 <code>x : 2 (탭) y : 3</code>",
+            "<code>public</code> 을 빼면 <code>attempting to assign weaker access privileges</code> 오류 · Car · 붕어빵도 같은 방법" ],
+          note: "🤖 javac 확인 — 패키지 안의 클래스는 <code>test.Point@…</code> 처럼 패키지 이름까지 · 해시코드는 실행마다 다를 수 있음" },
+        { id: "equals", week: 12, tab: "⑰ == vs equals", src: "6장 32 · 43 · 44쪽 — 객체 비교와 equals() · 스트링 리터럴과 new String() · ✍️ “43페이지 if(e==f) 결과가 false 인 이유?”",
+          steps: [
+            "<b>리터럴</b> <code>\"Hello\"</code> · <code>\"Java\"</code> — JVM 이 <b>리터럴 테이블</b>에서 관리 · <b>공유</b> → a 와 c 는 같은 객체 (43쪽)",
+            "<code>new String(…)</code> — <b>힙 메모리에 새 객체</b>를 매번 만듦 → e 와 f 는 내용은 같아도 다른 객체",
+            "<code>==</code> = <b>레퍼런스(주소) 비교</b> → <code>a == c</code> true · <code>e == f</code> <b>false</b> (32쪽)",
+            "<code>equals()</code> = <b>내용 비교</b> → <code>e.equals(f)</code> <b>true</b> (java 확인)",
+            "✍️ 43쪽 질문의 답 — 그래서 문자열 내용 비교는 equals() (44쪽) · ⚠️ == 를 써도 컴파일 오류는 아님" ],
+          note: "🤖 equals 를 안 쓴 Point 는 <code>p1.equals(p2)</code> 도 false (Object 의 equals = 주소 비교) → 예제 6-3 처럼 좌표를 비교하는 equals() 를 써야 true" },
+        { id: "wrapper", week: 12, tab: "⑱ Wrapper · 박싱", src: "6장 35 · 37 · 38 · 40쪽 — Wrapper 클래스 8개 · static 메소드 · 박싱 · 언박싱 · 12주차 수업 파일 WrapperEx.java",
+          steps: [
+            "기본 타입 8개를 클래스로 — <b>int → Integer</b> · <b>char → Character</b> 만 이름이 많이 다름 (35쪽)",
+            "이름이 Wrapper 인 클래스는 <b>없음</b> · 용도 = 기본 타입의 값을 <b>객체로</b> 다룸",
+            "<b>박싱</b> = 기본 타입 → Wrapper 객체 <code>Integer.valueOf(10)</code> · <b>언박싱</b> = 객체 안의 값을 빼냄 <code>ten.intValue()</code> (40쪽)",
+            "<b>자동</b> 박싱 · 언박싱 (JDK 1.5 부터) — <code>Integer ten = 10;</code> · <code>int n = ten;</code> → 예제 6-6 <code>m = 20</code>",
+            "많은 메소드가 <b>static</b> — <code>Integer.parseInt(\"100\")</code> → 100 · <code>toHexString(28)</code> → 1c · <code>toBinaryString(28)</code> → 11100" ],
+          note: "⚠️ 39쪽 주석은 toHexString ↔ toBinaryString 설명이 서로 바뀜 (Hex = 16진수 · Binary = 2진수 · 출력은 맞음) · 28 = 16+8+4 = 11100 → 0001 1100 → 1c" },
+        { id: "strmeth", week: 12, tab: "⑲ String 메소드", src: "6장 44 · 45 · 48 · 49 · 50쪽 — String 주요 메소드 · 예제 6-7 · 12주차 수업 파일 StringEx.java",
+          steps: [
+            "<code>a = new String(\" C#\")</code> — 앞에 공백 포함 <b>3글자</b> · <code>contains(\"#\")</code> true",
+            "<code>concat(b)</code> → <b>새 문자열</b> <code>\" C#,C++ \"</code> 을 a 에 다시 대입 · <code>trim()</code> → 앞뒤 공백 제거 <code>\"C#,C++\"</code>",
+            "<code>replace(\"C#\", \"Java\")</code> → <code>\"Java,C++\"</code> · <code>split(\",\")</code> → 배열 <code>{\"Java\", \"C++\"}</code>",
+            "<code>substring(5)</code> — 인덱스 <b>5부터 끝까지</b> → J0 a1 v2 a3 ,4 <b>C5</b> → <code>\"C++\"</code>",
+            "<code>charAt(2)</code> → C0 +1 <b>+2</b> → <code>'+'</code> · String 은 <b>수정 불가</b> → 바꾼 결과를 쓰려면 다시 대입" ],
+          note: "⚠️ 47쪽 <code>\"I love \".concat(\"Java.\")</code> 의 결과는 \"I love Java.\" (슬라이드의 대문자 L 은 오타 · javac 확인)" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),
