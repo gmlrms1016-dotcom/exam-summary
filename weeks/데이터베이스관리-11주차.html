@@ -102,7 +102,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>🔥 직원 집계 (3번부터 시험) · 🔥 NULL 과 SUM (기말) · 집합 연산 · 내부조인 / 외부조인</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><a class="next" href="데이터베이스관리-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><a class="next" href="데이터베이스관리-12주차.html">다음 · <b>12주차</b> ›<br><small>🔥 엑셀 실행결과 (Quiz 6 · 7 외부조인) · 🔥 합집합 UNION · 3테이블 조인 · 🔥 하위질의</small></a></nav>
 
 <div class="tip">수업: <b>11/11(수)</b> · 자료: 노션 11주차 필기 · <code>up-dy262DB1-w11-수업요약-stu.txt</code>(수업요약 원본) · 실습 엑셀 <code>dy262DB1-SQL실습02-w11-stu.xlsx</code> · 강의자료 <b>DB-Lect11-SQL-join</b> (27쪽 · PDF 펜 필기 없음) — 원본 txt 에 없고 <b>내가 노션 · 엑셀에 쓴 것은 ✍️</b>. 결과 표는 전부 이 맥 <b>MySQL 8.4</b> 로 직접 실행한 값이에요 (행 순서는 MySQL 이 정한 순서 · 릴레이션의 투플은 순서가 없어요). 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
 <div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> — ① “직원테이블 퀴즈 <b>3번문제</b>(직책의 개수를 중복없이 검색하시오)<b>부터 시험문제</b>” (1번) · ② “<b>기말고사 문제</b> <code>SELECT sum(col2) FROM tab1;</code>” · 엑셀 “<b>중요! 기말고사 시험문제</b>” (3번) · ③ 예제5-8-2 “<b>시험에 나옴</b>” (8번) → <a href="데이터베이스관리-15주차-기말고사.html">기말고사 정리</a> 맨 위 카드에 넣었어요.</div>
@@ -281,7 +281,7 @@ SELECT * FROM R, S;                                          -- 4) 모든 짝</c
 <tr><td>3) <code>MINUS</code></td><td>π B,C (R) − π B,C (S)</td><td>⚠️ <code>MINUS</code> → ERROR 1064 · <code>EXCEPT</code> → <b>2행</b> (b1, c2) · (b2, c3)</td></tr>
 <tr><td>4) <code>FROM R, S</code></td><td>R × S</td><td><b>12행</b> (4 × 3) · 열 6개 (A · B · C · B · C · D)</td></tr>
 </tbody></table>
-<div class="tip">✍️ 내 1) 답 <code>SELECT R.B,R.C FROM R UNION SELECT S.B,S.C FROM S</code> ✅ (끝에 <code>;</code> 만 더하기) · 🤖 <code>UNION ALL</code> 이면 중복까지 7행 · ⚠️ 수업요약 txt 의 R INSERT 3행은 <code>('a2','b1','c2')</code> 라 슬라이드의 <b>a3</b> 와 달라요 (오타로 보임) — 1) ~ 3) 은 B · C 만 써서 결과가 같고 4) 의 A 열만 달라져요 (위 결과는 슬라이드 값) · 🤖 MySQL <b>8.0.31+</b> 는 <code>INTERSECT</code> · <code>EXCEPT</code> 지원 (이 맥 8.4 로 확인 · 학교 MySQL 이 낮은 버전이면 오류) · 기말은 <b>합집합만</b> (10주차 🔥).</div>
+<div class="tip">✍️ 내 1) 답 <code>SELECT R.B,R.C FROM R UNION SELECT S.B,S.C FROM S</code> ✅ (끝에 <code>;</code> 만 더하기) · 🤖 <code>UNION ALL</code> 이면 중복까지 7행 · ⚠️ 수업요약 txt 의 R INSERT 3행은 <code>('a2','b1','c2')</code> 라 슬라이드의 <b>a3</b> 와 달라요 (오타로 보임) — 1) ~ 3) 은 B · C 만 써서 결과가 같고 4) 의 A 열만 달라져요 (위 결과는 슬라이드 값) · 🤖 MySQL <b>8.0.31+</b> 는 <code>INTERSECT</code> · <code>EXCEPT</code> 지원 (이 맥 8.4 로 확인 · 학교와 같은 8.0.46 에서도 됨 — 12주차에 확인) · 기말은 <b>합집합만</b> (10주차 🔥).</div>
 </section>
 <section class="card" id="s6">
 <h2>5. 조인 요약 — 내부조인 · 외부조인 (강의자료 11 · 12쪽)</h2>
@@ -636,7 +636,7 @@ FROM S
 <ul><li><a href="../데이터베이스관리-실제시험.html">🔒 데이터베이스관리 실제시험 — 11주차 🔥 직원 집계 · NULL 과 SUM · 조인 문제까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="데이터베이스관리-15주차-기말고사.html">기말고사 시험문제 정리</a></li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><a class="next" href="데이터베이스관리-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-10주차.html">‹ 이전 · <b>10주차</b><br><small>🔥 관계대수 — 합집합(UNION)만 기말 · 실렉션 σ · 프로젝션 π · 조인 4가지 / 널 값과 집계함수</small></a><a class="next" href="데이터베이스관리-12주차.html">다음 · <b>12주차</b> ›<br><small>🔥 엑셀 실행결과 (Quiz 6 · 7 외부조인) · 🔥 합집합 UNION · 3테이블 조인 · 🔥 하위질의</small></a></nav>
 
     <p class="wk-src">노션 「데이터베이스관리 · 11주차」 페이지를 정리한 내용입니다.</p>
 

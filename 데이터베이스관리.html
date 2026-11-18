@@ -15,7 +15,7 @@
 
     <header class="page-head">
         <h1>데이터베이스관리 · 완전 정리</h1>
-        <p>1주차 ~ 11주차 · DB 개념 + DBMS + 데이터언어 + 키 5종 + 관계형 데이터 모델 + 뷰(view) + 널 값 + INSERT + 무결성 제약조건 + SELECT · UPDATE · DELETE + ALTER · GRANT/REVOKE · 기본키 · 외래키 테이블 생성 + SELECT 심화(LIKE · ORDER BY · 집계함수 · GROUP BY · HAVING) + 관계대수(🔥 합집합 · σ · π · 조인) + 조인(내부 · 외부 · 완전 = UNION) · 🔥 직원 집계 · NULL 과 SUM</p>
+        <p>1주차 ~ 12주차 · DB 개념 + DBMS + 데이터언어 + 키 5종 + 관계형 데이터 모델 + 뷰(view) + 널 값 + INSERT + 무결성 제약조건 + SELECT · UPDATE · DELETE + ALTER · GRANT/REVOKE · 기본키 · 외래키 테이블 생성 + SELECT 심화(LIKE · ORDER BY · 집계함수 · GROUP BY · HAVING) + 관계대수(🔥 합집합 · σ · π · 조인) + 조인(내부 · 외부 · 완전 = UNION) · 🔥 직원 집계 · NULL 과 SUM · 🔥 엑셀 조인 실행결과 · 3테이블 조인 · 🔥 하위질의</p>
     </header>
 
     <div id="week-nav" data-subject="데이터베이스관리"></div>
@@ -59,6 +59,7 @@
         <a href="#s31">31.SELECT·GROUP BY</a>
         <a href="#s32">32.🔥합집합·관계대수</a>
         <a href="#s33">33.🔥직원·NULL·조인</a>
+        <a href="#s34">34.🔥조인결과·하위질의</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1157,9 +1158,70 @@ SELECT * FROM freshman RIGHT OUTER JOIN dmember ON freshman.name = dmember.name;
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#nullsum" title="그림 — 🔥 NULL 과 SUM" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#nullsum" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 NULL 과 SUM — 새 창으로 크게 보기</a></p></div>
     </section>
 
+    <section class="card" id="s34">
+        <h2>34. 🔥 12주차 — 엑셀 실행결과 (Quiz 6 · 7) · 합집합 UNION · 3테이블 조인 · 하위질의<span class="week">12주차</span></h2>
+        <div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> — <b>“엑셀에서 문제 푸는거 시험에 나옴”</b> · <b>“합집합 · 교집합 · 차집합 중에서 합집합 하나만 출제”</b> · <b>“스칼라 · 인라인 · 하위질의 중에서 하위질의 하나만 출제”</b> · [공지] 기말고사 범위 = 교재 <b>4 · 5 · 6장</b> · <a href="weeks/데이터베이스관리-15주차-기말고사.html">기말고사 정리</a> · 자세한 SQL 은 <a href="weeks/데이터베이스관리-12주차.html">12주차 페이지</a></div>
+        <table class="ref">
+            <tr><th>🔥 Quiz 6 omember · group_ex (엑셀)</th><th>✍️ SQL (내 답)</th><th>실행결과</th></tr>
+            <tr><td>1) 내부(동등)조인</td><td><code>SELECT * FROM omember INNER JOIN group_ex ON omember.groupid=group_ex.groupid;</code></td><td><b>3행</b> — 100 A 서울 · 101 B 대구 · 102 A 서울</td></tr>
+            <tr><td>2) 왼쪽 외부조인</td><td><code>… FROM omember LEFT OUTER JOIN group_ex ON …</code></td><td><b>4행</b> — + 103 F NULL NULL</td></tr>
+            <tr><td>3) 오른쪽 외부조인</td><td><code>… FROM omember RIGHT OUTER JOIN group_ex ON …</code></td><td><b>6행</b> — + NULL NULL C 광주 · D 부산 · E 대전</td></tr>
+            <tr><td>4) 완전 외부조인</td><td>왼쪽 <code>UNION</code> 오른쪽</td><td><b>7행</b> (<code>UNION ALL</code> 이면 10행)</td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>🔥 Quiz 7 emp · project (엑셀)</th><th>✍️ 관계대수</th><th>실행결과</th></tr>
+            <tr><td>1) 카티션 프로덕트 <code>SELECT * FROM emp, project;</code></td><td>emp × project</td><td>5 × 4 = <b>20행</b></td></tr>
+            <tr><td>2) 동등조인 — 방법1 <code>WHERE emp.pno = project.pno</code> = 방법2 <code>INNER JOIN … ON</code></td><td>emp ⋈ emp.pno=project.pno project</td><td><b>4행</b></td></tr>
+            <tr><td>3) 자연조인 <code>SELECT ename, emp.pno, pname …</code></td><td>emp ⋈N project</td><td>4행 · <b>3열</b></td></tr>
+            <tr><td>4) 왼쪽 · 5) 오른쪽 외부조인</td><td>emp ⟕ project · emp ⟖ project</td><td><b>5행</b> (+ 신동엽 NULL) · <b>5행</b> (+ 104 다모여)</td></tr>
+            <tr><td>6) 완전 외부조인 = 4) <code>UNION</code> 5)</td><td>emp ⟗ project</td><td><b>6행</b></td></tr>
+        </table>
+        <div class="tip">🔥 <b>합집합만 출제</b> — 정회원 {1 홍길동, 2 임꺽정} · 준회원 {1 홍길동, 3 박찬호, 4 선동열} → <code>UNION</code> <b>4행</b> (중복 한 번) · <code>UNION ALL</code> <b>5행</b> (홍길동 2번) · 교집합 <code>INTERSECT</code> · 차집합 <code>EXCEPT</code> 는 학교와 같은 MySQL 8.0.46 에서도 되지만 시험 ✕<br>3테이블 조인 = 학생 ↔ 수강(학번) ↔ 과목(과목번호) — 조건 2개를 <code>AND</code> (또는 <code>INNER JOIN … ON</code> 두 번) → 7행 · 이홍근 2행 · 외부조인 8행 (홍서범 NULL NULL · 시험 미출제) · ⚠️ 필기 방법2 <code>SELECT 학생명,성적</code> 은 과목명이 빠짐 · 행 순서는 ORDER BY 가 없으면 MySQL 이 정함</div>
+        <table class="ref">
+            <tr><th>🔥 하위질의 (WHERE 절 안만 출제)</th><th>✍️ SQL</th><th>결과 (MySQL)</th></tr>
+            <tr><td>20) 박영권과 같은 직급</td><td><code>WHERE title=(SELECT title FROM employee WHERE empname='박영권')</code></td><td>조민희 · 박영권 (괄호 안 = '과장' 1행)</td></tr>
+            <tr><td>21) 영업부나 개발부 (IN)</td><td><code>WHERE dno IN (SELECT deptno FROM department WHERE deptname IN('영업','개발'))</code></td><td>김상원 · 박영권 · 이수민 · 최종철 (괄호 안 = 1 · 3)</td></tr>
+            <tr><td>21-02) 그 밖의 부서 (NOT IN)</td><td><code>WHERE dno NOT IN (…)</code></td><td>조민희 · 김창섭 · 이성래</td></tr>
+            <tr><td>24) 사원이 없는 부서 (NOT EXISTS)</td><td><code>select deptname from department D where NOT EXISTS (select * from employee E where D.deptno = E.dno);</code></td><td><b>총무</b></td></tr>
+        </table>
+        <div class="tip">스칼라 질의(SELECT 절 안) · 인라인 뷰(FROM 절 안)는 시험 ✕ · 괄호 안부터 실행 · 괄호 안 결과가 여러 행인데 <code>=</code> → <b>ERROR 1242</b> → <code>IN</code> · <code>EXISTS</code> = 존재하면 참 · <code>NOT EXISTS</code> = 존재하지 않으면 참 · 17번 <code>SELECT employee.empname AS 사원명, department.deptname AS 부서명 FROM employee, department WHERE department.deptno=employee.dno;</code> → 7행</div>
+        <h3>🔥 괄호넣기 — 중복 포함 ( ① ) · 여러 행 ( ② ) · 존재하지 않으면 참 ( ③ )</h3>
+        <pre><code class="language-sql">-- 실습 1-1 2) 합집합 (중복 포함 → 5행)
+select 번호,이름 from 정회원
+( ① )
+select 번호,이름 from 준회원;
+-- 21) 영업부나 개발부에 근무하는 사원들의 이름
+SELECT empname FROM employee
+WHERE dno ( ② ) (SELECT deptno FROM department WHERE deptname IN('영업','개발'));
+-- 24) 사원들이 한 명도 소속되지 않은 부서명
+select deptname from department D
+where ( ③ ) (select * from employee E where D.deptno = E.dno);</code></pre>
+        <div class="quiz-item" data-answers="UNION ALL" data-explain="UNION ALL → 중복(1 홍길동)도 그대로 → 5행 · UNION 이면 4행">
+            <p class="quiz-q"><span class="quiz-cat">①</span>정회원 · 준회원 결과를 합치면서 <b>중복도 그대로</b> 두는 ( ① ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="IN" data-explain="괄호 안 결과가 1 · 3 두 행 → IN (= 면 ERROR 1242) → 김상원 · 박영권 · 이수민 · 최종철">
+            <p class="quiz-q"><span class="quiz-cat">②</span>괄호 안 결과가 <b>여러 행</b>(1 · 3)일 때 쓰는 ( ② ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="NOT EXISTS" data-explain="NOT EXISTS → 그 부서(D)의 사원이 한 명도 없으면 참 → 총무">
+            <p class="quiz-q"><span class="quiz-cat">③</span>괄호 안 결과가 <b>존재하지 않으면 참</b>이 되는 ( ③ ) 는?</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#q6" title="그림 — 🔥 Quiz 6 외부조인" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#q6" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 Quiz 6 외부조인 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#union2" title="그림 — 🔥 UNION · UNION ALL" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#union2" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 UNION · UNION ALL — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#subq" title="그림 — 🔥 하위질의" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#subq" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 하위질의 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 46 · 주관식 46 · 출력결과 23 · 코드 작성 26 · 총 141문제 · 11주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 51 · 주관식 51 · 출력결과 28 · 코드 작성 30 · 총 160문제 · 12주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="데이터베이스관리-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
