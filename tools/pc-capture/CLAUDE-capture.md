@@ -4,6 +4,7 @@
   `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\tools\vmcapture.ps1" -Out "<저장할 경로>.png"`
   - VM 탭을 고를 때 `-Title "Server(B)"` · VMware 말고 다른 창은 `-Process code`(프로세스 이름) · `-Window yunhuigeun`(제목 글자)
   - **VMware 창은 앞으로 가져와 화면에서 복사(Screen)가 기본** (2026-11-12 학교 PC: VMware 가 뒤에 있을 때 PrintWindow 가 몇 분 전 콘솔을 찍어 오류 화면이 과제 캡처로 저장될 뻔함) · 그 밖의 창(`-Process` · `-Window` — 텔넷 · 원격 데스크톱 · VS Code …)은 PrintWindow — 창이 스스로 그리게 해서 다른 창에 가려져 있어도 깨끗 · **찍은 뒤 꼭 그림을 열어 지금 화면인지 확인**
+  - **MySQL Workbench 도 Screen 이 기본** (`-Process MySQLWorkbench` — 2026-11-18 학교 PC: 화면 배율 125% 에서 PrintWindow 로 찍으면 그림 오른쪽 · 아래가 검은 여백으로 남음 · Screen 으로 찍으니 깨끗) — Workbench 가 앞으로 나오니 찍은 뒤 Claude 창을 다시 앞으로
   - 원격 데스크톱(mstsc)은 첫 확인 창(인증서 등)을 누른 뒤 찍기 (안 누르면 `could not read window size (w=0 h=0)`) · 창이 작으면 가로 스크롤바가 같이 찍히므로 `mstsc /v:IP /w:1280 /h:800` 처럼 크기를 정하거나 최대화 뒤 찍기
   - 출력이 긴 명령(dnf install …)은 터미널 창을 최대화한 뒤 실행 · 한 화면을 넘으면 앞이 사라지므로 나눠 찍기
 - 스크립트가 하는 일: ① 캡처 전에 `SetProcessDpiAwarenessContext(-4)`(안 되면 스레드만)로 DPI 인식 ② 그 창 영역만 ③ 원래 픽셀 크기 그대로 ④ PNG

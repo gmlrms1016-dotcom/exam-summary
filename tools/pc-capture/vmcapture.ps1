@@ -7,6 +7,8 @@
               (2026-11-05 학교 PC: 화면 복사 방식은 Claude 창에 가려진 채 찍혔고 오류도 안 났음)
               단 VMware 창은 앞으로 가져와 화면 복사(Screen)가 기본 (2026-11-12 학교 PC: VMware 가 뒤에 있으면 PrintWindow 가 몇 분 전 콘솔을 찍음
               → 오류 화면이 과제 캡처로 저장될 뻔함 · 텔넷 · 원격 데스크톱 창은 PrintWindow 가 잘 됨) · 찍은 뒤 꼭 그림을 열어 지금 화면인지 확인
+              MySQL Workbench(-Process MySQLWorkbench · -Window "MySQL Workbench")도 Screen 이 기본 (2026-11-18 학교 PC: 화면 배율 125% 에서
+              PrintWindow 로 찍으면 그림 오른쪽 · 아래가 검은 여백 — 1408×1380 중 내용 약 1124×1103 · -Method Screen 으로 찍으니 깨끗)
            ③ DWM 의 보이는 테두리로 자르기 (그림자 · 투명 테두리 X) — 제목 줄은 그대로 (VMware 과제 = 원래 제목 그대로 · 사용자 2026-11-05)
            ③-1 -TextOnly: 검은 글자 화면(CUI · Server(B) 등)은 글자 부분만 딱 맞게 — 검은 콘솔 영역을 먼저 찾고 그 안의 글자 테두리 + 검은 여백 12px
                (2026-11-13 사용자: "검은 화면에 작은 글씨라 글자가 너무 작음" · 제목 줄 · 메뉴 · 라이브러리 · 검은 여백 X)
@@ -16,7 +18,7 @@
     -Title "Server(B)"   제목에 VMware 와 이 글자가 있는 창 (지금 열린 VM 탭 이름이 제목에 나옴)
     -Process code        VMware 말고 다른 프로그램의 창 (프로세스 이름: code · cmd · WindowsTerminal · notepad …)
     -Window yunhuigeun   VMware 말고 제목에 이 글자가 있는 아무 창
-    -Method Auto         기본 — VMware 창 = Screen (앞으로 가져와 화면에서 복사 · 맨 앞이 안 되면 ERROR) · -Process / -Window 창 = PrintWindow (가려져도 깨끗)
+    -Method Auto         기본 — VMware 창 · MySQL Workbench = Screen (앞으로 가져와 화면에서 복사 · 맨 앞이 안 되면 ERROR) · 그 밖의 -Process / -Window 창 = PrintWindow (가려져도 깨끗)
     -Method PrintWindow  VMware 도 PrintWindow 로 (뒤에 있으면 예전 화면이 찍힐 수 있음) · -Method Screen = 그 밖의 창도 화면 복사
     -Client              창 테두리 · 제목 줄을 빼고 안쪽만 (규칙상 보통 안 씀 — 제목 줄은 살림)
     -TextOnly            글자 화면(CUI)은 글자 부분만 잘라 저장 + 워드에 넣을 폭(word width …cm) 알려 줌 · 그래픽 화면(GNOME)에 쓰면 ERROR (그때는 빼고 찍기)
@@ -172,7 +174,9 @@ else {
 }
 if ($hWnd -eq [IntPtr]::Zero) { Write-Output "ERROR: $what not found"; exit 1 }
 # 2026-11-12: Auto = VMware 는 앞으로 가져와 화면 복사 (뒤에 있으면 PrintWindow 가 몇 분 전 콘솔을 찍음) · 그 밖의 창은 PrintWindow
-if ($Method -eq "Auto") { if ($Process -or $Window) { $Method = "PrintWindow" } else { $Method = "Screen" } }
+# 2026-11-18: MySQL Workbench 도 Screen (학교 PC 화면 배율 125% 에서 PrintWindow 로 찍으면 오른쪽 · 아래가 검은 여백으로 남음)
+$isWorkbench = ($Process -match "^MySQLWorkbench") -or ($Window -match "MySQL Workbench")
+if ($Method -eq "Auto") { if (($Process -or $Window) -and -not $isWorkbench) { $Method = "PrintWindow" } else { $Method = "Screen" } }
 
 # 3) 최소화돼 있으면 되살림 (PrintWindow 는 최소화된 창을 못 그림) · 화면 복사 방식만 앞으로 가져옴
 if ([VmCap]::IsIconic($hWnd)) { [void][VmCap]::ShowWindow($hWnd, 9); Start-Sleep -Milliseconds 600 }
