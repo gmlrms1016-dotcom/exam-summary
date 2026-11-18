@@ -575,7 +575,7 @@
             "<b>3) 오른쪽 외부조인</b> <code>RIGHT OUTER JOIN</code> — group_ex 5행은 다 → C · D · E 는 짝이 없어 <b>NULL · NULL</b> → 3 + 3 = <b>6행</b>",
             "<b>4) 완전 외부조인</b> = 왼쪽 <code>UNION</code> 오른쪽 (MySQL 에는 FULL OUTER JOIN 이 없음) → 4 + 6 − 겹친 3 = <b>7행</b> (표 전체)",
             "🤖 <code>UNION ALL</code> 로 합치면 겹친 3행(100 · 101 · 102)이 두 번 → <b>10행</b> (MySQL 8.0.46 로 확인)" ],
-          note: "결과는 교수님 엑셀 답안 · 학교와 같은 MySQL 8.0.46 으로 실행한 값 · 행 순서는 ORDER BY 가 없으면 MySQL 이 정함 (엑셀 답안의 3) 은 100 · 101 · C · D · E · 102 순서) — 시험 답은 행의 내용 · 개수를 정확히 (<a href=\"../데이터베이스관리-12주차.html\" target=\"_top\">12주차 페이지</a>)" },
+          note: "결과는 ✍️ 내 엑셀 답 · 학교와 같은 MySQL 8.0.46 으로 실행한 값 · 행 순서는 ORDER BY 가 없으면 MySQL 이 정함 (내 엑셀 답의 3) 은 100 · 101 · C · D · E · 102 순서) — 시험 답은 행의 내용 · 개수를 정확히 (<a href=\"../데이터베이스관리-12주차.html\" target=\"_top\">12주차 페이지</a>)" },
         { id: "q7", week: 12, tab: "⑫ 🔥 Quiz 7 조인 6가지", src: "12주차 🔥 ✍️ 필기 “엑셀에서 문제 푸는거 시험에 나옴” · ✍️ 노션 [Quiz 7] 관계대수 · 실습 엑셀 quiz-7-outer02 · 강의자료 5쪽 (복습) [Quiz11-7]",
           steps: [
             "<b>1) 카티션 프로덕트</b> <code>emp × project</code> = <code>SELECT * FROM emp, project;</code> — 조건 없이 모든 짝 → 5 × 4 = <b>20행</b>",
@@ -584,7 +584,7 @@
             "<b>4) 왼쪽 외부조인</b> <code>emp ⟕ project</code> — emp 는 다 → <b>신동엽</b>(pno NULL) + NULL · NULL → <b>5행</b>",
             "<b>5) 오른쪽 외부조인</b> <code>emp ⟖ project</code> — project 는 다 → NULL · NULL + <b>104 다모여</b> → <b>5행</b>",
             "<b>6) 완전 외부조인</b> <code>emp ⟗ project</code> = 4) <code>UNION</code> 5) → 4 + 1 + 1 = <b>6행</b>" ],
-          note: "✍️ 관계대수 기호는 노션 필기 그대로 · 결과는 엑셀 답안 · MySQL 8.0.46 실행 값 · 🤖 <code>NULL = 101</code> 은 참이 아니라서 신동엽은 어떤 프로젝트와도 짝이 안 맞아요 · ⚠️ 엑셀 답안 5) 의 다모여 행 ename 칸은 비어 있지만 MySQL 은 NULL" },
+          note: "✍️ 관계대수 기호는 노션 필기 그대로 · 결과는 ✍️ 내 엑셀 답 · MySQL 8.0.46 실행 값 · 🤖 <code>NULL = 101</code> 은 참이 아니라서 신동엽은 어떤 프로젝트와도 짝이 안 맞아요 · ⚠️ 오른쪽 외부조인에서 101 작전중은 홍길동 · 박찬호 <b>둘</b>과 짝 (내 엑셀 답은 처음에 박찬호 줄이 빠졌다가 고침) · 다모여 행 ename 칸은 빈칸 말고 NULL" },
         { id: "union2", week: 12, tab: "⑬ 🔥 UNION · UNION ALL", src: "12주차 🔥 ✍️ 필기 “시험에는 합집합.교집합.차집합 중에서 합집합 하나만 출제함” · 강의자료 8쪽 [실습1-1] 정회원 · 준회원",
           steps: [
             "<b>홍길동</b>(1번)은 정회원이면서 준회원 — 실습 SQL 이 집합연산 연습용으로 같은 데이터를 일부러 넣음",

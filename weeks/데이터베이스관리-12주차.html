@@ -104,7 +104,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <nav class="wk-pager"><a class="prev" href="데이터베이스관리-11주차.html">‹ 이전 · <b>11주차</b><br><small>🔥 직원 집계 (3번부터 시험) · 🔥 NULL 과 SUM (기말) · 집합 연산 · 내부조인 / 외부조인</small></a><a class="next" href="데이터베이스관리-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 12주차 반영)</small></a></nav>
 
-<div class="tip">수업: <b>11/18(수)</b> · 자료: 노션 12주차 필기 · <code>up-dy262DB1-w12-수업요약-stu.txt</code>(수업요약 원본) · 실습 SQL <code>sql-week12db-sql-txt.txt</code> · 실습 엑셀 <code>dy262DB1-SQL실습03-w12-stu.xlsx</code> · <code>Quiz7_emp_project.sql</code> · 학교 Workbench 캡처 11장 · 강의자료 <b>DB-Lect12-관계대수-join-subquery</b> (29쪽 · PDF 펜 필기 없음) — 원본 txt 에 없고 <b>내가 노션에 쓴 것은 ✍️</b>. 결과 표는 학교 Workbench 캡처 · 교수님 엑셀 답안 · 이 맥 <b>MySQL 8.0.46</b>(학교와 같은 버전)으로 직접 실행한 값이에요. 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
+<div class="tip">수업: <b>11/18(수)</b> · 자료: 노션 12주차 필기 · <code>up-dy262DB1-w12-수업요약-stu.txt</code>(수업요약 원본) · 실습 SQL <code>sql-week12db-sql-txt.txt</code> · 실습 엑셀 <code>dy262DB1-SQL실습03-w12-stu.xlsx</code> · <code>Quiz7_emp_project.sql</code> · 학교 Workbench 캡처 11장 · 강의자료 <b>DB-Lect12-관계대수-join-subquery</b> (29쪽 · PDF 펜 필기 없음) — 원본 txt 에 없고 <b>내가 노션에 쓴 것은 ✍️</b>. 결과 표는 학교 Workbench 캡처 · ✍️ 내 엑셀 답(실습 엑셀의 “-답안” 시트 = 내가 푼 답 · 학교에서 Workbench 결과와 맞춰 봄) · 이 맥 <b>MySQL 8.0.46</b>(학교와 같은 버전)으로 직접 실행한 값이에요. 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
 <div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> — ① “<b>엑셀에서 문제 푸는거 시험에 나옴</b>” (Quiz 6 · 7 “실행결과는 무엇인가?” — 1 · 2번) · ② “시험에는 합집합 · 교집합 · 차집합 중에서 <b>합집합 하나만</b> 출제함” (3번) · ③ “시험에는 스칼라 · 인라인 · 하위질의 중에서 <b>하위질의 하나만</b> 출제함” (6 · 7번) · [공지] <b>기말고사 범위 = 교재 4장 · 5장 · 6장</b> → <a href="데이터베이스관리-15주차-기말고사.html">기말고사 정리</a> 맨 위 카드에 넣었어요.</div>
 <section class="card" id="s1">
 <h2>🎨 12주차 그림으로 보기</h2>
@@ -128,7 +128,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </section>
 <section class="card" id="s3">
 <h2>1. 🔥 [Quiz 6] omember · group_ex — 외부조인 실행결과 (1교시 · 엑셀)</h2>
-<div class="tip">실습 엑셀 quiz-6-outer01 “실행결과는 무엇인가?” — 1) 내부조인 2) 왼쪽 외부조인 3) 오른쪽 외부조인 4) 완전 외부조인 (강의자료 4쪽 (복습) [Quiz11-6]) · ✍️ “<b>엑셀에서 문제 푸는거 시험에 나옴</b>”</div>
+<div class="tip">실습 엑셀 quiz-6-outer01 “실행결과는 무엇인가?” — 1) 내부조인 2) 왼쪽 외부조인 3) 오른쪽 외부조인 4) 완전 외부조인 (강의자료 4쪽 (복습) [Quiz11-6]) · ✍️ “<b>엑셀에서 문제 푸는거 시험에 나옴</b>” · ✍️ 내 답 = 엑셀 quiz-6-outer01-답안 시트</div>
 <table class="ref">
 <tbody style="min-width:643px;">
 <tr><th>omember.id</th><th>groupid</th><th></th><th>group_ex.groupid</th><th>position</th></tr>
@@ -194,8 +194,8 @@ ON omember.groupid=group_ex.groupid;                         -- → 4 + 6 − 3 
 <tr><td>NULL</td><td>NULL</td><td>D</td><td>부산</td></tr>
 <tr><td>NULL</td><td>NULL</td><td>E</td><td>대전</td></tr>
 </tbody></table>
-<div class="tip">✍️ 내 답 4개 ✅ · 표는 <b>교수님 엑셀 답안</b> 순서 (MySQL 8.0.46 결과와 행 내용 · 개수가 같아요) · 🤖 A 그룹은 omember 에 <b>2명</b>(100 · 102) 이라 서울이 2번 나와요 · 🤖 <code>UNION ALL</code> 로 합치면 겹치는 3행이 두 번 나와 <b>10행</b> (MySQL 로 확인).</div>
-<div class="tip">🤖 <b>행 순서</b> — ORDER BY 가 없으면 MySQL 이 정해요. 같은 8.0.46 인데도 이 맥은 1) 을 102 · 100 · 101 순서로, 3) 을 102 · 100 · 101 · C · D · E 순서로 보여 줬어요 (엑셀 답안과 다름) → 시험 답은 <b>행의 내용 · 개수</b>를 정확히.</div>
+<div class="tip">✍️ 내 답 4개 ✅ · 표는 <b>✍️ 내 엑셀 답</b> 순서 (MySQL 8.0.46 결과와 행 내용 · 개수가 같아요) · 🤖 A 그룹은 omember 에 <b>2명</b>(100 · 102) 이라 서울이 2번 나와요 · 🤖 <code>UNION ALL</code> 로 합치면 겹치는 3행이 두 번 나와 <b>10행</b> (MySQL 로 확인).</div>
+<div class="tip">🤖 <b>행 순서</b> — ORDER BY 가 없으면 MySQL 이 정해요. 같은 8.0.46 인데도 이 맥은 1) 을 102 · 100 · 101 순서로, 3) 을 102 · 100 · 101 · C · D · E 순서로 보여 줬어요 (내 엑셀 답과 순서가 다름) → 시험 답은 <b>행의 내용 · 개수</b>를 정확히.</div>
 </section>
 <section class="card" id="s4">
 <h2>2. 🔥 [Quiz 7] emp · project — 조인 6가지 · 관계대수 (엑셀)</h2>
@@ -287,7 +287,7 @@ ON emp.pno = project.pno;</code></pre>
 <tr><td>신동엽</td><td>NULL</td><td>NULL</td><td>NULL</td></tr>
 <tr><td>NULL</td><td>NULL</td><td>104</td><td>다모여</td></tr>
 </tbody></table>
-<div class="tip">✍️ 내 답 6개 ✅ (위 표 = 4) 왼쪽 · 5) 오른쪽 · 6) 완전 — 엑셀 답안 순서) · 🤖 신동엽의 pno 는 NULL → <code>NULL = 101</code> 은 참이 아니라서 어떤 프로젝트와도 짝이 안 맞아요 (외부조인에서만 살아남음) · 🤖 <code>SELECT * FROM emp NATURAL JOIN project;</code> 도 같은 4행인데 열 순서가 <b>pno · ename · pname</b> (공통 열이 맨 앞) · ⚠️ 엑셀 답안 5) 의 104 다모여 행은 ename 칸이 비어 있는데 MySQL 결과는 <b>NULL</b>.</div>
+<div class="tip">✍️ 내 답 6개 ✅ (위 표 = 4) 왼쪽 · 5) 오른쪽 · 6) 완전 — ✍️ 내 엑셀 답 quiz-7-outer02-답안 순서 · 학교에서 Workbench 결과와 맞춰 봐서 빠졌던 박찬호 101 줄을 채움) · 🤖 신동엽의 pno 는 NULL → <code>NULL = 101</code> 은 참이 아니라서 어떤 프로젝트와도 짝이 안 맞아요 (외부조인에서만 살아남음) · 🤖 <code>SELECT * FROM emp NATURAL JOIN project;</code> 도 같은 4행인데 열 순서가 <b>pno · ename · pname</b> (공통 열이 맨 앞) · ⚠️ 내 엑셀 답 3) 오른쪽 외부조인의 104 다모여 행은 ename 칸이 비어 있어요 → MySQL 결과는 <b>NULL</b> (빈칸 말고 NULL 로 쓰기).</div>
 <details class="wk-details">
 <summary>1) 카티션 프로덕트 20행 펼쳐 보기</summary>
 <table class="ref">
@@ -365,7 +365,7 @@ select 번호,이름 from 준회원;</code></pre>
 </section>
 <section class="card" id="s6">
 <h2>4. [실습 1-2] 3테이블 조인 — 학생 · 수강 · 과목</h2>
-<div class="tip">강의자료 9 · 14 ~ 17쪽 · 실습 엑셀 02학생수강과목 · ✍️ 0) 1) 2) 3) + 내가 더한 3-2)</div>
+<div class="tip">강의자료 9 · 14 ~ 17쪽 · 실습 엑셀 02학생수강과목 · ✍️ 0) 1) 2) 3) · 3-2) (교수님 화면에 있던 문제 — 수업이 빨라 놓쳤다가 학교 Claude 가 사진과 비교해 채움)</div>
 <table class="ref">
 <tbody>
 <tr><th>학생.학번</th><th>학생명</th></tr>
@@ -461,7 +461,7 @@ FROM 학생 LEFT OUTER JOIN 수강                                 -- ① 학생
 ON 학생.학번=수강.학번
 LEFT OUTER JOIN 과목                                          -- ② 과목도 왼쪽 외부조인으로 이어야 홍서범이 안 빠짐
 ON 수강.과목번호=과목.과목번호;                                  -- → 8행 (홍서범 NULL NULL)
--- 3-2) 홍서범의 학생명, 과목명, 성적을 검색하라                   ✍️ 내가 더한 문제
+-- 3-2) 홍서범의 학생명, 과목명, 성적을 검색하라                   교수님 화면의 문제 (놓쳤다가 채움)
 SELECT 학생명,과목명,성적
 FROM 학생 LEFT OUTER JOIN 수강
 ON 학생.학번=수강.학번
@@ -621,7 +621,7 @@ where NOT EXISTS (select *                                   -- ② 그 부서(D
 </section>
 <section class="card" id="s11">
 <h2>⚠️ 정정 · 팩트체크</h2>
-<ul><li>[실습 1-2] 1) 방법2 — 내 필기 <code>SELECT 학생명,성적</code> → <b>과목명이 빠져</b> 2열 → <code>SELECT 학생명,과목명,성적</code> (강의자료 15쪽)</li><li>✍️ 이론 필기 “subqury” → <b>subquery</b> (철자)</li><li>테이블 이름 없이 <code>학번</code> → ERROR 1052 (두 테이블에 다 있음) · 하위질의가 여러 행인데 <code>=</code> → ERROR 1242 → <code>IN</code></li><li>엑셀 답안 Quiz 7 5) 오른쪽 외부조인 — 104 다모여 행의 ename 칸이 비어 있음 → MySQL 결과는 <b>NULL</b></li><li><b>행 순서</b> — 엑셀 답안 · 학교 · 이 맥 MySQL 8.0.46 의 행 순서가 서로 달라요 (ORDER BY 가 없으면 정해지지 않음) → 행 내용 · 개수로 확인</li><li><code>INTERSECT</code> · <code>EXCEPT</code> — 학교와 같은 <b>MySQL 8.0.46</b> 에서도 돼요 (11주차에 걱정했던 “학교 MySQL 이 낮은 버전이면 오류” 는 해당 없음) · 기말은 합집합만</li><li>12주차 실습 SQL 의 omember 는 <code>('103','F')</code> — 11주차 수업요약의 <code>('102','F')</code> 오타가 고쳐졌어요 (엑셀과 같음)</li><li>(미리 확인) 강의자료 25쪽 상관중첩질의 답 <code>… from employee E where salary &gt; (select AVG(salary) from employee E where E.dno = employee.dno);</code> → 바깥 · 안쪽 별칭이 둘 다 <b>E</b> 라서 <code>employee.dno</code> 를 못 찾아 <b>ERROR 1054</b> (MySQL 8.0.46) → 바깥 <code>E1</code> · 안쪽 <code>E2</code> 로 쓰면 <code>… where E2.dno = E1.dno</code> → 이수민 · 박영권 · 이성래 (수업 전 · 노션에 없음)</li></ul>
+<ul><li>[실습 1-2] 1) 방법2 — 내 필기 <code>SELECT 학생명,성적</code> → <b>과목명이 빠져</b> 2열 → <code>SELECT 학생명,과목명,성적</code> (강의자료 15쪽)</li><li>✍️ 이론 필기 “subqury” → <b>subquery</b> (철자)</li><li>테이블 이름 없이 <code>학번</code> → ERROR 1052 (두 테이블에 다 있음) · 하위질의가 여러 행인데 <code>=</code> → ERROR 1242 → <code>IN</code></li><li>내 엑셀 답 Quiz 7 3) 오른쪽 외부조인 — 104 다모여 행의 ename 칸이 비어 있음 → MySQL 결과는 <b>NULL</b> (처음엔 박찬호 101 줄도 빠져 있었는데 학교에서 고침 — 101 작전중은 홍길동 · 박찬호 <b>둘</b>과 짝)</li><li><b>행 순서</b> — 내 엑셀 답 · 학교 · 이 맥 MySQL 8.0.46 의 행 순서가 서로 달라요 (ORDER BY 가 없으면 정해지지 않음) → 행 내용 · 개수로 확인</li><li><code>INTERSECT</code> · <code>EXCEPT</code> — 학교와 같은 <b>MySQL 8.0.46</b> 에서도 돼요 (11주차에 걱정했던 “학교 MySQL 이 낮은 버전이면 오류” 는 해당 없음) · 기말은 합집합만</li><li>12주차 실습 SQL 의 omember 는 <code>('103','F')</code> — 11주차 수업요약의 <code>('102','F')</code> 오타가 고쳐졌어요 (엑셀과 같음)</li><li>(미리 확인) 강의자료 25쪽 상관중첩질의 답 <code>… from employee E where salary &gt; (select AVG(salary) from employee E where E.dno = employee.dno);</code> → 바깥 · 안쪽 별칭이 둘 다 <b>E</b> 라서 <code>employee.dno</code> 를 못 찾아 <b>ERROR 1054</b> (MySQL 8.0.46) → 바깥 <code>E1</code> · 안쪽 <code>E2</code> 로 쓰면 <code>… where E2.dno = E1.dno</code> → 이수민 · 박영권 · 이성래 (수업 전 · 노션에 없음)</li></ul>
 <details class="wk-details">
 <summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
 <pre><code class="language-text">강의자료 3페이지는 다음주에 실습함
