@@ -102,7 +102,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>원격 접속 — 🔥 텔넷 서버 · XRDP 원격 데스크톱 + 🔥 LVM 개념</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 11주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a><a class="next" href="운영체제실습-12주차.html">다음 · <b>12주차</b> ›<br><small>DB 서버 · NFS — 🔥 MariaDB 설치 · 원격 사용자 + NFS 공유 폴더</small></a></nav>
 
 <div class="tip">수업: <b>11/12(목)</b> · 교재 『이것이 리눅스다』 Chapter 08 과제 <b>VITAMIN QUIZ 8-1 · 8-2</b> · ✍️ 노션 11주차 = 수업 메모 2줄 + 수업 로그(Server) + 학교 PC 에서 정리한 “✅ 11주차 실습 깔끔 순서”<br>✍️ “<b>LVM 실습은 안 하지만 시험에 개념은 출제함</b>” → 🔥 <b>5절</b> (📖 6장 462 ~ 464쪽 · 10주차 PDF 끝부분)<br>정리 범위 = 노션 필기 · 로그 + 제출 워드 캡처(🖼️). 📖 = 교재 · 🤖 = 필기 · 교재에 없는 설명. 로그 상자는 <b>명령을 누르면 출력이 펼쳐져요</b>.</div>
 <section class="card" id="s1">
@@ -325,7 +325,7 @@ success
 <ol><li><b>텔넷 서버</b> = <code>dnf -y install telnet-server</code> → <code>adduser</code> · <code>passwd</code> → 방화벽 → <code>systemctl start telnet.socket</code> → status = <b>active (listening)</b> · <b>Listen: [::]:23</b></li><li><b>글자 화면 방화벽</b> = <code>firewall-cmd --permanent --add-service=telnet</code> + <code>firewall-cmd --reload</code> (그래픽 = <code>firewall-config</code>) · 🤖 <code>--permanent</code> 가 없으면 재부팅하면 사라짐</li><li>포트 — 텔넷 <b>23</b> · RDP <b>3389</b> · 🤖 SSH 22</li><li>Windows 에서 — 텔넷 = PowerShell <code>telnet 192.168.111.200</code> (60초 안에 로그인) · 원격 데스크톱 = <code>mstsc</code></li><li><b>XRDP</b> = rpm 3개(tigervnc-license · tigervnc-server-minimal · xrdp) → <code>epel-release</code> → <code>dnf -y install tiger*.rpm xrdp*.rpm</code> → <code>systemctl start</code> · <code>enable xrdp</code> → 3389 허용 → rocky 로 로그인</li><li>🔥 <b>LVM</b> = 논리 디스크 관리자 · <b>물리 볼륨</b>(파티션) → <b>볼륨 그룹</b>(합침) → <b>논리 볼륨</b>(나눔) · Rocky Linux 기본 설치 = LVM (Server · Server(B) = 표준 파티션 · Client = LVM)</li><li>LVM 순서 — <code>fdisk</code>(LVM) → <code>pvcreate</code> → <code>vgcreate</code> → <code>lvcreate</code> → <code>mkfs.ext4</code> → <code>mount</code> → /etc/fstab</li></ol>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 11주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-10주차.html">‹ 이전 · <b>10주차</b><br><small>RAID — Linear RAID 구축 · 고장 · 복구 · RAID 0 (6장)</small></a><a class="next" href="운영체제실습-12주차.html">다음 · <b>12주차</b> ›<br><small>DB 서버 · NFS — 🔥 MariaDB 설치 · 원격 사용자 + NFS 공유 폴더</small></a></nav>
 
     <p class="wk-src">노션 「운영체제실습 · 11주차」 페이지를 정리한 내용입니다.</p>
 

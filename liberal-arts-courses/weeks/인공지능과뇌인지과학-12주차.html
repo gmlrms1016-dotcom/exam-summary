@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인공지능과뇌인지과학 12주차 · 신경망과 딥러닝 1 — 🔥 뉴런 논리 연산 · TLU 계단함수 · 퍼셉트론 (10장)</title>
+    <meta name="description" content="인공지능과뇌인지과학 12주차 정리 — 신경망과 딥러닝 1 — 🔥 뉴런 논리 연산 · TLU 계단함수 · 퍼셉트론 (10장)">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="인공지능과뇌인지과학 12주차 · 신경망과 딥러닝 1 — 🔥 뉴런 논리 연산 · TLU 계단함수 · 퍼셉트론 (10장)">
+    <meta property="og:description" content="인공지능과뇌인지과학 12주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../../icon-180.png">
+    <link rel="stylesheet" href="../../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../인공지능과뇌인지과학.html">← 인공지능과뇌인지과학 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🧠 인공지능과뇌인지과학 · 12주차</h1>
+        <p>신경망과 딥러닝 1 — 🔥 뉴런 논리 연산 · TLU 계단함수 · 퍼셉트론 (10장)</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-11주차.html">‹ 이전 · <b>11주차</b><br><small>머신러닝 3 — 🔥 경사하강법 · 학습률 · 특성 스케일링 · SVM (9장)</small></a><a class="next" href="인공지능과뇌인지과학-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 12주차 반영)</small></a></nav>
+
+<div class="tip">수업: <b>11/19(목)</b> · 자료: <b>인공지능과_뇌인지과학_10장.pdf</b> (17쪽 · 신경망과 딥러닝 1) — 노션 12주차는 비어 있어서 <b>PDF 펜 필기</b>(✍️ 4 · 5 · 6 · 7 · 8 · 9 · 10 · 14쪽)와 <b>내 논의 답</b>(<code>20232629_윤희근.txt</code>)으로 정리했어요. 📄 = 강의자료 · ✍️ = 내 필기 · 🤖 = 강의자료에 없는 설명.<br>🔥 ★ 가 붙은 곳 = <b>6쪽 뉴런 논리 연산 그림</b>(★ 4개) · <b>8쪽 TLU 계단함수 계산</b>(★) → <b>3 · 4절</b> · ✗ 를 친 곳 = 9쪽 TLU와 선형 이진분류 · 10쪽 편향(“편향은 안함”) · 14쪽 행렬 수식</div>
+<section class="card" id="s1">
+<h2>🎨 12주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/뇌인지-그림정리.html?week=12" title="12주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/뇌인지-그림정리.html?week=12" target="_blank" rel="noopener">🎬 12주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+<ul><li>㉛ 생물학적 뉴런 → 인공 뉴런 · ㉜ 🔥 뉴런 논리 연산 (C = A · A ∧ B · A ∨ B · A ∧ ¬B) · ㉝ 🔥 TLU — 가중치 합 → 계단함수 · ㉞ 퍼셉트론 → 다층 퍼셉트론 · 역전파</li></ul>
+</section>
+<section class="card" id="s2">
+<h2>✍️ 내 필기 (PDF 펜)</h2>
+<table class="ref">
+<tbody>
+<tr><th>어디</th><th>✍️ 필기</th><th>정리</th></tr>
+<tr><td>4쪽 인공 신경망 부흥</td><td>빨간 네모 — “인공 신경망이 <b>투자와 진보의 선순환</b> → 제품들이 뉴스 헤드라인 장식 (자율주행 · 추천시스템 · Chat-GPT)”</td><td>1절</td></tr>
+<tr><td>5쪽 뉴런의 구조</td><td>수상돌기 옆 “<b>정보 받기</b>” · 축색 옆 “<b>다른 뉴런께 정보 전달</b>”</td><td>2절</td></tr>
+<tr><td>6쪽 뉴런 논리 연산 그림</td><td>🔥 <b>★ 4개</b> + 네모 · “<b>¬ = NOT · ∧ = AND · ∨ = OR</b>”</td><td>3절</td></tr>
+<tr><td>7쪽 TLU</td><td><b>TLU(threshold logic unit)</b> 동그라미 + ☆ · LTU(linear threshold unit) 에는 줄</td><td>4절</td></tr>
+<tr><td>8쪽 계단함수</td><td>🔥 <b>★</b> + 네모(TLU 그림 · heaviside · sgn) · 손 계산 x₁ = −1 · x₂ = 0 · x₃ = 1 / w₁ = 1 · w₂ = 2 · w₃ = 2 → z = −1 + 0 + 2 = 1 → ∴ step = z = 1</td><td>4절</td></tr>
+<tr><td>9쪽</td><td>“TLU와 선형 이진분류” 에 큰 <b>✗</b> · “<b>퍼셉트론 정의</b>” 동그라미</td><td>5절</td></tr>
+<tr><td>10쪽 입력층 예제 그림</td><td>큰 <b>✗</b> + “<b>편향은 안함</b>”</td><td>5절</td></tr>
+<tr><td>14쪽 행렬 수식</td><td>쪽 전체에 큰 <b>✗</b> · 그림의 은닉층에 동그라미</td><td>6절</td></tr>
+<tr><td>17쪽 논의</td><td>내 답 3개 (<code>20232629_윤희근.txt</code>)</td><td>7절</td></tr>
+</tbody></table>
+<ul><li>2 · 11 · 17쪽 펜 표시는 내용이 없는 빈 표시예요</li></ul>
+</section>
+<section class="card" id="s3">
+<h2>1. 인공 신경망 (2 ~ 4쪽)</h2>
+<ul><li>📄 <b>ANN</b>(Artificial Neural Network) = 뇌에 있는 <b>생물학적 뉴런의 네트워크에서 영감</b>을 받은 머신러닝 모델</li><li>📄 하늘을 나는 비행기 → 새로부터 영감 · 지능적인 기계 → 뇌 구조로부터 영감 — 그러나 비행기가 새처럼 날개를 펄럭일 필요는 없다 → 인공 신경망도 <b>뉴런에서 점점 멀어짐</b></li><li>📄 인공 신경망 → <b>딥러닝의 핵심</b> — 다재다능 · 강력 · 확장성이 좋음 · 수백만 개의 이미지 분류(구글 이미지) · 음성 인식(애플 Siri) · 비디오 추천(유투브) · <b>대규모</b> 머신러닝 문제에 적합</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>📄 역사 (3 · 4쪽)</th><th>내용</th></tr>
+<tr><td><b>1943년</b></td><td>신경생리학자 <b>워런 매컬러</b>(Warren McCulloh) · 수학자 <b>월터 피트</b>(Walter Pitts) — <b>명제 논리</b>로 뉴런이 복잡한 계산을 위해 상호작용하는 간단한 계산 모델 → <b>최초의 인공 신경망 구조</b></td></tr>
+<tr><td>초기 성공 → 1960년</td><td>지능을 가진 기계와 대화를 나눌 수 있을 거란 기대 → 힘들다는 게 명백해지자 <b>침체기</b></td></tr>
+<tr><td>1980년대 초</td><td>새로운 네트워크 구조 → <b>연결주의</b>(신경망 연구) 관심 증가</td></tr>
+<tr><td>1990년대</td><td><b>서포트 벡터 머신</b> 같은 기술이 더 나아 보임 → 신경망 연구 <b>침체기</b></td></tr>
+<tr><td>부흥 (4쪽)</td><td>① 훈련 <b>데이터</b>가 많아짐 ② <b>하드웨어</b> 발전(무어의 법칙 · GPU · 클라우드 플랫폼) ③ 훈련 <b>알고리즘</b> 향상(작은 변화 → But. 커다란 영향) ④ 이론상 제한(<b>지역 최저점</b> 문제)이 실전에선 문제가 안 됨 ⑤ ✍️ <b>투자와 진보의 선순환</b> → 자율주행 · 추천시스템 · Chat-GPT</td></tr>
+</tbody></table>
+<ul><li>⚠️ 팩트체크 — 슬라이드 철자 McCulloh → 정확한 이름은 <b>Warren McCulloch</b> (🤖)</li><li>🤖 9주차 연결 — 연결주의(1980년대 · 인공신경망 · 데이터로 학습) → 딥러닝(2010~ · GPU)</li></ul>
+</section>
+<section class="card" id="s4">
+<h2>2. 생물학적 뉴런 (5쪽)</h2>
+<ul><li>📄 뉴런의 구조 — <b>수상돌기 · 축색 · 축색종말 · 시냅스 · 활동 전위 · 신호 · 신경전달 물질</b></li><li>✍️ <b>수상돌기 = “정보 받기”</b> · ✍️ <b>축색 = “다른 뉴런께 정보 전달”</b></li><li>📄 그림 — Dendrites(수상돌기) → Cell body(세포체 · Nucleus 핵) → Axon hillock → Axon(축색 · Myelin sheath 수초) → Synaptic terminals(축색종말) → <b>Synapse</b>(시냅스) → 다음 뉴런 (Presynaptic cell → Postsynaptic cell · Signal direction)</li><li>🤖 5주차 연결 — 활동 전위가 축색을 따라 → 축색종말에서 신경전달물질 → 시냅스를 건너 다음 뉴런의 수상돌기로 · 인공 뉴런은 이 흐름을 <b>입력(받기) → 계산 → 출력(전달)</b> 으로 단순화</li></ul>
+</section>
+<section class="card" id="s5">
+<h2>3. 🔥 뉴런을 사용한 논리 연산 (6쪽 · ✍️ ★ 4개)</h2>
+<ul><li>📄 <b>인공 뉴런</b> (매컬러와 피트) — 하나 이상의 <b>이진(on/off) 입력</b>과 <b>이진 출력 하나</b> · 입력이 <b>일정 개수만큼 활성화</b>되었을 때 출력을 내보냄 · 예: <b>입력이 둘은 준비되어야</b> 뉴런이 활성화된다고 가정</li><li>✍️ <b>¬ = NOT · ∧ = AND · ∨ = OR</b> (📄 그림 속 ∧ = 논리곱 · ∨ = 논리합 · ¬ = 논리부정)</li></ul>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>📄 그림</th><th>🤖 연결 (그림의 화살표)</th><th>뜻</th><th>C 가 켜지는 때</th></tr>
+<tr><td><b>C = A</b></td><td>A → C 연결 <b>2개</b></td><td>그대로</td><td>A 가 켜지면 (A 하나로 신호 2개)</td></tr>
+<tr><td><b>C = A ∧ B</b></td><td>A → C <b>1개</b> · B → C <b>1개</b></td><td>AND (논리곱)</td><td>A · B <b>둘 다</b> 켜질 때</td></tr>
+<tr><td><b>C = A ∨ B</b></td><td>A → C <b>2개</b> · B → C <b>2개</b></td><td>OR (논리합)</td><td>A · B 중 <b>하나라도</b> 켜질 때</td></tr>
+<tr><td><b>C = A ∧ ¬B</b></td><td>A → C <b>2개</b> · B → C 는 <b>억제(−)</b> 연결</td><td>A AND NOT B</td><td>A 가 켜지고 <b>B 는 꺼져 있을 때</b></td></tr>
+</tbody></table>
+<ul><li>🤖 기준 = “신호 <b>2개</b>가 들어와야 켜짐” — 연결 개수만 세어 보면 표가 이해돼요 (그림 ㉜)</li></ul>
+</section>
+<section class="card" id="s6">
+<h2>4. 🔥 퍼셉트론 — TLU · 계단함수 (7 · 8쪽 · ✍️ ★)</h2>
+<ul><li>📄 <b>TLU</b>(threshold logic unit · ✍️ 동그라미 ☆) 또는 LTU(linear threshold unit)라 불리는 인공 뉴런을 활용 · ✍️ LTU 에는 줄 → 🤖 이름은 <b>TLU</b> 로 기억</li><li>📄 입력 / 출력 = <b>숫자</b> · 모든 입력은 <b>가중치</b>와 연결됨</li><li>📄 TLU = 입력값과 가중치를 곱한 값들의 <b>합</b>에 <b>계단함수(step function)</b> 적용 · n = 특성 수<ul><li>📄 <code>z = xᵀw = x₁w₁ + x₂w₂ + … + xₙwₙ</code> → 출력 <code>h_w(x) = step(z)</code></li></ul></li><li>📄 8쪽 예제 — <b>3개의 특성</b>을 갖는 샘플 하나가 입력되면 가중치와 곱한 후 <b>합</b>을 계산 → 계단함수를 통과시킨 결과를 출력 · 보통은 <b>편향</b>에 대한 가중치도 함께 고려</li><li>📄 가장 많이 사용되는 계단함수 — <b>Heaviside 계단함수</b>와 <b>sign 함수</b></li></ul>
+<table class="ref">
+<tbody style="min-width:439px;">
+<tr><th>📄 계단함수</th><th>z &lt; 0</th><th>z = 0</th><th>z &gt; 0</th></tr>
+<tr><td><b>heaviside(z)</b></td><td>0</td><td><b>1</b></td><td>1</td></tr>
+<tr><td><b>sgn(z)</b></td><td>−1</td><td><b>0</b></td><td>1</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>✍️ 손 계산 (★)</th><th>x₁ = −1 · x₂ = 0 · x₃ = 1 / w₁ = 1 · w₂ = 2 · w₃ = 2</th></tr>
+<tr><td>① 곱해서 더하기</td><td>z = (−1)×1 + 0×2 + 1×2 = −1 + 0 + 2 = <b>1</b></td></tr>
+<tr><td>② 계단함수</td><td>heaviside(1) = <b>1</b> (z ≥ 0) · sgn(1) = <b>1</b> (z &gt; 0)</td></tr>
+</tbody></table>
+<ul><li>⚠️ 팩트체크 — ✍️ “∴ step = z = 1” 은 이번 값이 <b>우연히 같은 것</b> · 계단함수는 z 를 그대로 내보내지 않고 <b>0 과 비교</b>해서 heaviside 는 0 · 1, sgn 은 −1 · 0 · 1 만 내보냄 → 예) z = 5 여도 heaviside = <b>1</b> · z = −3 이면 heaviside = 0 · sgn = −1 (🤖)</li><li>🤖 헷갈리는 곳 — <b>z = 0</b> 일 때 heaviside = <b>1</b> (z ≥ 0) · sgn = <b>0</b></li></ul>
+</section>
+<section class="card" id="s7">
+<h2>5. 퍼셉트론 정의 · 학습 (9 ~ 11쪽)</h2>
+<ul><li>✍️ 9쪽 “TLU와 선형 이진분류” 에 큰 ✗ → 🤖 수업에서 넘어간 부분 — 짧게만: 하나의 TLU = 간단한 <b>이진분류기</b>(입계값을 기준으로 양성 / 음성 · 학습 = 최적의 가중치 찾기)</li><li>📄 <b>퍼셉트론 정의</b> (✍️ 동그라미) — <b>하나의 층에 여러 개의 TLU</b> 로 구성 · TLU 각각은 <b>모든 입력과 연결</b>됨</li><li>📄 10쪽 <b>입력층</b> = 입력 뉴런(입력을 받아 <b>그대로 통과</b>시켜 출력)으로 구성된 층 · 편향값 1 을 항상 출력하는 편향 뉴런도 함께 · 예: 입력 2개 · 출력 3개 퍼셉트론 — ✍️ 그림에 ✗ + “<b>편향은 안함</b>”</li><li>📄 11쪽 <b>퍼셉트론 학습 알고리즘</b> — 오차가 감소되도록 가중치를 조절하며 뉴런 사이의 관계를 강화 · <b>하나의 샘플이 입력될 때마다 예측 → 오차 계산 → 오차가 줄어드는 방향으로 가중치 조절</b><ul><li>📄 <code>w(next step) = w + η (y − ŷ) x</code> — 🤖 η = 학습률(11주차) · y − ŷ = 실제 − 예측(10주차 오차 e) → 예측이 맞으면(y − ŷ = 0) 가중치 그대로</li></ul></li></ul>
+</section>
+<section class="card" id="s8">
+<h2>6. 다층 퍼셉트론(MLP)과 역전파 (12 ~ 15쪽)</h2>
+<ul><li>📄 <b>다층 퍼셉트론(MLP)</b> = 퍼셉트론을 여러 개 쌓아 올린 인공신경망 — <b>입력층 1개 · 은닉층 여러 개 · 출력층 1개</b></li><li>📄 <b>완전연결 층(밀집 층)</b> = 층에 속한 각각의 뉴런이 <b>이전 층의 모든 뉴런</b>과 연결되어 있을 때</li><li>✍️ 14쪽 행렬 수식 <code>h(X) = φ(XW + b)</code> (X 특성행렬 · W 가중치 · b 편향벡터 · φ 활성화 함수) 쪽은 통째로 <b>✗</b> — 그림의 <b>은닉층</b>(가운데 두 줄)에 동그라미</li><li>📄 <b>심층신경망(DNN)</b> = 여러 개의 <b>은닉층</b>을 쌓아 올린 인공신경망</li><li>📄 <b>역전파</b>(backpropagation) — 층이 많을수록 훈련이 어려웠는데 <b>1986년</b>에 소개된 역전파 이후 실용성을 갖춤</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>📄 역전파</th><th>하는 일</th></tr>
+<tr><td>1단계 (<b>정방향</b>)</td><td>각 훈련 샘플에 대해 먼저 <b>예측</b> → <b>오차 측정</b></td></tr>
+<tr><td>2단계 (<b>역방향</b>)</td><td>거꾸로 각 층을 거치며 각 연결이 <b>오차에 기여한 정도</b> 측정</td></tr>
+<tr><td>3단계</td><td>오차가 감소하도록 <b>모든 가중치 조정</b></td></tr>
+</tbody></table>
+<ul><li>📄 16쪽 영상자료 — youtube.com/watch?v=aircAruvnKk (🤖 3Blue1Brown 「But what is a neural network?」)</li></ul>
+</section>
+<section class="card" id="s9">
+<h2>7. 논의 (17쪽 · ✍️ 내 답)</h2>
+<table class="ref">
+<tbody>
+<tr><th>📄 질문</th><th>✍️ 내 답 (<code>20232629_윤희근.txt</code>)</th></tr>
+<tr><td>뉴런과 인공신경망의 공통점과 차이점은?</td><td>공통 = <b>여러 신호를 받아 처리하고 결과를 전달</b> · 차이 = 생물학적 뉴런은 뇌에서 <b>전기적 · 화학적 신호</b>, 인공신경망은 컴퓨터에서 <b>수학적 계산</b></td></tr>
+<tr><td>딥러닝은 왜 많은 양의 데이터가 필요할까?</td><td>많은 데이터로 <b>특징과 규칙</b>을 찾아냄 · 데이터가 많을수록 다양한 상황을 학습해 <b>예측 정확도</b>가 높아짐</td></tr>
+<tr><td>딥러닝처럼 생물학적인 구조가 바탕이 된 기술은?</td><td><b>유전자 알고리즘 · 진화 알고리즘</b> — 생물의 유전과 자연선택에서 아이디어 · 여러 방법 중 더 좋은 결과를 골라 발전</td></tr>
+</tbody></table>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-11주차.html">‹ 이전 · <b>11주차</b><br><small>머신러닝 3 — 🔥 경사하강법 · 학습률 · 특성 스케일링 · SVM (9장)</small></a><a class="next" href="인공지능과뇌인지과학-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 12주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「인공지능과뇌인지과학 · 12주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../../ink.js?v=202611041620"></script>
+</body>
+</html>

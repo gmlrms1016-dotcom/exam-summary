@@ -20,7 +20,7 @@
 
     <header class="page-head">
         <h1>운영체제실습 · 완전 정리</h1>
-        <p>1주차 ~ 11주차 Rocky Linux · 명령어 + 마운트 + 권한 + 사용자·그룹 관리 + 패키지 설치(rpm·dnf) + 작업 예약(cron·at) + 프로세스·작업 제어 + 셸 스크립트 + 도전문제 + 디스크·fstab·쿼터 + RAID 총정리 + 원격 접속(텔넷 · XRDP) · 🔥 LVM 개념</p>
+        <p>1주차 ~ 12주차 Rocky Linux · 명령어 + 마운트 + 권한 + 사용자·그룹 관리 + 패키지 설치(rpm·dnf) + 작업 예약(cron·at) + 프로세스·작업 제어 + 셸 스크립트 + 도전문제 + 디스크·fstab·쿼터 + RAID 총정리 + 원격 접속(텔넷 · XRDP) · 🔥 LVM 개념 + DB 서버(MariaDB · 사용자 · 권한) · NFS 공유</p>
     </header>
 
     <div id="week-nav" data-subject="운영체제실습"></div>
@@ -61,6 +61,7 @@
         <a href="#s21">21.RAID 종류(10주차)</a>
         <a href="#s22">22.Linear RAID·RAID 0(10주차)</a>
         <a href="#s23">23.원격 접속·텔넷·XRDP·LVM(11주차)</a>
+        <a href="#s24">24.DB 서버 MariaDB·NFS(12주차)</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1625,9 +1626,26 @@ exit 0                                    # 정상 종료</code></pre>
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#lvm" title="그림 — LVM 개념" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#lvm" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — LVM 개념 — 새 창으로 크게 보기</a></p></div>
     </section>
 
+    <section class="card" id="s24">
+        <h2>24. DB 서버 — 🔥 MariaDB 설치 · 사용자 · 권한 + 🔥 NFS 공유<span class="week">12주차</span></h2>
+        <p>11/19(목) — 과제 VITAMIN QUIZ 11-1(Server(B) MariaDB 12.1 + 실습 3 shopping_db) · 14-1(Server(B) /share NFS → Client · Windows) · ✍️ “오늘 실습: server(b)에 dbms를 설치해서 서비스를 운영한다”. 로그 · 명령은 <a href="weeks/운영체제실습-12주차.html" target="_blank" rel="noopener">12주차 페이지</a>.</p>
+        <table class="ref">
+            <tr><th>주제</th><th>핵심</th></tr>
+            <tr><td>MariaDB 설치</td><td>rpm 5개(MariaDB-client · common · server · shared · galera-4) → <code>dnf -y install M*.rpm g*.rpm</code> → <code>systemctl restart</code> · <code>enable mariadb</code> → active (running)</td></tr>
+            <tr><td>포트 3306</td><td><code>firewall-cmd --permanent --add-port=3306/tcp</code> → <code>firewall-cmd --reload</code> (📖 HINT2 · 그래픽 = <code>firewall-config</code>)</td></tr>
+            <tr><td>DB 사용자</td><td>사용자 = <b>'이름'@'호스트'</b> · <code>create user winuser@'192.168.111.%' identified by '…';</code> (% = 아무 글자) · root 비밀번호를 정한 뒤엔 <code>mariadb -h localhost -u root -p</code></td></tr>
+            <tr><td>권한</td><td><code>grant all on *.* to winuser@'192.168.111.%';</code> (*.* = 모든 DB · 모든 표) → <code>flush privileges;</code></td></tr>
+            <tr><td>NFS 서버</td><td>nfs-utils · <code>/etc/exports</code> = <code>/share *(rw,sync)</code> (공유 폴더 · 허용 컴퓨터 · 옵션) → <code>chmod 707</code> → <code>systemctl restart nfs-server</code> = active (exited) · <code>exportfs -v</code></td></tr>
+            <tr><td>NFS 클라이언트</td><td><code>showmount -e 서버IP</code> → <code>sudo mount -t nfs 서버IP:/share myshare</code> · Windows <code>mount.exe 서버IP:/share Z:</code></td></tr>
+        </table>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#mariadb" title="그림 — MariaDB 설치 → 서비스 → 접속" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#mariadb" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — MariaDB 설치 → 서비스 → 접속 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#dbuser" title="그림 — DB 사용자 '이름'@'호스트'" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#dbuser" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — DB 사용자 '이름'@'호스트' — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/리눅스-그림정리.html#nfs" title="그림 — NFS /etc/exports → mount" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/리눅스-그림정리.html#nfs" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — NFS /etc/exports → mount — 새 창으로 크게 보기</a></p></div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 58 · 주관식 102 · 출력결과 3 · 서술형 6 · 총 169문제 — 7주차 도전문제 · 9주차 디스크 · 쿼터 · 10주차 RAID 포함)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 70 · 주관식 115 · 출력결과 3 · 서술형 6 · 총 194문제 — 7주차 도전문제 · 9주차 디스크 · 쿼터 · 10주차 RAID · 11주차 원격 접속 · LVM · 12주차 MariaDB · NFS 포함)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="운영체제실습-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
