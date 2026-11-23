@@ -29,6 +29,19 @@
   - **50줄이 넘으면 나눠 찍기** = `-Lines 1-45` · `-Lines 46-90` (그 줄을 맨 위로) → `src_이름_1.png` · `_2.png` · 출력의 `fit: skipped (…)` 는 확대 · 창 맞추기만 못 한 것(그림은 찍힘) → 그 글을 그대로 사용자에게 알리기
   - run = 시작 프로젝트 바꾸기 → 디버그하지 않고 시작(Ctrl+F5) → 새 디버그 콘솔 창 높이를 출력에 맞춤(`-Height` 로 직접 · `-NoFit` 안 바꿈) → 여러 장(`-Shots 5`) 중 **커서가 꺼진 장면** · 입력이 필요한 프로그램(scanf)은 사용자가 입력한 뒤 vmcapture `-Window` 로
   - **실행 캡처는 Ctrl+F5 로 뜨는 창 그대로** (2026-11-09 사용자: “출력결과는 그냥 ctrl+F5 해서 나오는 거처럼”) — 경로가 길어 `…종료되었습니다.` 줄이 두 줄이 돼도 그대로 · 내용을 고치거나 자르지 않음
+  - ⭐ **2026-11-23 사용자 확정 (13주차 Quiz — “다음부턴 오늘 과제처럼 과제하면 되고”)**
+    - Quiz 는 **문제마다 프로젝트 따로** (`w13.sln` 안 `w13-quiz1-01` ~ `w13-quiz1-12`) · 맨 위 주석 `// [Quiz 1-01]` (강의자료 표기 그대로 · 파일 이름 주석 X) · 워드 표 1행도 **`[Quiz 1-01]` 만** (문제 설명 X) · eclass 제출까지
+    - **소스** = 코드에 딱 맞게 자름 (줄 번호 포함 · 상태 줄 · 스크롤바 · 탭 X)
+    - **실행** = Ctrl+F5 디버그 콘솔 창 그대로 (제목 줄 · 종료 안내 두 줄 포함) · **가로는 건들지 않고 아래만 마지막 글자 줄에 맞춰 자름** — cmd 를 글자만 딱 맞게 자르는 `-TextOnly` 는 C 과제 실행 캡처에 쓰지 않음
+  - 🔧 **이 학교 PC 에서 `vscapture.ps1` 이 막혔던 것 → 해결** (2026-11-23 · 도구에는 아직 안 넣음 — 맥에서 못 돌려 봄 · 막히면 그 자리에서 이렇게 고치고, 고친 사본은 N주차 폴더에 남겨 맥이 받게)
+    - `-Mode src` = “null-valued expression” → 이 PC 의 PowerShell 은 DTE 창 속성(Visible · Caption · ActivePane)을 그냥 못 읽음 → `[System.__ComObject].InvokeMember('이름', [Reflection.BindingFlags]::GetProperty, $null, $창, $null)` (쓰기는 SetProperty)
+    - `-Mode run` = “debug console did not appear” → 디버그 콘솔이 **Windows 터미널**(프로세스 `WindowsTerminal` · 제목 “Microsoft Visual Studio 디버그 콘솔”)로 뜸 → 그 창을 찾기
+    - 시작 프로젝트 — `SolutionBuild.StartupProjects = "이름"` 은 E_FAIL → `"이름\이름.vcxproj"` 를 배열로 InvokeMember
+    - `View.ZoomIn/ZoomOut` 은 VS 가 앞에 없으면 “사용할 수 없음” → 글꼴 크기(`DTE.Properties("FontsAndColors","TextEditor").Item("FontSize").Value` = Int16)로 코드를 화면에 맞추고 끝나면 10 으로 되돌림
+    - 1번 줄이 반쯤 잘림 → 글꼴을 바꾼 뒤 파일을 닫았다 다시 열기 + C/C++ 탐색 막대(`ShowNavigationBar`) 잠깐 끄기
+    - 현재 줄 테두리 → DTE 에 HighlightCurrentLine 설정이 없음 → 색 항목 `CurrentLineActiveFormat` 의 Foreground 를 편집기 배경색(#1E1E1E)으로 잠깐 바꿨다 되돌림 (원래 #464646)
+    - `vmcapture.ps1 -Out` 에 **한글 경로**를 powershell.exe 인자로 넘기면 깨져 엉뚱한 폴더에 저장됨 → 영문 임시 경로에 저장한 뒤 옮기기
+    - 제출 워드를 다시 만들 때 Word 에 열려 있으면 저장이 막힘 → 다시 만들기 전에 먼저 확인
   - 워드는 문제마다 1열 3행 표 (문제 · 소스 · 실행) · 원본 PNG 그대로
   - 수업 실습 코드는 **맨 위에 파일 이름 주석 한 줄만** (`// w11-ex01_05-pointer-01.c` — 메모 글자 X) · 한 슬라이드에 코드 2개면 두 번째에 `-static` · `-null` 처럼 붙임 · 주차 솔루션 하나(`w11.sln`) · 프로젝트 이름에 `.c` 를 붙이지 않기
   - **제출 전 점검 = `hwcheck.py`** (`%USERPROFILE%\.claude\동양미래\도구\c-hw\hwcheck.py` · 파이썬 표준만): `python hwcheck.py <솔루션 폴더> --doc <제출.docx> --pdf <강의자료.pdf>` → ❌ 는 고치고 ⚠️ 는 사용자에게 알리기만
