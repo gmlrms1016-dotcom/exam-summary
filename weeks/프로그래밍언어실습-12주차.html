@@ -102,7 +102,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>포인터 2 (w12) — 이중 포인터 · 배열 포인터 · 포인터 배열 · 함수 포인터 · void 포인터 · 포인터 연산</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><a class="next" href="프로그래밍언어실습-13주차.html">다음 · <b>13주차</b> ›<br><small>문자열 (w13) — 명령행 인수 argc · argv · 문자 입출력 · 문자열 · 문자열 함수 + 🔥 기말고사 시험 방식</small></a></nav>
 
 <div class="tip">자료: 노션 필기(11/16) · <b>C-Lect12-w12-포인터2-stu-pdf-v1.0.1.pdf</b> (24쪽 · 11/16 저녁에 19쪽을 고친 판) · 수업 파일 <code>w12.sln</code> (main.c 하나에 이중 · 배열 · 함수 · void 포인터를 주석으로 바꿔 가며 실행) · 교수님 화면 사진 1장(배열 포인터 이론 + 엑셀 메모리 그림) · 실습 요약 PDF(교재 11장 · 과제04). PDF 펜 필기 없음. ✍️ = 내 필기 · 수업 코드 · ⚠️ = 정정 · 🤖 = 강의자료에 없는 설명. 코드 주석과 ▶ 출력은 이 맥(clang · 64비트)에서 직접 컴파일 · 실행한 값이고, 주소처럼 <b>실행마다 다른 값</b>은 그렇다고 적었어요.</div>
 <div class="tip">🔥 <b>기말고사 (✍️ 노션)</b> — ① “<b>오늘 한 거 실행결과 기말고사 예상문제</b>” = 수업에서 실행한 4개 (이중 포인터 · 배열 포인터 · 함수 포인터 · void 형 포인터) ② “<b>강의자료 5페이지 기말고사 예상문제</b>” + 노션 <code>//시험문제</code> (<code>printf("%d %d %d", *ptr, ptr, i)</code>) ③ “<b><code>++ptr</code> 이 1004번지 / 1001번지가 나오는 방법 공부하기</b>” ④ “<b>포인터 종류 공부하기</b>” → 아래 ① ~ ⑥ 을 먼저 보세요.</div>
@@ -466,7 +466,7 @@ MORNING MORNING
 <ul><li>🔥 5쪽 — <code>ptr = &amp;i;</code> 뒤 <code>*ptr = 100;</code> → <b>i 도 100</b> · <code>printf("%d %d %d", *ptr, ptr, i)</code> → <code>10 (주소) 10</code> (주소는 <code>%p</code> 가 맞음)</li><li>🔥 이중 포인터 <code>int** pptr = &amp;ptr;</code> → <code>**pptr</code> = i · <code>**pptr = 11;</code> → i = 11 · 출력 <code>*ptr = 10</code> / <code>i = 11, *ptr = 11, **ptr = 11</code></li><li>🔥 배열 포인터 <b><code>int (*ptr)[3]</code></b> = 포인터 1개 (+1 → 한 줄 12바이트) · 포인터 배열 <b><code>int* ptr[3]</code></b> = 주소 3칸짜리 배열 (⚠️ 9쪽 표는 이름이 바뀜)</li><li>🔥 함수 포인터 <code>int (*pfunc)(int); pfunc = add;</code> → <code>pfunc(11)</code> = 12 · void 포인터는 <b>형변환</b>해서 읽기 (<code>*((int*)vptr)</code>)</li><li>포인터 연산 = 자료형 크기만큼 — <code>int*</code> +1 → <b>1004</b> · <code>char*</code> +1 → <b>1001</b> · <code>++ptr</code> 은 ptr 을 바꾸고 <code>ptr + 1</code> 은 안 바꿈 · <code>*</code> <code>/</code> 는 안 됨</li></ul>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><a class="next" href="프로그래밍언어실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>포인터 1 (w11) — 배열명 = 시작 주소 · 배열과 함수 · 포인터 &amp; · * · static · NULL</small></a><a class="next" href="프로그래밍언어실습-13주차.html">다음 · <b>13주차</b> ›<br><small>문자열 (w13) — 명령행 인수 argc · argv · 문자 입출력 · 문자열 · 문자열 함수 + 🔥 기말고사 시험 방식</small></a></nav>
 
     <p class="wk-src">노션 「프로그래밍언어실습 · 12주차」 페이지를 정리한 내용입니다.</p>
 
