@@ -14,6 +14,8 @@
 - 표 칸에 `{빈칸}` = 손으로 써 보는 빈 칸 (높이 넉넉 · 줄 2개)
 - `:::toc` 한 줄 = 그 자리에 ‘바로 가기’ 칩 (이 원고의 `## ` 절 목록 · 누르면 그 카드로 이동 · 긴 중간고사 정리용)
 - `🎬 [이름](주소)` 한 줄 = 그 자리에 애니메이션 · 데모 페이지를 끼워 넣음(iframe · 주소는 주차 페이지 기준) + 아래에 '새 창으로 크게 보기' 버튼
+- ```sheet 제목 = 📗 엑셀 모양 표 (교수님 엑셀 설명처럼 · 2026-11-24 사용자: “엑셀로 설명이 있으면 좋겠어”) — 한 줄 = 한 행 · `|` 로 칸 나눔(칸 안의 | 는 \\|) · `--- 탭 이름` 줄 = 아래 시트 탭을 하나 더(누르면 바뀜) · 칸을 누르면 위 수식 줄에 그 칸 내용
+  칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{2}`~`{9}` 칸 합치기(오른쪽으로 N칸)
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
 원고 파일이 있는 주차만 과목 페이지에서 버튼이 열리고, 나머지는 잠깁니다.
 """
@@ -183,6 +185,77 @@ def render_exam(block):
     return "".join(out)
 
 
+XL_JS = ('<script data-xl-js>(function(){if(window.__xl)return;window.__xl=1;document.addEventListener("click",function(e){'
+         'var t=e.target.closest&&e.target.closest(".xl-tabs button");if(t){var x=t.closest(".xl"),i=[].indexOf.call(t.parentNode.children,t);'
+         'x.querySelectorAll(".xl-tabs button").forEach(function(b,k){b.classList.toggle("on",k===i);});'
+         'x.querySelectorAll(".xl-sheet").forEach(function(s,k){s.hidden=k!==i;});'
+         'x.querySelectorAll("td.sel").forEach(function(c){c.classList.remove("sel");});x.querySelector(".xl-ref").textContent="A1";x.querySelector(".xl-f").textContent="";return;}'
+         'var c=e.target.closest&&e.target.closest(".xl td");if(c){var y=c.closest(".xl");y.querySelectorAll("td.sel").forEach(function(d){d.classList.remove("sel");});'
+         'c.classList.add("sel");y.querySelector(".xl-ref").textContent=c.dataset.r;y.querySelector(".xl-f").textContent=c.textContent;}});})();</script>')
+
+
+def xl_col(n):
+    s = ""
+    n += 1
+    while n > 0:
+        n, m = divmod(n - 1, 26)
+        s = chr(65 + m) + s
+    return s
+
+
+def render_sheet(title, lines):
+    """```sheet 블록 → 엑셀 모양 (제목 줄 · 이름 상자 + fx 수식 줄 · A B C 열 · 1 2 3 행 · 아래 시트 탭)"""
+    sheets, name, cur = [], None, []
+    for ln in lines:
+        if ln.startswith("--- "):
+            if cur or name is not None:
+                sheets.append((name or "Sheet1", cur))
+            name, cur = ln[4:].strip(), []
+        else:
+            cur.append(ln)
+    sheets.append((name or "Sheet1", cur))
+    tabs, tables = [], []
+    for k, (nm, rows) in enumerate(sheets):
+        grid = []
+        for ln in rows:
+            cells = [c.replace("\\|", "|") for c in re.split(r"(?<!\\)\|", ln)] if ln.strip() else []
+            out = []
+            for c in cells:
+                c = c.strip()
+                cls, span = [], 1
+                while True:
+                    m = re.match(r"\{([ybhkcrn]|[2-9])\}", c)
+                    if not m:
+                        break
+                    v = m.group(1)
+                    if v.isdigit():
+                        span = int(v)
+                    else:
+                        cls.append(v)
+                    c = c[m.end():]
+                if re.fullmatch(r"[+-]?\d+(\.\d+)?", c):
+                    cls.append("num")
+                out.append((c, cls, span))
+            grid.append(out)
+        ncol = max([sum(sp for _, _, sp in r) for r in grid] + [1])
+        h = ['<table class="xl-sheet"%s><thead><tr><th class="xl-corner"></th>%s</tr></thead><tbody>' % (
+            "" if k == 0 else " hidden", "".join("<th>%s</th>" % xl_col(j) for j in range(ncol)))]
+        for ri, r in enumerate(grid, 1):
+            tds, col = [], 0
+            for c, cls, sp in r:
+                tds.append('<td data-r="%s%d"%s%s>%s</td>' % (xl_col(col), ri, ' class="%s"' % " ".join(cls) if cls else "",
+                                                          ' colspan="%d"' % sp if sp > 1 else "", html.escape(c, quote=False)))
+                col += sp
+            tds += ['<td data-r="%s%d"></td>' % (xl_col(j), ri) for j in range(col, ncol)]
+            h.append("<tr><th>%d</th>%s</tr>" % (ri, "".join(tds)))
+        h.append("</tbody></table>")
+        tables.append("".join(h))
+        tabs.append('<button type="button"%s>%s</button>' % (' class="on"' if k == 0 else "", html.escape(nm)))
+    return ('<div class="xl"><div class="xl-head"><span class="xl-logo">X</span><span>%s</span></div>'
+            '<div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div>'
+            '<div class="xl-wrap">%s</div><div class="xl-tabs">%s</div></div>') % (html.escape(title or "엑셀로 보기"), "".join(tables), "".join(tabs))
+
+
 def render_md(md):
     lines = md.splitlines()
     title, parts, in_card, i = "", [], False, 0
@@ -215,7 +288,11 @@ def render_md(md):
                 code.append(lines[i])
                 i += 1
             body = html.escape("\n".join(code), quote=False)
-            if lang == "term" or lang.startswith("term "):   # 🖥️ 명령을 누르면 출력이 펼쳐지는 터미널 (termclick.js)
+            if lang == "sheet" or lang.startswith("sheet "):   # 📗 엑셀 모양 표 (교수님 엑셀 설명처럼)
+                parts.append(render_sheet(lang[5:].strip(), code))
+                if not any("data-xl-js" in x for x in parts):
+                    parts.append(XL_JS)
+            elif lang == "term" or lang.startswith("term "):   # 🖥️ 명령을 누르면 출력이 펼쳐지는 터미널 (termclick.js)
                 prompt = lang[4:].strip() or "$"
                 raw = "\n".join(code).replace("</", "<\\/")      # <script> 안이라 </ 만 막아 둠 (termclick.js 가 되돌림)
                 parts.append('<div class="tclick" data-prompt="%s"><script type="text/plain" class="tc-src">\n%s\n</script></div>' % (html.escape(prompt, quote=True), raw))
@@ -383,6 +460,30 @@ pre.io{background:#0f1b14;}
 pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
 pre.io code{color:#dff5e6;}
 pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+.xl{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0;background:var(--card);}
+.xl-head{display:flex;align-items:center;gap:8px;padding:6px 12px;background:#217346;color:#fff;font-size:13px;font-weight:700;}
+.xl-logo{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;background:#fff;color:#217346;font-weight:900;font-size:12px;}
+.xl-bar{display:flex;align-items:center;gap:8px;padding:5px 8px;border-bottom:1px solid var(--line);font-size:13px;}
+.xl-ref{min-width:44px;padding:1px 6px;border:1px solid var(--line);border-radius:3px;text-align:center;font-family:Consolas,Menlo,monospace;}
+.xl-fx{font-style:italic;font-weight:700;opacity:.55;}
+.xl-f{flex:1;min-width:0;min-height:20px;padding:1px 6px;border:1px solid var(--line);border-radius:3px;font-family:Consolas,Menlo,monospace;white-space:pre;overflow-x:auto;}
+.xl-wrap{overflow-x:auto;}
+.xl-sheet{border-collapse:collapse;font-size:13px;margin:0;width:auto;}
+.xl-sheet[hidden]{display:none!important;}
+.xl-sheet th{background:rgba(128,128,128,.14);font-weight:600;border:1px solid var(--line);padding:1px 6px;min-width:26px;font-size:11.5px;opacity:.9;}
+.xl-sheet td{border:1px solid rgba(128,128,128,.22);text-align:left;padding:3px 8px;min-width:38px;height:22px;white-space:pre;cursor:cell;}
+.xl-sheet td.num{text-align:right;}
+.xl-sheet td.y{background:rgba(255,206,64,.40);}
+.xl-sheet td.b{border:1.5px solid var(--ink);}
+.xl-sheet td.h{background:rgba(128,128,128,.22);font-weight:700;text-align:center;}
+.xl-sheet td.k{background:rgba(255,153,51,.40);font-weight:700;text-align:center;}
+.xl-sheet td.c{background:rgba(91,155,213,.34);font-weight:700;text-align:center;}
+.xl-sheet td.r{color:#e5484d;font-weight:700;}
+.xl-sheet td.n{font-weight:800;}
+.xl-sheet td.sel{box-shadow:inset 0 0 0 2px #21a366;}
+.xl-tabs{display:flex;gap:2px;padding:4px 8px 0;border-top:1px solid var(--line);background:rgba(128,128,128,.08);overflow-x:auto;}
+.xl-tabs button{border:0;border-bottom:2px solid transparent;background:transparent;color:inherit;font:inherit;font-size:12.5px;padding:4px 10px;border-radius:4px 4px 0 0;cursor:pointer;opacity:.75;white-space:nowrap;}
+.xl-tabs button.on{opacity:1;font-weight:800;color:#21a366;border-bottom-color:#21a366;background:var(--card);}
 """
 
 PAGE = """<!DOCTYPE html>
