@@ -21,7 +21,7 @@
 
     <header class="page-head">
         <h1>자바프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 12주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체 + 생성자 · this + this() · 오버로딩 · 접근 지정자 · static · 객체 배열 · 상속 · 생성자 호출 순서 · super() · toString · 오버라이딩 · 동적 바인딩 · 추상 클래스 · 인터페이스 · 패키지 · Object(toString · equals) · Wrapper · String</p>
+        <p>1주차 ~ 13주차 · 자바 개요(WORA·JVM) + 자료형 + 연산자 + 조건문 + 반복문·배열·예외처리 + 반복문·배열 실습 + 배열·예외 실습 · 클래스와 객체 + 생성자 · this + this() · 오버로딩 · 접근 지정자 · static · 객체 배열 · 상속 · 생성자 호출 순서 · super() · toString · 오버라이딩 · 동적 바인딩 · 추상 클래스 · 인터페이스 · 패키지 · Object(toString · equals) · Wrapper · String · Math · Calendar · ArrayList</p>
     </header>
 
     <div id="week-nav" data-subject="자바프로그래밍"></div>
@@ -69,6 +69,7 @@
         <a href="#s36">36.과제·toString</a>
         <a href="#s37">37.오버라이딩·인터페이스</a>
         <a href="#s38">38.패키지·toString·equals</a>
+        <a href="#s39">39.Math·Calendar·ArrayList</a>
         <a href="#quiz">✏️퀴즈</a>
         <a href="#output">🖥️출력맞히기</a>
         <a href="#code">💻코딩테스트</a>
@@ -2724,8 +2725,145 @@ C++
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#strmeth" title="그림 — String 메소드" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#strmeth" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — String 메소드 — 새 창으로 크게 보기</a></p></div>
     </section>
 
+    <section class="card" id="s39">
+        <h2>39. 13주차 — String 길이 · Math · Calendar (6장) · ArrayList (7장) · 과제 3문제<span class="week">13주차</span></h2>
+        <div class="tip">수업 11/24(화) · 6장.pdf 49 · 50 · 60 ~ 68쪽 + 7장.pdf 18 ~ 24쪽 — 수업 소스 Ex1 · MathEx · CalendarEx · ArrayListEx1 · ArrayListEx2 + 과제 3문제(문제1 ~ 3 · 수업 중 제출) · 코드 주석과 출력은 javac · java 로 직접 실행한 결과 · 자세한 정리는 <a href="weeks/자바프로그래밍-13주차.html" target="_blank" rel="noopener">13주차 페이지</a></div>
+        <h3>① String 길이 · Math 클래스 — 객체 없이 Math.메소드 (Ex1 · MathEx · 6장 49 · 50 · 60 ~ 62쪽)</h3>
+        <table class="ref">
+            <tr><th>코드</th><th>결과 · 뜻</th></tr>
+            <tr><td><code>"동양미래대학교".length()</code></td><td><b>7</b> — 글자(char) 수 · 한글도 한 글자 = 1 (🤖 C 의 strlen 처럼 바이트를 세지 않음)</td></tr>
+            <tr><td><code>Math.max(5, 2)</code> · <code>Math.min(5, 2)</code></td><td>큰 값 <b>5</b> · 작은 값 <b>2</b></td></tr>
+            <tr><td><code>Math.PI</code></td><td>원주율 상수 3.141592653589793</td></tr>
+            <tr><td><code>Math.ceil(a)</code> · <code>Math.floor(a)</code></td><td><b>올림</b> 4.0 · <b>내림</b> 3.0 (double 이라 <code>.0</code>)</td></tr>
+            <tr><td><code>Math.sqrt(9)</code> · <code>Math.exp(2)</code></td><td>제곱근 3.0 · e² 7.38905609893065</td></tr>
+            <tr><td><code>Math.round(a)</code></td><td><b>반올림</b> 3 (정수 long · 소수점 없음)</td></tr>
+            <tr><td><code>(int) (Math.random() * 45 + 1)</code></td><td>random() = 0.0 이상 1.0 미만 → ×45 → +1 → (int) 버림 → <b>1 ~ 45</b> (실행마다 다름)</td></tr>
+        </table>
+        <div class="tip">Math 는 <code>new</code> 없이 <code>Math.max(…)</code> 처럼 <b>클래스 이름으로 바로</b> 부름 (모든 메소드가 static · 6장 60쪽)</div>
+        <pre><code class="language-java">public class 연습 {                                             // 원래 이름 MathEx → 파일 이름도 연습.java
+    public static void main(String[] args) {                     // 프로그램 시작
+        double a = Math.PI;                                      // 원주율 상수 3.141592653589793
+        System.out.println(a);                                   // 3.141592653589793
+        System.out.println(Math.ceil(a));                        // 올림 → 4.0 (double)
+        System.out.println(Math.floor(a));                       // 내림 → 3.0
+        System.out.println(Math.sqrt(9));                        // 제곱근 √9 → 3.0
+        System.out.println(Math.exp(2));                         // e² → 7.38905609893065
+        System.out.println(Math.round(a));                       // 반올림 → 3 (long · 소수점 없음)
+        System.out.print(&quot;이번주 행운의 번호는 &quot;);                  // 줄바꿈 없이
+        for (int i = 0; i &lt; 5; i++)                              // 5번
+            System.out.print((int) (Math.random() * 45 + 1) + &quot; &quot;);  // random() = 0.0 이상 1.0 미만 → ×45 → 0 ~ 44.xx → +1 → (int) 로 버림 → 1 ~ 45
+    }                                                            // main 끝
+}                                                                // 클래스 끝</code></pre>
+        <pre class="io"><code class="language-text">3.141592653589793
+4.0
+3.0
+3.0
+7.38905609893065
+3
+이번주 행운의 번호는 41 12 24 2 37 </code></pre>
+        <h3>② Calendar — 오늘 날짜 · 시각 (CalendarEx · 6장 63 ~ 68쪽)</h3>
+        <pre><code class="language-java">import java.util.Calendar;                                       // Calendar 는 java.util 패키지
+
+public class 연습 {                                             // 원래 이름 CalendarEx → 파일 이름도 연습.java
+    public static void main(String[] args) {                     // 프로그램 시작
+        Calendar now = Calendar.getInstance();                   // new 가 아니라 getInstance() 로 지금 날짜 · 시각을 가진 객체
+        int year = now.get(Calendar.YEAR);                       // 연도
+        int month = now.get(Calendar.MONTH) + 1;                 // ✍️ “0부터 시작해서 1을 더해줘야함” → 11월은 10 + 1
+        int day = now.get(Calendar.DAY_OF_MONTH);                // 일
+        int hour = now.get(Calendar.HOUR);                       // 시 — HOUR 는 12시간제 (오후 4시 → 4)
+        int minute = now.get(Calendar.MINUTE);                   // 분
+        int second = now.get(Calendar.SECOND);                   // 초
+        System.out.println(year + &quot;년 &quot; + month + &quot;월 &quot; + day + &quot;일 &quot; + hour + &quot;시 &quot; + minute + &quot;분 &quot; + second + &quot;초&quot;);  // 이어 붙여 출력
+    }                                                            // main 끝
+}                                                                // 클래스 끝</code></pre>
+        <pre class="io"><code class="language-text">2026년 11월 24일 4시 51분 51초</code></pre>
+        <div class="tip"><span class="wk-tag note">✍️ 수업 코드</span> — <code>MONTH</code> 는 “0부터 시작해서 1을 더해줘야함” (1월 = 0 · 11월 = 10 → <code>+ 1</code>) · 🤖 <code>Calendar.HOUR</code> = 12시간제 (오후 4시 → 4) · 24시간제는 <code>HOUR_OF_DAY</code> (→ 16) · 결과는 실행한 시각마다 달라요 (javac 확인)</div>
+        <h3>③ ArrayList — add · get · size · for 와 for-each (ArrayListEx1 · 7장 18 ~ 24쪽)</h3>
+        <pre><code class="language-java">import java.util.ArrayList;                                      // ArrayList 는 java.util 패키지
+
+public class 연습 {                                             // 원래 이름 ArrayListEx1 → 파일 이름도 연습.java
+    public static void main(String[] args) {                     // 프로그램 시작
+        ArrayList&lt;Integer&gt; suList = new ArrayList&lt;Integer&gt;();    // 정수를 담는 리스트 (기본 타입 int 대신 Integer)
+        suList.add(5);                                           // [5]
+        suList.add(4);                                           // [5, 4]
+        suList.add(-1);                                          // [5, 4, -1]
+        suList.add(2, 100);                                      // 2번 자리에 끼워 넣기 → [5, 4, 100, -1] (뒤는 한 칸씩 밀림)
+        System.out.println(&quot;리스트 객체 수 : &quot; + suList.size());   // size() = 요소 개수 → 4
+        for (int index = 0; index &lt; suList.size(); index++) {    // 인덱스 0 ~ 3
+            int result = suList.get(index);                      // get(인덱스) → 그 자리 값 (Integer → int 자동 언박싱)
+            System.out.println(result);                          // 5 / 4 / 100 / -1
+        }                                                        // for 끝
+        System.out.println(&quot;위 for문과 아래 for문은 같음&quot;);          // ✍️ 수업 코드의 안내 문장
+        for (int hangae : suList) {                              // for-each — 앞에서부터 하나씩 꺼냄
+            System.out.println(hangae);                          // 5 / 4 / 100 / -1
+        }                                                        // for-each 끝
+    }                                                            // main 끝
+}                                                                // 클래스 끝</code></pre>
+        <pre class="io"><code class="language-text">리스트 객체 수 : 4
+5
+4
+100
+-1
+위 for문과 아래 for문은 같음
+5
+4
+100
+-1</code></pre>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#foreach" title="그림 — for · for-each" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#foreach" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — for · for-each — 새 창으로 크게 보기</a></p></div>
+        <table class="ref">
+            <tr><th>메소드 (7장 20쪽)</th><th>하는 일</th></tr>
+            <tr><td><code>add(값)</code> · <code>add(인덱스, 값)</code></td><td>맨 뒤에 추가 · 그 자리에 <b>끼워 넣기</b> (뒤는 한 칸씩 밀림 · 덮어쓰지 않음)</td></tr>
+            <tr><td><code>get(인덱스)</code> · <code>size()</code></td><td>그 자리 요소 · 요소 <b>개수</b> (배열은 <code>a.length</code> · String 은 <code>s.length()</code>)</td></tr>
+            <tr><td><code>remove(인덱스)</code> · <code>remove(객체)</code></td><td>그 자리 삭제 · 같은 첫 요소 삭제 → 뒤 요소가 앞으로 당겨짐</td></tr>
+            <tr><td><code>indexOf(객체)</code> · <code>contains(객체)</code></td><td>같은 첫 요소의 인덱스(없으면 <b>-1</b>) · 있으면 true</td></tr>
+            <tr><td><code>isEmpty()</code> · <code>clear()</code></td><td>비어 있으면 true · 모든 요소 삭제</td></tr>
+        </table>
+        <div class="tip"><span class="wk-tag note">✍️ 필기</span> — 노션 “ArrayList for문 실수 예” · <code>for (int index = 1; …)</code> 로 시작하면 <b>첫 칸(0번)을 건너뜀</b> → 인덱스도 배열처럼 <b>0부터</b> · <code>ArrayList&lt;String&gt;</code> 에 <code>nameList.add(1);</code> → <b>컴파일 오류</b> (javac <code>no suitable method found for add(int)</code>) · 기본 타입은 <code>&lt;Integer&gt;</code> 처럼 Wrapper 로 (18쪽 · 박싱/언박싱)</div>
+        <div class="tip">📄 21 · 22쪽 오류 — <code>a.capacity()</code> 는 없는 메소드 (컴파일 오류) · 요소 4개일 때 <code>a.add(5, …)</code> · 3개일 때 <code>a.remove(4)</code> → 실행 중 <code>IndexOutOfBoundsException</code> · ⚠️ 20쪽 표의 <code>elementAt(int index)</code> 는 <b>Vector 의 메소드</b> — ArrayList 에 쓰면 컴파일 오류 (<code>cannot find symbol</code> · javac 확인) → <code>get(인덱스)</code></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/자바프로그래밍-그림정리.html#alist" title="그림 — ArrayList" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/자바프로그래밍-그림정리.html#alist" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — ArrayList — 새 창으로 크게 보기</a></p></div>
+        <h3>④ ArrayList 에 객체 넣기 · remove · toString (ArrayListEx2 · 6장 31쪽)</h3>
+        <pre><code class="language-java">import java.util.ArrayList;                                      // ArrayList 사용
+
+class Point {                                                    // 점 클래스 (public 없이 같은 파일에)
+    private int x, y;                                            // 좌표 (private → 메소드로만 접근)
+    Point(int x, int y) {                                        // 생성자
+        this.x = x;                                              // this.x = 필드 · x = 매개변수
+        this.y = y;                                              // y 도 같게
+    }                                                            // 생성자 끝
+    @Override                                                    // Object 의 toString 을 다시 정의 (6장 31쪽 예제 6-2)
+    public String toString() {                                   // 객체를 출력하면 자동으로 불림
+        return &quot;Point [x=&quot; + x + &quot;, y=&quot; + y + &quot;]&quot;;               // 예: Point [x=2, y=3]
+    }                                                            // toString 끝
+}                                                                // Point 끝
+
+public class 연습 {                                             // 원래 이름 ArrayListEx2 → 파일 이름도 연습.java
+    public static void main(String[] args) {                     // 프로그램 시작
+        ArrayList&lt;Point&gt; ptList = new ArrayList&lt;Point&gt;();        // Point 객체를 담는 리스트
+        ptList.add(new Point(2, 3));                             // 0번
+        ptList.add(new Point(-5, 20));                           // 1번 (곧 지움)
+        ptList.add(new Point(30, -8));                           // 2번
+        ptList.add(new Point(1, 2));                             // 3번
+        ptList.remove(1);                                        // 1번 (-5, 20) 삭제 → 뒤가 한 칸씩 당겨짐 → 3개
+        for (Point p : ptList) {                                 // for-each 로 하나씩
+            System.out.println(p);                               // println(객체) → toString() 결과
+        }                                                        // for-each 끝
+    }                                                            // main 끝
+}                                                                // 클래스 끝</code></pre>
+        <pre class="io"><code class="language-text">Point [x=2, y=3]
+Point [x=30, y=-8]
+Point [x=1, y=2]</code></pre>
+        <h3>⑤ 📝 과제 3문제 (문제1 ~ 3.png · 수업 중 제출)</h3>
+        <table class="ref">
+            <tr><th>문제</th><th>하는 일</th><th>출력</th></tr>
+            <tr><td>문제1 <code>Example1_Basic</code></td><td>학생 이름 리스트 · <code>add(1, "최지우")</code> 끼워 넣기 · <code>get(1)</code> · <code>remove("박민수")</code> (값으로 지우기)</td><td>전체 학생 수: 4명 · 두 번째 학생: 최지우 · - 김철수 / - 최지우 / - 이영희</td></tr>
+            <tr><td>문제2 <code>Example2_Score</code></td><td>점수 리스트 · 총점 · 평균 <code>(double) sum / size()</code> · <code>%.1f</code> · 최고점</td><td>총점: 351 · 평균: 87.8 · 최고점: 96</td></tr>
+            <tr><td>문제3 <code>Example4_CafeCart</code></td><td><code>ArrayList&lt;Menu&gt;</code> · getter 로 이름 · 가격 · 5000원 이상만 다시 출력</td><td>총 결제 금액: 16000원</td></tr>
+        </table>
+        <div class="tip">⚠️ 문제3 그림의 오타 — <code>cartList</code> 를 만들고 <code>cart.add(…)</code> 로 씀 → <code>cartList</code> 로 · Menu 의 name · price 가 private 라 <code>item.name</code> 은 컴파일 오류 → 문제가 말한 대로 getter(<code>getName()</code> · <code>getPrice()</code>) 추가 · 문제1 · 2 는 아래 💻 코딩테스트 22 · 23번으로 연습</div>
+    </section>
+
     <section class="card" id="quiz">
-        <h2>✏️ 퀴즈 — 객관식 47 · 주관식 47<span class="week">2~12주차</span></h2>
+        <h2>✏️ 퀴즈 — 객관식 52 · 주관식 52<span class="week">2~13주차</span></h2>
         <div class="tip">📝 <b>객관식</b>은 보기를 누르면 바로 채점 · <b>주관식</b>은 답을 입력하고 <b>Enter</b> 또는 <b>확인</b> (띄어쓰기·대소문자·괄호·따옴표는 채점에서 무시)<br>틀린 문제는 오른쪽 아래 <b>📋 틀린 문제 복사</b> 버튼으로 모아서 AI에게 비슷한 문제를 요청할 수 있어요.</div>
         <div class="quiz-score" id="quiz-score"></div>
         <h3>객관식</h3>
@@ -3105,6 +3243,46 @@ C++
             <button class="opt" type="button" data-opt="D"><b>D.</b> 컴파일 오류 (duplicate class)</button>
             <div class="mcq-exp"><b>정답 D</b> — ✍️ “동일한 패키지 밑에 동일한 이름의 .java 는 생성이 불가능함” · javac <code>duplicate class: test.Point</code> · 다른 패키지(a.Tools · b.Tools)면 같은 이름도 됨 (18쪽)</div>
         </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">48</span>13주차 MathEx — <code>(int) (Math.random() * 45 + 1)</code> 이 만드는 값의 범위로 옳은 것은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 0 ~ 45</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 1 ~ 45</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 1 ~ 46</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 0 ~ 44</button>
+            <div class="mcq-exp"><b>정답 B</b> — random() = 0.0 이상 <b>1.0 미만</b> → ×45 → 0.0 ~ 44.xx → +1 → 1.0 ~ 45.xx → (int) 로 소수점 버림 → <b>1 ~ 45</b> (200만 번 실행해 확인 · 최솟값 1 · 최댓값 45)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">49</span>13주차 ✍️ — 지금이 <b>11월</b>일 때 <code>now.get(Calendar.MONTH)</code> 의 값은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 11</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 10</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 12</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 1</button>
+            <div class="mcq-exp"><b>정답 B</b> — ✍️ “0부터 시작해서 1을 더해줘야함” — 1월 = 0 … 11월 = <b>10</b> (javac 확인 · <code>Calendar.NOVEMBER</code> = 10) → 수업 코드 <code>now.get(Calendar.MONTH) + 1</code></div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">50</span>13주차 ArrayListEx1 — <code>[5, 4, -1]</code> 이 들어 있는 ArrayList 에 <code>suList.add(2, 100);</code> 을 하면?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> <code>[5, 4, 100]</code> (2번 자리를 덮어씀)</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> <code>[5, 4, 100, -1]</code></button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> <code>[5, 100, 4, -1]</code></button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> <code>[5, 4, -1, 100]</code></button>
+            <div class="mcq-exp"><b>정답 B</b> — <code>add(인덱스, 값)</code> = 그 자리에 <b>끼워 넣기</b> · 원래 2번이던 -1 이 한 칸 뒤로 밀림 → 크기 <b>4</b> (7장 20 · 21쪽 · 덮어쓰지 않음)</div>
+        </div>
+        <div class="mcq" data-correct="C">
+            <p class="mcq-q"><span class="mcq-no">51</span>13주차 ✍️ — <code>ArrayList&lt;String&gt; nameList</code> 에 <code>nameList.add(1);</code> 을 쓰면?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 정수 1 이 문자열 "1" 로 바뀌어 들어간다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 1번 자리에 빈 칸이 생긴다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 컴파일 오류</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 실행할 때 예외가 난다</button>
+            <div class="mcq-exp"><b>정답 C</b> — ✍️ 수업 코드 — <code>&lt;String&gt;</code> 으로 담을 타입을 정해 두어서 정수를 넣으면 <b>컴파일 오류</b> (javac <code>no suitable method found for add(int)</code>)</div>
+        </div>
+        <div class="mcq" data-correct="B">
+            <p class="mcq-q"><span class="mcq-no">52</span>13주차 ✍️ 노션 “ArrayList for문 실수 예” — <code>suList</code> 가 <code>[5, 4, 100, -1]</code> 일 때 <code>for (int index = 1; index &lt; suList.size(); index++) System.out.println(suList.get(index));</code> 의 문제점은?</p>
+            <button class="opt" type="button" data-opt="A"><b>A.</b> 마지막 요소에서 오류가 난다</button>
+            <button class="opt" type="button" data-opt="B"><b>B.</b> 첫 번째 요소(5)가 출력되지 않는다</button>
+            <button class="opt" type="button" data-opt="C"><b>C.</b> 모든 요소가 두 번 출력된다</button>
+            <button class="opt" type="button" data-opt="D"><b>D.</b> 문제없다</button>
+            <div class="mcq-exp"><b>정답 B</b> — 인덱스는 배열처럼 <b>0부터</b> → 1 부터 시작하면 0번(5)을 건너뛰고 4 · 100 · -1 만 출력 → <code>int index = 0</code> 으로</div>
+        </div>
         <h3>주관식</h3>
         <div class="quiz-item" data-answers=".class|class" data-explain=".java → javac 컴파일 → .class (JVM 이 실행)">
             <p class="quiz-q"><span class="quiz-cat">주관식 1</span>자바 소스를 컴파일하면 만들어지는 <b>바이트코드 파일</b>의 확장자는?</p>
@@ -3388,10 +3566,40 @@ C++
             <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
             <div class="quiz-feedback"></div>
         </div>
+        <div class="quiz-item" data-answers="Integer|java.lang.Integer|인티저" data-full="Integer" data-explain="7장 18쪽 · 기본 타입은 박싱으로 Wrapper 객체로 만들어 저장 · int → Integer (12주차 Wrapper)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 48</span>13주차 — 정수를 담는 ArrayList 를 만들 때 <code>ArrayList&lt; ? &gt; suList = new ArrayList&lt; ? &gt;();</code> 의 ? 에 들어갈 클래스 이름은? (기본 타입 int 는 못 씀)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="size|size()|.size()|사이즈" data-full="size()" data-explain="7장 20쪽 · int size() · 배열은 a.length · String 은 s.length()">
+            <p class="quiz-q"><span class="quiz-cat">주관식 49</span>13주차 — ArrayList 에 들어 있는 <b>요소의 개수</b>를 돌려주는 메소드는? (배열의 length 와 다름)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="get|get()|.get()|겟" data-full="get" data-explain="7장 20 · 21쪽 · E get(int index) · 수업 suList.get(index) · String str = a.get(1); → &quot;Hi&quot;">
+            <p class="quiz-q"><span class="quiz-cat">주관식 50</span>13주차 — ArrayList 에서 <b>인덱스 위치의 요소</b>를 꺼내 오는 메소드는? (<code>String str = a.( ? )(1);</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="ceil|ceil()|Math.ceil|Math.ceil()|실링" data-full="ceil" data-explain="6장 Math · ceil 올림 4.0 · floor 내림 3.0 · round 반올림 3 (수업 MathEx · a = Math.PI)">
+            <p class="quiz-q"><span class="quiz-cat">주관식 51</span>13주차 MathEx — Math 클래스에서 소수점 아래를 <b>올림</b>하는 메소드는? (<code>Math.( ? )(Math.PI)</code> → 4.0)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
+        <div class="quiz-item" data-answers="getInstance|getInstance()|Calendar.getInstance|Calendar.getInstance()|겟인스턴스" data-full="getInstance" data-explain="6장 63 ~ 68쪽 · 수업 CalendarEx · Calendar now = Calendar.getInstance(); → 지금 날짜 · 시각">
+            <p class="quiz-q"><span class="quiz-cat">주관식 52</span>13주차 CalendarEx — Calendar 는 new 로 만들지 않고 이 static 메소드로 지금 날짜 · 시각을 가진 객체를 얻어요 (<code>Calendar now = Calendar.( ? )();</code>)</p>
+            <input type="text" placeholder="답 입력" spellcheck="false" autocomplete="off">
+            <div class="quiz-btns"><button class="quiz-btn check" type="button">확인</button><button class="quiz-btn ghost show" type="button">정답 보기</button></div>
+            <div class="quiz-feedback"></div>
+        </div>
     </section>
 
     <section class="card" id="output">
-        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~12주차</span></h2>
+        <h2>🖥️ 출력 결과 맞히기 — 코드를 읽고 실행 결과 쓰기<span class="week">3~13주차</span></h2>
         <div class="tip">📝 시험의 <b>“실행결과를 쓰시오”</b> 대비 — 코드를 눈으로 따라가며 화면에 찍힐 결과를 적고 <b>확인</b>을 누르세요. 줄마다 <b>Enter</b>, 띄어쓰기 개수·빈 줄은 채점에서 무시하고 <b>글자·숫자·기호</b>는 정확히 봐요 (칸수 문제만 띄어쓰기까지). <code>print</code> 는 줄을 안 바꾸고 <code>println</code> 은 바꿔요. 정답은 모두 <b>실제로 실행한 결과</b>예요.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="oq-score"></div>
@@ -4230,10 +4438,75 @@ public class Main {
 </script>
             <div class="oq-why">💡 <b>풀이</b> — p + "점" → p.toString() + "점" → <b>2,3점</b> · parseInt("12") → 12 + 3 = <b>15</b> · "12" + 3 → 문자열 연결 <b>123</b> · Integer io = 10 (자동 박싱) · io + 5 → 자동 언박싱 → <b>15</b></div>
         </div>
+        <h3 class="oq-group">✍️ 13주차 — Math · ArrayList</h3>
+        <div class="oq" id="oq-oj34">
+            <p class="oq-q"><span class="oq-no">34</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">13주차</span></p>
+            <pre><code class="language-java">import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();
+        list.add(5);
+        list.add(4);
+        list.add(-1);
+        list.add(2, 100);
+        System.out.println(list.size());
+        for (int x : list) {
+            System.out.print(x + &quot; &quot;);
+        }
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+4
+5 4 100 -1
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — add 5 · 4 · -1 → [5, 4, -1] · <code>add(2, 100)</code> → 2번 자리에 <b>끼워 넣기</b> → [5, 4, 100, -1] · size() → <b>4</b> · for-each 로 앞에서부터 → <b>5 4 100 -1</b></div>
+        </div>
+        <div class="oq" id="oq-oj35">
+            <p class="oq-q"><span class="oq-no">35</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">13주차</span></p>
+            <pre><code class="language-java">import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList&lt;String&gt; names = new ArrayList&lt;String&gt;();
+        names.add(&quot;RM&quot;);
+        names.add(&quot;진&quot;);
+        names.add(&quot;슈가&quot;);
+        names.add(1, &quot;뷔&quot;);
+        names.remove(2);
+        System.out.println(names.size());
+        System.out.print(names.get(1));
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+3
+뷔
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — [RM, 진, 슈가] → <code>add(1, "뷔")</code> → [RM, 뷔, 진, 슈가] → <code>remove(2)</code> → 2번 "진" 삭제 → [RM, 뷔, 슈가] → size() <b>3</b> · get(1) → <b>뷔</b></div>
+        </div>
+        <div class="oq" id="oq-oj36">
+            <p class="oq-q"><span class="oq-no">36</span>다음 프로그램의 출력결과를 쓰시오.<span class="oq-tag">13주차</span></p>
+            <pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        double a = 3.7;
+        System.out.println(Math.ceil(a));
+        System.out.println(Math.floor(a));
+        System.out.println(Math.round(a));
+        System.out.print(Math.max(5, 2));
+    }
+}</code></pre>
+            <script type="text/plain" class="oq-expect">
+4.0
+3.0
+4
+5
+</script>
+            <div class="oq-why">💡 <b>풀이</b> — ceil 올림 → <b>4.0</b> (double) · floor 내림 → <b>3.0</b> · round 반올림 → <b>4</b> (정수 long · .0 없음) · max(5, 2) → <b>5</b></div>
+        </div>
     </section>
 
     <section class="card" id="code">
-        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~12주차</span></h2>
+        <h2>💻 코딩테스트 — 소스코드를 붙여넣으면 채점<span class="week">3~13주차</span></h2>
         <div class="tip">📝 문제를 읽고 <b>전체 소스코드</b>를 붙여넣은 뒤 <b>▶ 채점하기</b>를 누르세요. 입력 예 말고도 <b>숨은 테스트</b> 여러 개로 실제로 실행해서 출력이 모두 같아야 통과예요. Java 는 인터넷의 채점 서버(Wandbox · OpenJDK)에서 실행돼요. <code>package</code> 줄이나 클래스 이름은 그대로 붙여넣어도 괜찮아요. 입력은 <code>Scanner</code> 로 받습니다.</div>
         <div class="tip">🔥 <b>시험문제</b> = 교수님이 수업 중 <b>“시험문제”</b>라고 한 코드를 채점 문제로 만든 것 (빨간 테두리) · ★시험단골 — 3주차 타입 변환 · 4주차 예외 처리</div>
         <div id="ct-score"></div>
@@ -4951,6 +5224,84 @@ public class Main {
         Point b = new Point(sc.nextInt(), sc.nextInt());
         System.out.println(a == b);
         System.out.println(a.equals(b));
+    }
+}
+</script>
+        </div>
+        <div class="ct" id="ct-j22" data-lang="java" data-must="[&quot;ArrayList\\s*&lt;\\s*String\\s*&gt;&quot;, &quot;\\.add\\s*\\(\\s*1\\s*,&quot;, &quot;\\.remove\\s*\\(&quot;]" data-must-msg="ArrayList&lt;String&gt; 에 담고 add(1, 이름) 으로 끼워 넣은 뒤 remove 로 지워야 해요.">
+            <p class="ct-q"><span class="ct-no">22</span>학생 이름 리스트 — 끼워 넣기 · 값으로 지우기 (과제 문제1)<span class="ct-tag">13주차 · 7장 20쪽 · add(인덱스, 값) · remove(객체)</span></p>
+            <p class="ct-desc">Scanner 로 이름 5개를 입력받아요. 앞의 <b>3개</b>는 <code>ArrayList&lt;String&gt;</code> 에 차례로 넣고, 4번째 이름은 <b>1번 자리에 끼워 넣어요</b>. <code>전체 학생 수: N명</code> · <code>두 번째 학생: 이름</code> 을 출력한 뒤, 5번째 이름을 리스트에서 <b>지우고</b>(remove) 남은 학생을 <code>- 이름</code> 으로 한 줄씩 출력하세요 (<code>public class Main</code>)</p>
+            <div class="ct-ex"><pre class="io ct-in"><code>김철수 이영희 박민수 최지우 박민수</code></pre><pre class="io ct-out"><code>전체 학생 수: 4명
+두 번째 학생: 최지우
+- 김철수
+- 최지우
+- 이영희</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="학생 이름 리스트 — 끼워 넣기 · 값으로 지우기 (과제 문제1) 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "김철수 이영희 박민수 최지우 박민수\n", "expect": "전체 학생 수: 4명\n두 번째 학생: 최지우\n- 김철수\n- 최지우\n- 이영희\n"}, {"stdin": "a b c d c\n", "expect": "전체 학생 수: 4명\n두 번째 학생: d\n- a\n- d\n- b\n"}, {"stdin": "x y z w x\n", "expect": "전체 학생 수: 4명\n두 번째 학생: w\n- w\n- y\n- z\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<String> studentsList = new ArrayList<>();
+        studentsList.add(sc.next());
+        studentsList.add(sc.next());
+        studentsList.add(sc.next());
+        studentsList.add(1, sc.next());
+
+        System.out.println("전체 학생 수: " + studentsList.size() + "명");
+        System.out.println("두 번째 학생: " + studentsList.get(1));
+
+        studentsList.remove(sc.next());
+
+        for (String name : studentsList) {
+            System.out.println("- " + name);
+        }
+    }
+}
+</script>
+        </div>
+        <div class="ct" id="ct-j23" data-lang="java" data-must="[&quot;ArrayList\\s*&lt;\\s*Integer\\s*&gt;&quot;]" data-must-msg="점수는 ArrayList&lt;Integer&gt; 에 담아야 해요.">
+            <p class="ct-q"><span class="ct-no">23</span>점수 리스트 — 총점 · 평균 · 최고점 (과제 문제2)<span class="ct-tag">13주차 · 7장 · size() · for-each · (double) 형변환</span></p>
+            <p class="ct-desc">첫 줄에 점수 개수 <b>n</b>, 다음 줄에 점수 n개를 입력받아 <code>ArrayList&lt;Integer&gt;</code> 에 넣고 <code>총점: </code> · <code>평균: </code>(소수점 첫째 자리 <code>%.1f</code>) · <code>최고점: </code> 을 한 줄씩 출력하세요 (<code>public class Main</code>)</p>
+            <div class="ct-ex"><pre class="io ct-in"><code>4
+85 92 78 96</code></pre><pre class="io ct-out"><code>총점: 351
+평균: 87.8
+최고점: 96</code></pre></div>
+            <textarea class="ct-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="점수 리스트 — 총점 · 평균 · 최고점 (과제 문제2) 소스코드"></textarea>
+            <div class="ct-btns"><button class="ct-run" type="button">▶ 채점하기</button><button class="ct-show" type="button">💡 정답 코드 보기</button><button class="ct-clear" type="button">지우기</button></div>
+            <div class="ct-result"></div>
+            <script type="application/json" class="ct-tests">[{"stdin": "4\n85 92 78 96\n", "expect": "총점: 351\n평균: 87.8\n최고점: 96\n"}, {"stdin": "3\n100 50 75\n", "expect": "총점: 225\n평균: 75.0\n최고점: 100\n"}, {"stdin": "1\n42\n", "expect": "총점: 42\n평균: 42.0\n최고점: 42\n"}]</script>
+            <script type="text/plain" class="ct-answer">
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        ArrayList<Integer> scoresList = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            scoresList.add(sc.nextInt());
+        }
+
+        int sum = 0;
+        int max = scoresList.get(0);
+        for (int score : scoresList) {
+            sum += score;
+            if (score > max) {
+                max = score;
+            }
+        }
+
+        double avg = (double) sum / scoresList.size();
+        System.out.println("총점: " + sum);
+        System.out.printf("평균: %.1f\n", avg);
+        System.out.println("최고점: " + max);
     }
 }
 </script>

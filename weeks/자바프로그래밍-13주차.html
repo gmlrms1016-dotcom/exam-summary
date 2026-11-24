@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바프로그래밍 13주차 · &lt;11월 24일&gt; String · Math · Calendar (6장) · ArrayList (7장) + 과제 3문제</title>
+    <meta name="description" content="자바프로그래밍 13주차 정리 — &lt;11월 24일&gt; String · Math · Calendar (6장) · ArrayList (7장) + 과제 3문제">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="자바프로그래밍 13주차 · &lt;11월 24일&gt; String · Math · Calendar (6장) · ArrayList (7장) + 과제 3문제">
+    <meta property="og:description" content="자바프로그래밍 13주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../자바프로그래밍.html">← 자바프로그래밍 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>☕ 자바프로그래밍 · 13주차</h1>
+        <p>&lt;11월 24일&gt; String · Math · Calendar (6장) · ArrayList (7장) + 과제 3문제</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-12주차.html">‹ 이전 · <b>12주차</b><br><small>6장 패키지 · Object(toString · equals) · Wrapper · String — ✍️ 43쪽 e == f 가 false 인 이유</small></a><a class="next" href="자바프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12 · 13주차 반영)</small></a></nav>
+
+<div class="tip">자료: 수업 프로젝트 <code>test</code> 의 수업 실습 5개(<code>Ex1</code> · <code>MathEx</code> · <code>CalendarEx</code> · <code>ArrayListEx1</code> · <code>ArrayListEx2</code>) · 과제 3문제(<code>13주차\과제\문제1~3.png</code> → <code>Example1_Basic</code> · <code>Example2_Score</code> · <code>Example4_CafeCart</code> · 수업 중 제출) · <b>6장.pdf</b>(68쪽 — 49 · 50쪽 String · 60 ~ 62쪽 Math · 63 ~ 68쪽 Calendar · 31쪽 toString) · <b>7장.pdf</b>(47쪽 — 18 ~ 24쪽 ArrayList) · 노션 필기 “ArrayList for문 실수 예”. PDF 펜 필기 없음. ✍️ = 수업 코드 · 노션 · 🤖 = 강의자료에 없는 설명. 출력은 이 맥(javac · java)에서 직접 실행한 값이에요 (random · 지금 시각은 실행마다 다름).</div>
+<section class="card" id="s1">
+<h2>🎨 13주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/자바프로그래밍-그림정리.html?week=13" title="13주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/자바프로그래밍-그림정리.html?week=13" target="_blank" rel="noopener">🎬 13주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+<ul><li>ArrayList — add · add(인덱스, 값) · get · size · remove · for 와 for-each (인덱스는 0부터)</li></ul>
+</section>
+<section class="card" id="s2">
+<h2>1. ✍️ String 길이 · Math.max · min (Ex1 · 6장 49 · 50 · 60쪽)</h2>
+<pre><code class="language-java">public class 연습 {                                             // 원래 이름 Ex1 → 파일 이름도 연습.java
+    public static void main(String[] args) {                     // 프로그램 시작
+        String school = "동양미래대학교";                          // 리터럴로 만든 문자열
+        String dept = new String("컴퓨터소프트웨어공학과");          // new 로 만든 문자열 (6장 43쪽 — 리터럴 · new 두 방법)
+        int school_len = school.length();                        // length() = 글자 수 → 한글도 한 글자 = 1 → 7
+        System.out.println(school + " 글자수는 " + school_len + "자 입니다.");  // 동양미래대학교 글자수는 7자 입니다.
+        int dept_len = dept.length();                            // 컴퓨터소프트웨어공학과 → 11
+        System.out.println(dept + " 글자수는 " + dept_len + "자 입니다.");      // … 11자 입니다.
+        int i = 5, j = 2;                                        // 비교할 두 수
+        System.out.println("큰 값 : " + Math.max(i, j));          // Math.max(5, 2) → 5
+        System.out.println("작은 값 : " + Math.min(i, j));        // Math.min(5, 2) → 2
+    }                                                            // main 끝
+}                                                                // 클래스 끝</code></pre>
+<pre class="io"><code class="language-text">동양미래대학교 글자수는 7자 입니다.
+컴퓨터소프트웨어공학과 글자수는 11자 입니다.
+큰 값 : 5
+작은 값 : 2</code></pre>
+<ul><li>🤖 자바 <code>length()</code> 는 <b>글자(char) 수</b> — 한글도 한 글자에 1 (C 의 strlen 처럼 바이트를 세지 않음)</li><li>Math 는 객체를 만들지 않고 <code>Math.max(…)</code> 처럼 <b>클래스 이름으로 바로</b> 부름 (📄 60쪽 — 모든 메소드가 static)</li></ul>
+</section>
+<section class="card" id="s3">
+<h2>2. ✍️ Math 클래스 (MathEx · 6장 60 ~ 62쪽)</h2>
+<pre><code class="language-java">public class 연습 {                                             // 원래 이름 MathEx → 파일 이름도 연습.java
+    public static void main(String[] args) {                     // 프로그램 시작
+        double a = Math.PI;                                      // 원주율 상수 3.141592653589793
+        System.out.println(a);                                   // 3.141592653589793
+        System.out.println(Math.ceil(a));                        // 올림 → 4.0 (double)
+        System.out.println(Math.floor(a));                       // 내림 → 3.0
+        System.out.println(Math.sqrt(9));                        // 제곱근 √9 → 3.0
+        System.out.println(Math.exp(2));                         // e² → 7.38905609893065
+        System.out.println(Math.round(a));                       // 반올림 → 3 (long · 소수점 없음)
+        System.out.print("이번주 행운의 번호는 ");                  // 줄바꿈 없이
+        for (int i = 0; i &lt; 5; i++)                              // 5번
+            System.out.print((int) (Math.random() * 45 + 1) + " ");  // random() = 0.0 이상 1.0 미만 → ×45 → 0 ~ 44.xx → +1 → (int) 로 버림 → 1 ~ 45
+    }                                                            // main 끝
+}                                                                // 클래스 끝</code></pre>
+<pre class="io"><code class="language-text">3.141592653589793
+4.0
+3.0
+3.0
+7.38905609893065
+3
+이번주 행운의 번호는 41 12 24 2 37 </code></pre>
+<ul><li>마지막 줄 숫자 5개는 <b>실행마다 달라요</b> (<code>Math.random()</code>) · ceil · floor · sqrt 는 double 이라 <code>.0</code> 이 붙고 round 는 정수(long)</li></ul>
+</section>
+<section class="card" id="s4">
+<h2>3. ✍️ Calendar — 오늘 날짜 · 시각 (CalendarEx · 6장 63 ~ 68쪽)</h2>
+<pre><code class="language-java">import java.util.Calendar;                                       // Calendar 는 java.util 패키지
+
+public class 연습 {                                             // 원래 이름 CalendarEx → 파일 이름도 연습.java
+    public static void main(String[] args) {                     // 프로그램 시작
+        Calendar now = Calendar.getInstance();                   // new 가 아니라 getInstance() 로 지금 날짜 · 시각을 가진 객체
+        int year = now.get(Calendar.YEAR);                       // 연도
+        int month = now.get(Calendar.MONTH) + 1;                 // ✍️ “0부터 시작해서 1을 더해줘야함” → 11월은 10 + 1
+        int day = now.get(Calendar.DAY_OF_MONTH);                // 일
+        int hour = now.get(Calendar.HOUR);                       // 시 — HOUR 는 12시간제 (오후 4시 → 4)
+        int minute = now.get(Calendar.MINUTE);                   // 분
+        int second = now.get(Calendar.SECOND);                   // 초
+        System.out.println(year + "년 " + month + "월 " + day + "일 " + hour + "시 " + minute + "분 " + second + "초");  // 이어 붙여 출력
+    }                                                            // main 끝
+}                                                                // 클래스 끝</code></pre>
+<pre class="io"><code class="language-text">2026년 11월 24일 4시 51분 51초</code></pre>
+<ul><li>✍️ 수업 코드는 맨 앞에 <code>System.out.println(now);</code> 도 있어요 → <code>java.util.GregorianCalendar[time=…</code> 처럼 객체 속 값이 길게 다 찍힘</li><li>🤖 <code>Calendar.HOUR</code> = <b>12시간제</b> (오후 4시 → 4) · 24시간제는 <code>Calendar.HOUR_OF_DAY</code> (→ 16) · 결과는 실행한 시각마다 달라요</li></ul>
+</section>
+<section class="card" id="s5">
+<h2>4. ✍️ ArrayList — add · get · size · for 와 for-each (ArrayListEx1 · 7장 18 ~ 24쪽)</h2>
+<pre><code class="language-java">import java.util.ArrayList;                                      // ArrayList 는 java.util 패키지
+
+public class 연습 {                                             // 원래 이름 ArrayListEx1 → 파일 이름도 연습.java
+    public static void main(String[] args) {                     // 프로그램 시작
+        ArrayList&lt;Integer&gt; suList = new ArrayList&lt;Integer&gt;();    // 정수를 담는 리스트 (기본 타입 int 대신 Integer)
+        suList.add(5);                                           // [5]
+        suList.add(4);                                           // [5, 4]
+        suList.add(-1);                                          // [5, 4, -1]
+        suList.add(2, 100);                                      // 2번 자리에 끼워 넣기 → [5, 4, 100, -1] (뒤는 한 칸씩 밀림)
+        System.out.println("리스트 객체 수 : " + suList.size());   // size() = 요소 개수 → 4
+        for (int index = 0; index &lt; suList.size(); index++) {    // 인덱스 0 ~ 3
+            int result = suList.get(index);                      // get(인덱스) → 그 자리 값 (Integer → int 자동 언박싱)
+            System.out.println(result);                          // 5 / 4 / 100 / -1
+        }                                                        // for 끝
+        System.out.println("위 for문과 아래 for문은 같음");          // ✍️ 수업 코드의 안내 문장
+        for (int hangae : suList) {                              // for-each — 앞에서부터 하나씩 꺼냄
+            System.out.println(hangae);                          // 5 / 4 / 100 / -1
+        }                                                        // for-each 끝
+    }                                                            // main 끝
+}                                                                // 클래스 끝</code></pre>
+<pre class="io"><code class="language-text">리스트 객체 수 : 4
+5
+4
+100
+-1
+위 for문과 아래 for문은 같음
+5
+4
+100
+-1</code></pre>
+<ul><li>✍️ 수업 코드는 같은 방법으로 <code>ArrayList&lt;String&gt; nameList</code> 에 RM · 진 · 슈가 · 제이홉 · 지민 · 뷔 · 정국 7명도 넣어 출력 (<code>리스트 객체 수 : 7</code>)</li><li>✍️ <code>nameList.add(1);</code> — <b>String 리스트에 정수를 넣으면 컴파일 오류</b> (제네릭 <code>&lt;String&gt;</code> 이 타입을 정해 둠)</li><li>✍️ 노션 “ArrayList for문 실수 예” — <code>for (int index = 1; …)</code> 로 시작하면 <b>첫 칸(0번)을 건너뜀</b> → ArrayList 번호도 배열처럼 <b>0부터</b></li></ul>
+<table class="ref">
+<tbody>
+<tr><th>메소드 (📄 7장 20쪽)</th><th>하는 일</th></tr>
+<tr><td><code>add(값)</code> · <code>add(인덱스, 값)</code></td><td>맨 뒤에 추가 · 그 자리에 <b>끼워 넣기</b> (뒤는 한 칸씩 밀림 · 덮어쓰지 않음)</td></tr>
+<tr><td><code>get(인덱스)</code> · <code>size()</code></td><td>그 자리 요소 · 요소 <b>개수</b> (배열은 <code>a.length</code> · String 은 <code>s.length()</code>)</td></tr>
+<tr><td><code>remove(인덱스)</code> · <code>remove(객체)</code></td><td>그 자리 삭제 · 같은 첫 요소 삭제 → 뒤 요소가 앞으로 당겨짐</td></tr>
+<tr><td><code>indexOf(객체)</code> · <code>contains(객체)</code></td><td>같은 첫 요소의 인덱스(없으면 <b>-1</b>) · 있으면 true</td></tr>
+<tr><td><code>isEmpty()</code> · <code>clear()</code></td><td>비어 있으면 true · 모든 요소 삭제</td></tr>
+</tbody></table>
+<ul><li>📄 18쪽 — ArrayList = <b>가변 크기 배열</b> (java.util) · 기본 타입은 박싱/언박싱으로 <b>Wrapper 객체</b>로 저장 · 23쪽 <code>new ArrayList&lt;&gt;()</code> (타입 생략) 도 됨</li><li>📄 21 · 22쪽 오류 — <code>a.capacity()</code> 는 없는 메소드 (컴파일 오류) · 요소 4개일 때 <code>a.add(5, …)</code> · 3개일 때 <code>a.remove(4)</code> → 실행 중 <code>IndexOutOfBoundsException</code> (javac · java 확인)</li><li>⚠️ 20쪽 표의 <code>elementAt(int index)</code> 는 <b>Vector 의 메소드</b> — ArrayList 에 쓰면 컴파일 오류 (<code>cannot find symbol</code> · javac 확인) → <code>get(인덱스)</code> 를 씀</li></ul>
+</section>
+<section class="card" id="s6">
+<h2>5. ✍️ ArrayList 에 객체 넣기 · remove · toString (ArrayListEx2 · 6장 31쪽 · 7장)</h2>
+<pre><code class="language-java">import java.util.ArrayList;                                      // ArrayList 사용
+
+class Point {                                                    // 점 클래스 (public 없이 같은 파일에)
+    private int x, y;                                            // 좌표 (private → 메소드로만 접근)
+    Point(int x, int y) {                                        // 생성자
+        this.x = x;                                              // this.x = 필드 · x = 매개변수
+        this.y = y;                                              // y 도 같게
+    }                                                            // 생성자 끝
+    @Override                                                    // Object 의 toString 을 다시 정의 (6장 31쪽 예제 6-2)
+    public String toString() {                                   // 객체를 출력하면 자동으로 불림
+        return "Point [x=" + x + ", y=" + y + "]";               // 예: Point [x=2, y=3]
+    }                                                            // toString 끝
+}                                                                // Point 끝
+
+public class 연습 {                                             // 원래 이름 ArrayListEx2 → 파일 이름도 연습.java
+    public static void main(String[] args) {                     // 프로그램 시작
+        ArrayList&lt;Point&gt; ptList = new ArrayList&lt;Point&gt;();        // Point 객체를 담는 리스트
+        ptList.add(new Point(2, 3));                             // 0번
+        ptList.add(new Point(-5, 20));                           // 1번 (곧 지움)
+        ptList.add(new Point(30, -8));                           // 2번
+        ptList.add(new Point(1, 2));                             // 3번
+        ptList.remove(1);                                        // 1번 (-5, 20) 삭제 → 뒤가 한 칸씩 당겨짐 → 3개
+        for (Point p : ptList) {                                 // for-each 로 하나씩
+            System.out.println(p);                               // println(객체) → toString() 결과
+        }                                                        // for-each 끝
+    }                                                            // main 끝
+}                                                                // 클래스 끝</code></pre>
+<pre class="io"><code class="language-text">Point [x=2, y=3]
+Point [x=30, y=-8]
+Point [x=1, y=2]</code></pre>
+<ul><li>✍️ 수업 코드는 Eclipse 의 Source → Generate 로 getX · setX · getY · setY · toString 을 만들었어요 · 인덱스 for 와 for-each 로 두 번 출력 (사이에 <code>-</code> 100개)</li><li><code>remove(인덱스)</code> 는 그 자리를 지우고 <b>뒤 요소가 앞으로 당겨짐</b> → 크기 4 → 3</li></ul>
+</section>
+<section class="card" id="s7">
+<h2>6. 📝 과제 3문제 (문제1 ~ 3 · 수업 중 제출)</h2>
+<ul><li>📄 <code>13주차\과제\문제1~3.png</code> — ArrayList 연습 → <code>Example1_Basic</code> · <code>Example2_Score</code> · <code>Example4_CafeCart</code> (그림의 클래스 이름 그대로)</li><li><b>문제1</b> 학생 이름 리스트 — <code>add(1, "최지우")</code> 로 끼워 넣기 · <code>get(1)</code> · <code>remove("박민수")</code>(값으로 지우기) → <code>전체 학생 수: 4명</code> / <code>두 번째 학생: 최지우</code> / <code>- 김철수</code> <code>- 최지우</code> <code>- 이영희</code></li><li><b>문제2</b> 점수 리스트 — 총점 · 평균(<code>(double) sum / size()</code> · <code>%.1f</code>) · 최고점 → <code>총점: 351</code> / <code>평균: 87.8</code> / <code>최고점: 96</code></li><li><b>문제3</b> 카페 장바구니 — <code>ArrayList&lt;Menu&gt;</code> · getter 로 이름 · 가격 → <code>총 결제 금액: 16000원</code> · 5000원 이상만 다시 출력</li><li>⚠️ 문제3 그림의 오타 — <code>cartList</code> 를 만들고 <code>cart.add(…)</code> 로 씀 → <code>cartList</code> 로 · <code>Menu</code> 의 name · price 가 private 라 <code>item.name</code> 은 컴파일 오류 → 문제가 말한 대로 getter(<code>getName()</code> · <code>getPrice()</code>) 추가</li></ul>
+</section>
+<section class="card" id="s8">
+<h2>7. 한 줄 정리</h2>
+<ul><li><code>length()</code> 글자 수 · <code>Math.max</code> · <code>min</code> · <code>ceil</code> 올림 · <code>floor</code> 내림 · <code>round</code> 반올림 · <code>sqrt</code> · <code>random()</code> 0.0 이상 1.0 미만 → <code>(int)(Math.random()*45+1)</code> = 1 ~ 45</li><li><code>Calendar.getInstance()</code> · <code>MONTH</code> 는 0부터라 <b>+1</b> · <code>HOUR</code> 12시간제</li><li><code>ArrayList&lt;타입&gt;</code> — <code>add(값)</code> · <code>add(인덱스, 값)</code> 끼워 넣기 · <code>get(인덱스)</code> · <code>size()</code> · <code>remove(인덱스 또는 값)</code> · 인덱스 <b>0부터</b> · 기본 타입은 <code>Integer</code> 처럼 Wrapper · <code>&lt;String&gt;</code> 에 정수 넣으면 컴파일 오류</li><li>for(인덱스) 와 for-each 는 결과가 같음 · 객체를 println 하면 <code>toString()</code></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="자바프로그래밍-12주차.html">‹ 이전 · <b>12주차</b><br><small>6장 패키지 · Object(toString · equals) · Wrapper · String — ✍️ 43쪽 e == f 가 false 인 이유</small></a><a class="next" href="자바프로그래밍-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 · 10 · 11 · 12 · 13주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「자바프로그래밍 · 13주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202611041620"></script>
+</body>
+</html>

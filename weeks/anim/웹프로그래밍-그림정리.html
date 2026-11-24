@@ -432,6 +432,29 @@
 </svg>
 
 
+<!-- ⑰ 콜백 → 콜백 지옥 (13주차 1124_01_fetch.js) -->
+<svg data-fig="cbhell" viewBox="0 0 600 380" role="img" aria-label="함수를 인자로 넘기는 콜백과 콜백 안에 콜백이 계속 들어가는 콜백 지옥" hidden>
+  <g data-s="1"><rect x="24" y="30" width="220" height="56" rx="8" style="fill:var(--inh);fill-opacity:.15;stroke:var(--inh);stroke-width:2"/><text x="134" y="64" text-anchor="middle" class="s m">greet(&quot;Rahul&quot;, </text><rect x="330" y="30" width="200" height="56" rx="8" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/><text x="430" y="64" text-anchor="middle" class="b m">sayGoodbye</text><path class="d" d="M328,58 L256.0,58.0" style="stroke:var(--te);stroke-width:2.5;fill:none"/><path d="M256.0,52.0 L246,58 L256.0,64.0 Z" style="fill:var(--te)"/><text x="300" y="112" text-anchor="middle" class="s">함수를 () 없이 넘김 → greet 가 나중에 callback() 으로 불러 줌</text></g>
+  <g data-s="2"><rect x="24" y="140" width="552" height="150" rx="8" style="fill:var(--fr);fill-opacity:.08;stroke:var(--fr);stroke-width:2"/><text x="40" y="166" class="s m">getUser(1, (user) =&gt; {</text><text x="548" y="166" text-anchor="end" class="s" style="fill:var(--ap)">1초</text><rect x="48" y="176" width="512" height="104" rx="8" style="fill:var(--fr);fill-opacity:.10;stroke:var(--fr);stroke-width:2"/><text x="64" y="200" class="s m">getPosts(user, (posts) =&gt; {</text><text x="536" y="200" text-anchor="end" class="s" style="fill:var(--ap)">2초</text><rect x="72" y="210" width="472" height="60" rx="8" style="fill:var(--fr);fill-opacity:.12;stroke:var(--fr);stroke-width:2"/><text x="88" y="234" class="s m">getComments(posts[0], (comments) =&gt; {</text><text x="88" y="258" class="s m">console.log(&quot;Comments:&quot;, …)</text></g>
+  <g data-s="3"><text x="300" y="322" text-anchor="middle" class="b">콜백 안에 콜백 안에 콜백 → 들여쓰기가 계속 깊어짐 = 콜백 지옥</text><text x="300" y="354" text-anchor="middle" class="s" style="fill:var(--te)">해결 ① Promise   ② async / await</text></g>
+</svg>
+
+<!-- ⑱ Promise 3가지 상태 · async/await (13주차) -->
+<svg data-fig="promise3" viewBox="0 0 600 400" role="img" aria-label="Promise 는 대기 상태에서 resolve 면 이행 then 으로 reject 면 거부 catch 로 · async 는 항상 Promise 를 돌려줌" hidden>
+  <g data-s="1"><rect x="220" y="30" width="160" height="56" rx="8" style="fill:var(--ink2);fill-opacity:.15;stroke:var(--ink2);stroke-width:2"/><text x="300" y="58" text-anchor="middle" class="b">대기</text><text x="300" y="78" text-anchor="middle" class="s m">Pending</text></g>
+  <g data-s="2"><path class="d" d="M260,88 L148.9,145.4" style="stroke:var(--te);stroke-width:2.5;fill:none"/><path d="M146.1,140.1 L140,150 L151.6,150.7 Z" style="fill:var(--te)"/><text x="150" y="118" text-anchor="end" class="s m">resolve(값)</text><rect x="40" y="152" width="200" height="56" rx="8" style="fill:var(--te);fill-opacity:.15;stroke:var(--te);stroke-width:2"/><text x="140" y="180" text-anchor="middle" class="b">이행</text><text x="140" y="200" text-anchor="middle" class="s m">Fulfilled</text><path class="d" d="M140,210 L140.0,236.0" style="stroke:var(--te);stroke-width:2.5;fill:none"/><path d="M134.0,236.0 L140,246 L146.0,236.0 Z" style="fill:var(--te)"/><text x="140" y="272" text-anchor="middle" class="s m">.then(res =&gt; …)</text></g>
+  <g data-s="3"><path class="d" d="M340,88 L451.1,145.4" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M448.4,150.7 L460,150 L453.9,140.1 Z" style="fill:var(--ap)"/><text x="450" y="118" class="s m">reject(이유)</text><rect x="360" y="152" width="200" height="56" rx="8" style="fill:var(--ap);fill-opacity:.15;stroke:var(--ap);stroke-width:2"/><text x="460" y="180" text-anchor="middle" class="b">거부</text><text x="460" y="200" text-anchor="middle" class="s m">Rejected</text><path class="d" d="M460,210 L460.0,236.0" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M454.0,236.0 L460,246 L466.0,236.0 Z" style="fill:var(--ap)"/><text x="460" y="272" text-anchor="middle" class="s m">.catch(err =&gt; …)</text></g>
+  <g data-s="4"><path d="M24,296 L576,296" class="dash"/><text x="24" y="326" class="s m">async function f() { return 값; }</text><text x="24" y="350" class="s">→ 항상 Promise 를 돌려줌 (Promise.resolve(값))</text><text x="24" y="380" class="s m">await Promise</text><text x="200" y="380" class="s">→ 끝날 때까지 기다림 · async 함수 안에서만</text></g>
+</svg>
+
+<!-- ⑲ 실행 순서 — 동기 → Promise → 타이머 (13주차 🤖) -->
+<svg data-fig="evorder" viewBox="0 0 600 366" role="img" aria-label="실행 순서는 동기 코드 다음 Promise then 다음 타이머" hidden>
+  <g data-s="1"><text x="24" y="36" class="b">① 동기 코드 — 위에서부터 바로</text><text x="40" y="62" class="s m">Hello, Rahul!   Goodbye!   other work ....</text></g>
+  <g data-s="2"><text x="24" y="104" class="b" style="fill:var(--te)">② Promise 의 then — 동기가 다 끝난 뒤</text><text x="40" y="130" class="s m">작업 완료   Hello, Async!</text></g>
+  <g data-s="3"><text x="24" y="172" class="b" style="fill:var(--inh)">③ 타이머 — 시간이 된 순서</text><text x="40" y="198" class="s m">1초  Fetched user with ID: 1</text><text x="40" y="222" class="s m">2초  Data fetched!  Processing data: …</text><text x="40" y="244" class="s m">     Fetched posts for Rahul</text><text x="40" y="268" class="s m">3초  Fetched comments for Post1  Comments: […]</text></g>
+  <g data-s="4"><path d="M24,288 L576,288" class="dash"/><text x="24" y="316" class="s" style="fill:var(--ap)">⚠️ 수업 파일엔 fetchData 함수가 2개</text><text x="24" y="342" class="s" style="fill:var(--ap)">→ 나중 것(async)이 앞 것을 덮어씀 (호이스팅) → fetch(&quot;~&quot;) 실패</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -575,7 +598,27 @@
             "<b>멀티 스레드</b> — 스레드가 <b>여러 개</b> → 일 A · B · C 를 <b>동시에</b>",
             "단일 = 일꾼 1명 · 한 번에 한 가지 / 멀티 = 일꾼 여러 명 · 동시에 (🤖 예: 자바 Thread)",
             "오래 걸리는 일을 붙잡고 기다리면 화면이 멈춤 → 그래서 JS 는 <b>기다리지 않음</b> (6주차 setTimeout 과 같은 비동기)" ],
-          note: "🤖 node 확인 — <code>console.log(\"요청\"); setTimeout(…, 0); console.log(\"다음\");</code> → 요청 · 다음 · (타이머) 순서 · ⚠️ 필기 오타 “멀티스레스 · 단일스레스” → 스레드" }
+          note: "🤖 node 확인 — <code>console.log(\"요청\"); setTimeout(…, 0); console.log(\"다음\");</code> → 요청 · 다음 · (타이머) 순서 · ⚠️ 필기 오타 “멀티스레스 · 단일스레스” → 스레드" },
+        { id: "cbhell", week: 13, tab: "⑰ 콜백 · 콜백 지옥", src: "13주차 수업 파일 1124_01_fetch.js 1 · 2번 · ✍️ 노션 “콜백함수 넘기기 뜻?”",
+          steps: [
+            "<b>콜백함수 넘기기</b> — <code>greet(\"Rahul\", sayGoodbye)</code> · 함수를 <b>() 없이</b> 인자로 넘기면 greet 가 알맞은 때 <code>callback()</code> 으로 불러 줌",
+            "<code>getUser</code> → 그 안에서 <code>getPosts</code> → 또 그 안에서 <code>getComments</code> — 1초 · 2초 · 3초 뒤 차례로",
+            "안으로 계속 들어가 들여쓰기가 깊어짐 = <b>콜백 지옥</b> → 해결 ① Promise ② async / await (✍️ “JS 비동기작업”)" ],
+          note: "🤖 <code>sayGoodbye()</code> 처럼 괄호를 붙여 넘기면 그 자리에서 실행된 결과(undefined)가 넘어가요" },
+        { id: "promise3", week: 13, tab: "⑱ Promise 상태", src: "13주차 1124_01_fetch.js 4 · 5번 — Promise 3가지 상태 · async / await",
+          steps: [
+            "<code>new Promise(…)</code> 를 만들면 <b>대기(Pending)</b> — 아직 결과를 받지 못한 상태",
+            "<code>resolve(값)</code> → <b>이행(Fulfilled)</b> = 성공 → <code>.then(res =&gt; …)</code>",
+            "<code>reject(이유)</code> → <b>거부(Rejected)</b> = 실패 → <code>.catch(err =&gt; …)</code>",
+            "<b>async</b> 함수 = 항상 Promise 를 돌려줌 · <b>await</b> = 끝날 때까지 기다림 (async 함수 안에서만)" ],
+          note: "수업 파일 — success = true 라 “작업 완료” · false 로 바꾸면 catch 쪽 “작업 실패”" },
+        { id: "evorder", week: 13, tab: "⑲ 실행 순서", src: "13주차 1124_01_fetch.js 를 node 로 실행 (🤖 · fetchData 이름 하나만 바꿈)",
+          steps: [
+            "① <b>동기 코드</b> 먼저 끝까지 — Hello, Rahul! · Goodbye! · other work ....",
+            "② <b>Promise 의 then</b> — 작업 완료 · Hello, Async!",
+            "③ <b>타이머</b> — 1초 사용자 · 2초 Data fetched · posts · 3초 comments",
+            "⚠️ 이름이 같은 함수 fetchData 2개 → 나중 것이 덮어씀 → <code>fetch(\"~\")</code> 실패" ],
+          note: "🤖 node 로 실행한 순서 · 원본 그대로면 node 는 Failed to parse URL from ~ 로 멈춰요 (브라우저는 콘솔 오류)" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

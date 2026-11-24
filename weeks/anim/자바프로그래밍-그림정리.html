@@ -497,6 +497,22 @@
 </svg>
 
 
+<!-- ⑳ ArrayList add · get · size · remove (13주차 7장 · ArrayListEx1 · 2) -->
+<svg data-fig="alist" viewBox="0 0 600 410" role="img" aria-label="ArrayList 에 add 로 넣고 add 인덱스로 끼우고 get size remove" hidden>
+  <g data-s="1"><text x="24" y="44" class="s m">add(5) · add(4) · add(-1)</text><rect x="150" y="56" width="70" height="44" style="fill:none;stroke:var(--ink2);stroke-width:1.5"/><text x="185.0" y="85.0" text-anchor="middle" class="m">5</text><text x="185.0" y="118" text-anchor="middle" class="s m">[0]</text><rect x="220" y="56" width="70" height="44" style="fill:none;stroke:var(--ink2);stroke-width:1.5"/><text x="255.0" y="85.0" text-anchor="middle" class="m">4</text><text x="255.0" y="118" text-anchor="middle" class="s m">[1]</text><rect x="290" y="56" width="70" height="44" style="fill:none;stroke:var(--ink2);stroke-width:1.5"/><text x="325.0" y="85.0" text-anchor="middle" class="m">-1</text><text x="325.0" y="118" text-anchor="middle" class="s m">[2]</text></g>
+  <g data-s="2"><text x="24" y="158" class="s m">add(2, 100) — 2번 자리에 끼움 · 뒤는 밀림</text><rect x="150" y="170" width="70" height="44" style="fill:none;stroke:var(--ink2);stroke-width:1.5"/><text x="185.0" y="199.0" text-anchor="middle" class="m">5</text><text x="185.0" y="232" text-anchor="middle" class="s m">[0]</text><rect x="220" y="170" width="70" height="44" style="fill:none;stroke:var(--ink2);stroke-width:1.5"/><text x="255.0" y="199.0" text-anchor="middle" class="m">4</text><text x="255.0" y="232" text-anchor="middle" class="s m">[1]</text><rect x="290" y="170" width="70" height="44" style="fill:none;stroke:var(--te);stroke-width:1.5"/><text x="325.0" y="199.0" text-anchor="middle" class="m">100</text><text x="325.0" y="232" text-anchor="middle" class="s m">[2]</text><rect x="360" y="170" width="70" height="44" style="fill:none;stroke:var(--ink2);stroke-width:1.5"/><text x="395.0" y="199.0" text-anchor="middle" class="m">-1</text><text x="395.0" y="232" text-anchor="middle" class="s m">[3]</text></g>
+  <g data-s="3"><text x="24" y="272" class="b m">get(2) = 100 · size() = 4</text><text x="400" y="272" class="s">인덱스는 0부터</text></g>
+  <g data-s="4"><text x="24" y="312" class="s m">remove(1) — 그 자리를 지우고 뒤가 당겨짐 (🤖 예)</text><rect x="150" y="324" width="70" height="44" style="fill:none;stroke:var(--ink2);stroke-width:1.5"/><text x="185.0" y="353.0" text-anchor="middle" class="m">5</text><text x="185.0" y="386" text-anchor="middle" class="s m">[0]</text><rect x="220" y="324" width="70" height="44" style="fill:none;stroke:var(--ink2);stroke-width:1.5"/><text x="255.0" y="353.0" text-anchor="middle" class="m">100</text><text x="255.0" y="386" text-anchor="middle" class="s m">[1]</text><rect x="290" y="324" width="70" height="44" style="fill:none;stroke:var(--ink2);stroke-width:1.5"/><text x="325.0" y="353.0" text-anchor="middle" class="m">-1</text><text x="325.0" y="386" text-anchor="middle" class="s m">[2]</text></g>
+</svg>
+
+<!-- ㉑ for · for-each (13주차 ✍️ 노션 “ArrayList for문 실수 예”) -->
+<svg data-fig="foreach" viewBox="0 0 600 380" role="img" aria-label="인덱스 for 문과 for-each 로 ArrayList 를 하나씩 읽음 인덱스는 0부터" hidden>
+  <g data-s="1"><text x="24" y="36" class="s m">for (int index = 0; index &lt; list.size(); index++)</text><text x="24" y="60" class="s m">→ list.get(index)</text><rect x="150" y="78" width="70" height="44" style="fill:none;stroke:var(--te);stroke-width:1.5"/><text x="185.0" y="107.0" text-anchor="middle" class="m">5</text><text x="185.0" y="140" text-anchor="middle" class="s m">[0]</text><rect x="220" y="78" width="70" height="44" style="fill:none;stroke:var(--te);stroke-width:1.5"/><text x="255.0" y="107.0" text-anchor="middle" class="m">4</text><text x="255.0" y="140" text-anchor="middle" class="s m">[1]</text><rect x="290" y="78" width="70" height="44" style="fill:none;stroke:var(--te);stroke-width:1.5"/><text x="325.0" y="107.0" text-anchor="middle" class="m">100</text><text x="325.0" y="140" text-anchor="middle" class="s m">[2]</text><rect x="360" y="78" width="70" height="44" style="fill:none;stroke:var(--te);stroke-width:1.5"/><text x="395.0" y="107.0" text-anchor="middle" class="m">-1</text><text x="395.0" y="140" text-anchor="middle" class="s m">[3]</text></g>
+  <g data-s="2"><text x="24" y="182" class="s m">for (int x : list)  — 앞에서부터 하나씩 (for-each)</text><text x="24" y="206" class="s">→ 두 for 문의 결과는 같음</text></g>
+  <g data-s="3"><text x="24" y="248" class="s" style="fill:var(--ap)">✍️ for (int index = 1; …) 로 시작하면</text><path d="M156,86 L214,116" style="stroke:var(--ap);stroke-width:3;fill:none"/><text x="24" y="272" class="s" style="fill:var(--ap)">→ 0번 칸을 건너뜀 (번호는 0부터)</text></g>
+  <g data-s="4"><path d="M24,296 L576,296" class="dash"/><text x="24" y="326" class="s m" style="fill:var(--ap)">ArrayList&lt;String&gt; 에 add(1) → 컴파일 오류</text><text x="24" y="354" class="s m">기본 타입은 Wrapper 로 — ArrayList&lt;Integer&gt;</text></g>
+</svg>
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -664,7 +680,21 @@
             "<code>replace(\"C#\", \"Java\")</code> → <code>\"Java,C++\"</code> · <code>split(\",\")</code> → 배열 <code>{\"Java\", \"C++\"}</code>",
             "<code>substring(5)</code> — 인덱스 <b>5부터 끝까지</b> → J0 a1 v2 a3 ,4 <b>C5</b> → <code>\"C++\"</code>",
             "<code>charAt(2)</code> → C0 +1 <b>+2</b> → <code>'+'</code> · String 은 <b>수정 불가</b> → 바꾼 결과를 쓰려면 다시 대입" ],
-          note: "⚠️ 47쪽 <code>\"I love \".concat(\"Java.\")</code> 의 결과는 \"I love Java.\" (슬라이드의 대문자 L 은 오타 · javac 확인)" }
+          note: "⚠️ 47쪽 <code>\"I love \".concat(\"Java.\")</code> 의 결과는 \"I love Java.\" (슬라이드의 대문자 L 은 오타 · javac 확인)" },
+        { id: "alist", week: 13, tab: "⑳ ArrayList", src: "13주차 7장 18 ~ 24쪽 · ✍️ 수업 ArrayListEx1 · ArrayListEx2",
+          steps: [
+            "<code>add(5)</code> · <code>add(4)</code> · <code>add(-1)</code> — 뒤에 차례로 → [5, 4, -1]",
+            "<code>add(2, 100)</code> — <b>2번 자리에 끼워 넣기</b> · 뒤는 한 칸씩 밀림 → [5, 4, 100, -1]",
+            "<code>get(2)</code> = 100 · <code>size()</code> = 4 · 인덱스는 <b>0부터</b>",
+            "<code>remove(1)</code> — 그 자리를 지우고 뒤 요소가 앞으로 당겨짐 (🤖 숫자로 든 예 · 수업은 Point 객체)" ],
+          note: "✍️ 수업 ArrayListEx1 → 5 · 4 · 100 · -1 · ArrayListEx2 는 Point 4개 중 1번을 지워 3개 · 문제1 은 remove(\"박민수\") 처럼 값으로도 지움" },
+        { id: "foreach", week: 13, tab: "㉑ for · for-each", src: "13주차 ✍️ 수업 코드 “위 for문과 아래 for문은 같음” · 노션 “ArrayList for문 실수 예”",
+          steps: [
+            "인덱스 for — <code>for (int index = 0; index &lt; list.size(); index++)</code> 안에서 <code>list.get(index)</code>",
+            "for-each — <code>for (int x : list)</code> 앞에서부터 하나씩 · 두 for 문의 결과는 같음",
+            "✍️ <code>index = 1</code> 로 시작하면 <b>0번 칸을 건너뜀</b> (위 for 2줄 + 아래 for-each 3줄 = 5줄이 됐던 실수)",
+            "<code>ArrayList&lt;String&gt;</code> 에 <code>add(1)</code> → 컴파일 오류 · 기본 타입은 <code>Integer</code> 같은 Wrapper 로" ],
+          note: "✍️ 수업 코드의 for-each 변수 이름은 hangae (낱개) — 이름은 마음대로" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

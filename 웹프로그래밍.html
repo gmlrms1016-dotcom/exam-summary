@@ -22,7 +22,7 @@
 
     <header class="page-head">
         <h1>웹프로그래밍 · 완전 정리</h1>
-        <p>1주차 ~ 12주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29 · 10/13 · 10/27 · 11/3 · 11/10 · 11/17) · 강의시간에 나온 내용 전부 정리</p>
+        <p>1주차 ~ 13주차 (강좌 OT · 9/1 · 9/8 · 9/15 · 9/22 · 9/29 · 10/13 · 10/27 · 11/3 · 11/10 · 11/17 · 11/24) · 강의시간에 나온 내용 전부 정리</p>
     </header>
 
     <div id="week-nav" data-subject="웹프로그래밍"></div>
@@ -74,6 +74,7 @@
         <a href="#s40">40.🔥배열메서드·CRUD</a>
         <a href="#s41">41.🎮두더지·map·filter</a>
         <a href="#s42">42.🔥HTTP메시지·이벤트·fetch</a>
+        <a href="#s43">43.콜백·Promise·async/await</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1948,9 +1949,148 @@ console.log(&quot;2. 기다리지 않고 다음 코드&quot;);       // 두 번�
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#thread" title="그림 — 단일 · 멀티 스레드" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#thread" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 단일 · 멀티 스레드 — 새 창으로 크게 보기</a></p></div>
     </section>
 
+    <section class="card" id="s43">
+        <h2>43. 13주차 — 콜백 · 콜백 지옥 · Promise (3가지 상태) · async / await · HTTP 메서드<span class="week">13주차</span></h2>
+        <div class="tip"><span class="wk-tag note">✍️ 필기</span> — ① <b>“get, post, put, delete 들을 HTTP 메서드라고 함”</b> ② <b>“JS 비동기작업 { 1) Promise 객체 2) }”</b> (2번 = async / await) ③ <b>“콜백함수 넘기기 뜻?”</b> → 아래 ① 🤖 · 자세한 정리는 <a href="weeks/웹프로그래밍-13주차.html" target="_blank" rel="noopener">13주차 페이지</a></div>
+        <p>수업 파일 <b>1124_01_fetch.js</b> (교수님 실습예제 — 콜백 · callback hell · Promise 객체 vs async/await) + 노션 필기 · 결과는 node 로 직접 실행했어요.</p>
+        <h3>① ✍️ “콜백함수 넘기기 뜻?” — 함수를 다른 함수의 인자로 넘기기</h3>
+        <pre><code class="language-javascript">function greet(name, callback) {          // callback = 인자로 받은 &#x27;함수&#x27; (아직 실행 안 함)
+    console.log(`Hello, ${name}!`);       // 먼저 인사 → Hello, Rahul!
+    callback();                           // 받은 함수를 &#x27;나중에 불러 줌&#x27; → sayGoodbye() 실행
+}                                         // greet 끝
+
+function sayGoodbye() {                   // 넘겨줄 함수
+    console.log(&quot;Goodbye!&quot;);              // Goodbye!
+}                                         // sayGoodbye 끝
+
+greet(&quot;Rahul&quot;, sayGoodbye);               // sayGoodbye 를 () 없이 넘김 = 함수 그 자체를 넘김 (실행 결과가 아님)</code></pre>
+        <pre class="io"><code class="language-text">Hello, Rahul!
+Goodbye!</code></pre>
+        <div class="tip">🤖 <b>콜백함수 넘기기</b> = 함수를 <b>값처럼 다른 함수의 인자로 넘겨서</b>, 받은 함수가 알맞은 때(일이 끝난 뒤 등)에 <b>대신 불러 주게</b> 하는 것 · <code>sayGoodbye</code> 처럼 <b>괄호 없이</b> 넘김 (<code>sayGoodbye()</code> 로 넘기면 그 자리에서 실행된 결과 <code>undefined</code> 가 넘어감)</div>
+        <p>비동기에서 쓰는 이유 — 데이터를 받는 데 시간이 걸리니 “다 받으면 이 함수를 불러 줘” 하고 넘겨 둠 (수업 파일 2번 · 비동기 프로그래밍의 콜백)</p>
+        <pre><code class="language-javascript">function fetchData(callback) {                       // callback = 데이터를 다 받으면 불러 줄 함수
+    setTimeout(() =&gt; {                               // 2초 걸리는 일(데이터 받기)을 맡겨 둠
+        console.log(&quot;Data fetched!&quot;);                // 2초 뒤 → Data fetched!
+        callback(&quot;Here is your data.&quot;);              // 받은 데이터를 넘기며 콜백 실행 → processData(&quot;Here is your data.&quot;)
+    }, 2000);                                        // 2000ms = 2초
+    console.log(&quot;other work ....&quot;);                  // 기다리지 않고 바로 → 먼저 찍힘
+}                                                    // fetchData 끝
+
+function processData(data) {                         // 넘겨줄 콜백 — 받은 데이터를 처리
+    console.log(&quot;Processing data:&quot;, data);           // Processing data: Here is your data.
+}                                                    // processData 끝
+
+fetchData(processData);                              // processData 를 () 없이 넘김 → 2초 뒤에 불림</code></pre>
+        <pre class="io"><code class="language-text">other work ....
+Data fetched!
+Processing data: Here is your data.</code></pre>
+        <h3>② 콜백 지옥 (callback hell) — 콜백 안에 콜백 안에 콜백</h3>
+        <pre><code class="language-javascript">function getUser(id, callback) {                      // 1초 뒤 사용자 정보를 콜백으로
+  setTimeout(() =&gt; {                                  // 1000ms 뒤 실행
+    console.log(`Fetched user with ID: ${id}`);       // Fetched user with ID: 1
+    callback({ id, name: &quot;Rahul&quot; });                  // {id: 1, name: &quot;Rahul&quot;} 를 넘김
+  }, 1000);                                           // setTimeout 끝
+}                                                     // getUser 끝
+
+function getPosts(user, callback) {                   // 그 사용자의 글 목록
+  setTimeout(() =&gt; {                                  // 다시 1초 뒤
+    console.log(`Fetched posts for ${user.name}`);    // Fetched posts for Rahul
+    callback([&quot;Post1&quot;, &quot;Post2&quot;]);                     // 글 2개를 넘김
+  }, 1000);                                           // setTimeout 끝
+}                                                     // getPosts 끝
+
+function getComments(post, callback) {                // 그 글의 댓글
+  setTimeout(() =&gt; {                                  // 다시 1초 뒤
+    console.log(`Fetched comments for ${post}`);      // Fetched comments for Post1
+    callback([&quot;Comment1&quot;, &quot;Comment2&quot;]);               // 댓글 2개를 넘김
+  }, 1000);                                           // setTimeout 끝
+}                                                     // getComments 끝
+
+getUser(1, (user) =&gt; {                                // ① 사용자를 받으면
+  getPosts(user, (posts) =&gt; {                         // ② 그 안에서 글을 받고
+    getComments(posts[0], (comments) =&gt; {             // ③ 또 그 안에서 첫 글의 댓글을 받음 → 안으로 계속 들어감 = 콜백 지옥
+      console.log(&quot;Comments:&quot;, comments);             // Comments: [ &#x27;Comment1&#x27;, &#x27;Comment2&#x27; ]
+    });                                               // ③ 끝
+  });                                                 // ② 끝
+});                                                   // ① 끝</code></pre>
+        <pre class="io"><code class="language-text">Fetched user with ID: 1
+Fetched posts for Rahul
+Fetched comments for Post1
+Comments: [ &#x27;Comment1&#x27;, &#x27;Comment2&#x27; ]</code></pre>
+        <div class="tip">1초 · 2초 · 3초에 한 줄씩 — 앞 작업이 끝나야 다음 작업을 시작해서 <b>들여쓰기가 계속 깊어짐</b> → 읽기 · 고치기 어려움 = <b>콜백 지옥</b> · 해결 방법 2가지 (✍️ “JS 비동기작업 { 1) Promise 객체 2) }”) → ① <b>Promise</b> ② <b>async / await</b></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#cbhell" title="그림 — 콜백 · 콜백 지옥" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#cbhell" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 콜백 · 콜백 지옥 — 새 창으로 크게 보기</a></p></div>
+        <h3>③ 해결 ① Promise — 3가지 상태 · then · catch</h3>
+        <table class="ref">
+            <tr><th>상태 (수업 파일 주석)</th><th>뜻</th><th>이어지는 것</th></tr>
+            <tr><td><b>대기</b> (Pending)</td><td>아직 결과를 받지 못한 상태</td><td>만들자마자 · 결과를 기다리는 중</td></tr>
+            <tr><td><b>이행</b> (Fulfilled)</td><td>연산이 성공적으로 완료된 상태</td><td><code>resolve(값)</code> → <code>.then</code></td></tr>
+            <tr><td><b>거부</b> (Rejected)</td><td>연산이 실패한 상태</td><td><code>reject(이유)</code> → <code>.catch</code></td></tr>
+        </table>
+        <pre><code class="language-javascript">const promise = new Promise((resolve, reject) =&gt; {    // 만들면 대기(Pending)
+  const success = true;                               // 성공했다고 가정
+  if (success) resolve(&quot;작업 완료&quot;);                   // 성공 → 이행(Fulfilled) · 값 &quot;작업 완료&quot;
+  else reject(&quot;작업 실패&quot;);                            // 실패 → 거부(Rejected) · 이유 &quot;작업 실패&quot;
+});                                                   // Promise 끝
+
+promise                                               // 결과가 나오면
+  .then((res) =&gt; console.log(res))                    // 이행이면 then → 작업 완료
+  .catch((err) =&gt; console.error(err));                // 거부면 catch → 작업 실패</code></pre>
+        <pre class="io"><code class="language-text">작업 완료</code></pre>
+        <div class="tip"><code>success = false</code> 로 바꾸면 <code>catch</code> 쪽이 실행돼 <code>작업 실패</code> (console.error) · 🤖 node 로 상태를 찍어 보면 <code>Promise { &lt;pending&gt; }</code> · <code>Promise { '작업 완료' }</code> · <code>Promise { &lt;rejected&gt; '작업 실패' }</code></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#promise3" title="그림 — Promise 상태" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#promise3" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — Promise 상태 — 새 창으로 크게 보기</a></p></div>
+        <h3>④ 해결 ② async / await — 비동기를 동기 코드처럼</h3>
+        <table class="ref">
+            <tr><th>키워드</th><th>뜻 (수업 파일 주석)</th></tr>
+            <tr><td><b>async</b> 함수</td><td>항상 <b>Promise 를 반환</b> — return 값이 <code>Promise.resolve(값)</code> 으로 감싸짐 → <code>then</code> · <code>catch</code> 를 쓸 수 있음</td></tr>
+            <tr><td><b>await</b></td><td>Promise 의 연산이 끝날 때까지 함수 실행을 <b>일시중지</b> → 동기 함수처럼 보이게 · <b>async 함수 안에서만</b> 쓸 수 있음</td></tr>
+        </table>
+        <div class="tip">⚠️ <b>팩트체크</b> — 일반 함수 안에서 <code>await</code> 를 쓰면 node 오류 <code>SyntaxError: await is only valid in async functions and the top level bodies of modules</code> → 정확히는 async 함수 안 <b>또는 모듈(<code>&lt;script type="module"&gt;</code>)의 맨 바깥</b>에서도 돼요 · 수업 범위에서는 “async 함수 안에서” 로 기억</div>
+        <pre><code class="language-javascript">async function myAsyncFunction() {                    // async → 항상 Promise 를 돌려줌
+  return &quot;Hello, Async!&quot;;                             // = Promise.resolve(&quot;Hello, Async!&quot;)
+}                                                     // 함수 끝
+
+myAsyncFunction()                                     // Promise 가 돌아옴
+  .then(res =&gt; console.log(res));                     // 이행 값 → Hello, Async!</code></pre>
+        <pre class="io"><code class="language-text">Hello, Async!</code></pre>
+        <p>같은 일을 두 방식으로 (수업 파일 — <code>/api/user</code> 서버가 있어야 실행돼서 결과는 없어요 · node --check 로 문법만 확인)</p>
+        <pre><code class="language-javascript">// 1) Promise 방식 — then · catch 를 이어 붙임
+function getUserPromise() {                          // 사용자 정보를 가져오는 함수
+  return fetch(&#x27;/api/user&#x27;)                          // 서버에 GET 요청 → Promise 를 돌려줌
+    .then((res) =&gt; res.json())                       // 응답이 오면(이행) → 본문을 JSON 으로 바꿈
+    .catch((err) =&gt; console.error(err));             // 실패하면(거부) → 오류 출력
+}                                                    // getUserPromise 끝
+
+// 2) async/await 방식 — 위에서 아래로 읽히는 동기 코드처럼
+async function getUserAsync() {                      // async → 항상 Promise 를 돌려줌
+  try {                                              // 실패할 수 있는 부분
+    const res = await fetch(&#x27;/api/user&#x27;);            // 응답이 올 때까지 여기서 기다림 (함수 실행 일시중지)
+    return await res.json();                         // JSON 으로 바꾼 결과를 돌려줌 (async 라 Promise 로 감싸짐)
+  } catch (err) {                                    // fetch · json 이 실패하면(거부) 여기로
+    console.error(err);                              // 오류 출력
+  }                                                  // try · catch 끝
+}                                                    // getUserAsync 끝</code></pre>
+        <h3>⑤ 🤖 실행 순서 — 동기 → Promise(then) → 타이머</h3>
+        <p>수업 파일을 한 번에 실행하면 (아래 ⚠️ 처럼 이름을 고친 뒤) 이 순서로 찍혀요:</p>
+        <pre class="io"><code class="language-text">Hello, Rahul!
+Goodbye!
+other work ....
+작업 완료
+Hello, Async!
+Fetched user with ID: 1
+Data fetched!
+Processing data: Here is your data.
+Fetched posts for Rahul
+Fetched comments for Post1
+Comments: [ &#x27;Comment1&#x27;, &#x27;Comment2&#x27; ]</code></pre>
+        <div class="tip">🤖 <b>동기 코드를 먼저 끝까지</b> (Hello · Goodbye · <code>other work ....</code>) → 그다음 <b>Promise 의 then</b> (작업 완료 · Hello, Async!) → 그다음 <b>시간이 된 타이머 순서</b> (1초 사용자 → 2초 Data fetched · posts → 3초 comments)<br>⚠️ 수업 파일에는 <code>fetchData</code> 라는 이름의 함수가 <b>2개</b> (2번 콜백 예제 · 5번 await 예제) — 함수 선언은 끌어올려져(호이스팅) <b>나중 것이 앞 것을 덮어써서</b>, <code>fetchData(processData)</code> 가 await 예제 쪽을 부름 → <code>fetch("~")</code> 가 실패 (node: <code>Failed to parse URL from ~</code> · 브라우저: 콘솔 오류) · 위 순서는 두 번째 이름을 <code>fetchData2</code> 로 바꿔서 실행한 결과</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/웹프로그래밍-그림정리.html#evorder" title="그림 — 실행 순서" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/웹프로그래밍-그림정리.html#evorder" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 실행 순서 — 새 창으로 크게 보기</a></p></div>
+        <h3>⑥ ✍️ HTTP 메서드 — GET · POST · PUT · DELETE</h3>
+        <div class="tip"><span class="wk-tag note">✍️ 필기</span> — “get, post, put, delete 들을 <b>HTTP 메서드</b>라고 함” — 서버에 보내는 요청의 종류 · 표는 <a href="#s42">42번</a> 요청 방식 · CRUD 와 같아요 · 🤖 <code>fetch(주소)</code> 처럼 아무것도 안 정하면 <b>GET</b> · 다른 메서드는 <code>fetch(주소, { method: "POST" })</code> 처럼 정함</div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 56 · 주관식 47 · 출력결과 37 · 코드 작성 20 · 총 160문제 · 12주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 61 · 주관식 53 · 출력결과 41 · 코드 작성 21 · 총 176문제 · 13주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="웹프로그래밍-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
