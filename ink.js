@@ -634,7 +634,7 @@
     }
 
     /* ===================== 입력 ===================== */
-    var EXEMPT = "input, textarea, select, button, label, [contenteditable], .ct-code, .oq-ans, .ex-srcref, .ex-srcview, .ex-lv, .ex-modal";
+    var EXEMPT = "input, textarea, select, button, label, [contenteditable], .ct-code, .oq-ans, .ex-srcref, .ex-srcview, .ex-lv, .ex-modal, .xl-q .xl-sheet, .xl-rib";
     function inUI(t) { return t && t.closest && t.closest(".ink-ui"); }
     function onRuler(t) { return t && t.closest && t.closest(".ink-ruler"); }
     function exempt(t) { return inUI(t) || (t && t.closest && t.closest(EXEMPT)); }

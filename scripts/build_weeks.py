@@ -15,8 +15,9 @@
 - `:::toc` 한 줄 = 그 자리에 ‘바로 가기’ 칩 (이 원고의 `## ` 절 목록 · 누르면 그 카드로 이동 · 긴 중간고사 정리용)
 - `🎬 [이름](주소)` 한 줄 = 그 자리에 애니메이션 · 데모 페이지를 끼워 넣음(iframe · 주소는 주차 페이지 기준) + 아래에 '새 창으로 크게 보기' 버튼
 - ```sheet 제목 = 📗 엑셀 모양 표 (교수님 엑셀 설명처럼 · 2026-11-24 사용자: “엑셀로 설명이 있으면 좋겠어”) — 한 줄 = 한 행 · `|` 로 칸 나눔(칸 안의 | 는 \\|) · `--- 탭 이름` 줄 = 아래 시트 탭을 하나 더(누르면 바뀜) · 칸을 누르면 위 수식 줄에 그 칸 내용
-  칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{2}`~`{99}` 칸 합치기(오른쪽으로 N칸) · 칸 끝 `{=4*6}` = 엑셀 수식(칸에는 값 · 누르면 수식 줄에 =4*6)
-  ✏️ 입력 칸 (2026-11-25 사용자: “문제를 만들고 푸는 방식이 입력이 되고 채점이 되었으면”): `{?24}` = 답을 쓰는 칸(그 자리 그대로 채점 · `/` 로 여러 정답) · `{?~김광식}` = 행 순서와 상관없이 채점하는 결과 표 칸(그 탭에서 ~ 칸이 있는 행끼리 한 행씩 비교 · 빈 행은 `{?~}`) → 입력 칸이 있으면 제목 줄에 ✔ 채점 · 정답 · 다시 버튼
+  칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{g}` 회색 글씨(힌트 · SQL) · `{o}` 긴 글을 엑셀처럼 오른쪽 빈 칸으로 넘쳐 보이게(열 폭은 그대로 · 모자라면 빈 열을 더 둠) · `{2}`~`{99}` 칸 합치기(오른쪽으로 N칸) · 칸 끝 `{=4*6}` = 엑셀 수식(칸에는 값 · 누르면 수식 줄에 =4*6)
+  ✏️ 입력 칸 (2026-11-25 사용자: “문제를 만들고 푸는 방식이 입력이 되고 채점이 되었으면”): `{?24}` = 답을 쓰는 칸(그 자리 그대로 채점 · `/` 로 여러 정답) · `{?~김광식}` = 행 순서와 상관없이 채점하는 결과 표 칸(같은 표 안에서 ~ 칸이 있는 행끼리 한 행씩 비교 · 빈 행은 `{?~}`) → 입력 칸이 있으면 엑셀 리본(붙여넣기 · 행 삭제 · ✔ 채점 · 👁 정답 보기 · ↺ 다시 풀기)
+  표 여러 개를 한 시트에 세로로 (2026-11-25 사용자: “엑셀처럼 세로로 길게해서 한꺼번에 다 보이게 · 완전외부조인 풀 때 왼쪽 · 오른쪽을 붙여넣고 중복된 걸 빼서”): `✏️ 1) 내부조인 실행결과` 처럼 **✏️ 로 시작하는 칸 = 표 제목** → 그 아래(다음 ✏️ 제목 전까지) 입력 칸이 한 문제 · 채점 · 행 삭제 · 붙여넣기 · 👁 정답 보기가 표마다 따로 · 제목 칸에 ✅ ❌
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
 원고 파일이 있는 주차만 과목 페이지에서 버튼이 열리고, 나머지는 잠깁니다.
 """
@@ -186,41 +187,222 @@ def render_exam(block):
     return "".join(out)
 
 
-XL_JS = r"""<script data-xl-js>(function(){if(window.__xl)return;window.__xl=1;
+XL_CSS = r""".xl{--xg:#217346;--xbg:#fff;--xgrid:#e1e1e1;--xhd:#f3f3f3;--xhdl:#c8c8c8;--xhdt:#444;--xrib:#f3f3f3;--xtx:#222;--xmut:#6b6b6b;--xsel:rgba(33,115,70,.14);--xhsel:#d2d2d2;--xgt:#217346;--xsb:#217346;
+ position:relative;border:1px solid #c8c8c8;border-radius:8px;overflow:hidden;margin:14px 0;background:var(--xbg);color:var(--xtx);font-family:"맑은 고딕","Malgun Gothic","Apple SD Gothic Neo",-apple-system,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.16);}
+html[data-theme=dark] .xl{--xbg:#1f1f1f;--xgrid:#3a3a3a;--xhd:#2b2b2b;--xhdl:#474747;--xhdt:#cfcfcf;--xrib:#2b2b2b;--xtx:#e8e8e8;--xmut:#a3a3a3;--xsel:rgba(255,255,255,.11);--xhsel:#3d3d3d;--xgt:#7ad7a2;--xsb:#4fbf7f;border-color:#474747;}
+.xl-title{display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;background:var(--xg);color:#fff;font-size:12.5px;}
+.xl-logo{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;background:#fff;color:#217346;font-weight:900;font-size:12px;flex:none;}
+.xl-name{font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.xl-app{opacity:.85;flex:none;}
+.xl-menu{display:flex;gap:2px;padding:0 6px;background:var(--xg);overflow-x:auto;scrollbar-width:none;}
+.xl-menu span{padding:5px 10px 6px;font-size:12.5px;color:#fff;opacity:.9;white-space:nowrap;border-radius:4px 4px 0 0;}
+.xl-menu span.on{background:var(--xrib);color:var(--xgt);font-weight:800;opacity:1;}
+.xl-rib{display:flex;align-items:stretch;padding:6px 4px 2px;background:var(--xrib);border-bottom:1px solid var(--xhdl);overflow-x:auto;}
+.xl-grp{display:flex;flex-direction:column;justify-content:space-between;padding:0 8px;border-right:1px solid var(--xhdl);flex:none;}
+.xl-grp:last-child{border-right:0;}
+.xl-gb{display:flex;align-items:flex-start;gap:4px;}
+.xl-col{display:flex;flex-direction:column;gap:1px;}
+.xl-gl{text-align:center;font-size:11px;color:var(--xmut);padding-top:3px;}
+.xl-rib button{border:1px solid transparent;background:transparent;color:var(--xtx);font:inherit;font-size:12px;padding:2px 6px;border-radius:3px;cursor:pointer;text-align:left;white-space:nowrap;}
+.xl-rib button:hover{background:rgba(33,115,70,.12);border-color:rgba(33,115,70,.35);}
+.xl-rib button:active{background:rgba(33,115,70,.25);}
+.xl-rib .xl-big{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 8px;min-width:52px;text-align:center;}
+.xl-rib .xl-big i{font-style:normal;font-size:21px;line-height:1.15;}
+.xl-rib .xl-chk{color:var(--xgt);font-weight:800;}
+.xl-bar{display:flex;align-items:center;gap:6px;padding:4px 6px;border-bottom:1px solid var(--xhdl);background:var(--xbg);font-size:12.5px;}
+.xl-ref{min-width:64px;padding:2px 6px;border:1px solid var(--xhdl);background:var(--xbg);font-family:Consolas,Menlo,monospace;}
+.xl-dots{color:var(--xmut);}
+.xl-bx{border:0;background:transparent;color:var(--xtx);font:inherit;font-size:13px;padding:0 3px;cursor:pointer;}
+.xl-bx:disabled{opacity:.3;cursor:default;}
+.xl-fx{font-style:italic;font-weight:700;color:var(--xmut);font-family:Georgia,"Times New Roman",serif;}
+.xl-f{flex:1;min-width:0;min-height:20px;padding:2px 6px;border-left:1px solid var(--xhdl);font-family:Consolas,Menlo,"맑은 고딕",monospace;white-space:pre;overflow-x:auto;}
+.xl-wrap{overflow-x:auto;background:var(--xbg);}
+.xl-sheet{border-collapse:collapse;font-size:13px;margin:0;width:auto;background:var(--xbg);color:var(--xtx);}
+.xl-sheet[hidden]{display:none!important;}
+.xl-sheet th{background:var(--xhd);color:var(--xhdt);font-weight:400;border:1px solid var(--xhdl);padding:1px 6px;min-width:28px;font-size:11.5px;text-align:center;}
+.xl-sheet th.xl-corner{position:relative;cursor:pointer;}
+.xl-sheet th.xl-corner::after{content:"";position:absolute;right:2px;bottom:2px;border-left:9px solid transparent;border-bottom:9px solid var(--xhdl);}
+.xl-sheet td{border:1px solid var(--xgrid);text-align:left;padding:3px 8px;min-width:44px;height:22px;white-space:pre;cursor:cell;position:relative;}
+.xl-sheet td.num{text-align:right;}
+.xl-sheet td.y{background:#fff2cc;}
+.xl-sheet td.b{border:1.5px solid var(--xtx);}
+.xl-sheet td.h{background:#d9d9d9;font-weight:700;text-align:center;}
+.xl-sheet td.k{background:#f8cbad;font-weight:700;text-align:center;}
+.xl-sheet td.c{background:#bdd7ee;font-weight:700;text-align:center;}
+.xl-sheet td.r{color:#c00000;font-weight:700;}
+.xl-sheet td.n{font-weight:800;}
+html[data-theme=dark] .xl-sheet td.y{background:#5c4d1f;}
+html[data-theme=dark] .xl-sheet td.h{background:#3a3a3a;}
+html[data-theme=dark] .xl-sheet td.k{background:#6a4630;}
+html[data-theme=dark] .xl-sheet td.c{background:#28465f;}
+html[data-theme=dark] .xl-sheet td.r{color:#ff7b7b;}
+.xl-sheet td.sel{box-shadow:inset 0 0 0 2px var(--xsb);}
+.xl-sheet td.sel::after{content:"";position:absolute;right:-3px;bottom:-3px;width:6px;height:6px;background:var(--xsb);border:1px solid var(--xbg);z-index:2;}
+.xl-sheet td.rng{background-image:linear-gradient(var(--xsel),var(--xsel));}
+.xl-sheet th.hl{background:var(--xhsel);color:var(--xgt);font-weight:700;}
+.xl-sheet thead th.hl{box-shadow:inset 0 -2px 0 var(--xsb);}
+.xl-sheet tbody th.hl{box-shadow:inset -2px 0 0 var(--xsb);}
+.xl-sheet td.in{padding:0;background:#fff;box-shadow:inset 0 0 0 1px #f4b183;}
+html[data-theme=dark] .xl-sheet td.in{background:#262626;box-shadow:inset 0 0 0 1px #a8683a;}
+.xl-sheet td.in.sel,html[data-theme=dark] .xl-sheet td.in.sel{box-shadow:inset 0 0 0 2px var(--xsb);}
+.xl-in{display:block;width:100%;min-width:64px;box-sizing:border-box;border:0;background:transparent;color:#1f4e9e;font:inherit;padding:3px 6px;height:24px;outline:none;}
+html[data-theme=dark] .xl-in{color:#9cc3ff;}
+.xl-in.ok{background:#c6efce;color:#006100;}
+.xl-in.no{background:#ffc7ce;color:#9c0006;}
+html[data-theme=dark] .xl-in.ok{background:#1f4d2c;color:#b6f2c2;}
+html[data-theme=dark] .xl-in.no{background:#5c1f26;color:#ffc2c9;}
+.xl-in.shown{color:#7f7f7f;font-style:italic;}
+.xl-in.nav{caret-color:transparent;cursor:cell;}
+.xl-in.nav::selection{background:transparent;}
+.xl-q .xl-sheet td:not(.in){-webkit-user-select:none;user-select:none;}
+.xl-q .xl-sheet th{cursor:pointer;-webkit-user-select:none;user-select:none;}
+.xl-tabs{display:flex;align-items:stretch;padding:0 6px;border-top:1px solid var(--xhdl);background:var(--xhd);overflow-x:auto;}
+.xl-nav{display:flex;align-items:center;gap:2px;padding-right:6px;margin-right:4px;border-right:1px solid var(--xhdl);flex:none;}
+.xl-nav button{border:0;background:transparent;color:var(--xmut);font-size:11px;padding:2px 5px;cursor:pointer;}
+.xl-tab{border:0;border-bottom:3px solid transparent;background:transparent;color:var(--xtx);font:inherit;font-size:12.5px;padding:5px 12px 3px;cursor:pointer;white-space:nowrap;opacity:.85;}
+.xl-tab.on{background:var(--xbg);color:var(--xgt);font-weight:800;border-bottom-color:var(--xgt);opacity:1;}
+.xl-plus{display:flex;align-items:center;padding:0 10px;color:var(--xmut);font-size:15px;flex:none;}
+.xl-status{display:flex;align-items:center;gap:12px;min-height:24px;padding:3px 10px;background:var(--xhd);border-top:1px solid var(--xhdl);color:var(--xtx);font-size:12px;}
+.xl-mode{font-weight:700;flex:none;}
+.xl-msg{flex:1;min-width:0;color:var(--xmut);line-height:1.5;}
+.xl-msg.all{color:var(--xgt);font-weight:700;}
+.xl-stat{flex:none;white-space:pre;}
+.xl-zoom{flex:none;color:var(--xmut);white-space:nowrap;}
+.xl-kb{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;border:0;padding:0;resize:none;pointer-events:none;}
+@media (max-width:640px){.xl-status{flex-wrap:wrap;gap:4px 10px;}.xl-zoom{display:none;}.xl-app{display:none;}}
+@media (pointer:coarse){.xl-in{font-size:16px;height:28px;}}
+.xl-sheet td.g{color:var(--xmut);}
+.xl-sheet td.xh{font-weight:700;}
+.xl-sheet td.ov{overflow:visible;}
+.xl-sheet td.ov>.ov-t{position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;padding:0 8px;white-space:pre;z-index:1;pointer-events:none;}
+html[data-theme=dark] .xl-sheet th{background:var(--xhd);color:var(--xhdt);border-color:var(--xhdl);}
+html[data-theme=dark] .xl-sheet th.hl{background:var(--xhsel);color:var(--xgt);}
+html[data-theme=dark] .xl-sheet td{border-color:var(--xgrid);}
+html[data-theme=dark] .xl-sheet td.b{border-color:var(--xtx);}
+"""
+
+# 다크 모드 색 변환(theme.js)이 엑셀 색을 바꾸지 않게 data-theme-skip · 다크 색은 위 XL_CSS 가 직접 지정
+XL_JS = '<style data-theme-skip>' + XL_CSS + '</style>' + r"""<script data-xl-js>(function(){if(window.__xl)return;window.__xl=1;
+var NL=String.fromCharCode(10),TB=String.fromCharCode(9),MOD=/Mac|iP(hone|ad|od)/.test(navigator.platform||"")?"⌘":"Ctrl";
 function xn(s){s=String(s==null?"":s).normalize("NFKC").trim().toLowerCase().replace(/\s+/g,"");s=s.replace(/(개|행)$/,"");if(s==="(null)"||s==="널")s="null";return s;}
 function alts(i){return i.getAttribute("data-ans").split("/").map(xn);}
-function bar(x,c){x.querySelector(".xl-ref").textContent=c.dataset.r;var i=c.querySelector("input");x.querySelector(".xl-f").textContent=i?(i.value||"✏️ 입력 칸"):(c.dataset.f||c.textContent);}
-function sel(x,c){x.querySelectorAll("td.sel").forEach(function(d){d.classList.remove("sel");});c.classList.add("sel");bar(x,c);}
-function gradeTab(t){var ins=[].slice.call(t.querySelectorAll("input.xl-in"));if(!ins.length)return null;var ok=true,bad=0,miss=0;
- ins.forEach(function(i){i.classList.remove("ok","no");});
- ins.filter(function(i){return !i.dataset.free;}).forEach(function(i){var g=alts(i).indexOf(xn(i.value))>=0;i.classList.add(g?"ok":"no");if(!g){ok=false;bad++;}});
- var rows=[];[].slice.call(t.querySelectorAll("tr")).forEach(function(tr){var f=[].slice.call(tr.querySelectorAll("input.xl-in[data-free]"));if(f.length)rows.push(f);});
- if(rows.length){var exp=[];rows.forEach(function(f){var e=f.map(function(i){return alts(i)[0];});if(e.join("")!=="")exp.push(e.join("\u0001"));});
-  rows.forEach(function(f){var u=f.map(function(i){return xn(i.value);});if(u.join("")==="")return;var k=u.join("\u0001"),p=exp.indexOf(k);
-   if(p>=0){exp.splice(p,1);f.forEach(function(i){i.classList.add("ok");});}else{ok=false;bad++;f.forEach(function(i){i.classList.add("no");});}});
-  if(exp.length){ok=false;miss=exp.length;}}
- return {ok:ok,bad:bad,miss:miss};}
-document.addEventListener("click",function(e){
- var t=e.target.closest&&e.target.closest(".xl-tabs button");if(t){var x=t.closest(".xl"),i=[].indexOf.call(t.parentNode.children,t);
-  x.querySelectorAll(".xl-tabs button").forEach(function(b,k){b.classList.toggle("on",k===i);});
-  x.querySelectorAll(".xl-sheet").forEach(function(s,k){s.hidden=k!==i;});
-  x.querySelectorAll("td.sel").forEach(function(c){c.classList.remove("sel");});x.querySelector(".xl-ref").textContent="A1";x.querySelector(".xl-f").textContent="";return;}
- var b=e.target.closest&&e.target.closest(".xl-act button");if(b){var x=b.closest(".xl"),tabs=[].slice.call(x.querySelectorAll(".xl-tabs button")),sh=[].slice.call(x.querySelectorAll(".xl-sheet")),msg=x.querySelector(".xl-msg");
-  if(b.classList.contains("xl-chk")){var n=0,good=0,parts=[];sh.forEach(function(s,k){var tb=tabs[k];if(!tb.dataset.l)tb.dataset.l=tb.textContent;var r=gradeTab(s);if(!r){tb.textContent=tb.dataset.l;return;}
-    var lb=tb.dataset.l.replace(/^✏️\s*/,"");if(![].some.call(s.querySelectorAll("input.xl-in"),function(i){return i.value.trim();})){tb.textContent=tb.dataset.l;parts.push(lb+" (아직 안 씀)");n++;return;}
-    n++;if(r.ok)good++;tb.textContent=(r.ok?"✅ ":"❌ ")+lb;parts.push(lb+(r.ok?" ✅":" ❌"+(r.bad?" 틀린 칸·행 "+r.bad:"")+(r.miss?" · 빠진 행 "+r.miss:"")));});
-   msg.innerHTML="<b>"+good+" / "+n+"</b> 맞음 — "+parts.join(" · ");msg.classList.toggle("all",good===n);return;}
-  if(b.classList.contains("xl-show")){var s=sh.filter(function(s){return !s.hidden;})[0];var ins=s.querySelectorAll("input.xl-in");if(!ins.length){msg.textContent="이 탭에는 입력 칸이 없어요 — ✏️ 탭에서 눌러 주세요";return;}
-   ins.forEach(function(i){i.value=i.getAttribute("data-ans").split("/")[0];i.classList.remove("ok","no");i.classList.add("shown");});return;}
-  if(b.classList.contains("xl-rst")){x.querySelectorAll("input.xl-in").forEach(function(i){i.value="";i.classList.remove("ok","no","shown");});tabs.forEach(function(tb){if(tb.dataset.l)tb.textContent=tb.dataset.l;});
-   msg.classList.remove("all");msg.innerHTML="✏️ 다시 풀어 보세요 — 칸에 답을 쓰고 <b>✔ 채점</b>";return;}}
- var c=e.target.closest&&e.target.closest(".xl td");if(c){sel(c.closest(".xl"),c);}});
-document.addEventListener("input",function(e){var i=e.target;if(!i.classList||!i.classList.contains("xl-in"))return;i.classList.remove("ok","no","shown");var c=i.closest("td");bar(c.closest(".xl"),c);});
-document.addEventListener("focusin",function(e){var i=e.target;if(!i.classList||!i.classList.contains("xl-in"))return;var c=i.closest("td");sel(c.closest(".xl"),c);});
-document.addEventListener("keydown",function(e){var i=e.target;if(e.key!=="Enter"||e.isComposing||!i.classList||!i.classList.contains("xl-in"))return;e.preventDefault();
- var td=i.closest("td"),col=td.dataset.r.replace(/\d+/g,""),tr=td.parentElement,nx=e.shiftKey?tr.previousElementSibling:tr.nextElementSibling;
- while(nx){var cs=[].slice.call(nx.querySelectorAll("td"));for(var q=0;q<cs.length;q++){if(cs[q].dataset.r&&cs[q].dataset.r.replace(/\d+/g,"")===col){var c=cs[q].querySelector("input.xl-in");if(c){c.focus();c.select();return;}}}nx=e.shiftKey?nx.previousElementSibling:nx.nextElementSibling;}
- if(!e.shiftKey)i.closest(".xl").querySelector(".xl-chk").click();});
+function colNum(L){var c=0;for(var k=0;k<L.length;k++)c=c*26+(L.charCodeAt(k)-64);return c-1;}
+function pos(td){var m=/^([A-Z]+)(\d+)$/.exec(td&&td.dataset&&td.dataset.r||"");return m?{r:+m[2],c:colNum(m[1]),w:td.colSpan||1}:null;}
+function sheetOf(x){return [].filter.call(x.querySelectorAll(".xl-sheet"),function(t){return !t.hidden;})[0];}
+function dims(t){return {R:t.tBodies[0].rows.length,C:t.tHead.rows[0].cells.length-1};}
+function cellAt(t,r,c){var tr=t.tBodies[0].rows[r-1];if(!tr)return null;for(var k=0;k<tr.cells.length;k++){var td=tr.cells[k];if(td.tagName!=="TD")continue;var p=pos(td);if(p&&c>=p.c&&c<p.c+p.w)return td;}return null;}
+var S=typeof WeakMap!=="undefined"?new WeakMap():null,DRAG=null;
+function st(x){var s=S.get(x);if(!s){s={a:null,b:null,mode:"sel",kind:"",orig:"",undo:[],redo:[],rows:false};S.set(x,s);}return s;}
+function rect(s){if(!s.a)return null;var b=s.b||s.a;return {r1:Math.min(s.a.r,b.r),r2:Math.max(s.a.r,b.r),c1:Math.min(s.a.c,b.c),c2:Math.max(s.a.c+(s.a.w||1)-1,b.c+(b.w||1)-1)};}
+function inputs(x){return [].slice.call(x.querySelectorAll("input.xl-in"));}
+function actTd(x){var s=st(x),t=sheetOf(x);return s.a&&t?cellAt(t,s.a.r,s.a.c):null;}
+function actIn(x){var td=actTd(x);return td?td.querySelector("input.xl-in"):null;}
+function bar(x,td){var r=x.querySelector(".xl-ref"),f=x.querySelector(".xl-f");if(!td){r.textContent="A1";f.textContent="";return;}r.textContent=td.dataset.r;var i=td.querySelector("input");f.textContent=i?(i.value||"✏️ 입력 칸"):(td.dataset.f||td.textContent);}
+function paint(x){var s=st(x),t=sheetOf(x);[].forEach.call(x.querySelectorAll("td.sel,td.rng,th.hl"),function(e){e.classList.remove("sel","rng","hl");});if(!t||!s.a){bar(x,null);return;}
+ var R=rect(s),one=R.r1===R.r2&&R.c1===R.c2,a=cellAt(t,s.a.r,s.a.c);
+ for(var r=R.r1;r<=R.r2;r++){var tr=t.tBodies[0].rows[r-1];if(!tr)continue;tr.cells[0].classList.add("hl");for(var c=R.c1;c<=R.c2;c++){var td=cellAt(t,r,c);if(td&&td!==a&&!one)td.classList.add("rng");}}
+ for(var c2=R.c1;c2<=R.c2;c2++){var h=t.tHead.rows[0].cells[c2+1];if(h)h.classList.add("hl");}
+ if(a){a.classList.add("sel");bar(x,a);}stats(x);}
+function setMode(x){var s=st(x),m=x.querySelector(".xl-mode");if(m)m.textContent=s.mode==="edit"?(s.kind==="f2"?"편집":"입력"):"준비";[].forEach.call(x.querySelectorAll(".xl-bx"),function(b){b.disabled=s.mode!=="edit";});}
+function stats(x){var el=x.querySelector(".xl-stat");if(!el)return;var s=st(x),t=sheetOf(x),R=rect(s);if(!R||!t||(R.r1===R.r2&&R.c1===R.c2)){el.textContent="";return;}var n=0,k=0,sum=0;for(var r=R.r1;r<=R.r2;r++){var prev=null;for(var c=R.c1;c<=R.c2;c++){var td=cellAt(t,r,c);if(!td||td===prev)continue;prev=td;var i=td.querySelector("input.xl-in"),v=(i?i.value:td.textContent).trim();if(!v)continue;n++;if(/^-?\d+(\.\d+)?$/.test(v)){k++;sum+=parseFloat(v);}}}el.textContent=k>1?"평균: "+(Math.round(sum/k*100)/100)+"   개수: "+n+"   합계: "+sum:(n?"개수: "+n:"");}
+function kb(x){var k=x.querySelector(".xl-kb");if(!k){k=document.createElement("textarea");k.className="xl-kb";k.setAttribute("aria-hidden","true");k.tabIndex=-1;k.value=" ";x.appendChild(k);}return k;}
+function focusCell(x,touch){var s=st(x),i=actIn(x);s.mode="sel";s.kind="";setMode(x);inputs(x).forEach(function(n){if(n!==i)n.classList.remove("nav");});
+ if(i){s.orig=i.value;i.classList.add("nav");if(document.activeElement!==i)try{i.focus({preventScroll:true});}catch(e){i.focus();}i.select();}
+ else if(!touch){var k=kb(x);k.value=" ";try{k.focus({preventScroll:true});}catch(e){k.focus();}k.select();}
+ else if(document.activeElement&&x.contains(document.activeElement))document.activeElement.blur();
+ var td=actTd(x);if(td&&td.scrollIntoView){var w=x.querySelector(".xl-wrap"),tr=td.getBoundingClientRect(),wr=w.getBoundingClientRect();if(tr.left<wr.left||tr.right>wr.right)w.scrollLeft+=tr.left<wr.left?tr.left-wr.left-8:tr.right-wr.right+8;}}
+function push(x,ch){ch=ch.filter(function(c){return c.o!==c.n;});if(!ch.length)return;var s=st(x);s.undo.push(ch);if(s.undo.length>200)s.undo.shift();s.redo=[];ch.forEach(function(c){c.i.classList.remove("ok","no","shown");});}
+function setv(x,list){var ch=list.map(function(p){return {i:p[0],o:p[0].value,n:p[1]};});ch.forEach(function(c){c.i.value=c.n;});push(x,ch);}
+function commit(x){var s=st(x),i=actIn(x);if(s.mode==="edit"&&i&&i.value!==s.orig){var c={i:i,o:s.orig,n:i.value};push(x,[c]);}s.mode="sel";s.kind="";if(i){s.orig=i.value;}setMode(x);}
+function cancel(x){var s=st(x),i=actIn(x);if(i)i.value=s.orig;s.mode="sel";focusCell(x);paint(x);}
+function startEdit(x,kind){var s=st(x),i=actIn(x);if(!i)return;if(s.mode!=="edit"){s.mode="edit";s.kind=kind;}else if(kind==="f2")s.kind="f2";setMode(x);i.classList.remove("nav");if(document.activeElement!==i)i.focus();if(kind==="f2"){var n=i.value.length;try{i.setSelectionRange(n,n);}catch(e){}}}
+function undo(x,re){var s=st(x),a=re?s.redo:s.undo,b=re?s.undo:s.redo;commit(x);var ch=a.pop();if(!ch){note(x,re?"다시 할 것이 없어요":"되돌릴 것이 없어요");return;}ch.forEach(function(c){c.i.value=re?c.n:c.o;c.i.classList.remove("ok","no","shown");});b.push(ch);focusCell(x);paint(x);note(x,re?"↷ 다시 실행":"↶ 실행 취소 — "+MOD+"Shift+Z 로 다시");}
+function vis(td){if(!td)return;var vr=td.getBoundingClientRect(),vh=window.innerHeight||document.documentElement.clientHeight;if(vr.bottom>vh-12)window.scrollBy(0,vr.bottom-vh+60);else if(vr.top<64)window.scrollBy(0,vr.top-96);}
+function jump(x,r,c){var s=st(x),t=sheetOf(x);if(!t)return;var D=dims(t);r=Math.max(1,Math.min(D.R,r));var td=cellAt(t,r,c);s.a=td?pos(td):{r:r,c:c,w:1};s.b=null;s.rows=false;paint(x);focusCell(x);vis(td);}
+function enter(x,back){var s=st(x);commit(x);if(s.tabCol!=null&&!back){var tc=s.tabCol;s.tabCol=null;jump(x,s.a.r+1,tc);return;}s.tabCol=null;move(x,back?-1:1,0,false);}
+function tab(x,back){var s=st(x);commit(x);if(s.tabCol==null)s.tabCol=s.a.c;move(x,0,back?-1:1,false,true);}
+function move(x,dr,dc,ext,keepTab){var s=st(x),t=sheetOf(x);if(!t||!s.a)return;if(!keepTab)s.tabCol=null;var D=dims(t);commit(x);var base=ext?(s.b||s.a):s.a;var r=Math.max(1,Math.min(D.R,base.r+dr)),c=base.c+(dc>0?(base.w||1):dc<0?-1:0);c=Math.max(0,Math.min(D.C-1,c));var td=cellAt(t,r,c);var p=td?pos(td):{r:r,c:c,w:1};if(ext){s.b=p;}else{s.a=p;s.b=null;}s.rows=false;paint(x);focusCell(x);vis(td);}
+function tsv(x){var s=st(x),t=sheetOf(x),R=rect(s);if(!R)return null;var out=[];for(var r=R.r1;r<=R.r2;r++){var row=[],prev=null;for(var c=R.c1;c<=R.c2;c++){var td=cellAt(t,r,c);if(!td||td===prev){row.push("");continue;}prev=td;var i=td.querySelector("input.xl-in");row.push(i?i.value:td.textContent);}out.push(row.join(TB));}return out.join(NL);}
+function rangeInputs(x){var s=st(x),t=sheetOf(x),R=rect(s),out=[];if(!R)return out;for(var r=R.r1;r<=R.r2;r++){var prev=null;for(var c=R.c1;c<=R.c2;c++){var td=cellAt(t,r,c);if(!td||td===prev)continue;prev=td;var i=td.querySelector("input.xl-in");if(i)out.push(i);}}return out;}
+function clearRange(x){var l=rangeInputs(x);if(!l.length){note(x,"지울 입력 칸이 없어요 (입력 칸만 고칠 수 있어요)");return;}setv(x,l.map(function(i){return [i,""];}));paint(x);focusCell(x);}
+function paste(x,txt){var s=st(x),t=sheetOf(x),R=rect(s);if(!R||txt==null)return;txt=String(txt).replace(/\r\n?/g,NL);if(txt.slice(-1)===NL)txt=txt.slice(0,-1);var rows=txt.split(NL).map(function(l){return l.split(TB);});var list=[],skip=0,cut=0;
+ if(!(rows.length===1&&rows[0].length===1)){var bk=blockAt(t,R.r1);if(bk){var end=bk[bk.length-1].r;if(R.r1+rows.length-1>end){cut=R.r1+rows.length-1-end;rows=rows.slice(0,end-R.r1+1);}}}
+ if(rows.length===1&&rows[0].length===1&&(R.r1!==R.r2||R.c1!==R.c2)){rangeInputs(x).forEach(function(i){list.push([i,rows[0][0]]);});}
+ else{rows.forEach(function(row,ri){var prev=null;row.forEach(function(v,ci){var td=cellAt(t,R.r1+ri,R.c1+ci);if(!td||td===prev)return;prev=td;var i=td.querySelector("input.xl-in");if(i)list.push([i,v.trim()]);else if(v.trim()!==(td.textContent||"").trim())skip++;});});
+  s.a=pos(cellAt(t,R.r1,R.c1))||s.a;s.b=pos(cellAt(t,Math.min(R.r1+rows.length-1,dims(t).R),R.c1+Math.max.apply(null,rows.map(function(r){return r.length;}))-1))||null;}
+ if(!list.length){note(x,"여기는 붙여 넣을 수 있는 칸이 아니에요 — 입력 칸을 고르고 붙여넣기");return;}setv(x,list);paint(x);focusCell(x);note(x,"붙여넣기 "+list.length+"칸"+(skip?" · 입력 칸이 아닌 "+skip+"칸은 건너뜀":"")+(cut?" · 표가 모자라 "+cut+"행은 못 붙였어요":""));}
+function blocks(t){var out=[],cur=null;[].forEach.call(t.tBodies[0].rows,function(tr,k){var f=[].slice.call(tr.querySelectorAll("input.xl-in[data-free]"));if(!f.length){cur=null;return;}if(!cur){cur=[];out.push(cur);}cur.push({r:k+1,ins:f});});return out;}
+function blockAt(t,r){var b=blocks(t);for(var j=0;j<b.length;j++){if(r>=b[j][0].r&&r<=b[j][b[j].length-1].r)return b[j];}return null;}
+function sections(t){var out=[],cur={head:null,r1:1,pos:[],rows:[]};out.push(cur);[].forEach.call(t.tBodies[0].rows,function(tr,k){var h=tr.querySelector("td.xh");if(h){cur={head:h,r1:k+1,pos:[],rows:[]};out.push(cur);}
+  var f=[].slice.call(tr.querySelectorAll("input.xl-in[data-free]"));if(f.length)cur.rows.push(f);[].forEach.call(tr.querySelectorAll("input.xl-in:not([data-free])"),function(i){cur.pos.push(i);});});
+ out.forEach(function(q,j){q.r2=j+1<out.length?out[j+1].r1-1:t.tBodies[0].rows.length;});return out.filter(function(q){return q.pos.length||q.rows.length;});}
+function secIns(q){var a=q.pos.slice();q.rows.forEach(function(f){a=a.concat(f);});return a;}
+function hl(h){var el=h.querySelector(".ov-t")||h;if(!h.dataset.l)h.dataset.l=el.textContent.replace(/^(✏️|✅|❌)\s*/,"");return el;}
+function setHead(h,mark){hl(h).textContent=mark+" "+h.dataset.l;}
+function secLabel(q,tb){if(q.head){hl(q.head);return q.head.dataset.l.replace(/^--\s*/,"");}return (tb.dataset.l||tb.textContent).replace(/^(✏️|✅|❌)\s*/,"");}
+function delRows(x,force){var s=st(x),t=sheetOf(x),R=rect(s);if(!R)return;var hit=[],cnt=0;
+ blocks(t).forEach(function(b){var sel=b.filter(function(o){return o.r>=R.r1&&o.r<=R.r2;});if(sel.length)hit.push({b:b,sel:sel});});
+ if(!hit.length){var l=rangeInputs(x);if(l.length){setv(x,l.map(function(i){return [i,""];}));paint(x);focusCell(x);note(x,"지웠어요");}else note(x,"지울 칸이 없어요 — 결과 표의 행(입력 칸)을 드래그하고 눌러 주세요");return;}
+ if(!force){var full=hit.every(function(h){return h.sel.every(function(o){var p0=pos(o.ins[0].closest("td")),p1=pos(o.ins[o.ins.length-1].closest("td"));return R.c1<=p0.c&&R.c2>=p1.c+p1.w-1;});});if(!full){clearRange(x);return;}}
+ var list=[];hit.forEach(function(h){var gone={};h.sel.forEach(function(o){gone[o.r]=1;});cnt+=h.sel.length;var vals=h.b.filter(function(o){return !gone[o.r];}).map(function(o){return o.ins.map(function(i){return i.value;});});
+  h.b.forEach(function(o,k){var v=vals[k]||[];o.ins.forEach(function(i,j){list.push([i,v[j]||""]);});});});
+ setv(x,list);s.b=null;s.rows=false;var td=cellAt(t,R.r1,R.c1);s.a=td?pos(td):s.a;paint(x);focusCell(x);note(x,"행 "+cnt+"개 삭제 — 그 표의 아래 행이 올라왔어요 ("+MOD+"Z = 되돌리기)");}
+function fillDown(x){var s=st(x),t=sheetOf(x),R=rect(s);if(!R||R.r1===R.r2)return;var list=[];for(var c=R.c1;c<=R.c2;c++){var top=cellAt(t,R.r1,c),ti=top&&top.querySelector("input.xl-in");var v=ti?ti.value:(top?top.textContent:"");for(var r=R.r1+1;r<=R.r2;r++){var td=cellAt(t,r,c),i=td&&td.querySelector("input.xl-in");if(i)list.push([i,v]);}}if(list.length){setv(x,list);paint(x);focusCell(x);}}
+function note(x,m){var n=x.querySelector(".xl-msg");if(!n)return;n.classList.remove("all");n.textContent=m;}
+function copyOut(x,cut){var v=tsv(x);if(v==null)return;x.__clip=v;var ok=function(){note(x,(cut?"잘라내기":"복사")+" — 붙여 넣을 칸을 고르고 "+MOD+"V");};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(ok,ok);else ok();if(cut)clearRange(x);}
+function gradeSec(q){var ok=true,bad=0,miss=0,ins=secIns(q);ins.forEach(function(i){i.classList.remove("ok","no");});var any=ins.some(function(i){return i.value.trim();});if(!any)return {any:false};
+ q.pos.forEach(function(i){var g=alts(i).indexOf(xn(i.value))>=0;i.classList.add(g?"ok":"no");if(!g){ok=false;bad++;}});
+ if(q.rows.length){var exp=[];q.rows.forEach(function(f){var e=f.map(function(i){return alts(i)[0];});if(e.join("")!=="")exp.push(e.join("\u0001"));});
+  q.rows.forEach(function(f){var u=f.map(function(i){return xn(i.value);});if(u.join("")==="")return;var k=u.join("\u0001"),p=exp.indexOf(k);if(p>=0){exp.splice(p,1);f.forEach(function(i){i.classList.add("ok");});}else{ok=false;bad++;f.forEach(function(i){i.classList.add("no");});}});if(exp.length){ok=false;miss=exp.length;}}
+ return {any:true,ok:ok,bad:bad,miss:miss};}
+function act(x,b){var tabs=[].slice.call(x.querySelectorAll(".xl-tabs .xl-tab")),sh=[].slice.call(x.querySelectorAll(".xl-sheet")),msg=x.querySelector(".xl-msg"),k=b.getAttribute("data-a");commit(x);
+ if(k==="chk"){var n=0,good=0,parts=[];sh.forEach(function(sv,j){var tb=tabs[j];if(!tb.dataset.l)tb.dataset.l=tb.textContent;var secs=sections(sv);if(!secs.length){tb.textContent=tb.dataset.l;return;}var tAll=true,tBad=false;
+   secs.forEach(function(q){var r=gradeSec(q),lb=secLabel(q,tb);n++;if(!r.any){if(q.head)setHead(q.head,"✏️");parts.push(lb+" (아직 안 씀)");tAll=false;return;}if(r.ok)good++;else{tAll=false;tBad=true;}if(q.head)setHead(q.head,r.ok?"✅":"❌");
+    parts.push(lb+(r.ok?" ✅":" ❌"+(r.bad?" 틀린 칸·행 "+r.bad:"")+(r.miss?" · 빠진 행 "+r.miss:"")));});
+   tb.textContent=tBad||tAll?(tBad?"❌ ":"✅ ")+tb.dataset.l.replace(/^✏️\s*/,""):tb.dataset.l;});
+  msg.textContent="";var bb=document.createElement("b");bb.textContent=good+" / "+n;msg.appendChild(bb);msg.appendChild(document.createTextNode(" 맞음 — "+parts.join(" · ")));msg.classList.toggle("all",good===n);return;}
+ if(k==="show"){var s0=sheetOf(x),a0=st(x).a,secs0=sections(s0),pick=null;if(a0)secs0.forEach(function(q){if(a0.r>=q.r1&&a0.r<=q.r2)pick=q;});var ins=pick?secIns(pick):[].slice.call(s0.querySelectorAll("input.xl-in"));
+  if(!ins.length){note(x,"이 시트에는 입력 칸이 없어요 — ✏️ 시트에서 눌러 주세요");return;}setv(x,ins.map(function(i){return [i,i.getAttribute("data-ans").split("/")[0]];}));ins.forEach(function(i){i.classList.remove("ok","no");i.classList.add("shown");});paint(x);
+  note(x,pick&&secs0.length>1?"👁 "+secLabel(pick,tabs[sh.indexOf(s0)])+" — 정답을 채웠어요 · 다른 표는 그 표의 칸을 고르고 👁 ("+MOD+"Z = 되돌리기)":"👁 정답을 채웠어요 ("+MOD+"Z = 되돌리기)");return;}
+ if(k==="rst"){setv(x,inputs(x).map(function(i){return [i,""];}));inputs(x).forEach(function(i){i.classList.remove("ok","no","shown");});tabs.forEach(function(tb){if(tb.dataset.l)tb.textContent=tb.dataset.l;});[].forEach.call(x.querySelectorAll("td.xh"),function(h){setHead(h,"✏️");});msg.classList.remove("all");msg.textContent="✏️ 다시 풀어 보세요 ("+MOD+"Z = 되돌리기)";return;}
+ if(k==="copy"||k==="cut"){if(!st(x).a){note(x,"먼저 칸을 고르세요");return;}copyOut(x,k==="cut");return;}
+ if(k==="paste"){if(!st(x).a){note(x,"먼저 붙여 넣을 칸을 고르세요");return;}var fb=function(){if(x.__clip!=null)paste(x,x.__clip);else note(x,"붙여 넣을 내용이 없어요 — "+MOD+"V 로 해 보세요");};if(navigator.clipboard&&navigator.clipboard.readText)navigator.clipboard.readText().then(function(v){paste(x,v);},fb);else fb();return;}
+ if(k==="esc"){cancel(x);return;}if(k==="ent"){focusCell(x);paint(x);return;}if(k==="del"){delRows(x,true);return;}if(k==="clr"){clearRange(x);return;}if(k==="undo"){undo(x,false);return;}if(k==="redo"){undo(x,true);return;}}
+function init(x){if(x.__xi)return;x.__xi=1;kb(x);
+ x.addEventListener("pointerdown",function(e){var b=e.target.closest&&e.target.closest(".xl-rib button, .xl-bar .xl-bx");if(b){e.preventDefault();return;}
+  var cell=e.target.closest&&e.target.closest(".xl-sheet td, .xl-sheet th");if(!cell||(e.pointerType==="mouse"&&e.button!==0))return;var s=st(x),t=sheetOf(x);if(!t||!t.contains(cell))return;if(cell.parentNode.parentNode.tagName==="THEAD"){commit(x);if(e.pointerType!=="touch")e.preventDefault();var D0=dims(t),ci=cell.cellIndex-1;s.tabCol=null;if(ci<0){s.a={r:1,c:0,w:1};s.b={r:D0.R,c:D0.C-1,w:1};}else if(e.shiftKey&&s.a){s.b={r:D0.R,c:ci,w:1};}else{s.a={r:1,c:ci,w:1};s.b={r:D0.R,c:ci,w:1};}paint(x);focusCell(x,e.pointerType==="touch");return;}
+  var i=cell.querySelector&&cell.querySelector("input.xl-in");if(s.mode==="edit"&&i&&i===actIn(x)&&e.target===i&&s.kind==="f2")return;
+  var touch=e.pointerType==="touch";commit(x);
+  if(cell.tagName==="TH"){var r=+cell.textContent,D=dims(t);if(!touch)e.preventDefault();if(e.shiftKey&&s.a){s.b={r:r,c:D.C-1,w:1};s.a={r:s.a.r,c:0,w:1};}else{s.a={r:r,c:0,w:1};s.b={r:r,c:D.C-1,w:1};}s.rows=true;paint(x);focusCell(x,touch);if(!touch)DRAG={x:x,rows:true};return;}
+  var p=pos(cell);s.tabCol=null;if(!touch)e.preventDefault();if(e.shiftKey&&s.a&&!touch){s.b=p;}else{s.a=p;s.b=null;}s.rows=false;paint(x);focusCell(x,touch);if(!touch)DRAG={x:x,rows:false};});
+ x.addEventListener("dblclick",function(e){var cell=e.target.closest&&e.target.closest(".xl-sheet td");if(!cell)return;var i=cell.querySelector("input.xl-in");if(!i)return;var s=st(x);s.a=pos(cell);s.b=null;paint(x);startEdit(x,"f2");});
+ x.addEventListener("input",function(e){var i=e.target;if(i.classList.contains("xl-kb")){i.value=" ";i.select();return;}if(!i.classList.contains("xl-in"))return;var s=st(x);if(s.mode==="sel"&&i===actIn(x))startEdit(x,"type");i.classList.remove("ok","no","shown");bar(x,i.closest("td"));});
+ x.addEventListener("focusout",function(e){if(!e.relatedTarget||!x.contains(e.relatedTarget))commit(x);});
+ x.addEventListener("keydown",function(e){var s=st(x),t=sheetOf(x);if(!t||!s.a||e.isComposing||e.key==="Process")return;var k=e.key,m=e.metaKey||e.ctrlKey,kl=k.length===1?k.toLowerCase():k;
+  var done=function(){e.preventDefault();e.stopPropagation();};
+  if(s.mode==="edit"){if(k==="Enter"&&!m){done();enter(x,e.shiftKey);return;}if(k==="Tab"){done();tab(x,e.shiftKey);return;}if(k==="Escape"){done();cancel(x);return;}
+   if(s.kind==="type"&&/^Arrow/.test(k)&&!m&&!e.shiftKey){done();commit(x);move(x,k==="ArrowUp"?-1:k==="ArrowDown"?1:0,k==="ArrowLeft"?-1:k==="ArrowRight"?1:0,false);return;}
+   if(m&&k==="Enter"){done();commit(x);act(x,x.querySelector('[data-a="chk"]'));return;}e.stopPropagation();return;}
+  if(m&&(kl==="c"||kl==="x"||kl==="v")){e.stopPropagation();return;}
+  if(m&&kl==="z"){done();undo(x,e.shiftKey);return;}if(m&&kl==="y"){done();undo(x,true);return;}
+  if(m&&kl==="a"){done();var D=dims(t);s.a={r:1,c:0,w:1};s.b={r:D.R,c:D.C-1,w:1};paint(x);return;}
+  if(m&&kl==="d"){done();fillDown(x);return;}if(m&&k==="Enter"){done();act(x,x.querySelector('[data-a="chk"]'));return;}
+  if(/^Arrow/.test(k)){done();move(x,k==="ArrowUp"?-1:k==="ArrowDown"?1:0,k==="ArrowLeft"?-1:k==="ArrowRight"?1:0,e.shiftKey);return;}
+  if(k==="Enter"){done();enter(x,e.shiftKey);return;}if(k==="Tab"){done();tab(x,e.shiftKey);return;}
+  if(k==="Delete"||k==="Backspace"){done();delRows(x,false);return;}if(k==="F2"){done();startEdit(x,"f2");return;}
+  if(k==="Escape"){done();s.b=null;paint(x);return;}e.stopPropagation();});
+ x.addEventListener("copy",function(e){var s=st(x);if(s.mode==="edit"||!s.a)return;var v=tsv(x);if(v==null)return;e.preventDefault();e.clipboardData.setData("text/plain",v);x.__clip=v;note(x,"복사 — 붙여 넣을 칸을 고르고 "+MOD+"V");});
+ x.addEventListener("cut",function(e){var s=st(x);if(s.mode==="edit"||!s.a)return;var v=tsv(x);if(v==null)return;e.preventDefault();e.clipboardData.setData("text/plain",v);x.__clip=v;clearRange(x);});
+ x.addEventListener("paste",function(e){var s=st(x);if(!s.a)return;var v=(e.clipboardData||window.clipboardData).getData("text/plain");if(v==null)return;var multi=/[\t\n]/.test(v.replace(/\r?\n$/,""));if(s.mode==="edit"&&!multi)return;e.preventDefault();if(s.mode==="edit")commit(x);paste(x,v);});}
+document.addEventListener("pointermove",function(e){if(!DRAG)return;var el=document.elementFromPoint(e.clientX,e.clientY),x=DRAG.x,t=sheetOf(x),s=st(x);if(!el||!t)return;var cell=el.closest&&el.closest(".xl-sheet td, .xl-sheet tbody th");if(!cell||!t.contains(cell))return;
+ if(DRAG.rows){var r=cell.tagName==="TH"?+cell.textContent:pos(cell).r,D=dims(t);s.b={r:r,c:D.C-1,w:1};}else{if(cell.tagName==="TH")return;s.b=pos(cell);}paint(x);});
+document.addEventListener("pointerup",function(){if(DRAG){var x=DRAG.x;DRAG=null;var R=rect(st(x));if(R&&(R.r1!==R.r2||R.c1!==R.c2))note(x,"범위 선택 — "+MOD+"C 복사 · Del · 🗑 행 삭제 · "+MOD+"X 잘라내기");}});
+function showTab(x,i){var tb=x.querySelectorAll(".xl-tabs .xl-tab");if(i<0||i>=tb.length)return;commit(x);[].forEach.call(tb,function(b,k){b.classList.toggle("on",k===i);});x.querySelectorAll(".xl-sheet").forEach(function(s,k){s.hidden=k!==i;});var s=st(x);s.a=null;s.b=null;paint(x);}
+document.addEventListener("click",function(e){var nv=e.target.closest&&e.target.closest(".xl-tabs [data-nav]");if(nv){var xx=nv.closest(".xl"),tb=[].slice.call(xx.querySelectorAll(".xl-tabs .xl-tab")),cur=tb.findIndex(function(b){return b.classList.contains("on");});showTab(xx,cur+(+nv.getAttribute("data-nav")));return;}var t=e.target.closest&&e.target.closest(".xl-tabs .xl-tab");if(t){var x=t.closest(".xl");showTab(x,[].indexOf.call(x.querySelectorAll(".xl-tabs .xl-tab"),t));return;}
+ var b=e.target.closest&&e.target.closest(".xl-q .xl-rib button, .xl-q .xl-bar .xl-bx");if(b){act(b.closest(".xl"),b);return;}
+ var c=e.target.closest&&e.target.closest(".xl:not(.xl-q) td");if(c){var y=c.closest(".xl");y.querySelectorAll("td.sel").forEach(function(d){d.classList.remove("sel");});c.classList.add("sel");bar(y,c);}});
+function boot(){[].forEach.call(document.querySelectorAll(".xl.xl-q"),init);}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 })();</script>"""
 
 
@@ -254,7 +436,7 @@ def render_sheet(title, lines):
                 c = c.strip()
                 cls, span = [], 1
                 while True:
-                    m = re.match(r"\{([ybhkcrn]|[2-9]|[1-9]\d)\}", c)
+                    m = re.match(r"\{([ybhkcrnog]|[2-9]|[1-9]\d)\}", c)
                     if not m:
                         break
                     v = m.group(1)
@@ -274,9 +456,18 @@ def render_sheet(title, lines):
                     c, f = fm.group(1), fm.group(2)
                 if re.fullmatch(r"[+-]?\d+(\.\d+)?", c):
                     cls.append("num")
+                if c.startswith("✏️"):                      # ✏️ 로 시작하는 칸 = 표 제목 (그 아래 입력 칸끼리 따로 채점 · ✅ ❌ 표시)
+                    cls += ["xh", "o"]
                 out.append((c, cls, span, f, None))
             grid.append(out)
         ncol = max([sum(sp for _, _, sp, _, _ in r) for r in grid] + [1])
+        for r in grid:                                   # {o} 긴 글 = 엑셀처럼 오른쪽 빈 칸으로 넘쳐 보임 → 넘칠 만큼 빈 열을 더 둠
+            col = 0
+            for c, cls, sp, _, _ in r:
+                if "o" in cls and c:
+                    px = sum(13.2 if ord(ch) > 0x2000 else 7.6 for ch in c) + 18
+                    ncol = max(ncol, col + max(sp, -(-int(px) // 62)))
+                col += sp
         h = ['<table class="xl-sheet"%s><thead><tr><th class="xl-corner"></th>%s</tr></thead><tbody>' % (
             "" if k == 0 else " hidden", "".join("<th>%s</th>" % xl_col(j) for j in range(ncol)))]
         for ri, r in enumerate(grid, 1):
@@ -284,27 +475,52 @@ def render_sheet(title, lines):
             for c, cls, sp, f, inp in r:
                 body = html.escape(c, quote=False)
                 if inp:
-                    body = ('<input type="text" class="xl-in" data-ans="%s"%s autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="%s%d 칸">'
+                    body = ('<input type="text" class="xl-in" size="1" data-ans="%s"%s autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="%s%d 칸">'
                             % (html.escape(inp[0]), ' data-free="1"' if inp[1] else "", xl_col(col), ri))
-                tds.append('<td data-r="%s%d"%s%s%s>%s</td>' % (xl_col(col), ri, ' class="%s"' % " ".join(cls) if cls else "",
+                if "o" in cls:
+                    body = '<span class="ov-t">%s</span>' % body
+                    cls = ["ov" if v == "o" else v for v in cls]
+                lab = ' data-l="%s"' % html.escape(re.sub(r"^✏️\s*", "", c)) if "xh" in cls else ""
+                tds.append('<td data-r="%s%d"%s%s%s%s>%s</td>' % (xl_col(col), ri, ' class="%s"' % " ".join(cls) if cls else "",
                                                             ' colspan="%d"' % sp if sp > 1 else "",
-                                                            ' data-f="%s"' % html.escape(f) if f else "", body))
+                                                            ' data-f="%s"' % html.escape(f) if f else "", lab, body))
                 col += sp
             tds += ['<td data-r="%s%d"></td>' % (xl_col(j), ri) for j in range(col, ncol)]
             h.append("<tr><th>%d</th>%s</tr>" % (ri, "".join(tds)))
         h.append("</tbody></table>")
         tables.append("".join(h))
-        tabs.append('<button type="button"%s>%s</button>' % (' class="on"' if k == 0 else "", html.escape(nm)))
-    act = msg = ""
+        tabs.append('<button type="button" class="xl-tab%s">%s</button>' % (" on" if k == 0 else "", html.escape(nm)))
+    t = html.escape(title or "엑셀로 보기")
+    menu = rib = ""
+    hint = ""
     if has_in:
-        act = ('<span class="xl-act"><button type="button" class="xl-chk">✔ 채점</button>'
-               '<button type="button" class="xl-show">정답</button><button type="button" class="xl-rst">다시</button></span>')
-        msg = ('<div class="xl-msg">✏️ 초록 칸에 답을 쓰고 <b>✔ 채점</b> — 탭마다 채점해요 · Enter = 아래 칸 (마지막 칸에서 Enter = 채점) · '
-               '결과 표는 행 순서 상관없어요 · 빈 값은 NULL · <b>정답</b> = 지금 탭의 답 보기</div>')
-    return ('<div class="xl%s"><div class="xl-head"><span class="xl-logo">X</span><span>%s</span>%s</div>'
-            '<div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div>'
-            '<div class="xl-wrap">%s</div>%s<div class="xl-tabs">%s</div></div>') % (" xl-q" if has_in else "", html.escape(title or "엑셀로 보기"), act,
-                                                                            "".join(tables), msg, "".join(tabs))
+        menu = ('<div class="xl-menu"><span>파일</span><span class="on">홈</span><span>삽입</span><span>페이지 레이아웃</span>'
+                '<span>수식</span><span>데이터</span><span>검토</span><span>보기</span></div>')
+        rib = ('<div class="xl-rib">'
+               '<div class="xl-grp"><div class="xl-gb"><button type="button" class="xl-big" data-a="paste" title="붙여넣기 (⌘/Ctrl+V)"><i>📋</i>붙여넣기</button>'
+               '<div class="xl-col"><button type="button" data-a="cut" title="잘라내기 (⌘/Ctrl+X)">✂️ 잘라내기</button>'
+               '<button type="button" data-a="copy" title="복사 (⌘/Ctrl+C)">⧉ 복사</button></div></div><div class="xl-gl">클립보드</div></div>'
+               '<div class="xl-grp"><div class="xl-gb"><button type="button" class="xl-big" data-a="del" title="고른 행 삭제 — 아래 행이 올라옴 (행을 고르고 Del)"><i>🗑</i>행 삭제</button></div>'
+               '<div class="xl-gl">셀</div></div>'
+               '<div class="xl-grp"><div class="xl-gb"><div class="xl-col"><button type="button" data-a="clr" title="고른 칸 내용 지우기">🧽 지우기</button>'
+               '<button type="button" data-a="undo" title="실행 취소 (⌘/Ctrl+Z)">↶ 실행 취소</button>'
+               '<button type="button" data-a="redo" title="다시 실행 (⌘/Ctrl+Shift+Z)">↷ 다시 실행</button></div></div><div class="xl-gl">편집</div></div>'
+               '<div class="xl-grp"><div class="xl-gb"><button type="button" class="xl-big xl-chk" data-a="chk" title="채점 (⌘/Ctrl+Enter)"><i>✔</i>채점</button>'
+               '<div class="xl-col"><button type="button" data-a="show" title="고른 표의 답 보기 (표 밖을 고르면 시트 전체)">👁 정답 보기</button>'
+               '<button type="button" data-a="rst" title="모두 지우기 (⌘/Ctrl+Z 로 되돌리기)">↺ 다시 풀기</button></div></div><div class="xl-gl">채점</div></div>'
+               '</div>')
+        hint = ('✏️ 주황 테두리 칸(입력)에 답 · 드래그 · Shift+방향키로 여러 칸 · ⌘/Ctrl + C · V · X · '
+                '행 번호를 누르거나 행을 끌어 고르고 Del = 행 삭제 · ⌘/Ctrl+Z · ⌘/Ctrl+Enter = 채점 · 결과 표는 행 순서 상관없이 채점 · 빈 값은 NULL')
+    head = ('<div class="xl-title"><span class="xl-logo">X</span><span class="xl-name">%s</span><span class="xl-app">- Excel</span></div>' % t)
+    fbar = ('<div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-dots">⋮</span>'
+            '<button type="button" class="xl-bx" data-a="esc" title="취소 (Esc)" disabled>✕</button>'
+            '<button type="button" class="xl-bx" data-a="ent" title="입력 (Enter)" disabled>✓</button>'
+            '<span class="xl-fx">fx</span><span class="xl-f"></span></div>')
+    tabsbar = ('<div class="xl-tabs"><span class="xl-nav"><button type="button" data-nav="-1" title="이전 시트">◀</button>'
+               '<button type="button" data-nav="1" title="다음 시트">▶</button></span>%s<span class="xl-plus" title="시트">⊕</span></div>' % "".join(tabs))
+    status = ('<div class="xl-status"><span class="xl-mode">준비</span><span class="xl-msg">%s</span>'
+              '<span class="xl-stat"></span><span class="xl-zoom">－ ━━━●━━━ ＋ 100%%</span></div>' % hint)
+    return '<div class="xl%s">%s%s%s%s<div class="xl-wrap">%s</div>%s%s</div>' % (" xl-q" if has_in else "", head, menu, rib, fbar, "".join(tables), tabsbar, status)
 
 
 def render_md(md):
@@ -511,50 +727,13 @@ pre.io{background:#0f1b14;}
 pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
 pre.io code{color:#dff5e6;}
 pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
-.xl{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0;background:var(--card);}
-.xl-head{display:flex;align-items:center;gap:8px;padding:6px 12px;background:#217346;color:#fff;font-size:13px;font-weight:700;}
-.xl-logo{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;background:#fff;color:#217346;font-weight:900;font-size:12px;}
-.xl-bar{display:flex;align-items:center;gap:8px;padding:5px 8px;border-bottom:1px solid var(--line);font-size:13px;}
-.xl-ref{min-width:44px;padding:1px 6px;border:1px solid var(--line);border-radius:3px;text-align:center;font-family:Consolas,Menlo,monospace;}
-.xl-fx{font-style:italic;font-weight:700;opacity:.55;}
-.xl-f{flex:1;min-width:0;min-height:20px;padding:1px 6px;border:1px solid var(--line);border-radius:3px;font-family:Consolas,Menlo,monospace;white-space:pre;overflow-x:auto;}
-.xl-wrap{overflow-x:auto;}
-.xl-sheet{border-collapse:collapse;font-size:13px;margin:0;width:auto;}
-.xl-sheet[hidden]{display:none!important;}
-.xl-sheet th{background:rgba(128,128,128,.14);font-weight:600;border:1px solid var(--line);padding:1px 6px;min-width:26px;font-size:11.5px;opacity:.9;}
-.xl-sheet td{border:1px solid rgba(128,128,128,.22);text-align:left;padding:3px 8px;min-width:38px;height:22px;white-space:pre;cursor:cell;}
-.xl-sheet td.num{text-align:right;}
-.xl-sheet td.y{background:rgba(255,206,64,.40);}
-.xl-sheet td.b{border:1.5px solid var(--ink);}
-.xl-sheet td.h{background:rgba(128,128,128,.22);font-weight:700;text-align:center;}
-.xl-sheet td.k{background:rgba(255,153,51,.40);font-weight:700;text-align:center;}
-.xl-sheet td.c{background:rgba(91,155,213,.34);font-weight:700;text-align:center;}
-.xl-sheet td.r{color:#e5484d;font-weight:700;}
-.xl-sheet td.n{font-weight:800;}
-.xl-sheet td.sel{box-shadow:inset 0 0 0 2px #21a366;}
-.xl-tabs{display:flex;gap:2px;padding:4px 8px 0;border-top:1px solid var(--line);background:rgba(128,128,128,.08);overflow-x:auto;}
-.xl-tabs button{border:0;border-bottom:2px solid transparent;background:transparent;color:inherit;font:inherit;font-size:12.5px;padding:4px 10px;border-radius:4px 4px 0 0;cursor:pointer;opacity:.75;white-space:nowrap;}
-.xl-tabs button.on{opacity:1;font-weight:800;color:#21a366;border-bottom-color:#21a366;background:var(--card);}
-.xl-head{flex-wrap:wrap;}
-.xl-act{margin-left:auto;display:flex;gap:4px;}
-.xl-act button{border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.14);color:#fff;font:inherit;font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;cursor:pointer;}
-.xl-act button.xl-chk{background:#fff;color:#217346;}
-.xl-sheet td.in{padding:0;background:rgba(33,163,102,.10);}
-.xl-in{display:block;width:100%;min-width:58px;box-sizing:border-box;border:0;background:transparent;color:inherit;font:inherit;padding:3px 6px;height:24px;outline:none;}
-.xl-in:focus{background:rgba(33,163,102,.18);}
-.xl-in.ok{background:rgba(48,164,108,.32);}
-.xl-in.no{background:rgba(229,72,77,.30);}
-.xl-in.shown{color:#8a8f98;font-style:italic;}
-.xl-msg{padding:6px 10px;border-top:1px solid var(--line);font-size:13px;line-height:1.6;}
-.xl-msg.all{color:#21a366;font-weight:700;}
-@media (pointer:coarse){.xl-in{font-size:16px;height:28px;}}
 """
 
 PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202611041620"></script>
+    <script src="{asset}theme.js?v=202611251636"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
     <meta name="description" content="{subject} {week_label} 정리 — {title}">
@@ -564,7 +743,7 @@ PAGE = """<!DOCTYPE html>
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="{asset}favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="{asset}icon-180.png">
-    <link rel="stylesheet" href="{asset}style.css?v=202611041620">
+    <link rel="stylesheet" href="{asset}style.css?v=202611251636">
     <style>{css}</style>
 </head>
 <body>
@@ -592,7 +771,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202611041620"></script>
+<script src="{asset}ink.js?v=202611251636"></script>
 </body>
 </html>
 """
