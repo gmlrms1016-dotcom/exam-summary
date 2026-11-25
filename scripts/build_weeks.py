@@ -15,7 +15,7 @@
 - `:::toc` 한 줄 = 그 자리에 ‘바로 가기’ 칩 (이 원고의 `## ` 절 목록 · 누르면 그 카드로 이동 · 긴 중간고사 정리용)
 - `🎬 [이름](주소)` 한 줄 = 그 자리에 애니메이션 · 데모 페이지를 끼워 넣음(iframe · 주소는 주차 페이지 기준) + 아래에 '새 창으로 크게 보기' 버튼
 - ```sheet 제목 = 📗 엑셀 모양 표 (교수님 엑셀 설명처럼 · 2026-11-24 사용자: “엑셀로 설명이 있으면 좋겠어”) — 한 줄 = 한 행 · `|` 로 칸 나눔(칸 안의 | 는 \\|) · `--- 탭 이름` 줄 = 아래 시트 탭을 하나 더(누르면 바뀜) · 칸을 누르면 위 수식 줄에 그 칸 내용
-  칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{2}`~`{9}` 칸 합치기(오른쪽으로 N칸)
+  칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{2}`~`{9}` 칸 합치기(오른쪽으로 N칸) · 칸 끝 `{=4*6}` = 엑셀 수식(칸에는 값 · 누르면 수식 줄에 =4*6)
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
 원고 파일이 있는 주차만 과목 페이지에서 버튼이 열리고, 나머지는 잠깁니다.
 """
@@ -191,7 +191,7 @@ XL_JS = ('<script data-xl-js>(function(){if(window.__xl)return;window.__xl=1;doc
          'x.querySelectorAll(".xl-sheet").forEach(function(s,k){s.hidden=k!==i;});'
          'x.querySelectorAll("td.sel").forEach(function(c){c.classList.remove("sel");});x.querySelector(".xl-ref").textContent="A1";x.querySelector(".xl-f").textContent="";return;}'
          'var c=e.target.closest&&e.target.closest(".xl td");if(c){var y=c.closest(".xl");y.querySelectorAll("td.sel").forEach(function(d){d.classList.remove("sel");});'
-         'c.classList.add("sel");y.querySelector(".xl-ref").textContent=c.dataset.r;y.querySelector(".xl-f").textContent=c.textContent;}});})();</script>')
+         'c.classList.add("sel");y.querySelector(".xl-ref").textContent=c.dataset.r;y.querySelector(".xl-f").textContent=c.dataset.f||c.textContent;}});})();</script>')
 
 
 def xl_col(n):
@@ -233,18 +233,23 @@ def render_sheet(title, lines):
                     else:
                         cls.append(v)
                     c = c[m.end():]
+                fm = re.match(r"^(.*?)\s*\{(=[^{}]+)\}$", c)
+                f = None
+                if fm:
+                    c, f = fm.group(1), fm.group(2)
                 if re.fullmatch(r"[+-]?\d+(\.\d+)?", c):
                     cls.append("num")
-                out.append((c, cls, span))
+                out.append((c, cls, span, f))
             grid.append(out)
-        ncol = max([sum(sp for _, _, sp in r) for r in grid] + [1])
+        ncol = max([sum(sp for _, _, sp, _ in r) for r in grid] + [1])
         h = ['<table class="xl-sheet"%s><thead><tr><th class="xl-corner"></th>%s</tr></thead><tbody>' % (
             "" if k == 0 else " hidden", "".join("<th>%s</th>" % xl_col(j) for j in range(ncol)))]
         for ri, r in enumerate(grid, 1):
             tds, col = [], 0
-            for c, cls, sp in r:
-                tds.append('<td data-r="%s%d"%s%s>%s</td>' % (xl_col(col), ri, ' class="%s"' % " ".join(cls) if cls else "",
-                                                          ' colspan="%d"' % sp if sp > 1 else "", html.escape(c, quote=False)))
+            for c, cls, sp, f in r:
+                tds.append('<td data-r="%s%d"%s%s%s>%s</td>' % (xl_col(col), ri, ' class="%s"' % " ".join(cls) if cls else "",
+                                                            ' colspan="%d"' % sp if sp > 1 else "",
+                                                            ' data-f="%s"' % html.escape(f) if f else "", html.escape(c, quote=False)))
                 col += sp
             tds += ['<td data-r="%s%d"></td>' % (xl_col(j), ri) for j in range(col, ncol)]
             h.append("<tr><th>%d</th>%s</tr>" % (ri, "".join(tds)))

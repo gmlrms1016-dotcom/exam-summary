@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202611041620"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 ~ 12주차 반영)</title>
-    <meta name="description" content="데이터베이스관리 15주차 정리 — 기말고사 시험문제 정리 (9 ~ 12주차 반영)">
+    <title>데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 ~ 13주차 반영)</title>
+    <meta name="description" content="데이터베이스관리 15주차 정리 — 기말고사 시험문제 정리 (9 ~ 13주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 ~ 12주차 반영)">
+    <meta property="og:title" content="데이터베이스관리 15주차 · 기말고사 시험문제 정리 (9 ~ 13주차 반영)">
     <meta property="og:description" content="데이터베이스관리 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -123,15 +123,18 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🗄️ 데이터베이스관리 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9 ~ 12주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 ~ 13주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-12주차.html">‹ 이전 · <b>12주차</b><br><small>🔥 엑셀 실행결과 (Quiz 6 · 7 외부조인) · 🔥 합집합 UNION · 3테이블 조인 · 🔥 하위질의</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-13주차.html">‹ 이전 · <b>13주차</b><br><small>🔥 조인 카디널리티 (R · S) · 🔥 하위질의 IN · ALL · SOME · ANY · 자체조인 · 🔥 기말 120점 구성</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../데이터베이스관리-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>📊 성적 비율</dt><dd><span class="wk-chip">출석 20%</span><span class="wk-chip">중간 30%</span><span class="wk-chip"><b>기말 30%</b></span><span class="wk-chip">과제 20%</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">교재 <b>4·5·6장</b></span><span class="wk-chip">12주차 [공지]</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">12주차</span><b>엑셀에서 문제 푸는거 시험에 나옴</b> — Quiz 6 (omember · group_ex) · Quiz 7 (emp · project) 조인 <b>실행결과</b> 쓰기 (실습 엑셀 “실행결과는 무엇인가?”)</li><li><span class="wk-exam-wk">12주차</span><b>합집합 · 교집합 · 차집합 중에서 합집합 하나만 출제</b> — 실습 1-1 정회원 · 준회원 <code>UNION</code> · <code>UNION ALL</code></li><li><span class="wk-exam-wk">12주차</span><b>스칼라 · 인라인 · 하위질의 중에서 하위질의 하나만 출제</b> — WHERE 절 안의 하위질의 (<code>=</code> · <code>IN</code> · <code>NOT IN</code> · <code>NOT EXISTS</code>)</li><li><span class="wk-exam-wk">11주차</span><b>직원 퀴즈 3번부터 시험문제</b> — Quiz 11-1 3 ~ 6번 (<code>COUNT(DISTINCT 직책)</code> · 직책별 <code>AVG</code> · <code>COUNT</code> · <code>WHERE</code> + <code>GROUP BY</code> + <code>HAVING</code>)</li><li><span class="wk-exam-wk">11주차</span><b>기말고사 문제 <code>SELECT sum(col2) FROM tab1;</code></b> — Quiz 11-3 NULL 과 SUM (실습 엑셀 “중요! 기말고사 시험문제” · 정답 ③)</li><li><span class="wk-exam-wk">11주차</span>예제5-8-2 <b>시험에 나옴</b> — <code>COUNT(*)</code> · <code>COUNT(주소)</code> · <code>COUNT(DISTINCT 주소)</code></li><li><span class="wk-exam-wk">10주차</span><b>(MySQL) 기말고사에 합집합만 나옴</b> — 관계대수 집합 연산 중 <b>합집합 <code>UNION</code></b></li><li><span class="wk-exam-wk">10주차</span><b>강의자료 28페이지</b> — 프로젝션 π 예제</li><li><span class="wk-exam-wk">6주차</span>무결성 제약조건 중 <b>키 · 도메인 제약조건은 기말고사</b> (개체 · 참조 무결성은 중간고사였음)</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>📊 성적 비율</dt><dd><span class="wk-chip">출석 20%</span><span class="wk-chip">중간 30%</span><span class="wk-chip"><b>기말 30%</b></span><span class="wk-chip">과제 20%</span></dd><dt>📝 시험 방식</dt><dd><span class="wk-chip"><b>120점 만점</b></span><span class="wk-chip">1. SQL 문법과 실행결과 8문제 = <b>80점</b> (과제2 유형 학생·수강·과목)</span><span class="wk-chip">2. 왼쪽·오른쪽·완전조인 <b>실행결과</b> 작성</span><span class="wk-chip">3. 관계대수 = 공부 X (시험 당일 공개)</span><span class="wk-chip">4. SQL <b>실행결과</b> (하위질의)</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">교재 <b>4·5·6장</b></span><span class="wk-chip">12주차 [공지]</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">13주차</span><b>실습 엑셀 Quiz1-1-join-stu 시험출제</b> — R · S 를 B 로 조인한 결과 · 카디널리티 (자연 · 왼쪽 · 완전) · “12주차 위주 공부 (자연조인 · 왼쪽조인 · 오른쪽조인)”</li><li><span class="wk-exam-wk">13주차</span><b>강의자료 30 · 31페이지 다음 주에 수업하고 시험에 출제</b> — 24) <code>NOT EXISTS</code> · 25) 상관중첩질의 (department · employee)</li><li><span class="wk-exam-wk">13주차</span><b>하위질의 12주차 필수 출제</b> · “13주차 4번 실행결과 작성하기” (🤖 = [Quiz 13-04] 강의자료 10쪽)</li><li><span class="wk-exam-wk">12주차</span><b>엑셀에서 문제 푸는거 시험에 나옴</b> — Quiz 6 (omember · group_ex) · Quiz 7 (emp · project) 조인 <b>실행결과</b> 쓰기 (실습 엑셀 “실행결과는 무엇인가?”)</li><li><span class="wk-exam-wk">12주차</span><b>합집합 · 교집합 · 차집합 중에서 합집합 하나만 출제</b> — 실습 1-1 정회원 · 준회원 <code>UNION</code> · <code>UNION ALL</code></li><li><span class="wk-exam-wk">12주차</span><b>스칼라 · 인라인 · 하위질의 중에서 하위질의 하나만 출제</b> — WHERE 절 안의 하위질의 (<code>=</code> · <code>IN</code> · <code>NOT IN</code> · <code>NOT EXISTS</code>)</li><li><span class="wk-exam-wk">11주차</span><b>직원 퀴즈 3번부터 시험문제</b> — Quiz 11-1 3 ~ 6번 (<code>COUNT(DISTINCT 직책)</code> · 직책별 <code>AVG</code> · <code>COUNT</code> · <code>WHERE</code> + <code>GROUP BY</code> + <code>HAVING</code>)</li><li><span class="wk-exam-wk">11주차</span><b>기말고사 문제 <code>SELECT sum(col2) FROM tab1;</code></b> — Quiz 11-3 NULL 과 SUM (실습 엑셀 “중요! 기말고사 시험문제” · 정답 ③)</li><li><span class="wk-exam-wk">11주차</span>예제5-8-2 <b>시험에 나옴</b> — <code>COUNT(*)</code> · <code>COUNT(주소)</code> · <code>COUNT(DISTINCT 주소)</code></li><li><span class="wk-exam-wk">10주차</span><b>(MySQL) 기말고사에 합집합만 나옴</b> — 관계대수 집합 연산 중 <b>합집합 <code>UNION</code></b></li><li><span class="wk-exam-wk">10주차</span><b>강의자료 28페이지</b> — 프로젝션 π 예제</li><li><span class="wk-exam-wk">6주차</span>무결성 제약조건 중 <b>키 · 도메인 제약조건은 기말고사</b> (개체 · 참조 무결성은 중간고사였음)</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
 <tbody>
 <tr><th>찍어 준 것</th><th>핵심 · 답</th></tr>
+<tr><td><b>Quiz 1-1 R · S 조인</b> (13주차)</td><td>R(a 2 · b 3 · c 3 · d 5) · S(1 x · 2 y · 3 z) 를 B 로 → 자연 <b>3행</b> · 왼쪽 <b>4행</b> (+ d 5 NULL NULL) · 오른쪽 4행 (+ NULL NULL 1 x) · 완전 <b>5행</b> (왼쪽 <code>UNION</code> 오른쪽)</td></tr>
+<tr><td><b>강의자료 30 · 31쪽</b> (13주차)</td><td>24) <code>NOT EXISTS</code> → <b>총무</b> · 25) 상관중첩질의 <code>salary &gt; (SELECT AVG(salary) FROM employee WHERE dno = E.dno)</code> → 이수민 · 박영권 · 이성래 (부서 평균 1부 225만 · 2부 350만 · 3부 275만) · ⚠️ 31쪽 답 그대로(바깥 · 안쪽 별칭 둘 다 E)는 ERROR 1054</td></tr>
+<tr><td><b>Quiz 13-04</b> (13주차)</td><td><code>SELECT B FROM R1 WHERE C IN (SELECT C FROM R2 WHERE D = 'k');</code> → 괄호 안 x · y → <b>a · b</b> · <code>&gt; ALL</code> = 가장 큰 값보다 · <code>&gt; SOME(ANY)</code> = 가장 작은 값보다 (3-3 → p1 · p3 · 3-4 → s2)</td></tr>
 <tr><td><b>엑셀 실행결과</b> (12주차)</td><td>Quiz 6 omember(100 A · 101 B · 102 A · 103 F) · group_ex(A 서울 · B 대구 · C 광주 · D 부산 · E 대전) → 내부 <b>3행</b> (A 가 2명이라 서울 2번) · 왼쪽 <b>4행</b> (+ 103 F NULL NULL) · 오른쪽 <b>6행</b> (+ NULL NULL C · D · E) · 완전 = 왼쪽 <code>UNION</code> 오른쪽 <b>7행</b> · Quiz 7 emp · project → 카티션 <b>20행</b> · 동등 <b>4행</b> · 자연 4행 3열 · 왼쪽 <b>5행</b> (+ 신동엽 NULL) · 오른쪽 <b>5행</b> (+ 104 다모여) · 완전 <b>6행</b></td></tr>
 <tr><td><b>합집합만</b> (12주차)</td><td>정회원 {1 홍길동, 2 임꺽정} · 준회원 {1 홍길동, 3 박찬호, 4 선동열} → <code>UNION</code> <b>4행</b> (중복 한 번) · <code>UNION ALL</code> <b>5행</b> (홍길동 2번)</td></tr>
 <tr><td><b>하위질의만</b> (12주차)</td><td>괄호 SELECT 가 <b>WHERE 절 안</b> (SELECT 절 안 = 스칼라 · FROM 절 안 = 인라인 뷰는 ✕) · 괄호 안부터 실행 · 1행이면 <code>=</code> (20번 박영권 → '과장' → 조민희 · 박영권) · 여러 행이면 <code>IN</code> (21번 → 1 · 3 → 김상원 · 박영권 · 이수민 · 최종철 · <code>=</code> 면 ERROR 1242) · <code>NOT IN</code> (21-02 → 조민희 · 김창섭 · 이성래) · <code>NOT EXISTS</code> (24번 → <b>총무</b>)</td></tr>
@@ -141,14 +144,28 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td><b>합집합만 나옴</b> (10주차)</td><td>합집합 <b>∪</b> = SQL <b><code>UNION</code></b> — 두 SELECT 결과를 합치고 <b>중복은 한 번만</b> · <b><code>UNION ALL</code></b> = 중복까지 모두 · 두 릴레이션은 <b>합병 가능</b>(속성 개수 · 도메인이 같아야) — 열 개수가 다르면 ERROR 1222 · 사원 {1 고길동, 2 이순신} ∪ 직원 {2 이순신, 3 둘리} → 1 고길동 · 2 이순신 · 3 둘리 (UNION ALL 은 4행)</td></tr>
 <tr><td><b>강의자료 28페이지</b> (10주차)</td><td>프로젝션 <b>π</b> = 원하는 <b>열</b>(속성)을 검색 · 관계대수식 <code>π 고객이름,등급,적립금 (고객)</code> → SQL <code>SELECT 고객이름, 등급, 적립금 FROM 고객;</code> → 행 수는 그대로 · 열만 3개 (실렉션 σ 는 행을 고름)</td></tr>
 <tr><td><b>키 · 도메인 제약조건</b> (6주차)</td><td>키 제약조건 = 키는 중복된 값을 갖지 않는다 (<code>UNIQUE</code>) · 도메인 제약조건 = 값의 범위 · 기본값 지정 (<code>CHECK</code> · <code>DEFAULT</code> — 10주차 Quiz 10-2 <code>적립금 int DEFAULT 0</code>)</td></tr>
-</tbody></table></div></details></dd><dd class="wk-exam-note">📌 범위 = 교재 4 · 5 · 6장 (12주차 공지) · 일시 · 시험 방식은 아직 안내 전 — 교수님이 알려 주면 이 카드에 더해요.</dd></dl></section>
+</tbody></table></div></details></dd><dt>❌ 안 나옴</dt><dd><span class="wk-chip bad">[13주차] Quiz 1-2 카디널리티</span><span class="wk-chip bad">차수</span><span class="wk-chip bad">집합 (Quiz 1-3)</span><span class="wk-chip bad">자체조인</span><span class="wk-chip bad">관계대수는 공부 X (시험 당일 공개)</span></dd><dd class="wk-exam-note">📌 범위 = 교재 4 · 5 · 6장 (12주차 공지) · 일시 · 시험 방식은 아직 안내 전 — 교수님이 알려 주면 이 카드에 더해요.</dd></dl></section>
 <section class="card" id="s1">
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-그림정리.html?weeks=9-15#order" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-그림정리.html?weeks=9-15#order" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차 — ① SELECT 실행 순서 · ② GROUP BY · HAVING · ③ COUNT 와 NULL</li><li>10주차 — ④ 🔥 합집합 UNION · ⑤ 실렉션 σ · 프로젝션 π · ⑥ 조인 4가지</li><li>11주차 — ⑦ 🔥 직원 GROUP BY · ⑧ 🔥 NULL 과 SUM · ⑨ 집합 연산 R · S · ⑩ 내부 · 외부조인</li><li>12주차 — ⑪ 🔥 Quiz 6 외부조인 · ⑫ 🔥 Quiz 7 조인 6가지 · ⑬ 🔥 UNION · UNION ALL · ⑭ 3테이블 조인 · ⑮ 🔥 하위질의</li></ul>
+<ul><li>9주차 — ① SELECT 실행 순서 · ② GROUP BY · HAVING · ③ COUNT 와 NULL</li><li>10주차 — ④ 🔥 합집합 UNION · ⑤ 실렉션 σ · 프로젝션 π · ⑥ 조인 4가지</li><li>11주차 — ⑦ 🔥 직원 GROUP BY · ⑧ 🔥 NULL 과 SUM · ⑨ 집합 연산 R · S · ⑩ 내부 · 외부조인</li><li>12주차 — ⑪ 🔥 Quiz 6 외부조인 · ⑫ 🔥 Quiz 7 조인 6가지 · ⑬ 🔥 UNION · UNION ALL · ⑭ 3테이블 조인 · ⑮ 🔥 하위질의</li><li>13주차 — ⑯ 🔥 R · S 조인 카디널리티 · ⑰ 자체조인 E · M · ⑱ 🔥 ALL · SOME(ANY) · ⑲ 🔥 Quiz 13-04 서브질의</li></ul>
 </section>
 <section class="card" id="s2">
+<h2>13주차 · 🔥 조인 카디널리티 · 하위질의 ALL · SOME · ANY / 기말 120점 구성</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>🔥 ✍️ Quiz 1-1 R · S</td><td>B 로 조인 → 자연 3 · 왼쪽 4 · 오른쪽 4 · 완전 5 (✍️ 엑셀 3 · 4 · 5 ✅) · MySQL 은 <code>FULL OUTER JOIN</code> 없음 → 왼쪽 <code>UNION</code> 오른쪽</td><td>⑯</td></tr>
+<tr><td>✍️ 차수 · 카디널리티</td><td>차수 = 필드(열) 개수 · 카디널리티 = 레코드(행) 개수 · R × S → 행 곱하기 4 × 6 = 24 · 열 더하기 5 + 4 = 9 (⚠️ 엑셀 18 ✕) · 시험 미출제</td><td></td></tr>
+<tr><td>🔥 ✍️ 실습 3-1 중첩질의</td><td><code>IN</code> (= ANY) · <code>&gt; ALL</code> (모두보다 = 가장 큰 34 → p1 · p3) · <code>&gt; SOME</code> = <code>&gt; ANY</code> (하나라도 = 가장 작은 32 → s2) · <code>= (SELECT MAX(sage) …)</code> → 오정민 · 여러 행에 <code>=</code> → ERROR 1242</td><td>⑱</td></tr>
+<tr><td>🔥 Quiz 13-04</td><td>괄호 안 <code>D = 'k'</code> → x · y → <code>C IN (…)</code> → B = <b>a · b</b></td><td>⑲</td></tr>
+<tr><td>🔥 30 · 31쪽 (다음 주)</td><td>24) <code>NOT EXISTS</code> → 총무 · 25) 상관중첩질의 → 이수민 · 박영권 · 이성래 (⚠️ 31쪽 SQL 그대로는 ERROR 1054)</td><td></td></tr>
+<tr><td>✍️ 자체조인 (미출제)</td><td><code>FROM emps E, emps M WHERE E.manager = M.empno</code> → 4행 (이수민 NULL 빠짐) · 추천고객 LEFT OUTER → 4행 (정지영 NULL)</td><td>⑰</td></tr>
+</tbody></table>
+<div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-13주차.html">13주차</a> · 문제는 🔒 실제시험.</div>
+</section>
+<section class="card" id="s3">
 <h2>12주차 · 🔥 엑셀 실행결과 · 합집합 UNION · 하위질의 / 3테이블 조인</h2>
 <table class="ref">
 <tbody>
@@ -162,7 +179,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-12주차.html">12주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s3">
+<section class="card" id="s4">
 <h2>11주차 · 🔥 직원 집계 · NULL 과 SUM / 집합 연산 · 내부조인 · 외부조인</h2>
 <table class="ref">
 <tbody>
@@ -176,7 +193,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-11주차.html">11주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s4">
+<section class="card" id="s5">
 <h2>10주차 · 🔥 관계대수 — 합집합 · 프로젝션 · 조인 / 널 값과 집계함수</h2>
 <table class="ref">
 <tbody>
@@ -190,7 +207,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s5">
+<section class="card" id="s6">
 <h2>9주차 · SELECT 문법 — LIKE · NULL · ORDER BY · 집계함수 · GROUP BY · HAVING</h2>
 <table class="ref">
 <tbody>
@@ -205,7 +222,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">자세한 SQL · 실행 결과는 <a href="데이터베이스관리-9주차.html">9주차</a> · 문제는 🔒 실제시험.</div>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-12주차.html">‹ 이전 · <b>12주차</b><br><small>🔥 엑셀 실행결과 (Quiz 6 · 7 외부조인) · 🔥 합집합 UNION · 3테이블 조인 · 🔥 하위질의</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-13주차.html">‹ 이전 · <b>13주차</b><br><small>🔥 조인 카디널리티 (R · S) · 🔥 하위질의 IN · ALL · SOME · ANY · 자체조인 · 🔥 기말 120점 구성</small></a><span></span></nav>
 
     <p class="wk-src">노션 「데이터베이스관리」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

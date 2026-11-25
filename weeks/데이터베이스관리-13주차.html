@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202611041620"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터베이스관리 13주차 · 🔥 조인 카디널리티 (R · S) · 🔥 하위질의 IN · ALL · SOME · ANY · 자체조인 · 🔥 기말 120점 구성</title>
+    <meta name="description" content="데이터베이스관리 13주차 정리 — 🔥 조인 카디널리티 (R · S) · 🔥 하위질의 IN · ALL · SOME · ANY · 자체조인 · 🔥 기말 120점 구성">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="데이터베이스관리 13주차 · 🔥 조인 카디널리티 (R · S) · 🔥 하위질의 IN · ALL · SOME · ANY · 자체조인 · 🔥 기말 120점 구성">
+    <meta property="og:description" content="데이터베이스관리 13주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202611041620">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+.xl{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0;background:var(--card);}
+.xl-head{display:flex;align-items:center;gap:8px;padding:6px 12px;background:#217346;color:#fff;font-size:13px;font-weight:700;}
+.xl-logo{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;background:#fff;color:#217346;font-weight:900;font-size:12px;}
+.xl-bar{display:flex;align-items:center;gap:8px;padding:5px 8px;border-bottom:1px solid var(--line);font-size:13px;}
+.xl-ref{min-width:44px;padding:1px 6px;border:1px solid var(--line);border-radius:3px;text-align:center;font-family:Consolas,Menlo,monospace;}
+.xl-fx{font-style:italic;font-weight:700;opacity:.55;}
+.xl-f{flex:1;min-width:0;min-height:20px;padding:1px 6px;border:1px solid var(--line);border-radius:3px;font-family:Consolas,Menlo,monospace;white-space:pre;overflow-x:auto;}
+.xl-wrap{overflow-x:auto;}
+.xl-sheet{border-collapse:collapse;font-size:13px;margin:0;width:auto;}
+.xl-sheet[hidden]{display:none!important;}
+.xl-sheet th{background:rgba(128,128,128,.14);font-weight:600;border:1px solid var(--line);padding:1px 6px;min-width:26px;font-size:11.5px;opacity:.9;}
+.xl-sheet td{border:1px solid rgba(128,128,128,.22);text-align:left;padding:3px 8px;min-width:38px;height:22px;white-space:pre;cursor:cell;}
+.xl-sheet td.num{text-align:right;}
+.xl-sheet td.y{background:rgba(255,206,64,.40);}
+.xl-sheet td.b{border:1.5px solid var(--ink);}
+.xl-sheet td.h{background:rgba(128,128,128,.22);font-weight:700;text-align:center;}
+.xl-sheet td.k{background:rgba(255,153,51,.40);font-weight:700;text-align:center;}
+.xl-sheet td.c{background:rgba(91,155,213,.34);font-weight:700;text-align:center;}
+.xl-sheet td.r{color:#e5484d;font-weight:700;}
+.xl-sheet td.n{font-weight:800;}
+.xl-sheet td.sel{box-shadow:inset 0 0 0 2px #21a366;}
+.xl-tabs{display:flex;gap:2px;padding:4px 8px 0;border-top:1px solid var(--line);background:rgba(128,128,128,.08);overflow-x:auto;}
+.xl-tabs button{border:0;border-bottom:2px solid transparent;background:transparent;color:inherit;font:inherit;font-size:12.5px;padding:4px 10px;border-radius:4px 4px 0 0;cursor:pointer;opacity:.75;white-space:nowrap;}
+.xl-tabs button.on{opacity:1;font-weight:800;color:#21a366;border-bottom-color:#21a366;background:var(--card);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../데이터베이스관리.html">← 데이터베이스관리 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🗄️ 데이터베이스관리 · 13주차</h1>
+        <p>🔥 조인 카디널리티 (R · S) · 🔥 하위질의 IN · ALL · SOME · ANY · 자체조인 · 🔥 기말 120점 구성</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-12주차.html">‹ 이전 · <b>12주차</b><br><small>🔥 엑셀 실행결과 (Quiz 6 · 7 외부조인) · 🔥 합집합 UNION · 3테이블 조인 · 🔥 하위질의</small></a><a class="next" href="데이터베이스관리-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 13주차 반영)</small></a></nav>
+
+<div class="tip">수업: <b>11/25(수)</b> · 자료: 노션 13주차 필기 · 사진 3장 · 캡처 1장 · <code>up-dy262DB1-w13-수업요약-stu.txt</code>(수업요약 원본) · 실습 SQL <code>sql-week13db-sql-txt.txt</code> · ✍️ 내 SQL <code>13주차_SQL File 3 · 4.sql</code> · 실습 엑셀 <code>dy262DB1-SQL실습04-w13-stu.xlsx</code>(✍️ 1교시에 내가 푼 답) · 강의자료 <b>DB-Lect13-01-subquery2</b> (50쪽 · PDF 펜 필기 없음) — 원본 txt 에 없고 <b>내가 노션 · 엑셀에 쓴 것은 ✍️</b>. 결과 표는 이 맥 <b>MySQL 8.4</b> 로 직접 실행한 값이에요 (31쪽 상관중첩질의는 학교와 같은 <b>8.0.46</b> 으로도). 🤖 = 강의자료에 없는 설명 · ⚠️ = 정정 · 팩트체크.</div>
+<div class="tip">🔥 ✍️ <b>필기 — 시험출제</b> : ① 실습 엑셀 <b>Quiz1-1-join-stu</b> (R · S 조인 → 1번) ② “<b>12주차 위주 공부</b> — 자연조인 · 왼쪽조인 · 오른쪽조인” (<a href="데이터베이스관리-12주차.html">12주차</a> Quiz 6 · 7) ③ “<b>강의자료 30 · 31페이지 다음주에 수업하고 시험에 출제함</b>” (NOT EXISTS · 상관중첩질의 → 6번) · ✍️ <b>시험 미출제</b> : Quiz1-2-quiz-stu (카디널리티 · 차수) · <b>집합</b> · <b>자체조인</b> (2 · 4번) · ✍️ <b>기말고사 120점 만점</b> 구성 → 바로 아래 표 · <a href="데이터베이스관리-15주차-기말고사.html">기말고사 정리</a> 맨 위 카드에도 넣었어요.</div>
+<section class="card" id="s1">
+<h2>🎨 13주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-그림정리.html?week=13" title="13주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-그림정리.html?week=13" target="_blank" rel="noopener">🎬 13주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+</section>
+<section class="card" id="s2">
+<h2>📢 기말고사 120점 · 공지 · 수업 순서</h2>
+<table class="ref">
+<tbody>
+<tr><th>번호</th><th>✍️ 필기 — 기말고사 120점 만점</th><th>언제 배움</th></tr>
+<tr><td>1</td><td><b>SQL 문법과 실행결과 8문제 = 80점</b> (과제2 유형: 학생 · 수강 · 과목 · “강의자료 10페이지 등등”)</td><td>univDB = <a href="데이터베이스관리-11주차.html">11주차</a> · <a href="데이터베이스관리-12주차.html">12주차</a> · 🤖 13주차 강의자료 10쪽 = [Quiz 13-04] (3번)</td></tr>
+<tr><td>2</td><td><b>왼쪽 · 오른쪽 · 완전조인 실행결과 작성하기</b></td><td>“오늘 수업” = 1번 · 12주차 Quiz 6 · 7</td></tr>
+<tr><td>3</td><td><b>관계대수 → 공부하지 말고</b> 15주차(시험 당일)에 공개함</td><td>—</td></tr>
+<tr><td>4</td><td><b>SQL 실행결과</b> — 하위질의 <b>12주차 필수로 출제</b> · “13주차 4번 실행결과 작성하기”</td><td>하위질의 12 · 13주차 · 중첩질의 13주차 · 상관중첩질의 14주차 · 🤖 “13주차 4번” = [Quiz 13-04] “실행 결과는?” (3번)</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>수업요약 · 📷 노션 사진</th><th>내용</th></tr>
+<tr><td>[공지] (사진)</td><td><b>기말고사 교재 4 · 5 · 6장</b> (12주차 공지와 같음)</td></tr>
+<tr><td>[과제2] univDB (사진)</td><td>학생 · 수강 · 과목 — <b>배점 10점</b></td></tr>
+<tr><td>[자유과제1] · [자유과제2] (사진)</td><td>네이버 카페에 제출 · <b>마감 12/5(토)</b> → 7번</td></tr>
+<tr><td>1교시</td><td>“다음 문제를 엑셀파일에 답안을 작성하시오” — (복습) [Quiz 1-1] R · S 조인 · [Quiz 1-2] 카디널리티 / 차수 → 1 · 2번</td></tr>
+<tr><td>(복습)</td><td>[실습 1-1] 입력 · 수정 · 삭제 (부서 · 사원) · [실습 1-2] 합집합 · 조인 (16-1 · 16-2 · 17 · 19) — 노션 필기 없음 (합집합 · 17번은 <a href="데이터베이스관리-12주차.html">12주차</a>)</td></tr>
+<tr><td>[실습 1-3]</td><td>자체조인 — [Quiz 2-1] 사원 · 직속상사 · [Quiz 2-2] 고객 · 추천고객 → 4번</td></tr>
+<tr><td>[실습 2-1]</td><td>하위질의 20 · 21 · 21-02 · 24 (12주차 복습) · 25 상관중첩질의 → 6번</td></tr>
+<tr><td>[실습 3-1]</td><td>중첩질의 (stu · pro) 3-1 ~ 3-6 — IN · ALL · SOME · ANY · MAX → 5번</td></tr>
+<tr><td>다음 주</td><td>🔥 강의자료 <b>30 · 31쪽</b> (24 NOT EXISTS · 25 상관중첩질의) 수업 → 시험 출제</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s3">
+<h2>1. 🔥 [Quiz 1-1] R · S 조인 — 결과 릴레이션의 카디널리티 (1교시 · 엑셀 · ✍️ 시험출제)</h2>
+<div class="tip">강의자료 8쪽 [Quiz 13-01] · 실습 엑셀 Quiz1-1-join-stu “카디날리티는 무엇인가?” — 다음 두 릴레이션 R 과 S 에 대해 <b>R 을 왼쪽, S 를 오른쪽</b> 릴레이션으로 하고 <b>속성 B 를 조인 속성</b>으로 하여 자연조인, 왼쪽외부조인, 완전외부조인으로 수행하였을 때 결과 릴레이션의 카디널리티는 각각 얼마인가? · ✍️ 내 엑셀 답 <b>3 · 4 · 5</b> ✅</div>
+<table class="ref">
+<tbody style="min-width:266px;">
+<tr><th>R.A</th><th>R.B</th><th></th><th>S.B</th><th>S.C</th></tr>
+<tr><td>a</td><td>2</td><td></td><td>1</td><td>x</td></tr>
+<tr><td>b</td><td>3</td><td></td><td>2</td><td>y</td></tr>
+<tr><td>c</td><td>3</td><td></td><td>3</td><td>z</td></tr>
+<tr><td>d</td><td>5</td><td></td><td></td><td></td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- 1) 자연조인 — 같은 이름의 열 B 가 같은 짝만 · B 는 한 번만
+SELECT *
+FROM R NATURAL JOIN S;                                       -- R.B 2 · 3 · 3 이 S 와 짝 (a · b · c) → 3행 (MySQL 은 B 를 맨 앞에: B · A · C)
+-- (같은 짝을 ON 으로 쓰면 동등조인 — B 열이 2개)
+SELECT *
+FROM R INNER JOIN S
+ON R.B = S.B;                                                -- 3행 · A · B · B · C
+-- 2) 왼쪽 외부조인 — 왼쪽(R) 행은 짝이 없어도 모두
+SELECT *
+FROM R LEFT OUTER JOIN S
+ON R.B = S.B;                                                -- 짝 3행 + d · 5 (S 에 B=5 없음) → NULL · NULL → 4행
+-- (오른쪽 외부조인 — 오른쪽(S) 행은 모두)
+SELECT *
+FROM R RIGHT OUTER JOIN S
+ON R.B = S.B;                                                -- 짝 3행 + 1 · x (R 에 B=1 없음) → NULL · NULL → 4행
+-- 3) 완전 외부조인 — 양쪽 모두 (MySQL 은 FULL OUTER JOIN 이 없음 → 왼쪽 UNION 오른쪽)
+SELECT * FROM R LEFT OUTER JOIN S ON R.B = S.B
+UNION                                                        -- 겹친 짝 3행은 한 번만
+SELECT * FROM R RIGHT OUTER JOIN S ON R.B = S.B;             -- 4 + 4 − 3 = 5행</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>1) 자연조인 A</th><th>B</th><th>C</th></tr>
+<tr><td>a</td><td>2</td><td>y</td></tr>
+<tr><td>b</td><td>3</td><td>z</td></tr>
+<tr><td>c</td><td>3</td><td>z</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:361px;">
+<tr><th>2) 왼쪽 외부 A</th><th>R.B</th><th>S.B</th><th>C</th></tr>
+<tr><td>a</td><td>2</td><td>2</td><td>y</td></tr>
+<tr><td>b</td><td>3</td><td>3</td><td>z</td></tr>
+<tr><td>c</td><td>3</td><td>3</td><td>z</td></tr>
+<tr><td>d</td><td>5</td><td>NULL</td><td>NULL</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:322px;">
+<tr><th>(오른쪽 외부) A</th><th>R.B</th><th>S.B</th><th>C</th></tr>
+<tr><td>NULL</td><td>NULL</td><td>1</td><td>x</td></tr>
+<tr><td>a</td><td>2</td><td>2</td><td>y</td></tr>
+<tr><td>b</td><td>3</td><td>3</td><td>z</td></tr>
+<tr><td>c</td><td>3</td><td>3</td><td>z</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:374px;">
+<tr><th>3) 완전 외부 A</th><th>R.B</th><th>S.B</th><th>C</th></tr>
+<tr><td>a</td><td>2</td><td>2</td><td>y</td></tr>
+<tr><td>b</td><td>3</td><td>3</td><td>z</td></tr>
+<tr><td>c</td><td>3</td><td>3</td><td>z</td></tr>
+<tr><td>d</td><td>5</td><td>NULL</td><td>NULL</td></tr>
+<tr><td>NULL</td><td>NULL</td><td>1</td><td>x</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody>
+<tr><th>조인</th><th>카디널리티 (행 수)</th><th>왜</th></tr>
+<tr><td>1) 자연조인</td><td><b>3</b></td><td>B = 2 · 3 · 3 인 a · b · c 만 S 와 짝 — d(5) 와 S 의 1(x) 은 짝 없음</td></tr>
+<tr><td>2) 왼쪽 외부조인</td><td><b>4</b></td><td>짝 3 + 짝 없는 <b>왼쪽</b> d → <code>d · 5 · NULL · NULL</code></td></tr>
+<tr><td>(오른쪽 외부조인)</td><td>4</td><td>짝 3 + 짝 없는 <b>오른쪽</b> 1(x) → <code>NULL · NULL · 1 · x</code></td></tr>
+<tr><td>3) 완전 외부조인</td><td><b>5</b></td><td>짝 3 + 왼쪽 d + 오른쪽 1(x)</td></tr>
+</tbody></table>
+<div class="tip">✍️ 내 엑셀 답 3 · 4 · 5 ✅ · 왼쪽 · 오른쪽 결과 표 ✅ · ⚠️ 1) 자연조인 표는 <code>a 2 2 y</code> 한 행에서 멈췄어요 → b · c 까지 <b>3행</b> · 자연조인은 B 를 <b>한 번만</b> (A · B · C 3열 — 교수님 엑셀 틀은 B 칸이 2개지만 묻는 건 행 수라 답은 같음) · 🤖 카디널리티 = <b>짝 수</b> (+ 외부조인이면 짝 없는 쪽 행 수) — b 와 c 가 둘 다 B=3 이라 S 의 3(z) 은 <b>두 번</b> 짝이 돼요.</div>
+<h3>📗 교수님 엑셀로 풀어 보기 — 문제 탭에서 먼저 써 보고 → 1) ~ 4) 탭으로 확인</h3>
+<div class="xl"><div class="xl-head"><span class="xl-logo">X</span><span>dy262DB1-SQL실습04-w13 — Quiz 1-1 조인 카디널리티 (교수님 엑셀)</span></div><div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div><div class="xl-wrap"><table class="xl-sheet"><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="2">R</td><td data-r="C1"></td><td data-r="D1" colspan="2">S</td><td data-r="F1"></td><td data-r="G1" colspan="3">-- 카디날리티는 무엇인가?</td></tr><tr><th>2</th><td data-r="A2" class="c">A</td><td data-r="B2" class="k">B</td><td data-r="C2"></td><td data-r="D2" class="k">B</td><td data-r="E2" class="c">C</td><td data-r="F2"></td><td data-r="G2">1) 자연조인</td><td data-r="H2" class="b"></td><td data-r="I2">개</td></tr><tr><th>3</th><td data-r="A3">a</td><td data-r="B3" class="num">2</td><td data-r="C3"></td><td data-r="D3" class="num">1</td><td data-r="E3">x</td><td data-r="F3"></td><td data-r="G3">2) 왼쪽외부조인</td><td data-r="H3" class="b"></td><td data-r="I3">개</td></tr><tr><th>4</th><td data-r="A4">b</td><td data-r="B4" class="num">3</td><td data-r="C4"></td><td data-r="D4" class="num">2</td><td data-r="E4">y</td><td data-r="F4"></td><td data-r="G4">3) 완전외부조인</td><td data-r="H4" class="b"></td><td data-r="I4">개</td></tr><tr><th>5</th><td data-r="A5">c</td><td data-r="B5" class="num">3</td><td data-r="C5"></td><td data-r="D5" class="num">3</td><td data-r="E5">z</td><td data-r="F5"></td><td data-r="G5"></td><td data-r="H5"></td><td data-r="I5"></td></tr><tr><th>6</th><td data-r="A6">d</td><td data-r="B6" class="num">5</td><td data-r="C6"></td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6"></td><td data-r="H6"></td><td data-r="I6"></td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td><td data-r="H7"></td><td data-r="I7"></td></tr><tr><th>8</th><td data-r="A8" class="r" colspan="9">R 을 왼쪽 · S 를 오른쪽 · 속성 B 로 조인 — 먼저 빈칸에 써 보고 아래 탭에서 확인</td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="2">R</td><td data-r="C1"></td><td data-r="D1" colspan="2">S</td><td data-r="F1"></td><td data-r="G1" colspan="3">1) 자연조인 실행결과 (3행)</td></tr><tr><th>2</th><td data-r="A2" class="c">A</td><td data-r="B2" class="k">B</td><td data-r="C2"></td><td data-r="D2" class="k">B</td><td data-r="E2" class="c">C</td><td data-r="F2"></td><td data-r="G2" class="c">A</td><td data-r="H2" class="k">B</td><td data-r="I2" class="c">C</td></tr><tr><th>3</th><td data-r="A3">a</td><td data-r="B3" class="num">2</td><td data-r="C3"></td><td data-r="D3" class="num">1</td><td data-r="E3">x</td><td data-r="F3"></td><td data-r="G3">a</td><td data-r="H3" class="num">2</td><td data-r="I3">y</td></tr><tr><th>4</th><td data-r="A4">b</td><td data-r="B4" class="num">3</td><td data-r="C4"></td><td data-r="D4" class="num">2</td><td data-r="E4">y</td><td data-r="F4"></td><td data-r="G4">b</td><td data-r="H4" class="num">3</td><td data-r="I4">z</td></tr><tr><th>5</th><td data-r="A5">c</td><td data-r="B5" class="num">3</td><td data-r="C5"></td><td data-r="D5" class="num">3</td><td data-r="E5">z</td><td data-r="F5"></td><td data-r="G5">c</td><td data-r="H5" class="num">3</td><td data-r="I5">z</td></tr><tr><th>6</th><td data-r="A6">d</td><td data-r="B6" class="num">5</td><td data-r="C6"></td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6"></td><td data-r="H6"></td><td data-r="I6"></td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td><td data-r="H7"></td><td data-r="I7"></td></tr><tr><th>8</th><td data-r="A8" colspan="9">카디널리티 = 3 · 자연조인은 B 를 한 번만 (SELECT * FROM R NATURAL JOIN S;)</td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="2">R</td><td data-r="C1"></td><td data-r="D1" colspan="2">S</td><td data-r="F1"></td><td data-r="G1" colspan="4">2) 왼쪽 외부조인 실행결과 (4행)</td></tr><tr><th>2</th><td data-r="A2" class="c">A</td><td data-r="B2" class="k">B</td><td data-r="C2"></td><td data-r="D2" class="k">B</td><td data-r="E2" class="c">C</td><td data-r="F2"></td><td data-r="G2" class="c">A</td><td data-r="H2" class="k">B</td><td data-r="I2" class="k">B</td><td data-r="J2" class="c">C</td></tr><tr><th>3</th><td data-r="A3">a</td><td data-r="B3" class="num">2</td><td data-r="C3"></td><td data-r="D3" class="num">1</td><td data-r="E3">x</td><td data-r="F3"></td><td data-r="G3">a</td><td data-r="H3" class="num">2</td><td data-r="I3" class="num">2</td><td data-r="J3">y</td></tr><tr><th>4</th><td data-r="A4">b</td><td data-r="B4" class="num">3</td><td data-r="C4"></td><td data-r="D4" class="num">2</td><td data-r="E4">y</td><td data-r="F4"></td><td data-r="G4">b</td><td data-r="H4" class="num">3</td><td data-r="I4" class="num">3</td><td data-r="J4">z</td></tr><tr><th>5</th><td data-r="A5">c</td><td data-r="B5" class="num">3</td><td data-r="C5"></td><td data-r="D5" class="num">3</td><td data-r="E5">z</td><td data-r="F5"></td><td data-r="G5">c</td><td data-r="H5" class="num">3</td><td data-r="I5" class="num">3</td><td data-r="J5">z</td></tr><tr><th>6</th><td data-r="A6">d</td><td data-r="B6" class="num">5</td><td data-r="C6"></td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6">d</td><td data-r="H6" class="num">5</td><td data-r="I6" class="y">NULL</td><td data-r="J6" class="y">NULL</td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td><td data-r="H7"></td><td data-r="I7"></td><td data-r="J7"></td></tr><tr><th>8</th><td data-r="A8">{10}카디널리티 = 4 · SELECT * FROM R LEFT OUTER JOIN S ON R.B = S.B;</td><td data-r="B8"></td><td data-r="C8"></td><td data-r="D8"></td><td data-r="E8"></td><td data-r="F8"></td><td data-r="G8"></td><td data-r="H8"></td><td data-r="I8"></td><td data-r="J8"></td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="2">R</td><td data-r="C1"></td><td data-r="D1" colspan="2">S</td><td data-r="F1"></td><td data-r="G1" colspan="4">오른쪽 외부조인 실행결과 (4행)</td></tr><tr><th>2</th><td data-r="A2" class="c">A</td><td data-r="B2" class="k">B</td><td data-r="C2"></td><td data-r="D2" class="k">B</td><td data-r="E2" class="c">C</td><td data-r="F2"></td><td data-r="G2" class="c">A</td><td data-r="H2" class="k">B</td><td data-r="I2" class="k">B</td><td data-r="J2" class="c">C</td></tr><tr><th>3</th><td data-r="A3">a</td><td data-r="B3" class="num">2</td><td data-r="C3"></td><td data-r="D3" class="num">1</td><td data-r="E3">x</td><td data-r="F3"></td><td data-r="G3" class="y">NULL</td><td data-r="H3" class="y">NULL</td><td data-r="I3" class="num">1</td><td data-r="J3">x</td></tr><tr><th>4</th><td data-r="A4">b</td><td data-r="B4" class="num">3</td><td data-r="C4"></td><td data-r="D4" class="num">2</td><td data-r="E4">y</td><td data-r="F4"></td><td data-r="G4">a</td><td data-r="H4" class="num">2</td><td data-r="I4" class="num">2</td><td data-r="J4">y</td></tr><tr><th>5</th><td data-r="A5">c</td><td data-r="B5" class="num">3</td><td data-r="C5"></td><td data-r="D5" class="num">3</td><td data-r="E5">z</td><td data-r="F5"></td><td data-r="G5">b</td><td data-r="H5" class="num">3</td><td data-r="I5" class="num">3</td><td data-r="J5">z</td></tr><tr><th>6</th><td data-r="A6">d</td><td data-r="B6" class="num">5</td><td data-r="C6"></td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6">c</td><td data-r="H6" class="num">3</td><td data-r="I6" class="num">3</td><td data-r="J6">z</td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td><td data-r="H7"></td><td data-r="I7"></td><td data-r="J7"></td></tr><tr><th>8</th><td data-r="A8">{10}카디널리티 = 4 · SELECT * FROM R RIGHT OUTER JOIN S ON R.B = S.B;</td><td data-r="B8"></td><td data-r="C8"></td><td data-r="D8"></td><td data-r="E8"></td><td data-r="F8"></td><td data-r="G8"></td><td data-r="H8"></td><td data-r="I8"></td><td data-r="J8"></td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="2">R</td><td data-r="C1"></td><td data-r="D1" colspan="2">S</td><td data-r="F1"></td><td data-r="G1" colspan="4">3) 완전 외부조인 실행결과 (5행)</td></tr><tr><th>2</th><td data-r="A2" class="c">A</td><td data-r="B2" class="k">B</td><td data-r="C2"></td><td data-r="D2" class="k">B</td><td data-r="E2" class="c">C</td><td data-r="F2"></td><td data-r="G2" class="c">A</td><td data-r="H2" class="k">B</td><td data-r="I2" class="k">B</td><td data-r="J2" class="c">C</td></tr><tr><th>3</th><td data-r="A3">a</td><td data-r="B3" class="num">2</td><td data-r="C3"></td><td data-r="D3" class="num">1</td><td data-r="E3">x</td><td data-r="F3"></td><td data-r="G3">a</td><td data-r="H3" class="num">2</td><td data-r="I3" class="num">2</td><td data-r="J3">y</td></tr><tr><th>4</th><td data-r="A4">b</td><td data-r="B4" class="num">3</td><td data-r="C4"></td><td data-r="D4" class="num">2</td><td data-r="E4">y</td><td data-r="F4"></td><td data-r="G4">b</td><td data-r="H4" class="num">3</td><td data-r="I4" class="num">3</td><td data-r="J4">z</td></tr><tr><th>5</th><td data-r="A5">c</td><td data-r="B5" class="num">3</td><td data-r="C5"></td><td data-r="D5" class="num">3</td><td data-r="E5">z</td><td data-r="F5"></td><td data-r="G5">c</td><td data-r="H5" class="num">3</td><td data-r="I5" class="num">3</td><td data-r="J5">z</td></tr><tr><th>6</th><td data-r="A6">d</td><td data-r="B6" class="num">5</td><td data-r="C6"></td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6">d</td><td data-r="H6" class="num">5</td><td data-r="I6" class="y">NULL</td><td data-r="J6" class="y">NULL</td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7" class="y">NULL</td><td data-r="H7" class="y">NULL</td><td data-r="I7" class="num">1</td><td data-r="J7">x</td></tr><tr><th>8</th><td data-r="A8"></td><td data-r="B8"></td><td data-r="C8"></td><td data-r="D8"></td><td data-r="E8"></td><td data-r="F8"></td><td data-r="G8"></td><td data-r="H8"></td><td data-r="I8"></td><td data-r="J8"></td></tr><tr><th>9</th><td data-r="A9">{10}카디널리티 = 5 · 왼쪽 외부조인 UNION 오른쪽 외부조인 (MySQL 은 FULL OUTER JOIN 이 없음)</td><td data-r="B9"></td><td data-r="C9"></td><td data-r="D9"></td><td data-r="E9"></td><td data-r="F9"></td><td data-r="G9"></td><td data-r="H9"></td><td data-r="I9"></td><td data-r="J9"></td></tr></tbody></table></div><div class="xl-tabs"><button type="button" class="on">문제 (stu)</button><button type="button">1) 자연조인</button><button type="button">2) 왼쪽외부조인</button><button type="button">(오른쪽외부조인)</button><button type="button">3) 완전외부조인</button></div></div>
+<script data-xl-js>(function(){if(window.__xl)return;window.__xl=1;document.addEventListener("click",function(e){var t=e.target.closest&&e.target.closest(".xl-tabs button");if(t){var x=t.closest(".xl"),i=[].indexOf.call(t.parentNode.children,t);x.querySelectorAll(".xl-tabs button").forEach(function(b,k){b.classList.toggle("on",k===i);});x.querySelectorAll(".xl-sheet").forEach(function(s,k){s.hidden=k!==i;});x.querySelectorAll("td.sel").forEach(function(c){c.classList.remove("sel");});x.querySelector(".xl-ref").textContent="A1";x.querySelector(".xl-f").textContent="";return;}var c=e.target.closest&&e.target.closest(".xl td");if(c){var y=c.closest(".xl");y.querySelectorAll("td.sel").forEach(function(d){d.classList.remove("sel");});c.classList.add("sel");y.querySelector(".xl-ref").textContent=c.dataset.r;y.querySelector(".xl-f").textContent=c.dataset.f||c.textContent;}});})();</script>
+<ul><li>📗 주황 머리글 = 조인 열쇠 열 B · 노란 NULL = 짝이 없어서 비어 나온 칸 · 행 순서는 ORDER BY 가 없으면 MySQL 마음대로 (행 내용 · 개수로 확인)</li></ul>
+</section>
+<section class="card" id="s4">
+<h2>2. [Quiz 1-2] 카디널리티 · 차수 · [Quiz 1-3] 관계대수(집합) — ✍️ 시험 미출제</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “[용어] 관계형 데이터 모델 · <b>차수: 필드의 개수</b> · <b>카디너리티: 레코드의 개수</b>” · “[용어] 관계대수 (<b>UNION은 시험에 나옴</b>) 1. 집합 — 합집합 UNION · UNION ALL” · “시험 미출제 — Quiz1-2-quiz-stu · 집합 · 자체조인”</p>
+<table class="ref">
+<tbody>
+<tr><th>용어</th><th>✍️ 뜻</th><th>🤖 같은 말</th></tr>
+<tr><td><b>차수</b> (degree)</td><td><b>필드</b>의 개수</td><td>속성 · 열 (attribute · column) 의 수</td></tr>
+<tr><td><b>카디널리티</b> (cardinality)</td><td><b>레코드</b>의 개수</td><td>투플 · 행 (tuple · row) 의 수 — ✍️ “카디너리티” · 엑셀 “카디날리티” 모두 같은 말</td></tr>
+</tbody></table>
+<pre><code class="language-text">[Quiz 1-2] (생능 박성진 ch03 연습문제 14)
+릴레이션 R 의 카디널리티가 4, 차수가 5 이고 릴레이션 S 의 카디널리티가 6, 차수가 4 인
+두 릴레이션에 카티션 프로덕트 연산을 적용한 결과 릴레이션의 카디널리티와 차수는?
+① 24, 20   ② 10, 9   ③ 10, 20   ④ 24, 9
+
+[Quiz 1-3] (생능 박성진 ch04 연습문제 7)
+릴레이션 R1 의 투플 수는 10개, R2 의 투플 수는 15개, 두 릴레이션의 공통 투플 수는 5개이다.
+릴레이션 R1 과 R2 에 대한 각 연산 결과의 투플 수로 옳지 않은 것은?
+① 교집합 - 5개   ② 카티션 프로덕트 - 150개   ③ 차집합 - 5개   ④ 합집합 - 15개</code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>문제</th><th>계산</th><th>답</th><th>✍️ 내 엑셀 답</th></tr>
+<tr><td>1-2 R × S 카디널리티</td><td>행은 <b>곱하기</b> 4 × 6</td><td><b>24</b></td><td>24 ✅</td></tr>
+<tr><td>1-2 R × S 차수</td><td>열은 <b>더하기</b> 5 + 4</td><td><b>9</b> → 정답 <b>④ 24, 9</b></td><td>⚠️ 18 (<code>=5+4+9</code>) ✕</td></tr>
+<tr><td>1-3 ① R1 ∩ R2 교집합</td><td>공통 투플만</td><td><b>5</b> ⭕</td><td>⚠️ 20 (<code>=(10+15)-5</code>) ✕ — 합집합 값</td></tr>
+<tr><td>1-3 ② R1 × R2</td><td>10 × 15</td><td><b>150</b> ⭕</td><td>150 ✅</td></tr>
+<tr><td>1-3 ③ R1 − R2 차집합</td><td>R1 에만 있는 것 10 − 5</td><td><b>5</b> ⭕</td><td>⚠️ −5 (<code>=10-15</code>) ✕ — 투플 수는 음수가 안 됨</td></tr>
+<tr><td>1-3 ④ R1 ∪ R2 합집합</td><td>10 + 15 − 공통 5</td><td><b>20</b> → 15개는 <b>틀림</b></td><td>⚠️ 25 (<code>=10+15</code>) ✕ — 공통 5개를 두 번 셈</td></tr>
+</tbody></table>
+<div class="tip">정답 — Quiz 1-2 <b>④</b> · Quiz 1-3 <b>④</b> (합집합은 20개) · 🤖 R2 − R1 이면 15 − 5 = 10 · 카티션 프로덕트는 공통 투플과 상관없이 10 × 15 · 시험에는 안 나오지만 용어(차수 · 카디널리티)는 1번 문제에 쓰여요.</div>
+<div class="xl"><div class="xl-head"><span class="xl-logo">X</span><span>dy262DB1-SQL실습04-w13 — Quiz 1-2 · 1-3 (칸을 누르면 수식)</span></div><div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div><div class="xl-wrap"><table class="xl-sheet"><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" class="h" colspan="4">R 카디널리티 4 · 차수 5 / S 카디널리티 6 · 차수 4 → R X S</td></tr><tr><th>2</th><td data-r="A2" class="c">구하는 것</td><td data-r="B2" class="c">계산</td><td data-r="C2" class="c">답</td><td data-r="D2" class="c">✍️ 내 엑셀 답</td></tr><tr><th>3</th><td data-r="A3">카디널리티 (행 수)</td><td data-r="B3">4 × 6</td><td data-r="C3" class="y num" data-f="=4*6">24</td><td data-r="D3" class="num" data-f="=4*6">24</td></tr><tr><th>4</th><td data-r="A4">차수 (열 수)</td><td data-r="B4">5 + 4</td><td data-r="C4" class="y num" data-f="=5+4">9</td><td data-r="D4" class="r num" data-f="=5+4+9">18</td></tr><tr><th>5</th><td data-r="A5"></td><td data-r="B5"></td><td data-r="C5"></td><td data-r="D5"></td></tr><tr><th>6</th><td data-r="A6" colspan="4">→ 정답 ④ 24, 9 · 카티션 프로덕트 = 행은 곱하고 열은 더함</td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" class="h" colspan="4">R1 투플 10개 · R2 투플 15개 · 공통 투플 5개</td></tr><tr><th>2</th><td data-r="A2" class="c">연산</td><td data-r="B2" class="c">계산</td><td data-r="C2" class="c">답</td><td data-r="D2" class="c">✍️ 내 엑셀 답</td></tr><tr><th>3</th><td data-r="A3">1) R1 ∩ R2</td><td data-r="B3">공통만</td><td data-r="C3" class="y num">5</td><td data-r="D3" class="r num" data-f="=(10+15)-5">20</td></tr><tr><th>4</th><td data-r="A4">2) R1 X R2</td><td data-r="B4">10 × 15</td><td data-r="C4" class="y num" data-f="=10*15">150</td><td data-r="D4" class="num" data-f="=10*15">150</td></tr><tr><th>5</th><td data-r="A5">3) R1 - R2</td><td data-r="B5">10 − 5</td><td data-r="C5" class="y num" data-f="=10-5">5</td><td data-r="D5" class="r num" data-f="=10-15">-5</td></tr><tr><th>6</th><td data-r="A6">4) R1 ∪ R2</td><td data-r="B6">10 + 15 − 5</td><td data-r="C6" class="y num" data-f="=10+15-5">20</td><td data-r="D6" class="r num" data-f="=10+15">25</td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td></tr><tr><th>8</th><td data-r="A8" colspan="4">→ 옳지 않은 것 = ④ 합집합 15개 (실제 20개)</td></tr></tbody></table></div><div class="xl-tabs"><button type="button" class="on">Quiz 1-2 카디널리티/차수</button><button type="button">Quiz 1-3 관계대수(집합)</button></div></div>
+</section>
+<section class="card" id="s5">
+<h2>3. 🔥 [Quiz 13-04] 서브질의 — 실행 결과는? (강의자료 10쪽 · 🤖 기말 4번 “13주차 4번”)</h2>
+<div class="tip">강의자료 10쪽 [예제] 서브질의 (문제) · ✍️ 노션 “4.SQL 실행결과 … 13주차 4번 실행결과 작성하기” · “1.1 8문제 = 80점 (강의자료 10페이지 등등)” — 🤖 13주차 강의자료 10쪽이 바로 이 문제예요.</div>
+<table class="ref">
+<tbody style="min-width:310px;">
+<tr><th>R1.A</th><th>B</th><th>C</th><th></th><th>R2.C</th><th>D</th><th>E</th></tr>
+<tr><td>1</td><td>a</td><td>x</td><td></td><td>x</td><td>k</td><td>3</td></tr>
+<tr><td>2</td><td>b</td><td>x</td><td></td><td>y</td><td>k</td><td>3</td></tr>
+<tr><td>1</td><td>c</td><td>w</td><td></td><td>z</td><td>s</td><td>2</td></tr>
+<tr><td>3</td><td>d</td><td>w</td><td></td><td></td><td></td><td></td></tr>
+</tbody></table>
+<pre><code class="language-sql">SELECT B                                                     -- ③ 남은 행의 B 만 → a · b
+FROM R1
+WHERE C IN (SELECT C                                         -- ① 괄호 안 먼저 — R2 에서 D = 'k' 인 행의 C → x · y (2행이라 IN)
+            FROM R2
+            WHERE D = 'k');                                  -- ② 바깥 WHERE C IN ('x', 'y') → R1 의 1 a x · 2 b x (w 는 ✕)</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>B</th></tr>
+<tr><td>a</td></tr>
+<tr><td>b</td></tr>
+</tbody></table>
+<div class="tip">🤖 <code>IN</code> = <code>= ANY</code> 라서 <code>WHERE C = ANY (…)</code> 도 a · b · <code>NOT IN</code> = <code>&lt;&gt; ALL</code> → c · d (모두 실행해 봄) · 괄호 안 결과가 2행인데 <code>WHERE C = (…)</code> 면 <b>ERROR 1242</b>.</div>
+<div class="xl"><div class="xl-head"><span class="xl-logo">X</span><span>강의자료 10쪽 — [Quiz 13-04] 서브질의 실행 결과</span></div><div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div><div class="xl-wrap"><table class="xl-sheet"><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="3">[R1]</td><td data-r="D1"></td><td data-r="E1" colspan="3">[R2]</td></tr><tr><th>2</th><td data-r="A2" class="c">A</td><td data-r="B2" class="c">B</td><td data-r="C2" class="k">C</td><td data-r="D2"></td><td data-r="E2" class="k">C</td><td data-r="F2" class="c">D</td><td data-r="G2" class="c">E</td></tr><tr><th>3</th><td data-r="A3" class="num">1</td><td data-r="B3">a</td><td data-r="C3">x</td><td data-r="D3"></td><td data-r="E3">x</td><td data-r="F3">k</td><td data-r="G3" class="num">3</td></tr><tr><th>4</th><td data-r="A4" class="num">2</td><td data-r="B4">b</td><td data-r="C4">x</td><td data-r="D4"></td><td data-r="E4">y</td><td data-r="F4">k</td><td data-r="G4" class="num">3</td></tr><tr><th>5</th><td data-r="A5" class="num">1</td><td data-r="B5">c</td><td data-r="C5">w</td><td data-r="D5"></td><td data-r="E5">z</td><td data-r="F5">s</td><td data-r="G5" class="num">2</td></tr><tr><th>6</th><td data-r="A6" class="num">3</td><td data-r="B6">d</td><td data-r="C6">w</td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6"></td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td></tr><tr><th>8</th><td data-r="A8" class="r" colspan="7">-- 실행 결과는?   SELECT B FROM R1 WHERE C IN (SELECT C FROM R2 WHERE D = 'k');</td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="3">[R1]</td><td data-r="D1"></td><td data-r="E1" colspan="3">[R2]</td></tr><tr><th>2</th><td data-r="A2" class="c">A</td><td data-r="B2" class="c">B</td><td data-r="C2" class="k">C</td><td data-r="D2"></td><td data-r="E2" class="k">C</td><td data-r="F2" class="c">D</td><td data-r="G2" class="c">E</td></tr><tr><th>3</th><td data-r="A3" class="num">1</td><td data-r="B3">a</td><td data-r="C3">x</td><td data-r="D3"></td><td data-r="E3" class="y">x</td><td data-r="F3" class="y">k</td><td data-r="G3" class="num">3</td></tr><tr><th>4</th><td data-r="A4" class="num">2</td><td data-r="B4">b</td><td data-r="C4">x</td><td data-r="D4"></td><td data-r="E4" class="y">y</td><td data-r="F4" class="y">k</td><td data-r="G4" class="num">3</td></tr><tr><th>5</th><td data-r="A5" class="num">1</td><td data-r="B5">c</td><td data-r="C5">w</td><td data-r="D5"></td><td data-r="E5">z</td><td data-r="F5">s</td><td data-r="G5" class="num">2</td></tr><tr><th>6</th><td data-r="A6" class="num">3</td><td data-r="B6">d</td><td data-r="C6">w</td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6"></td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td></tr><tr><th>8</th><td data-r="A8" colspan="7">① SELECT C FROM R2 WHERE D = 'k' → x · y</td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="3">[R1]</td><td data-r="D1"></td><td data-r="E1" colspan="3">[R2]</td></tr><tr><th>2</th><td data-r="A2" class="c">A</td><td data-r="B2" class="c">B</td><td data-r="C2" class="k">C</td><td data-r="D2"></td><td data-r="E2" class="k">C</td><td data-r="F2" class="c">D</td><td data-r="G2" class="c">E</td></tr><tr><th>3</th><td data-r="A3" class="num">1</td><td data-r="B3" class="y">a</td><td data-r="C3" class="y">x</td><td data-r="D3"></td><td data-r="E3">x</td><td data-r="F3">k</td><td data-r="G3" class="num">3</td></tr><tr><th>4</th><td data-r="A4" class="num">2</td><td data-r="B4" class="y">b</td><td data-r="C4" class="y">x</td><td data-r="D4"></td><td data-r="E4">y</td><td data-r="F4">k</td><td data-r="G4" class="num">3</td></tr><tr><th>5</th><td data-r="A5" class="num">1</td><td data-r="B5">c</td><td data-r="C5">w</td><td data-r="D5"></td><td data-r="E5">z</td><td data-r="F5">s</td><td data-r="G5" class="num">2</td></tr><tr><th>6</th><td data-r="A6" class="num">3</td><td data-r="B6">d</td><td data-r="C6">w</td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6"></td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td></tr><tr><th>8</th><td data-r="A8" colspan="7">② WHERE C IN ('x', 'y') → 1 a x · 2 b x → ③ SELECT B → a · b</td></tr></tbody></table></div><div class="xl-tabs"><button type="button" class="on">문제</button><button type="button">① 괄호 안</button><button type="button">② 바깥 WHERE</button></div></div>
+</section>
+<section class="card" id="s6">
+<h2>4. [실습 1-3] 자체조인 (self join) — [Quiz 2-1] 사원 · 직속상사 · [Quiz 2-2] 고객 · 추천고객 (✍️ 시험 미출제)</h2>
+<div class="tip">강의자료 18 ~ 23쪽 — “❖ 자체 릴레이션: <b>자신의 테이블을 참조하는 관계</b> (self join)” · 한 테이블을 별칭 2개(E = 사원 · M = 관리자)로 두 번 쓰고 <b>manager → empno</b> 로 짝을 지어요 · ✍️ 노션 <code>#자체조인</code> · “시험 미출제”</div>
+<table class="ref">
+<tbody style="min-width:439px;">
+<tr><th>emps.empno</th><th>empname</th><th>manager</th><th>dno</th></tr>
+<tr><td>1003</td><td>조민희</td><td>3011</td><td>1</td></tr>
+<tr><td>2106</td><td>김창섭</td><td>3426</td><td>2</td></tr>
+<tr><td>3011</td><td>이수민</td><td>NULL</td><td>1</td></tr>
+<tr><td>3426</td><td>박영권</td><td>3011</td><td>3</td></tr>
+<tr><td>3427</td><td>최종철</td><td>2106</td><td>3</td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- [Quiz 2-1] 사원명과 관리자명을 검색하라.                    ✍️ 내 SQL
+SELECT E.empname AS 사원명 ,M.empname AS 관리자명              -- ③ E 쪽 이름 = 사원 · M 쪽 이름 = 관리자
+FROM emps E,emps M                                           -- ① 같은 emps 를 E(사원) · M(관리자) 두 개로
+WHERE E.manager=M.empno;                                     -- ② 사원의 manager 번호 = 관리자의 empno 인 짝만 → 4행</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>사원명</th><th>관리자명</th></tr>
+<tr><td>조민희</td><td>이수민</td></tr>
+<tr><td>김창섭</td><td>박영권</td></tr>
+<tr><td>박영권</td><td>이수민</td></tr>
+<tr><td>최종철</td><td>김창섭</td></tr>
+</tbody></table>
+<div class="tip">🤖 이수민은 manager 가 <b>NULL</b> → <code>NULL = empno</code> 는 참이 아니라 빠져요 (4행) · <code>FROM emps E LEFT OUTER JOIN emps M ON E.manager = M.empno</code> 로 쓰면 <b>이수민 · NULL</b> 까지 5행 · 별칭(E · M)이 없으면 어느 emps 인지 몰라서 안 돼요 · 수업요약은 표 이름이 <code>emp</code> · 실습 SQL(week13db)은 <code>emps</code> — week13db 에는 관계대수용 <code>emp(ename, pno)</code> 가 이미 있어서.</div>
+<pre><code class="language-sql">-- [Quiz 2-2] 모든 고객명과 추천고객명을 검색하라.              ✍️ 내 SQL
+SELECT A.고객이름 AS 고객명,B.고객이름 AS 추천고객명            -- ③ A 쪽 = 고객 · B 쪽 = 추천해 준 고객
+FROM 추천고객 A LEFT OUTER JOIN 추천고객 B                     -- ① 같은 추천고객을 A · B 로 · 왼쪽(A)은 모두
+ON A.추천고객=B.고객아이디;                                    -- ② A 의 추천고객 아이디 = B 의 고객아이디 → 정지영은 추천고객 NULL → 4행</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>고객명</th><th>추천고객명</th></tr>
+<tr><td>김현준</td><td>정지영</td></tr>
+<tr><td>정소화</td><td>정지영</td></tr>
+<tr><td>원유선</td><td>김현준</td></tr>
+<tr><td>정지영</td><td>NULL</td></tr>
+</tbody></table>
+<div class="tip">수업요약 [Quiz 2-2] 실행결과는 <b>3행</b> (김현준 · 정소화 · 원유선) = 내부조인 — 강의자료 23쪽 답 <code>SELECT C1.고객이름 고객명, C2.고객이름 추천고객명 FROM 추천고객 C1, 추천고객 C2 WHERE C1.추천고객 = C2.고객아이디;</code> · ✍️ 내 SQL 은 “<b>모든</b> 고객명” 이라 LEFT OUTER JOIN 으로 정지영까지 4행 (둘 다 실행해 봄).</div>
+<div class="xl"><div class="xl-head"><span class="xl-logo">X</span><span>실습 엑셀 Quiz2-1-self — 같은 표를 E · M 두 개로</span></div><div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div><div class="xl-wrap"><table class="xl-sheet"><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="4">emp (수업 SQL 은 emps)</td><td data-r="E1"></td><td data-r="F1" colspan="2">-- 사원명과 직속상사명을 검색하라</td></tr><tr><th>2</th><td data-r="A2" class="c">empno</td><td data-r="B2" class="c">empname</td><td data-r="C2" class="k">manager</td><td data-r="D2" class="c">dno</td><td data-r="E2"></td><td data-r="F2" class="c">사원명</td><td data-r="G2" class="c">관리자명</td></tr><tr><th>3</th><td data-r="A3" class="num">1003</td><td data-r="B3">조민희</td><td data-r="C3" class="num">3011</td><td data-r="D3" class="num">1</td><td data-r="E3"></td><td data-r="F3" class="b"></td><td data-r="G3" class="b"></td></tr><tr><th>4</th><td data-r="A4" class="num">2106</td><td data-r="B4">김창섭</td><td data-r="C4" class="num">3426</td><td data-r="D4" class="num">2</td><td data-r="E4"></td><td data-r="F4" class="b"></td><td data-r="G4" class="b"></td></tr><tr><th>5</th><td data-r="A5" class="num">3011</td><td data-r="B5">이수민</td><td data-r="C5">NULL</td><td data-r="D5" class="num">1</td><td data-r="E5"></td><td data-r="F5" class="b"></td><td data-r="G5" class="b"></td></tr><tr><th>6</th><td data-r="A6" class="num">3426</td><td data-r="B6">박영권</td><td data-r="C6" class="num">3011</td><td data-r="D6" class="num">3</td><td data-r="E6"></td><td data-r="F6" class="b"></td><td data-r="G6" class="b"></td></tr><tr><th>7</th><td data-r="A7" class="num">3427</td><td data-r="B7">최종철</td><td data-r="C7" class="num">2106</td><td data-r="D7" class="num">3</td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="4">emp E (사원)</td><td data-r="E1"></td><td data-r="F1" colspan="4">emp M (관리자)</td></tr><tr><th>2</th><td data-r="A2" class="c">empno</td><td data-r="B2" class="c">empname</td><td data-r="C2" class="k">manager</td><td data-r="D2" class="c">dno</td><td data-r="E2"></td><td data-r="F2" class="k">empno</td><td data-r="G2" class="c">empname</td><td data-r="H2" class="c">manager</td><td data-r="I2" class="c">dno</td></tr><tr><th>3</th><td data-r="A3" class="num">1003</td><td data-r="B3">조민희</td><td data-r="C3" class="y num">3011</td><td data-r="D3" class="num">1</td><td data-r="E3"></td><td data-r="F3" class="num">1003</td><td data-r="G3">조민희</td><td data-r="H3" class="num">3011</td><td data-r="I3" class="num">1</td></tr><tr><th>4</th><td data-r="A4" class="num">2106</td><td data-r="B4">김창섭</td><td data-r="C4" class="y num">3426</td><td data-r="D4" class="num">2</td><td data-r="E4"></td><td data-r="F4" class="num">2106</td><td data-r="G4">김창섭</td><td data-r="H4" class="num">3426</td><td data-r="I4" class="num">2</td></tr><tr><th>5</th><td data-r="A5" class="num">3011</td><td data-r="B5">이수민</td><td data-r="C5" class="r">NULL</td><td data-r="D5" class="num">1</td><td data-r="E5"></td><td data-r="F5" class="y num">3011</td><td data-r="G5">이수민</td><td data-r="H5">NULL</td><td data-r="I5" class="num">1</td></tr><tr><th>6</th><td data-r="A6" class="num">3426</td><td data-r="B6">박영권</td><td data-r="C6" class="y num">3011</td><td data-r="D6" class="num">3</td><td data-r="E6"></td><td data-r="F6" class="y num">3426</td><td data-r="G6">박영권</td><td data-r="H6" class="num">3011</td><td data-r="I6" class="num">3</td></tr><tr><th>7</th><td data-r="A7" class="num">3427</td><td data-r="B7">최종철</td><td data-r="C7" class="y num">2106</td><td data-r="D7" class="num">3</td><td data-r="E7"></td><td data-r="F7" class="y num">2106</td><td data-r="G7">김창섭</td><td data-r="H7" class="num">3426</td><td data-r="I7" class="num">2</td></tr><tr><th>8</th><td data-r="A8"></td><td data-r="B8"></td><td data-r="C8"></td><td data-r="D8"></td><td data-r="E8"></td><td data-r="F8"></td><td data-r="G8"></td><td data-r="H8"></td><td data-r="I8"></td></tr><tr><th>9</th><td data-r="A9" colspan="9">WHERE E.manager = M.empno — E 의 manager 와 같은 번호를 M 의 empno 에서 찾기 (NULL 은 짝 없음)</td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" class="c">사원명 (E.empname)</td><td data-r="B1" class="c">E.manager = M.empno</td><td data-r="C1" class="c">관리자명 (M.empname)</td></tr><tr><th>2</th><td data-r="A2">조민희</td><td data-r="B2">3011 = 3011</td><td data-r="C2">이수민</td></tr><tr><th>3</th><td data-r="A3">김창섭</td><td data-r="B3">3426 = 3426</td><td data-r="C3">박영권</td></tr><tr><th>4</th><td data-r="A4" class="r">이수민</td><td data-r="B4" class="r">NULL → 짝 없음</td><td data-r="C4" class="r">(빠짐)</td></tr><tr><th>5</th><td data-r="A5">박영권</td><td data-r="B5">3011 = 3011</td><td data-r="C5">이수민</td></tr><tr><th>6</th><td data-r="A6">최종철</td><td data-r="B6">2106 = 2106</td><td data-r="C6">김창섭</td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td></tr><tr><th>8</th><td data-r="A8" colspan="3">→ 4행 · LEFT OUTER JOIN 이면 이수민 · NULL 까지 5행</td></tr></tbody></table></div><div class="xl-tabs"><button type="button" class="on">문제 (stu)</button><button type="button">E · M 짝 맞추기</button><button type="button">결과</button></div></div>
+</section>
+<section class="card" id="s7">
+<h2>5. 🔥 [실습 3-1] 중첩질의 — IN · ALL · SOME · ANY · MAX (stu · pro)</h2>
+<p>✍️ <b>필기 (📷 사진 · 캡처)</b> — “하위질의: 서브 쿼리 (sub query, 하위질의, 부질의, 중첩질의, 상관중첩질의)” · 강의자료 33 · 35쪽 [요약]</p>
+<table class="ref">
+<tbody>
+<tr><th>✍️ 키워드</th><th>뜻</th><th>🤖 같은 것 · 예</th></tr>
+<tr><td><b>ANY</b></td><td>서브쿼리의 여러 개의 결과 중 <b>한 가지만</b> 만족해도 되며</td><td><code>&gt; ANY</code> = 가장 <b>작은</b> 값보다 크면 참 (3-4)</td></tr>
+<tr><td><b>ALL</b></td><td>서브쿼리의 여러 개의 결과를 <b>모두</b> 만족시켜야 된다</td><td><code>&gt; ALL</code> = 가장 <b>큰</b> 값보다 커야 참 (3-3)</td></tr>
+<tr><td><b>SOME</b></td><td>ANY 와 동일한 의미</td><td><code>&gt; SOME</code> = <code>&gt; ANY</code> (✍️ “위랑 아래랑 같음”)</td></tr>
+<tr><td><b>IN</b></td><td><code>= ANY</code> 와 동일</td><td>목록 중 하나와 같으면 참 (3-1 · 3-2)</td></tr>
+<tr><td><b>NOT IN</b></td><td><code>&lt;&gt; ALL</code> 과 동일</td><td>목록 어느 것과도 다르면 참</td></tr>
+<tr><td><b>EXISTS</b></td><td>존재하면 참, 아니면 거짓</td><td>22번</td></tr>
+<tr><td><b>NOT EXISTS</b></td><td>존재하지 않으면 참</td><td>24번 (6번)</td></tr>
+</tbody></table>
+<div class="tip">🤖 <code>&gt; ALL</code> ↔ <code>&gt; MAX</code> · <code>&gt; ANY</code> ↔ <code>&gt; MIN</code> 은 하위질의 결과가 비어 있지 않고 NULL 이 없을 때 같은 결과예요 (3-3 · 3-4 를 MAX · MIN 으로 바꿔 실행해 봄).</div>
+<table class="ref">
+<tbody style="min-width:718px;">
+<tr><th>stu.sno</th><th>sname</th><th>dept</th><th>sage</th><th></th><th>pro.pno</th><th>pname</th><th>dept</th><th>page</th></tr>
+<tr><td>s1</td><td>유준호</td><td>컴퓨터</td><td>23</td><td></td><td>p1</td><td>이정무</td><td>컴퓨터</td><td>36</td></tr>
+<tr><td>s2</td><td>오정민</td><td>컴퓨터</td><td>34</td><td></td><td>p2</td><td>우태하</td><td>컴퓨터</td><td>32</td></tr>
+<tr><td>s3</td><td>이태현</td><td>건축</td><td>22</td><td></td><td>p3</td><td>이성민</td><td>건축</td><td>45</td></tr>
+<tr><td>s4</td><td>신현주</td><td>건축</td><td>21</td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- 3-1) 교수 테이블에서 이정무 의 학과와 같은 학생 이름, 학과, 나이를 검색하라      ✍️ 내 SQL
+SELECT sname, dept, sage                                     -- ③ 이름 · 학과 · 나이
+FROM stu
+WHERE dept IN (SELECT dept                                   -- ① 괄호 안 — 이정무의 dept → '컴퓨터' (1행)
+               FROM pro
+               WHERE pname = '이정무');                       -- ② dept IN ('컴퓨터') → 유준호 · 오정민
+-- 3-2) 교수 테이블에서 pno 가 p1 이거나 p2 인 학과와 같은 학생 이름, 학과, 나이를 검색하라
+SELECT sname, dept, sage
+FROM stu
+WHERE dept IN (SELECT dept                                   -- ① p1 · p2 의 dept → '컴퓨터' · '컴퓨터' (2행)
+               FROM pro
+               WHERE pno IN('p1','p2'));                     -- ② dept IN ('컴퓨터', '컴퓨터') → 유준호 · 오정민</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>sname</th><th>dept</th><th>sage</th></tr>
+<tr><td>유준호</td><td>컴퓨터</td><td>23</td></tr>
+<tr><td>오정민</td><td>컴퓨터</td><td>34</td></tr>
+</tbody></table>
+<div class="tip">3-1 · 3-2 결과는 같아요 · 3-1 은 괄호 안이 1행이라 <code>=</code> 도 되지만 3-2 는 <b>2행</b>이라 <code>dept = (…)</code> → <b>ERROR 1242</b> (실행해 봄) → <code>IN</code>.</div>
+<pre><code class="language-sql">-- 3-3) 학생 테이블과 교수 테이블에서 모든 학생들보다 나이가 많은 교수의
+-- 교번, 이름, 나이를 ALL 구문을 이용하여 검색하라                              ✍️ 내 SQL
+SELECT pno, pname, page
+FROM pro
+WHERE page&gt;ALL (SELECT sage FROM stu);                       -- 괄호 안 23 · 34 · 22 · 21 → 모두보다 커야 = 34 보다 커야 → p1 36 · p3 45</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>pno</th><th>pname</th><th>page</th></tr>
+<tr><td>p1</td><td>이정무</td><td>36</td></tr>
+<tr><td>p3</td><td>이성민</td><td>45</td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- 3-4) 학생 테이블과 교수 테이블에서 한 명 이상 교수보다
+-- 나이가 많은 학생이 있을 경우 학생의 학번, 이름, 나이를 SOME 구문으로 검색하라   ✍️ 내 SQL
+SELECT sno, sname, sage
+FROM stu
+WHERE sage &gt; SOME (SELECT page FROM pro);                    -- 괄호 안 36 · 32 · 45 → 하나라도보다 크면 = 32 보다 크면 → s2 34
+-- 위랑 아래랑 같음  (✍️)
+SELECT sno, sname, sage
+FROM stu
+WHERE sage &gt; ANY (SELECT page FROM pro);                     -- SOME = ANY → 같은 1행</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>sno</th><th>sname</th><th>sage</th></tr>
+<tr><td>s2</td><td>오정민</td><td>34</td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- 3-5) 가장 나이가 많은 학생 이름, 나이를 검색하라                               ✍️ 내 SQL
+SELECT sname, sage
+FROM stu
+WHERE sage = (SELECT MAX(sage) FROM stu);                    -- ① MAX(sage) → 34 (1행이라 =) → ② sage = 34 → 오정민</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>sname</th><th>sage</th></tr>
+<tr><td>오정민</td><td>34</td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- 3-6) 각 학과마다 가장 나이가 많은 학생 이름, 학과, 나이를 검색하라  (강의자료 41쪽 · 노션 필기 없음)
+select sname, dept, sage
+from   stu S1                                                -- ① 바깥 학생을 한 행씩 (S1)
+where  sage IN (select MAX(sage)                             -- ② 그 학생과 같은 학과(S2)만 모아 MAX
+                from   stu S2
+                where  S1.dept = S2.dept);                   -- ③ 컴퓨터 → 34 · 건축 → 22 → 오정민 · 이태현</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>sname</th><th>dept</th><th>sage</th></tr>
+<tr><td>오정민</td><td>컴퓨터</td><td>34</td></tr>
+<tr><td>이태현</td><td>건축</td><td>22</td></tr>
+</tbody></table>
+<div class="tip">🤖 3-6 은 괄호 안이 바깥 <code>S1.dept</code> 를 써서 <b>바깥 행마다</b> 다시 실행돼요 = <b>상관 중첩 질의</b> (6번 25번과 같은 모양 · 14주차) · 강의자료 40쪽 3-5 답은 <code>select sname, dept, sage</code> (3열) — 문제는 “이름, 나이” 라 ✍️ 내 답(2열)이 문제에 맞아요.</div>
+<div class="xl"><div class="xl-head"><span class="xl-logo">X</span><span>실습 엑셀 Quiz3-1 — stu · pro 로 ALL · SOME · MAX</span></div><div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div><div class="xl-wrap"><table class="xl-sheet"><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="4">stu</td><td data-r="E1"></td><td data-r="F1" colspan="4">pro</td></tr><tr><th>2</th><td data-r="A2" class="c">sno</td><td data-r="B2" class="c">sname</td><td data-r="C2" class="c">dept</td><td data-r="D2" class="k">sage</td><td data-r="E2"></td><td data-r="F2" class="c">pno</td><td data-r="G2" class="c">pname</td><td data-r="H2" class="c">dept</td><td data-r="I2" class="k">page</td></tr><tr><th>3</th><td data-r="A3">s1</td><td data-r="B3">유준호</td><td data-r="C3">컴퓨터</td><td data-r="D3" class="num">23</td><td data-r="E3"></td><td data-r="F3">p1</td><td data-r="G3">이정무</td><td data-r="H3">컴퓨터</td><td data-r="I3" class="num">36</td></tr><tr><th>4</th><td data-r="A4">s2</td><td data-r="B4">오정민</td><td data-r="C4">컴퓨터</td><td data-r="D4" class="num">34</td><td data-r="E4"></td><td data-r="F4">p2</td><td data-r="G4">우태하</td><td data-r="H4">컴퓨터</td><td data-r="I4" class="num">32</td></tr><tr><th>5</th><td data-r="A5">s3</td><td data-r="B5">이태현</td><td data-r="C5">건축</td><td data-r="D5" class="num">22</td><td data-r="E5"></td><td data-r="F5">p3</td><td data-r="G5">이성민</td><td data-r="H5">건축</td><td data-r="I5" class="num">45</td></tr><tr><th>6</th><td data-r="A6">s4</td><td data-r="B6">신현주</td><td data-r="C6">건축</td><td data-r="D6" class="num">21</td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6"></td><td data-r="H6"></td><td data-r="I6"></td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td><td data-r="H7"></td><td data-r="I7"></td></tr><tr><th>8</th><td data-r="A8" class="r" colspan="9">3-3) page &gt; ALL (sage 전부) · 3-4) sage &gt; SOME (page 하나라도) · 3-5) = MAX · 3-6) 학과마다 MAX — 먼저 골라 보고 탭으로 확인</td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="4">stu (괄호 안 = sage 전부)</td><td data-r="E1"></td><td data-r="F1" colspan="5">pro — page &gt; ALL (23, 34, 22, 21) ?</td></tr><tr><th>2</th><td data-r="A2" class="c">sno</td><td data-r="B2" class="c">sname</td><td data-r="C2" class="c">dept</td><td data-r="D2" class="k">sage</td><td data-r="E2"></td><td data-r="F2" class="c">pno</td><td data-r="G2" class="c">pname</td><td data-r="H2" class="c">dept</td><td data-r="I2" class="k">page</td><td data-r="J2" class="c">&gt; 34 ?</td></tr><tr><th>3</th><td data-r="A3">s1</td><td data-r="B3">유준호</td><td data-r="C3">컴퓨터</td><td data-r="D3" class="num">23</td><td data-r="E3"></td><td data-r="F3" class="y">p1</td><td data-r="G3" class="y">이정무</td><td data-r="H3">컴퓨터</td><td data-r="I3" class="y num">36</td><td data-r="J3" class="y">⭕</td></tr><tr><th>4</th><td data-r="A4">s2</td><td data-r="B4">오정민</td><td data-r="C4">컴퓨터</td><td data-r="D4" class="y num">34</td><td data-r="E4"></td><td data-r="F4">p2</td><td data-r="G4">우태하</td><td data-r="H4">컴퓨터</td><td data-r="I4" class="num">32</td><td data-r="J4" class="r">✕</td></tr><tr><th>5</th><td data-r="A5">s3</td><td data-r="B5">이태현</td><td data-r="C5">건축</td><td data-r="D5" class="num">22</td><td data-r="E5"></td><td data-r="F5" class="y">p3</td><td data-r="G5" class="y">이성민</td><td data-r="H5">건축</td><td data-r="I5" class="y num">45</td><td data-r="J5" class="y">⭕</td></tr><tr><th>6</th><td data-r="A6">s4</td><td data-r="B6">신현주</td><td data-r="C6">건축</td><td data-r="D6" class="num">21</td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6"></td><td data-r="H6"></td><td data-r="I6"></td><td data-r="J6"></td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td><td data-r="H7"></td><td data-r="I7"></td><td data-r="J7"></td></tr><tr><th>8</th><td data-r="A8">{10}모두보다 커야 = 가장 큰 34 보다 커야 {=MAX(23,34,22,21)} → p1 이정무 36 · p3 이성민 45</td><td data-r="B8"></td><td data-r="C8"></td><td data-r="D8"></td><td data-r="E8"></td><td data-r="F8"></td><td data-r="G8"></td><td data-r="H8"></td><td data-r="I8"></td><td data-r="J8"></td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="5">stu — sage &gt; SOME (36, 32, 45) ?</td><td data-r="F1"></td><td data-r="G1" colspan="4">pro (괄호 안 = page 전부)</td></tr><tr><th>2</th><td data-r="A2" class="c">sno</td><td data-r="B2" class="c">sname</td><td data-r="C2" class="c">dept</td><td data-r="D2" class="k">sage</td><td data-r="E2" class="c">&gt; 32 ?</td><td data-r="F2"></td><td data-r="G2" class="c">pno</td><td data-r="H2" class="c">pname</td><td data-r="I2" class="c">dept</td><td data-r="J2" class="k">page</td></tr><tr><th>3</th><td data-r="A3">s1</td><td data-r="B3">유준호</td><td data-r="C3">컴퓨터</td><td data-r="D3" class="num">23</td><td data-r="E3" class="r">✕</td><td data-r="F3"></td><td data-r="G3">p1</td><td data-r="H3">이정무</td><td data-r="I3">컴퓨터</td><td data-r="J3" class="num">36</td></tr><tr><th>4</th><td data-r="A4" class="y">s2</td><td data-r="B4" class="y">오정민</td><td data-r="C4">컴퓨터</td><td data-r="D4" class="y num">34</td><td data-r="E4" class="y">⭕</td><td data-r="F4"></td><td data-r="G4">p2</td><td data-r="H4">우태하</td><td data-r="I4">컴퓨터</td><td data-r="J4" class="y num">32</td></tr><tr><th>5</th><td data-r="A5">s3</td><td data-r="B5">이태현</td><td data-r="C5">건축</td><td data-r="D5" class="num">22</td><td data-r="E5" class="r">✕</td><td data-r="F5"></td><td data-r="G5">p3</td><td data-r="H5">이성민</td><td data-r="I5">건축</td><td data-r="J5" class="num">45</td></tr><tr><th>6</th><td data-r="A6">s4</td><td data-r="B6">신현주</td><td data-r="C6">건축</td><td data-r="D6" class="num">21</td><td data-r="E6" class="r">✕</td><td data-r="F6"></td><td data-r="G6"></td><td data-r="H6"></td><td data-r="I6"></td><td data-r="J6"></td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td><td data-r="H7"></td><td data-r="I7"></td><td data-r="J7"></td></tr><tr><th>8</th><td data-r="A8">{10}하나라도보다 크면 = 가장 작은 32 보다 크면 {=MIN(36,32,45)} → s2 오정민 34 (SOME = ANY)</td><td data-r="B8"></td><td data-r="C8"></td><td data-r="D8"></td><td data-r="E8"></td><td data-r="F8"></td><td data-r="G8"></td><td data-r="H8"></td><td data-r="I8"></td><td data-r="J8"></td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="4">stu</td></tr><tr><th>2</th><td data-r="A2" class="c">sno</td><td data-r="B2" class="c">sname</td><td data-r="C2" class="c">dept</td><td data-r="D2" class="k">sage</td></tr><tr><th>3</th><td data-r="A3">s1</td><td data-r="B3">유준호</td><td data-r="C3">컴퓨터</td><td data-r="D3" class="num">23</td></tr><tr><th>4</th><td data-r="A4" class="y">s2</td><td data-r="B4" class="y">오정민</td><td data-r="C4">컴퓨터</td><td data-r="D4" class="y num">34</td></tr><tr><th>5</th><td data-r="A5">s3</td><td data-r="B5">이태현</td><td data-r="C5">건축</td><td data-r="D5" class="num">22</td></tr><tr><th>6</th><td data-r="A6">s4</td><td data-r="B6">신현주</td><td data-r="C6">건축</td><td data-r="D6" class="num">21</td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td></tr><tr><th>8</th><td data-r="A8" class="c">MAX(sage)</td><td data-r="B8" class="y num" data-f="=MAX(D3:D6)">34</td><td data-r="C8"></td><td data-r="D8"></td></tr><tr><th>9</th><td data-r="A9" colspan="4">sage = 34 → 오정민 34</td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="4">stu S1 (바깥)</td><td data-r="E1"></td><td data-r="F1" colspan="2">S2 — 같은 학과의 MAX</td></tr><tr><th>2</th><td data-r="A2" class="c">sno</td><td data-r="B2" class="c">sname</td><td data-r="C2" class="k">dept</td><td data-r="D2" class="c">sage</td><td data-r="E2"></td><td data-r="F2" class="k">dept</td><td data-r="G2" class="c">MAX(sage)</td></tr><tr><th>3</th><td data-r="A3">s1</td><td data-r="B3">유준호</td><td data-r="C3">컴퓨터</td><td data-r="D3" class="num">23</td><td data-r="E3"></td><td data-r="F3">컴퓨터</td><td data-r="G3" class="num" data-f="=MAX(23,34)">34</td></tr><tr><th>4</th><td data-r="A4" class="y">s2</td><td data-r="B4" class="y">오정민</td><td data-r="C4">컴퓨터</td><td data-r="D4" class="y num">34</td><td data-r="E4"></td><td data-r="F4">컴퓨터</td><td data-r="G4" class="num" data-f="=MAX(23,34)">34</td></tr><tr><th>5</th><td data-r="A5" class="y">s3</td><td data-r="B5" class="y">이태현</td><td data-r="C5">건축</td><td data-r="D5" class="y num">22</td><td data-r="E5"></td><td data-r="F5">건축</td><td data-r="G5" class="num" data-f="=MAX(22,21)">22</td></tr><tr><th>6</th><td data-r="A6">s4</td><td data-r="B6">신현주</td><td data-r="C6">건축</td><td data-r="D6" class="num">21</td><td data-r="E6"></td><td data-r="F6">건축</td><td data-r="G6" class="num" data-f="=MAX(22,21)">22</td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td><td data-r="G7"></td></tr><tr><th>8</th><td data-r="A8" colspan="7">바깥 행마다 같은 학과(S1.dept = S2.dept)의 MAX 와 비교 → 오정민 · 이태현 (상관 중첩 질의)</td></tr></tbody></table></div><div class="xl-tabs"><button type="button" class="on">문제 (stu · pro)</button><button type="button">3-3) &gt; ALL</button><button type="button">3-4) &gt; SOME</button><button type="button">3-5) = MAX</button><button type="button">3-6) 학과마다 MAX</button></div></div>
+</section>
+<section class="card" id="s8">
+<h2>6. 🔥 다음 주(14주차) 미리 보기 — 강의자료 30 · 31쪽 = ✍️ “시험에 출제함”</h2>
+<div class="tip">✍️ “강의자료 30,31페이지 다음주에 수업하고 시험에 출제함” — 30쪽 = [실습 2-1] 24번 <b>NOT EXISTS</b> · 31쪽 = 25번 <b>상관중첩질의</b> (department · employee) · 노션 필기는 다음 주에 다시 정리해요.</div>
+<pre><code class="language-sql">-- 24) 사원들이 한 명도 소속되지 않은 부서명을 검색하라 (NOT EXISTS 사용)   (강의자료 30쪽 답 · 12주차 7번)
+select  deptname                                             -- ③ 부서 이름
+from    department D                                         -- ① 부서를 한 행씩 (D)
+where   NOT EXISTS (select *                                 -- ② 그 부서(D.deptno)의 사원을 찾아서
+                    from   employee E
+                    where  D.deptno = E.dno);                --    한 명도 없으면 참 → 4 총무만</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>deptname</th></tr>
+<tr><td>총무</td></tr>
+</tbody></table>
+<pre><code class="language-sql">-- 25) 자신이 속한 부서의 사원들의 평균급여보다 많은 급여를 받는 사원들에 대해서
+--     이름, 부서번호, 급여를 검색하라 (상관중첩질의)            (강의자료 31쪽 · ⚠️ 슬라이드 그대로는 오류)
+select  empname, dno, salary                                 -- ③ 이름 · 부서번호 · 급여
+from    employee E                                           -- ① 바깥 사원을 한 행씩 (E)
+where   salary &gt; (select AVG(salary)                         -- ② 그 사원과 같은 부서(dno = E.dno)의 평균급여보다 많으면
+                  from   employee
+                  where  dno = E.dno);                       --    1부 225만 · 2부 350만 · 3부 275만 → 박영권 · 이성래 · 이수민</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>empname</th><th>dno</th><th>salary</th></tr>
+<tr><td>이수민</td><td>3</td><td>4000000</td></tr>
+<tr><td>박영권</td><td>1</td><td>3000000</td></tr>
+<tr><td>이성래</td><td>2</td><td>5000000</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>바깥 사원 (E)</th><th>dno</th><th>salary</th><th>괄호 안 = 그 부서 평균</th><th><code>salary &gt;</code> 평균</th></tr>
+<tr><td>김상원</td><td>1</td><td>1500000</td><td>(1500000 + 3000000) ÷ 2 = 2250000</td><td>✕</td></tr>
+<tr><td>박영권</td><td>1</td><td>3000000</td><td>2250000</td><td><b>⭕</b></td></tr>
+<tr><td>조민희</td><td>2</td><td>3000000</td><td>(3000000 + 2500000 + 5000000) ÷ 3 = 3500000</td><td>✕</td></tr>
+<tr><td>김창섭</td><td>2</td><td>2500000</td><td>3500000</td><td>✕</td></tr>
+<tr><td>이성래</td><td>2</td><td>5000000</td><td>3500000</td><td><b>⭕</b></td></tr>
+<tr><td>이수민</td><td>3</td><td>4000000</td><td>(4000000 + 1500000) ÷ 2 = 2750000</td><td><b>⭕</b></td></tr>
+<tr><td>최종철</td><td>3</td><td>1500000</td><td>2750000</td><td>✕</td></tr>
+</tbody></table>
+<div class="tip">⚠️ <b>강의자료 31쪽 답</b> <code>select empname, dno, salary from employee E where salary &gt; (select AVG(salary) from employee E where E.dno = employee.dno);</code> → 바깥에 별칭 <b>E</b> 를 붙여서 <code>employee.dno</code> 를 못 찾아 <b>ERROR 1054</b> (Unknown column 'employee.dno' · 학교와 같은 MySQL 8.0.46 · 8.4 둘 다 확인) → ① 바깥 <code>from employee</code> 에서 <b>E 만 빼면</b> 슬라이드 안쪽 그대로 동작 · ② 위처럼 안쪽 별칭을 빼고 <code>dno = E.dno</code> · ③ 바깥 <code>E1</code> · 안쪽 <code>E2</code> 로 <code>E2.dno = E1.dno</code> — 셋 다 같은 3행 (실행해 봄) · 12주차 ⚠️ 에도 적었던 것 · 다음 주 수업에서 교수님 답을 확인하세요.</div>
+<div class="xl"><div class="xl-head"><span class="xl-logo">X</span><span>강의자료 31쪽 — 25) 상관중첩질의 (평균 칸을 누르면 수식)</span></div><div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div><div class="xl-wrap"><table class="xl-sheet"><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" class="c">empname</td><td data-r="B1" class="k">dno</td><td data-r="C1" class="c">salary</td><td data-r="D1"></td><td data-r="E1" class="k">dno</td><td data-r="F1" class="c">AVG(salary)</td></tr><tr><th>2</th><td data-r="A2">김상원</td><td data-r="B2" class="num">1</td><td data-r="C2" class="num">1500000</td><td data-r="D2"></td><td data-r="E2" class="num">1</td><td data-r="F2" class="y num" data-f="=AVERAGE(1500000,3000000)">2250000</td></tr><tr><th>3</th><td data-r="A3">박영권</td><td data-r="B3" class="num">1</td><td data-r="C3" class="num">3000000</td><td data-r="D3"></td><td data-r="E3" class="num">2</td><td data-r="F3" class="y num" data-f="=AVERAGE(3000000,2500000,5000000)">3500000</td></tr><tr><th>4</th><td data-r="A4">조민희</td><td data-r="B4" class="num">2</td><td data-r="C4" class="num">3000000</td><td data-r="D4"></td><td data-r="E4" class="num">3</td><td data-r="F4" class="y num" data-f="=AVERAGE(4000000,1500000)">2750000</td></tr><tr><th>5</th><td data-r="A5">김창섭</td><td data-r="B5" class="num">2</td><td data-r="C5" class="num">2500000</td><td data-r="D5"></td><td data-r="E5"></td><td data-r="F5"></td></tr><tr><th>6</th><td data-r="A6">이성래</td><td data-r="B6" class="num">2</td><td data-r="C6" class="num">5000000</td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td></tr><tr><th>7</th><td data-r="A7">이수민</td><td data-r="B7" class="num">3</td><td data-r="C7" class="num">4000000</td><td data-r="D7"></td><td data-r="E7"></td><td data-r="F7"></td></tr><tr><th>8</th><td data-r="A8">최종철</td><td data-r="B8" class="num">3</td><td data-r="C8" class="num">1500000</td><td data-r="D8"></td><td data-r="E8"></td><td data-r="F8"></td></tr><tr><th>9</th><td data-r="A9"></td><td data-r="B9"></td><td data-r="C9"></td><td data-r="D9"></td><td data-r="E9"></td><td data-r="F9"></td></tr><tr><th>10</th><td data-r="A10" colspan="6">괄호 안 (select AVG(salary) from employee where dno = E.dno) = 바깥 사원의 부서 평균</td></tr></tbody></table><table class="xl-sheet" hidden><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" class="c">empname</td><td data-r="B1" class="k">dno</td><td data-r="C1" class="c">salary</td><td data-r="D1" class="c">그 부서 평균</td><td data-r="E1" class="c">salary &gt; 평균 ?</td></tr><tr><th>2</th><td data-r="A2">김상원</td><td data-r="B2" class="num">1</td><td data-r="C2" class="num">1500000</td><td data-r="D2" class="num">2250000</td><td data-r="E2" class="r">✕</td></tr><tr><th>3</th><td data-r="A3" class="y">박영권</td><td data-r="B3" class="num">1</td><td data-r="C3" class="y num">3000000</td><td data-r="D3" class="num">2250000</td><td data-r="E3" class="y">⭕</td></tr><tr><th>4</th><td data-r="A4">조민희</td><td data-r="B4" class="num">2</td><td data-r="C4" class="num">3000000</td><td data-r="D4" class="num">3500000</td><td data-r="E4" class="r">✕</td></tr><tr><th>5</th><td data-r="A5">김창섭</td><td data-r="B5" class="num">2</td><td data-r="C5" class="num">2500000</td><td data-r="D5" class="num">3500000</td><td data-r="E5" class="r">✕</td></tr><tr><th>6</th><td data-r="A6" class="y">이성래</td><td data-r="B6" class="num">2</td><td data-r="C6" class="y num">5000000</td><td data-r="D6" class="num">3500000</td><td data-r="E6" class="y">⭕</td></tr><tr><th>7</th><td data-r="A7" class="y">이수민</td><td data-r="B7" class="num">3</td><td data-r="C7" class="y num">4000000</td><td data-r="D7" class="num">2750000</td><td data-r="E7" class="y">⭕</td></tr><tr><th>8</th><td data-r="A8">최종철</td><td data-r="B8" class="num">3</td><td data-r="C8" class="num">1500000</td><td data-r="D8" class="num">2750000</td><td data-r="E8" class="r">✕</td></tr><tr><th>9</th><td data-r="A9"></td><td data-r="B9"></td><td data-r="C9"></td><td data-r="D9"></td><td data-r="E9"></td></tr><tr><th>10</th><td data-r="A10" colspan="5">→ 박영권 · 이성래 · 이수민 (3행) · 바깥 행마다 괄호 안을 다시 실행 = 상관 중첩 질의</td></tr></tbody></table></div><div class="xl-tabs"><button type="button" class="on">부서별 평균</button><button type="button">바깥 행마다 비교</button></div></div>
+</section>
+<section class="card" id="s9">
+<h2>7. 📝 과제 — [과제2] univDB · [자유과제1] · [자유과제2] (네이버 카페 · 마감 12/5(토))</h2>
+<ul><li>📷 노션 사진 — “1. [과제2]: <b>배점 10점</b> · 2. [자유과제1][자유과제2] 네이버카페에 제출 ⇒ <b>12/5 (토)</b>”</li><li>수업요약 — “다음 SQL 문법을 <b>문제와 답, 실행결과</b>를 작성한다 (실행결과는 <b>부분화면캡처</b> 하여 제출)” · 워드 없이 카페 글에 SQL + 캡처</li><li>[자유과제1] department · employee 1) ~ 19) (강의자료 42 ~ 46쪽 — 12주차 [Quiz 1] · 16-1 UNION · 17 · 18 self join · 19 ORDER BY) · [자유과제2] 교재 5장 [실습 5] 서브질의 예제5-17a ~ e (강의자료 48 ~ 50쪽 — IN · 서브질의 · 중첩서브질의 · EXISTS · NOT EXISTS)</li><li>학교에서 만든 카페 글 · 캡처 26장은 13주차 폴더 <code>자유과제/</code> 에 있어요 (답은 여기 안 옮겼어요)</li></ul>
+</section>
+<section class="card" id="s10">
+<h2>⚠️ 정정 · 팩트체크</h2>
+<ul><li>✍️ 엑셀 Quiz 1-2 차수 <b>18</b> (<code>=5+4+9</code>) → <b>9</b> (카티션 프로덕트의 차수 = 5 + 4) · 정답 ④ 24, 9</li><li>✍️ 엑셀 Quiz 1-3 — ∩ 20 → <b>5</b> · − (−5) → <b>5</b> (R1 에만 있는 투플 10 − 5) · ∪ 25 → <b>20</b> (공통 5 를 한 번만) · 옳지 않은 것 = <b>④</b></li><li>✍️ 엑셀 Quiz 1-1 1) 자연조인 표가 a 한 행에서 멈춤 → <b>3행</b> (a · b · c) · 자연조인 결과는 B 가 한 번 (3열)</li><li>강의자료 31쪽 25번 답 → 그대로 치면 <b>ERROR 1054</b> (MySQL 8.0.46 · 8.4) → 바깥 별칭 E 를 빼거나 <code>dno = E.dno</code> (6번)</li><li>강의자료 3쪽 · 수업요약 [실습 1-1] <code>insert into 부서 valus('FF','홍보부');</code> → <b>values</b> 오타 (그대로 치면 ERROR 1064)</li><li>강의자료 40쪽 3-5 답 <code>select sname, dept, sage</code> — 문제는 “이름, 나이” (✍️ 내 답 <code>SELECT sname, sage</code> 가 문제에 맞음)</li><li>강의자료 35 · 41쪽 표 제목은 <b>prof</b> · 실습 SQL 의 테이블 이름은 <b>pro</b> (<code>pro(pno, pname, dept, page)</code>) — SQL 은 pro 로</li><li>자체조인 표 이름 — 수업요약 <code>emp</code> · 실습 SQL(week13db) <code>emps</code> (week13db 의 emp 는 관계대수용 <code>emp(ename, pno)</code>) · ✍️ 내 SQL 은 emps</li><li>✍️ 엑셀 Quiz2-2 시트의 초안 <code>WHERE A.추천고객 ,B.고객아이디;</code> → <code>=</code> 대신 쉼표라 오류 · 별칭 <code>추천고명</code> 오타 → 노션 최종 SQL(<code>ON A.추천고객=B.고객아이디</code> · <code>추천고객명</code>)은 맞음</li><li><code>FULL OUTER JOIN</code> — MySQL 에는 없음 (ERROR 1064 · 8.0.46 · 8.4) → <b>왼쪽 외부조인 UNION 오른쪽 외부조인</b></li><li>용어 철자 — ✍️ 카디너리티 · 엑셀 카디날리티 · 강의자료 카디널리티 = 모두 cardinality (행 수)</li></ul>
+<details class="wk-details">
+<summary>✍️ 수업 중 원본 필기 (노션 그대로)</summary>
+<pre><code class="language-text">시험출제{
+dy262DB1-SQL실습04-w13-stu(Quiz1-1-join-stu)
+(📷 사진: 수업 화면 — 기말고사 교재: 4,5,6장 · [과제2] univDB(학생, 수강, 과목) · [공지] (1교시) [실습용] 13주차(부서,사원))
+12주차 위주 공부
+자연조인,왼쪽조인,오른쪽조인
+강의자료 30,31페이지 다음주에 수업하고 시험에 출제함
+    }
+시험 미출제{
+dy262DB1-SQL실습04-w13-stu(Quiz1-2-quiz-stu)
+집합
+자체조인
+    }</code></pre>
+<pre><code class="language-sql">[용어] 관계형 데이터 모델
+# 차수: 필드의 개수
+# 카디너리티: 레코드의 개수
+
+[용어] 관계대수 (UNION은 시험에 나옴)
+1.집합
+합집합 UNION UNION ALL
+R 카디널리티 차수
+
+#자체조인
+
+기말고사:120점 만점
+1.SQL 문법과 실행결과 8문제 (과제 2유형: 학생,수강,과목)
+   1.1 8문제 = 80점 (강의자료 10페이지 등등)
+2.왼쪽,오른쪽,완전조인 실행결과 작성하기 -&gt; 오늘 수업
+3.관계대수 -&gt; 공부하지 말고 15주차(시험당일)에공개함
+4.SQL 실행결과
+#하위질의 12주차: 필수로 시험에 출제함
+13주차
+4번 실행결과 작성하기
+#하위질의 12,13주차 수업
+#중첩질의 13주차 수업
+#상관중첩질의 14주차 수업</code></pre>
+<pre><code class="language-sql">-- 사원명과 관리자명을 검색하라.
+SELECT E.empname AS 사원명 ,M.empname AS 관리자명
+FROM emps E,emps M
+WHERE E.manager=M.empno;
+
+-- 모든 고객명과 추천고객명을 검색하라.
+SELECT A.고객이름 AS 고객명,B.고객이름 AS 추천고객명
+FROM 추천고객 A LEFT OUTER JOIN 추천고객 B
+ON A.추천고객=B.고객아이디;
+-- [실습 3-1] 중첩질의(sub query)
+-- stu(sno, sname, dept, sage)
+-- pro(pno, pname, dept, page)
+
+-- 3-1) 교수 테이블에서 이정무 의 학과와 같은 학생 이름, 학과, 나이를 검색하라
+SELECT sname, dept, sage
+FROM stu
+WHERE dept IN (SELECT dept
+               FROM pro
+               WHERE pname = '이정무');
+-- 3-2) 교수 테이블에서 pno 가 p1 이거나 p2 인 학과와 같은 학생 이름, 학과, 나이를 검색하라
+SELECT sname, dept, sage
+FROM stu
+WHERE dept IN (SELECT dept
+               FROM pro
+               WHERE pno IN('p1','p2'));
+-- 3-3) 학생 테이블과 교수 테이블에서 모든 학생들보다 나이가 많은 교수의
+-- 교번, 이름, 나이를 ALL 구문을 이용하여 검색하라
+SELECT pno, pname, page
+FROM pro
+WHERE page&gt;ALL (SELECT sage FROM stu);
+-- 3-4) 학생 테이블과 교수 테이블에서 한 명 이상 교수보다 
+-- 나이가 많은 학생이 있을 경우 학생의 학번, 이름, 나이를 SOME 구문으로 검색하라
+SELECT sno, sname, sage
+FROM stu
+WHERE sage &gt; SOME (SELECT page FROM pro);
+-- 위랑 아래랑 같음
+SELECT sno, sname, sage
+FROM stu
+WHERE sage &gt; ANY (SELECT page FROM pro);
+-- 3-5) 가장 나이가 많은 학생 이름, 나이를 검색하라
+SELECT sname, sage
+FROM stu
+WHERE sage = (SELECT MAX(sage) FROM stu);</code></pre>
+<div class="tip">📷 노션 사진 · 캡처 4장 — ① 수업 화면 (기말고사 교재 4 · 5 · 6장 · [과제2] univDB) ② 중첩질의 요약 메모 (ANY · ALL · SOME · =ANY · IN · NOT IN · EXISTS) + 강의자료 35쪽 stu · prof 표 ③ 강의자료 33쪽 캡처 “ANY … 한가지만 만족해도 되며 · ALL … 모두 만족시켜야 된다” ④ 공지 ([과제2] 배점 10점 · 자유과제 네이버카페 12/5(토) · 기말고사 120점 만점)</div>
+</details>
+</section>
+<section class="card" id="s11">
+<h2>✏️ 문제로 확인하기</h2>
+<ul><li><a href="../데이터베이스관리-실제시험.html">🔒 데이터베이스관리 실제시험 — 13주차 🔥 조인 카디널리티 · 하위질의 ALL · SOME · 실행결과 문제까지 시험 모드로 (관리자가 없으면 혼자 풀기)</a></li><li><a href="데이터베이스관리-15주차-기말고사.html">기말고사 시험문제 정리</a></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="데이터베이스관리-12주차.html">‹ 이전 · <b>12주차</b><br><small>🔥 엑셀 실행결과 (Quiz 6 · 7 외부조인) · 🔥 합집합 UNION · 3테이블 조인 · 🔥 하위질의</small></a><a class="next" href="데이터베이스관리-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 13주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「데이터베이스관리 · 13주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202611041620"></script>
+</body>
+</html>

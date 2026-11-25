@@ -15,7 +15,7 @@
 
     <header class="page-head">
         <h1>데이터베이스관리 · 완전 정리</h1>
-        <p>1주차 ~ 12주차 · DB 개념 + DBMS + 데이터언어 + 키 5종 + 관계형 데이터 모델 + 뷰(view) + 널 값 + INSERT + 무결성 제약조건 + SELECT · UPDATE · DELETE + ALTER · GRANT/REVOKE · 기본키 · 외래키 테이블 생성 + SELECT 심화(LIKE · ORDER BY · 집계함수 · GROUP BY · HAVING) + 관계대수(🔥 합집합 · σ · π · 조인) + 조인(내부 · 외부 · 완전 = UNION) · 🔥 직원 집계 · NULL 과 SUM · 🔥 엑셀 조인 실행결과 · 3테이블 조인 · 🔥 하위질의</p>
+        <p>1주차 ~ 13주차 · DB 개념 + DBMS + 데이터언어 + 키 5종 + 관계형 데이터 모델 + 뷰(view) + 널 값 + INSERT + 무결성 제약조건 + SELECT · UPDATE · DELETE + ALTER · GRANT/REVOKE · 기본키 · 외래키 테이블 생성 + SELECT 심화(LIKE · ORDER BY · 집계함수 · GROUP BY · HAVING) + 관계대수(🔥 합집합 · σ · π · 조인) + 조인(내부 · 외부 · 완전 = UNION) · 🔥 직원 집계 · NULL 과 SUM · 🔥 엑셀 조인 실행결과 · 3테이블 조인 · 🔥 하위질의 · 🔥 조인 카디널리티 · 하위질의 ALL · SOME · ANY</p>
     </header>
 
     <div id="week-nav" data-subject="데이터베이스관리"></div>
@@ -60,6 +60,7 @@
         <a href="#s32">32.🔥합집합·관계대수</a>
         <a href="#s33">33.🔥직원·NULL·조인</a>
         <a href="#s34">34.🔥조인결과·하위질의</a>
+        <a href="#s35">35.🔥카디널리티·ALL·SOME</a>
         <a href="#quiz">🔒실제시험</a>
     </nav>
 
@@ -1219,9 +1220,33 @@ where ( ③ ) (select * from employee E where D.deptno = E.dno);</code></pre>
         <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#subq" title="그림 — 🔥 하위질의" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#subq" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 하위질의 — 새 창으로 크게 보기</a></p></div>
     </section>
 
+    <section class="card" id="s35">
+        <h2>35. 🔥 13주차 — 조인 카디널리티 (R · S) · 하위질의 IN · ALL · SOME · ANY · 기말 120점<span class="week">13주차</span></h2>
+        <div class="tip">🔥 <span class="wk-tag note">✍️ 필기</span> — <b>“시험출제 — Quiz1-1-join-stu (R · S 조인)”</b> · <b>“12주차 위주 공부 — 자연조인 · 왼쪽조인 · 오른쪽조인”</b> · <b>“강의자료 30 · 31페이지 다음주에 수업하고 시험에 출제함”</b> (NOT EXISTS · 상관중첩질의) · 시험 미출제 — 카디널리티/차수 · 집합 · 자체조인 · <b>기말고사 120점</b> = SQL 문법 · 실행결과 8문제 80점 + 왼쪽 · 오른쪽 · 완전조인 실행결과 + 관계대수(시험 당일 공개) + SQL 실행결과(하위질의) → <a href="weeks/데이터베이스관리-13주차.html">13주차 페이지</a></div>
+        <table class="ref">
+            <tr><th>🔥 Quiz 1-1 R · S (B 로 조인)</th><th>SQL</th><th>카디널리티 (행 수)</th></tr>
+            <tr><td>1) 자연조인</td><td><code>SELECT * FROM R NATURAL JOIN S;</code></td><td><b>3</b> — a 2 y · b 3 z · c 3 z (B 는 한 번)</td></tr>
+            <tr><td>2) 왼쪽 외부조인</td><td><code>… FROM R LEFT OUTER JOIN S ON R.B = S.B;</code></td><td><b>4</b> — + d 5 NULL NULL</td></tr>
+            <tr><td>(오른쪽 외부조인)</td><td><code>… FROM R RIGHT OUTER JOIN S ON R.B = S.B;</code></td><td>4 — + NULL NULL 1 x</td></tr>
+            <tr><td>3) 완전 외부조인</td><td>왼쪽 <code>UNION</code> 오른쪽 (MySQL 은 FULL OUTER JOIN 없음)</td><td><b>5</b></td></tr>
+        </table>
+        <table class="ref">
+            <tr><th>🔥 실습 3-1 중첩질의 (stu · pro)</th><th>✍️ SQL</th><th>결과 (MySQL)</th></tr>
+            <tr><td>3-1) 이정무의 학과와 같은 학생</td><td><code>WHERE dept IN (SELECT dept FROM pro WHERE pname = '이정무')</code></td><td>유준호 · 오정민</td></tr>
+            <tr><td>3-3) 모든 학생보다 나이 많은 교수 (ALL)</td><td><code>WHERE page &gt; ALL (SELECT sage FROM stu)</code></td><td>p1 이정무 36 · p3 이성민 45 (34 보다 큼)</td></tr>
+            <tr><td>3-4) 한 명 이상 교수보다 나이 많은 학생 (SOME = ANY)</td><td><code>WHERE sage &gt; SOME (SELECT page FROM pro)</code></td><td>s2 오정민 34 (32 보다 큼)</td></tr>
+            <tr><td>3-5) 가장 나이 많은 학생</td><td><code>WHERE sage = (SELECT MAX(sage) FROM stu)</code></td><td>오정민 34</td></tr>
+            <tr><td>🔥 [Quiz 13-04] 실행 결과는?</td><td><code>SELECT B FROM R1 WHERE C IN (SELECT C FROM R2 WHERE D = 'k');</code></td><td><b>a · b</b> (괄호 안 = x · y)</td></tr>
+        </table>
+        <div class="tip">ANY · SOME = 하나라도 만족 · ALL = 모두 만족 · <code>IN</code> = <code>= ANY</code> · <code>NOT IN</code> = <code>&lt;&gt; ALL</code> · 차수 = 필드 개수 · 카디널리티 = 레코드 개수 (R × S → 행 곱 · 열 합) · ⚠️ 강의자료 31쪽 상관중첩질의 답은 그대로 치면 ERROR 1054 → 바깥 별칭 E 를 빼거나 <code>WHERE dno = E.dno</code> → 이수민 · 박영권 · 이성래</div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#q11rs" title="그림 — 🔥 R · S 조인 카디널리티" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#q11rs" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 R · S 조인 카디널리티 — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#anyall" title="그림 — 🔥 ALL · SOME(ANY)" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#anyall" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 ALL · SOME(ANY) — 새 창으로 크게 보기</a></p></div>
+        <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="weeks/anim/데이터베이스관리-그림정리.html#q1304" title="그림 — 🔥 Quiz 13-04 서브질의" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p style="text-align:right;margin:4px 0 10px;"><a href="weeks/anim/데이터베이스관리-그림정리.html#q1304" target="_blank" rel="noopener" style="display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🎨 그림 — 🔥 Quiz 13-04 서브질의 — 새 창으로 크게 보기</a></p></div>
+    </section>
+
     <section class="card" id="quiz">
         <h2>🔒 퀴즈 → 실제시험으로 옮겼어요</h2><span id="output"></span><span id="code"></span>
-        <div class="tip">이 과목의 퀴즈(객관식 51 · 주관식 51 · 출력결과 28 · 코드 작성 30 · 총 160문제 · 12주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
+        <div class="tip">이 과목의 퀴즈(객관식 56 · 주관식 56 · 출력결과 31 · 코드 작성 32 · 총 175문제 · 13주차까지)는 스터디 <b>실제시험</b>으로 옮겼어요 (2026-10-07). 시험 모드로 풀어요 — 관리자가 접속해 있지 않으면 <b>혼자 풀기</b>로 바로 풀 수 있고, 제출하면 정답과 풀이를 볼 수 있어요.</div>
         <p class="wk-lockbtn" style="text-align:left"><a href="데이터베이스관리-실제시험.html" style="display:inline-block;font-size:14px;font-weight:800;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);text-decoration:none;">🔒 실제시험 열기</a></p>
     </section>
 
