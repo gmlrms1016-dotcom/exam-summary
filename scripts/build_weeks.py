@@ -15,7 +15,8 @@
 - `:::toc` 한 줄 = 그 자리에 ‘바로 가기’ 칩 (이 원고의 `## ` 절 목록 · 누르면 그 카드로 이동 · 긴 중간고사 정리용)
 - `🎬 [이름](주소)` 한 줄 = 그 자리에 애니메이션 · 데모 페이지를 끼워 넣음(iframe · 주소는 주차 페이지 기준) + 아래에 '새 창으로 크게 보기' 버튼
 - ```sheet 제목 = 📗 엑셀 모양 표 (교수님 엑셀 설명처럼 · 2026-11-24 사용자: “엑셀로 설명이 있으면 좋겠어”) — 한 줄 = 한 행 · `|` 로 칸 나눔(칸 안의 | 는 \\|) · `--- 탭 이름` 줄 = 아래 시트 탭을 하나 더(누르면 바뀜) · 칸을 누르면 위 수식 줄에 그 칸 내용
-  칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{2}`~`{9}` 칸 합치기(오른쪽으로 N칸) · 칸 끝 `{=4*6}` = 엑셀 수식(칸에는 값 · 누르면 수식 줄에 =4*6)
+  칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{2}`~`{99}` 칸 합치기(오른쪽으로 N칸) · 칸 끝 `{=4*6}` = 엑셀 수식(칸에는 값 · 누르면 수식 줄에 =4*6)
+  ✏️ 입력 칸 (2026-11-25 사용자: “문제를 만들고 푸는 방식이 입력이 되고 채점이 되었으면”): `{?24}` = 답을 쓰는 칸(그 자리 그대로 채점 · `/` 로 여러 정답) · `{?~김광식}` = 행 순서와 상관없이 채점하는 결과 표 칸(그 탭에서 ~ 칸이 있는 행끼리 한 행씩 비교 · 빈 행은 `{?~}`) → 입력 칸이 있으면 제목 줄에 ✔ 채점 · 정답 · 다시 버튼
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
 원고 파일이 있는 주차만 과목 페이지에서 버튼이 열리고, 나머지는 잠깁니다.
 """
@@ -185,13 +186,42 @@ def render_exam(block):
     return "".join(out)
 
 
-XL_JS = ('<script data-xl-js>(function(){if(window.__xl)return;window.__xl=1;document.addEventListener("click",function(e){'
-         'var t=e.target.closest&&e.target.closest(".xl-tabs button");if(t){var x=t.closest(".xl"),i=[].indexOf.call(t.parentNode.children,t);'
-         'x.querySelectorAll(".xl-tabs button").forEach(function(b,k){b.classList.toggle("on",k===i);});'
-         'x.querySelectorAll(".xl-sheet").forEach(function(s,k){s.hidden=k!==i;});'
-         'x.querySelectorAll("td.sel").forEach(function(c){c.classList.remove("sel");});x.querySelector(".xl-ref").textContent="A1";x.querySelector(".xl-f").textContent="";return;}'
-         'var c=e.target.closest&&e.target.closest(".xl td");if(c){var y=c.closest(".xl");y.querySelectorAll("td.sel").forEach(function(d){d.classList.remove("sel");});'
-         'c.classList.add("sel");y.querySelector(".xl-ref").textContent=c.dataset.r;y.querySelector(".xl-f").textContent=c.dataset.f||c.textContent;}});})();</script>')
+XL_JS = r"""<script data-xl-js>(function(){if(window.__xl)return;window.__xl=1;
+function xn(s){s=String(s==null?"":s).normalize("NFKC").trim().toLowerCase().replace(/\s+/g,"");s=s.replace(/(개|행)$/,"");if(s==="(null)"||s==="널")s="null";return s;}
+function alts(i){return i.getAttribute("data-ans").split("/").map(xn);}
+function bar(x,c){x.querySelector(".xl-ref").textContent=c.dataset.r;var i=c.querySelector("input");x.querySelector(".xl-f").textContent=i?(i.value||"✏️ 입력 칸"):(c.dataset.f||c.textContent);}
+function sel(x,c){x.querySelectorAll("td.sel").forEach(function(d){d.classList.remove("sel");});c.classList.add("sel");bar(x,c);}
+function gradeTab(t){var ins=[].slice.call(t.querySelectorAll("input.xl-in"));if(!ins.length)return null;var ok=true,bad=0,miss=0;
+ ins.forEach(function(i){i.classList.remove("ok","no");});
+ ins.filter(function(i){return !i.dataset.free;}).forEach(function(i){var g=alts(i).indexOf(xn(i.value))>=0;i.classList.add(g?"ok":"no");if(!g){ok=false;bad++;}});
+ var rows=[];[].slice.call(t.querySelectorAll("tr")).forEach(function(tr){var f=[].slice.call(tr.querySelectorAll("input.xl-in[data-free]"));if(f.length)rows.push(f);});
+ if(rows.length){var exp=[];rows.forEach(function(f){var e=f.map(function(i){return alts(i)[0];});if(e.join("")!=="")exp.push(e.join("\u0001"));});
+  rows.forEach(function(f){var u=f.map(function(i){return xn(i.value);});if(u.join("")==="")return;var k=u.join("\u0001"),p=exp.indexOf(k);
+   if(p>=0){exp.splice(p,1);f.forEach(function(i){i.classList.add("ok");});}else{ok=false;bad++;f.forEach(function(i){i.classList.add("no");});}});
+  if(exp.length){ok=false;miss=exp.length;}}
+ return {ok:ok,bad:bad,miss:miss};}
+document.addEventListener("click",function(e){
+ var t=e.target.closest&&e.target.closest(".xl-tabs button");if(t){var x=t.closest(".xl"),i=[].indexOf.call(t.parentNode.children,t);
+  x.querySelectorAll(".xl-tabs button").forEach(function(b,k){b.classList.toggle("on",k===i);});
+  x.querySelectorAll(".xl-sheet").forEach(function(s,k){s.hidden=k!==i;});
+  x.querySelectorAll("td.sel").forEach(function(c){c.classList.remove("sel");});x.querySelector(".xl-ref").textContent="A1";x.querySelector(".xl-f").textContent="";return;}
+ var b=e.target.closest&&e.target.closest(".xl-act button");if(b){var x=b.closest(".xl"),tabs=[].slice.call(x.querySelectorAll(".xl-tabs button")),sh=[].slice.call(x.querySelectorAll(".xl-sheet")),msg=x.querySelector(".xl-msg");
+  if(b.classList.contains("xl-chk")){var n=0,good=0,parts=[];sh.forEach(function(s,k){var tb=tabs[k];if(!tb.dataset.l)tb.dataset.l=tb.textContent;var r=gradeTab(s);if(!r){tb.textContent=tb.dataset.l;return;}
+    var lb=tb.dataset.l.replace(/^✏️\s*/,"");if(![].some.call(s.querySelectorAll("input.xl-in"),function(i){return i.value.trim();})){tb.textContent=tb.dataset.l;parts.push(lb+" (아직 안 씀)");n++;return;}
+    n++;if(r.ok)good++;tb.textContent=(r.ok?"✅ ":"❌ ")+lb;parts.push(lb+(r.ok?" ✅":" ❌"+(r.bad?" 틀린 칸·행 "+r.bad:"")+(r.miss?" · 빠진 행 "+r.miss:"")));});
+   msg.innerHTML="<b>"+good+" / "+n+"</b> 맞음 — "+parts.join(" · ");msg.classList.toggle("all",good===n);return;}
+  if(b.classList.contains("xl-show")){var s=sh.filter(function(s){return !s.hidden;})[0];var ins=s.querySelectorAll("input.xl-in");if(!ins.length){msg.textContent="이 탭에는 입력 칸이 없어요 — ✏️ 탭에서 눌러 주세요";return;}
+   ins.forEach(function(i){i.value=i.getAttribute("data-ans").split("/")[0];i.classList.remove("ok","no");i.classList.add("shown");});return;}
+  if(b.classList.contains("xl-rst")){x.querySelectorAll("input.xl-in").forEach(function(i){i.value="";i.classList.remove("ok","no","shown");});tabs.forEach(function(tb){if(tb.dataset.l)tb.textContent=tb.dataset.l;});
+   msg.classList.remove("all");msg.innerHTML="✏️ 다시 풀어 보세요 — 칸에 답을 쓰고 <b>✔ 채점</b>";return;}}
+ var c=e.target.closest&&e.target.closest(".xl td");if(c){sel(c.closest(".xl"),c);}});
+document.addEventListener("input",function(e){var i=e.target;if(!i.classList||!i.classList.contains("xl-in"))return;i.classList.remove("ok","no","shown");var c=i.closest("td");bar(c.closest(".xl"),c);});
+document.addEventListener("focusin",function(e){var i=e.target;if(!i.classList||!i.classList.contains("xl-in"))return;var c=i.closest("td");sel(c.closest(".xl"),c);});
+document.addEventListener("keydown",function(e){var i=e.target;if(e.key!=="Enter"||e.isComposing||!i.classList||!i.classList.contains("xl-in"))return;e.preventDefault();
+ var td=i.closest("td"),col=td.dataset.r.replace(/\d+/g,""),tr=td.parentElement,nx=e.shiftKey?tr.previousElementSibling:tr.nextElementSibling;
+ while(nx){var cs=[].slice.call(nx.querySelectorAll("td"));for(var q=0;q<cs.length;q++){if(cs[q].dataset.r&&cs[q].dataset.r.replace(/\d+/g,"")===col){var c=cs[q].querySelector("input.xl-in");if(c){c.focus();c.select();return;}}}nx=e.shiftKey?nx.previousElementSibling:nx.nextElementSibling;}
+ if(!e.shiftKey)i.closest(".xl").querySelector(".xl-chk").click();});
+})();</script>"""
 
 
 def xl_col(n):
@@ -214,7 +244,7 @@ def render_sheet(title, lines):
         else:
             cur.append(ln)
     sheets.append((name or "Sheet1", cur))
-    tabs, tables = [], []
+    tabs, tables, has_in = [], [], False
     for k, (nm, rows) in enumerate(sheets):
         grid = []
         for ln in rows:
@@ -224,7 +254,7 @@ def render_sheet(title, lines):
                 c = c.strip()
                 cls, span = [], 1
                 while True:
-                    m = re.match(r"\{([ybhkcrn]|[2-9])\}", c)
+                    m = re.match(r"\{([ybhkcrn]|[2-9]|[1-9]\d)\}", c)
                     if not m:
                         break
                     v = m.group(1)
@@ -233,32 +263,48 @@ def render_sheet(title, lines):
                     else:
                         cls.append(v)
                     c = c[m.end():]
+                im = re.fullmatch(r"\{\?(~?)([^{}]*)\}", c)
+                if im:
+                    out.append(("", cls + ["in"], span, None, (im.group(2).strip(), im.group(1) == "~")))
+                    has_in = True
+                    continue
                 fm = re.match(r"^(.*?)\s*\{(=[^{}]+)\}$", c)
                 f = None
                 if fm:
                     c, f = fm.group(1), fm.group(2)
                 if re.fullmatch(r"[+-]?\d+(\.\d+)?", c):
                     cls.append("num")
-                out.append((c, cls, span, f))
+                out.append((c, cls, span, f, None))
             grid.append(out)
-        ncol = max([sum(sp for _, _, sp, _ in r) for r in grid] + [1])
+        ncol = max([sum(sp for _, _, sp, _, _ in r) for r in grid] + [1])
         h = ['<table class="xl-sheet"%s><thead><tr><th class="xl-corner"></th>%s</tr></thead><tbody>' % (
             "" if k == 0 else " hidden", "".join("<th>%s</th>" % xl_col(j) for j in range(ncol)))]
         for ri, r in enumerate(grid, 1):
             tds, col = [], 0
-            for c, cls, sp, f in r:
+            for c, cls, sp, f, inp in r:
+                body = html.escape(c, quote=False)
+                if inp:
+                    body = ('<input type="text" class="xl-in" data-ans="%s"%s autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="%s%d 칸">'
+                            % (html.escape(inp[0]), ' data-free="1"' if inp[1] else "", xl_col(col), ri))
                 tds.append('<td data-r="%s%d"%s%s%s>%s</td>' % (xl_col(col), ri, ' class="%s"' % " ".join(cls) if cls else "",
                                                             ' colspan="%d"' % sp if sp > 1 else "",
-                                                            ' data-f="%s"' % html.escape(f) if f else "", html.escape(c, quote=False)))
+                                                            ' data-f="%s"' % html.escape(f) if f else "", body))
                 col += sp
             tds += ['<td data-r="%s%d"></td>' % (xl_col(j), ri) for j in range(col, ncol)]
             h.append("<tr><th>%d</th>%s</tr>" % (ri, "".join(tds)))
         h.append("</tbody></table>")
         tables.append("".join(h))
         tabs.append('<button type="button"%s>%s</button>' % (' class="on"' if k == 0 else "", html.escape(nm)))
-    return ('<div class="xl"><div class="xl-head"><span class="xl-logo">X</span><span>%s</span></div>'
+    act = msg = ""
+    if has_in:
+        act = ('<span class="xl-act"><button type="button" class="xl-chk">✔ 채점</button>'
+               '<button type="button" class="xl-show">정답</button><button type="button" class="xl-rst">다시</button></span>')
+        msg = ('<div class="xl-msg">✏️ 초록 칸에 답을 쓰고 <b>✔ 채점</b> — 탭마다 채점해요 · Enter = 아래 칸 (마지막 칸에서 Enter = 채점) · '
+               '결과 표는 행 순서 상관없어요 · 빈 값은 NULL · <b>정답</b> = 지금 탭의 답 보기</div>')
+    return ('<div class="xl%s"><div class="xl-head"><span class="xl-logo">X</span><span>%s</span>%s</div>'
             '<div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div>'
-            '<div class="xl-wrap">%s</div><div class="xl-tabs">%s</div></div>') % (html.escape(title or "엑셀로 보기"), "".join(tables), "".join(tabs))
+            '<div class="xl-wrap">%s</div>%s<div class="xl-tabs">%s</div></div>') % (" xl-q" if has_in else "", html.escape(title or "엑셀로 보기"), act,
+                                                                            "".join(tables), msg, "".join(tabs))
 
 
 def render_md(md):
@@ -489,6 +535,19 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 .xl-tabs{display:flex;gap:2px;padding:4px 8px 0;border-top:1px solid var(--line);background:rgba(128,128,128,.08);overflow-x:auto;}
 .xl-tabs button{border:0;border-bottom:2px solid transparent;background:transparent;color:inherit;font:inherit;font-size:12.5px;padding:4px 10px;border-radius:4px 4px 0 0;cursor:pointer;opacity:.75;white-space:nowrap;}
 .xl-tabs button.on{opacity:1;font-weight:800;color:#21a366;border-bottom-color:#21a366;background:var(--card);}
+.xl-head{flex-wrap:wrap;}
+.xl-act{margin-left:auto;display:flex;gap:4px;}
+.xl-act button{border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.14);color:#fff;font:inherit;font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;cursor:pointer;}
+.xl-act button.xl-chk{background:#fff;color:#217346;}
+.xl-sheet td.in{padding:0;background:rgba(33,163,102,.10);}
+.xl-in{display:block;width:100%;min-width:58px;box-sizing:border-box;border:0;background:transparent;color:inherit;font:inherit;padding:3px 6px;height:24px;outline:none;}
+.xl-in:focus{background:rgba(33,163,102,.18);}
+.xl-in.ok{background:rgba(48,164,108,.32);}
+.xl-in.no{background:rgba(229,72,77,.30);}
+.xl-in.shown{color:#8a8f98;font-style:italic;}
+.xl-msg{padding:6px 10px;border-top:1px solid var(--line);font-size:13px;line-height:1.6;}
+.xl-msg.all{color:#21a366;font-weight:700;}
+@media (pointer:coarse){.xl-in{font-size:16px;height:28px;}}
 """
 
 PAGE = """<!DOCTYPE html>

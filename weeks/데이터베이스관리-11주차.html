@@ -111,6 +111,19 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 .xl-tabs{display:flex;gap:2px;padding:4px 8px 0;border-top:1px solid var(--line);background:rgba(128,128,128,.08);overflow-x:auto;}
 .xl-tabs button{border:0;border-bottom:2px solid transparent;background:transparent;color:inherit;font:inherit;font-size:12.5px;padding:4px 10px;border-radius:4px 4px 0 0;cursor:pointer;opacity:.75;white-space:nowrap;}
 .xl-tabs button.on{opacity:1;font-weight:800;color:#21a366;border-bottom-color:#21a366;background:var(--card);}
+.xl-head{flex-wrap:wrap;}
+.xl-act{margin-left:auto;display:flex;gap:4px;}
+.xl-act button{border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.14);color:#fff;font:inherit;font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;cursor:pointer;}
+.xl-act button.xl-chk{background:#fff;color:#217346;}
+.xl-sheet td.in{padding:0;background:rgba(33,163,102,.10);}
+.xl-in{display:block;width:100%;min-width:58px;box-sizing:border-box;border:0;background:transparent;color:inherit;font:inherit;padding:3px 6px;height:24px;outline:none;}
+.xl-in:focus{background:rgba(33,163,102,.18);}
+.xl-in.ok{background:rgba(48,164,108,.32);}
+.xl-in.no{background:rgba(229,72,77,.30);}
+.xl-in.shown{color:#8a8f98;font-style:italic;}
+.xl-msg{padding:6px 10px;border-top:1px solid var(--line);font-size:13px;line-height:1.6;}
+.xl-msg.all{color:#21a366;font-weight:700;}
+@media (pointer:coarse){.xl-in{font-size:16px;height:28px;}}
 </style>
 </head>
 <body>
@@ -270,6 +283,44 @@ select sum(col2) + sum(col3) from tab1;                      -- ④ 열마다 �
 </tbody></table>
 <div class="tip">6쪽 정리 — 1. <b>컬럼 간 연산</b>할 때 NULL 이 포함되면 항상 <b>NULL</b> 을 반환 · 2. 집계함수(SUM() · AVG() · MIN() · MAX() · COUNT())는 여러 행을 읽어 집계할 때 <b>NULL 값을 연산 대상에서 제외</b> (결과는 정상 반환)</div>
 <div class="tip">✍️ 엑셀 답 “① X 90나옴 · ② X 140 나옴 · ③ O 90나옴 · ④ X 110나옴” → 전부 ✅ (MySQL 로 확인) · 정답 <b>③</b> · 🤖 ② 의 185 = 10 + 20 + 15 + 50 + 70 + 20 (NULL 을 0 처럼 보고 다 더한 값) 함정 — 실제로는 1 · 2행 전체가 NULL 이 되어 합에서 빠져요.</div>
+<h3>📗 교수님 엑셀로 직접 풀기 — 실제 결과 · O X · 정답 번호를 쓰고 ✔ 채점</h3>
+<div class="xl xl-q"><div class="xl-head"><span class="xl-logo">X</span><span>dy262DB1-SQL실습02-w11 — 🔥 Quiz 11-3 NULL 과 SUM (기말고사 시험문제) · ✏️ 직접 풀고 채점</span><span class="xl-act"><button type="button" class="xl-chk">✔ 채점</button><button type="button" class="xl-show">정답</button><button type="button" class="xl-rst">다시</button></span></div><div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-fx">fx</span><span class="xl-f"></span></div><div class="xl-wrap"><table class="xl-sheet"><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" colspan="3">tab1 (각 칼럼의 타입은 number)</td><td data-r="D1"></td><td data-r="E1" class="r" colspan="5">중요! 기말고사 시험문제</td></tr><tr><th>2</th><td data-r="A2" class="c">col1</td><td data-r="B2" class="c">col2</td><td data-r="C2" class="c">col3</td><td data-r="D2"></td><td data-r="E2"></td><td data-r="F2"></td><td data-r="G2"></td><td data-r="H2"></td><td data-r="I2"></td></tr><tr><th>3</th><td data-r="A3" class="num">10</td><td data-r="B3" class="num">20</td><td data-r="C3">NULL</td><td data-r="D3"></td><td data-r="E3"></td><td data-r="F3"></td><td data-r="G3"></td><td data-r="H3"></td><td data-r="I3"></td></tr><tr><th>4</th><td data-r="A4" class="num">15</td><td data-r="B4">NULL</td><td data-r="C4">NULL</td><td data-r="D4"></td><td data-r="E4"></td><td data-r="F4"></td><td data-r="G4"></td><td data-r="H4"></td><td data-r="I4"></td></tr><tr><th>5</th><td data-r="A5" class="num">50</td><td data-r="B5" class="num">70</td><td data-r="C5" class="num">20</td><td data-r="D5"></td><td data-r="E5"></td><td data-r="F5"></td><td data-r="G5"></td><td data-r="H5"></td><td data-r="I5"></td></tr><tr><th>6</th><td data-r="A6"></td><td data-r="B6"></td><td data-r="C6"></td><td data-r="D6"></td><td data-r="E6"></td><td data-r="F6"></td><td data-r="G6"></td><td data-r="H6"></td><td data-r="I6"></td></tr><tr><th>7</th><td data-r="A7" class="c">보기</td><td data-r="B7" class="c" colspan="5">설명</td><td data-r="G7" class="c">실제 결과</td><td data-r="H7" class="c">O · X</td><td data-r="I7"></td></tr><tr><th>8</th><td data-r="A8">①</td><td data-r="B8" colspan="5">select sum(col2) from tab1 의 결과는 NULL 이다.</td><td data-r="G8" class="in"><input type="text" class="xl-in" data-ans="90" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G8 칸"></td><td data-r="H8" class="in"><input type="text" class="xl-in" data-ans="X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H8 칸"></td><td data-r="I8"></td></tr><tr><th>9</th><td data-r="A9">②</td><td data-r="B9" colspan="5">select sum(col1 + col2 + col3) from tab1 의 결과는 185 이다.</td><td data-r="G9" class="in"><input type="text" class="xl-in" data-ans="140" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G9 칸"></td><td data-r="H9" class="in"><input type="text" class="xl-in" data-ans="X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H9 칸"></td><td data-r="I9"></td></tr><tr><th>10</th><td data-r="A10">③</td><td data-r="B10" colspan="5">select sum(col2 + col3) from tab1 의 결과는 90 이다.</td><td data-r="G10" class="in"><input type="text" class="xl-in" data-ans="90" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G10 칸"></td><td data-r="H10" class="in"><input type="text" class="xl-in" data-ans="O/○/⭕" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H10 칸"></td><td data-r="I10"></td></tr><tr><th>11</th><td data-r="A11">④</td><td data-r="B11" colspan="5">select sum(col2) + sum(col3) from tab1 의 결과는 90 이다.</td><td data-r="G11" class="in"><input type="text" class="xl-in" data-ans="110" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G11 칸"></td><td data-r="H11" class="in"><input type="text" class="xl-in" data-ans="X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H11 칸"></td><td data-r="I11"></td></tr><tr><th>12</th><td data-r="A12"></td><td data-r="B12"></td><td data-r="C12"></td><td data-r="D12"></td><td data-r="E12"></td><td data-r="F12"></td><td data-r="G12"></td><td data-r="H12"></td><td data-r="I12"></td></tr><tr><th>13</th><td data-r="A13" class="n" colspan="7">→ 가장 적절한 것은? (번호)</td><td data-r="H13" class="in"><input type="text" class="xl-in" data-ans="③" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H13 칸"></td><td data-r="I13"></td></tr></tbody></table></div><div class="xl-msg">✏️ 초록 칸에 답을 쓰고 <b>✔ 채점</b> — 탭마다 채점해요 · Enter = 아래 칸 (마지막 칸에서 Enter = 채점) · 결과 표는 행 순서 상관없어요 · 빈 값은 NULL · <b>정답</b> = 지금 탭의 답 보기</div><div class="xl-tabs"><button type="button" class="on">✏️ Quiz 11-3</button></div></div>
+<script data-xl-js>(function(){if(window.__xl)return;window.__xl=1;
+function xn(s){s=String(s==null?"":s).normalize("NFKC").trim().toLowerCase().replace(/\s+/g,"");s=s.replace(/(개|행)$/,"");if(s==="(null)"||s==="널")s="null";return s;}
+function alts(i){return i.getAttribute("data-ans").split("/").map(xn);}
+function bar(x,c){x.querySelector(".xl-ref").textContent=c.dataset.r;var i=c.querySelector("input");x.querySelector(".xl-f").textContent=i?(i.value||"✏️ 입력 칸"):(c.dataset.f||c.textContent);}
+function sel(x,c){x.querySelectorAll("td.sel").forEach(function(d){d.classList.remove("sel");});c.classList.add("sel");bar(x,c);}
+function gradeTab(t){var ins=[].slice.call(t.querySelectorAll("input.xl-in"));if(!ins.length)return null;var ok=true,bad=0,miss=0;
+ ins.forEach(function(i){i.classList.remove("ok","no");});
+ ins.filter(function(i){return !i.dataset.free;}).forEach(function(i){var g=alts(i).indexOf(xn(i.value))>=0;i.classList.add(g?"ok":"no");if(!g){ok=false;bad++;}});
+ var rows=[];[].slice.call(t.querySelectorAll("tr")).forEach(function(tr){var f=[].slice.call(tr.querySelectorAll("input.xl-in[data-free]"));if(f.length)rows.push(f);});
+ if(rows.length){var exp=[];rows.forEach(function(f){var e=f.map(function(i){return alts(i)[0];});if(e.join("")!=="")exp.push(e.join("\u0001"));});
+  rows.forEach(function(f){var u=f.map(function(i){return xn(i.value);});if(u.join("")==="")return;var k=u.join("\u0001"),p=exp.indexOf(k);
+   if(p>=0){exp.splice(p,1);f.forEach(function(i){i.classList.add("ok");});}else{ok=false;bad++;f.forEach(function(i){i.classList.add("no");});}});
+  if(exp.length){ok=false;miss=exp.length;}}
+ return {ok:ok,bad:bad,miss:miss};}
+document.addEventListener("click",function(e){
+ var t=e.target.closest&&e.target.closest(".xl-tabs button");if(t){var x=t.closest(".xl"),i=[].indexOf.call(t.parentNode.children,t);
+  x.querySelectorAll(".xl-tabs button").forEach(function(b,k){b.classList.toggle("on",k===i);});
+  x.querySelectorAll(".xl-sheet").forEach(function(s,k){s.hidden=k!==i;});
+  x.querySelectorAll("td.sel").forEach(function(c){c.classList.remove("sel");});x.querySelector(".xl-ref").textContent="A1";x.querySelector(".xl-f").textContent="";return;}
+ var b=e.target.closest&&e.target.closest(".xl-act button");if(b){var x=b.closest(".xl"),tabs=[].slice.call(x.querySelectorAll(".xl-tabs button")),sh=[].slice.call(x.querySelectorAll(".xl-sheet")),msg=x.querySelector(".xl-msg");
+  if(b.classList.contains("xl-chk")){var n=0,good=0,parts=[];sh.forEach(function(s,k){var tb=tabs[k];if(!tb.dataset.l)tb.dataset.l=tb.textContent;var r=gradeTab(s);if(!r){tb.textContent=tb.dataset.l;return;}
+    var lb=tb.dataset.l.replace(/^✏️\s*/,"");if(![].some.call(s.querySelectorAll("input.xl-in"),function(i){return i.value.trim();})){tb.textContent=tb.dataset.l;parts.push(lb+" (아직 안 씀)");n++;return;}
+    n++;if(r.ok)good++;tb.textContent=(r.ok?"✅ ":"❌ ")+lb;parts.push(lb+(r.ok?" ✅":" ❌"+(r.bad?" 틀린 칸·행 "+r.bad:"")+(r.miss?" · 빠진 행 "+r.miss:"")));});
+   msg.innerHTML="<b>"+good+" / "+n+"</b> 맞음 — "+parts.join(" · ");msg.classList.toggle("all",good===n);return;}
+  if(b.classList.contains("xl-show")){var s=sh.filter(function(s){return !s.hidden;})[0];var ins=s.querySelectorAll("input.xl-in");if(!ins.length){msg.textContent="이 탭에는 입력 칸이 없어요 — ✏️ 탭에서 눌러 주세요";return;}
+   ins.forEach(function(i){i.value=i.getAttribute("data-ans").split("/")[0];i.classList.remove("ok","no");i.classList.add("shown");});return;}
+  if(b.classList.contains("xl-rst")){x.querySelectorAll("input.xl-in").forEach(function(i){i.value="";i.classList.remove("ok","no","shown");});tabs.forEach(function(tb){if(tb.dataset.l)tb.textContent=tb.dataset.l;});
+   msg.classList.remove("all");msg.innerHTML="✏️ 다시 풀어 보세요 — 칸에 답을 쓰고 <b>✔ 채점</b>";return;}}
+ var c=e.target.closest&&e.target.closest(".xl td");if(c){sel(c.closest(".xl"),c);}});
+document.addEventListener("input",function(e){var i=e.target;if(!i.classList||!i.classList.contains("xl-in"))return;i.classList.remove("ok","no","shown");var c=i.closest("td");bar(c.closest(".xl"),c);});
+document.addEventListener("focusin",function(e){var i=e.target;if(!i.classList||!i.classList.contains("xl-in"))return;var c=i.closest("td");sel(c.closest(".xl"),c);});
+document.addEventListener("keydown",function(e){var i=e.target;if(e.key!=="Enter"||e.isComposing||!i.classList||!i.classList.contains("xl-in"))return;e.preventDefault();
+ var td=i.closest("td"),col=td.dataset.r.replace(/\d+/g,""),tr=td.parentElement,nx=e.shiftKey?tr.previousElementSibling:tr.nextElementSibling;
+ while(nx){var cs=[].slice.call(nx.querySelectorAll("td"));for(var q=0;q<cs.length;q++){if(cs[q].dataset.r&&cs[q].dataset.r.replace(/\d+/g,"")===col){var c=cs[q].querySelector("input.xl-in");if(c){c.focus();c.select();return;}}}nx=e.shiftKey?nx.previousElementSibling:nx.nextElementSibling;}
+ if(!e.shiftKey)i.closest(".xl").querySelector(".xl-chk").click();});
+})();</script>
 </section>
 <section class="card" id="s5">
 <h2>4. [Quiz 11-4] 관계대수 — 집합 연산 R · S (강의자료 7쪽)</h2>
