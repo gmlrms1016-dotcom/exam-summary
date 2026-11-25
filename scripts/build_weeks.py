@@ -15,7 +15,7 @@
 - `:::toc` 한 줄 = 그 자리에 ‘바로 가기’ 칩 (이 원고의 `## ` 절 목록 · 누르면 그 카드로 이동 · 긴 중간고사 정리용)
 - `🎬 [이름](주소)` 한 줄 = 그 자리에 애니메이션 · 데모 페이지를 끼워 넣음(iframe · 주소는 주차 페이지 기준) + 아래에 '새 창으로 크게 보기' 버튼
 - ```sheet 제목 = 📗 엑셀 모양 표 (교수님 엑셀 설명처럼 · 2026-11-24 사용자: “엑셀로 설명이 있으면 좋겠어”) — 한 줄 = 한 행 · `|` 로 칸 나눔(칸 안의 | 는 \\|) · `--- 탭 이름` 줄 = 아래 시트 탭을 하나 더(누르면 바뀜) · 칸을 누르면 위 수식 줄에 그 칸 내용
-  칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{g}` 회색 글씨(힌트 · SQL) · `{o}` 긴 글을 엑셀처럼 오른쪽 빈 칸으로 넘쳐 보이게(열 폭은 그대로 · 모자라면 빈 열을 더 둠) · `{2}`~`{99}` 칸 합치기(오른쪽으로 N칸) · 칸 끝 `{=4*6}` = 엑셀 수식(칸에는 값 · 누르면 수식 줄에 =4*6)
+  칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{g}` 회색 글씨(힌트 · SQL) · `{m}` 코드 글꼴(줄 앞 들여쓰기는 NBSP) · `{o}` 긴 글을 엑셀처럼 오른쪽 빈 칸으로 넘쳐 보이게(열 폭은 그대로 · 모자라면 빈 열을 더 둠) · `{2}`~`{99}` 칸 합치기(오른쪽으로 N칸) · 칸 끝 `{=4*6}` = 엑셀 수식(칸에는 값 · 누르면 수식 줄에 =4*6)
   ✏️ 입력 칸 (2026-11-25 사용자: “문제를 만들고 푸는 방식이 입력이 되고 채점이 되었으면”): `{?24}` = 답을 쓰는 칸(그 자리 그대로 채점 · `/` 로 여러 정답) · `{?~김광식}` = 행 순서와 상관없이 채점하는 결과 표 칸(같은 표 안에서 ~ 칸이 있는 행끼리 한 행씩 비교 · 빈 행은 `{?~}`) → 입력 칸이 있으면 엑셀 리본(붙여넣기 · 행 삭제 · ✔ 채점 · 👁 정답 보기 · ↺ 다시 풀기)
   표 여러 개를 한 시트에 세로로 (2026-11-25 사용자: “엑셀처럼 세로로 길게해서 한꺼번에 다 보이게 · 완전외부조인 풀 때 왼쪽 · 오른쪽을 붙여넣고 중복된 걸 빼서”): `✏️ 1) 내부조인 실행결과` 처럼 **✏️ 로 시작하는 칸 = 표 제목** → 그 아래(다음 ✏️ 제목 전까지) 입력 칸이 한 문제 · 채점 · 행 삭제 · 붙여넣기 · 👁 정답 보기가 표마다 따로 · 제목 칸에 ✅ ❌
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
@@ -272,6 +272,7 @@ html[data-theme=dark] .xl-in.no{background:#5c1f26;color:#ffc2c9;}
 @media (max-width:640px){.xl-status{flex-wrap:wrap;gap:4px 10px;}.xl-zoom{display:none;}.xl-app{display:none;}}
 @media (pointer:coarse){.xl-in{font-size:16px;height:28px;}}
 .xl-sheet td.g{color:var(--xmut);}
+.xl-sheet td.m{font-family:Consolas,Menlo,"D2Coding",monospace;font-size:12.5px;}
 .xl-sheet td.xh{font-weight:700;}
 .xl-sheet td.ov{overflow:visible;}
 .xl-sheet td.ov>.ov-t{position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;padding:0 8px;white-space:pre;z-index:1;pointer-events:none;}
@@ -382,17 +383,17 @@ function init(x){if(x.__xi)return;x.__xi=1;kb(x);
   var done=function(){e.preventDefault();e.stopPropagation();};
   if(s.mode==="edit"){if(k==="Enter"&&!m){done();enter(x,e.shiftKey);return;}if(k==="Tab"){done();tab(x,e.shiftKey);return;}if(k==="Escape"){done();cancel(x);return;}
    if(s.kind==="type"&&/^Arrow/.test(k)&&!m&&!e.shiftKey){done();commit(x);move(x,k==="ArrowUp"?-1:k==="ArrowDown"?1:0,k==="ArrowLeft"?-1:k==="ArrowRight"?1:0,false);return;}
-   if(m&&k==="Enter"){done();commit(x);act(x,x.querySelector('[data-a="chk"]'));return;}e.stopPropagation();return;}
+   if(m&&k==="Enter"){done();commit(x);var cb=x.querySelector('[data-a="chk"]');if(cb)act(x,cb);return;}e.stopPropagation();return;}
   if(m&&(kl==="c"||kl==="x"||kl==="v")){e.stopPropagation();return;}
   if(m&&kl==="z"){done();undo(x,e.shiftKey);return;}if(m&&kl==="y"){done();undo(x,true);return;}
   if(m&&kl==="a"){done();var D=dims(t);s.a={r:1,c:0,w:1};s.b={r:D.R,c:D.C-1,w:1};paint(x);return;}
-  if(m&&kl==="d"){done();fillDown(x);return;}if(m&&k==="Enter"){done();act(x,x.querySelector('[data-a="chk"]'));return;}
+  if(m&&kl==="d"){done();fillDown(x);return;}if(m&&k==="Enter"){done();var cb2=x.querySelector('[data-a="chk"]');if(cb2)act(x,cb2);return;}
   if(/^Arrow/.test(k)){done();move(x,k==="ArrowUp"?-1:k==="ArrowDown"?1:0,k==="ArrowLeft"?-1:k==="ArrowRight"?1:0,e.shiftKey);return;}
   if(k==="Enter"){done();enter(x,e.shiftKey);return;}if(k==="Tab"){done();tab(x,e.shiftKey);return;}
-  if(k==="Delete"||k==="Backspace"){done();delRows(x,false);return;}if(k==="F2"){done();startEdit(x,"f2");return;}
+  if(k==="Delete"||k==="Backspace"){done();if(x.classList.contains("xl-q"))delRows(x,false);return;}if(k==="F2"){done();startEdit(x,"f2");return;}
   if(k==="Escape"){done();s.b=null;paint(x);return;}e.stopPropagation();});
  x.addEventListener("copy",function(e){var s=st(x);if(s.mode==="edit"||!s.a)return;var v=tsv(x);if(v==null)return;e.preventDefault();e.clipboardData.setData("text/plain",v);x.__clip=v;note(x,"복사 — 붙여 넣을 칸을 고르고 "+MOD+"V");});
- x.addEventListener("cut",function(e){var s=st(x);if(s.mode==="edit"||!s.a)return;var v=tsv(x);if(v==null)return;e.preventDefault();e.clipboardData.setData("text/plain",v);x.__clip=v;clearRange(x);});
+ x.addEventListener("cut",function(e){var s=st(x);if(s.mode==="edit"||!s.a)return;var v=tsv(x);if(v==null)return;e.preventDefault();e.clipboardData.setData("text/plain",v);x.__clip=v;if(x.classList.contains("xl-q"))clearRange(x);else note(x,"복사 — 이 표는 설명용이라 잘라내기 대신 복사만 돼요");});
  x.addEventListener("paste",function(e){var s=st(x);if(!s.a)return;var v=(e.clipboardData||window.clipboardData).getData("text/plain");if(v==null)return;var multi=/[\t\n]/.test(v.replace(/\r?\n$/,""));if(s.mode==="edit"&&!multi)return;e.preventDefault();if(s.mode==="edit")commit(x);paste(x,v);});}
 document.addEventListener("pointermove",function(e){if(!DRAG)return;var el=document.elementFromPoint(e.clientX,e.clientY),x=DRAG.x,t=sheetOf(x),s=st(x);if(!el||!t)return;var cell=el.closest&&el.closest(".xl-sheet td, .xl-sheet tbody th");if(!cell||!t.contains(cell))return;
  if(DRAG.rows){var r=cell.tagName==="TH"?+cell.textContent:pos(cell).r,D=dims(t);s.b={r:r,c:D.C-1,w:1};}else{if(cell.tagName==="TH")return;s.b=pos(cell);}paint(x);});
@@ -400,8 +401,8 @@ document.addEventListener("pointerup",function(){if(DRAG){var x=DRAG.x;DRAG=null
 function showTab(x,i){var tb=x.querySelectorAll(".xl-tabs .xl-tab");if(i<0||i>=tb.length)return;commit(x);[].forEach.call(tb,function(b,k){b.classList.toggle("on",k===i);});x.querySelectorAll(".xl-sheet").forEach(function(s,k){s.hidden=k!==i;});var s=st(x);s.a=null;s.b=null;paint(x);}
 document.addEventListener("click",function(e){var nv=e.target.closest&&e.target.closest(".xl-tabs [data-nav]");if(nv){var xx=nv.closest(".xl"),tb=[].slice.call(xx.querySelectorAll(".xl-tabs .xl-tab")),cur=tb.findIndex(function(b){return b.classList.contains("on");});showTab(xx,cur+(+nv.getAttribute("data-nav")));return;}var t=e.target.closest&&e.target.closest(".xl-tabs .xl-tab");if(t){var x=t.closest(".xl");showTab(x,[].indexOf.call(x.querySelectorAll(".xl-tabs .xl-tab"),t));return;}
  var b=e.target.closest&&e.target.closest(".xl-q .xl-rib button, .xl-q .xl-bar .xl-bx");if(b){act(b.closest(".xl"),b);return;}
- var c=e.target.closest&&e.target.closest(".xl:not(.xl-q) td");if(c){var y=c.closest(".xl");y.querySelectorAll("td.sel").forEach(function(d){d.classList.remove("sel");});c.classList.add("sel");bar(y,c);}});
-function boot(){[].forEach.call(document.querySelectorAll(".xl.xl-q"),init);}
+ });
+function boot(){[].forEach.call(document.querySelectorAll(".xl"),init);}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 })();</script>"""
 
@@ -433,10 +434,10 @@ def render_sheet(title, lines):
             cells = [c.replace("\\|", "|") for c in re.split(r"(?<!\\)\|", ln)] if ln.strip() else []
             out = []
             for c in cells:
-                c = c.strip()
+                c = c.strip(" \t")                      # 줄 앞 NBSP(코드 들여쓰기)는 남김
                 cls, span = [], 1
                 while True:
-                    m = re.match(r"\{([ybhkcrnog]|[2-9]|[1-9]\d)\}", c)
+                    m = re.match(r"\{([ybhkcrnogm]|[2-9]|[1-9]\d)\}", c)
                     if not m:
                         break
                     v = m.group(1)
@@ -465,8 +466,8 @@ def render_sheet(title, lines):
             col = 0
             for c, cls, sp, _, _ in r:
                 if "o" in cls and c:
-                    px = sum(13.2 if ord(ch) > 0x2000 else 7.6 for ch in c) + 18
-                    ncol = max(ncol, col + max(sp, -(-int(px) // 62)))
+                    px = sum(13.2 if ord(ch) > 0x2000 else (7.0 if "m" in cls else 7.6) for ch in c) + 18
+                    ncol = max(ncol, col + max(sp, -(-int(px) // 46)))   # 빈 열 1칸 ≈ 44px
                 col += sp
         h = ['<table class="xl-sheet"%s><thead><tr><th class="xl-corner"></th>%s</tr></thead><tbody>' % (
             "" if k == 0 else " hidden", "".join("<th>%s</th>" % xl_col(j) for j in range(ncol)))]
@@ -511,6 +512,8 @@ def render_sheet(title, lines):
                '</div>')
         hint = ('✏️ 주황 테두리 칸(입력)에 답 · 드래그 · Shift+방향키로 여러 칸 · ⌘/Ctrl + C · V · X · '
                 '행 번호를 누르거나 행을 끌어 고르고 Del = 행 삭제 · ⌘/Ctrl+Z · ⌘/Ctrl+Enter = 채점 · 결과 표는 행 순서 상관없이 채점 · 빈 값은 NULL')
+    else:
+        hint = '칸을 누르면 위 수식 줄에 내용 · 드래그 · Shift+방향키 = 여러 칸 · ⌘/Ctrl+C = 복사 · 행 번호 · 열 이름을 누르면 줄 전체'
     head = ('<div class="xl-title"><span class="xl-logo">X</span><span class="xl-name">%s</span><span class="xl-app">- Excel</span></div>' % t)
     fbar = ('<div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-dots">⋮</span>'
             '<button type="button" class="xl-bx" data-a="esc" title="취소 (Esc)" disabled>✕</button>'
