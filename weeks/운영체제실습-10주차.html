@@ -208,6 +208,7 @@ gedit /etc/fstab
 <h3>2-5. RAID 6 · RAID 1+0</h3>
 <ul><li>📖 <b>RAID 6</b> = RAID 5 를 개선해 <b>패리티 2개</b> → <b>디스크 2개가 동시에 고장 나도</b> 데이터 이상 없음 · 1TB × 10개 → <b>8TB</b>(N − 2) · <b>최소 4개</b> (RAID 5 는 최소 3개)</li><li>📖 RAID 6 은 공간 효율이 RAID 5 보다 약간 낮지만 <b>신뢰도는 더 높음</b> · 패리티를 2개 만들어야 해서 쓰기 알고리즘이 복잡 → <b>속도는 RAID 5 보다 약간 느림</b></li><li>📖 <b>RAID 1+0</b>(또는 10) = RAID 1(미러링)로 구성한 데이터를 다시 RAID 0(스트라이핑)으로 → 신뢰성 + 속도 · 그림 6-29: 디스크당 6글자 → <b>6초</b> · 24바이트 사용 · 왼쪽 · 오른쪽 RAID 1 에서 <b>각각 1개씩</b> 고장 나도 안전</li></ul>
 <p>---</p>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/운영체제실습-RAID-LVM.html#raid" title="💽 RAID 실험실 — 쓰기 · 💥 고장 · 읽기를 버튼으로" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/운영체제실습-RAID-LVM.html#raid" target="_blank" rel="noopener">🎬 💽 RAID 실험실 — 쓰기 · 💥 고장 · 읽기를 버튼으로 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s5">
 <h2>3. 수업 실습 — Server 에 Linear RAID (/dev/md9 → /raidLinear)</h2>

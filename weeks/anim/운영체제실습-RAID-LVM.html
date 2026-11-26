@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAID · LVM 실험실</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        try { if (window.parent !== window) document.documentElement.classList.add("embed"); } catch (e) { }
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --box:#eef3ff;--boxb:#7b93d6;--in:#16a34a;--out:#e5484d;--par:#d97706;--scan:#2563eb;--code:#0f1b14;--codet:#dff5e6;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --box:#1b2433;--boxb:#5b7bd6;--in:#4cc38a;--out:#ff6369;--par:#ffb547;--scan:#6b9cff;--code:#0b120e;--codet:#dff5e6;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Apple SD Gothic Neo","맑은 고딕",sans-serif;}
+    .wrap{max-width:980px;margin:0 auto;padding:14px 14px 18px;}
+    h1{font-size:20px;margin:2px 0 4px;}
+    .sub{margin:0 0 10px;color:var(--ink2);font-size:13.5px;line-height:1.55;}
+    code{font-family:Consolas,"D2Coding",Menlo,monospace;}
+    .tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:8px;}
+    .tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 6px;font-size:14px;font-weight:800;cursor:pointer;line-height:1.3;}
+    .tab small{display:block;font-weight:600;font-size:11.5px;color:var(--ink2);}
+    .tab[aria-selected=true]{border-color:var(--main);box-shadow:inset 0 0 0 1px var(--main);background:color-mix(in srgb,var(--main) 16%,var(--card));}
+    .pane{display:none;} .pane.on{display:block;}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+    .chips button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:800;cursor:pointer;}
+    .chips button[aria-pressed=true]{border-color:var(--main);box-shadow:inset 0 0 0 1px var(--main);background:color-mix(in srgb,var(--main) 16%,var(--card));}
+    .facts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+    .facts span{border-radius:8px;padding:3px 9px;font-size:12.5px;font-weight:800;background:var(--card);border:1px solid var(--line);}
+    .facts span.ok{border-color:var(--in);color:var(--in);} .facts span.no{border-color:var(--out);color:var(--out);}
+    .ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;}
+    .ctrl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13.5px;font-weight:800;cursor:pointer;}
+    .ctrl button.go{background:var(--main);border-color:var(--main);color:#fff;}
+    html[data-theme=dark] .ctrl button.go{color:#06121c;}
+    .ctrl button:disabled{opacity:.45;cursor:default;}
+    .ctrl .n{font-size:13px;color:var(--ink2);display:flex;gap:6px;align-items:center;}
+    .ctrl .n b{font-size:15px;color:var(--ink);min-width:14px;text-align:center;}
+    .ctrl label{font-size:13px;color:var(--ink2);display:flex;gap:5px;align-items:center;}
+    .disks{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;}
+    .disk{flex:1 0 92px;max-width:150px;background:var(--card);border:2px solid var(--boxb);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:4px;transition:border-color .25s,opacity .25s;}
+    .disk.dead{border-color:var(--out);opacity:.75;}
+    .disk .hd{display:flex;justify-content:space-between;align-items:center;gap:4px;font-family:Consolas,Menlo,monospace;font-weight:800;font-size:13.5px;}
+    .disk .hd button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:7px;font-size:11.5px;padding:3px 6px;cursor:pointer;font-weight:800;}
+    .disk.dead .hd button{border-color:var(--in);color:var(--in);}
+    .slot{height:30px;border:1.5px dashed var(--line);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;font-family:Consolas,Menlo,monospace;transition:background .25s,border-color .25s;}
+    .slot.f{border-style:solid;border-color:var(--boxb);background:var(--box);}
+    .slot.p{border-style:solid;border-color:var(--par);background:color-mix(in srgb,var(--par) 18%,var(--card));color:var(--par);}
+    .slot.w{animation:pop .4s ease-out;border-color:var(--in);}
+    .slot.x{border-color:var(--out);background:color-mix(in srgb,var(--out) 14%,var(--card));color:var(--out);}
+    @keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px;font-size:14px;line-height:1.6;}
+    .card .lbl{font-size:12.5px;color:var(--ink2);}
+    .readout{font-size:20px;font-weight:800;letter-spacing:.04em;font-family:Consolas,"D2Coding",Menlo,monospace;overflow-wrap:anywhere;}
+    .readout .lost{color:var(--out);} .readout .rec{color:var(--in);text-decoration:underline;}
+    #why,#lwhy{color:var(--ink2);font-size:13.5px;} #why b,#lwhy b{color:var(--ink);}
+    pre.cmd{margin:0 0 10px;background:var(--code);color:var(--codet);border-radius:10px;padding:10px 12px;font-family:Consolas,Menlo,monospace;font-size:13.5px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;min-height:44px;}
+    pre.cmd .c{color:#8ab4ff;}
+    .lvm{display:grid;gap:8px;margin-bottom:10px;}
+    .layer{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;}
+    .layer .t{font-size:12.5px;color:var(--ink2);margin-bottom:5px;}
+    .layer .t b{color:var(--ink);}
+    .bar{display:flex;gap:4px;min-height:40px;}
+    .seg{display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:8px;border:2px solid var(--boxb);background:var(--box);font-family:Consolas,Menlo,monospace;font-size:12.5px;font-weight:800;text-align:center;padding:4px;animation:pop .45s ease-out;min-width:0;overflow-wrap:anywhere;}
+    .seg small{font-weight:600;color:var(--ink2);font-size:11px;}
+    .seg.pv{border-color:var(--scan);} .seg.vg{border-color:var(--par);background:color-mix(in srgb,var(--par) 14%,var(--card));}
+    .seg.lv{border-color:var(--in);background:color-mix(in srgb,var(--in) 14%,var(--card));} .seg.free{border-style:dashed;opacity:.6;animation:none;}
+    .empty{color:var(--ink2);font-size:12.5px;align-self:center;}
+    table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);}
+    th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;}
+    th{background:color-mix(in srgb,var(--main) 14%,var(--card));}
+    html.embed table.sum{display:none;}
+    .note{font-size:12.5px;color:var(--ink2);line-height:1.55;margin:0 0 8px;}
+    @media (max-width:420px){.tab small{display:none}.disk{flex-basis:76px}.slot{height:28px;font-size:14px}.readout{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="box">
+    <h1>💽 RAID · LVM 실험실</h1>
+    <p class="sub">버튼을 누르면 데이터가 디스크에 <b>어떻게 나뉘어 저장되는지</b> · 디스크가 <b>고장 나면 데이터가 남는지</b> · LVM 이 <b>디스크를 묶었다가 나누는</b> 모습을 보여 줘요 — 10주차 RAID(📖 396 ~ 404쪽) · 11주차 LVM 개념(📖 462 ~ 464쪽 · ✍️ “시험에 개념은 출제함”)</p>
+
+    <div class="tabs" role="tablist">
+        <button type="button" class="tab" data-tab="raid">💽 RAID<small>Linear · 0 · 1 · 5 · 6 — 쓰기 · 고장 · 읽기</small></button>
+        <button type="button" class="tab" data-tab="lvm">🧱 LVM<small>물리 볼륨 → 볼륨 그룹 → 논리 볼륨</small></button>
+    </div>
+
+    <div class="pane" data-pane="raid">
+        <div class="chips" id="modes"></div>
+        <div class="facts" id="facts"></div>
+        <div class="ctrl">
+            <button type="button" class="go" id="write">✍️ 데이터 쓰기</button>
+            <button type="button" id="read">📖 읽기</button>
+            <button type="button" id="rreset">↺ 처음부터</button>
+            <span class="n" id="ncount">디스크 <button type="button" id="minus">−</button><b id="nval">3</b><button type="button" id="plus">+</button></span>
+            <label><input type="checkbox" id="fast"> ⚡ 움직임 끄기</label>
+        </div>
+        <div class="disks" id="disks"></div>
+        <div class="card">
+            <div class="lbl">📖 읽은 데이터 <span id="time"></span></div>
+            <div class="readout" id="readout">—</div>
+            <div id="why"></div>
+        </div>
+        <p class="note">각 디스크 위 <b>💥</b> 를 누르면 그 디스크가 고장 나요 (다시 누르면 교체) · 한 글자(비트) 저장에 1초로 가정(📖 그림 6-24) · 디스크 1개를 8칸으로 작게 그렸어요 · RAID 5 는 📖 그림 6-26 처럼 비트 <code>000 111 010 011</code> 과 짝수 패리티로 실제 계산</p>
+        <table class="sum">
+            <tr><th>방식</th><th>저장 방식</th><th>최소 디스크</th><th>쓸 수 있는 용량 (1TB × N)</th><th>디스크 고장</th></tr>
+            <tr><td>Linear RAID</td><td>앞 디스크를 다 채운 뒤 다음</td><td>2개</td><td>N</td><td>결함 허용 ✗</td></tr>
+            <tr><td>RAID 0</td><td>스트라이핑 — 동시에 나눠 저장 (가장 빠름)</td><td>2개</td><td>N</td><td>하나만 고장 나도 전부 잃음</td></tr>
+            <tr><td>RAID 1</td><td>미러링 — 같은 데이터 2벌</td><td>2개</td><td>N / 2</td><td>1개 고장 OK</td></tr>
+            <tr><td>RAID 5</td><td>패리티 1개분</td><td>3개</td><td>N − 1</td><td>1개까지 OK</td></tr>
+            <tr><td>RAID 6</td><td>패리티 2개분</td><td>4개</td><td>N − 2</td><td>2개까지 OK</td></tr>
+        </table>
+    </div>
+
+    <div class="pane" data-pane="lvm">
+        <div class="ctrl">
+            <button type="button" class="go" id="lnext">▶ 다음 단계</button>
+            <button type="button" id="lreset">↺ 처음부터</button>
+            <span class="n" id="lstep"></span>
+        </div>
+        <pre class="cmd" id="lcmd"></pre>
+        <div class="lvm" id="lvm"></div>
+        <div class="card"><div id="lwhy"></div></div>
+        <p class="note">📖 그림 6-113 — 2TB(/dev/sdb) + 3TB(/dev/sdc) → 5TB 볼륨 그룹 → 1TB · 3TB · 1TB 논리 볼륨 · ✍️ LVM 은 수업 실습 없이 <b>개념만</b> 시험 · 🤖 명령은 그림 6-114 순서(fdisk → pvcreate → vgcreate → lvcreate → mkfs.ext4 → mount)를 보여 주는 예시예요</p>
+    </div>
+</div>
+<script>
+(function () {
+    "use strict";
+    var $ = function (id) { return document.getElementById(id); };
+    function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, $("fast").checked ? 0 : ms); }); }
+    var TEXT = "안녕하세요?우재남입니다".split(""), BITS = "000111010011".split(""), CAP = 8;
+    var MODES = {
+        linear: { t: "Linear RAID", min: 2, max: 5, def: 3, cap: function (n) { return n; }, tol: 0, f: ["앞 디스크를 다 채운 뒤 다음 디스크", "결함 허용 ✗", "공간 효율 100%"] },
+        r0: { t: "RAID 0", min: 2, max: 5, def: 3, cap: function (n) { return n; }, tol: 0, f: ["스트라이핑 — 동시에 나눠 저장", "가장 빠름", "하나만 고장 나도 전부 잃음 ✗"] },
+        r1: { t: "RAID 1", min: 2, max: 2, def: 2, cap: function (n) { return n / 2; }, tol: 1, f: ["미러링 — 같은 데이터 2벌", "결함 허용 ○", "공간 효율 50%"] },
+        r5: { t: "RAID 5", min: 4, max: 4, def: 4, cap: function (n) { return n - 1; }, tol: 1, f: ["패리티 1개분 (짝수 패리티)", "1개까지 고장 OK", "최소 3개 · 그림 6-26 은 4개"] },
+        r6: { t: "RAID 6", min: 4, max: 5, def: 4, cap: function (n) { return n - 2; }, tol: 2, f: ["패리티 2개분", "2개까지 고장 OK", "최소 4개 · 속도는 RAID 5 보다 약간 ↓"] }
+    };
+    var mode = "r0", N = 3, disks = [], dead = [], written = false, busy = false, secs = 0, layout = null;
+    function names() { var base = mode === "r5" ? "abcd" : "bcdef"; return base.split("").slice(0, N).map(function (c) { return "sd" + c; }); }
+    // 칸 배치 계산 — layout[d][slot] = { v, k(data 순번) , p(패리티) }
+    function plan() {
+        var L = []; for (var d = 0; d < N; d++) L.push([]);
+        var t = 0;
+        if (mode === "linear") { TEXT.forEach(function (ch, k) { var d = Math.floor(k / CAP); L[d].push({ v: ch, k: k, at: k + 1 }); }); t = TEXT.length; }
+        else if (mode === "r0") { TEXT.forEach(function (ch, k) { L[k % N].push({ v: ch, k: k, at: Math.floor(k / N) + 1 }); }); t = Math.ceil(TEXT.length / N); }
+        else if (mode === "r1") { TEXT.forEach(function (ch, k) { for (var d = 0; d < N; d++) L[d].push({ v: ch, k: k, at: k + 1 }); }); t = TEXT.length; }
+        else if (mode === "r5") {
+            var rows = BITS.length / (N - 1);
+            for (var r = 0; r < rows; r++) {
+                var pd = (N - 1 - r % N + N) % N, bits = BITS.slice(r * (N - 1), r * (N - 1) + N - 1), bi = 0, sum = 0;
+                bits.forEach(function (b) { sum += +b; });
+                for (var d2 = 0; d2 < N; d2++) {
+                    if (d2 === pd) L[d2].push({ v: String(sum % 2), p: "P", at: r + 1, row: r });
+                    else { L[d2].push({ v: bits[bi], k: r * (N - 1) + bi, at: r + 1, row: r }); bi++; }
+                }
+            }
+            t = rows;
+        } else if (mode === "r6") {
+            var per = N - 2, rows6 = Math.ceil(TEXT.length / per), k6 = 0;
+            for (var r6 = 0; r6 < rows6; r6++) {
+                var p1 = (N - 1 - r6 % N + N) % N, p2 = (p1 + N - 1) % N;
+                for (var d6 = 0; d6 < N; d6++) {
+                    if (d6 === p1) L[d6].push({ v: "P", p: "P", at: r6 + 1 });
+                    else if (d6 === p2) L[d6].push({ v: "Q", p: "Q", at: r6 + 1 });
+                    else if (k6 < TEXT.length) { L[d6].push({ v: TEXT[k6], k: k6, at: r6 + 1 }); k6++; }
+                    else L[d6].push(null);
+                }
+            }
+            t = rows6;
+        }
+        return { L: L, t: t };
+    }
+    function drawDisks(shown, fresh) {
+        var nm = names();
+        $("disks").innerHTML = nm.map(function (n, d) {
+            var cells = [], col = shown ? shown[d] : [];
+            var slots = Math.max(CAP, layout ? layout.L[d].length : 0);
+            for (var s = 0; s < slots; s++) {
+                var c = col && col[s], cls = "slot";
+                if (c) cls += c.p ? " p" : " f";
+                if (c && fresh && fresh[d] === s) cls += " w";
+                if (dead[d] && c) cls += " x";
+                cells.push('<div class="' + cls + '">' + (c ? esc(dead[d] ? "✗" : c.v) : "") + "</div>");
+            }
+            return '<div class="disk' + (dead[d] ? " dead" : "") + '"><div class="hd"><span>' + n + '</span><button type="button" data-d="' + d + '">' + (dead[d] ? "🔧 교체" : "💥 고장") + "</button></div>" + cells.join("") + "</div>";
+        }).join("");
+        tell();
+    }
+    function facts() {
+        var M = MODES[mode], cap = M.cap(N);
+        $("facts").innerHTML = M.f.map(function (x) { return '<span class="' + (/✗/.test(x) ? "no" : /OK|○/.test(x) ? "ok" : "") + '">' + esc(x) + "</span>"; }).join("") +
+            '<span>디스크 ' + N + "개 → 쓸 수 있는 용량 " + cap + "TB (1TB 기준 · " + Math.round(cap / N * 100) + "%)</span>";
+        $("nval").textContent = N;
+        $("minus").disabled = N <= M.min || busy; $("plus").disabled = N >= M.max || busy;
+        $("ncount").style.display = M.min === M.max ? "none" : "";
+        [].forEach.call(document.querySelectorAll("#modes button"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-m") === mode ? "true" : "false"); });
+    }
+    function reset() { dead = []; written = false; layout = plan(); drawDisks(null); facts(); $("readout").textContent = "—"; $("time").textContent = ""; $("why").innerHTML = "✍️ 데이터 쓰기를 눌러 보세요 — " + (mode === "r5" ? "비트 <b>000 111 010 011</b> (📖 그림 6-26)" : "‘<b>안녕하세요?우재남입니다</b>’ 12바이트 (📖 그림 6-24)"); }
+    async function write() {
+        if (busy) return; busy = true; $("write").disabled = true; dead = []; layout = plan(); facts();
+        var shown = layout.L.map(function () { return []; });
+        for (var tick = 1; tick <= layout.t; tick++) {
+            var fresh = {};
+            layout.L.forEach(function (col, d) { col.forEach(function (c, s) { if (c && c.at === tick) { shown[d][s] = c; fresh[d] = s; } }); });
+            drawDisks(shown, fresh); $("time").textContent = "· 걸린 시간 " + tick + "초";
+            await wait(mode === "linear" || mode === "r1" ? 260 : 520);
+        }
+        written = true; busy = false; $("write").disabled = false; facts();
+        var M = MODES[mode];
+        $("why").innerHTML = (mode === "linear" ? "앞 디스크(8칸)를 <b>다 채운 뒤</b> 다음 디스크로 → 한 번에 한 디스크만 써서 <b>12초</b> · 속도 이득 없음" :
+            mode === "r0" ? "<b>모든 디스크에 동시에</b> 나눠 저장 → 디스크 " + N + "개면 " + layout.t + "초 (📖 3개 → 4초) · 디스크를 늘릴수록 빨라짐" :
+            mode === "r1" ? "같은 데이터를 <b>2벌</b> (동시에 저장 · 12초) → 24바이트를 써서 1TB 2개 → <b>1TB 만</b> 사용" :
+            mode === "r5" ? "행마다 3비트 + <b>패리티 1칸</b>(1 의 합이 <b>짝수</b>가 되게) · 패리티 자리는 행마다 <b>돌아가며</b> (sdd → sdc → sdb → sda)" :
+            "행마다 데이터 " + (N - 2) + "칸 + 패리티 <b>P · Q 2칸</b> → 디스크 2개가 동시에 고장 나도 복구") + " · 이제 💥 로 디스크를 고장 내고 📖 읽기";
+        read();
+    }
+    function read() {
+        if (!written) { $("readout").textContent = "—"; $("why").innerHTML = "먼저 ✍️ 데이터 쓰기"; return; }
+        var M = MODES[mode], nd = dead.filter(Boolean).length, src = mode === "r5" ? BITS : TEXT, out = src.map(function () { return null; }), rec = {};
+        layout.L.forEach(function (col, d) { col.forEach(function (c) { if (c && c.k != null && !dead[d]) out[c.k] = c.v; }); });
+        var ok = nd <= M.tol;
+        if (ok && nd > 0) src.forEach(function (v, k) { if (out[k] == null) { out[k] = v; rec[k] = true; } });
+        var html = out.map(function (v, k) { return (mode === "r5" && k && k % 3 === 0 ? " " : "") + (v == null ? '<span class="lost">X</span>' : rec[k] ? '<span class="rec">' + esc(v) + "</span>" : esc(v)); }).join("");
+        $("readout").innerHTML = html;
+        var lost = out.filter(function (v) { return v == null; }).length;
+        if (nd === 0) $("why").innerHTML = "고장 난 디스크 없음 → 그대로 읽음";
+        else if (ok) $("why").innerHTML = (mode === "r1" ? "남은 디스크에 <b>같은 데이터</b>가 있어서 그대로 읽음 = <b>결함 허용</b>" :
+            mode === "r5" ? "고장 난 칸 = 같은 행의 나머지 칸을 더해 <b>짝수</b>가 되는 값 → <b>밑줄 = 패리티로 복구</b> (📖 sdb 고장 → 0110 을 알아냄)" :
+            "패리티 P · Q 로 <b>밑줄 칸을 복구</b> — RAID 6 은 2개까지") + " · 고장 " + nd + "개";
+        else $("why").innerHTML = "<b>잃은 데이터 " + lost + "칸 (X)</b> · 고장 " + nd + "개 &gt; 버틸 수 있는 " + M.tol + "개" + (M.tol ? "" : " (결함 허용 ✗)") + (mode === "r0" ? " · 📖 ‘안X하세X?우X남입X다’ → 원래 데이터를 알 수 없음 = 전부 잃음" : mode === "linear" ? " · 그 디스크에 있던 데이터를 잃음" : "");
+        tell();
+    }
+    $("modes").innerHTML = Object.keys(MODES).map(function (k) { return '<button type="button" data-m="' + k + '">' + MODES[k].t + "</button>"; }).join("");
+    $("modes").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b || busy) return; mode = b.getAttribute("data-m"); N = MODES[mode].def; reset(); });
+    $("minus").addEventListener("click", function () { if (N > MODES[mode].min && !busy) { N--; reset(); } });
+    $("plus").addEventListener("click", function () { if (N < MODES[mode].max && !busy) { N++; reset(); } });
+    $("write").addEventListener("click", write);
+    $("read").addEventListener("click", read);
+    $("rreset").addEventListener("click", function () { if (!busy) reset(); });
+    $("disks").addEventListener("click", function (e) {
+        var b = e.target.closest("button[data-d]"); if (!b || busy) return;
+        var d = +b.getAttribute("data-d"); dead[d] = !dead[d];
+        drawDisks(written ? layout.L : null); if (written) read(); else $("why").innerHTML = names()[d] + (dead[d] ? " 고장 (아직 데이터 없음)" : " 교체");
+    });
+
+    // ── LVM 단계 ─────────────────────────────────────────
+    var STEPS = [
+        { c: "fdisk /dev/sdb   (n → p → 1 → t → 8e)\nfdisk /dev/sdc   (같게)", w: "디스크마다 파티션을 만들고 타입을 <b>LVM</b> 으로 (📖 그림 6-114 첫 단계)" },
+        { c: "pvcreate /dev/sdb1\npvcreate /dev/sdc1", w: "<b>물리 볼륨</b>(Physical Volume) = /dev/sdb1 · /dev/sdc1 같은 <b>파티션</b> — 2TB · 3TB" },
+        { c: "vgcreate myVG /dev/sdb1 /dev/sdc1", w: "<b>볼륨 그룹</b>(Volume Group) = 물리 볼륨을 <b>합쳐서</b> 1개로 → 2TB + 3TB = <b>5TB</b> (Linear RAID 처럼 묶음)" },
+        { c: "lvcreate --size 1T --name myLG1 myVG\nlvcreate --size 3T --name myLG2 myVG\nlvcreate --extents 100%FREE --name myLG3 myVG", w: "<b>논리 볼륨</b>(Logical Volume) = 볼륨 그룹을 <b>1개 이상으로 나눈</b> 것 → 1TB · 3TB · 남은 1TB (📖 예: 2TB 2개를 합친 뒤 1TB 와 3TB 로)" },
+        { c: "mkfs.ext4 /dev/myVG/myLG1   (myLG2 · myLG3 도)\nmount /dev/myVG/myLG1 /lvm1   (/lvm2 · /lvm3)", w: "논리 볼륨을 포맷 → <b>/lvm1 · /lvm2 · /lvm3</b> 에 마운트 → 일반 파티션처럼 사용 · 🤖 RAID = 속도 · 결함 허용 / LVM = <b>묶었다가 원하는 크기로 나누는</b> 유연한 관리" }
+    ];
+    var ls = 0;
+    function seg(cls, name, size, total) { return '<div class="seg ' + cls + '" style="flex:' + size + ' 1 0">' + esc(name) + "<small>" + size + "TB</small></div>"; }
+    function drawLvm() {
+        var h = "";
+        h += '<div class="layer"><div class="t"><b>디스크</b> (SCSI 추가)</div><div class="bar">' + seg("", "/dev/sdb", 2) + seg("", "/dev/sdc", 3) + "</div></div>";
+        h += '<div class="layer"><div class="t"><b>① 물리 볼륨</b> PV — 파티션</div><div class="bar">' + (ls >= 2 ? seg("pv", "/dev/sdb1", 2) + seg("pv", "/dev/sdc1", 3) : ls >= 1 ? seg("free", "sdb1 (8e)", 2) + seg("free", "sdc1 (8e)", 3) : '<span class="empty">아직 없음</span>') + "</div></div>";
+        h += '<div class="layer"><div class="t"><b>② 볼륨 그룹</b> VG — 합친 것</div><div class="bar">' + (ls >= 3 ? seg("vg", "myVG", 5) : '<span class="empty">아직 없음</span>') + "</div></div>";
+        h += '<div class="layer"><div class="t"><b>③ 논리 볼륨</b> LV — 나눈 것</div><div class="bar">' + (ls >= 4 ? seg("lv", "myLG1" + (ls >= 5 ? " → /lvm1" : ""), 1) + seg("lv", "myLG2" + (ls >= 5 ? " → /lvm2" : ""), 3) + seg("lv", "myLG3" + (ls >= 5 ? " → /lvm3" : ""), 1) : '<span class="empty">아직 없음</span>') + "</div></div>";
+        $("lvm").innerHTML = h;
+        $("lcmd").innerHTML = ls ? STEPS.slice(0, ls).map(function (s) { return s.c.split("\n").map(function (l) { return '<span class="c"># </span>' + esc(l); }).join("\n"); }).join("\n") : '<span class="c"># ▶ 다음 단계를 눌러 보세요</span>';
+        $("lwhy").innerHTML = ls ? STEPS[ls - 1].w : "📖 LVM(Logical Volume Manager) = ‘논리 디스크 관리자’ · 여러 디스크를 합쳐 1개로 만든 뒤 필요에 따라 다시 나눠 씀";
+        $("lstep").textContent = ls + " / " + STEPS.length + " 단계";
+        $("lnext").disabled = ls >= STEPS.length;
+        tell();
+    }
+    $("lnext").addEventListener("click", function () { if (ls < STEPS.length) { ls++; drawLvm(); } });
+    $("lreset").addEventListener("click", function () { ls = 0; drawLvm(); });
+
+    function setTab(t) {
+        [].forEach.call(document.querySelectorAll(".tab"), function (b) { b.setAttribute("aria-selected", b.getAttribute("data-tab") === t ? "true" : "false"); });
+        [].forEach.call(document.querySelectorAll(".pane"), function (p) { p.classList.toggle("on", p.getAttribute("data-pane") === t); });
+        try { history.replaceState(null, "", "#" + t); } catch (e) { }
+        tell();
+    }
+    document.addEventListener("click", function (e) { var tb = e.target.closest && e.target.closest(".tab"); if (tb) setTab(tb.getAttribute("data-tab")); });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    var box = $("box");
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) { } }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+    var h0 = /^#(raid|lvm)$/.exec(location.hash), q0 = /[?&]tab=(raid|lvm)\b/.exec(location.search);
+    reset(); drawLvm(); setTab(h0 ? h0[1] : q0 ? q0[1] : "raid");
+})();
+</script>
+<script src="../../figink.js?v=202611260939"></script>
+</body>
+</html>

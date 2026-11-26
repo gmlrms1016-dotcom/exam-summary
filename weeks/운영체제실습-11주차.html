@@ -293,6 +293,7 @@ success
 <tr><td><b>논리 볼륨</b> (Logical Volume)</td><td>볼륨 그룹을 <b>1개 이상으로 나눈</b> 것 · 논리적 그룹이라고도 함</td></tr>
 </tbody></table>
 <ul><li>📖 그림 6-113 — 물리 볼륨 <b>2TB</b>(/dev/sdb) + <b>3TB</b>(/dev/sdc) → <b>5TB 볼륨 그룹</b> → 1TB · 3TB · 1TB 로 나눠 /lvm1 · /lvm2 · /lvm3 에 마운트</li><li>📖 결국 LVM = 여러 디스크(물리 볼륨)를 묶어 <b>1개의 볼륨 그룹</b>으로 만든 뒤 다시 필요한 용량의 파티션(<b>논리 그룹</b>)으로 나눠 쓰는 방식</li><li>📖 그림 6-114 구현 순서 — <code>fdisk</code>(타입 <b>LVM</b>) → <code>pvcreate</code>(/dev/sdb1 · /dev/sdc1) → <code>vgcreate</code>(/dev/myVG) → <code>lvcreate</code>(/dev/myVG/myLG1 ~ 3) → <code>mkfs.ext4</code> → <code>mount</code> → /etc/fstab 등록 → reboot</li><li>🤖 RAID 와 차이 — RAID = 속도 · 결함 허용(미러링 · 패리티)이 목적 · LVM = 용량을 <b>묶었다가 원하는 크기로 나누는</b> 유연한 관리가 목적</li></ul>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/운영체제실습-RAID-LVM.html#lvm" title="🧱 LVM 실험실 — 물리 볼륨 → 볼륨 그룹 → 논리 볼륨 한 단계씩" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/운영체제실습-RAID-LVM.html#lvm" target="_blank" rel="noopener">🎬 🧱 LVM 실험실 — 물리 볼륨 → 볼륨 그룹 → 논리 볼륨 한 단계씩 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s8">
 <h2>6. 트러블슈팅 (학교 PC 기록 · 노션)</h2>
