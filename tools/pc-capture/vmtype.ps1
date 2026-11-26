@@ -22,6 +22,10 @@
     -Commands · -Names 는 ;; 로 나눔 (powershell -File 로 배열을 넘기면 "a,b" 한 문자열로 합쳐짐) · 명령은 영어로만
     -DryRun   키는 안 보내고 무엇을 할지만 출력 (먼저 이걸로 확인 · -Commands 는 꼭 있어야 함: -Commands "hostname" -DryRun)
     -TimeoutMs 180000  한 명령을 기다리는 최대 시간 (기본 3분 — 2026-11-12: dnf 가 저장소가 느려 30초로는 짧았음)
+    -LongStableMs 8000  dnf · yum · rpm · wget · curl · unzip · tar · git · make · pip · npm 처럼 진행 막대가 잠깐 멈추는 명령은
+                        화면이 이만큼(기본 8초) 안 바뀌어야 끝난 걸로 봄 (2026-11-26 학교 PC: 1.5초 멈춘 다운로드 도중에 찍고 dnf 실행 중에 clear 를 쳤음)
+    ;; 구분: 명령 끝의 ; 은 그대로 두고 그다음 ;; 로 나눔 — "grant …;;;exit" = "grant …;" + "exit" (2026-11-26: 전에는 "grant …" + ";exit")
+    VMware 가 맨 앞에서 밀려나면 한 번 다시 앞으로 가져와 확인된 뒤에만 이어서 침 (2026-11-26: 크롬 · Claude 창이 앞으로 와서 자주 멈췄음)
   ⚠️ 화면의 프롬프트를 읽지 못함 → 보내기 전에 vmcapture.ps1 -TextOnly 로 찍어 열어 보고 root 프롬프트(#)인지 확인 · su 가 실패했으면 멈추기
      (2026-11-12: rocky 상태에 dnf 를 보내 오류 · su 실패 뒤에도 다음 명령을 보냄) · 오래 걸리는 명령은 찍은 그림에서 끝났는지(Complete! 등) 확인
     -KeepWindow  글자 부분만 자르지 않고 창 통째로 (제목 줄 그대로 · 보통 안 씀) · -PageCm 17 = 워드 본문 폭(cm) = word width 의 최대값
@@ -35,6 +39,7 @@ param(
     [string]$Names = "",
     [int]$CharDelayMs = 40,
     [int]$StableMs = 1500,
+    [int]$LongStableMs = 8000,
     [int]$TimeoutMs = 180000,
     [switch]$KeepWindow,
     [double]$PageCm = 17.0,
@@ -314,9 +319,10 @@ try { if ([VmType]::SetProcessDpiAwarenessContext([IntPtr]::new(-4))) { $dpiMode
 if ($dpiMode -eq "FAILED") { try { if ([VmType]::SetThreadDpiAwarenessContext([IntPtr]::new(-4)) -ne [IntPtr]::Zero) { $dpiMode = "thread PerMonitorV2" } } catch { } }
 
 # 2) 명령 나누기 · 디스크를 바꾸는 명령 · 재부팅은 거부 (사용자가 직접)
-$cmdList = @($Commands -split ";;" | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+$cmdList = @($Commands -split ';;(?!;)' | ForEach-Object { $_.Trim() } | Where-Object { $_ })   # ;;; = 명령 끝 ; + 구분 ;; (2026-11-26)
 $nameList = @()
-if ($Names) { $nameList = @($Names -split ";;" | ForEach-Object { $_.Trim() }) }
+if ($Names) { $nameList = @($Names -split ';;(?!;)' | ForEach-Object { $_.Trim() }) }
+$longCmd = '(^|[\s;|&(])(sudo\s+)?(dnf|yum|rpm|wget|curl|unzip|tar|git|make|pip3?|npm)(\s|$)'   # 진행 막대가 멈추는 긴 명령
 $danger = '(^|[\s;|&(])(sudo\s+)?(fdisk|sfdisk|gdisk|cfdisk|parted|mkfs(\.\w+)?|mkswap|mdadm|dd|wipefs|pvcreate|vgcreate|lvcreate|pvremove|vgremove|lvremove|reboot|shutdown|poweroff|halt|init\s+[06])(\s|$)'
 $refused = @($cmdList | Where-Object { $_ -match $danger })
 if ($refused.Count -gt 0) { Write-Output ("ERROR: refused - disk-changing / reboot commands must be typed by the user (then capture with vmcapture.ps1): " + ($refused -join " | ")); exit 1 }
@@ -390,8 +396,17 @@ function Release-Input {                          # Ctrl+Alt = VM 이 잡은 입
     # 2026-11-12: 끝난 뒤 Ctrl 이 눌린 채 남아 텔넷에 teluser 를 치니 ^T^E^L 이 찍힘 → Shift · Ctrl · Alt (왼 · 오른쪽까지) 모두 떼기
     foreach ($vk in 0x10, 0x11, 0x12, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5) { [VmType]::keybd_event([byte]$vk, 0, 2, [UIntPtr]::Zero) }
 }
-function Stop-IfNotFront($what) {                 # 맨 앞이 그 VMware 창이 아니면 키를 안 보내고 멈춤
-    if ([VmType]::GetForegroundWindow() -ne $hWnd) { Release-Input; Write-Output ("ERROR: VMware is no longer in front - stopped before " + $what + " (nothing was typed into another window)"); exit 1 }
+function Stop-IfNotFront($what) {                 # 맨 앞이 그 VMware 창이 아니면 → 한 번 다시 앞으로 가져와 확인 · 그래도 아니면 키를 안 보내고 멈춤
+    if ([VmType]::GetForegroundWindow() -eq $hWnd) { return }
+    [VmType]::keybd_event(0x12, 0, 0, [UIntPtr]::Zero); [VmType]::keybd_event(0x12, 0, 2, [UIntPtr]::Zero)
+    [void][VmType]::SetForegroundWindow($hWnd)
+    Start-Sleep -Milliseconds 500
+    if ([VmType]::GetForegroundWindow() -eq $hWnd) {   # 다시 앞으로 왔음 → 입력을 VM 에 다시 잡고 이어서 (2026-11-26)
+        [System.Windows.Forms.SendKeys]::SendWait("^g"); Start-Sleep -Milliseconds 300
+        Write-Output ("NOTE: VMware was pushed back - brought it to front again before " + $what)
+        return
+    }
+    Release-Input; Write-Output ("ERROR: VMware is no longer in front - stopped before " + $what + " (nothing was typed into another window)"); exit 1
 }
 
 # 4) 앞으로 가져오기 → Ctrl+G 로 입력을 VM 에
@@ -416,14 +431,16 @@ for ($i = 0; $i -lt $cmdList.Count; $i++) {
     [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
 
     $t0 = [Environment]::TickCount; $since = $t0; $last = $null; $timedOut = $false
-    while ($true) {                               # 화면이 StableMs 동안 (거의) 안 바뀌면 = 출력이 다 나옴 (커서 깜빡임 = 표본 몇 칸은 무시)
+    $needMs = $StableMs
+    if ($cmd -match $longCmd) { $needMs = [Math]::Max($StableMs, $LongStableMs) }   # 다운로드 진행 막대가 잠깐 멈춰도 끝난 걸로 보지 않게 (2026-11-26)
+    while ($true) {                               # 화면이 needMs 동안 (거의) 안 바뀌면 = 출력이 다 나옴 (커서 깜빡임 = 표본 몇 칸은 무시)
         Start-Sleep -Milliseconds 300
         $fr = Get-Frame; $sig = Get-Sig $fr; $fr.Bmp.Dispose()
         $now = [Environment]::TickCount
         $changed = 9999
         if ($null -ne $last) { $changed = 0; for ($k = 0; $k -lt $sig.Length; $k++) { if ($sig[$k] -ne $last[$k]) { $changed++ } } }
         if ($changed -gt 3) { $last = $sig; $since = $now }
-        elseif (($now - $since) -ge $StableMs) { break }
+        elseif (($now - $since) -ge $needMs) { break }
         if (($now - $t0) -ge $TimeoutMs) { $timedOut = $true; break }
     }
     $nm = "{0:D2}" -f ($i + 1)
