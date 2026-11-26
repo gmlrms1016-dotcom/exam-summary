@@ -1,0 +1,38 @@
+{
+ "lang": "c",
+ "template": "// w11-ex01_05-pointer-03.c\n#include<stdio.h>\n\nint main() {\n    int a1 = «a=100|300|500|700|250»;\n    int* a2 = &a1;\n    int a3 = a1;\n\n    a3 = «b=1000|1500|3000|4000»;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"a3: %d\\n\", a3);\n\n    *a2 = «c=2000|2500|6000|9000»;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"*a2: %d\\n\", *a2);\n\n    return 0;\n}",
+ "variants": [
+  {
+   "code": "// w11-ex01_05-pointer-03.c\n#include<stdio.h>\n\nint main() {\n    int a1 = 100;\n    int* a2 = &a1;\n    int a3 = a1;\n\n    a3 = 1000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"a3: %d\\n\", a3);\n\n    *a2 = 2000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"*a2: %d\\n\", *a2);\n\n    return 0;\n}",
+   "out": "a1: 100\na3: 1000\na1: 2000\n*a2: 2000\n"
+  },
+  {
+   "code": "// w11-ex01_05-pointer-03.c\n#include<stdio.h>\n\nint main() {\n    int a1 = 250;\n    int* a2 = &a1;\n    int a3 = a1;\n\n    a3 = 1000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"a3: %d\\n\", a3);\n\n    *a2 = 2500;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"*a2: %d\\n\", *a2);\n\n    return 0;\n}",
+   "out": "a1: 250\na3: 1000\na1: 2500\n*a2: 2500\n"
+  },
+  {
+   "code": "// w11-ex01_05-pointer-03.c\n#include<stdio.h>\n\nint main() {\n    int a1 = 300;\n    int* a2 = &a1;\n    int a3 = a1;\n\n    a3 = 3000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"a3: %d\\n\", a3);\n\n    *a2 = 2000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"*a2: %d\\n\", *a2);\n\n    return 0;\n}",
+   "out": "a1: 300\na3: 3000\na1: 2000\n*a2: 2000\n"
+  },
+  {
+   "code": "// w11-ex01_05-pointer-03.c\n#include<stdio.h>\n\nint main() {\n    int a1 = 500;\n    int* a2 = &a1;\n    int a3 = a1;\n\n    a3 = 1500;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"a3: %d\\n\", a3);\n\n    *a2 = 9000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"*a2: %d\\n\", *a2);\n\n    return 0;\n}",
+   "out": "a1: 500\na3: 1500\na1: 9000\n*a2: 9000\n"
+  },
+  {
+   "code": "// w11-ex01_05-pointer-03.c\n#include<stdio.h>\n\nint main() {\n    int a1 = 100;\n    int* a2 = &a1;\n    int a3 = a1;\n\n    a3 = 1000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"a3: %d\\n\", a3);\n\n    *a2 = 9000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"*a2: %d\\n\", *a2);\n\n    return 0;\n}",
+   "out": "a1: 100\na3: 1000\na1: 9000\n*a2: 9000\n"
+  },
+  {
+   "code": "// w11-ex01_05-pointer-03.c\n#include<stdio.h>\n\nint main() {\n    int a1 = 500;\n    int* a2 = &a1;\n    int a3 = a1;\n\n    a3 = 4000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"a3: %d\\n\", a3);\n\n    *a2 = 2000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"*a2: %d\\n\", *a2);\n\n    return 0;\n}",
+   "out": "a1: 500\na3: 4000\na1: 2000\n*a2: 2000\n"
+  },
+  {
+   "code": "// w11-ex01_05-pointer-03.c\n#include<stdio.h>\n\nint main() {\n    int a1 = 700;\n    int* a2 = &a1;\n    int a3 = a1;\n\n    a3 = 1000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"a3: %d\\n\", a3);\n\n    *a2 = 2500;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"*a2: %d\\n\", *a2);\n\n    return 0;\n}",
+   "out": "a1: 700\na3: 1000\na1: 2500\n*a2: 2500\n"
+  },
+  {
+   "code": "// w11-ex01_05-pointer-03.c\n#include<stdio.h>\n\nint main() {\n    int a1 = 500;\n    int* a2 = &a1;\n    int a3 = a1;\n\n    a3 = 4000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"a3: %d\\n\", a3);\n\n    *a2 = 6000;\n    printf(\"a1: %d\\n\", a1);\n    printf(\"*a2: %d\\n\", *a2);\n\n    return 0;\n}",
+   "out": "a1: 500\na3: 4000\na1: 6000\n*a2: 6000\n"
+  }
+ ]
+}

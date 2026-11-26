@@ -1,0 +1,38 @@
+{
+ "lang": "c",
+ "template": "#include <stdio.h>\n\nint main() {\n    int array1[3];\n    int i;\n    array1[0] = «a=10|15|7|100»;\n    array1[1] = «b=20|25|14|200»;\n    array1[2] = «c=30|35|21|300»;\n\n    for (i = 0; i < 3; i++)\n        printf(\"array1[%d]: %d\\n\", i, array1[i]);\n\n    return 0;\n}",
+ "variants": [
+  {
+   "code": "#include <stdio.h>\n\nint main() {\n    int array1[3];\n    int i;\n    array1[0] = 10;\n    array1[1] = 20;\n    array1[2] = 30;\n\n    for (i = 0; i < 3; i++)\n        printf(\"array1[%d]: %d\\n\", i, array1[i]);\n\n    return 0;\n}",
+   "out": "array1[0]: 10\narray1[1]: 20\narray1[2]: 30\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main() {\n    int array1[3];\n    int i;\n    array1[0] = 7;\n    array1[1] = 14;\n    array1[2] = 30;\n\n    for (i = 0; i < 3; i++)\n        printf(\"array1[%d]: %d\\n\", i, array1[i]);\n\n    return 0;\n}",
+   "out": "array1[0]: 7\narray1[1]: 14\narray1[2]: 30\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main() {\n    int array1[3];\n    int i;\n    array1[0] = 100;\n    array1[1] = 200;\n    array1[2] = 30;\n\n    for (i = 0; i < 3; i++)\n        printf(\"array1[%d]: %d\\n\", i, array1[i]);\n\n    return 0;\n}",
+   "out": "array1[0]: 100\narray1[1]: 200\narray1[2]: 30\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main() {\n    int array1[3];\n    int i;\n    array1[0] = 7;\n    array1[1] = 20;\n    array1[2] = 21;\n\n    for (i = 0; i < 3; i++)\n        printf(\"array1[%d]: %d\\n\", i, array1[i]);\n\n    return 0;\n}",
+   "out": "array1[0]: 7\narray1[1]: 20\narray1[2]: 21\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main() {\n    int array1[3];\n    int i;\n    array1[0] = 15;\n    array1[1] = 200;\n    array1[2] = 300;\n\n    for (i = 0; i < 3; i++)\n        printf(\"array1[%d]: %d\\n\", i, array1[i]);\n\n    return 0;\n}",
+   "out": "array1[0]: 15\narray1[1]: 200\narray1[2]: 300\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main() {\n    int array1[3];\n    int i;\n    array1[0] = 15;\n    array1[1] = 25;\n    array1[2] = 30;\n\n    for (i = 0; i < 3; i++)\n        printf(\"array1[%d]: %d\\n\", i, array1[i]);\n\n    return 0;\n}",
+   "out": "array1[0]: 15\narray1[1]: 25\narray1[2]: 30\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main() {\n    int array1[3];\n    int i;\n    array1[0] = 15;\n    array1[1] = 25;\n    array1[2] = 35;\n\n    for (i = 0; i < 3; i++)\n        printf(\"array1[%d]: %d\\n\", i, array1[i]);\n\n    return 0;\n}",
+   "out": "array1[0]: 15\narray1[1]: 25\narray1[2]: 35\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main() {\n    int array1[3];\n    int i;\n    array1[0] = 100;\n    array1[1] = 200;\n    array1[2] = 35;\n\n    for (i = 0; i < 3; i++)\n        printf(\"array1[%d]: %d\\n\", i, array1[i]);\n\n    return 0;\n}",
+   "out": "array1[0]: 100\narray1[1]: 200\narray1[2]: 35\n"
+  }
+ ]
+}

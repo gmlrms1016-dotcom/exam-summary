@@ -1,0 +1,38 @@
+{
+ "lang": "c",
+ "template": "// array01.c\n#include <stdio.h>\n\nint main() {\n    int count[«n=5|6|8|10»];\n    int i;\n\n    printf(\"배열의 전체크기:%d, 하나의 원소크기: %d\\n\",\n        sizeof(count), sizeof(count[0]));\n\n    count[0] = «a=100|10|150»;\n    count[1] = «b=200|20|250»;\n    count[2] = «c=300|30|350»;\n    count[3] = «d=400|40|450»;\n    count[4] = «e=500|50|550»;\n\n    printf(\"\\n%d, %d, %d, %d, %d \\n\",\n        count[0], count[1], count[2], count[3], count[4]);\n\n    for (i = 0; i < 5; i++)\n        printf(\"%d, \", count[i]);\n    printf(\"\\n\");\n\n    return 0;\n}",
+ "variants": [
+  {
+   "code": "// array01.c\n#include <stdio.h>\n\nint main() {\n    int count[5];\n    int i;\n\n    printf(\"배열의 전체크기:%d, 하나의 원소크기: %d\\n\",\n        sizeof(count), sizeof(count[0]));\n\n    count[0] = 100;\n    count[1] = 200;\n    count[2] = 300;\n    count[3] = 400;\n    count[4] = 500;\n\n    printf(\"\\n%d, %d, %d, %d, %d \\n\",\n        count[0], count[1], count[2], count[3], count[4]);\n\n    for (i = 0; i < 5; i++)\n        printf(\"%d, \", count[i]);\n    printf(\"\\n\");\n\n    return 0;\n}",
+   "out": "배열의 전체크기:20, 하나의 원소크기: 4\n\n100, 200, 300, 400, 500 \n100, 200, 300, 400, 500, \n"
+  },
+  {
+   "code": "// array01.c\n#include <stdio.h>\n\nint main() {\n    int count[8];\n    int i;\n\n    printf(\"배열의 전체크기:%d, 하나의 원소크기: %d\\n\",\n        sizeof(count), sizeof(count[0]));\n\n    count[0] = 100;\n    count[1] = 250;\n    count[2] = 350;\n    count[3] = 450;\n    count[4] = 550;\n\n    printf(\"\\n%d, %d, %d, %d, %d \\n\",\n        count[0], count[1], count[2], count[3], count[4]);\n\n    for (i = 0; i < 5; i++)\n        printf(\"%d, \", count[i]);\n    printf(\"\\n\");\n\n    return 0;\n}",
+   "out": "배열의 전체크기:32, 하나의 원소크기: 4\n\n100, 250, 350, 450, 550 \n100, 250, 350, 450, 550, \n"
+  },
+  {
+   "code": "// array01.c\n#include <stdio.h>\n\nint main() {\n    int count[6];\n    int i;\n\n    printf(\"배열의 전체크기:%d, 하나의 원소크기: %d\\n\",\n        sizeof(count), sizeof(count[0]));\n\n    count[0] = 150;\n    count[1] = 250;\n    count[2] = 300;\n    count[3] = 450;\n    count[4] = 550;\n\n    printf(\"\\n%d, %d, %d, %d, %d \\n\",\n        count[0], count[1], count[2], count[3], count[4]);\n\n    for (i = 0; i < 5; i++)\n        printf(\"%d, \", count[i]);\n    printf(\"\\n\");\n\n    return 0;\n}",
+   "out": "배열의 전체크기:24, 하나의 원소크기: 4\n\n150, 250, 300, 450, 550 \n150, 250, 300, 450, 550, \n"
+  },
+  {
+   "code": "// array01.c\n#include <stdio.h>\n\nint main() {\n    int count[6];\n    int i;\n\n    printf(\"배열의 전체크기:%d, 하나의 원소크기: %d\\n\",\n        sizeof(count), sizeof(count[0]));\n\n    count[0] = 10;\n    count[1] = 20;\n    count[2] = 300;\n    count[3] = 40;\n    count[4] = 500;\n\n    printf(\"\\n%d, %d, %d, %d, %d \\n\",\n        count[0], count[1], count[2], count[3], count[4]);\n\n    for (i = 0; i < 5; i++)\n        printf(\"%d, \", count[i]);\n    printf(\"\\n\");\n\n    return 0;\n}",
+   "out": "배열의 전체크기:24, 하나의 원소크기: 4\n\n10, 20, 300, 40, 500 \n10, 20, 300, 40, 500, \n"
+  },
+  {
+   "code": "// array01.c\n#include <stdio.h>\n\nint main() {\n    int count[5];\n    int i;\n\n    printf(\"배열의 전체크기:%d, 하나의 원소크기: %d\\n\",\n        sizeof(count), sizeof(count[0]));\n\n    count[0] = 10;\n    count[1] = 200;\n    count[2] = 350;\n    count[3] = 40;\n    count[4] = 50;\n\n    printf(\"\\n%d, %d, %d, %d, %d \\n\",\n        count[0], count[1], count[2], count[3], count[4]);\n\n    for (i = 0; i < 5; i++)\n        printf(\"%d, \", count[i]);\n    printf(\"\\n\");\n\n    return 0;\n}",
+   "out": "배열의 전체크기:20, 하나의 원소크기: 4\n\n10, 200, 350, 40, 50 \n10, 200, 350, 40, 50, \n"
+  },
+  {
+   "code": "// array01.c\n#include <stdio.h>\n\nint main() {\n    int count[6];\n    int i;\n\n    printf(\"배열의 전체크기:%d, 하나의 원소크기: %d\\n\",\n        sizeof(count), sizeof(count[0]));\n\n    count[0] = 100;\n    count[1] = 200;\n    count[2] = 350;\n    count[3] = 400;\n    count[4] = 50;\n\n    printf(\"\\n%d, %d, %d, %d, %d \\n\",\n        count[0], count[1], count[2], count[3], count[4]);\n\n    for (i = 0; i < 5; i++)\n        printf(\"%d, \", count[i]);\n    printf(\"\\n\");\n\n    return 0;\n}",
+   "out": "배열의 전체크기:24, 하나의 원소크기: 4\n\n100, 200, 350, 400, 50 \n100, 200, 350, 400, 50, \n"
+  },
+  {
+   "code": "// array01.c\n#include <stdio.h>\n\nint main() {\n    int count[8];\n    int i;\n\n    printf(\"배열의 전체크기:%d, 하나의 원소크기: %d\\n\",\n        sizeof(count), sizeof(count[0]));\n\n    count[0] = 150;\n    count[1] = 250;\n    count[2] = 300;\n    count[3] = 40;\n    count[4] = 550;\n\n    printf(\"\\n%d, %d, %d, %d, %d \\n\",\n        count[0], count[1], count[2], count[3], count[4]);\n\n    for (i = 0; i < 5; i++)\n        printf(\"%d, \", count[i]);\n    printf(\"\\n\");\n\n    return 0;\n}",
+   "out": "배열의 전체크기:32, 하나의 원소크기: 4\n\n150, 250, 300, 40, 550 \n150, 250, 300, 40, 550, \n"
+  },
+  {
+   "code": "// array01.c\n#include <stdio.h>\n\nint main() {\n    int count[5];\n    int i;\n\n    printf(\"배열의 전체크기:%d, 하나의 원소크기: %d\\n\",\n        sizeof(count), sizeof(count[0]));\n\n    count[0] = 100;\n    count[1] = 200;\n    count[2] = 30;\n    count[3] = 40;\n    count[4] = 500;\n\n    printf(\"\\n%d, %d, %d, %d, %d \\n\",\n        count[0], count[1], count[2], count[3], count[4]);\n\n    for (i = 0; i < 5; i++)\n        printf(\"%d, \", count[i]);\n    printf(\"\\n\");\n\n    return 0;\n}",
+   "out": "배열의 전체크기:20, 하나의 원소크기: 4\n\n100, 200, 30, 40, 500 \n100, 200, 30, 40, 500, \n"
+  }
+ ]
+}

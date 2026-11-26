@@ -37,7 +37,8 @@
     loadSibling("outview-js", "outview.js");      // ▶ 출력 결과 상자: 줄 번호 · 입력 표시 · 줄마다 설명
     loadSibling("codecopy-js", "codecopy.js");    // ⧉ 복사 — 모든 코드블록 (주차 페이지 · 나중에 생기는 코드 포함)
     loadSibling("termclick-js", "termclick.js");  // 🖥️ 명령을 누르면 출력이 펼쳐지는 터미널 (.tclick · 원고 ```term)
-    loadSibling("ux-js", "ux.js");                // 👆 쓰기 편하게: 아이폰 입력칸 확대 막기 · 작은 버튼 누르는 영역 · 아이콘 · 위쪽 색
+    loadSibling("ux-js", "ux.js");
+    loadSibling("wrongnote-js", "wrongnote.js");  // 📕 오답노트: 틀린 문제를 이 기기에 계속 모음 · 다시 맞히면 뺌 (2026-11-26 · 오답노트.html)                // 👆 쓰기 편하게: 아이폰 입력칸 확대 막기 · 작은 버튼 누르는 영역 · 아이콘 · 위쪽 색
 
     // ---- 전공 과목 로고 — 과목 이름 왼쪽에 (2026-10-09 사용자 요청) ----
     //  과목 페이지 · 주차 페이지 · 중간고사 페이지 · 실제시험의 제목(h1, 앞의 이모지는 로고로 바꿈) + 첫 화면 과목 카드 아이콘

@@ -126,6 +126,7 @@
         + '<div id="rv-body"><div id="rv-empty" style="display:none;">아직 틀린 문제가 없어요! 문제를 풀어본 뒤 다시 눌러주세요. 🙂</div>'
         + '<textarea id="rv-text" readonly></textarea></div>'
         + '<div id="rv-foot"><button class="rv-btn copy" id="rv-copy" type="button">📋 클립보드에 복사</button>'
+        + '<a class="rv-btn close" href="오답노트.html" style="text-decoration:none;display:inline-block;">📕 오답노트 전체 (다른 과목 · 지난번 것까지)</a>'
         + '<button class="rv-btn close" id="rv-close" type="button">닫기</button></div>'
         + '</div>';
     document.body.appendChild(overlay);

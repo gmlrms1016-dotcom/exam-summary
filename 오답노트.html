@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="theme.js?v=202611260939"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📕 오답노트 · 전공</title>
+    <meta name="description" content="전공 과목에서 틀린 문제를 모아 다시 풀기 — 객관식 · 빈칸 · 출력 결과 · 코딩테스트 · 엑셀 · 변형 문제">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css?v=202611260939">
+    <style>
+        .wn-bar{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px;}
+        .wn-chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 13px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;}
+        .wn-chip.on{background:var(--main);border-color:var(--main);color:#fff;}
+        .wn-act{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;}
+        .wn-btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:9px 14px;font:inherit;font-size:13.5px;font-weight:800;cursor:pointer;}
+        .wn-btn.main{background:var(--main);border-color:var(--main);color:#fff;}
+        .wn-item{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0;background:var(--card);}
+        .wn-meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12.5px;color:#6b776e;margin-bottom:8px;}
+        .wn-kind{background:#fdecdc;color:#a4520f;border-radius:6px;padding:2px 8px;font-weight:800;}
+        .wn-n{color:#c0392b;font-weight:800;}
+        .wn-q{white-space:pre-wrap;font-family:Consolas,"D2Coding",Menlo,"맑은 고딕",monospace;font-size:13.5px;line-height:1.55;margin:0;padding:10px 12px;border-radius:10px;background:rgba(127,127,127,.08);overflow-x:auto;}
+        .wn-ans{display:none;margin-top:10px;}
+        .wn-item.open .wn-ans{display:block;}
+        .wn-ans h4{margin:8px 0 4px;font-size:13px;}
+        .wn-ans .wn-p{white-space:pre-wrap;margin:0;padding:9px 12px;border-radius:10px;font-family:Consolas,"D2Coding",Menlo,"맑은 고딕",monospace;font-size:13px;line-height:1.5;}
+        .wn-ans .ok{background:#e7f6ec;color:#176c3a;}
+        .wn-ans .my{background:#fdecec;color:#a32f2b;}
+        .wn-ans .ex{background:rgba(127,127,127,.08);}
+        .wn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+        .wn-row a,.wn-row button{font-size:13px;}
+        .wn-empty{padding:18px;text-align:center;color:#6b776e;line-height:1.7;}
+        .wn-panel{display:none;margin:0 0 16px;}
+        .wn-panel.open{display:block;}
+        .wn-panel textarea{width:100%;min-height:160px;box-sizing:border-box;font-family:Consolas,Menlo,monospace;font-size:12.5px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--card);color:var(--ink);}
+        .wn-sum{font-size:14px;margin:0 0 6px;}
+        html[data-theme=dark] .wn-kind{background:#4a2f17;color:#ffc58f;}
+        html[data-theme=dark] .wn-ans .ok{background:#16351f;color:#a6e9b8;}
+        html[data-theme=dark] .wn-ans .my{background:#3d1a1a;color:#ffb3b3;}
+    </style>
+</head>
+<body>
+<div class="wrap">
+
+    <a class="back-link" href="index.html#sem2-final" style="display:inline-block;margin-bottom:14px;color:var(--main);font-weight:800;text-decoration:none;font-size:14px;">← 2학기 기말고사로 돌아가기</a>
+
+    <header class="page-head">
+        <h1>📕 오답노트</h1>
+        <p>과목 페이지 · 주차 페이지에서 틀린 문제(객관식 · 빈칸 · 출력 결과 · 코딩테스트 · 📗 엑셀 · 🎲 변형 문제)가 저절로 모여요 · 다시 맞히면 저절로 빠져요 · 이 기기에만 저장돼요</p>
+    </header>
+
+    <section class="card">
+        <p class="wn-sum" id="wn-sum">—</p>
+        <div class="wn-bar" id="wn-subj"></div>
+        <div class="wn-act">
+            <button class="wn-btn main" type="button" id="wn-ai">📋 AI 에게 비슷한 문제 받기 (복사)</button>
+            <button class="wn-btn" type="button" id="wn-openall">👁 정답 모두 펼치기</button>
+            <button class="wn-btn" type="button" id="wn-exp">⬇ 내보내기</button>
+            <button class="wn-btn" type="button" id="wn-imp">⬆ 가져오기</button>
+        </div>
+        <div class="wn-panel" id="wn-exp-panel">
+            <p style="margin:0 0 6px;font-size:13px;">아래 글을 복사해서 다른 기기의 오답노트 → ⬆ 가져오기 에 붙여 넣으세요 (학교 PC 는 끄면 초기화돼요)</p>
+            <textarea id="wn-exp-text" readonly></textarea>
+            <div class="wn-row"><button class="wn-btn main" type="button" id="wn-exp-copy">복사</button></div>
+        </div>
+        <div class="wn-panel" id="wn-imp-panel">
+            <p style="margin:0 0 6px;font-size:13px;">다른 기기에서 ⬇ 내보내기 한 글을 붙여 넣고 [합치기] — 같은 문제는 틀린 횟수를 더해요</p>
+            <textarea id="wn-imp-text" placeholder="여기에 붙여 넣기"></textarea>
+            <div class="wn-row"><button class="wn-btn main" type="button" id="wn-imp-go">합치기</button></div>
+        </div>
+        <div id="wn-list"></div>
+    </section>
+
+</div>
+<script>
+(function () {
+    "use strict";
+    var KEY = "wrongnote:v1";
+    function load() { try { var d = JSON.parse(localStorage.getItem(KEY) || "{}"); return d && typeof d === "object" ? d : {}; } catch (e) { return {}; } }
+    function save(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) { } }
+    function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function day(t) { var d = new Date(t || 0); return (d.getMonth() + 1) + "/" + d.getDate() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
+    var ORDER = ["프로그래밍언어실습", "자바프로그래밍", "데이터베이스관리", "운영체제실습", "웹프로그래밍"];
+    var cur = "전체", openAll = false;
+
+    function items() {
+        var d = load();
+        return Object.keys(d).map(function (id) { var it = d[id]; it.id = id; return it; })
+            .sort(function (a, b) { return (b.t || 0) - (a.t || 0); });
+    }
+    function render() {
+        var all = items(), subj = {};
+        all.forEach(function (it) { subj[it.s] = (subj[it.s] || 0) + 1; });
+        var names = Object.keys(subj).sort(function (a, b) {
+            var i = ORDER.indexOf(a), j = ORDER.indexOf(b); return (i < 0 ? 99 : i) - (j < 0 ? 99 : j);
+        });
+        if (cur !== "전체" && !subj[cur]) cur = "전체";
+        document.getElementById("wn-sum").innerHTML = all.length
+            ? "틀린 문제 <b>" + all.length + "</b>개 · 과목 " + names.length + "개 — 다시 풀어서 맞히면 여기서 빠져요"
+            : "아직 담긴 문제가 없어요";
+        var bar = document.getElementById("wn-subj");
+        bar.innerHTML = ["전체"].concat(names).map(function (n) {
+            return '<button type="button" class="wn-chip' + (n === cur ? " on" : "") + '" data-s="' + esc(n) + '">' + esc(n) + " " + (n === "전체" ? all.length : subj[n]) + "</button>";
+        }).join("");
+        var list = all.filter(function (it) { return cur === "전체" || it.s === cur; });
+        var box = document.getElementById("wn-list");
+        if (!list.length) {
+            box.innerHTML = '<div class="wn-empty">📕 틀린 문제가 여기에 저절로 모여요<br>과목 페이지(객관식 · 빈칸 · 출력 결과 · 코딩테스트) · 주차 페이지(📗 엑셀 · 🎲 변형 문제)에서 문제를 풀어 보세요</div>';
+            return;
+        }
+        box.innerHTML = list.map(function (it) {
+            var href = encodeURI(it.p || "") + "#wn=" + encodeURIComponent(it.k || "");
+            return '<div class="wn-item' + (openAll ? " open" : "") + '" data-id="' + esc(it.id) + '">'
+                + '<div class="wn-meta"><span class="wn-kind">' + esc(it.kind || "문제") + "</span><b>" + esc(it.s) + "</b>"
+                + "<span>" + esc((it.title || "").replace(/\s*·.*$/, "").replace(it.s, "").trim() || "과목 페이지") + "</span>"
+                + '<span class="wn-n">❌ ' + (it.n || 1) + "번</span><span>마지막 " + day(it.t) + "</span></div>"
+                + '<div class="wn-q">' + esc(it.q) + "</div>"
+                + '<div class="wn-ans">'
+                + (it.ans ? '<h4>✅ 정답</h4><div class="wn-p ok">' + esc(it.ans) + "</div>" : "")
+                + (it.my ? '<h4>✏️ 내가 쓴 답</h4><div class="wn-p my">' + esc(it.my) + "</div>" : "")
+                + (it.ex ? '<h4>💡 풀이</h4><div class="wn-p ex">' + esc(it.ex) + "</div>" : "")
+                + "</div>"
+                + '<div class="wn-row"><button class="wn-btn" type="button" data-a="open">👁 정답 보기</button>'
+                + '<a class="wn-btn" href="' + esc(href) + '">➡ 문제로 가서 다시 풀기</a>'
+                + '<button class="wn-btn" type="button" data-a="del">🗑 지우기</button></div>'
+                + "</div>";
+        }).join("");
+    }
+    function prompt(list) {
+        var L = ["아래는 내가 대학 전공 과목에서 틀린 문제들이야. (문제 / 정답 / 내가 쓴 답)",
+                 "같은 개념 · 난이도로 새 연습문제를 과목마다 만들어 줘. 문제를 먼저 보여 주고, 정답과 해설은 맨 아래에 따로 모아 줘. 한국어로.", ""];
+        list.forEach(function (it, i) {
+            L.push("──────── " + (i + 1) + ". [" + it.s + " · " + (it.kind || "문제") + "]");
+            L.push(it.q || "");
+            if (it.ans) L.push("▶ " + it.ans);
+            if (it.my) L.push("✏️ 내가 쓴 답: " + it.my);
+            L.push("");
+        });
+        return L.join("\n");
+    }
+    function copy(text, btn, label) {
+        function done() { btn.textContent = "복사됨 ✓"; setTimeout(function () { btn.textContent = label; }, 1600); }
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+        else fallback();
+        function fallback() { var t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (e) { } t.remove(); done(); }
+    }
+
+    document.addEventListener("click", function (e) {
+        var chip = e.target.closest(".wn-chip");
+        if (chip) { cur = chip.getAttribute("data-s"); render(); return; }
+        var b = e.target.closest("[data-a]");
+        if (b && b.closest(".wn-item")) {
+            var item = b.closest(".wn-item"), id = item.getAttribute("data-id");
+            if (b.getAttribute("data-a") === "open") { item.classList.toggle("open"); b.textContent = item.classList.contains("open") ? "🙈 정답 숨기기" : "👁 정답 보기"; return; }
+            if (b.getAttribute("data-a") === "del") { var d = load(); delete d[id]; save(d); render(); return; }
+        }
+    });
+    document.getElementById("wn-ai").addEventListener("click", function () {
+        var list = items().filter(function (it) { return cur === "전체" || it.s === cur; });
+        if (!list.length) return;
+        copy(prompt(list), this, "📋 AI 에게 비슷한 문제 받기 (복사)");
+    });
+    document.getElementById("wn-openall").addEventListener("click", function () {
+        openAll = !openAll; this.textContent = openAll ? "🙈 정답 모두 접기" : "👁 정답 모두 펼치기"; render();
+    });
+    document.getElementById("wn-exp").addEventListener("click", function () {
+        var p = document.getElementById("wn-exp-panel"); p.classList.toggle("open");
+        document.getElementById("wn-imp-panel").classList.remove("open");
+        document.getElementById("wn-exp-text").value = JSON.stringify(load());
+    });
+    document.getElementById("wn-exp-copy").addEventListener("click", function () { copy(document.getElementById("wn-exp-text").value, this, "복사"); });
+    document.getElementById("wn-imp").addEventListener("click", function () {
+        document.getElementById("wn-imp-panel").classList.toggle("open");
+        document.getElementById("wn-exp-panel").classList.remove("open");
+    });
+    document.getElementById("wn-imp-go").addEventListener("click", function () {
+        var raw = document.getElementById("wn-imp-text").value.trim(), add;
+        try { add = JSON.parse(raw); } catch (e) { alert("붙여 넣은 글이 오답노트 내보내기 형식이 아니에요"); return; }
+        if (!add || typeof add !== "object") return;
+        var d = load(), n = 0;
+        Object.keys(add).forEach(function (id) {
+            var a = add[id]; if (!a || typeof a !== "object" || !a.k) return;
+            if (d[id]) { d[id].n = (d[id].n || 0) + (a.n || 1); d[id].t = Math.max(d[id].t || 0, a.t || 0); }
+            else { d[id] = a; n++; }
+        });
+        save(d); document.getElementById("wn-imp-text").value = ""; document.getElementById("wn-imp-panel").classList.remove("open");
+        render(); if (window.moToast) window.moToast("📕 " + n + "문제를 새로 합쳤어요");
+    });
+    window.addEventListener("storage", function (e) { if (e.key === KEY) render(); });
+    render();
+})();
+</script>
+<script src="ink.js?v=202611260939"></script>
+</body>
+</html>

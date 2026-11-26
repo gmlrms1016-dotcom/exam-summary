@@ -1,0 +1,38 @@
+{
+ "lang": "c",
+ "template": "// ex_05-pointer1.c\n#include <stdio.h>\n\nint main(void) {\n    int i = «a=10|20|30|5»;\n    int* ptr;\n    int** pptr;\n    ptr = &i;\n    pptr = &ptr;\n    printf(\"*ptr = %d\\n\", *ptr);\n    **pptr = «b=11|22|33|7»;\n    printf(\"i = %d, *ptr = %d, **ptr = %d\\n\", i, *ptr, **pptr);\n    return 0;\n}",
+ "variants": [
+  {
+   "code": "// ex_05-pointer1.c\n#include <stdio.h>\n\nint main(void) {\n    int i = 10;\n    int* ptr;\n    int** pptr;\n    ptr = &i;\n    pptr = &ptr;\n    printf(\"*ptr = %d\\n\", *ptr);\n    **pptr = 11;\n    printf(\"i = %d, *ptr = %d, **ptr = %d\\n\", i, *ptr, **pptr);\n    return 0;\n}",
+   "out": "*ptr = 10\ni = 11, *ptr = 11, **ptr = 11\n"
+  },
+  {
+   "code": "// ex_05-pointer1.c\n#include <stdio.h>\n\nint main(void) {\n    int i = 5;\n    int* ptr;\n    int** pptr;\n    ptr = &i;\n    pptr = &ptr;\n    printf(\"*ptr = %d\\n\", *ptr);\n    **pptr = 22;\n    printf(\"i = %d, *ptr = %d, **ptr = %d\\n\", i, *ptr, **pptr);\n    return 0;\n}",
+   "out": "*ptr = 5\ni = 22, *ptr = 22, **ptr = 22\n"
+  },
+  {
+   "code": "// ex_05-pointer1.c\n#include <stdio.h>\n\nint main(void) {\n    int i = 5;\n    int* ptr;\n    int** pptr;\n    ptr = &i;\n    pptr = &ptr;\n    printf(\"*ptr = %d\\n\", *ptr);\n    **pptr = 33;\n    printf(\"i = %d, *ptr = %d, **ptr = %d\\n\", i, *ptr, **pptr);\n    return 0;\n}",
+   "out": "*ptr = 5\ni = 33, *ptr = 33, **ptr = 33\n"
+  },
+  {
+   "code": "// ex_05-pointer1.c\n#include <stdio.h>\n\nint main(void) {\n    int i = 5;\n    int* ptr;\n    int** pptr;\n    ptr = &i;\n    pptr = &ptr;\n    printf(\"*ptr = %d\\n\", *ptr);\n    **pptr = 7;\n    printf(\"i = %d, *ptr = %d, **ptr = %d\\n\", i, *ptr, **pptr);\n    return 0;\n}",
+   "out": "*ptr = 5\ni = 7, *ptr = 7, **ptr = 7\n"
+  },
+  {
+   "code": "// ex_05-pointer1.c\n#include <stdio.h>\n\nint main(void) {\n    int i = 30;\n    int* ptr;\n    int** pptr;\n    ptr = &i;\n    pptr = &ptr;\n    printf(\"*ptr = %d\\n\", *ptr);\n    **pptr = 22;\n    printf(\"i = %d, *ptr = %d, **ptr = %d\\n\", i, *ptr, **pptr);\n    return 0;\n}",
+   "out": "*ptr = 30\ni = 22, *ptr = 22, **ptr = 22\n"
+  },
+  {
+   "code": "// ex_05-pointer1.c\n#include <stdio.h>\n\nint main(void) {\n    int i = 20;\n    int* ptr;\n    int** pptr;\n    ptr = &i;\n    pptr = &ptr;\n    printf(\"*ptr = %d\\n\", *ptr);\n    **pptr = 22;\n    printf(\"i = %d, *ptr = %d, **ptr = %d\\n\", i, *ptr, **pptr);\n    return 0;\n}",
+   "out": "*ptr = 20\ni = 22, *ptr = 22, **ptr = 22\n"
+  },
+  {
+   "code": "// ex_05-pointer1.c\n#include <stdio.h>\n\nint main(void) {\n    int i = 30;\n    int* ptr;\n    int** pptr;\n    ptr = &i;\n    pptr = &ptr;\n    printf(\"*ptr = %d\\n\", *ptr);\n    **pptr = 7;\n    printf(\"i = %d, *ptr = %d, **ptr = %d\\n\", i, *ptr, **pptr);\n    return 0;\n}",
+   "out": "*ptr = 30\ni = 7, *ptr = 7, **ptr = 7\n"
+  },
+  {
+   "code": "// ex_05-pointer1.c\n#include <stdio.h>\n\nint main(void) {\n    int i = 30;\n    int* ptr;\n    int** pptr;\n    ptr = &i;\n    pptr = &ptr;\n    printf(\"*ptr = %d\\n\", *ptr);\n    **pptr = 33;\n    printf(\"i = %d, *ptr = %d, **ptr = %d\\n\", i, *ptr, **pptr);\n    return 0;\n}",
+   "out": "*ptr = 30\ni = 33, *ptr = 33, **ptr = 33\n"
+  }
+ ]
+}

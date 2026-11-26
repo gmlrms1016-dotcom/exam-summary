@@ -1,0 +1,38 @@
+{
+ "lang": "c",
+ "template": "// w11-ex01_01-array.c\n#include <stdio.h>\n\nvoid test(int v1[]) {\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"v1[%d]: %d\\n\", i, v1[i]);\n    }\n}\n\nint main() {\n    int array1[] = {«p=10|5|15», «q=20|25|30», «r=30|35|45», «s=40|45|60», «t=50|55|75»};\n    int array2[] = {«u=100|150|200», «v=200|250|400», «w=300|350|600», «x=400|450|800», «y=500|550|1000»};\n    test(array1);\n    printf(\"--------------------\\n\");\n    test(array2);\n    return 0;\n}",
+ "variants": [
+  {
+   "code": "// w11-ex01_01-array.c\n#include <stdio.h>\n\nvoid test(int v1[]) {\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"v1[%d]: %d\\n\", i, v1[i]);\n    }\n}\n\nint main() {\n    int array1[] = {10, 20, 30, 40, 50};\n    int array2[] = {100, 200, 300, 400, 500};\n    test(array1);\n    printf(\"--------------------\\n\");\n    test(array2);\n    return 0;\n}",
+   "out": "v1[0]: 10\nv1[1]: 20\nv1[2]: 30\nv1[3]: 40\nv1[4]: 50\n--------------------\nv1[0]: 100\nv1[1]: 200\nv1[2]: 300\nv1[3]: 400\nv1[4]: 500\n"
+  },
+  {
+   "code": "// w11-ex01_01-array.c\n#include <stdio.h>\n\nvoid test(int v1[]) {\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"v1[%d]: %d\\n\", i, v1[i]);\n    }\n}\n\nint main() {\n    int array1[] = {10, 30, 35, 60, 50};\n    int array2[] = {100, 400, 600, 800, 1000};\n    test(array1);\n    printf(\"--------------------\\n\");\n    test(array2);\n    return 0;\n}",
+   "out": "v1[0]: 10\nv1[1]: 30\nv1[2]: 35\nv1[3]: 60\nv1[4]: 50\n--------------------\nv1[0]: 100\nv1[1]: 400\nv1[2]: 600\nv1[3]: 800\nv1[4]: 1000\n"
+  },
+  {
+   "code": "// w11-ex01_01-array.c\n#include <stdio.h>\n\nvoid test(int v1[]) {\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"v1[%d]: %d\\n\", i, v1[i]);\n    }\n}\n\nint main() {\n    int array1[] = {10, 25, 35, 40, 55};\n    int array2[] = {200, 200, 300, 800, 550};\n    test(array1);\n    printf(\"--------------------\\n\");\n    test(array2);\n    return 0;\n}",
+   "out": "v1[0]: 10\nv1[1]: 25\nv1[2]: 35\nv1[3]: 40\nv1[4]: 55\n--------------------\nv1[0]: 200\nv1[1]: 200\nv1[2]: 300\nv1[3]: 800\nv1[4]: 550\n"
+  },
+  {
+   "code": "// w11-ex01_01-array.c\n#include <stdio.h>\n\nvoid test(int v1[]) {\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"v1[%d]: %d\\n\", i, v1[i]);\n    }\n}\n\nint main() {\n    int array1[] = {10, 20, 45, 40, 55};\n    int array2[] = {200, 250, 600, 400, 550};\n    test(array1);\n    printf(\"--------------------\\n\");\n    test(array2);\n    return 0;\n}",
+   "out": "v1[0]: 10\nv1[1]: 20\nv1[2]: 45\nv1[3]: 40\nv1[4]: 55\n--------------------\nv1[0]: 200\nv1[1]: 250\nv1[2]: 600\nv1[3]: 400\nv1[4]: 550\n"
+  },
+  {
+   "code": "// w11-ex01_01-array.c\n#include <stdio.h>\n\nvoid test(int v1[]) {\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"v1[%d]: %d\\n\", i, v1[i]);\n    }\n}\n\nint main() {\n    int array1[] = {15, 25, 45, 40, 75};\n    int array2[] = {100, 400, 350, 450, 1000};\n    test(array1);\n    printf(\"--------------------\\n\");\n    test(array2);\n    return 0;\n}",
+   "out": "v1[0]: 15\nv1[1]: 25\nv1[2]: 45\nv1[3]: 40\nv1[4]: 75\n--------------------\nv1[0]: 100\nv1[1]: 400\nv1[2]: 350\nv1[3]: 450\nv1[4]: 1000\n"
+  },
+  {
+   "code": "// w11-ex01_01-array.c\n#include <stdio.h>\n\nvoid test(int v1[]) {\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"v1[%d]: %d\\n\", i, v1[i]);\n    }\n}\n\nint main() {\n    int array1[] = {5, 30, 30, 40, 50};\n    int array2[] = {200, 200, 350, 450, 500};\n    test(array1);\n    printf(\"--------------------\\n\");\n    test(array2);\n    return 0;\n}",
+   "out": "v1[0]: 5\nv1[1]: 30\nv1[2]: 30\nv1[3]: 40\nv1[4]: 50\n--------------------\nv1[0]: 200\nv1[1]: 200\nv1[2]: 350\nv1[3]: 450\nv1[4]: 500\n"
+  },
+  {
+   "code": "// w11-ex01_01-array.c\n#include <stdio.h>\n\nvoid test(int v1[]) {\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"v1[%d]: %d\\n\", i, v1[i]);\n    }\n}\n\nint main() {\n    int array1[] = {10, 20, 35, 45, 75};\n    int array2[] = {150, 250, 350, 400, 500};\n    test(array1);\n    printf(\"--------------------\\n\");\n    test(array2);\n    return 0;\n}",
+   "out": "v1[0]: 10\nv1[1]: 20\nv1[2]: 35\nv1[3]: 45\nv1[4]: 75\n--------------------\nv1[0]: 150\nv1[1]: 250\nv1[2]: 350\nv1[3]: 400\nv1[4]: 500\n"
+  },
+  {
+   "code": "// w11-ex01_01-array.c\n#include <stdio.h>\n\nvoid test(int v1[]) {\n    int i;\n    for (i = 0; i < 5; i++) {\n        printf(\"v1[%d]: %d\\n\", i, v1[i]);\n    }\n}\n\nint main() {\n    int array1[] = {10, 30, 30, 60, 75};\n    int array2[] = {150, 250, 350, 800, 500};\n    test(array1);\n    printf(\"--------------------\\n\");\n    test(array2);\n    return 0;\n}",
+   "out": "v1[0]: 10\nv1[1]: 30\nv1[2]: 30\nv1[3]: 60\nv1[4]: 75\n--------------------\nv1[0]: 150\nv1[1]: 250\nv1[2]: 350\nv1[3]: 800\nv1[4]: 500\n"
+  }
+ ]
+}

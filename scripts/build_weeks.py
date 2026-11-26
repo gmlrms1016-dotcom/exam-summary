@@ -17,13 +17,21 @@
 - ```sheet 제목 = 📗 엑셀 모양 표 (교수님 엑셀 설명처럼 · 2026-11-24 사용자: “엑셀로 설명이 있으면 좋겠어”) — 한 줄 = 한 행 · `|` 로 칸 나눔(칸 안의 | 는 \\|) · `--- 탭 이름` 줄 = 아래 시트 탭을 하나 더(누르면 바뀜) · 칸을 누르면 위 수식 줄에 그 칸 내용
   칸 앞 표시(여러 개 가능): `{y}` 노란 칸(이번에 바뀐 값) · `{b}` 테두리 상자(배열 칸) · `{h}` 회색 머리글 · `{k}` 주황 머리글(조인 열쇠 열) · `{c}` 파란 머리글 · `{r}` 빨간 글씨 · `{n}` 굵게 · `{g}` 회색 글씨(힌트 · SQL) · `{m}` 코드 글꼴(줄 앞 들여쓰기는 NBSP) · `{o}` 긴 글을 엑셀처럼 오른쪽 빈 칸으로 넘쳐 보이게(열 폭은 그대로 · 모자라면 빈 열을 더 둠) · `{2}`~`{99}` 칸 합치기(오른쪽으로 N칸) · 칸 끝 `{=4*6}` = 엑셀 수식(칸에는 값 · 누르면 수식 줄에 =4*6)
   ✏️ 입력 칸 (2026-11-25 사용자: “문제를 만들고 푸는 방식이 입력이 되고 채점이 되었으면”): `{?24}` = 답을 쓰는 칸(그 자리 그대로 채점 · `/` 로 여러 정답) · `{?~김광식}` = 행 순서와 상관없이 채점하는 결과 표 칸(같은 표 안에서 ~ 칸이 있는 행끼리 한 행씩 비교 · 빈 행은 `{?~}`) → 입력 칸이 있으면 엑셀 리본(붙여넣기 · 행 삭제 · ✔ 채점 · 👁 정답 보기 · ↺ 다시 풀기)
+  🎲 조인 숫자 바꾸기 (2026-11-26): 탭 안에 `@join {"L":"A3:B7","R":"D3:E7","key":[1,0]}` 한 줄 = 원본 표 두 개의 범위 · 조인 열쇠 열(각 표 안에서 0부터) → 리본에 🎲 숫자 바꾸기 · ↩ 원래 문제 (표 값을 새로 만들고 ✏️ 결과 표 · 카디날리티 정답을 다시 계산 · 제목 글자로 내부 · 왼쪽 · 오른쪽 · 완전 · 자연 · 동등 · X(카티션) 구분)
+- ```variant c 제목 = 🎲 숫자 바꾼 변형 문제 (2026-11-26) — 코드 안 «이름=100|200|300» 자리를 바꿔 8가지 (첫 값 = 원래 코드 · 다시 쓰면 «이름» · 범위 «n=1..9/2») → 빌드할 때 맥에서 컴파일 · 실행한 결과가 정답 (weeks/variants/*.json 에 저장 · 컴파일러 없으면 저장본) · ```variant c exact 제목 = 칸 수까지 채점
   표 여러 개를 한 시트에 세로로 (2026-11-25 사용자: “엑셀처럼 세로로 길게해서 한꺼번에 다 보이게 · 완전외부조인 풀 때 왼쪽 · 오른쪽을 붙여넣고 중복된 걸 빼서”): `✏️ 1) 내부조인 실행결과` 처럼 **✏️ 로 시작하는 칸 = 표 제목** → 그 아래(다음 ✏️ 제목 전까지) 입력 칸이 한 문제 · 채점 · 행 삭제 · 붙여넣기 · 👁 정답 보기가 표마다 따로 · 제목 칸에 ✅ ❌
 - `⭐ **강조**` `✍️ **필기**` `✍️ **필기 정정**` `📝 **교수님 메모**` `⚠️ **정정**` 은 색 배지로 바뀝니다
 원고 파일이 있는 주차만 과목 페이지에서 버튼이 열리고, 나머지는 잠깁니다.
 """
+import hashlib
 import html
+import json
 import os
+import random
 import re
+import shutil
+import subprocess
+import tempfile
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
@@ -363,9 +371,58 @@ function gradeSec(q){var ok=true,bad=0,miss=0,ins=secIns(q);ins.forEach(function
  if(q.rows.length){var exp=[];q.rows.forEach(function(f){var e=f.map(function(i){return alts(i)[0];});if(e.join("")!=="")exp.push(e.join("\u0001"));});
   q.rows.forEach(function(f){var u=f.map(function(i){return xn(i.value);});if(u.join("")==="")return;var k=u.join("\u0001"),p=exp.indexOf(k);if(p>=0){exp.splice(p,1);f.forEach(function(i){i.classList.add("ok");});}else{ok=false;bad++;f.forEach(function(i){i.classList.add("no");});}});if(exp.length){ok=false;miss=exp.length;}}
  return {any:true,ok:ok,bad:bad,miss:miss};}
+function hh(s){var h=5381;s=String(s);for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36);}
+function wnKey(x,sv,q){var tbs=x.querySelectorAll(".xl-tabs .xl-tab"),tb=tbs[[].indexOf.call(x.querySelectorAll(".xl-sheet"),sv)],name=(x.querySelector(".xl-name")||{}).textContent||"";if(q.head)hl(q.head);var lab=q.head?q.head.dataset.l:(tb?(tb.dataset.l||tb.textContent):"");return "xl:"+hh(name+"|"+lab);}
+function wnMark(x){[].forEach.call(x.querySelectorAll(".xl-sheet"),function(sv){sections(sv).forEach(function(q){var k=wnKey(x,sv,q);if(q.head)q.head.setAttribute("data-wn",k);else if(!x.getAttribute("data-wn"))x.setAttribute("data-wn",k);});});}
+function rowsTxt(rows,ans){return rows.map(function(f){return f.map(function(i){return ans?i.getAttribute("data-ans").split("/")[0]:i.value.trim();}).join(" | ");}).filter(function(l){return l.replace(/[ |]/g,"")!=="";}).join(NL);}
+function posTxt(q,ans){return q.pos.map(function(i){var td=i.closest("td"),pv=td&&td.previousElementSibling,lb=pv&&pv.tagName==="TD"?pv.textContent.trim():"";return (lb?lb+" → ":"")+(ans?i.getAttribute("data-ans").split("/")[0]:i.value.trim());}).join(NL);}
+function rangeOf(a){var m=/^([A-Z]+)(\d+):([A-Z]+)(\d+)$/.exec(a||"");return m?{c1:colNum(m[1]),r1:+m[2],c2:colNum(m[3]),r2:+m[4]}:null;}
+function jspec(t){if(!t||!t.dataset.join)return null;try{var j=JSON.parse(t.dataset.join);j.LR=rangeOf(j.L);j.RR=rangeOf(j.R);return j.LR&&j.RR?j:null;}catch(e){return null;}}
+function tblRows(t,g){var out=[];for(var r=g.r1;r<=g.r2;r++){var tds=[],v=[];for(var c=g.c1;c<=g.c2;c++){var td=cellAt(t,r,c);tds.push(td);v.push(td?td.textContent.trim():"");}if(v.join("")!=="")out.push({tds:tds,v:v});}return out;}
+function srcTxt(t){var j=jspec(t);if(!j)return "";return [j.LR,j.RR].map(function(g){var nm=cellAt(t,g.r1-2,g.c1),hd=[];for(var c=g.c1;c<=g.c2;c++){var h=cellAt(t,g.r1-1,c);hd.push(h?h.textContent.trim():"");}return (nm?nm.textContent.trim():"표")+" ("+hd.join(", ")+"): "+tblRows(t,g).map(function(o){return o.v.join(" ");}).join(" / ");}).join(NL);}
+function secCtx(sv,q){var out=[];for(var r=q.r1;r<q.r1+4&&r<=q.r2;r++){var tr=sv.tBodies[0].rows[r-1];if(!tr||tr.querySelector("input.xl-in"))break;var g=tr.querySelector("td.g");if(g)out.push(g.textContent.trim());}return out.join(NL);}
+function wnSec(x,sv,q,lb,r){if(!r.any)return;var k=wnKey(x,sv,q),W=window.wrongNote;if(q.head)q.head.setAttribute("data-wn",k);if(!W)return;var peek=secIns(q).some(function(i){return i.classList.contains("shown");});if(r.ok&&!peek){W.solve(k);return;}
+ var name=(x.querySelector(".xl-name")||{}).textContent||"",ctx=secCtx(sv,q),src=srcTxt(sv);
+ W.record({key:k,kind:"엑셀",q:"[엑셀] "+name+NL+"✏️ "+lb+(ctx?NL+ctx:"")+(src?NL+"— 표 —"+NL+src:""),ans:[posTxt(q,true),rowsTxt(q.rows,true)].filter(Boolean).join(NL),my:peek&&r.ok?"(👁 정답 보기로 채운 답)":[posTxt(q,false),rowsTxt(q.rows,false)].filter(Boolean).join(NL)});}
+var CITY="서울 부산 대구 인천 광주 대전 울산 수원 춘천 청주 전주 제주 포항 창원 강릉 목포".split(" "),NAME="홍길동 임꺽정 박찬호 신동엽 김연아 이순신 강감찬 유관순 장보고 손흥민 김유신 이몽룡 성춘향 심청이 허준혁".split(" "),WORD="작전중 특공대 유레카 다모여 새싹반 해오름 별빛팀 꿈나무 개척단 한마음 나래반 무지개".split(" ");
+function shuf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function ctype(v){var a=v.filter(function(s){return s&&s!=="NULL";});if(!a.length)return "han";if(a.every(function(s){return /^-?\d+$/.test(s);}))return "num";if(a.every(function(s){return /^[a-z]$/.test(s);}))return "low";if(a.every(function(s){return /^[A-Z]$/.test(s);}))return "up";return "han";}
+function cpool(v,need){var a=v.filter(function(s){return s&&s!=="NULL";}),ty=ctype(v),c=[];
+ if(ty==="num"){var n=a.map(Number),mn=Math.min.apply(null,n),mx=Math.max.apply(null,n),d=String(Math.abs(mx)).length,lo=d===1?1:Math.pow(10,d-1),hi=Math.pow(10,d)-1,st=n.every(function(z){return z%100===0;})?100:n.every(function(z){return z%10===0;})?10:1;
+  for(var z=Math.max(lo,mn-5*st);z<=Math.min(hi,mx+8*st);z+=st)c.push(String(z));if(c.length<need+2){c=[];for(z=lo;z<=hi&&c.length<500;z+=st)c.push(String(z));}}
+ else if(ty==="low")c="abcdefghijklmnopqrstuvwxyz".split("");else if(ty==="up")c="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+ else c=a.every(function(s){return CITY.indexOf(s)>=0;})?CITY.slice():a.every(function(s){return /^[가-힣]{3}$/.test(s)&&WORD.indexOf(s)<0;})?NAME.slice():WORD.slice();
+ return shuf(c);}
+function remap(col){var u=[];col.forEach(function(s){if(s&&s!=="NULL"&&u.indexOf(s)<0)u.push(s);});var p=cpool(col,u.length),m={};u.forEach(function(s,i){m[s]=p[i%p.length];});return col.map(function(s){return s&&s!=="NULL"?m[s]:s;});}
+function genJoin(L,R,lk,rk){var keys=L.map(function(r){return r[lk];}).concat(R.map(function(r){return r[rk];}));
+ for(var t=0;t<80;t++){var p=cpool(keys,R.length+3);if(p.length<R.length+1)return null;var rk2=p.slice(0,R.length),oth=p.slice(R.length,R.length+3);
+  var lk2=L.map(function(r){var k=r[lk];if(!k||k==="NULL")return k;return Math.random()<0.68?rk2[Math.floor(Math.random()*rk2.length)]:oth[Math.floor(Math.random()*oth.length)];});
+  var mL=lk2.filter(function(k){return rk2.indexOf(k)>=0;}).length,uR=rk2.filter(function(k){return lk2.indexOf(k)<0;}).length;
+  if(mL>=1&&mL<L.length&&(R.length<2||uR>=1))break;}
+ var nL=L.map(function(r){return r.slice();}),nR=R.map(function(r){return r.slice();});
+ for(var c=0;c<(L[0]||[]).length;c++){if(c===lk)continue;var col=remap(L.map(function(r){return r[c];}));nL.forEach(function(r,i){r[c]=col[i];});}
+ for(c=0;c<(R[0]||[]).length;c++){if(c===rk)continue;var col2=remap(R.map(function(r){return r[c];}));nR.forEach(function(r,i){r[c]=col2[i];});}
+ nL.forEach(function(r,i){r[lk]=lk2[i];});nR.forEach(function(r,i){r[rk]=rk2[i];});return {L:nL,R:nR};}
+function jkind(s){s=String(s||"");return /자연/.test(s)?"natural":/X\s*DEPT|카티션|CROSS|×/i.test(s)?"cross":/왼쪽/.test(s)?"left":/오른쪽/.test(s)?"right":/완전/.test(s)?"full":/내부|동등/.test(s)?"inner":"";}
+function joinRows(kind,L,R,lk,rk){var out=[],used={},nl=(L[0]||[]).length,nr=(R[0]||[]).length,nul=function(n){var a=[];for(var i=0;i<n;i++)a.push("NULL");return a;};
+ if(kind==="cross"){L.forEach(function(l){R.forEach(function(r){out.push(l.concat(r));});});return out;}
+ L.forEach(function(l){var hit=false;R.forEach(function(r,j){if(l[lk]&&l[lk]!=="NULL"&&l[lk]===r[rk]){hit=true;used[j]=1;out.push(kind==="natural"?l.concat(r.filter(function(_,c){return c!==rk;})):l.concat(r));}});if(!hit&&(kind==="left"||kind==="full"))out.push(l.concat(nul(nr)));});
+ if(kind==="right"||kind==="full")R.forEach(function(r,j){if(!used[j])out.push(nul(nl).concat(r));});return out;}
+function keepOrig(x,t){if(t.__orig)return;var o={cells:[],ans:[]},j=jspec(t);[j.LR,j.RR].forEach(function(g){tblRows(t,g).forEach(function(rw){rw.tds.forEach(function(td){if(td)o.cells.push([td,td.textContent,td.classList.contains("num")]);});});});
+ [].forEach.call(t.querySelectorAll("input.xl-in"),function(i){o.ans.push([i,i.getAttribute("data-ans")]);});t.__orig=o;}
+function fresh(x,t){var s=st(x);inputs(x).forEach(function(i){i.value="";i.classList.remove("ok","no","shown");});[].forEach.call(x.querySelectorAll("td.xh"),function(h){setHead(h,"✏️");});[].forEach.call(x.querySelectorAll(".xl-tabs .xl-tab"),function(tb){if(tb.dataset.l)tb.textContent=tb.dataset.l;});s.undo=[];s.redo=[];s.b=null;var m=x.querySelector(".xl-msg");if(m)m.classList.remove("all");paint(x);}
+function randJoin(x){var t=sheetOf(x),j=jspec(t);if(!j){note(x,"이 시트는 숫자 바꾸기가 없어요");return;}keepOrig(x,t);
+ var Lr=tblRows(t,j.LR),Rr=tblRows(t,j.RR),lk=j.key[0],rk=j.key[1],nd=genJoin(Lr.map(function(o){return o.v;}),Rr.map(function(o){return o.v;}),lk,rk);if(!nd){note(x,"숫자를 바꾸지 못했어요");return;}
+ Lr.forEach(function(o,i){o.tds.forEach(function(td,c){if(td){td.textContent=nd.L[i][c];td.classList.toggle("num",/^-?\d+$/.test(nd.L[i][c]));}});});
+ Rr.forEach(function(o,i){o.tds.forEach(function(td,c){if(td){td.textContent=nd.R[i][c];td.classList.toggle("num",/^-?\d+$/.test(nd.R[i][c]));}});});
+ var skip=0;sections(t).forEach(function(q){var kind=jkind(q.head?(hl(q.head),q.head.dataset.l):"");
+  if(q.rows.length&&kind){var rows=joinRows(kind,nd.L,nd.R,lk,rk);if(rows.length>q.rows.length||(rows[0]&&rows[0].length!==q.rows[0].length)){skip++;return;}q.rows.forEach(function(f,i){f.forEach(function(inp,c){inp.setAttribute("data-ans",rows[i]?rows[i][c]:"");});});}
+  q.pos.forEach(function(inp){var td=inp.closest("td"),pv=td&&td.previousElementSibling,k2=jkind(pv?pv.textContent:"");if(k2)inp.setAttribute("data-ans",String(joinRows(k2,nd.L,nd.R,lk,rk).length));});});
+ fresh(x,t);x.__rand=(x.__rand||0)+1;note(x,"🎲 숫자를 바꾼 "+x.__rand+"번째 문제 — 위 표가 바뀌었어요 · 다시 풀고 ✔ 채점"+(skip?" · (표 "+skip+"개는 칸이 모자라 그대로)":"")+" · ↩ 원래 문제");}
+function origJoin(x){var t=sheetOf(x);if(!t||!t.__orig){note(x,"지금이 원래 문제예요");return;}t.__orig.cells.forEach(function(c){c[0].textContent=c[1];c[0].classList.toggle("num",c[2]);});t.__orig.ans.forEach(function(a){a[0].setAttribute("data-ans",a[1]);});fresh(x,t);x.__rand=0;note(x,"↩ 원래 문제로 돌아왔어요");}
 function act(x,b){var tabs=[].slice.call(x.querySelectorAll(".xl-tabs .xl-tab")),sh=[].slice.call(x.querySelectorAll(".xl-sheet")),msg=x.querySelector(".xl-msg"),k=b.getAttribute("data-a");commit(x);
  if(k==="chk"){var n=0,good=0,parts=[];sh.forEach(function(sv,j){var tb=tabs[j];if(!tb.dataset.l)tb.dataset.l=tb.textContent;var secs=sections(sv);if(!secs.length){tb.textContent=tb.dataset.l;return;}var tAll=true,tBad=false;
-   secs.forEach(function(q){var r=gradeSec(q),lb=secLabel(q,tb);n++;if(!r.any){if(q.head)setHead(q.head,"✏️");parts.push(lb+" (아직 안 씀)");tAll=false;return;}if(r.ok)good++;else{tAll=false;tBad=true;}if(q.head)setHead(q.head,r.ok?"✅":"❌");
+   secs.forEach(function(q){var r=gradeSec(q),lb=secLabel(q,tb);n++;if(!r.any){if(q.head)setHead(q.head,"✏️");parts.push(lb+" (아직 안 씀)");tAll=false;return;}if(r.ok)good++;else{tAll=false;tBad=true;}if(q.head)setHead(q.head,r.ok?"✅":"❌");wnSec(x,sv,q,lb,r);
     parts.push(lb+(r.ok?" ✅":" ❌"+(r.bad?" 틀린 칸·행 "+r.bad:"")+(r.miss?" · 빠진 행 "+r.miss:"")));});
    tb.textContent=tBad||tAll?(tBad?"❌ ":"✅ ")+tb.dataset.l.replace(/^✏️\s*/,""):tb.dataset.l;});
   msg.textContent="";var bb=document.createElement("b");bb.textContent=good+" / "+n;msg.appendChild(bb);msg.appendChild(document.createTextNode(" 맞음 — "+parts.join(" · ")));msg.classList.toggle("all",good===n);return;}
@@ -375,8 +432,9 @@ function act(x,b){var tabs=[].slice.call(x.querySelectorAll(".xl-tabs .xl-tab"))
  if(k==="rst"){setv(x,inputs(x).map(function(i){return [i,""];}));inputs(x).forEach(function(i){i.classList.remove("ok","no","shown");});tabs.forEach(function(tb){if(tb.dataset.l)tb.textContent=tb.dataset.l;});[].forEach.call(x.querySelectorAll("td.xh"),function(h){setHead(h,"✏️");});msg.classList.remove("all");msg.textContent="✏️ 다시 풀어 보세요 ("+MOD+"Z = 되돌리기)";return;}
  if(k==="copy"||k==="cut"){if(!st(x).a){note(x,"먼저 칸을 고르세요");return;}copyOut(x,k==="cut");return;}
  if(k==="paste"){if(!st(x).a){note(x,"먼저 붙여 넣을 칸을 고르세요");return;}var fb=function(){if(x.__clip!=null)paste(x,x.__clip);else note(x,"붙여 넣을 내용이 없어요 — "+MOD+"V 로 해 보세요");};if(navigator.clipboard&&navigator.clipboard.readText)navigator.clipboard.readText().then(function(v){paste(x,v);},fb);else fb();return;}
+ if(k==="rand"){randJoin(x);return;}if(k==="orig"){origJoin(x);return;}
  if(k==="esc"){cancel(x);return;}if(k==="ent"){focusCell(x);paint(x);return;}if(k==="del"){delRows(x,true);return;}if(k==="clr"){clearRange(x);return;}if(k==="undo"){undo(x,false);return;}if(k==="redo"){undo(x,true);return;}}
-function init(x){if(x.__xi)return;x.__xi=1;kb(x);
+function init(x){if(x.__xi)return;x.__xi=1;kb(x);if(x.classList.contains("xl-q"))try{wnMark(x);}catch(e){}
  x.addEventListener("pointerdown",function(e){var b=e.target.closest&&e.target.closest(".xl-rib button, .xl-bar .xl-bx");if(b){e.preventDefault();return;}
   var cell=e.target.closest&&e.target.closest(".xl-sheet td, .xl-sheet th");if(!cell||(e.pointerType==="mouse"&&e.button!==0))return;var s=st(x),t=sheetOf(x);if(!t||!t.contains(cell))return;if(cell.parentNode.parentNode.tagName==="THEAD"){commit(x);if(e.pointerType!=="touch")e.preventDefault();var D0=dims(t),ci=cell.cellIndex-1;s.tabCol=null;if(ci<0){s.a={r:1,c:0,w:1};s.b={r:D0.R,c:D0.C-1,w:1};}else if(e.shiftKey&&s.a){s.b={r:D0.R,c:ci,w:1};}else{s.a={r:1,c:ci,w:1};s.b={r:D0.R,c:ci,w:1};}paint(x);focusCell(x,e.pointerType==="touch");return;}
   var i=cell.querySelector&&cell.querySelector("input.xl-in");if(s.mode==="edit"&&i&&i===actIn(x)&&e.target===i&&s.kind==="f2")return;
@@ -434,10 +492,13 @@ def render_sheet(title, lines):
         else:
             cur.append(ln)
     sheets.append((name or "Sheet1", cur))
-    tabs, tables, has_in = [], [], False
+    tabs, tables, has_in, has_join = [], [], False, False
     for k, (nm, rows) in enumerate(sheets):
-        grid = []
+        grid, jspec = [], ""
         for ln in rows:
+            if ln.startswith("@join "):                  # 🎲 조인 숫자 바꾸기 설정 (원본 표 두 개의 범위 · 열쇠 열) — 행으로 그리지 않음
+                jspec, has_join = ln[6:].strip(), True
+                continue
             cells = [c.replace("\\|", "|") for c in re.split(r"(?<!\\)\|", ln)] if ln.strip() else []
             out = []
             for c in cells:
@@ -476,8 +537,9 @@ def render_sheet(title, lines):
                     px = sum(13.2 if ord(ch) > 0x2000 else (7.0 if "m" in cls else 7.6) for ch in c) + 18
                     ncol = max(ncol, col + max(sp, -(-int(px) // 46)))   # 빈 열 1칸 ≈ 44px
                 col += sp
-        h = ['<table class="xl-sheet"%s><thead><tr><th class="xl-corner"></th>%s</tr></thead><tbody>' % (
-            "" if k == 0 else " hidden", "".join("<th>%s</th>" % xl_col(j) for j in range(ncol)))]
+        h = ['<table class="xl-sheet"%s%s><thead><tr><th class="xl-corner"></th>%s</tr></thead><tbody>' % (
+            "" if k == 0 else " hidden", " data-join='%s'" % html.escape(jspec, quote=True) if jspec else "",
+            "".join("<th>%s</th>" % xl_col(j) for j in range(ncol)))]
         for ri, r in enumerate(grid, 1):
             tds, col = [], 0
             for c, cls, sp, f, inp in r:
@@ -513,6 +575,8 @@ def render_sheet(title, lines):
                '<div class="xl-grp"><div class="xl-gb"><div class="xl-col"><button type="button" data-a="clr" title="고른 칸 내용 지우기">🧽 지우기</button>'
                '<button type="button" data-a="undo" title="실행 취소 (⌘/Ctrl+Z)">↶ 실행 취소</button>'
                '<button type="button" data-a="redo" title="다시 실행 (⌘/Ctrl+Shift+Z)">↷ 다시 실행</button></div></div><div class="xl-gl">편집</div></div>'
+               + ('<div class="xl-grp"><div class="xl-gb"><button type="button" class="xl-big" data-a="rand" title="원본 표의 숫자 · 값을 새로 만들고 정답을 다시 계산 (2026-11-26)"><i>🎲</i>숫자 바꾸기</button>'
+                  '<div class="xl-col"><button type="button" data-a="orig" title="처음 문제로">↩ 원래 문제</button></div></div><div class="xl-gl">변형</div></div>' if has_join else '') +
                '<div class="xl-grp"><div class="xl-gb"><button type="button" class="xl-big xl-chk" data-a="chk" title="채점 (⌘/Ctrl+Enter)"><i>✔</i>채점</button>'
                '<div class="xl-col"><button type="button" data-a="show" title="고른 표의 답 보기 (표 밖을 고르면 시트 전체)">👁 정답 보기</button>'
                '<button type="button" data-a="rst" title="모두 지우기 (⌘/Ctrl+Z 로 되돌리기)">↺ 다시 풀기</button></div></div><div class="xl-gl">채점</div></div>'
@@ -531,6 +595,138 @@ def render_sheet(title, lines):
     status = ('<div class="xl-status"><span class="xl-mode">준비</span><span class="xl-msg">%s</span>'
               '<span class="xl-stat"></span><span class="xl-zoom">－ ━━━●━━━ ＋ 100%%</span></div>' % hint)
     return '<div class="xl%s">%s%s%s%s<div class="xl-wrap">%s</div>%s%s</div>' % (" xl-q" if has_in else "", head, menu, rib, fbar, "".join(tables), tabsbar, status)
+
+
+# ===================== 🎲 숫자 바꾼 변형 문제 (```variant c 제목) — 2026-11-26 =====================
+# 사용자: “1,2해줘” — 추천 1번 “숫자만 바꾼 변형 문제” (C 11주차 수업 파일 “숫자만 바꿔서 기말고사 시험문제”)
+#  - 코드 안 «이름=100|200|300» = 바꿀 숫자 자리 (첫 값 = 원래 코드) · 다시 쓰면 «이름» · 범위 «이름=10..90/10»
+#  - 빌드할 때 숫자를 바꾼 코드 8가지를 맥에서 직접 컴파일 · 실행해 정답(실행 결과)을 만듦 → weeks/variants/<해시>.json 에 저장
+#    (컴파일러가 없는 곳 · 클라우드 세션은 이 저장본을 그대로 씀)
+#  - ```variant c exact 제목 = 줄 안의 칸 수까지 채점 (%2d 같은 문제) · 기본은 줄 앞뒤 공백 · 빈 줄 무시
+VAR_RE = re.compile(r"«([A-Za-z_]\w*)(?:=([^»]*))?»")
+VARIANTS_DIR = os.path.join(ROOT, "weeks", "variants")
+
+
+def _choices(spec):
+    m = re.fullmatch(r"\s*(-?\d+)\s*\.\.\s*(-?\d+)\s*(?:/\s*(\d+))?\s*", spec)
+    if m:
+        a, b, st = int(m.group(1)), int(m.group(2)), int(m.group(3) or 1)
+        return [str(v) for v in range(a, b + 1, st)]
+    return [c.strip() for c in spec.split("|") if c.strip() != ""]
+
+
+def _run_c(code):
+    cc = shutil.which("cc") or shutil.which("clang") or shutil.which("gcc")
+    if not cc:
+        return None
+    with tempfile.TemporaryDirectory() as d:
+        src, exe = os.path.join(d, "v.c"), os.path.join(d, "v")
+        with open(src, "w", encoding="utf-8") as f:
+            f.write(code + "\n")
+        r = subprocess.run([cc, "-std=c11", "-w", "-O0", "-o", exe, src], capture_output=True, text=True)
+        if r.returncode != 0:
+            print("  ⚠️ 변형 문제 컴파일 실패:", r.stderr.strip()[:300])
+            return None
+        try:
+            out = subprocess.run([exe], capture_output=True, timeout=5)
+        except subprocess.TimeoutExpired:
+            print("  ⚠️ 변형 문제 실행 시간 초과")
+            return None
+        return out.stdout.decode("utf-8", "replace")
+
+
+def gen_variants(lang, tpl, n=8):
+    key = hashlib.sha1((lang + "\n" + tpl).encode("utf-8")).hexdigest()[:12]
+    path = os.path.join(VARIANTS_DIR, key + ".json")
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            return key, json.load(f)["variants"]
+    defs = {}
+    for m in VAR_RE.finditer(tpl):
+        if m.group(2) is not None and m.group(1) not in defs:
+            defs[m.group(1)] = _choices(m.group(2))
+    rnd = random.Random(int(key, 16))
+    combos, tries = [{k: v[0] for k, v in defs.items()}], 0
+    while len(combos) < n and tries < 300:
+        c = {k: rnd.choice(v) for k, v in defs.items()}
+        if c not in combos:
+            combos.append(c)
+        tries += 1
+    out = []
+    for c in combos:
+        code = VAR_RE.sub(lambda m: c[m.group(1)], tpl)
+        res = _run_c(code) if lang == "c" else None
+        if res is None:
+            if not out:
+                print("  ⚠️ 변형 문제를 만들 컴파일러가 없거나 실패 — 원래 코드만 보여 줌")
+                return key, []
+            continue
+        out.append({"code": code, "out": res})
+    if out:
+        os.makedirs(VARIANTS_DIR, exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump({"lang": lang, "template": tpl, "variants": out}, f, ensure_ascii=False, indent=1)
+        print("  🎲 변형 문제 %d가지 만듦 (%s)" % (len(out), key))
+    return key, out
+
+
+def render_variant(head, lines):
+    parts = head.split()
+    lang = parts[0] if parts else "c"
+    exact = len(parts) > 1 and parts[1] == "exact"
+    title = " ".join(parts[2 if exact else 1:]) or "숫자 바꾼 문제"
+    tpl = "\n".join(lines).rstrip()
+    key, vs = gen_variants(lang, tpl)
+    if not vs:
+        code = VAR_RE.sub(lambda m: next((x for x in [m.group(2)] if x), "").split("|")[0] if m.group(2) else m.group(1), tpl)
+        return '<pre><code class="language-%s">%s</code></pre>' % (lang, html.escape(code, quote=False))
+    codes = "".join('<pre class="vq-code"%s><code class="language-%s">%s</code></pre>' % ("" if i == 0 else " hidden", lang, html.escape(v["code"], quote=False))
+                    for i, v in enumerate(vs))
+    outs = "".join('<script type="text/plain" class="vq-out">%s</script>' % v["out"].replace("</", "<\\/") for v in vs)
+    return ('<div class="vq" data-wn="vq:%s"%s><div class="vq-head"><span class="vq-badge">🎲 숫자 바꾼 문제</span><b class="vq-title">%s</b>'
+            '<span class="vq-n">1 / %d · 원래 코드</span></div>%s%s'
+            '<textarea class="vq-in" rows="4" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="실행 결과를 그대로 적어 보세요 (한 줄에 한 줄 · ⌘/Ctrl+Enter = 채점)"></textarea>'
+            '<div class="vq-btns"><button type="button" class="vq-b main" data-v="chk">✔ 채점</button><button type="button" class="vq-b" data-v="show">👁 정답 보기</button>'
+            '<button type="button" class="vq-b" data-v="next">🎲 다른 숫자로</button></div><div class="vq-res"></div></div>'
+            % (key, ' data-exact="1"' if exact else "", html.escape(title), len(vs), codes, outs))
+
+
+VQ_JS = r"""<style>
+.vq{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0;background:var(--card);}
+.vq-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-bottom:8px;}
+.vq-badge{background:#fdecdc;color:#a4520f;border-radius:6px;padding:2px 8px;font-size:12.5px;font-weight:800;}
+.vq-title{font-size:15px;}
+.vq-n{margin-left:auto;font-size:12.5px;color:#6b776e;}
+.vq-code[hidden]{display:none!important;}
+.vq-in{width:100%;box-sizing:border-box;min-height:88px;margin-top:6px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-family:Consolas,"D2Coding",Menlo,monospace;font-size:14px;line-height:1.5;}
+.vq-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.vq-b{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:800;cursor:pointer;}
+.vq-b.main{background:var(--main);border-color:var(--main);color:#fff;}
+.vq-res{margin-top:10px;font-size:14px;line-height:1.6;}
+.vq-res pre{margin:6px 0 0;padding:9px 12px;border-radius:10px;background:#0f1b14;color:#dff5e6;font-family:Consolas,"D2Coding",Menlo,monospace;font-size:13.5px;white-space:pre;overflow-x:auto;}
+.vq-res .vq-l{font-family:Consolas,"D2Coding",Menlo,monospace;font-size:13px;white-space:pre;}
+.vq-ok{color:#176c3a;font-weight:800;}.vq-no{color:#c0392b;font-weight:800;}
+html[data-theme=dark] .vq-ok{color:#7fd49a;}html[data-theme=dark] .vq-no{color:#ff8a80;}
+</style><script data-vq-js>(function(){if(window.__vq)return;window.__vq=1;
+var NL=String.fromCharCode(10);
+function lines(s,ex){s=String(s||"").replace(/\r\n?/g,NL);var L=s.split(NL).map(function(l){return ex?l.replace(/\s+$/,""):l.trim().replace(/[ \t]+/g," ");});if(ex){while(L.length&&L[L.length-1]==="")L.pop();return L;}return L.filter(function(l){return l!=="";});}
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+function cur(q){return +(q.dataset.i||0);}
+function data(q){var i=cur(q);return {code:q.querySelectorAll(".vq-code")[i],out:q.querySelectorAll(".vq-out")[i].textContent};}
+function title(q){return (q.querySelector(".vq-title")||{}).textContent||"";}
+function rec(q,my){var W=window.wrongNote;if(!W)return;var d=data(q);W.record({key:q.getAttribute("data-wn"),kind:"변형 (실행결과)",q:"[🎲 숫자 바꾼 문제] "+title(q)+NL+d.code.textContent.replace(/\s+$/,""),ans:"실행 결과:"+NL+d.out.replace(/\s+$/,""),my:my});}
+function chk(q){var ex=q.hasAttribute("data-exact"),d=data(q),ta=q.querySelector(".vq-in"),r=q.querySelector(".vq-res");
+ var E=lines(d.out,ex),M=lines(ta.value,ex);if(!M.length){r.innerHTML='<span class="vq-no">실행 결과를 적고 채점을 눌러 주세요</span>';return;}
+ var n=Math.max(E.length,M.length),good=0,rows=[];for(var i=0;i<n;i++){var ok=E[i]!==undefined&&M[i]===E[i];if(ok)good++;rows.push('<div class="vq-l">'+(ok?"✅ ":"❌ ")+(i+1)+"줄  "+esc(M[i]===undefined?"(안 씀)":M[i])+"</div>");}
+ var all=good===E.length&&M.length===E.length;
+ r.innerHTML=(all?'<span class="vq-ok">✅ 정답! ('+E.length+"줄 모두)</span>":'<span class="vq-no">❌ '+good+" / "+E.length+"줄 맞음"+(M.length!==E.length?" · 쓴 줄 "+M.length+" / 실제 "+E.length+"줄":"")+"</span>")+rows.join("")+(all?"":'<div style="margin-top:4px;font-size:13px;opacity:.8">💡 👁 정답 보기로 실제 출력과 비교 · 🎲 다른 숫자로 한 번 더</div>');
+ q.dataset.state=all?"ok":"no";
+ if(all){if(!q.__peek&&window.wrongNote)window.wrongNote.solve(q.getAttribute("data-wn"));}else rec(q,ta.value);}
+function show(q){var d=data(q),r=q.querySelector(".vq-res");q.__peek=1;r.innerHTML='<b>👁 실제 실행 결과</b>'+(q.hasAttribute("data-exact")?' <span style="font-size:12.5px;opacity:.8">(칸 수까지 채점)</span>':"")+"<pre>"+esc(d.out.replace(/\s+$/,""))+"</pre>";if(q.dataset.state!=="ok")rec(q,q.querySelector(".vq-in").value||"(👁 정답 보기)");}
+function next(q){var cs=q.querySelectorAll(".vq-code"),n=cs.length,i=(cur(q)+1)%n;cs.forEach(function(c,k){c.hidden=k!==i;});q.dataset.i=i;q.__peek=0;q.dataset.state="";q.querySelector(".vq-in").value="";q.querySelector(".vq-res").innerHTML="";q.querySelector(".vq-n").textContent=(i+1)+" / "+n+(i===0?" · 원래 코드":" · 숫자 바꿈");}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".vq [data-v]");if(!b)return;var q=b.closest(".vq"),v=b.getAttribute("data-v");if(v==="chk")chk(q);else if(v==="show")show(q);else next(q);});
+document.addEventListener("keydown",function(e){var t=e.target;if(!t.classList||!t.classList.contains("vq-in"))return;if(e.key==="Enter"&&(e.metaKey||e.ctrlKey)){e.preventDefault();chk(t.closest(".vq"));}});
+})();</script>"""
 
 
 def render_md(md):
@@ -565,7 +761,11 @@ def render_md(md):
                 code.append(lines[i])
                 i += 1
             body = html.escape("\n".join(code), quote=False)
-            if lang == "sheet" or lang.startswith("sheet "):   # 📗 엑셀 모양 표 (교수님 엑셀 설명처럼)
+            if lang.startswith("variant "):                 # 🎲 숫자 바꾼 변형 문제 (C 코드를 숫자만 바꿔 8가지 · 정답 = 실제 실행 결과)
+                parts.append(render_variant(lang[8:].strip(), code))
+                if not any("data-vq-js" in x for x in parts):
+                    parts.append(VQ_JS)
+            elif lang == "sheet" or lang.startswith("sheet "):   # 📗 엑셀 모양 표 (교수님 엑셀 설명처럼)
                 parts.append(render_sheet(lang[5:].strip(), code))
                 if not any("data-xl-js" in x for x in parts):
                     parts.append(XL_JS)
@@ -743,7 +943,7 @@ PAGE = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="{asset}theme.js?v=202611251636"></script>
+    <script src="{asset}theme.js?v=202611260939"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{subject} {week_label} · {title}</title>
     <meta name="description" content="{subject} {week_label} 정리 — {title}">
@@ -753,7 +953,7 @@ PAGE = """<!DOCTYPE html>
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="{asset}favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="{asset}icon-180.png">
-    <link rel="stylesheet" href="{asset}style.css?v=202611251636">
+    <link rel="stylesheet" href="{asset}style.css?v=202611260939">
     <style>{css}</style>
 </head>
 <body>
@@ -781,7 +981,7 @@ PAGE = """<!DOCTYPE html>
         <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
     </footer>
 </div>
-<script src="{asset}ink.js?v=202611251636"></script>
+<script src="{asset}ink.js?v=202611260939"></script>
 </body>
 </html>
 """

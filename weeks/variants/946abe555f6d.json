@@ -1,0 +1,38 @@
+{
+ "lang": "c",
+ "template": "// main.c\n#include<stdio.h>\n\nint add(int i) {\n    return i+«d=1|2|5|10»;\n}\n\nint main(void) {\n    int(*pfunc)(int);\n    int result;\n    pfunc=add;\n    result = pfunc(«a=11|20|7|100»);\n    printf(\"result = %d\\n\", result);\n    return 0;\n}",
+ "variants": [
+  {
+   "code": "// main.c\n#include<stdio.h>\n\nint add(int i) {\n    return i+1;\n}\n\nint main(void) {\n    int(*pfunc)(int);\n    int result;\n    pfunc=add;\n    result = pfunc(11);\n    printf(\"result = %d\\n\", result);\n    return 0;\n}",
+   "out": "result = 12\n"
+  },
+  {
+   "code": "// main.c\n#include<stdio.h>\n\nint add(int i) {\n    return i+10;\n}\n\nint main(void) {\n    int(*pfunc)(int);\n    int result;\n    pfunc=add;\n    result = pfunc(100);\n    printf(\"result = %d\\n\", result);\n    return 0;\n}",
+   "out": "result = 110\n"
+  },
+  {
+   "code": "// main.c\n#include<stdio.h>\n\nint add(int i) {\n    return i+5;\n}\n\nint main(void) {\n    int(*pfunc)(int);\n    int result;\n    pfunc=add;\n    result = pfunc(11);\n    printf(\"result = %d\\n\", result);\n    return 0;\n}",
+   "out": "result = 16\n"
+  },
+  {
+   "code": "// main.c\n#include<stdio.h>\n\nint add(int i) {\n    return i+2;\n}\n\nint main(void) {\n    int(*pfunc)(int);\n    int result;\n    pfunc=add;\n    result = pfunc(20);\n    printf(\"result = %d\\n\", result);\n    return 0;\n}",
+   "out": "result = 22\n"
+  },
+  {
+   "code": "// main.c\n#include<stdio.h>\n\nint add(int i) {\n    return i+1;\n}\n\nint main(void) {\n    int(*pfunc)(int);\n    int result;\n    pfunc=add;\n    result = pfunc(20);\n    printf(\"result = %d\\n\", result);\n    return 0;\n}",
+   "out": "result = 21\n"
+  },
+  {
+   "code": "// main.c\n#include<stdio.h>\n\nint add(int i) {\n    return i+2;\n}\n\nint main(void) {\n    int(*pfunc)(int);\n    int result;\n    pfunc=add;\n    result = pfunc(11);\n    printf(\"result = %d\\n\", result);\n    return 0;\n}",
+   "out": "result = 13\n"
+  },
+  {
+   "code": "// main.c\n#include<stdio.h>\n\nint add(int i) {\n    return i+10;\n}\n\nint main(void) {\n    int(*pfunc)(int);\n    int result;\n    pfunc=add;\n    result = pfunc(20);\n    printf(\"result = %d\\n\", result);\n    return 0;\n}",
+   "out": "result = 30\n"
+  },
+  {
+   "code": "// main.c\n#include<stdio.h>\n\nint add(int i) {\n    return i+5;\n}\n\nint main(void) {\n    int(*pfunc)(int);\n    int result;\n    pfunc=add;\n    result = pfunc(7);\n    printf(\"result = %d\\n\", result);\n    return 0;\n}",
+   "out": "result = 12\n"
+  }
+ ]
+}

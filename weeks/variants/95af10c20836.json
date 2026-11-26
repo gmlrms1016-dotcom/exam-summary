@@ -1,0 +1,38 @@
+{
+ "lang": "c",
+ "template": "#include <stdio.h>\n\nint main(void) {\n    int a = «a=10|15|40|7»;\n    int* b = &a;\n    *b = «b=20|25|50|9»;\n    printf(\"%d %d\\n\", a, *b);\n    a = «c=30|35|60|11»;\n    printf(\"%d %d\\n\", a, *b);\n    return 0;\n}",
+ "variants": [
+  {
+   "code": "#include <stdio.h>\n\nint main(void) {\n    int a = 10;\n    int* b = &a;\n    *b = 20;\n    printf(\"%d %d\\n\", a, *b);\n    a = 30;\n    printf(\"%d %d\\n\", a, *b);\n    return 0;\n}",
+   "out": "20 20\n30 30\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main(void) {\n    int a = 7;\n    int* b = &a;\n    *b = 20;\n    printf(\"%d %d\\n\", a, *b);\n    a = 11;\n    printf(\"%d %d\\n\", a, *b);\n    return 0;\n}",
+   "out": "20 20\n11 11\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main(void) {\n    int a = 15;\n    int* b = &a;\n    *b = 9;\n    printf(\"%d %d\\n\", a, *b);\n    a = 11;\n    printf(\"%d %d\\n\", a, *b);\n    return 0;\n}",
+   "out": "9 9\n11 11\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main(void) {\n    int a = 40;\n    int* b = &a;\n    *b = 9;\n    printf(\"%d %d\\n\", a, *b);\n    a = 60;\n    printf(\"%d %d\\n\", a, *b);\n    return 0;\n}",
+   "out": "9 9\n60 60\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main(void) {\n    int a = 7;\n    int* b = &a;\n    *b = 25;\n    printf(\"%d %d\\n\", a, *b);\n    a = 11;\n    printf(\"%d %d\\n\", a, *b);\n    return 0;\n}",
+   "out": "25 25\n11 11\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main(void) {\n    int a = 40;\n    int* b = &a;\n    *b = 20;\n    printf(\"%d %d\\n\", a, *b);\n    a = 35;\n    printf(\"%d %d\\n\", a, *b);\n    return 0;\n}",
+   "out": "20 20\n35 35\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main(void) {\n    int a = 7;\n    int* b = &a;\n    *b = 9;\n    printf(\"%d %d\\n\", a, *b);\n    a = 30;\n    printf(\"%d %d\\n\", a, *b);\n    return 0;\n}",
+   "out": "9 9\n30 30\n"
+  },
+  {
+   "code": "#include <stdio.h>\n\nint main(void) {\n    int a = 15;\n    int* b = &a;\n    *b = 50;\n    printf(\"%d %d\\n\", a, *b);\n    a = 60;\n    printf(\"%d %d\\n\", a, *b);\n    return 0;\n}",
+   "out": "50 50\n60 60\n"
+  }
+ ]
+}
