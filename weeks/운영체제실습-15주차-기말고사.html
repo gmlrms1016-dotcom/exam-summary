@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <script src="../theme.js?v=202611260939"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>운영체제실습 15주차 · 기말고사 시험문제 정리 (9 ~ 12주차 반영)</title>
-    <meta name="description" content="운영체제실습 15주차 정리 — 기말고사 시험문제 정리 (9 ~ 12주차 반영)">
+    <title>운영체제실습 15주차 · 기말고사 시험문제 정리 (9 ~ 13주차 반영)</title>
+    <meta name="description" content="운영체제실습 15주차 정리 — 기말고사 시험문제 정리 (9 ~ 13주차 반영)">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="운영체제실습 15주차 · 기말고사 시험문제 정리 (9 ~ 12주차 반영)">
+    <meta property="og:title" content="운영체제실습 15주차 · 기말고사 시험문제 정리 (9 ~ 13주차 반영)">
     <meta property="og:description" content="운영체제실습 15주차 정리 — 필기 · 예제 · 그림">
     <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -99,18 +99,18 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <header class="page-head">
         <h1>🐧 운영체제실습 · 15주차 · 기말고사</h1>
-        <p>기말고사 시험문제 정리 (9 ~ 12주차 반영)</p>
+        <p>기말고사 시험문제 정리 (9 ~ 13주차 반영)</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-12주차.html">‹ 이전 · <b>12주차</b><br><small>DB 서버 · NFS — 🔥 MariaDB 설치 · 원격 사용자 + NFS 공유 폴더</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-13주차.html">‹ 이전 · <b>13주차</b><br><small>웹 서버 · APM — 🔥 Apache · PHP · MariaDB 설치 + 클라우드 저장소 ownCloud</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../운영체제실습-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 1장 ~ 7장 · 객관식(시험 예시 1~10번) + sh 문제 + 호스트 / 게스트 운영체제 설명 1문제였어요.</div>
+<div class="tip">🔥 ✍️ <b>“리눅스 시험은 필기시험으로 시행함”</b> (13주차 11/26 필기) — 명령을 종이에 쓰는 시험 → 명령어 · 순서 · 폴더 이름을 외워서 쓸 수 있게<br>📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 1장 ~ 7장 · 객관식(시험 예시 1~10번) + sh 문제 + 호스트 / 게스트 운영체제 설명 1문제였어요.</div>
 <section class="card" id="s1">
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/리눅스-그림정리.html?weeks=9-15#disk" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/리눅스-그림정리.html?weeks=9-15#disk" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차(6장 디스크) — ⑮ 디스크 추가 · ⑯ 마운트하면 가려짐 · ⑰ fstab 6칸 · ⑱ 이름 바뀜 → 응급 모드 · ⑲ 쿼터 soft · hard · ⑬ vi 모드</li><li>10주차(6장 RAID) — ⑳ RAID 종류 · ㉑ Linear · RAID 0 · RAID 1 저장 방식 · ㉒ RAID 5 짝수 패리티 · ㉓ Linear RAID 고장 → 복구</li><li>11주차(원격 접속 · LVM) — ㉔ 텔넷 서버 · ㉕ XRDP · ㉖ 🔥 LVM</li><li>12주차(DB 서버 · NFS) — ㉗ MariaDB 설치 · ㉘ 🔥 DB 사용자 '이름'@'호스트' · ㉙ 🔥 NFS /etc/exports → mount</li></ul>
+<ul><li>9주차(6장 디스크) — ⑮ 디스크 추가 · ⑯ 마운트하면 가려짐 · ⑰ fstab 6칸 · ⑱ 이름 바뀜 → 응급 모드 · ⑲ 쿼터 soft · hard · ⑬ vi 모드</li><li>10주차(6장 RAID) — ⑳ RAID 종류 · ㉑ Linear · RAID 0 · RAID 1 저장 방식 · ㉒ RAID 5 짝수 패리티 · ㉓ Linear RAID 고장 → 복구</li><li>11주차(원격 접속 · LVM) — ㉔ 텔넷 서버 · ㉕ XRDP · ㉖ 🔥 LVM</li><li>12주차(DB 서버 · NFS) — ㉗ MariaDB 설치 · ㉘ 🔥 DB 사용자 '이름'@'호스트' · ㉙ 🔥 NFS /etc/exports → mount</li><li>13주차(웹 서버 · APM) — ㉚ 🔥 APM 웹 서버 · ㉛ 🔥 ownCloud 설치 순서</li></ul>
 </section>
 <section class="card" id="s2">
 <h2>9주차 · 6장 디스크 관리와 사용자별 공간 할당</h2>
@@ -167,8 +167,23 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 로그 · 캡처는 <a href="운영체제실습-12주차.html">12주차</a> · 문제는 🔒 실제시험.</div>
 </section>
+<section class="card" id="s6">
+<h2>13주차 · 웹 서버(APM) · 클라우드 저장소 ownCloud — 🔥 ✍️ “리눅스 시험은 필기시험”</h2>
+<table class="ref">
+<tbody>
+<tr><th>포인트</th><th>핵심 · 답</th><th>그림</th></tr>
+<tr><td>🔥 필기시험</td><td>✍️ “리눅스 시험은 필기시험으로 시행함” → 아래 명령을 손으로 쓸 수 있게</td><td></td></tr>
+<tr><td>APM</td><td><b>A</b>pache(꾸러미 <b>httpd</b> · 80번) + <b>P</b>HP + <b>M</b>ariaDB(MySQL · 3306번) · 웹 문서 폴더 <b>/var/www/html</b> · 확인 <code>echo '&lt;?php phpinfo(); ?&gt;' &gt; /var/www/html/phpinfo.php</code> → 크롬 <code>http://IP/phpinfo.php</code></td><td>㉚</td></tr>
+<tr><td>PHP 7.4 (Remi)</td><td><code>dnf -y install dnf-utils (remi-release-10 주소)</code> → <code>dnf -y module reset php</code> → <code>dnf -y module enable php:remi-7.4</code> → <code>dnf -y install httpd mariadb-server php php-mysqlnd php-gd php-mbstring php-pecl-zip php-xml php-json php-intl</code> (📖 VITAMIN QUIZ 12-1)</td><td>㉚</td></tr>
+<tr><td>서비스 · 방화벽</td><td><code>systemctl restart · enable · status</code> (mariadb · httpd) · <code>firewall-cmd --permanent --add-service=http</code> (https 도) → <code>firewall-cmd --reload</code> · 그래픽 = <code>firewall-config</code> (런타임 → 영구적 · http · https 체크)</td><td>㉚</td></tr>
+<tr><td>DB 준비</td><td><code>mysql</code> → <code>create database webDB;</code> → <code>create user webuser@localhost identified by '…';</code> → <code>grant all on webDB.* to webuser@localhost;</code> (<code>webDB.*</code> = webDB 의 모든 표)</td><td>㉛</td></tr>
+<tr><td>🔥 ownCloud</td><td><code>cd /var/www/html</code> → <code>wget …owncloud-10.15.3.zip</code> → <code>unzip -q</code> → <code>mkdir owncloud/data</code> → 🔥 <code>chown -R apache:apache owncloud</code> (웹 서버 = apache 사용자) → <code>chmod -R 755 owncloud</code> → <code>systemctl restart httpd</code> → 크롬 <code>http://IP/owncloud</code> (admin · DB webuser · webDB · localhost) (📖 VITAMIN QUIZ 12-3)</td><td>㉛</td></tr>
+<tr><td>올린 파일 위치</td><td><code>/var/www/html/owncloud/data/사용자/files/</code> (주인 apache) · Windows ownCloud 클라이언트 = 폴더 동기화</td><td>㉛</td></tr>
+</tbody></table>
+<div class="tip">자세한 로그 · 캡처는 <a href="운영체제실습-13주차.html">13주차</a> · 문제는 🔒 실제시험.</div>
+</section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-12주차.html">‹ 이전 · <b>12주차</b><br><small>DB 서버 · NFS — 🔥 MariaDB 설치 · 원격 사용자 + NFS 공유 폴더</small></a><span></span></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-13주차.html">‹ 이전 · <b>13주차</b><br><small>웹 서버 · APM — 🔥 Apache · PHP · MariaDB 설치 + 클라우드 저장소 ownCloud</small></a><span></span></nav>
 
     <p class="wk-src">노션 「운영체제실습」 주차 페이지들의 시험 포인트를 모은 정리입니다.</p>
 

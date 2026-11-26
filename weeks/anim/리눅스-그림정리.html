@@ -602,6 +602,26 @@
   <g data-s="6"><text x="300" y="408" text-anchor="middle" class="b" style="fill:var(--ap)">한쪽에서 넣은 파일이 모두에게 보임</text><text x="300" y="432" text-anchor="middle" class="s">rw = 읽기·쓰기 · sync = 바로 기록 · 707 = others 도 쓰기</text></g>
 </svg>
 
+<svg data-fig="apm" viewBox="0 0 600 440" role="img" aria-label="Windows 크롬이 Server(B)의 Apache(httpd 80번)에 접속하면 /var/www/html 의 파일을 보여 주고 .php 는 PHP 가 실행해 MariaDB(3306)에서 데이터를 가져옴" hidden>
+  <g data-s="1"><rect x="16" y="30" width="150" height="86" rx="12" style="fill:var(--oc);fill-opacity:.12;stroke:var(--oc);stroke-width:2"/><text x="91" y="62" text-anchor="middle" class="b">Windows 크롬</text><text x="91" y="86" text-anchor="middle" class="s">http://192.168.111.200</text><text x="91" y="104" text-anchor="middle" class="s">/phpinfo.php</text></g>
+  <g data-s="2"><rect x="200" y="14" width="384" height="400" rx="14" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:2"/><text x="392" y="40" text-anchor="middle" class="b">Server(B) 192.168.111.200</text><path class="d" d="M166,72 L226,72" style="stroke:var(--oc);stroke-width:2.5;fill:none"/><path d="M234,72 L222,66 L222,78 Z" style="fill:var(--oc)"/><rect x="236" y="54" width="312" height="56" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><text x="392" y="78" text-anchor="middle" class="b">A = Apache (httpd) · 포트 80</text><text x="392" y="99" text-anchor="middle" class="s">방화벽 서비스 http · https 허용</text></g>
+  <g data-s="3"><rect x="236" y="126" width="312" height="72" rx="10" style="fill:none;stroke:var(--inh);stroke-width:1.5;stroke-dasharray:5 4"/><text x="392" y="150" text-anchor="middle" class="b">/var/www/html (웹 문서 폴더)</text><text x="392" y="172" text-anchor="middle" class="s">index.html · phpinfo.php · owncloud/</text><text x="392" y="190" text-anchor="middle" class="s">주소 /이름 = 이 폴더의 파일</text></g>
+  <g data-s="4"><path class="d" d="M392,198 L392,226" style="stroke:var(--ap);stroke-width:2.5;fill:none"/><path d="M392,234 L386,222 L398,222 Z" style="fill:var(--ap)"/><rect x="236" y="236" width="312" height="56" rx="10" style="fill:var(--ap);fill-opacity:.14;stroke:var(--ap);stroke-width:2"/><text x="392" y="260" text-anchor="middle" class="b">P = PHP 7.4 (Remi 저장소)</text><text x="392" y="281" text-anchor="middle" class="s">.php 파일을 실행해 HTML 로 바꿔 줌</text></g>
+  <g data-s="5"><path class="d" d="M392,292 L392,318" style="stroke:var(--te);stroke-width:2.5;fill:none"/><path d="M392,326 L386,314 L398,314 Z" style="fill:var(--te)"/><rect x="236" y="328" width="312" height="56" rx="10" style="fill:var(--inh);fill-opacity:.16;stroke:var(--inh);stroke-width:2"/><text x="392" y="352" text-anchor="middle" class="b">M = MariaDB (MySQL) · 포트 3306</text><text x="392" y="373" text-anchor="middle" class="s">php-mysqlnd 로 연결 · webDB · webuser@localhost</text></g>
+  <g data-s="6"><text x="100" y="300" text-anchor="middle" class="b" style="fill:var(--ap)">APM</text><text x="100" y="324" text-anchor="middle" class="s">dnf -y install</text><text x="100" y="342" text-anchor="middle" class="s">httpd php mariadb-server</text><text x="100" y="366" text-anchor="middle" class="s">systemctl restart · enable</text></g>
+</svg>
+
+<svg data-fig="owncloud" viewBox="0 0 600 440" role="img" aria-label="ownCloud 설치 순서: wget → unzip → mkdir data → chown apache → chmod 755 → restart → DB 준비 → 웹 설치 → 업로드 파일이 data/thisuser/files 에 저장" hidden>
+  <g data-s="1"><rect x="20" y="16" width="270" height="56" rx="10" style="fill:var(--oc);fill-opacity:.12;stroke:var(--oc);stroke-width:2"/><text x="155" y="40" text-anchor="middle" class="b">① cd /var/www/html → wget</text><text x="155" y="61" text-anchor="middle" class="s">owncloud-10.15.3.zip (69M)</text></g>
+  <g data-s="2"><rect x="20" y="88" width="270" height="56" rx="10" style="fill:var(--oc);fill-opacity:.12;stroke:var(--oc);stroke-width:2"/><text x="155" y="112" text-anchor="middle" class="b">② unzip -q → owncloud/</text><text x="155" y="133" text-anchor="middle" class="s">mkdir owncloud/data (파일 저장 칸)</text></g>
+  <g data-s="3"><rect x="20" y="160" width="270" height="72" rx="10" style="fill:var(--te);fill-opacity:.14;stroke:var(--te);stroke-width:2"/><text x="155" y="184" text-anchor="middle" class="b">③ 🔥 chown -R apache:apache</text><text x="155" y="205" text-anchor="middle" class="s">owncloud · chmod -R 755 owncloud</text><text x="155" y="223" text-anchor="middle" class="s">웹 서버(apache 사용자)가 쓸 수 있게</text></g>
+  <g data-s="4"><rect x="310" y="16" width="270" height="88" rx="10" style="fill:var(--inh);fill-opacity:.16;stroke:var(--inh);stroke-width:2"/><text x="445" y="40" text-anchor="middle" class="b">④ mysql (MariaDB)</text><text x="445" y="61" text-anchor="middle" class="s">create database webDB;</text><text x="445" y="79" text-anchor="middle" class="s">create user webuser@localhost …;</text><text x="445" y="97" text-anchor="middle" class="s">grant all on webDB.* to webuser@localhost;</text></g>
+  <g data-s="5"><rect x="310" y="120" width="270" height="112" rx="10" style="fill:var(--ap);fill-opacity:.14;stroke:var(--ap);stroke-width:2"/><text x="445" y="144" text-anchor="middle" class="b">⑤ 크롬 http://IP/owncloud</text><text x="445" y="166" text-anchor="middle" class="s">관리자 계정 admin 만들기</text><text x="445" y="186" text-anchor="middle" class="s">MySQL/MariaDB — 사용자 webuser</text><text x="445" y="204" text-anchor="middle" class="s">DB 이름 webDB · 호스트 localhost</text><text x="445" y="222" text-anchor="middle" class="s">→ 설치 완료 → admin 로그인</text></g>
+  <g data-s="6"><path class="d" d="M300,240 L300,262" style="stroke:var(--te);stroke-width:2.5;fill:none"/><path d="M300,270 L294,258 L306,258 Z" style="fill:var(--te)"/><rect x="60" y="272" width="480" height="92" rx="12" style="fill:none;stroke:var(--inh);stroke-width:1.5;stroke-dasharray:5 4"/><text x="300" y="298" text-anchor="middle" class="b">⑥ 사용자 thisuser 로그인 → owncloud_test.txt 업로드</text><text x="300" y="322" text-anchor="middle" class="s">서버 실제 위치 = /var/www/html/owncloud/data/thisuser/files/</text><text x="300" y="344" text-anchor="middle" class="s">주인 apache · Documents · Photos 폴더도 같이</text></g>
+  <g data-s="7"><text x="300" y="396" text-anchor="middle" class="b" style="fill:var(--ap)">⑦ Windows ownCloud 클라이언트 = 폴더 동기화</text><text x="300" y="420" text-anchor="middle" class="s">C:\Users\USER\ownCloud ↔ 서버 files (양쪽 파일이 서로 보임)</text></g>
+</svg>
+
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -833,7 +853,26 @@
             "<b>Client</b> — <code>sudo dnf -y install nfs-utils</code> → <code>showmount -e 192.168.111.200</code> = <code>/share *</code> → <code>mkdir myshare</code>(홈 안) → 🔥 <code>sudo mount -t nfs 192.168.111.200:/share myshare</code>",
             "<b>Windows</b> PowerShell — <code>mount.exe 192.168.111.200:/share Z:</code> (그냥 mount 는 PowerShell 명령이라 .exe 까지) → <code>copy C:\\Windows\\win.ini Z:\\wintest.txt</code> → <code>dir Z:\\</code>",
             "Client 가 넣은 testfile · Windows 가 넣은 wintest.txt 가 Server(B) <code>/share</code> · Client <code>myshare</code> · Windows <code>Z:</code> 모두에 보임 · rw = 읽기 · 쓰기 · sync = 바로 기록" ],
-          note: "🤖 showmount 만 치면 자기 자신에게 물어봐서 RPC: Program not registered · mkdir /myshare 는 rocky 라 허가 거부 · Windows 가 만든 파일의 주인 = 4294967294(익명) · 수업은 Server(.100) → Client" }
+          note: "🤖 showmount 만 치면 자기 자신에게 물어봐서 RPC: Program not registered · mkdir /myshare 는 rocky 라 허가 거부 · Windows 가 만든 파일의 주인 = 4294967294(익명) · 수업은 Server(.100) → Client" },
+        { id: "apm", week: 13, tab: "㉚ 🔥 APM 웹 서버", src: "13주차 · 📖 Chapter 12 · VITAMIN QUIZ 12-1 · 📄 ch12실습.txt · 수업 로그(Server) · 🖼️ 제출 캡처 q1",
+          steps: [
+            "<b>Windows 크롬</b>이 <code>http://192.168.111.200</code> (Server(B) 의 IP · <code>ip addr</code> 의 ens160) 으로 접속",
+            "<b>A = Apache</b> 웹 서버 (꾸러미 이름 <b>httpd</b>) — 포트 80 · <code>firewall-cmd --permanent --add-service=http</code> (https 도) → <code>--reload</code>",
+            "웹 문서 폴더 = <b>/var/www/html</b> — 주소의 /index.html · /phpinfo.php 가 이 폴더의 파일",
+            "<b>P = PHP</b> — .php 파일을 실행해 결과(HTML)를 돌려줌 · ownCloud 때문에 <b>Remi 저장소의 PHP 7.4</b> (<code>dnf -y module reset php</code> → <code>module enable php:remi-7.4</code>)",
+            "<b>M = MariaDB</b>(MySQL) — 포트 3306 · PHP 는 <b>php-mysqlnd</b> 로 DB 에 연결 · ownCloud 용 <code>webDB</code> · <code>webuser@localhost</code>",
+            "설치 <code>dnf -y install httpd php php-mysqlnd mariadb-server</code> → <code>systemctl restart · enable · status</code> (mariadb · httpd) → <code>echo '&lt;?php phpinfo(); ?&gt;' &gt; /var/www/html/phpinfo.php</code> 로 확인" ],
+          note: "🤖 APM = Apache · PHP · MySQL(MariaDB) 의 앞 글자 · 기본 저장소 PHP 는 8.3 (수업 로그) · 🤖 ownCloud 10 은 PHP 7.4 가 필요해서 Remi 를 씀 · 학교 PC 기록: Remi 로 PHP 7.4.33 · 56 꾸러미가 한 줄(&&)로 설치됨" },
+        { id: "owncloud", week: 13, tab: "㉛ 🔥 ownCloud", src: "13주차 · 📖 VITAMIN QUIZ 12-3 “클라우드 저장소를 설치하자” · 📄 ch12실습.txt · 수업 로그 · 🖼️ 제출 캡처 q3",
+          steps: [
+            "<code>cd /var/www/html</code> → <code>wget https://download.owncloud.com/server/stable/owncloud-10.15.3.zip</code> (69M)",
+            "<code>unzip -q owncloud-10.15.3.zip</code> → owncloud 폴더 · <code>mkdir owncloud/data</code> = 올린 파일이 저장될 곳",
+            "🔥 <code>chown -R apache:apache owncloud</code> · <code>chmod -R 755 owncloud</code> → <code>systemctl restart httpd</code> — 웹 서버는 <b>apache 사용자</b>로 돌아서 주인을 바꿔야 data 에 쓸 수 있음",
+            "<code>mysql</code> → <code>create database webDB;</code> · <code>create user webuser@localhost identified by '비밀번호';</code> · <code>grant all on webDB.* to webuser@localhost;</code> · <code>exit</code>",
+            "크롬 <code>http://IP/owncloud</code> → 관리자 계정 admin → 저장소 · DB = <b>MySQL/MariaDB</b> · 사용자 webuser · DB 이름 webDB · 호스트 localhost → 설치 완료",
+            "admin → 사용자 thisuser 만들기 → thisuser 로그인 → <code>owncloud_test.txt</code> 업로드 → 서버에서 <code>ls -l /var/www/html/owncloud/data/thisuser/files</code> (주인 apache)",
+            "Windows ownCloud 클라이언트 — 서버 주소 <code>http://192.168.111.200/owncloud</code> → thisuser → <code>C:\\Users\\USER\\ownCloud</code> 폴더가 서버와 동기화 (windows_test.txt 가 서버에 생김)" ],
+          note: "⚠️ 📄 ch12실습.txt 원본은 <code>create user root</code> / <code>@localhost …</code> 로 줄이 나뉘어 있고 wget 줄 끝에 <code>ls -l</code> 이 붙어 있음 → 실제로 친 명령은 <code>webuser@localhost</code> · wget 과 ls -l 따로 (수업 로그) · 📖 교수님 “비타민1에서 3할 때 꼭 초기화” (스냅샷 ‘설정 완료’)" },
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

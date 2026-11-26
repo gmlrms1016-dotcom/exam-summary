@@ -102,7 +102,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
         <p>DB 서버 · NFS — 🔥 MariaDB 설치 · 원격 사용자 + NFS 공유 폴더</p>
     </header>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>원격 접속 — 🔥 텔넷 서버 · XRDP 원격 데스크톱 + 🔥 LVM 개념</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 12주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>원격 접속 — 🔥 텔넷 서버 · XRDP 원격 데스크톱 + 🔥 LVM 개념</small></a><a class="next" href="운영체제실습-13주차.html">다음 · <b>13주차</b> ›<br><small>웹 서버 · APM — 🔥 Apache · PHP · MariaDB 설치 + 클라우드 저장소 ownCloud</small></a></nav>
 
 <div class="tip">수업: <b>11/19(목)</b> · 교재 『이것이 리눅스다』 <b>Chapter 11 DB 서버(MariaDB)</b> · <b>Chapter 14 NFS 서버</b> — 과제 <b>VITAMIN QUIZ 11-1 · 14-1</b> (📸 수업 화면 사진 2장) · ✍️ 노션 12주차 = 수업 메모 1줄 + 수업 로그(Server · Client) + 학교 PC 에서 정리한 “✅ 12주차 실습 깔끔 순서”<br>정리 범위 = 노션 필기 · 로그 + 📄 실습 txt 원본(<code>ch11_db실습SQL.txt</code>) + 제출 워드 캡처(🖼️). 📖 = 교재(수업 화면) · 🤖 = 필기 · 교재에 없는 설명. 로그 상자는 <b>명령을 누르면 출력이 펼쳐져요</b>. 비밀번호는 <code>'비밀번호'</code> 로 바꿔 적었어요.</div>
 <section class="card" id="s1">
@@ -455,7 +455,7 @@ $ cat /share/wintest.txt  ## 내용까지 같음
 <ol><li><b>MariaDB 설치</b> = rpm 5개(MariaDB-client · common · server · shared · galera-4) → <code>dnf -y install M*.rpm g*.rpm</code> → <code>systemctl restart</code> · <code>enable mariadb</code> → status <b>active (running)</b></li><li>MariaDB 포트 <b>3306</b> — 글자 화면 = <code>firewall-cmd --permanent --add-port=3306/tcp</code> + <code>firewall-cmd --reload</code> (📖 VITAMIN QUIZ 11-1 HINT2)</li><li><code>systemctl enable</code> = <b>부팅 때 자동 시작</b> · <code>restart</code> = 지금 다시 시작</li><li>DB 사용자 = <b>'이름'@'호스트'</b> · <code>%</code> = 아무 글자 → <code>create user winuser@'192.168.111.%' identified by '…';</code> → <code>grant all on *.* to winuser@'192.168.111.%';</code> (<code>*.*</code> = 모든 DB · 모든 표) → <code>flush privileges;</code></li><li>root 비밀번호를 정한 뒤엔 <code>mariadb</code> 만으로는 ERROR 1045 → <code>mariadb -h localhost -u root -p</code></li><li><b>NFS 서버</b> = nfs-utils · <code>/etc/exports</code> = <b>공유폴더 허용호스트(옵션)</b> → <code>/share *(rw,sync)</code> (rw 읽기 · 쓰기 · sync 바로 기록) · <code>chmod 707</code> · <code>systemctl restart nfs-server</code> = <b>active (exited)</b> 정상 · <code>exportfs -v</code></li><li><b>NFS 클라이언트</b> = <code>showmount -e 서버IP</code> → <code>mount -t nfs 서버IP:/share 마운트할곳</code> · Windows = <code>mount.exe 서버IP:/share Z:</code></li></ol>
 </section>
 
-    <nav class="wk-pager"><a class="prev" href="운영체제실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>원격 접속 — 🔥 텔넷 서버 · XRDP 원격 데스크톱 + 🔥 LVM 개념</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 12주차 반영)</small></a></nav>
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-11주차.html">‹ 이전 · <b>11주차</b><br><small>원격 접속 — 🔥 텔넷 서버 · XRDP 원격 데스크톱 + 🔥 LVM 개념</small></a><a class="next" href="운영체제실습-13주차.html">다음 · <b>13주차</b> ›<br><small>웹 서버 · APM — 🔥 Apache · PHP · MariaDB 설치 + 클라우드 저장소 ownCloud</small></a></nav>
 
     <p class="wk-src">노션 「운영체제실습 · 12주차」 페이지를 정리한 내용입니다.</p>
 

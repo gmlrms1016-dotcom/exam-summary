@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../theme.js?v=202611260939"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운영체제실습 13주차 · 웹 서버 · APM — 🔥 Apache · PHP · MariaDB 설치 + 클라우드 저장소 ownCloud</title>
+    <meta name="description" content="운영체제실습 13주차 정리 — 웹 서버 · APM — 🔥 Apache · PHP · MariaDB 설치 + 클라우드 저장소 ownCloud">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="운영체제실습 13주차 · 웹 서버 · APM — 🔥 Apache · PHP · MariaDB 설치 + 클라우드 저장소 ownCloud">
+    <meta property="og:description" content="운영체제실습 13주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../icon-180.png">
+    <link rel="stylesheet" href="../style.css?v=202611260939">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../운영체제실습.html">← 운영체제실습 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🐧 운영체제실습 · 13주차</h1>
+        <p>웹 서버 · APM — 🔥 Apache · PHP · MariaDB 설치 + 클라우드 저장소 ownCloud</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-12주차.html">‹ 이전 · <b>12주차</b><br><small>DB 서버 · NFS — 🔥 MariaDB 설치 · 원격 사용자 + NFS 공유 폴더</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 13주차 반영)</small></a></nav>
+
+<div class="tip">수업: <b>11/26(목)</b> · 교재 『이것이 리눅스다』 <b>Chapter 12 웹 서버(APM)</b> — 과제 <b>VITAMIN QUIZ 12-1 · 12-3</b> · ✍️ 노션 13주차 = 필기 1줄 + 수업 로그(Server) · 📄 실습 txt 원본 <code>ch12실습.txt</code> · 🖼️ 제출 워드 캡처 21장<br>🔥 ✍️ <b>“리눅스 시험은 필기시험으로 시행함”</b> — 명령을 직접 치는 시험이 아니라 <b>종이에 쓰는 시험</b> → 명령어 · 순서 · 폴더 이름을 외워서 쓸 수 있게<br>📖 = 교재 · 📄 = 실습 txt · 🤖 = 필기 · 교재에 없는 설명 · 비밀번호는 <code>'비밀번호'</code> 로 바꿔 적었어요.</div>
+<section class="card" id="s1">
+<h2>🎨 13주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/리눅스-그림정리.html?week=13" title="13주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/리눅스-그림정리.html?week=13" target="_blank" rel="noopener">🎬 13주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+<ul><li>㉚ 🔥 APM 웹 서버 (Apache · PHP · MariaDB 가 이어지는 모습) · ㉛ 🔥 ownCloud 설치 순서 → 올린 파일이 서버 어디에 저장되나</li></ul>
+<nav class="wk-toc"><span class="wk-toc-t">바로 가기</span><a href="#s1">🎨 13주차 그림으로 보기</a><a href="#s2">0. 배경</a><a href="#s3">1. 수업 필기 — ✍️ 원문 그대로</a><a href="#s4">2. 🔥 APM 설치 (VITAMIN QUIZ 12-1)</a><a href="#s5">3. 🔥 MariaDB — ownCloud 가 쓸 DB · 사용자</a><a href="#s6">4. 🔥 ownCloud 설치 (VITAMIN QUIZ 12-3)</a><a href="#s7">5. 트러블슈팅 (수업 로그 · 학교 PC 기록)</a><a href="#s8">6. 명령어 한 줄 사전</a><a href="#s9">7. 🔥 시험 대비 핵심 요약</a></nav>
+</section>
+<section class="card" id="s2">
+<h2>0. 배경</h2>
+<table class="ref">
+<tbody>
+<tr><th>항목</th><th>내용</th></tr>
+<tr><td>환경</td><td>Windows PC 의 VMware · Rocky Linux 10 · <b>Server</b> 192.168.111.100 (수업) · <b>Server(B)</b> 192.168.111.200 (과제 · 글자 화면)</td></tr>
+<tr><td>APM</td><td>🤖 <b>A</b>pache(웹 서버 · 꾸러미 이름 <code>httpd</code>) + <b>P</b>HP(웹 프로그램 언어) + <b>M</b>ySQL(→ Rocky 는 <b>MariaDB</b>) — 웹 사이트를 돌리는 3종 세트</td></tr>
+<tr><td>과제 1</td><td>📖 <b>VITAMIN QUIZ 12-1</b> “Server(B) 가상머신에서 dnf 명령을 실행해 APM을 설치하자. 결과는 다음 비타민 퀴즈에서 사용된다.”</td></tr>
+<tr><td>과제 2</td><td>📖 <b>VITAMIN QUIZ 12-3</b> “Server(B) 가상머신에 클라우드 저장소를 설치하자.” → ownCloud 10.15.3</td></tr>
+<tr><td>교수님</td><td>📖 “비타민 1에서 3 할 때 <b>꼭 초기화</b>” → Server(B) 스냅샷 <b>‘설정 완료’</b> 로 되돌리고 메모리 2GB</td></tr>
+<tr><td>제출</td><td>워드 <code>20232629_윤희근.docx</code> — 12-1 → 12-3 (새 쪽) · 🖼️ 캡처 21장 (학교 PC 16:26 제출)</td></tr>
+</tbody></table>
+<p>---</p>
+</section>
+<section class="card" id="s3">
+<h2>1. 수업 필기 — ✍️ 원문 그대로</h2>
+<ul><li>✍️ “리눅스 시험은 필기시험으로 시행함”</li><li>📄 <code>ch12실습.txt</code> (수업 때 받은 명령 모음) — 원본 그대로:</li></ul>
+<pre><code class="language-text">dnf -y install dnf-utils https://rpms.remirepo.net/enterprise/10/remi/x86_64/remi-release-10.0-3.el10.remi.noarch.rpm
+
+dnf -y module reset php
+dnf -y module enable php:remi-7.4
+
+dnf -y install httpd mariadb-server php php-mysqlnd php-gd php-mbstring php-pecl-zip php-xml php-json php-intl
+
+systemctl restart mariadb
+systemctl enable mariadb
+systemctl status mariadb
+systemctl restart httpd
+systemctl enable httpd
+systemctl status httpd
+===================================
+mysql
+
+create database webDB;
+create user root
+@localhost identified by '1234';
+grant all on webDB.* to webuser@localhost;
+exit
+
+systemctl restart httpd
+systemctl enable httpd
+
+firewall-config(http, https)
+
+cd /var/www/html
+ls -l
+
+wget https://download.owncloud.com/server/stable/owncloud-10.15.3.zipls -l
+unzip -q owncloud-10.15.3.zip
+ls -l
+mkdir owncloud/data
+ls -l
+chown -R apache:apache owncloud
+chmod -R 755 owncloud
+systemctl restart httpd
+
+크롬:  http://192.168.111.100/owncloud/</code></pre>
+<ul><li>⚠️ 📄 원본 오타 3곳 — ① <code>create user root</code> / <code>@localhost …</code> 는 줄이 잘못 나뉨 → 실제로 친 명령 = <b><code>create user webuser@localhost identified by '비밀번호';</code></b> (다음 줄 grant 가 webuser 라서 · 수업 로그) ② <code>wget …owncloud-10.15.3.zipls -l</code> = wget 줄과 <code>ls -l</code> 이 붙음 → 따로 치기 ③ <code>firewall-config(http, https)</code> 는 명령이 아니라 “firewall-config 창에서 http · https 체크” 라는 메모 → 그대로 치면 <code>bash: 예기치 않은 토큰 \</code>http,' 근처에서 문법 오류` (수업 로그)</li></ul>
+</section>
+<section class="card" id="s4">
+<h2>2. 🔥 APM 설치 (VITAMIN QUIZ 12-1)</h2>
+<h3>2-1. 처음 — 기본 저장소로 설치 (수업 로그)</h3>
+<div class="tclick" data-prompt="root@localhost:~#"><script type="text/plain" class="tc-src">
+$ rpm -qa httpd php mariadb-server  ## 아무것도 안 나옴 = 아직 설치 안 됨
+$ dnf -y install httpd php php-mysqlnd mariadb-server  ## 처음엔 `Curl error (28): Timeout` · `404` → ^C 뒤 다시 치니 설치됨
+종속성이 해결되었습니다.
+ httpd                x86_64 2.4.63-1.el10_0.2  appstream  52 k
+ mariadb-server       x86_64 3:10.11.11-1.el10  appstream 9.9 M
+ php                  x86_64 8.3.19-1.el10_0    appstream  11 k
+ php-mysqlnd          x86_64 8.3.19-1.el10_0    appstream 141 k
+설치  39 꾸러미
+</script></div>
+<ul><li><code>rpm -qa 이름</code> = 설치돼 있는지 확인 (아무것도 안 나오면 없음) → 기본 저장소 PHP = <b>8.3.19</b> · httpd 2.4.63 · mariadb-server 10.11.11 → 39 꾸러미</li><li>🤖 ownCloud 10 은 <b>PHP 7.4</b> 가 필요 → 아래처럼 <b>Remi 저장소</b>의 PHP 7.4 로 다시 설치</li></ul>
+<h3>2-2. 🔥 Remi 저장소 + PHP 7.4 (과제 = 이 순서)</h3>
+<pre><code class="language-bash">dnf -y install dnf-utils https://rpms.remirepo.net/enterprise/10/remi/x86_64/remi-release-10.0-3.el10.remi.noarch.rpm   # Remi 저장소 등록 (EPEL 도 같이)
+dnf -y module reset php                     # PHP 모듈 선택을 처음으로
+dnf -y module enable php:remi-7.4           # PHP 7.4 (Remi) 를 쓰겠다고 정함
+dnf -y install httpd mariadb-server php php-mysqlnd php-gd php-mbstring php-pecl-zip php-xml php-json php-intl</code></pre>
+<ul><li><code>php-mysqlnd</code> = PHP 가 MariaDB 에 연결하는 부품 · gd(그림) · mbstring(한글 같은 여러 바이트 글자) · zip · xml · json · intl = ownCloud 가 쓰는 PHP 확장</li><li>학교 PC 기록: 한 줄(<code>&amp;&amp;</code>)로 이어 치면 PHP <b>7.4.33</b> + httpd + mariadb-server <b>56 꾸러미</b> 설치 · 미러 연결 실패는 다른 미러로 넘어가서 괜찮음 · “PHP 7.4 End of Life” 경고는 정상</li></ul>
+<h3>2-3. 서비스 켜기 · 확인</h3>
+<pre><code class="language-bash">systemctl restart mariadb &amp;&amp; systemctl enable mariadb    # DB 서버 시작 + 부팅 때 자동 시작
+systemctl restart httpd &amp;&amp; systemctl enable httpd        # 웹 서버 시작 + 자동 시작
+systemctl status mariadb --no-pager                      # active (running) 이면 정상
+systemctl status httpd --no-pager</code></pre>
+<ul><li><code>restart</code> = 껐다 켜기(꺼져 있으면 켬) · <code>enable</code> = 부팅할 때 자동으로 · <code>status</code> = 지금 상태 · <code>--no-pager</code> = 한 화면에 다 출력하고 바로 프롬프트로</li></ul>
+<h3>2-4. 방화벽 · 웹 페이지 확인</h3>
+<pre><code class="language-bash">firewall-cmd --permanent --add-service=http     # 80번 (웹)
+firewall-cmd --permanent --add-service=https    # 443번 (보안 웹)
+firewall-cmd --reload                           # 바꾼 설정 적용
+firewall-cmd --list-services                    # 열린 서비스 목록에 http https 가 보이면 됨
+echo '&lt;?php phpinfo(); ?&gt;' &gt; /var/www/html/phpinfo.php    # PHP 정보 페이지
+ip addr                                         # ens160 의 inet = 서버 주소 (Server 192.168.111.100 · Server(B) .200)</code></pre>
+<ul><li>수업(Server · GNOME) = 그래픽 <b><code>firewall-config</code></b> 창 → 설정 <b>런타임 → 영구적</b> · 영역 public · 서비스 탭에서 <b>http · https 체크</b> → 옵션 → Firewalld 다시 불러오기 · 창은 <b>파일 → 끝내기</b>로 닫기 (학교 PC 기록)</li><li>수업은 <code>gedit index.html</code> 로 첫 화면을 만들고(Rocky 10 은 <code>alias gedit="gnome-text-editor"</code>) Windows 크롬 <b><code>http://192.168.111.100</code></b> · <b><code>/phpinfo.php</code></b> 로 확인 · 📖 phpinfo.php = 교재 714쪽</li><li>🤖 웹 문서 폴더 = <b>/var/www/html</b> — 주소창 <code>http://IP/파일이름</code> 이 이 폴더의 파일</li></ul>
+</section>
+<section class="card" id="s5">
+<h2>3. 🔥 MariaDB — ownCloud 가 쓸 DB · 사용자</h2>
+<pre><code class="language-text">MariaDB [(none)]&gt; create database webDB;
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [(none)]&gt; create user webuser@localhost identified by '비밀번호';
+Query OK, 0 rows affected (0.001 sec)
+
+MariaDB [(none)]&gt; grant all on webDB.* to webuser@localhost;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [(none)]&gt; exit
+Bye</code></pre>
+<ul><li><code>mysql</code> = MariaDB 접속 (root · 서버 안) · <b>webDB</b> = ownCloud 가 표를 만들 DB · <b>webuser@localhost</b> = 서버 안(localhost)에서만 접속하는 사용자 · <code>webDB.*</code> = webDB 의 모든 표 (12주차 <code>*.*</code> = 모든 DB)</li></ul>
+</section>
+<section class="card" id="s6">
+<h2>4. 🔥 ownCloud 설치 (VITAMIN QUIZ 12-3)</h2>
+<p><code>cd /var/www/html</code> 로 웹 문서 폴더에 들어간 뒤:</p>
+<div class="tclick" data-prompt="root@localhost:/var/www/html#"><script type="text/plain" class="tc-src">
+$ wget https://download.owncloud.com/server/stable/owncloud-10.15.3.zip  ## 인터넷에서 내려받기
+HTTP 요청을 보냈습니다. 응답 기다리는 중... 200 OK
+길이: 72166820 (69M) [application/zip]
+2026-11-26 15:23:32 (1.60 MB/s) - `owncloud-10.15.3.zip' 저장함 [72166820/72166820]
+$ unzip -q owncloud-10.15.3.zip  ## 조용히(-q) 압축 풀기 → owncloud 폴더
+$ mkdir owncloud/data  ## 올린 파일이 저장될 폴더
+$ chown -R apache:apache owncloud  ## 🔥 주인 · 그룹을 apache 로 — 웹 서버가 쓸 수 있게
+$ chmod -R 755 owncloud  ## 주인 rwx · 나머지 r-x
+$ systemctl restart httpd
+$ ls -l  ## 주인이 root → apache 로 바뀜
+합계 70480
+drwxr-xr-x 13 apache apache     4096 11월 26일  15:23 owncloud
+-rw-r--r--  1 root   root   72166820 2025년  7월  3일 owncloud-10.15.3.zip
+</script></div>
+<table class="ref">
+<tbody>
+<tr><th>순서</th><th>명령</th><th>하는 일</th></tr>
+<tr><td>1</td><td><code>wget 주소</code></td><td>인터넷에서 파일 내려받기 (69M zip)</td></tr>
+<tr><td>2</td><td><code>unzip -q</code></td><td>조용히(-q) 압축 풀기 → owncloud 폴더</td></tr>
+<tr><td>3</td><td><code>mkdir owncloud/data</code></td><td>올린 파일이 저장될 폴더</td></tr>
+<tr><td>4</td><td>🔥 <code>chown -R apache:apache owncloud</code></td><td>주인 · 그룹을 <b>apache</b> 로 (-R = 안쪽까지 모두) — 🤖 웹 서버(httpd)가 apache 사용자로 돌아서 이래야 data 에 쓸 수 있음</td></tr>
+<tr><td>5</td><td><code>chmod -R 755 owncloud</code></td><td>주인 rwx · 나머지 r-x (7 = 4+2+1 · 5 = 4+1)</td></tr>
+<tr><td>6</td><td><code>systemctl restart httpd</code></td><td>웹 서버 다시 시작</td></tr>
+</tbody></table>
+<ul><li>크롬 <b><code>http://IP/owncloud</code></b> → 관리자 계정 <b>admin</b> 만들기 → 저장소 · 데이터베이스 = <b>MySQL/MariaDB</b> · 사용자 <b>webuser</b> · DB 이름 <b>webDB</b> · 호스트 <b>localhost</b> → 설치 완료 → admin 로그인</li><li>admin → 사용자 → <b>thisuser</b> 만들기 → thisuser 로그인 → <code>owncloud_test.txt</code> 업로드 → 서버에서 확인:</li></ul>
+<pre><code class="language-text">root@localhost:/var/www/html/owncloud/data# ls -l
+drwxr-xr-x 4 apache apache   32 11월 26일 15:31 admin
+drwxr-xr-x 2 apache apache    6 11월 26일 15:31 avatars
+-rw-r--r-- 1 apache apache    0 11월 26일 15:30 index.html
+-rw-r--r-- 1 apache apache 4096 11월 26일 15:26 owncloud.db
+-rw-r----- 1 apache apache 1339 11월 26일 15:33 owncloud.log
+drwxr-xr-x 4 apache apache   32 11월 26일 15:33 thisuser
+root@localhost:/var/www/html/owncloud/data/thisuser/files# ls -l &amp;&amp; cat owncloud_test.txt
+drwxr-xr-x 2 apache apache   25 11월 26일 15:33  Documents
+drwxr-xr-x 2 apache apache 4096 11월 26일 15:33 'Learn more about ownCloud'
+drwxr-xr-x 2 apache apache   75 11월 26일 15:33  Photos
+-rw-r--r-- 1 apache apache   68 11월 26일 15:35  owncloud_test.txt
+ownCloud 업로드 테스트
+2026-11-26 운영체제실습 13주차</code></pre>
+<ul><li>🔥 웹에서 올린 파일의 <b>실제 위치 = <code>/var/www/html/owncloud/data/사용자이름/files/</code></b> · 주인은 apache</li><li>과제 12-3 더 — Windows <b>ownCloud 클라이언트</b> → 서버 주소 <code>http://192.168.111.200/owncloud</code> → thisuser → <code>C:\Users\USER\ownCloud</code> 폴더와 동기화 → Windows 에서 넣은 <code>windows_test.txt</code> 가 서버 <code>files</code> 에 생김</li></ul>
+</section>
+<section class="card" id="s7">
+<h2>5. 트러블슈팅 (수업 로그 · 학교 PC 기록)</h2>
+<table class="ref">
+<tbody>
+<tr><th>증상</th><th>원인 → 해결</th></tr>
+<tr><td><code>Curl error (28): Timeout</code> · <code>Status code: 404 … repomd.xml</code> · <code>Librepo was interrupted</code></td><td>저장소 미러가 느리거나 옛 주소(vault 10.0) → Ctrl+C 로 끊고 다시 실행하니 다른 미러로 설치됨</td></tr>
+<tr><td><code>bash: 예기치 않은 토큰 \</code>http,' 근처에서 문법 오류`</td><td><code>firewall-config(http, https)</code> 를 그대로 침 → 메모였음 · <code>firewall-config</code> 만 치고 창에서 체크</td></tr>
+<tr><td><code>Gdk-WARNING … Tried to map a popup</code></td><td>firewall-config 창의 경고 — 무시해도 됨</td></tr>
+<tr><td>firewall-config 창이 X 로 안 닫힘</td><td><b>파일 → 끝내기</b> · 창이 열린 채 키를 치면 창에 들어감(space 가 체크를 바꿈)</td></tr>
+<tr><td>크롬에서 안 열림</td><td>방화벽 http · https 허용 + <code>--reload</code> · 주소는 <code>ip addr</code> 의 ens160 IP</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s8">
+<h2>6. 명령어 한 줄 사전</h2>
+<table class="ref">
+<tbody>
+<tr><th>명령</th><th>뜻</th></tr>
+<tr><td><code>rpm -qa 이름</code></td><td>설치된 꾸러미 찾기</td></tr>
+<tr><td><code>dnf -y install 꾸러미…</code></td><td>꾸러미 설치 (-y = 묻지 않고 예)</td></tr>
+<tr><td><code>dnf -y module reset php</code> · <code>module enable php:remi-7.4</code></td><td>PHP 버전 고르기 (Remi 7.4)</td></tr>
+<tr><td><code>systemctl restart · enable · status 서비스</code></td><td>다시 시작 · 부팅 때 자동 · 상태</td></tr>
+<tr><td><code>firewall-cmd --permanent --add-service=http</code> · <code>--reload</code> · <code>--list-services</code></td><td>방화벽 열기 · 적용 · 목록</td></tr>
+<tr><td><code>ip addr</code></td><td>IP 주소 보기</td></tr>
+<tr><td><code>echo '&lt;?php phpinfo(); ?&gt;' &gt; 파일</code></td><td>한 줄 파일 만들기 (<code>&gt;</code> = 덮어쓰기)</td></tr>
+<tr><td><code>wget 주소</code> · <code>unzip -q 파일</code></td><td>내려받기 · 압축 풀기</td></tr>
+<tr><td><code>chown -R 사용자:그룹 폴더</code> · <code>chmod -R 755 폴더</code></td><td>주인 바꾸기 · 권한 바꾸기 (안쪽까지)</td></tr>
+<tr><td><code>mysql</code> → <code>create database</code> · <code>create user</code> · <code>grant all on DB.* to</code></td><td>DB · 사용자 · 권한</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s9">
+<h2>7. 🔥 시험 대비 핵심 요약</h2>
+<ul><li>🔥 ✍️ <b>리눅스 시험 = 필기시험</b> → 명령을 손으로 쓸 수 있게: APM 설치 한 줄 · 서비스 3종(restart · enable · status) · 방화벽 3줄 · ownCloud 6단계</li><li>APM = <b>A</b>pache(<b>httpd</b>) · <b>P</b>HP · <b>M</b>ariaDB(MySQL) · 웹 문서 폴더 <b>/var/www/html</b> · 웹 = 80번 · DB = 3306번</li><li>PHP 7.4 = Remi 저장소 → <code>module reset php</code> → <code>module enable php:remi-7.4</code></li><li>ownCloud = wget → unzip → <code>mkdir owncloud/data</code> → 🔥 <b><code>chown -R apache:apache owncloud</code></b> → <code>chmod -R 755</code> → <code>restart httpd</code> → 웹 설치(DB = webDB · webuser@localhost)</li><li>올린 파일 위치 = <b>owncloud/data/사용자/files</b> · DB 준비 = <code>create database webDB;</code> · <code>create user webuser@localhost identified by '…';</code> · <code>grant all on webDB.* to webuser@localhost;</code></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="운영체제실습-12주차.html">‹ 이전 · <b>12주차</b><br><small>DB 서버 · NFS — 🔥 MariaDB 설치 · 원격 사용자 + NFS 공유 폴더</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 13주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「운영체제실습 · 13주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../ink.js?v=202611260939"></script>
+</body>
+</html>
