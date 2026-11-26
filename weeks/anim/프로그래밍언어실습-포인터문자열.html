@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>포인터 · 문자열 실험실</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        try { if (window.parent !== window) document.documentElement.classList.add("embed"); } catch (e) { }
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --box:#eef3ff;--boxb:#7b93d6;--in:#16a34a;--out:#e5484d;--via:#d97706;--scan:#2563eb;--code:#0f1b14;--codet:#dff5e6;--ptr:#9333ea;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --box:#1b2433;--boxb:#5b7bd6;--in:#4cc38a;--out:#ff6369;--via:#ffb547;--scan:#6b9cff;--code:#0b120e;--codet:#dff5e6;--ptr:#c084fc;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Apple SD Gothic Neo","맑은 고딕",sans-serif;}
+    .wrap{max-width:1000px;margin:0 auto;padding:14px 14px 18px;}
+    h1{font-size:20px;margin:2px 0 4px;}
+    .sub{margin:0 0 10px;color:var(--ink2);font-size:13.5px;line-height:1.55;}
+    code,.mono{font-family:Consolas,"D2Coding",Menlo,monospace;}
+    .progs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+    .progs button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:800;cursor:pointer;}
+    .progs button[aria-pressed=true]{border-color:var(--main);box-shadow:inset 0 0 0 1px var(--main);background:color-mix(in srgb,var(--main) 16%,var(--card));}
+    .grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:10px;margin-bottom:10px;}
+    @media (max-width:760px){.grid{grid-template-columns:1fr;}}
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;min-width:0;}
+    .ptitle{font-size:13px;color:var(--ink2);margin:0 0 6px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+    .src{font-size:12px;color:var(--ink2);}
+    .codebox{font-family:Consolas,Menlo,monospace;font-size:14px;line-height:1.5;}
+    .ln{display:flex;gap:8px;align-items:flex-start;padding:3px 6px;border-radius:7px;cursor:pointer;border:1px solid transparent;}
+    .ln:hover{border-color:var(--line);}
+    .ln .no{color:var(--ink2);min-width:22px;text-align:right;user-select:none;font-size:12px;padding-top:2px;}
+    .ln .tx{white-space:pre-wrap;overflow-wrap:anywhere;flex:1;}
+    .ln.done{opacity:.55;}
+    .ln.cur{opacity:1;background:color-mix(in srgb,var(--in) 18%,var(--card));border-color:var(--in);}
+    .ln.next .no::before{content:"▶ ";color:var(--main);}
+    .ln.next{background:color-mix(in srgb,var(--main) 10%,var(--card));}
+    .ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;}
+    .ctrl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13.5px;font-weight:800;cursor:pointer;}
+    .ctrl button.go{background:var(--main);border-color:var(--main);color:#fff;font-size:15px;padding:9px 16px;}
+    html[data-theme=dark] .ctrl button.go{color:#06121c;}
+    .ctrl button:disabled{opacity:.45;cursor:default;}
+    .ctrl label{font-size:13px;color:var(--ink2);display:flex;gap:5px;align-items:center;}
+    .mem{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;min-height:90px;}
+    .var{border:2px solid var(--boxb);background:var(--box);border-radius:10px;padding:6px 9px;min-width:108px;transition:background .25s,border-color .25s,transform .25s;}
+    .var.arr{flex-basis:100%;}
+    .var .hd{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--ink2);}
+    .var .hd b{font-family:Consolas,Menlo,monospace;font-size:15px;color:var(--ink);}
+    .var .vl{font-family:Consolas,Menlo,monospace;font-size:19px;font-weight:800;margin:3px 0 1px;}
+    .var .vl .to{font-size:14px;color:var(--ptr);font-weight:800;}
+    .var .ad{font-size:11.5px;color:var(--ink2);font-family:Consolas,Menlo,monospace;}
+    .var.ptr{border-color:var(--ptr);}
+    .cells{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+    .cl{display:flex;flex-direction:column;align-items:center;gap:1px;}
+    .cl span{min-width:38px;text-align:center;padding:5px 4px;border:1.5px solid var(--boxb);border-radius:7px;background:var(--card);font-family:Consolas,Menlo,monospace;font-size:14px;font-weight:700;transition:background .25s,border-color .25s;}
+    .cl i{font-style:normal;font-size:10px;color:var(--ink2);font-family:Consolas,Menlo,monospace;}
+    .cl.nul span{color:var(--ink2);}
+    .new{animation:pop .45s ease-out;}
+    .write{border-color:var(--in)!important;background:color-mix(in srgb,var(--in) 28%,var(--box))!important;}
+    .read{border-color:var(--scan)!important;background:color-mix(in srgb,var(--scan) 22%,var(--box))!important;}
+    .via{border-color:var(--via)!important;background:color-mix(in srgb,var(--via) 22%,var(--box))!important;}
+    .cl span.write,.cl span.read{transform:translateY(-3px);}
+    @keyframes pop{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.06);opacity:1}100%{transform:scale(1)}}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--ink2);margin-top:8px;}
+    .legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px;border:2px solid;}
+    .legend .lw::before{border-color:var(--in);} .legend .lr::before{border-color:var(--scan);} .legend .lv::before{border-color:var(--via);} .legend .lp::before{border-color:var(--ptr);}
+    #why{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px;font-size:14px;line-height:1.6;min-height:48px;}
+    #why .c{font-family:Consolas,Menlo,monospace;font-weight:800;font-size:15px;overflow-wrap:anywhere;}
+    #why b{color:var(--ink);} #why .n{color:var(--ink2);}
+    .lbl{font-size:13px;color:var(--ink2);margin:2px 0 6px;}
+    pre.out{margin:0 0 12px;background:var(--code);color:var(--codet);border-radius:10px;padding:10px 12px;font-family:Consolas,Menlo,monospace;font-size:14px;line-height:1.55;min-height:44px;white-space:pre-wrap;overflow-wrap:anywhere;}
+    pre.out .new{color:#7fd49a;animation:none;}
+    pre.out .sp{color:#ffb547;}
+    .tw{overflow-x:auto;margin-bottom:12px;}
+    table{border-collapse:collapse;font-size:12.5px;background:var(--card);min-width:100%;}
+    th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;white-space:nowrap;font-family:Consolas,Menlo,monospace;}
+    th{background:color-mix(in srgb,var(--main) 14%,var(--card));font-family:inherit;}
+    td.chg{background:color-mix(in srgb,var(--in) 20%,var(--card));font-weight:800;}
+    .note{font-size:12.5px;color:var(--ink2);line-height:1.55;margin:0 0 10px;}
+    @media (max-width:420px){.codebox{font-size:13px}.var{min-width:96px}.cl span{min-width:32px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="box">
+    <h1>🧭 포인터 · 문자열 실험실</h1>
+    <p class="sub"><b>▶ 다음 줄</b>을 누르면 C 코드가 한 줄씩 실행되면서 <b>메모리 칸</b>(값 · 주소)과 <b>실행 결과</b>가 어떻게 바뀌는지 보여 줘요 — 11 · 12 · 13주차 수업 코드 그대로 · 코드 줄을 누르면 그 줄까지 바로 실행</p>
+
+    <div class="progs" id="progs"></div>
+
+    <div class="grid">
+        <section class="panel">
+            <div class="ptitle"><span>📄 코드</span><span class="src" id="src"></span></div>
+            <div class="codebox" id="code"></div>
+            <div class="ctrl">
+                <button type="button" class="go" id="next">▶ 다음 줄</button>
+                <button type="button" id="reset">⏮ 처음부터</button>
+                <button type="button" id="all">⏭ 끝까지</button>
+                <button type="button" id="dice" hidden>🎲 숫자 바꾸기</button>
+            </div>
+        </section>
+        <section class="panel">
+            <div class="ptitle"><span>🧠 메모리 (주소는 설명용 예시)</span></div>
+            <div class="mem" id="mem"></div>
+            <div class="legend"><span class="lw">값을 씀</span><span class="lr">값을 읽음</span><span class="lv">포인터를 따라감</span><span class="lp">포인터 변수</span></div>
+        </section>
+    </div>
+
+    <div id="why"></div>
+
+    <div class="lbl">🖥️ 실행 결과 <label style="margin-left:8px"><input type="checkbox" id="sp"> 공백을 ␣ 로 보기</label></div>
+    <pre class="out" id="out"></pre>
+
+    <div class="lbl">📋 줄마다 값 (시험의 실행 순서 표처럼)</div>
+    <div class="tw"><table id="trace"></table></div>
+
+    <p class="note">⚠️ 주소(1000번지 등)는 이해를 돕는 <b>예시</b>예요 — 실제 <code>%p</code> 는 <code>0x16eff5b6c</code> 처럼 16진수이고 실행마다 달라요. <b>칸 크기</b>(int = 4바이트 · char = 1바이트 · <code>+1</code> 이 몇 바이트 뒤인지)는 실제와 같아요. 실행 결과(주소 줄 빼고)는 맥 clang 으로 직접 실행한 값과 같아요.</p>
+</div>
+<script>
+(function () {
+    "use strict";
+    var $ = function (id) { return document.getElementById(id); };
+    function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+    function rnd(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+
+    // ── 메모리 모델 ─────────────────────────────────────────
+    function Mem() { this.v = {}; this.order = []; this.out = ""; this.hl = {}; this.chl = {}; this.newOut = ""; }
+    Mem.prototype.decl = function (n, t, a, val) { this.v[n] = { n: n, t: t, a: a, val: val }; this.order.push(n); this.hl[n] = "new"; };
+    Mem.prototype.arr = function (n, t, a, cells, es) { this.v[n] = { n: n, t: t, a: a, cells: cells, es: es }; this.order.push(n); this.hl[n] = "new"; };
+    Mem.prototype.set = function (n, val) { this.v[n].val = val; this.hl[n] = "write"; };
+    Mem.prototype.get = function (n) { if (!this.hl[n]) this.hl[n] = "read"; return this.v[n].val; };
+    Mem.prototype.mark = function (n, i, cls) { (this.chl[n] = this.chl[n] || {})[i] = cls; };
+    Mem.prototype.find = function (addr) {
+        for (var k = 0; k < this.order.length; k++) {
+            var v = this.v[this.order[k]];
+            if (!v.cells && v.a === addr) return { n: v.n };
+            if (v.cells && addr >= v.a && addr < v.a + v.cells.length * v.es && (addr - v.a) % v.es === 0) return { n: v.n, i: (addr - v.a) / v.es };
+        }
+        return null;
+    };
+    Mem.prototype.label = function (addr) { var t = this.find(addr); return t ? (t.i == null ? t.n : t.n + "[" + t.i + "]") : null; };
+    // *p (읽기 · 쓰기) — 포인터 칸은 주황(따라감) · 가리키는 칸은 파랑(읽음) / 초록(씀)
+    Mem.prototype.deref = function (pn, newVal) {
+        var p = this.v[pn]; this.hl[pn] = "via";
+        var t = this.find(p.val);
+        if (!t) throw new Error("가리키는 곳이 없음");
+        if (t.i == null) {
+            if (newVal !== undefined) { this.v[t.n].val = newVal; this.hl[t.n] = "write"; } else if (this.hl[t.n] !== "write") this.hl[t.n] = "read";
+            return this.v[t.n].val;
+        }
+        if (newVal !== undefined) { this.v[t.n].cells[t.i] = newVal; this.mark(t.n, t.i, "write"); } else this.mark(t.n, t.i, "read");
+        return this.v[t.n].cells[t.i];
+    };
+    Mem.prototype.deref2 = function (ppn, newVal) { var pp = this.v[ppn]; this.hl[ppn] = "via"; var mid = this.find(pp.val); return this.deref(mid.n, newVal); };
+    Mem.prototype.cell = function (n, i, cls) { this.mark(n, i, cls || "read"); return this.v[n].cells[i]; };
+    Mem.prototype.print = function (s) { this.out += s; this.newOut = s; };
+
+    // ── 수업 코드 (줄마다 실행 함수) ─────────────────────────
+    var N = { x: 100, y: 1000, z: 2000 };
+    function P() {
+        return [
+            { id: "p5", t: "① 포인터 변수 🔥", src: "12주차 ① · 📄 5쪽 [실습 1-01] — ✍️ “5페이지 기말고사 예상문제”", lines: [
+                { c: "int i = 10;", r: function (m) { m.decl("i", "int", 1000, 10); }, w: "일반 변수 <b>i</b> 에 10" },
+                { c: "int* ptr;", r: function (m) { m.decl("ptr", "int*", 2000, undefined); }, w: "포인터 변수 <b>ptr</b> — int 의 <b>주소</b>를 담는 변수 · 아직 아무것도 안 넣어서 <b>쓰레기값(?)</b>" },
+                { c: "ptr = &i;", r: function (m) { m.set("ptr", 1000); }, w: "<b>&i</b> = i 의 주소(1000번지) → ptr 에 저장 → ptr 이 <b>i 를 가리킴</b>" },
+                { c: "i = 50;", r: function (m) { m.set("i", 50); }, w: "i 를 직접 바꿈 → 50 · ptr 은 여전히 i 를 가리킴" },
+                { c: "*ptr = 100;", r: function (m) { m.deref("ptr", 100); }, w: "<b>*ptr</b> = ptr 이 가리키는 곳 = <b>i</b> → i 에 100 을 씀 (ptr 자체는 그대로 1000)" },
+                { c: 'printf("i = %d \\n", i);', r: function (m) { m.print("i = " + m.get("i") + " \n"); }, w: "i = 100 · <b>%d 뒤 공백도 그대로</b> 찍혀요 (␣ 로 보기)" },
+                { c: 'printf("*ptr = %d\\n", *ptr);', r: function (m) { m.print("*ptr = " + m.deref("ptr") + "\n"); }, w: "*ptr → 가리키는 i 의 값 → 100 · <b>i 도 *ptr 도 100</b>" }
+            ] },
+            { id: "p03", t: "② 숫자만 바꿔서 🔥", src: "11주차 ④ · w11-ex01_05-pointer-03.c — ✍️ “숫자만 바꿔서 기말고사 시험문제”", dice: true, lines: [
+                { c: "int a1 = " + N.x + ";", r: function (m) { m.decl("a1", "int", 1000, N.x); }, w: "일반 변수 a1 = " + N.x },
+                { c: "int* a2 = &a1;", r: function (m) { m.decl("a2", "int*", 2000, 1000); }, w: "포인터 a2 = a1 의 <b>주소</b> → a2 가 a1 을 가리킴" },
+                { c: "int a3 = a1;", r: function (m) { m.decl("a3", "int", 1100, m.get("a1")); }, w: "a3 = a1 의 <b>값</b>만 복사 (" + N.x + ") — 주소가 아니라 <b>따로 노는 사본</b>" },
+                { c: "a3 = " + N.y + ";", r: function (m) { m.set("a3", N.y); }, w: "a3 만 " + N.y + " → 사본이라 <b>a1 은 그대로 " + N.x + "</b>" },
+                { c: 'printf("a1: %d\\n", a1);', r: function (m) { m.print("a1: " + m.get("a1") + "\n"); }, w: "a1: " + N.x },
+                { c: 'printf("a3: %d\\n", a3);', r: function (m) { m.print("a3: " + m.get("a3") + "\n"); }, w: "a3: " + N.y },
+                { c: "*a2 = " + N.z + ";", r: function (m) { m.deref("a2", N.z); }, w: "<b>*a2</b> 에 쓰면 = a2 가 가리키는 <b>a1 에 쓰는 것</b> → a1 = " + N.z },
+                { c: 'printf("a1: %d\\n", a1);', r: function (m) { m.print("a1: " + m.get("a1") + "\n"); }, w: "a1: " + N.z + " (포인터로 바뀜)" },
+                { c: 'printf("*a2: %d\\n", *a2);', r: function (m) { m.print("*a2: " + m.deref("a2") + "\n"); }, w: "*a2 = a1 의 값 = " + N.z }
+            ] },
+            { id: "same", t: "③ 같이 바뀜 🔥", src: "13주차 ③ — ✍️ “b 가 a 를 포인터로 참조하면 값을 하나만 바꿔도 변수 2개가 바뀜”", lines: [
+                { c: "int a = 10;", r: function (m) { m.decl("a", "int", 1000, 10); }, w: "a = 10" },
+                { c: "int* b = &a;", r: function (m) { m.decl("b", "int*", 2000, 1000); }, w: "b = a 의 주소 → b 가 a 를 가리킴" },
+                { c: "*b = 20;", r: function (m) { m.deref("b", 20); }, w: "b 를 따라가 <b>a 에 20</b> 을 씀" },
+                { c: 'printf("%d %d\\n", a, *b);', r: function (m) { m.print(m.get("a") + " " + m.deref("b") + "\n"); }, w: "a = 20 · *b = a = 20 → 20 20" },
+                { c: "a = 30;", r: function (m) { m.set("a", 30); }, w: "이번엔 a 를 직접 바꿈 → 30" },
+                { c: 'printf("%d %d\\n", a, *b);', r: function (m) { m.print(m.get("a") + " " + m.deref("b") + "\n"); }, w: "*b 도 같은 칸(a)을 읽음 → 30 30 · ⚠️ 실제로 바뀐 칸은 <b>a 하나</b>" }
+            ] },
+            { id: "dbl", t: "④ 이중 포인터 🔥", src: "12주차 ② · 📄 19쪽 [실습 3-01] — ✍️ “실행결과 기말고사 예상문제”", lines: [
+                { c: "int i = 10;", r: function (m) { m.decl("i", "int", 1000, 10); }, w: "i = 10" },
+                { c: "int* ptr;", r: function (m) { m.decl("ptr", "int*", 2000, undefined); }, w: "포인터 ptr — int 의 주소를 저장 (아직 ?)" },
+                { c: "int** pptr;", r: function (m) { m.decl("pptr", "int**", 3000, undefined); }, w: "<b>이중 포인터</b> pptr — <b>int* 변수(ptr)의 주소</b>를 저장" },
+                { c: "ptr = &i;", r: function (m) { m.set("ptr", 1000); }, w: "✍️ “여기가 중요함” — ptr ← i 의 주소 → ptr → i" },
+                { c: "pptr = &ptr;", r: function (m) { m.set("pptr", 2000); }, w: "pptr ← <b>ptr 의 주소</b>(2000번지) → <b>pptr → ptr → i</b>" },
+                { c: 'printf("*ptr = %d\\n", *ptr);', r: function (m) { m.print("*ptr = " + m.deref("ptr") + "\n"); }, w: "*ptr = i = 10" },
+                { c: "**pptr = 11;", r: function (m) { m.deref2("pptr", 11); }, w: "<b>*pptr</b> = ptr → <b>**pptr</b> = *ptr = <b>i</b> → i 에 11 (두 번 따라감)" },
+                { c: 'printf("i = %d, *ptr = %d, **ptr = %d\\n",  i, *ptr, **pptr);', r: function (m) { var a = m.get("i"), b = m.deref("ptr"), c = m.deref2("pptr"); m.print("i = " + a + ", *ptr = " + b + ", **ptr = " + c + "\n"); }, w: "셋 다 같은 칸 i → 11 · 11 · 11 (글자 <code>**ptr</code> 은 따옴표 안이라 그대로 찍힘)" }
+            ] },
+            { id: "inc", t: "⑤ ++ptr — +4 · +1", src: "12주차 ⑥ · 📄 11쪽 [실습 2-01] — ✍️ “1004번지 · 1001번지가 나오는 방법 공부하기”", lines: [
+                { c: "int* ptr, i = 10;", r: function (m) { m.decl("ptr", "int*", 2000, undefined); m.decl("i", "int", 1000, 10); }, w: "ptr = int 포인터 · i = 10 (한 줄에 두 변수)" },
+                { c: "ptr = &i;", r: function (m) { m.set("ptr", 1000); }, w: "ptr ← i 의 주소(1000번지)" },
+                { c: 'printf("i = %d, *ptr = %d\\n", i, *ptr);', r: function (m) { m.print("i = " + m.get("i") + ", *ptr = " + m.deref("ptr") + "\n"); }, w: "i = 10 · *ptr = 10" },
+                { c: 'printf("ptr = %p\\n", ptr);', r: function (m) { m.print("ptr = (1000번지)\n"); m.get("ptr"); }, w: "%p = 주소 — 실제로는 <code>0x16eff5b6c</code> 처럼 16진수 · 여기서는 <b>1000번지</b>로" },
+                { c: "++ptr;", r: function (m) { m.set("ptr", 1004); }, w: "<b>int*</b> 를 1 증가 → <b>int 크기(4바이트)만큼</b> → 1000 → <b>1004</b> · 이제 i 를 안 가리킴" },
+                { c: 'printf("ptr = %p\\n", ptr);', r: function (m) { m.print("ptr = (1004번지)\n"); m.get("ptr"); }, w: "첫 주소 <b>+ 4</b> (실제 출력도 끝자리가 4 큼 · 예: …b6c → …b70)" },
+                { c: "char ch = 'a';", r: function (m) { m.decl("ch", "char", 1100, "a"); }, w: "✍️ 노션 1001번지 — char 변수(1바이트)" },
+                { c: "char* cp = &ch;", r: function (m) { m.decl("cp", "char*", 2100, 1100); }, w: "char 포인터 cp ← ch 의 주소(1100번지)" },
+                { c: "++cp;", r: function (m) { m.set("cp", 1101); }, w: "<b>char*</b> 를 1 증가 → <b>char 크기(1바이트)만큼</b> → 1100 → <b>1101</b> (1000 이면 1001)" },
+                { c: 'printf("cp = %p\\n", cp);', r: function (m) { m.print("cp = (1101번지)\n"); m.get("cp"); }, w: "+1 이 몇 바이트 뒤인지는 <b>가리키는 자료형 크기</b>로 정해져요 · 포인터 변수 자체 크기는 둘 다 8 (64비트)" }
+            ] },
+            { id: "arr", t: "⑥ 포인터로 배열 읽기", src: "11주차 2 · 📄 11쪽 [실습 1-02] (수업 코드를 줄임)", lines: [
+                { c: "int array1[] = { 10, 20, 30, 40, 50 };", r: function (m) { m.arr("array1", "int[5]", 1000, [10, 20, 30, 40, 50], 4); }, w: "5칸 배열 — 한 칸 = int 4바이트 → 1000 · 1004 · 1008 · 1012 · 1016번지 · <b>array1 = 시작 주소(1000)</b>" },
+                { c: 'printf("array1[0]: %d\\n", array1[0]);', r: function (m) { m.print("array1[0]: " + m.cell("array1", 0) + "\n"); }, w: "첨자로 0번 칸 → 10" },
+                { c: 'printf("*(array1 + 1): %d\\n", *(array1 + 1));', r: function (m) { m.print("*(array1 + 1): " + m.cell("array1", 1) + "\n"); }, w: "array1 + 1 = 1000 + <b>1칸(4바이트)</b> = 1004번지 → * 로 그 칸 = 20" },
+                { c: 'printf("*(array1 + 2): %d\\n", *(array1 + 2));', r: function (m) { m.print("*(array1 + 2): " + m.cell("array1", 2) + "\n"); }, w: "1000 + 2칸 = 1008번지 → 30 · <b>*(array1 + i) == array1[i]</b>" },
+                { c: 'for (int i = 0; i < 5; i++) printf("*(array1 + %d): %d\\n", i, *(array1 + i));', it: 5, r: function (m, k) { m.print("*(array1 + " + k + "): " + m.cell("array1", k) + "\n"); }, w: function (k) { return "i = " + k + " → 1000 + " + k + "칸 = " + (1000 + k * 4) + "번지 → " + (10 + k * 10) + (k < 4 ? " · ▶ 를 더 누르면 i = " + (k + 1) : " · 반복 끝 (수업 코드는 { } 로 3줄)"); } }
+            ] },
+            { id: "str", t: "⑦ strcpy · strcat · strlen", src: "13주차 3 · 📄 16쪽 [실습 1-07] (수업 main.c · #include <string.h> 넣음)", lines: [
+                { c: "int data_length;", r: function (m) { m.decl("data_length", "int", 3000, undefined); }, w: "길이를 받을 변수 (아직 ?)" },
+                { c: "char data[10] = {'a','b','c', 0,};", r: function (m) { m.arr("data", "char[10]", 1000, ["a", "b", "c", 0, 0, 0, 0, 0, 0, 0], 1); }, w: "a b c 다음 <b>0(= '\\0')</b> → 문자열 \"abc\" · 나머지 칸도 0 · char 1칸 = 1바이트" },
+                { c: "char result[16];", r: function (m) { m.arr("result", "char[16]", 2000, [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined], 1); }, w: "결과를 담을 16칸 — 아직 <b>쓰레기값(?)</b>" },
+                { c: "strcpy(result, data);", r: function (m) { var d = m.v.data.cells, r = m.v.result.cells; for (var i = 0; i < d.length; i++) { m.mark("data", i, "read"); r[i] = d[i]; m.mark("result", i, "write"); if (d[i] === 0) break; } }, w: "data 를 <b>'\\0' 까지</b> result 에 <b>복사</b> → \"abc\" (strcpy = 덮어쓰기)" },
+                { c: 'strcat(result, "def");', r: function (m) { var r = m.v.result.cells, e = r.indexOf(0), s = ["d", "e", "f", 0]; for (var i = 0; i < s.length; i++) { r[e + i] = s[i]; m.mark("result", e + i, "write"); } }, w: "result 끝 <b>'\\0' 자리([3])부터</b> d e f 를 붙이고 마지막에 '\\0' → \"abcdef\"" },
+                { c: "data_length = strlen(result);", r: function (m) { var r = m.v.result.cells, n = 0; while (r[n] !== 0) { m.mark("result", n, "read"); n++; } m.set("data_length", n); }, w: "<b>'\\0' 앞까지</b> 센 글자 수 = 6 ('\\0' 은 안 셈 · 배열 크기 16 과 다름)" },
+                { c: 'printf("%s + \\"def\\" = %s\\n", data, result);', r: function (m) { var s = function (n) { var c = m.v[n].cells, o = ""; for (var i = 0; c[i] !== 0; i++) { o += c[i]; m.mark(n, i, "read"); } return o; }; m.print(s("data") + " + \"def\" = " + s("result") + "\n"); }, w: "%s = '\\0' 앞까지 글자 · <code>\\\"</code> = 큰따옴표 글자 → abc + \"def\" = abcdef" },
+                { c: 'printf("data_length = % d\\n", data_length);', r: function (m) { var v = m.get("data_length"); m.print("data_length = " + (v >= 0 ? " " : "") + v + "\n"); }, w: "<b>% d</b> = 양수 앞에 공백 1칸 → <b>= 뒤 공백 2칸</b> (␣ 로 보기)" }
+            ] }
+        ];
+    }
+
+    var PROGS = P(), prog = PROGS[0], m, pc = 0, it = 0, last = null, trace = [];
+    function wtext(L, k) { return typeof L.w === "function" ? L.w(k) : L.w; }
+
+    function show(v, m) {
+        if (v.val === undefined) return '<span class="n">?</span>';
+        if (v.t.indexOf("*") >= 0) { var lb = m.label(v.val); return v.val + '<span class="to"> → ' + esc(lb || "모르는 곳") + "</span>"; }
+        if (v.t === "char") return "'" + esc(v.val) + "'";
+        return esc(String(v.val));
+    }
+    function cellTxt(x) { return x === undefined ? "?" : x === 0 ? "\\0" : "'" + x + "'"; }
+    function traceVal(v) {
+        if (v.cells) {
+            if (v.es === 1) { var o = "", c = v.cells; for (var i = 0; i < c.length && c[i] !== 0; i++) o += c[i] === undefined ? "?" : c[i]; return c.indexOf(0) >= 0 && c.slice(0, c.indexOf(0)).indexOf(undefined) < 0 ? '"' + o + '"' : "?"; }
+            return "{" + v.cells.join(", ") + "}";
+        }
+        if (v.val === undefined) return "?";
+        if (v.t.indexOf("*") >= 0) { var lb = m.label(v.val); return v.val + (lb ? "→" + lb : "→?"); }
+        return v.t === "char" ? "'" + v.val + "'" : String(v.val);
+    }
+
+    function render() {
+        var L = prog.lines;
+        $("src").textContent = prog.src;
+        $("code").innerHTML = L.map(function (x, k) {
+            var cls = k < pc ? "done" : "";
+            if (last != null && k === last) cls = "cur";
+            if (k === pc && pc < L.length) cls += " next";
+            return '<div class="ln ' + cls + '" data-k="' + k + '"><span class="no">' + (k + 1) + '</span><span class="tx">' + esc(x.c) + "</span></div>";
+        }).join("");
+        $("mem").innerHTML = m.order.length ? m.order.map(function (n) {
+            var v = m.v[n], h = m.hl[n] || "";
+            if (v.cells) {
+                var ch = m.chl[n] || {};
+                return '<div class="var arr ' + (h === "new" ? "new" : "") + '"><div class="hd"><span><b>' + esc(n) + "</b> " + esc(v.t) + "</span><span>시작 주소 " + v.a + "번지 · 한 칸 " + v.es + "바이트</span></div><div class=\"cells\">" +
+                    v.cells.map(function (x, i) { return '<div class="cl' + (x === 0 ? " nul" : "") + '"><i>[' + i + ']</i><span class="' + (ch[i] || "") + '">' + esc(v.es === 1 ? cellTxt(x) : (x === undefined ? "?" : x)) + "</span><i>" + (v.a + i * v.es) + "</i></div>"; }).join("") + "</div></div>";
+            }
+            return '<div class="var ' + (v.t.indexOf("*") >= 0 ? "ptr " : "") + h + '"><div class="hd"><b>' + esc(n) + "</b><span>" + esc(v.t) + '</span></div><div class="vl">' + show(v, m) + '</div><div class="ad">' + v.a + "번지</div></div>";
+        }).join("") : '<div class="n" style="color:var(--ink2);font-size:13px">▶ 다음 줄을 누르면 변수가 생겨요</div>';
+        var out = m.out, nw = m.newOut && last != null ? m.newOut : "", head = out.slice(0, out.length - nw.length);
+        var spOn = $("sp").checked, fmt = function (s) { return esc(s).replace(/ /g, spOn ? '<span class="sp">␣</span>' : " "); };
+        $("out").innerHTML = out ? fmt(head) + (nw ? '<span class="new">' + fmt(nw) + "</span>" : "") : '<span style="opacity:.6">(아직 출력 없음)</span>';
+        if (last == null) $("why").innerHTML = '<span class="n">' + esc(prog.t) + " — ▶ 다음 줄을 눌러 시작하세요 · 코드 줄을 누르면 그 줄까지 실행</span>";
+        else { var LL = L[last]; $("why").innerHTML = '<div class="c">' + esc(LL.c) + "</div>" + wtext(LL, LL.it ? lastIt : 0); }
+        var cols = m.order.slice();
+        $("trace").innerHTML = trace.length ? "<tr><th>줄</th><th>실행한 코드</th>" + cols.map(function (n) { return "<th>" + esc(n) + "</th>"; }).join("") + "</tr>" +
+            trace.map(function (r, ri) { var pr = trace[ri - 1]; return "<tr><td>" + r.no + "</td><td>" + esc(r.c) + "</td>" + cols.map(function (n) { var x = r.vals[n]; var ch = x !== undefined && (!pr || pr.vals[n] !== x); return "<td" + (ch ? ' class="chg"' : "") + ">" + (x === undefined ? "" : esc(x)) + "</td>"; }).join("") + "</tr>"; }).join("")
+            : "<tr><td style=\"font-family:inherit;color:var(--ink2)\">줄을 실행하면 여기에 줄마다 값이 쌓여요</td></tr>";
+        $("next").disabled = $("all").disabled = pc >= L.length;
+        $("dice").hidden = !prog.dice;
+        [].forEach.call(document.querySelectorAll("#progs button"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-id") === prog.id ? "true" : "false"); });
+        tell();
+    }
+    var lastIt = 0;
+    function step() {
+        var L = prog.lines[pc]; if (!L) return false;
+        m.hl = {}; m.chl = {}; m.newOut = "";
+        if (L.it) { L.r(m, it); lastIt = it; it++; if (it >= L.it) { it = 0; pc++; } }
+        else { L.r(m); pc++; }
+        last = prog.lines.indexOf(L);
+        var vals = {}; m.order.forEach(function (n) { vals[n] = traceVal(m.v[n]); });
+        trace.push({ no: last + 1, c: L.it ? L.c.replace(/^for \(.*?\) /, "i = " + lastIt + " → ") : L.c, vals: vals });
+        return true;
+    }
+    function reset() { m = new Mem(); pc = 0; it = 0; last = null; lastIt = 0; trace = []; }
+    function pick(id) {
+        PROGS = P(); prog = PROGS.filter(function (p) { return p.id === id; })[0] || PROGS[0];
+        reset(); render();
+        try { history.replaceState(null, "", "#" + prog.id); } catch (e) { }
+    }
+
+    $("progs").innerHTML = PROGS.map(function (p) { return '<button type="button" data-id="' + p.id + '">' + esc(p.t) + "</button>"; }).join("");
+    $("progs").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) pick(b.getAttribute("data-id")); });
+    $("next").addEventListener("click", function () { if (step()) render(); });
+    $("reset").addEventListener("click", function () { reset(); render(); });
+    $("all").addEventListener("click", function () { while (pc < prog.lines.length) step(); render(); });
+    $("dice").addEventListener("click", function () {
+        var x = rnd(2, 9) * (Math.random() < .5 ? 1 : 10) + rnd(0, 9) * (Math.random() < .5 ? 0 : 1), y, z;
+        do { y = rnd(1, 9) * 100 + rnd(0, 9) * 10; } while (y === x);
+        do { z = rnd(1, 9) * 1000 + rnd(0, 9) * 100; } while (z === x || z === y);
+        N.x = x; N.y = y; N.z = z; pick("p03");
+        $("why").innerHTML = '<span class="n">🎲 숫자를 바꿨어요 — a1 = ' + x + " · a3 = " + y + " · *a2 = " + z + " · 실행 결과를 먼저 써 보고 ⏭ 끝까지로 확인</span>";
+    });
+    $("code").addEventListener("click", function (e) {
+        var ln = e.target.closest(".ln"); if (!ln) return;
+        var k = +ln.getAttribute("data-k");
+        reset(); while (pc <= k && pc < prog.lines.length) step(); render();
+    });
+    $("sp").addEventListener("change", render);
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    var box = $("box");
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) { } }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    // ?p=dbl 또는 #dbl 로 처음 코드 고르기 — 주차 페이지에서 그 절에 맞게
+    var q = /[?&]p=(\w+)/.exec(location.search), hs = /^#(\w+)$/.exec(location.hash);
+    pick(hs ? hs[1] : q ? q[1] : "p5");
+})();
+</script>
+<script src="../../figink.js?v=202611260939"></script>
+</body>
+</html>

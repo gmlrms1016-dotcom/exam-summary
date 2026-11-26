@@ -166,6 +166,7 @@ int main(void) {                                // (void) = '매개변수 없음
 <pre class="io"><code class="language-text">*ptr = 10
 i = 11, *ptr = 11, **ptr = 11</code></pre>
 <ul><li><code>pptr → ptr → i</code> — <code>*pptr</code> = ptr (i 의 주소) · <code>**pptr</code> = i</li><li><code>**pptr = 11;</code> 은 <b>i 를 바꿈</b> → i · <code>*ptr</code> · <code>**pptr</code> 모두 11</li><li>⚠️ <b>강의자료가 고쳐졌어요 (v1.0.1)</b> — 처음 올라온 판의 19쪽은 <code>int* ptr, i = 10;</code> 다음 줄에 <code>int *ptr;</code> 가 또 있고, <code>printf</code> 에 <code>**ptr</code> (ptr 은 <code>int*</code> 라 별 두 개 불가) → clang 컴파일 오류 3개 (<code>redefinition of 'ptr'</code> · <code>indirection requires pointer operand ('int' invalid)</code> × 2). 11/16 저녁 v1.0.1 에서 위 코드처럼 고쳐짐</li><li>✍️ 수업 main.c 는 예전 판을 보고 쳐서 <code>**pptr</code> 로는 고쳤지만 <code>int* ptr;</code> 가 두 번 → clang <code>redefinition of 'ptr'</code> 오류 · 두 번째 줄을 지우면 실행돼요 (첫 출력 줄은 <code>**ptr = 10</code>)</li></ul>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-포인터문자열.html#dbl" title="🧭 포인터 실험실 — 이중 포인터 한 줄씩 실행" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-포인터문자열.html#dbl" target="_blank" rel="noopener">🎬 🧭 포인터 실험실 — 이중 포인터 한 줄씩 실행 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s4">
 <h2>③ 🔥 기말고사 — 수업 실행 ② 배열 포인터 (22쪽 [실습 3-03])</h2>
@@ -298,6 +299,7 @@ int main(void) {                                // (void) = '매개변수 없음
 ptr = 0x16eff5b6c
 ptr = 0x16eff5b70</code></pre>
 <ul><li>두 번째 주소 = 첫 번째 주소 <b>+ 4</b> (16진수 끝자리로 확인 · 예: <code>…cac</code> → <code>…cb0</code> = ac + 4 = b0 · c(12) + 4 = 16 → 0 쓰고 1 올림)</li><li>⚠️ 팩트체크 — 노션의 <code>printf("%p",++ptr); printf("%d %d",i,*ptr); //10 10</code> 은 아니에요. <code>++ptr</code> 은 <b>ptr 자체를 바꾸므로</b> 그 뒤 <code>*ptr</code> 은 i 가 아닌 다음 칸 → 쓰레기값(정의되지 않은 동작). ptr 을 그대로 두려면 <code>printf("%p", ptr + 1);</code> (<code>ptr + 1</code> 은 계산만 · ptr 은 그대로 → <code>*ptr</code> = 10)</li><li>⚠️ 팩트체크 — 노션 “포인터 변수의 연산: <code>+,-,*,/,++,--</code>” 중 <b><code>*</code> · <code>/</code> 는 안 돼요</b> (clang <code>ptr * 2</code> · <code>ptr / 2</code> → <code>invalid operands to binary expression ('int *' and 'int')</code>) · 📄 11쪽 “<code>*, -, ++, --</code>” 의 <code>*</code> 도 <code>+</code> 로 읽기 · 🤖 포인터끼리 빼기(<code>q - ptr</code>)는 됨 → 사이의 칸 수</li></ul>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-포인터문자열.html#inc" title="🧭 포인터 실험실 — ++ptr 이 +4 · +1" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-포인터문자열.html#inc" target="_blank" rel="noopener">🎬 🧭 포인터 실험실 — ++ptr 이 +4 · +1 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s8">
 <h2>1. ✍️ [이론] 포인터 종류 (9쪽 표 · 노션 “공부하기”)</h2>
