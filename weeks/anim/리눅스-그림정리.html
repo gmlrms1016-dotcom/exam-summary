@@ -862,7 +862,7 @@
             "<b>P = PHP</b> — .php 파일을 실행해 결과(HTML)를 돌려줌 · ownCloud 때문에 <b>Remi 저장소의 PHP 7.4</b> (<code>dnf -y module reset php</code> → <code>module enable php:remi-7.4</code>)",
             "<b>M = MariaDB</b>(MySQL) — 포트 3306 · PHP 는 <b>php-mysqlnd</b> 로 DB 에 연결 · ownCloud 용 <code>webDB</code> · <code>webuser@localhost</code>",
             "설치 <code>dnf -y install httpd php php-mysqlnd mariadb-server</code> → <code>systemctl restart · enable · status</code> (mariadb · httpd) → <code>echo '&lt;?php phpinfo(); ?&gt;' &gt; /var/www/html/phpinfo.php</code> 로 확인" ],
-          note: "🤖 APM = Apache · PHP · MySQL(MariaDB) 의 앞 글자 · 기본 저장소 PHP 는 8.3 (수업 로그) · 🤖 ownCloud 10 은 PHP 7.4 가 필요해서 Remi 를 씀 · 학교 PC 기록: Remi 로 PHP 7.4.33 · 56 꾸러미가 한 줄(&&)로 설치됨" },
+          note: "📖 711쪽 APM = Apache · PHP · MariaDB (리눅스 환경 = LAPM) · 📖 747 ~ 748쪽 설정 파일 /etc/httpd/conf/httpd.conf — Listen 80 · User apache · DocumentRoot · configtest → Syntax OK · 기본 저장소 PHP 는 8.3 (수업 로그) · 🤖 ownCloud 10 은 PHP 7.4 가 필요해서 Remi 를 씀 · 학교 PC 기록: Remi 로 PHP 7.4.33 · 56 꾸러미가 한 줄(&&)로 설치됨" },
         { id: "owncloud", week: 13, tab: "㉛ 🔥 ownCloud", src: "13주차 · 📖 VITAMIN QUIZ 12-3 “클라우드 저장소를 설치하자” · 📄 ch12실습.txt · 수업 로그 · 🖼️ 제출 캡처 q3",
           steps: [
             "<code>cd /var/www/html</code> → <code>wget https://download.owncloud.com/server/stable/owncloud-10.15.3.zip</code> (69M)",

@@ -104,13 +104,13 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
     <nav class="wk-pager"><a class="prev" href="운영체제실습-12주차.html">‹ 이전 · <b>12주차</b><br><small>DB 서버 · NFS — 🔥 MariaDB 설치 · 원격 사용자 + NFS 공유 폴더</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 13주차 반영)</small></a></nav>
 
-<div class="tip">수업: <b>11/26(목)</b> · 교재 『이것이 리눅스다』 <b>Chapter 12 웹 서버(APM)</b> — 과제 <b>VITAMIN QUIZ 12-1 · 12-3</b> · ✍️ 노션 13주차 = 필기 1줄 + 수업 로그(Server) · 📄 실습 txt 원본 <code>ch12실습.txt</code> · 🖼️ 제출 워드 캡처 21장<br>🔥 ✍️ <b>“리눅스 시험은 필기시험으로 시행함”</b> — 명령을 직접 치는 시험이 아니라 <b>종이에 쓰는 시험</b> → 명령어 · 순서 · 폴더 이름을 외워서 쓸 수 있게<br>📖 = 교재 · 📄 = 실습 txt · 🤖 = 필기 · 교재에 없는 설명 · 비밀번호는 <code>'비밀번호'</code> 로 바꿔 적었어요.</div>
+<div class="tip">수업: <b>11/26(목)</b> · 교재 『이것이 리눅스다』 <b>Chapter 12 웹 서버 설치 및 운영</b> (📖 <code>CH12.웹서버 설치 및 운영.pdf</code> 711 ~ 748쪽 · 그림으로 된 PDF) — 과제 <b>VITAMIN QUIZ 12-1 · 12-3</b> · ✍️ 노션 13주차 = 필기 1줄 + 수업 로그(Server) · 📄 실습 txt 원본 <code>ch12실습.txt</code> · 🖼️ 제출 워드 캡처 21장<br>🔥 ✍️ <b>“리눅스 시험은 필기시험으로 시행함”</b> — 명령을 직접 치는 시험이 아니라 <b>종이에 쓰는 시험</b> → 명령어 · 순서 · 폴더 이름을 외워서 쓸 수 있게<br>📖 = 교재 · 📄 = 실습 txt · 🤖 = 필기 · 교재에 없는 설명 · 비밀번호는 <code>'비밀번호'</code> 로 바꿔 적었어요.</div>
 <section class="card" id="s1">
 <h2>🎨 13주차 그림으로 보기</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/리눅스-그림정리.html?week=13" title="13주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/리눅스-그림정리.html?week=13" target="_blank" rel="noopener">🎬 13주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 <ul><li>㉚ 🔥 APM 웹 서버 (Apache · PHP · MariaDB 가 이어지는 모습) · ㉛ 🔥 ownCloud 설치 순서 → 올린 파일이 서버 어디에 저장되나</li></ul>
-<nav class="wk-toc"><span class="wk-toc-t">바로 가기</span><a href="#s1">🎨 13주차 그림으로 보기</a><a href="#s2">0. 배경</a><a href="#s3">1. 수업 필기 — ✍️ 원문 그대로</a><a href="#s4">2. 🔥 APM 설치 (VITAMIN QUIZ 12-1)</a><a href="#s5">3. 🔥 MariaDB — ownCloud 가 쓸 DB · 사용자</a><a href="#s6">4. 🔥 ownCloud 설치 (VITAMIN QUIZ 12-3)</a><a href="#s7">5. 트러블슈팅 (수업 로그 · 학교 PC 기록)</a><a href="#s8">6. 명령어 한 줄 사전</a><a href="#s9">7. 🔥 시험 대비 핵심 요약</a></nav>
+<nav class="wk-toc"><span class="wk-toc-t">바로 가기</span><a href="#s1">🎨 13주차 그림으로 보기</a><a href="#s2">0. 배경</a><a href="#s3">1. 수업 필기 — ✍️ 원문 그대로</a><a href="#s4">2. 🔥 APM 설치 (VITAMIN QUIZ 12-1)</a><a href="#s5">3. 🔥 MariaDB — ownCloud 가 쓸 DB · 사용자</a><a href="#s6">4. 🔥 ownCloud 설치 (VITAMIN QUIZ 12-3)</a><a href="#s7">5. 트러블슈팅 (수업 로그 · 학교 PC 기록)</a><a href="#s8">6. 📖 웹 서버 설정 파일 httpd.conf (12.3 · 747 ~ 748쪽)</a><a href="#s9">7. 명령어 한 줄 사전</a><a href="#s10">8. 🔥 시험 대비 핵심 요약</a></nav>
 </section>
 <section class="card" id="s2">
 <h2>0. 배경</h2>
@@ -118,7 +118,8 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tbody>
 <tr><th>항목</th><th>내용</th></tr>
 <tr><td>환경</td><td>Windows PC 의 VMware · Rocky Linux 10 · <b>Server</b> 192.168.111.100 (수업) · <b>Server(B)</b> 192.168.111.200 (과제 · 글자 화면)</td></tr>
-<tr><td>APM</td><td>🤖 <b>A</b>pache(웹 서버 · 꾸러미 이름 <code>httpd</code>) + <b>P</b>HP(웹 프로그램 언어) + <b>M</b>ySQL(→ Rocky 는 <b>MariaDB</b>) — 웹 사이트를 돌리는 3종 세트</td></tr>
+<tr><td>APM</td><td>📖 711쪽 — Rocky Linux 에는 가장 안정적이고 유명한 <b>아파치(Apache)</b> 웹 서버 · 웹 프로그래밍 언어 <b>PHP</b> · <b>MariaDB</b> 데이터베이스가 있음 → 이 3가지 = <b>APM</b>(Apache, PHP, MariaDB) · 리눅스 환경에서는 <b>LAPM</b>(Linux, Apache, PHP, MariaDB) · 원래는 따로 설치해야 하지만 Rocky 는 <b>dnf 로 한 번에</b> (아파치의 꾸러미 이름 = <code>httpd</code>)</td></tr>
+<tr><td>📖 교재 차례</td><td>12.1 APM 설치와 웹사이트 구축 (실습 1 = dnf 로 APM · 실습 2 = 워드프레스 · VITAMIN QUIZ 12-2 는 과제 X) → 12.2 웹 서버의 응용 서비스: <b>클라우드 저장소</b> 구축 (실습 3 = ownCloud) → 12.3 <b>웹 서버 설정 파일</b> (6절)</td></tr>
 <tr><td>과제 1</td><td>📖 <b>VITAMIN QUIZ 12-1</b> “Server(B) 가상머신에서 dnf 명령을 실행해 APM을 설치하자. 결과는 다음 비타민 퀴즈에서 사용된다.”</td></tr>
 <tr><td>과제 2</td><td>📖 <b>VITAMIN QUIZ 12-3</b> “Server(B) 가상머신에 클라우드 저장소를 설치하자.” → ownCloud 10.15.3</td></tr>
 <tr><td>교수님</td><td>📖 “비타민 1에서 3 할 때 <b>꼭 초기화</b>” → Server(B) 스냅샷 <b>‘설정 완료’</b> 로 되돌리고 메모리 2GB</td></tr>
@@ -279,7 +280,23 @@ ownCloud 업로드 테스트
 </tbody></table>
 </section>
 <section class="card" id="s8">
-<h2>6. 명령어 한 줄 사전</h2>
+<h2>6. 📖 웹 서버 설정 파일 httpd.conf (12.3 · 747 ~ 748쪽)</h2>
+<ul><li>아파치 설정 파일 = <b><code>/etc/httpd/conf/httpd.conf</code></b> — 고급 웹 서비스를 만들려면 의미를 알아 두면 좋음 (수업 · 과제에선 고치지 않음)</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>📖 설정</th><th>뜻</th></tr>
+<tr><td><code>ServerRoot "/etc/httpd"</code></td><td>웹 서버의 설정 파일 · 로그 파일 등이 저장되는 <b>최상위 디렉터리</b></td></tr>
+<tr><td><code>Listen 80</code></td><td>웹 서버의 <b>포트 번호</b> (대부분 80번)</td></tr>
+<tr><td><code>Include conf.modules.d/*.conf</code></td><td>설정 파일에 포함될 파일의 경로와 이름</td></tr>
+<tr><td><code>User apache</code> / <code>Group apache</code></td><td>웹 서비스를 작동하는 <b>사용자와 그룹</b> (→ ownCloud 를 <code>chown apache:apache</code> 한 이유)</td></tr>
+<tr><td><code>ServerAdmin root@localhost</code></td><td>관리자의 메일 주소</td></tr>
+<tr><td><code>DocumentRoot "/var/www/html"</code></td><td>웹 서버의 <b>홈 디렉터리</b> — <code>http://서버IP</code> 로 접속되는 디렉터리</td></tr>
+<tr><td><code>&lt;Directory "/var/www/html"&gt;</code> … <code>&lt;/Directory&gt;</code></td><td><b>디렉터리 단위</b>로 허가 · 거부 등 접근 권한 설정 · <code>Options Indexes FollowSymLinks</code> = DirectoryIndex 에 지정된 파일(index.html 등)이 없으면 <b>파일 목록을 대신 출력</b> · <code>AllowOverride None</code> · <code>Require all granted</code></td></tr>
+</tbody></table>
+<ul><li>고친 뒤 문법 검사 = <b><code>service httpd configtest</code></b> → 이상이 없으면 <b><code>Syntax OK</code></b></li></ul>
+</section>
+<section class="card" id="s9">
+<h2>7. 명령어 한 줄 사전</h2>
 <table class="ref">
 <tbody>
 <tr><th>명령</th><th>뜻</th></tr>
@@ -295,9 +312,9 @@ ownCloud 업로드 테스트
 <tr><td><code>mysql</code> → <code>create database</code> · <code>create user</code> · <code>grant all on DB.* to</code></td><td>DB · 사용자 · 권한</td></tr>
 </tbody></table>
 </section>
-<section class="card" id="s9">
-<h2>7. 🔥 시험 대비 핵심 요약</h2>
-<ul><li>🔥 ✍️ <b>리눅스 시험 = 필기시험</b> → 명령을 손으로 쓸 수 있게: APM 설치 한 줄 · 서비스 3종(restart · enable · status) · 방화벽 3줄 · ownCloud 6단계</li><li>APM = <b>A</b>pache(<b>httpd</b>) · <b>P</b>HP · <b>M</b>ariaDB(MySQL) · 웹 문서 폴더 <b>/var/www/html</b> · 웹 = 80번 · DB = 3306번</li><li>PHP 7.4 = Remi 저장소 → <code>module reset php</code> → <code>module enable php:remi-7.4</code></li><li>ownCloud = wget → unzip → <code>mkdir owncloud/data</code> → 🔥 <b><code>chown -R apache:apache owncloud</code></b> → <code>chmod -R 755</code> → <code>restart httpd</code> → 웹 설치(DB = webDB · webuser@localhost)</li><li>올린 파일 위치 = <b>owncloud/data/사용자/files</b> · DB 준비 = <code>create database webDB;</code> · <code>create user webuser@localhost identified by '…';</code> · <code>grant all on webDB.* to webuser@localhost;</code></li></ul>
+<section class="card" id="s10">
+<h2>8. 🔥 시험 대비 핵심 요약</h2>
+<ul><li>🔥 ✍️ <b>리눅스 시험 = 필기시험</b> → 명령을 손으로 쓸 수 있게: APM 설치 한 줄 · 서비스 3종(restart · enable · status) · 방화벽 3줄 · ownCloud 6단계</li><li>📖 APM = <b>A</b>pache(<b>httpd</b>) · <b>P</b>HP · <b>M</b>ariaDB · 리눅스 환경 = <b>LAPM</b> · Rocky 는 dnf 로 한 번에 · 웹 문서 폴더 <b>/var/www/html</b> · 웹 = 80번 · DB = 3306번</li><li>📖 설정 파일 <b>/etc/httpd/conf/httpd.conf</b> — ServerRoot <code>/etc/httpd</code> · <b>Listen 80</b> · <b>User/Group apache</b> · <b>DocumentRoot <code>/var/www/html</code></b> · <code>&lt;Directory&gt;</code> = 디렉터리마다 접근 권한 · 검사 <b><code>service httpd configtest</code> → Syntax OK</b></li><li>PHP 7.4 = Remi 저장소 → <code>module reset php</code> → <code>module enable php:remi-7.4</code></li><li>ownCloud = wget → unzip → <code>mkdir owncloud/data</code> → 🔥 <b><code>chown -R apache:apache owncloud</code></b> → <code>chmod -R 755</code> → <code>restart httpd</code> → 웹 설치(DB = webDB · webuser@localhost)</li><li>올린 파일 위치 = <b>owncloud/data/사용자/files</b> · DB 준비 = <code>create database webDB;</code> · <code>create user webuser@localhost identified by '…';</code> · <code>grant all on webDB.* to webuser@localhost;</code></li></ul>
 </section>
 
     <nav class="wk-pager"><a class="prev" href="운영체제실습-12주차.html">‹ 이전 · <b>12주차</b><br><small>DB 서버 · NFS — 🔥 MariaDB 설치 · 원격 사용자 + NFS 공유 폴더</small></a><a class="next" href="운영체제실습-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 13주차 반영)</small></a></nav>
