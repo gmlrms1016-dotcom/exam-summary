@@ -733,6 +733,25 @@
   <g data-s="4"><text x="300" y="318" text-anchor="middle" class="s">역전파 (1986) — ① 정방향: 예측 → 오차 측정</text><text x="300" y="344" text-anchor="middle" class="s">② 역방향: 각 연결이 오차에 기여한 정도</text><text x="300" y="370" text-anchor="middle" class="s">③ 오차가 줄도록 모든 가중치 조정</text><text x="300" y="400" text-anchor="middle" class="s" style="fill:var(--ink2)">완전연결 층(밀집 층) = 이전 층의 모든 뉴런과 연결</text></g>
 </svg>
 
+<!-- ㉟ 🔥 RNN → Attention → 트랜스포머 (11장 5 · 6 · 12쪽) -->
+<svg data-fig="attn" viewBox="0 0 600 420" role="img" aria-label="RNN 은 단어를 한 개씩 차례로 넣어 병렬 처리가 안 되고 긴 문장의 문맥을 놓치지만 Attention 은 단어마다 중요도를 한꺼번에 계산해 트랜스포머가 됨" hidden>
+  <g data-s="1"><text x="300" y="30" text-anchor="middle" class="b">2010년대 — 컴퓨터 비전(CV) → CNN · 자연어 처리(NLP) → RNN</text></g>
+  <g data-s="2"><rect x="14" y="48" width="572" height="116" rx="12" style="fill:var(--inh);fill-opacity:.08;stroke:var(--inh);stroke-width:2"/><text x="300" y="72" text-anchor="middle" class="b" style="fill:var(--inh)">RNN (순환 신경망) — 단어를 한 개씩 차례로</text><rect x="60" y="88" width="90" height="36" rx="8" style="fill:none;stroke:var(--inh);stroke-width:1.5"/><text x="105" y="111" text-anchor="middle" class="s">나는</text><rect x="210" y="88" width="90" height="36" rx="8" style="fill:none;stroke:var(--inh);stroke-width:1.5"/><text x="255" y="111" text-anchor="middle" class="s">학교에</text><rect x="360" y="88" width="90" height="36" rx="8" style="fill:none;stroke:var(--inh);stroke-width:1.5"/><text x="405" y="111" text-anchor="middle" class="s">갔다</text><path class="d" d="M150,106 L202,106" style="stroke:var(--inh);stroke-width:2;fill:none"/><path class="d" d="M300,106 L352,106" style="stroke:var(--inh);stroke-width:2;fill:none"/><text x="520" y="111" text-anchor="middle" class="s">…</text><text x="300" y="150" text-anchor="middle" class="s">❌ 병렬 처리 X (GPU 의미 없음) · ❌ 문장이 길면 전체 문맥을 못 담음</text></g>
+  <g data-s="3"><rect x="14" y="184" width="572" height="150" rx="12" style="fill:var(--ap);fill-opacity:.1;stroke:var(--ap);stroke-width:2"/><text x="300" y="208" text-anchor="middle" class="b" style="fill:var(--ap)">🔥 Attention — 단어마다 중요도(Attention Score)를 한꺼번에</text><rect x="60" y="226" width="90" height="36" rx="8" style="fill:var(--ap);fill-opacity:.25;stroke:var(--ap);stroke-width:1.5"/><text x="105" y="249" text-anchor="middle" class="s">나는 .2</text><rect x="210" y="226" width="90" height="36" rx="8" style="fill:var(--ap);fill-opacity:.55;stroke:var(--ap);stroke-width:2.5"/><text x="255" y="249" text-anchor="middle" class="b">학교에 .6</text><rect x="360" y="226" width="90" height="36" rx="8" style="fill:var(--ap);fill-opacity:.15;stroke:var(--ap);stroke-width:1.5"/><text x="405" y="249" text-anchor="middle" class="s">갔다 .2</text><text x="300" y="290" text-anchor="middle" class="s">어떤 단어가 중요한지 → 문장의 문맥까지 파악</text><text x="300" y="314" text-anchor="middle" class="s">계산을 병렬로 → 효율 ↑ · 시지각의 주의(빨간색 T 찾기)와 같은 생각</text></g>
+  <g data-s="4"><text x="300" y="366" text-anchor="middle" class="b" style="fill:var(--te)">트랜스포머 = Attention 으로 RNN · CNN 을 대체</text><text x="300" y="394" text-anchor="middle" class="s">최근 2년 arXiv AI 논문의 70% · 알파폴드(단백질) · 챗봇(ChatGPT = GPT)</text></g>
+</svg>
+
+<!-- ㊱ LLM 디코딩 · Top-k / Top-p (11장 15 ~ 18쪽) -->
+<svg data-fig="decode" viewBox="0 0 600 420" role="img" aria-label="LLM 은 다음 토큰 후보의 확률로 문장을 만든다 · 그리디는 가장 높은 것 · Top-k 는 상위 k 개 · Top-p 는 누적 확률 p 까지에서 고름" hidden>
+  <g data-s="1"><text x="300" y="28" text-anchor="middle" class="b">“나는 오늘 ___” 다음 토큰 후보와 확률 (18쪽 표)</text><text x="300" y="50" text-anchor="middle" class="s">토큰화: “나는 학교에 갔다” → “나는” · “학교에” · “갔다” · 임베딩 = 숫자 벡터로</text></g>
+  <g data-s="2"><text x="40" y="92" class="s">도서관에서</text><rect x="150" y="78" width="300" height="20" rx="4" style="fill:var(--te);fill-opacity:.6"/><text x="460" y="93" class="s">0.30</text><text x="40" y="126" class="s">점심먹으러</text><rect x="150" y="112" width="250" height="20" rx="4" style="fill:var(--te);fill-opacity:.5"/><text x="410" y="127" class="s">0.25</text><text x="40" y="160" class="s">숙제하러</text><rect x="150" y="146" width="220" height="20" rx="4" style="fill:var(--te);fill-opacity:.42"/><text x="380" y="161" class="s">0.22</text><text x="40" y="194" class="s">시내에서</text><rect x="150" y="180" width="150" height="20" rx="4" style="fill:var(--te);fill-opacity:.32"/><text x="310" y="195" class="s">0.15</text><text x="40" y="228" class="s">반대편에서</text><rect x="150" y="214" width="120" height="20" rx="4" style="fill:var(--te);fill-opacity:.25"/><text x="280" y="229" class="s">0.12</text></g>
+  <g data-s="3"><rect x="144" y="72" width="356" height="32" rx="6" style="fill:none;stroke:var(--ap);stroke-width:2.5"/><text x="512" y="93" class="b" style="fill:var(--ap)">그리디</text></g>
+  <g data-s="4"><rect x="138" y="68" width="300" height="104" rx="8" style="fill:none;stroke:var(--inh);stroke-width:2;stroke-dasharray:6 4"/><text x="512" y="150" class="b" style="fill:var(--inh)">Top-k=3</text></g>
+  <g data-s="5"><text x="300" y="268" text-anchor="middle" class="s">Top-p = 0.8 → 0.30 + 0.25 + 0.22 = 0.77 · + 0.15 = 0.92 ≥ 0.8 → 4개까지 후보</text></g>
+  <g data-s="6"><text x="300" y="304" text-anchor="middle" class="b">디코딩 유형 (17쪽)</text><text x="300" y="330" text-anchor="middle" class="s">그리디 = 매번 가장 높은 확률 · 간단 · 빠름 / 창의성 ↓</text><text x="300" y="354" text-anchor="middle" class="s">빔 = 여러 경로를 같이 · 누적 확률 높은 경로 · 품질 ↑ / 계산 비용 ↑</text><text x="300" y="378" text-anchor="middle" class="s">샘플링 = 확률대로 무작위 · 창의적 / 일관성 ↓ · 비논리적 답 가능</text><text x="300" y="404" text-anchor="middle" class="s" style="fill:var(--ap)">Top-k · Top-p = 샘플링을 더 정교하게 (높은 확률 후보 안에서만)</text></g>
+</svg>
+
+
     </div>
     <div class="ctl">
         <button type="button" id="redraw" class="main" title="처음부터 다시 그리기">✏️ 다시 그리기</button>
@@ -990,7 +1009,23 @@
             "<b>다층 퍼셉트론(MLP)</b> — 퍼셉트론을 여러 개 쌓음 · <b>입력층 1개 · 은닉층 여러 개 · 출력층 1개</b> · 완전연결 층(밀집 층) = 이전 층의 모든 뉴런과 연결",
             "<b>심층신경망(DNN)</b> = 여러 개의 <b>은닉층</b>을 쌓아 올린 인공신경망 (✍️ 14쪽 그림의 은닉층 동그라미)",
             "<b>역전파</b>(1986) — ① 정방향: 예측 → 오차 측정 ② 역방향: 각 연결이 오차에 기여한 정도 측정 ③ 오차가 감소하도록 모든 가중치 조정" ],
-          note: "✍️ 9쪽 TLU와 선형 이진분류 · 10쪽 편향 뉴런 그림 · 14쪽 행렬 수식 φ(XW + b) 에는 큰 ✗ — 수업에서 넘어간 부분" }
+          note: "✍️ 9쪽 TLU와 선형 이진분류 · 10쪽 편향 뉴런 그림 · 14쪽 행렬 수식 φ(XW + b) 에는 큰 ✗ — 수업에서 넘어간 부분" },
+        { id: "attn", week: 13, tab: "㉟ 🔥 Attention", src: "13주차 · 11장 5 · 6 · 12쪽 — 트랜스포머 배경 · RNN 의 단점 · Attention · ✍️ 5쪽 CNN · RNN 에 줄",
+          steps: [
+            "2010년대 주요 딥러닝 모델 — <b>컴퓨터 비전(CV) → CNN</b>(합성곱 신경망) · <b>자연어 처리(NLP) → RNN</b>(순환 신경망)",
+            "<b>RNN 의 단점</b> — 입력이 <b>순차적으로</b> 들어가서 GPU 를 써도 <b>병렬 처리 X</b> · 문장이 길어지면 <b>전체 문맥 정보를 못 담음</b>",
+            "🔥 <b>Attention</b> — 문장에서 단어마다 <b>중요도(Attention Score)</b>를 계산 → 어떤 단어가 중요한지 → <b>문맥까지 파악</b> · 계산을 <b>병렬</b>로 해서 효율 ↑ (그림의 숫자는 🤖 예시)",
+            "결과 — RNN 의 한계를 극복하고 성능이 크게 오름 · 지금은 CV 도 CNN 보다 좋음 → <b>트랜스포머가 RNN · CNN 을 대체</b> · 최근 2년 arXiv AI 논문의 <b>70%</b>에 등장" ],
+          note: "📖 7 ~ 11쪽 = 시지각의 주의 — “빨간색 T 를 찾아 주세요” (중요한 곳에 주의를 모음) · ✍️ 5쪽 펜 필기: ‘CNN, RNN’ 을 적고 줄을 그음 · 슬라이드 CNN · RNN 에 X" },
+        { id: "decode", week: 13, tab: "㊱ LLM 디코딩", src: "13주차 · 11장 15 ~ 18쪽 — LLM · 토큰 · 임베딩 · 디코딩 유형 · Top-k · Top-p (18쪽 확률 표)",
+          steps: [
+            "<b>LLM</b> = 대규모 데이터를 학습해 언어 이해 · 생성 능력을 극대화한 모델 (수백억 개 파라미터) · <b>토큰</b> = 텍스트를 나눈 작은 단위 · <b>임베딩</b> = 단어 · 문장을 고정된 크기의 벡터로",
+            "다음 토큰 후보마다 <b>확률</b> — 18쪽 표: 도서관에서 0.30 · 점심먹으러 0.25 · 숙제하러 0.22 · 시내에서 0.15 · 반대편에서 0.12",
+            "<b>그리디 디코딩</b> — 매 단계 <b>가장 높은 확률</b>의 토큰(도서관에서) · 간단 · 빠름 / 창의성 ↓ · 전체 문맥에서 최적이 아닐 수 있음",
+            "<b>Top-k</b> — 확률이 높은 <b>상위 k 개</b>만 두고 그 안에서 샘플링 (k = 3 → 도서관에서 · 점심먹으러 · 숙제하러) · k 가 너무 작으면 다양성 ↓",
+            "<b>Top-p</b> — <b>누적 확률이 p 에 도달할 때까지</b> 토큰을 후보로 (p = 0.8 → 0.30 + 0.25 + 0.22 = 0.77 < 0.8 → + 0.15 = 0.92 → 4개) · p 를 잘못 잡으면 후보가 너무 많거나 적음 (🤖 p 값 계산은 예시)",
+            "디코딩 유형 정리 — 그리디 · <b>빔</b>(여러 경로를 같이 · 누적 확률 높은 경로 · 비용 ↑) · <b>샘플링</b>(확률대로 무작위 · 창의적 / 일관성 ↓)" ],
+          note: "📖 15쪽 LLM 하이퍼파라미터 = 에포크 · 학습률 · 배치 크기 · 최대 출력 토큰 수 · 디코딩 유형 · Top-k 및 Top-p · 19쪽 랭체인(LLM 앱 개발 프레임워크) · 벡터 DB(벡터 임베딩 · 유사성 검색)" }
     ];
 
     var tabsBox = document.getElementById("tabs"), cap = document.getElementById("cap"), src = document.getElementById("src"),

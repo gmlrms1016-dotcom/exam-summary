@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="../../theme.js?v=202611260939"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인공지능과뇌인지과학 13주차 · 생성형 AI — 🔥 트랜스포머 · Attention · LLM 디코딩 (11장) · 🔥 “오늘까지 시험범위”</title>
+    <meta name="description" content="인공지능과뇌인지과학 13주차 정리 — 생성형 AI — 🔥 트랜스포머 · Attention · LLM 디코딩 (11장) · 🔥 “오늘까지 시험범위”">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="인공지능과뇌인지과학 13주차 · 생성형 AI — 🔥 트랜스포머 · Attention · LLM 디코딩 (11장) · 🔥 “오늘까지 시험범위”">
+    <meta property="og:description" content="인공지능과뇌인지과학 13주차 정리 — 필기 · 예제 · 그림">
+    <meta property="og:image" content="https://gmlrms1016-dotcom.github.io/exam-summary/icon-512.png">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../../icon-180.png">
+    <link rel="stylesheet" href="../../style.css?v=202611260939">
+    <style>
+.wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
+.wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
+.wk-hint{font-size:12.5px;color:#6b776e;}
+.wk-tag{display:inline-block;font-size:12px;font-weight:800;line-height:1.55;padding:0 8px;border-radius:999px;margin-right:2px;vertical-align:1px;white-space:nowrap;}
+.wk-tag.star{background:#fff1d6;color:#8a5a00;}
+.wk-tag.note{background:#e4efff;color:#1f5aa6;}
+.wk-tag.fix{background:#fde8e0;color:#b34727;}
+.wk-tag.memo{background:#efe7fb;color:#5b3a99;}
+.card ul,.card ol{margin:8px 0;padding-left:22px;}
+.card li{margin:6px 0;line-height:1.75;}
+.card li>ul,.card li>ol{margin:4px 0;}
+.card h3{margin:18px 0 8px;color:var(--main);}
+.card h4{margin:16px 0 6px;font-size:15.5px;}
+.card p{line-height:1.75;}
+.wk-lockbtn{text-align:right;margin:4px 0 10px;}
+.wk-lockbtn a{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:#6b776e;text-decoration:none;}
+.wk-exambtn{margin:4px 0 18px;--eb-glow:45,106,79;}
+.wk-exambtn a{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,var(--main,#2d6a4f),var(--main-d,#1b4d39));color:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(var(--eb-glow),.32);animation:wkEbPulse 2.4s ease-out infinite;transition:transform .15s,box-shadow .15s;}
+.wk-exambtn a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--eb-glow),.42);}
+.wk-exambtn a:active{transform:scale(.98);}
+.wk-exambtn .eb-ic{flex:none;font-size:36px;line-height:1;}
+.wk-exambtn .eb-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.wk-exambtn .eb-t{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.25;}
+.wk-exambtn .eb-s{font-size:13.5px;font-weight:600;line-height:1.45;opacity:.92;}
+.wk-exambtn .eb-go{flex:none;font-size:16px;font-weight:900;padding:10px 18px;border-radius:999px;background:#fff;color:var(--main);white-space:nowrap;}
+@keyframes wkEbPulse{0%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),.5);}70%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 14px rgba(var(--eb-glow),0);}100%{box-shadow:0 8px 24px rgba(var(--eb-glow),.32),0 0 0 0 rgba(var(--eb-glow),0);}}
+@media (prefers-reduced-motion:reduce){.wk-exambtn a{animation:none;}}
+@media (max-width:520px){.wk-exambtn a{flex-wrap:wrap;gap:10px 12px;padding:16px;}.wk-exambtn .eb-ic{font-size:30px;}.wk-exambtn .eb-t{font-size:20px;}.wk-exambtn .eb-go{flex:1 1 100%;text-align:center;}}
+.wk-exam{margin:6px 0 18px;padding:16px 18px 14px;border:2px solid var(--main);border-radius:18px;background:var(--card);box-shadow:0 6px 20px rgba(45,106,79,.10);}
+.wk-exam-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid var(--line);}
+.wk-exam-badge{flex:0 0 100%;font-size:13px;font-weight:900;color:var(--main);letter-spacing:.02em;}
+.wk-exam-when{font-size:22px;font-weight:900;line-height:1.3;}
+.wk-exam-where{font-size:15px;font-weight:700;color:#5e6b62;}
+.wk-exam-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 16px;margin:0;}
+.wk-exam-grid dt{font-weight:900;font-size:14.5px;white-space:nowrap;padding-top:4px;}
+.wk-exam-grid dd{margin:0;line-height:1.7;min-width:0;}
+.wk-exam-grid dd.wk-exam-more{grid-column:1 / -1;margin:-2px 0 4px;}
+.wk-exam-more summary{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;}
+.wk-exam-more summary::-webkit-details-marker{display:none;}
+.wk-exam-more .wm-open,.wk-exam-more .wm-close{display:inline-block;padding:7px 16px;border-radius:999px;background:var(--main);color:#fff;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(45,106,79,.22);}
+.wk-exam-more .wm-close{display:none;background:#6b776e;}
+.wk-exam-more details[open] .wm-open{display:none;}
+.wk-exam-more details[open] .wm-close{display:inline-block;}
+.wk-exam-more .wm-sub{font-size:12.5px;color:#6b776e;font-weight:700;}
+.wk-exam-more .wm-body{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);}
+.wk-exam-more .wm-body h4{margin:14px 0 6px;font-size:15px;}
+.wk-exam-more .wm-body h4:first-child{margin-top:2px;}
+.wk-exam-more .wm-body ul{margin:4px 0 8px;padding-left:20px;}
+.wk-exam-grid dd.wk-exam-note{grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.65;color:#6b776e;}
+.wk-chip{display:inline-block;margin:2px 6px 2px 0;padding:3px 11px;border-radius:999px;background:rgba(45,106,79,.09);font-size:14.5px;line-height:1.55;}
+.wk-chip.bad{background:rgba(220,60,60,.10);color:#b33a3a;font-weight:700;}
+.wk-exam-list{margin:4px 0 0;padding-left:22px;}
+.wk-exam-list li{margin:5px 0;line-height:1.65;}
+.wk-exam-wk{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:800;vertical-align:1px;}
+@media (max-width:560px){.wk-exam{padding:14px;}.wk-exam-when{font-size:19px;}.wk-exam-grid{grid-template-columns:minmax(0,1fr);gap:4px 0;}.wk-exam-grid dt{padding-top:10px;}}
+.card td.wk-blank{height:64px;min-width:96px;background:repeating-linear-gradient(transparent 0 31px,rgba(127,127,127,.16) 31px 32px);}
+.wk-toc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:0 0 18px;}
+.wk-toc-t{font-size:12.5px;font-weight:800;color:#6b776e;margin-right:2px;}
+.wk-toc a{display:inline-block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--main);font-size:13px;font-weight:700;text-decoration:none;line-height:1.4;}
+.wk-toc a:hover{border-color:var(--main);}
+.card[id^="s"]{scroll-margin-top:16px;}
+.wk-details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--bg);}
+.wk-details>summary{cursor:pointer;font-weight:800;color:var(--main);}
+.wk-pager{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;}
+.wk-pager>a,.wk-pager>span{flex:1 1 220px;display:block;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;}
+.wk-pager a b{color:var(--main);}
+.wk-pager .next{text-align:right;}
+.wk-pager>span{visibility:hidden;}
+.wk-src{font-size:12.5px;color:#6b776e;text-align:center;margin:20px 0 0;}
+pre.io{background:#0f1b14;}
+pre.io::before{content:"▶ 출력 결과";color:#7fd49a;}
+pre.io code{color:#dff5e6;}
+pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="wk-bar">
+        <a href="../인공지능과뇌인지과학.html">← 인공지능과뇌인지과학 정리 페이지</a>
+        <span class="wk-hint">새 탭으로 열렸어요 · 다 봤으면 탭을 닫으면 됩니다</span>
+    </div>
+
+    <header class="page-head">
+        <h1>🧠 인공지능과뇌인지과학 · 13주차</h1>
+        <p>생성형 AI — 🔥 트랜스포머 · Attention · LLM 디코딩 (11장) · 🔥 “오늘까지 시험범위”</p>
+    </header>
+
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-12주차.html">‹ 이전 · <b>12주차</b><br><small>신경망과 딥러닝 1 — 🔥 뉴런 논리 연산 · TLU 계단함수 · 퍼셉트론 (10장)</small></a><a class="next" href="인공지능과뇌인지과학-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 13주차 반영)</small></a></nav>
+
+<div class="tip">수업: <b>11/26(목)</b> · 자료: <b>인공지능과_뇌인지과학_11장.pdf</b> (20쪽 · 생성형 AI) — 노션 13주차는 비어 있어서 <b>PDF 펜 필기</b>(✍️ 1 · 5쪽)와 <b>내 논의 답</b>(<code>20232629_윤희근.txt</code>)으로 정리<br>🔥 ✍️ 1쪽 <b>“오늘까지 시험범위”</b> → 기말고사 범위는 <b>11장(생성형 AI)까지</b> · 📖 = 강의자료 · 🤖 = 강의자료에 없는 설명</div>
+<section class="card" id="s1">
+<h2>🎨 13주차 그림으로 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/뇌인지-그림정리.html?week=13" title="13주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/뇌인지-그림정리.html?week=13" target="_blank" rel="noopener">🎬 13주차 그림 — 새 창으로 크게 보기</a></p></div>
+<script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
+<ul><li>㉟ 🔥 RNN → Attention → 트랜스포머 · ㊱ LLM 디코딩 — 그리디 · 빔 · 샘플링 · Top-k · Top-p</li></ul>
+</section>
+<section class="card" id="s2">
+<h2>✍️ 내 필기 (PDF 펜)</h2>
+<table class="ref">
+<tbody>
+<tr><th>어디</th><th>✍️ 필기</th><th>정리</th></tr>
+<tr><td>1쪽 표지 “생성형 AI”</td><td>빨간 글씨 <b>“오늘까지 시험범위”</b></td><td>🔥 기말 범위 = 11장까지</td></tr>
+<tr><td>5쪽 트랜스포머 배경</td><td>위에 <b>“CNN, RNN”</b> 을 적고 줄을 그음 · 슬라이드의 CNN · RNN 끝 글자에 ✗</td><td>2절 (🤖 수업에서 CNN · RNN 은 짧게 넘어간 표시로 보임 — 확인 못 함)</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s3">
+<h2>1. 생성형 AI 시대 (2 ~ 4쪽)</h2>
+<ul><li><b>ChatGPT 의 등장</b> — <b>GPT = Generative Pre-trained Transformer</b> · 자연어 처리(NLP)에서 다양한 작업 · 사람과 거의 구별할 수 없는 텍스트 생성 · 📖 “GPT-3.5 의 경우 <b>1750억 개</b>의 파라미터”<ul><li>⚠️ 팩트체크 — 1750억(175B)은 <b>GPT-3</b> 논문(2020)에 공개된 수치 · GPT-3.5 의 파라미터 수는 OpenAI 가 공식으로 밝히지 않음 (🤖)</li></ul></li><li><b>AI 업계의 변화</b> — 단일 작업만 하는 <b>좁은 AI → 다목적 범용 AI</b> 로 초점 이동 · 대규모 모델 학습이 중요해져 데이터 · 컴퓨팅 자원에 대규모 투자 · GPT 같은 기술의 상용화로 AI 도구 생태계가 급속히 확장</li><li><b>사회적 영향</b> (3쪽) — 챗봇이 상담원을 대체 · 보조 · 콘텐츠 생성 · 번역 · 요약 자동화(언론 · 마케팅 · 출판) · 반복적이고 예측 가능한 작업 대체(<b>콜센터 · 은행 직원 · 번역가</b>) · 새 직업(<b>데이터 엔지니어 · 머신러닝 엔지니어 · AI 윤리 전문가</b>)</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>종류</th><th>생성형 AI (4쪽)</th></tr>
+<tr><td>텍스트</td><td>GPT · BERT · LLaMA</td></tr>
+<tr><td>이미지</td><td>DALL-E · StyleGAN</td></tr>
+<tr><td>음성</td><td>WaveNet · Tacotron</td></tr>
+<tr><td>영상</td><td>Sora</td></tr>
+</tbody></table>
+<ul><li>🤖 BERT 는 문장을 <b>이해</b>하는 쪽(인코더) 모델이라 보통 “생성” 모델로는 안 부름 — 슬라이드 분류 그대로 적음</li></ul>
+</section>
+<section class="card" id="s4">
+<h2>2. 🔥 트랜스포머 배경 · Attention (5 ~ 11쪽 · ✍️ 5쪽)</h2>
+<ul><li>2010년대 주요 딥러닝 모델 — <b>컴퓨터 비전(CV) → CNN</b>(Convolutional Neural Network · 합성곱 신경망) · <b>자연어 처리(NLP) → RNN</b>(Recurrent Neural Network · 순환 신경망)</li><li><b>RNN 의 단점</b> (6쪽)<ul><li>입력이 <b>순차적으로</b> 들어가서 GPU 를 써도 의미가 없음 → <b>병렬 처리 X</b></li><li>문장이 길어지면 <b>전체적인 문맥 정보를 담아낼 수 없음</b></li></ul></li><li>🔥 <b>Attention 개념의 등장</b><ul><li>문장에서 각 단어들의 <b>중요도(Attention Score)</b> 를 계산 → 어떤 단어가 중요한지 파악 → <b>문장의 문맥까지 파악</b> 가능</li><li>이 계산을 <b>병렬적으로</b> 처리해서 계산 효율 ↑</li><li>RNN 의 한계를 극복하고 비약적으로 성능 향상 · 지금은 CV 에서도 CNN 보다 성능 높음 → <b>결과적으로 RNN 과 CNN 을 대체</b></li></ul></li><li>7 ~ 11쪽 = 시지각에서의 <b>주의</b> — “빨간색 T 를 찾아 주세요” (여러 글자 중 중요한 것에 주의를 모으는 것 = Attention 의 생각)</li></ul>
+</section>
+<section class="card" id="s5">
+<h2>3. 트랜스포머의 부흥 · 활용 (12 ~ 14쪽)</h2>
+<ul><li>최근 2년간 arXiv 에 실린 AI 논문 중 <b>70%</b> 에 트랜스포머 등장 · 현존 최고의 딥러닝 모델 · 의료 · 헬스케어 · 챗봇 등</li><li><b>단백질 구조 예측</b> — 기존 방법은 시간이 오래 걸림 → 구글 딥마인드 <b>알파폴드</b> = 약 <b>2억 개</b> 단백질 예측 · 단백질 구조를 이해하면 어떻게 작동하는지 해독 → 신약 개발 · 환경 · 생물학에 큰 영향 (아직 단백질 상호작용 연구 필요)</li><li><b>챗봇</b> — ChatGPT (chat.openai.com)</li></ul>
+</section>
+<section class="card" id="s6">
+<h2>4. LLM (15 ~ 19쪽)</h2>
+<ul><li><b>LLM(Large Language Model)</b> — 대규모 데이터를 학습해 언어 이해 · 생성 능력을 극대화한 모델 · 수백억 개 파라미터</li><li><b>하이퍼파라미터</b> — 에포크 · 학습률 · 배치 크기 · 최대 출력 토큰 수 · 디코딩 유형 · Top-k 및 Top-p 샘플링</li><li><b>토큰</b> = 텍스트를 작은 단위로 나눈 것 · <b>토큰화</b> = 분석 가능한 기본 요소로 분리 (“나는 학교에 갔다” → “나는” · “학교에” · “갔다”) · <b>임베딩</b> = 단어 · 문장을 <b>고정된 크기의 벡터</b>로 변환 (수치화 · 차원의 저주 해결 · 계산 효율 ↑)</li></ul>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>디코딩 유형 (17쪽)</th><th>방법</th><th>장점</th><th>단점</th></tr>
+<tr><td>그리디</td><td>매 단계 <b>가장 높은 확률</b>의 토큰</td><td>간단 · 빠름</td><td>창의성 ↓ · 전체 문맥에서 최적이 아닐 수 있음</td></tr>
+<tr><td>빔 서치</td><td><b>여러 경로</b>를 동시에 · 누적 확률이 가장 높은 경로</td><td>품질 ↑ 가능성</td><td>계산 비용 ↑ · 복잡</td></tr>
+<tr><td>샘플링</td><td>확률 분포에 따라 <b>무작위</b>로</td><td>창의적인 텍스트</td><td>일관성 ↓ · 비논리적 응답 가능</td></tr>
+</tbody></table>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>18쪽</th><th>방법</th><th>장점</th><th>단점</th></tr>
+<tr><td><b>Top-k</b></td><td>확률이 높은 <b>상위 k 개</b> 토큰만 고려해 샘플링</td><td>비논리적 응답 ↓ · k 가 클수록 다양</td><td>k 가 너무 낮으면 다양성 ↓</td></tr>
+<tr><td><b>Top-p</b></td><td><b>누적 확률이 p 에 도달할 때까지</b> 토큰을 선택</td><td>비논리적 응답 ↓ + 필요하면 더 많은 토큰 → 유연</td><td>p 를 잘못 잡으면 토큰이 너무 많거나 적어 질 ↓</td></tr>
+</tbody></table>
+<ul><li>18쪽 표 (“다음 토큰” 후보) — 도서관에서 <b>0.30</b> · 점심먹으러 <b>0.25</b> · 숙제하러 <b>0.22</b> · 시내에서 <b>0.15</b> · 반대편에서 <b>0.12</b><ul><li>🤖 예시 — 그리디 = 도서관에서 · Top-k(k = 3) = 위 3개 중에서 · Top-p(p = 0.8) = 0.30 + 0.25 + 0.22 = 0.77 → 아직 &lt; 0.8 → + 0.15 = 0.92 → <b>4개</b> 중에서</li></ul></li><li>19쪽 관련 기술 — <b>랭체인(LangChain)</b> = LLM 앱 개발용 오픈소스 프레임워크 (OpenAI · Cohere · Hugging Face 등을 같은 방식으로 호출) · <b>벡터 데이터베이스</b> = 벡터를 저장 · 검색 (텍스트 · 이미지 · 오디오 → 벡터 · 벡터 임베딩 · 유사성 검색)</li></ul>
+</section>
+<section class="card" id="s7">
+<h2>5. 논의 (20쪽 · ✍️ 내 답)</h2>
+<table class="ref">
+<tbody>
+<tr><th>질문</th><th>✍️ 내 답 (요약)</th></tr>
+<tr><td>AI 가 가진 문제점과 위험성은?</td><td>다음 토큰을 확률로 골라 <b>그럴듯하지만 틀린 내용</b>을 말할 수 있음 · 데이터 <b>편향</b> · 가짜 영상 · 개인정보 유출 · 반복적인 일자리 감소</td></tr>
+<tr><td>안전한 AI 를 만들려면?</td><td>치우치지 않은 데이터 · 개인정보 빼기 · 사람이 결과 확인 · AI 가 만든 것 표시 규칙 · 법 · <b>AI 윤리 전문가</b></td></tr>
+<tr><td>AI 가 인간을 뛰어넘지 못한 부분과 이유는?</td><td>진짜 이해 · 공감 · 적은 경험으로 응용 — AI 는 확률이 높은 답을 고를 뿐 의미를 느끼거나 몸으로 경험하지 못함 → 판단 · 책임은 사람</td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s8">
+<h2>6. 🔥 시험 대비 핵심 요약</h2>
+<ul><li>🔥 ✍️ <b>“오늘까지 시험범위”</b> — 기말고사 = <b>11장 생성형 AI 까지</b></li><li>GPT = Generative Pre-trained Transformer · 좁은 AI → 범용 AI · 사회적 영향(대체되는 일 · 새 직업)</li><li>CV → CNN · NLP → RNN · 🔥 <b>RNN 단점 2가지</b> = 병렬 처리 X · 긴 문장의 문맥 X → 🔥 <b>Attention</b> = 단어 중요도(Attention Score) 계산 · 병렬 → <b>트랜스포머</b>가 RNN · CNN 대체</li><li>생성형 AI 종류 — 텍스트 GPT · BERT · LLaMA / 이미지 DALL-E · StyleGAN / 음성 WaveNet · Tacotron / 영상 Sora</li><li>LLM · 토큰 · 토큰화 · 임베딩 · 디코딩 3가지(그리디 · 빔 · 샘플링) · <b>Top-k = 상위 k 개</b> · <b>Top-p = 누적 확률 p 까지</b></li></ul>
+</section>
+
+    <nav class="wk-pager"><a class="prev" href="인공지능과뇌인지과학-12주차.html">‹ 이전 · <b>12주차</b><br><small>신경망과 딥러닝 1 — 🔥 뉴런 논리 연산 · TLU 계단함수 · 퍼셉트론 (10장)</small></a><a class="next" href="인공지능과뇌인지과학-15주차-기말고사.html">다음 · <b>15주차 기말고사</b> ›<br><small>기말고사 시험문제 정리 (9 ~ 13주차 반영)</small></a></nav>
+
+    <p class="wk-src">노션 「인공지능과뇌인지과학 · 13주차」 페이지를 정리한 내용입니다.</p>
+
+    <footer class="page-head" style="margin-top:30px;">
+        <p>COPYRIGHT © 2026 HEEGEUN YOON. ALL RIGHTS RESERVED.</p>
+    </footer>
+</div>
+<script src="../../ink.js?v=202611260939"></script>
+</body>
+</html>
