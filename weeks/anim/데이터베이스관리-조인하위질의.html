@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>조인 · 하위질의 실험실</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        try { if (window.parent !== window) document.documentElement.classList.add("embed"); } catch (e) { }
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --in:#16a34a;--out:#e5484d;--pick:#d97706;--scan:#2563eb;--code:#0f1b14;--codet:#dff5e6;--null:#9aa3a0;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --in:#4cc38a;--out:#ff6369;--pick:#ffb547;--scan:#6b9cff;--code:#0b120e;--codet:#dff5e6;--null:#6f7774;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Apple SD Gothic Neo","맑은 고딕",sans-serif;}
+    .wrap{max-width:1000px;margin:0 auto;padding:14px 14px 18px;}
+    h1{font-size:20px;margin:2px 0 4px;}
+    .sub{margin:0 0 10px;color:var(--ink2);font-size:13.5px;line-height:1.55;}
+    code{font-family:Consolas,"D2Coding",Menlo,monospace;}
+    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;}
+    .tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 6px;font-size:14px;font-weight:800;cursor:pointer;line-height:1.3;}
+    .tab small{display:block;font-weight:600;font-size:11.5px;color:var(--ink2);}
+    .tab[aria-selected=true]{border-color:var(--main);box-shadow:inset 0 0 0 1px var(--main);background:color-mix(in srgb,var(--main) 16%,var(--card));}
+    .btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+    .btns button{font-size:13.5px;font-weight:800;border:1px solid var(--main);background:var(--main);color:#fff;border-radius:9px;padding:7px 11px;cursor:pointer;}
+    html[data-theme=dark] .btns button{color:#06121c;}
+    .btns button[aria-pressed=true]{outline:3px solid color-mix(in srgb,var(--main) 45%,transparent);}
+    .btns button:disabled{opacity:.45;cursor:default;}
+    .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:-2px 0 10px;font-size:13px;color:var(--ink2);}
+    .tools label{display:flex;gap:5px;align-items:center;}
+    .src{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-bottom:10px;}
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;min-width:0;}
+    .ptl{font-size:13px;color:var(--ink2);margin:0 0 6px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;}
+    .ptl b{color:var(--ink);font-family:Consolas,Menlo,monospace;font-size:14.5px;}
+    .tw{overflow-x:auto;}
+    table{border-collapse:collapse;font-size:13.5px;min-width:100%;}
+    th,td{border:1px solid var(--line);padding:5px 9px;text-align:left;white-space:nowrap;transition:background .25s;}
+    th{background:color-mix(in srgb,var(--main) 14%,var(--card));font-size:12.5px;}
+    td.nul{color:var(--null);font-style:italic;}
+    tr.scan td{background:color-mix(in srgb,var(--scan) 22%,var(--card));}
+    tr.hit td{background:color-mix(in srgb,var(--in) 26%,var(--card));}
+    tr.miss td{background:color-mix(in srgb,var(--out) 16%,var(--card));}
+    tr.dup td{background:color-mix(in srgb,var(--out) 16%,var(--card));text-decoration:line-through;opacity:.6;}
+    tr.used td{background:color-mix(in srgb,var(--pick) 22%,var(--card));}
+    tr.new td{animation:pop .4s ease-out;}
+    @keyframes pop{0%{opacity:0;transform:translateY(-4px)}100%{opacity:1;transform:none}}
+    pre.sql{margin:0 0 10px;background:var(--code);color:var(--codet);border-radius:10px;padding:10px 12px;font-family:Consolas,Menlo,monospace;font-size:13.5px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px;}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+    .chip{border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:800;background:color-mix(in srgb,var(--main) 16%,var(--card));color:var(--ink);}
+    .chip.k{background:color-mix(in srgb,var(--in) 22%,var(--card));}
+    #why{font-size:13.5px;color:var(--ink2);line-height:1.6;margin-top:8px;min-height:1.6em;}
+    #why b{color:var(--ink);}
+    .inner{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 8px;font-size:13px;color:var(--ink2);}
+    .inner[hidden]{display:none;}
+    .inner span.v{font-family:Consolas,Menlo,monospace;font-weight:800;color:var(--ink);border:1.5px solid var(--pick);border-radius:7px;padding:2px 8px;background:color-mix(in srgb,var(--pick) 14%,var(--card));}
+    .note{font-size:12.5px;color:var(--ink2);line-height:1.55;margin:0 0 6px;}
+    @media (max-width:560px){.tabs{grid-template-columns:repeat(2,1fr);}}
+    @media (max-width:420px){.tab small{display:none}.tab{padding:9px 4px}table{font-size:12.5px}th,td{padding:4px 6px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="box">
+    <h1>🗄️ 조인 · 하위질의 실험실</h1>
+    <p class="sub">버튼을 누르면 두 테이블의 행이 <b>어떻게 짝지어지는지</b> · 결과 행이 하나씩 쌓이는 모습 · <b>카디널리티(행 수) · 차수(열 수)</b>를 보여 줘요 — 11 · 12 · 13주차 수업 테이블과 SQL 그대로</p>
+
+    <div class="tabs" role="tablist">
+        <button type="button" class="tab" data-tab="ep">🔗 emp · project<small>12주차 Quiz 7 · 조인 6가지</small></button>
+        <button type="button" class="tab" data-tab="rs">🔗 R · S<small>13주차 Quiz 1-1 · 카디널리티</small></button>
+        <button type="button" class="tab" data-tab="un">➕ UNION<small>12주차 정회원 · 준회원</small></button>
+        <button type="button" class="tab" data-tab="sq">🔍 하위질의<small>13주차 stu · pro · IN · ALL · ANY</small></button>
+    </div>
+    <div class="btns" id="btns"></div>
+    <div class="tools"><label><input type="checkbox" id="fast"> ⚡ 움직임 끄기</label><span id="hint"></span></div>
+
+    <div class="src" id="src"></div>
+    <pre class="sql" id="sql"></pre>
+    <div class="card">
+        <div class="meta" id="meta"></div>
+        <div class="inner" id="inner" hidden></div>
+        <div class="tw" id="res"></div>
+        <div id="why"></div>
+    </div>
+    <p class="note">⚠️ 행 순서는 <code>ORDER BY</code> 가 없으면 DBMS 가 정해요 — 여기서는 왼쪽(앞) 테이블 순서로 쌓아서 수업 MySQL 화면과 순서가 다를 수 있어요 (결과 <b>행 묶음 · 개수</b>는 같아요). 결과는 원고의 수업 결과 표와 맞춰 확인했어요.</p>
+</div>
+<script>
+(function () {
+    "use strict";
+    var $ = function (id) { return document.getElementById(id); };
+    function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, $("fast").checked ? 0 : ms); }); }
+    function td(v) { return v === null || v === undefined ? '<td class="nul">NULL</td>' : "<td>" + esc(v) + "</td>"; }
+
+    var T = {
+        emp: { cols: ["ename", "pno"], rows: [["홍길동", 101], ["임꺽정", 102], ["박찬호", 101], ["박찬호", 103], ["신동엽", null]] },
+        project: { cols: ["pno", "pname"], rows: [[101, "작전중"], [102, "특공대"], [103, "유레카"], [104, "다모여"]] },
+        R: { cols: ["A", "B"], rows: [["a", 2], ["b", 3], ["c", 3], ["d", 5]] },
+        S: { cols: ["B", "C"], rows: [[1, "x"], [2, "y"], [3, "z"]] },
+        "정회원": { cols: ["번호", "이름"], rows: [[1, "홍길동"], [2, "임꺽정"]] },
+        "준회원": { cols: ["번호", "이름"], rows: [[1, "홍길동"], [3, "박찬호"], [4, "선동열"]] },
+        stu: { cols: ["sno", "sname", "dept", "sage"], rows: [["s1", "유준호", "컴퓨터", 23], ["s2", "오정민", "컴퓨터", 34], ["s3", "이태현", "건축", 22], ["s4", "신현주", "건축", 21]] },
+        pro: { cols: ["pno", "pname", "dept", "page"], rows: [["p1", "이정무", "컴퓨터", 36], ["p2", "우태하", "컴퓨터", 32], ["p3", "이성민", "건축", 45]] }
+    };
+    var TAB = {
+        ep: { src: ["emp", "project"], hint: "pno 가 같은 행끼리 짝 · 신동엽은 pno 가 NULL · 104 다모여는 사원이 없음" },
+        rs: { src: ["R", "S"], hint: "✍️ 시험출제 — 결과 릴레이션의 카디널리티(행 수)는?" },
+        un: { src: ["정회원", "준회원"], hint: "✍️ “시험에는 합집합 하나만 출제” · 두 SELECT 의 열 개수 · 순서가 같아야 함" },
+        sq: { src: ["stu", "pro"], hint: "괄호 안(하위질의)을 먼저 실행 → 그 결과로 바깥 WHERE 를 걸러요" }
+    };
+    // ── 조인 (짝을 하나씩) ────────────────────────────────
+    function J(l, r, on, type, pick) { return { l: l, r: r, on: on, type: type, pick: pick }; }
+    var Q = {
+        ep: [
+            { k: "cross", t: "1) 카티션 프로덕트", sql: "SELECT *\nFROM emp, project;", j: J("emp", "project", null, "cross"), w: "WHERE 가 없으면 <b>모든 짝</b> — emp 5행 × project 4행 = <b>20행</b> · 관계대수 emp × project" },
+            { k: "inner", t: "2) 동등조인", sql: "SELECT *\nFROM emp INNER JOIN project\nON emp.pno = project.pno;", j: J("emp", "project", function (a, b) { return a[1] !== null && a[1] === b[0]; }, "inner"), w: "pno 가 <b>같은 짝만</b> → 4행 · pno 열이 <b>2개</b> (방법1 <code>FROM emp, project WHERE emp.pno = project.pno</code> 도 같음) · 신동엽(NULL)은 어떤 값과도 같지 않음" },
+            { k: "natural", t: "3) 자연조인", sql: "SELECT ename, emp.pno, pname\nFROM emp INNER JOIN project\nON emp.pno = project.pno;", j: J("emp", "project", function (a, b) { return a[1] !== null && a[1] === b[0]; }, "inner", { cols: ["ename", "pno", "pname"], f: function (a, b) { return [a[0], a[1], b[1]]; } }), w: "동등조인에서 <b>같은 pno 열을 하나만</b> 남김 → 4행 · <b>3열</b> · <code>pno</code> 만 쓰면 어느 테이블 것인지 몰라 ERROR 1052" },
+            { k: "left", t: "4) 왼쪽 외부조인", sql: "SELECT *\nFROM emp LEFT OUTER JOIN project\nON emp.pno = project.pno;", j: J("emp", "project", function (a, b) { return a[1] !== null && a[1] === b[0]; }, "left"), w: "<b>왼쪽(emp) 행은 짝이 없어도 모두</b> → 신동엽은 오른쪽 칸 NULL → <b>5행</b> · emp ⟕ project" },
+            { k: "right", t: "5) 오른쪽 외부조인", sql: "SELECT *\nFROM emp RIGHT OUTER JOIN project\nON emp.pno = project.pno;", j: J("emp", "project", function (a, b) { return a[1] !== null && a[1] === b[0]; }, "right"), w: "<b>오른쪽(project) 행은 모두</b> → 101 은 홍길동 · 박찬호 둘과 짝 · 104 다모여는 짝 없음 → 왼쪽 칸 NULL → <b>5행</b> · emp ⟖ project" },
+            { k: "full", t: "6) 완전 외부조인", sql: "SELECT *\nFROM emp LEFT OUTER JOIN project\nON emp.pno = project.pno\nUNION\nSELECT *\nFROM emp RIGHT OUTER JOIN project\nON emp.pno = project.pno;", j: J("emp", "project", function (a, b) { return a[1] !== null && a[1] === b[0]; }, "full"), w: "MySQL 은 FULL OUTER JOIN 이 없어서 <b>왼쪽 UNION 오른쪽</b> → 5 + 5 − 겹친 4 = <b>6행</b> (UNION 이 같은 행을 한 번만) · emp ⟗ project" }
+        ],
+        rs: [
+            { k: "natural", t: "1) 자연조인", sql: "SELECT *\nFROM R NATURAL JOIN S;", j: J("R", "S", function (a, b) { return a[1] === b[0]; }, "inner", { cols: ["B", "A", "C"], f: function (a, b) { return [a[1], a[0], b[1]]; } }), w: "이름이 같은 열 <b>B</b> 가 같은 짝만 · B 는 한 번만 → <b>카디널리티 3</b> · 차수 3 · 🤖 MySQL 은 같은 열 B 를 <b>맨 앞</b>에 보여 줘요 (A · B · C 로 써도 행은 같음)" },
+            { k: "inner", t: "동등조인 (ON)", sql: "SELECT *\nFROM R INNER JOIN S\nON R.B = S.B;", j: J("R", "S", function (a, b) { return a[1] === b[0]; }, "inner"), w: "같은 짝을 ON 으로 → 3행 · <b>B 열이 2개</b> (차수 4)" },
+            { k: "left", t: "2) 왼쪽 외부조인", sql: "SELECT *\nFROM R LEFT OUTER JOIN S\nON R.B = S.B;", j: J("R", "S", function (a, b) { return a[1] === b[0]; }, "left"), w: "짝 3행 + <b>d · 5</b> (S 에 B = 5 없음 → NULL · NULL) → <b>카디널리티 4</b>" },
+            { k: "right", t: "오른쪽 외부조인", sql: "SELECT *\nFROM R RIGHT OUTER JOIN S\nON R.B = S.B;", j: J("R", "S", function (a, b) { return a[1] === b[0]; }, "right"), w: "짝 3행 + <b>1 · x</b> (R 에 B = 1 없음 → NULL · NULL) → <b>4행</b>" },
+            { k: "full", t: "3) 완전 외부조인", sql: "SELECT * FROM R LEFT OUTER JOIN S ON R.B = S.B\nUNION\nSELECT * FROM R RIGHT OUTER JOIN S ON R.B = S.B;", j: J("R", "S", function (a, b) { return a[1] === b[0]; }, "full"), w: "4 + 4 − 겹친 짝 3 = <b>카디널리티 5</b>" }
+        ],
+        un: [
+            { k: "union", t: "1) UNION", sql: "select 번호,이름 from 정회원\nUNION\nselect 번호,이름 from 준회원;", u: true, w: "합치고 <b>같은 행(1 홍길동)은 한 번만</b> → 2 + 3 − 1 = <b>4행</b> · 관계대수 합집합 ∪" },
+            { k: "all", t: "2) UNION ALL", sql: "select 번호,이름 from 정회원\nUNION ALL\nselect 번호,이름 from 준회원;", u: false, w: "<b>중복도 그대로</b> → 2 + 3 = <b>5행</b>" }
+        ],
+        sq: [
+            { k: "q1", t: "3-1) IN (이정무 학과)", sql: "SELECT sname, dept, sage\nFROM stu\nWHERE dept IN (SELECT dept\n               FROM pro\n               WHERE pname = '이정무');" },
+            { k: "q2", t: "3-2) IN (p1 · p2)", sql: "SELECT sname, dept, sage\nFROM stu\nWHERE dept IN (SELECT dept\n               FROM pro\n               WHERE pno IN('p1','p2'));" },
+            { k: "q3", t: "3-3) > ALL", sql: "SELECT pno, pname, page\nFROM pro\nWHERE page>ALL (SELECT sage FROM stu);" },
+            { k: "q4", t: "3-4) > SOME (= ANY)", sql: "SELECT sno, sname, sage\nFROM stu\nWHERE sage > SOME (SELECT page FROM pro);" },
+            { k: "q5", t: "3-5) = MAX", sql: "SELECT sname, sage\nFROM stu\nWHERE sage = (SELECT MAX(sage) FROM stu);" },
+            { k: "q6", t: "3-6) 학과마다 최고령 (상관)", sql: "select sname, dept, sage\nfrom   stu S1\nwhere  sage IN (select MAX(sage)\n                from   stu S2\n                where  S1.dept = S2.dept);" }
+        ]
+    };
+    // 하위질의: inner(바깥 행) → 값 목록 · test(바깥 행, 목록) → [참/거짓, 설명]
+    var SQ = {
+        q1: { outer: "stu", used: function (p) { return p[1] === "이정무"; }, inner: function () { return T.pro.rows.filter(function (p) { return p[1] === "이정무"; }).map(function (p) { return p[2]; }); }, test: function (s, L) { return [L.indexOf(s[2]) >= 0, "'" + s[2] + "' IN (" + L.map(function (x) { return "'" + x + "'"; }).join(", ") + ")"]; }, pick: [1, 2, 3], w: "① 괄호 안 먼저 — 이정무의 dept → <b>'컴퓨터'</b> (1행) ② 학과가 그 안에 있는 학생 → 유준호 · 오정민 · 1행이라 <code>=</code> 도 됨" },
+        q2: { outer: "stu", used: function (p) { return p[0] === "p1" || p[0] === "p2"; }, inner: function () { return T.pro.rows.filter(function (p) { return p[0] === "p1" || p[0] === "p2"; }).map(function (p) { return p[2]; }); }, test: function (s, L) { return [L.indexOf(s[2]) >= 0, "'" + s[2] + "' IN (" + L.map(function (x) { return "'" + x + "'"; }).join(", ") + ")"]; }, pick: [1, 2, 3], w: "괄호 안이 <b>2행</b>('컴퓨터' · '컴퓨터') → 결과는 3-1 과 같음 · 2행이라 <code>dept = (…)</code> 로 쓰면 <b>ERROR 1242</b> (Subquery returns more than 1 row) → IN" },
+        q3: { outer: "pro", used: function () { return true; }, innerFrom: "stu", inner: function () { return T.stu.rows.map(function (s) { return s[3]; }); }, test: function (p, L) { var ok = L.every(function (x) { return p[3] > x; }); return [ok, p[3] + " > ALL (" + L.join(", ") + ") → 가장 큰 " + Math.max.apply(null, L) + " 보다 커야 → " + (p[3] > Math.max.apply(null, L))]; }, pick: [0, 1, 3], w: "<b>ALL</b> = 괄호 안 <b>모두</b>보다 커야 → 가장 큰 34 보다 커야 참 → 이정무 36 · 이성민 45 (우태하 32 는 34 보다 작음)" },
+        q4: { outer: "stu", used: function () { return true; }, innerFrom: "pro", inner: function () { return T.pro.rows.map(function (p) { return p[3]; }); }, test: function (s, L) { var ok = L.some(function (x) { return s[3] > x; }); return [ok, s[3] + " > SOME (" + L.join(", ") + ") → 가장 작은 " + Math.min.apply(null, L) + " 보다 크면 → " + ok]; }, pick: [0, 1, 3], w: "<b>SOME = ANY</b> = 괄호 안 <b>하나라도</b>보다 크면 참 → 가장 작은 32 보다 크면 → 오정민 34 (✍️ “위랑 아래랑 같음” — ANY 로 써도 같음)" },
+        q5: { outer: "stu", used: function () { return true; }, innerFrom: "stu", inner: function () { return [Math.max.apply(null, T.stu.rows.map(function (s) { return s[3]; }))]; }, test: function (s, L) { return [s[3] === L[0], s[3] + " = " + L[0]]; }, pick: [1, 3], w: "괄호 안 <b>MAX(sage) → 34</b> (1행이라 <code>=</code>) → sage 가 34 인 학생 → 오정민" },
+        q6: { outer: "stu", corr: true, innerFrom: "stu", inner: function (s) { return [Math.max.apply(null, T.stu.rows.filter(function (x) { return x[2] === s[2]; }).map(function (x) { return x[3]; }))]; }, test: function (s, L) { return [L.indexOf(s[3]) >= 0, s[1] + "(" + s[2] + ") → 같은 학과 MAX = " + L[0] + " → " + s[3] + " IN (" + L[0] + ")"]; }, pick: [1, 2, 3], w: "괄호 안이 바깥 <b>S1.dept</b> 를 써서 <b>바깥 행마다 다시</b> 실행 = <b>상관 중첩 질의</b> → 컴퓨터 34 · 건축 22 → 오정민 · 이태현" }
+    };
+
+    var tab = "ep", cur = null, busy = false;
+    function srcTable(name, cls) {
+        var t = T[name];
+        return '<section class="panel"><div class="ptl"><b>' + esc(name) + "</b><span>" + t.rows.length + "행 · " + t.cols.length + "열</span></div><div class=\"tw\"><table><tr>" + t.cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr>" +
+            t.rows.map(function (r, i) { return '<tr class="' + ((cls && cls[i]) || "") + '">' + r.map(td).join("") + "</tr>"; }).join("") + "</table></div></section>";
+    }
+    function drawSrc(cls) { var s = TAB[tab].src; $("src").innerHTML = srcTable(s[0], cls && cls[0]) + srcTable(s[1], cls && cls[1]); tell(); }
+    function drawRes(cols, rows, cls) {
+        $("res").innerHTML = "<table><tr>" + cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr>" +
+            (rows.length ? rows.map(function (r, i) { return '<tr class="' + ((cls && cls[i]) || "") + '">' + r.map(td).join("") + "</tr>"; }).join("") : '<tr><td colspan="' + cols.length + '" style="color:var(--ink2)">(결과 행이 쌓이는 곳)</td></tr>') + "</table>";
+        $("meta").innerHTML = '<span class="chip k">카디널리티(행 수) ' + rows.length + '</span><span class="chip">차수(열 수) ' + cols.length + "</span>";
+        tell();
+    }
+    function mk(n, f) { var a = []; for (var i = 0; i < n; i++) a.push(f(i)); return a; }
+    function same(a, b) { return a.length === b.length && a.every(function (x, i) { return x === b[i]; }); }
+
+    async function runJoin(q) {
+        var j = q.j, L = T[j.l], R = T[j.r], pick = j.pick;
+        var cols = pick ? pick.cols : L.cols.concat(R.cols), f = pick ? pick.f : function (a, b) { return (a || L.cols.map(function () { return null; })).concat(b || R.cols.map(function () { return null; })); };
+        var out = [], dt = j.type === "cross" ? 110 : 330;
+        function emit(li, ri, cl) {
+            out.push(f(li < 0 ? null : L.rows[li], ri < 0 ? null : R.rows[ri]));
+            drawSrc([mk(L.rows.length, function (k) { return k === li ? (ri < 0 ? "miss" : "hit") : ""; }), mk(R.rows.length, function (k) { return k === ri ? (li < 0 ? "miss" : "hit") : ""; })]);
+            drawRes(cols, out, mk(out.length, function (k) { return k === out.length - 1 ? "new " + (cl || "") : ""; }));
+        }
+        drawRes(cols, []);
+        if (j.type === "right") {
+            for (var r = 0; r < R.rows.length; r++) {
+                drawSrc([[], mk(R.rows.length, function (k) { return k === r ? "scan" : ""; })]); await wait(dt);
+                var hit = false;
+                for (var l = 0; l < L.rows.length; l++) if (j.on(L.rows[l], R.rows[r])) { hit = true; emit(l, r); await wait(dt); }
+                if (!hit) { emit(-1, r, "miss"); await wait(dt); }
+            }
+        } else {
+            for (var a = 0; a < L.rows.length; a++) {
+                if (j.type !== "cross") { drawSrc([mk(L.rows.length, function (k) { return k === a ? "scan" : ""; }), []]); await wait(dt); }
+                var any = false;
+                for (var b = 0; b < R.rows.length; b++) if (j.type === "cross" || j.on(L.rows[a], R.rows[b])) { any = true; emit(a, b); await wait(dt); }
+                if (!any && (j.type === "left" || j.type === "full")) { emit(a, -1, "miss"); await wait(dt); }
+            }
+            if (j.type === "full") {
+                $("why").innerHTML = "① 왼쪽 외부조인 " + out.length + "행 → ② 오른쪽 외부조인 행 중 <b>없는 것만</b> 더함 (UNION)"; await wait(dt * 2);
+                for (var r2 = 0; r2 < R.rows.length; r2++) {
+                    var hit2 = false;
+                    for (var l2 = 0; l2 < L.rows.length; l2++) if (j.on(L.rows[l2], R.rows[r2])) hit2 = true;
+                    if (!hit2) { emit(-1, r2, "miss"); await wait(dt); }
+                }
+            }
+        }
+        drawSrc(); drawRes(cols, out);
+        return out;
+    }
+    async function runUnion(q) {
+        var A = T["정회원"], B = T["준회원"], out = [], cls = [], dt = 380;
+        drawRes(A.cols, []);
+        for (var i = 0; i < A.rows.length; i++) { out.push(A.rows[i]); drawSrc([mk(A.rows.length, function (k) { return k === i ? "hit" : ""; }), []]); drawRes(A.cols, out, mk(out.length, function (k) { return k === out.length - 1 ? "new" : ""; })); await wait(dt); }
+        for (var j = 0; j < B.rows.length; j++) {
+            var dup = out.some(function (r) { return same(r, B.rows[j]); });
+            if (q.u && dup) {
+                drawSrc([mk(A.rows.length, function (k) { return same(A.rows[k], B.rows[j]) ? "dup" : ""; }), mk(B.rows.length, function (k) { return k === j ? "dup" : ""; })]);
+                $("why").innerHTML = "준회원 " + esc(B.rows[j].join(" ")) + " 은 이미 있음 → <b>UNION 은 한 번만</b> (빠짐)"; await wait(dt * 2); continue;
+            }
+            out.push(B.rows[j]); drawSrc([[], mk(B.rows.length, function (k) { return k === j ? "hit" : ""; })]);
+            drawRes(A.cols, out, mk(out.length, function (k) { return k === out.length - 1 ? "new" : ""; })); await wait(dt);
+        }
+        drawSrc(); drawRes(A.cols, out);
+        return out;
+    }
+    async function runSub(q) {
+        var s = SQ[q.k], O = T[s.outer], out = [], cols = s.pick.map(function (i) { return O.cols[i]; }), dt = 420;
+        var innerT = s.innerFrom || (s.outer === "stu" ? "pro" : "stu"), side = TAB.sq.src.indexOf(innerT), oside = TAB.sq.src.indexOf(s.outer);
+        drawRes(cols, []);
+        var L = null;
+        if (!s.corr) {
+            L = s.inner();
+            var usedCls = mk(T[innerT].rows.length, function (k) { return !s.used || s.used(T[innerT].rows[k]) ? "used" : ""; });
+            var cl = [[], []]; cl[side] = usedCls; drawSrc(cl);
+            $("inner").hidden = false; $("inner").innerHTML = "① 괄호 안(하위질의) 결과 → " + L.map(function (x) { return '<span class="v">' + esc(x) + "</span>"; }).join("");
+            await wait(dt * 2);
+        }
+        for (var i = 0; i < O.rows.length; i++) {
+            var row = O.rows[i];
+            if (s.corr) { L = s.inner(row); $("inner").hidden = false; $("inner").innerHTML = "① 이 행의 학과(" + esc(row[2]) + ")로 괄호 안을 다시 실행 → " + L.map(function (x) { return '<span class="v">' + esc(x) + "</span>"; }).join(""); }
+            var r = s.test(row, L), c2 = [[], []];
+            c2[oside] = mk(O.rows.length, function (k) { return k === i ? (r[0] ? "hit" : "miss") : ""; });
+            if (s.corr) c2[side === oside ? 1 - oside : side] = [];
+            drawSrc(c2);
+            $("why").innerHTML = "② " + esc(r[1]) + " → <b>" + (r[0] ? "참 · 결과에 넣음" : "거짓 · 뺌") + "</b>";
+            if (r[0]) { out.push(s.pick.map(function (k) { return row[k]; })); drawRes(cols, out, mk(out.length, function (k) { return k === out.length - 1 ? "new" : ""; })); }
+            await wait(dt + 200);
+        }
+        drawSrc(); drawRes(cols, out);
+        return out;
+    }
+
+    function setTab(t) {
+        tab = t; cur = null;
+        [].forEach.call(document.querySelectorAll(".tab"), function (b) { b.setAttribute("aria-selected", b.getAttribute("data-tab") === t ? "true" : "false"); });
+        $("btns").innerHTML = Q[t].map(function (q) { return '<button type="button" data-k="' + q.k + '">' + esc(q.t) + "</button>"; }).join("");
+        $("hint").textContent = TAB[t].hint;
+        $("sql").textContent = "-- 위 버튼을 눌러 보세요";
+        $("inner").hidden = true; $("why").innerHTML = ""; $("meta").innerHTML = ""; $("res").innerHTML = "";
+        drawSrc();
+        try { history.replaceState(null, "", "#" + t); } catch (e) { }
+    }
+    document.addEventListener("click", async function (e) {
+        var tb = e.target.closest && e.target.closest(".tab");
+        if (tb) { if (!busy) setTab(tb.getAttribute("data-tab")); return; }
+        var b = e.target.closest && e.target.closest("#btns button");
+        if (!b || busy) return;
+        var q = Q[tab].filter(function (x) { return x.k === b.getAttribute("data-k"); })[0];
+        busy = true; [].forEach.call(document.querySelectorAll("#btns button"), function (x) { x.disabled = true; x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+        $("sql").textContent = q.sql; $("why").innerHTML = ""; $("inner").hidden = true;
+        try {
+            if (q.j) await runJoin(q); else if (tab === "un") await runUnion(q); else await runSub(q);
+            $("why").innerHTML = q.w || SQ[q.k].w;
+        } finally { busy = false; [].forEach.call(document.querySelectorAll("#btns button"), function (x) { x.disabled = false; }); }
+    });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    var box = $("box");
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) { } }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+    var q0 = /[?&]tab=(ep|rs|un|sq)\b/.exec(location.search), h0 = /^#(ep|rs|un|sq)$/.exec(location.hash);
+    setTab(h0 ? h0[1] : q0 ? q0[1] : "ep");
+})();
+</script>
+<script src="../../figink.js?v=202611260939"></script>
+</body>
+</html>
