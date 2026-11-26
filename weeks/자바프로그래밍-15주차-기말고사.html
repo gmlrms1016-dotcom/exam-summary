@@ -106,12 +106,17 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">📌 교수님의 기말고사 안내(일시 · 범위 · 방식)가 나오면 이 맨 위에 카드로 정리해요. 중간고사는 필기평가1 <b>30점</b> · 직무수행능력평가 (실습 중심)였어요. 9 · 10 · 11 · 12주차 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a> 에 있어요.</div>
 <section class="card" id="s1">
-<h2>🎨 그림으로 정리</h2>
-<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/자바프로그래밍-그림정리.html?weeks=9-15#thiscall" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/자바프로그래밍-그림정리.html?weeks=9-15#thiscall" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
+<h2>☕ ArrayList 실험실 — 버튼으로 눌러 보기</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/자바프로그래밍-ArrayList.html" title="☕ ArrayList 실험실" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/자바프로그래밍-ArrayList.html" target="_blank" rel="noopener">🎬 ☕ ArrayList 실험실 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<ul><li>9주차 — ① this() · ② 메소드 오버로딩 · ③ 접근 지정자 · ④ static · ⑤ 객체 배열</li><li>10주차 — ⑥ 상속 객체 · ⑦ 생성자 호출 순서 · ⑧ super() 고르기 · ⑨ 과제 상속 · toString</li><li>11주차 — ⑩ 오버라이딩 · 동적 바인딩 · ⑪ 추상 클래스 · ⑫ 인터페이스 · ⑬ 상속 + 다중 구현 · ⑭ 추상 클래스 vs 인터페이스</li><li>12주차 — ⑮ 패키지 · import · ⑯ Object · toString · ⑰ == vs equals · ⑱ Wrapper · 박싱 · ⑲ String 메소드</li><li>13주차 — ⑳ ArrayList · ㉑ for · for-each</li></ul>
+<ul><li>13주차 ArrayList — 📄 수업 코드(ArrayListEx1 · Ex2)를 ▶ 다음 줄로 한 줄씩 · add · add(인덱스, 값) · remove · get · size · indexOf · contains · isEmpty · clear 를 버튼으로 → 리스트 칸 · 돌려준 값 · 원본이 바뀌는지</li><li>⚠️ 오류도 버튼으로 — 없는 인덱스 → IndexOutOfBoundsException · <code>nameList.add(1)</code> · <code>capacity()</code> → 컴파일 오류 · for 를 1부터 시작하면 0번 칸을 건너뜀</li></ul>
 </section>
 <section class="card" id="s2">
+<h2>🎨 그림으로 정리</h2>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/자바프로그래밍-그림정리.html?weeks=9-15#thiscall" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/자바프로그래밍-그림정리.html?weeks=9-15#thiscall" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
+<ul><li>9주차 — ① this() · ② 메소드 오버로딩 · ③ 접근 지정자 · ④ static · ⑤ 객체 배열</li><li>10주차 — ⑥ 상속 객체 · ⑦ 생성자 호출 순서 · ⑧ super() 고르기 · ⑨ 과제 상속 · toString</li><li>11주차 — ⑩ 오버라이딩 · 동적 바인딩 · ⑪ 추상 클래스 · ⑫ 인터페이스 · ⑬ 상속 + 다중 구현 · ⑭ 추상 클래스 vs 인터페이스</li><li>12주차 — ⑮ 패키지 · import · ⑯ Object · toString · ⑰ == vs equals · ⑱ Wrapper · 박싱 · ⑲ String 메소드</li><li>13주차 — ⑳ ArrayList · ㉑ for · for-each</li></ul>
+</section>
+<section class="card" id="s3">
 <h2>9주차 · 4장 클래스 — this() · 오버로딩 · 접근 지정자 · static · 객체 배열</h2>
 <table class="ref">
 <tbody>
@@ -125,7 +130,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="자바프로그래밍-9주차.html">9주차</a>.</div>
 </section>
-<section class="card" id="s3">
+<section class="card" id="s4">
 <h2>10주차 · 5장 상속 — extends · 생성자 호출 순서 · super() · toString</h2>
 <table class="ref">
 <tbody>
@@ -140,7 +145,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="자바프로그래밍-10주차.html">10주차</a> · 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a>.</div>
 </section>
-<section class="card" id="s4">
+<section class="card" id="s5">
 <h2>11주차 · 5장 상속 (2) — 오버라이딩 · 동적 바인딩 · 추상 클래스 · 인터페이스</h2>
 <table class="ref">
 <tbody>
@@ -157,7 +162,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="자바프로그래밍-11주차.html">11주차</a> · 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a>.</div>
 </section>
-<section class="card" id="s5">
+<section class="card" id="s6">
 <h2>12주차 · 6장 — 패키지 · Object(toString · equals) · Wrapper · 박싱 · String</h2>
 <table class="ref">
 <tbody>
@@ -172,7 +177,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="자바프로그래밍-12주차.html">12주차</a> · 문제는 과목 페이지 <a href="../자바프로그래밍.html#quiz">퀴즈</a> · <a href="../자바프로그래밍.html#output">출력 결과 맞히기</a> · <a href="../자바프로그래밍.html#code">코딩테스트</a>.</div>
 </section>
-<section class="card" id="s6">
+<section class="card" id="s7">
 <h2>13주차 · 6장 String · Math · Calendar · 7장 ArrayList + 과제 3문제</h2>
 <table class="ref">
 <tbody>

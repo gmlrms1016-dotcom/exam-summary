@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArrayList 실험실</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        try { if (window.parent !== window) document.documentElement.classList.add("embed"); } catch (e) { }
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --box:#eef3ff;--boxb:#7b93d6;--in:#16a34a;--out:#e5484d;--pick:#d97706;--scan:#2563eb;--skip:#9aa3a0;--code:#0f1b14;--codet:#dff5e6;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --box:#1b2433;--boxb:#5b7bd6;--in:#4cc38a;--out:#ff6369;--pick:#ffb547;--scan:#6b9cff;--skip:#5f6764;--code:#0b120e;--codet:#dff5e6;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Apple SD Gothic Neo","맑은 고딕",sans-serif;}
+    .wrap{max-width:980px;margin:0 auto;padding:14px 14px 18px;}
+    h1{font-size:20px;margin:2px 0 4px;}
+    .sub{margin:0 0 12px;color:var(--ink2);font-size:13.5px;line-height:1.55;}
+    code{font-family:Consolas,"D2Coding",Menlo,monospace;}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;}
+    .codeline{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 8px;padding-bottom:8px;border-bottom:1px dashed var(--line);}
+    .code{font-family:Consolas,Menlo,monospace;font-size:15.5px;font-weight:800;overflow-wrap:anywhere;}
+    .tag{display:inline-block;border-radius:6px;padding:1px 8px;font-size:12.5px;font-weight:800;}
+    .tag.chg{background:color-mix(in srgb,var(--out) 20%,var(--card));color:var(--out);}
+    .tag.keep{background:color-mix(in srgb,var(--in) 20%,var(--card));color:var(--in);}
+    .tag.err{background:color-mix(in srgb,var(--pick) 22%,var(--card));color:var(--pick);}
+    .lbl{font-size:13px;color:var(--ink2);margin:2px 0 6px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;}
+    .lbl b{color:var(--ink);font-family:Consolas,Menlo,monospace;font-size:14.5px;overflow-wrap:anywhere;}
+    .row{display:flex;flex-wrap:wrap;gap:6px;min-height:58px;align-items:flex-end;margin-bottom:8px;}
+    .cell{display:flex;flex-direction:column;align-items:center;gap:2px;}
+    .cell i{font-style:normal;font-size:11px;color:var(--ink2);font-family:Consolas,Menlo,monospace;}
+    .cell span{min-width:52px;padding:9px 8px;text-align:center;border:2px solid var(--boxb);background:var(--box);border-radius:9px;font-family:Consolas,Menlo,monospace;font-size:15px;font-weight:700;transition:background .25s,border-color .25s,opacity .3s,transform .3s;}
+    .row.obj .cell span{font-size:13px;min-width:0;}
+    .cell.in span{border-color:var(--in);background:color-mix(in srgb,var(--in) 22%,var(--box));animation:pop .45s ease-out;}
+    .cell.out span{border-color:var(--out);background:color-mix(in srgb,var(--out) 25%,var(--box));transform:translateY(-14px) scale(.8);opacity:.25;}
+    .cell.scan span{border-color:var(--scan);background:color-mix(in srgb,var(--scan) 25%,var(--box));transform:translateY(-6px);}
+    .cell.hit span{border-color:var(--in);background:color-mix(in srgb,var(--in) 30%,var(--box));transform:translateY(-6px);}
+    .cell.skip span{border-color:var(--skip);opacity:.4;}
+    .cell.shift span{border-color:var(--pick);}
+    .empty{color:var(--ink2);font-size:13px;padding:12px 2px;}
+    .val{font-family:Consolas,Menlo,monospace;font-size:20px;font-weight:800;padding:6px 12px;border-radius:9px;border:2px solid var(--in);background:color-mix(in srgb,var(--in) 15%,var(--card));animation:pop .45s ease-out;}
+    .val.err{border-color:var(--out);color:var(--out);background:color-mix(in srgb,var(--out) 12%,var(--card));font-size:15px;}
+    .val.none{border-color:var(--skip);color:var(--ink2);font-size:15px;}
+    @keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+    #why{font-size:13.5px;color:var(--ink2);line-height:1.6;min-height:1.6em;}
+    #why b{color:var(--ink);}
+    .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;}
+    .tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13.5px;font-weight:700;cursor:pointer;}
+    .tools label{font-size:13px;color:var(--ink2);display:flex;gap:6px;align-items:center;}
+    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;}
+    .tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 6px;font-size:14px;font-weight:800;cursor:pointer;line-height:1.3;}
+    .tab small{display:block;font-weight:600;font-size:11.5px;color:var(--ink2);}
+    .tab[aria-selected=true]{border-color:var(--main);box-shadow:inset 0 0 0 1px var(--main);background:color-mix(in srgb,var(--main) 16%,var(--card));}
+    .pane{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 12px;margin-bottom:12px;}
+    .pane.on{display:block;}
+    .m{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 0;border-top:1px dashed var(--line);}
+    .m:first-child{border-top:0;}
+    .m button.run,.steps button.go{font-family:Consolas,Menlo,monospace;font-size:14px;font-weight:800;border:1px solid var(--main);background:var(--main);color:#fff;border-radius:9px;padding:7px 11px;cursor:pointer;max-width:100%;text-align:left;}
+    html[data-theme=dark] .m button.run,html[data-theme=dark] .steps button.go{color:#06121c;}
+    .m button.run:disabled,.steps button:disabled{opacity:.45;cursor:default;}
+    .m input{font-family:Consolas,Menlo,monospace;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 7px;width:66px;}
+    .m .d{flex-basis:100%;font-size:12.5px;color:var(--ink2);line-height:1.5;}
+    .m .d b{color:var(--ink);}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0 4px;}
+    .chips button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 11px;font-size:13px;font-weight:800;cursor:pointer;}
+    .chips button[aria-pressed=true]{border-color:var(--main);box-shadow:inset 0 0 0 1px var(--main);background:color-mix(in srgb,var(--main) 16%,var(--card));}
+    .codebox{font-family:Consolas,Menlo,monospace;font-size:13.5px;line-height:1.5;margin:4px 0;}
+    .ln{display:flex;gap:8px;padding:3px 6px;border-radius:7px;cursor:pointer;border:1px solid transparent;}
+    .ln .no{color:var(--ink2);min-width:22px;text-align:right;font-size:12px;padding-top:2px;user-select:none;}
+    .ln .tx{white-space:pre-wrap;overflow-wrap:anywhere;flex:1;}
+    .ln.done{opacity:.55;} .ln.cur{opacity:1;background:color-mix(in srgb,var(--in) 18%,var(--card));border-color:var(--in);}
+    .ln.next{background:color-mix(in srgb,var(--main) 10%,var(--card));} .ln.next .no::before{content:"▶ ";color:var(--main);}
+    .steps{display:flex;flex-wrap:wrap;gap:8px;padding:6px 0 10px;}
+    .steps button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13.5px;font-weight:800;cursor:pointer;}
+    pre.log{margin:0 0 12px;background:var(--code);color:var(--codet);border-radius:10px;padding:10px 12px;font-family:Consolas,Menlo,monospace;font-size:13px;line-height:1.55;max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;}
+    pre.log .c{color:#8ab4ff;} pre.log .r{color:#7fd49a;} pre.log .x{color:#ff8a80;}
+    table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);}
+    th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle;}
+    th{background:color-mix(in srgb,var(--main) 14%,var(--card));}
+    html.embed table{display:none;}
+    @media (max-width:560px){.tabs{grid-template-columns:repeat(2,1fr);}}
+    @media (max-width:420px){.cell span{min-width:44px;padding:8px 6px;font-size:14px}.m input{width:58px}.code{font-size:14.5px}.tab small{display:none}.tab{padding:9px 4px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="box">
+    <h1>☕ ArrayList 실험실</h1>
+    <p class="sub">버튼을 누르면 <code>ArrayList</code> 가 어떻게 바뀌는지 · <b>돌려주는 값</b> · <b>원본이 바뀌는지</b>를 보여 줘요 — 13주차 수업 코드(ArrayListEx1 · Ex2)와 7장 메소드 표 · 인덱스는 <b>0부터</b> · 결과는 자바 16 으로 직접 실행한 값과 같아요</p>
+
+    <section class="stage">
+        <div class="codeline"><span class="code" id="code">ArrayList&lt;Integer&gt; suList = [5, 4, 100, -1]</span><span id="tag"></span></div>
+        <div class="lbl">리스트 <b id="arrTxt"></b><span id="len"></span></div>
+        <div class="row" id="arr"></div>
+        <div class="lbl">돌려준 값 <b id="resTxt"></b></div>
+        <div class="row" id="res"><div class="empty">아래 버튼을 눌러 보세요</div></div>
+        <div id="why"></div>
+    </section>
+
+    <div class="tools">
+        <button type="button" id="undo">↶ 되돌리기</button>
+        <button type="button" id="reset">↺ 처음 [5, 4, 100, -1]</button>
+        <label><input type="checkbox" id="fast"> ⚡ 움직임 끄기</label>
+    </div>
+
+    <div class="tabs" role="tablist">
+        <button type="button" class="tab" role="tab" data-tab="class">📄 수업 코드<small>한 줄씩 실행</small></button>
+        <button type="button" class="tab" role="tab" data-tab="edit">🔧 바꾸기<small>add · remove · clear</small></button>
+        <button type="button" class="tab" role="tab" data-tab="read">🔍 읽기<small>get · size · indexOf …</small></button>
+        <button type="button" class="tab" role="tab" data-tab="loop">🔁 반복 · ⚠️ 오류<small>for · for-each · 예외</small></button>
+    </div>
+
+    <div class="pane" data-pane="class">
+        <div class="chips" id="progs"><button type="button" data-p="ex1">ArrayListEx1 — 정수 리스트</button><button type="button" data-p="ex2">ArrayListEx2 — Point 객체 · remove(1)</button></div>
+        <div class="codebox" id="src"></div>
+        <div class="steps"><button type="button" class="go" id="next">▶ 다음 줄</button><button type="button" id="restart">⏮ 처음부터</button><button type="button" id="toEnd">⏭ 끝까지</button></div>
+    </div>
+    <div class="pane" data-pane="edit">
+        <div class="m"><button type="button" class="run" data-m="add">suList.add(<span data-show="av">7</span>)</button> 값 <input id="av" value="7"><div class="d">맨 <b>뒤</b>에 추가 → 돌려주는 값 = <b>true</b> (boolean)</div></div>
+        <div class="m"><button type="button" class="run" data-m="addAt">suList.add(<span data-show="ai">1</span>, <span data-show="aj">9</span>)</button> 인덱스 <input id="ai" value="1"> 값 <input id="aj" value="9"><div class="d">그 자리에 <b>끼워 넣기</b> — 뒤는 한 칸씩 밀림 (덮어쓰지 않음) · 돌려주는 값 없음(void) · 인덱스가 size() 보다 크면 예외</div></div>
+        <div class="m"><button type="button" class="run" data-m="removeAt">suList.remove(<span data-show="ri">1</span>)</button> 인덱스 <input id="ri" value="1"><div class="d">그 <b>자리</b>를 지우고 뒤가 앞으로 당겨짐 → 돌려주는 값 = <b>지운 요소</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="removeObj">suList.remove(Integer.valueOf(<span data-show="rv">100</span>))</button> 값 <input id="rv" value="100"><div class="d"><b>같은 첫 요소</b>를 지움 → 돌려주는 값 = <b>true / false</b> · 🤖 Integer 리스트에 <code>remove(100)</code> 이라고 쓰면 <b>100번 자리</b>를 지우려 함 (인덱스로 봄)</div></div>
+        <div class="m"><button type="button" class="run" data-m="clear">suList.clear()</button><div class="d">모든 요소 삭제 → size() = 0 · 돌려주는 값 없음(void)</div></div>
+    </div>
+    <div class="pane" data-pane="read">
+        <div class="m"><button type="button" class="run" data-m="get">suList.get(<span data-show="gi">2</span>)</button> 인덱스 <input id="gi" value="2"><div class="d">그 자리 요소 (배열의 <code>a[2]</code> 처럼) · 없는 자리면 <b>IndexOutOfBoundsException</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="size">suList.size()</button><div class="d">요소 <b>개수</b> — 배열은 <code>a.length</code> · String 은 <code>s.length()</code></div></div>
+        <div class="m"><button type="button" class="run" data-m="indexOf">suList.indexOf(<span data-show="xi">100</span>)</button> 값 <input id="xi" value="100"><div class="d">같은 첫 요소의 인덱스 · 없으면 <b>-1</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="contains">suList.contains(<span data-show="ci">4</span>)</button> 값 <input id="ci" value="4"><div class="d">있으면 <b>true</b> · 없으면 <b>false</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="isEmpty">suList.isEmpty()</button><div class="d">비어 있으면 <b>true</b></div></div>
+    </div>
+    <div class="pane" data-pane="loop">
+        <div class="m"><button type="button" class="run" data-m="forIdx">for (int index = 0; index &lt; suList.size(); index++)</button><div class="d">인덱스 for — <code>suList.get(index)</code> 를 하나씩 출력</div></div>
+        <div class="m"><button type="button" class="run" data-m="forEach">for (int hangae : suList)</button><div class="d">for-each — 앞에서부터 하나씩 꺼냄 · ✍️ “위 for문과 아래 for문은 같음”</div></div>
+        <div class="m"><button type="button" class="run" data-m="forOne">⚠️ for (int index = 1; …)</button><div class="d">✍️ 노션 “for문 실수 예” — 1부터 시작하면 <b>0번 칸을 건너뜀</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="getSize">⚠️ suList.get(suList.size())</button><div class="d">마지막 인덱스는 <b>size() - 1</b> → size() 자리는 없음 → 실행 중 예외</div></div>
+        <div class="m"><button type="button" class="run" data-m="strInt">⚠️ nameList.add(1)</button><div class="d">✍️ <code>ArrayList&lt;String&gt;</code> 에 정수 → <b>컴파일 오류</b> (제네릭이 타입을 정해 둠)</div></div>
+        <div class="m"><button type="button" class="run" data-m="capacity">⚠️ suList.capacity()</button><div class="d">📄 21쪽 — ArrayList 에 없는 메소드 → <b>컴파일 오류</b> (elementAt 도 Vector 메소드라 없음)</div></div>
+    </div>
+
+    <div class="lbl">🖥️ 콘솔 (<code>&gt;</code> 실행 · <code>&lt;</code> 돌려준 값 · 초록 = System.out.println)</div>
+    <pre class="log" id="log"></pre>
+
+    <table>
+        <tr><th>메소드 (📄 7장 20쪽)</th><th>원본</th><th>돌려주는 값</th></tr>
+        <tr><td><code>add(값)</code></td><td>바뀜</td><td>true</td></tr>
+        <tr><td><code>add(인덱스, 값)</code> · <code>clear()</code></td><td>바뀜</td><td>없음 (void)</td></tr>
+        <tr><td><code>remove(인덱스)</code></td><td>바뀜</td><td>지운 요소</td></tr>
+        <tr><td><code>remove(객체)</code></td><td>바뀜 (있으면)</td><td>true / false</td></tr>
+        <tr><td><code>get(인덱스)</code> · <code>size()</code></td><td>그대로</td><td>그 자리 요소 · 개수</td></tr>
+        <tr><td><code>indexOf(객체)</code> · <code>contains(객체)</code> · <code>isEmpty()</code></td><td>그대로</td><td>인덱스(없으면 -1) · true / false</td></tr>
+    </table>
+</div>
+<script>
+(function () {
+    "use strict";
+    var START = [5, 4, 100, -1];
+    var lists = { suList: START.slice(), ptList: [] }, cur = "suList", hist = [], busy = false;
+    var $ = function (id) { return document.getElementById(id); };
+    function Pt(x, y) { return { pt: true, x: x, y: y }; }
+    function show(v) { return v && v.pt ? "Point [x=" + v.x + ", y=" + v.y + "]" : String(v); }
+    function list(a) { return "[" + a.map(show).join(", ") + "]"; }
+    function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+    function num(id) { var n = parseInt($(id).value, 10); return isFinite(n) ? n : 0; }
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, $("fast").checked ? 0 : ms); }); }
+    function marks(n, f) { var a = []; for (var k = 0; k < n; k++) a.push(f(k)); return a; }
+    function A() { return lists[cur]; }
+
+    function paint(rowId, vals, cls, defCls) {
+        $(rowId).innerHTML = vals.length ? vals.map(function (x, i) {
+            var c = cls ? (cls[i] ? " " + cls[i] : "") : (defCls ? " " + defCls : "");
+            return '<div class="cell' + c + '"><span>' + esc(show(x)) + "</span><i>[" + i + "]</i></div>";
+        }).join("") : '<div class="empty">빈 리스트 [ ] · size() = 0</div>';
+    }
+    function draw(cls) {
+        var a = A();
+        $("arr").className = "row" + (cur === "ptList" ? " obj" : "");
+        paint("arr", a, cls);
+        $("arrTxt").textContent = cur + " = " + list(a);
+        $("len").textContent = "size() " + a.length;
+        tell();
+    }
+    function res(v, kind) {
+        var r = $("res");
+        if (kind === "void") { r.innerHTML = '<div class="val none">없음 (void)</div>'; $("resTxt").textContent = "void"; }
+        else if (kind === "err") { r.innerHTML = '<div class="val err">' + esc(v) + "</div>"; $("resTxt").textContent = "예외 — 실행이 멈춤"; }
+        else if (kind === "cerr") { r.innerHTML = '<div class="val err">' + esc(v) + "</div>"; $("resTxt").textContent = "컴파일 오류 — 실행 전에 멈춤"; }
+        else if (kind === "none") { r.innerHTML = '<div class="empty">' + esc(v) + "</div>"; $("resTxt").textContent = ""; }
+        else { r.innerHTML = '<div class="val">' + esc(show(v)) + "</div>"; $("resTxt").textContent = show(v); }
+        tell();
+    }
+    function head(code, state, why) {
+        $("code").textContent = code;
+        $("tag").innerHTML = state === "err" ? '<span class="tag err">오류</span>' : state ? '<span class="tag chg">원본 바뀜</span>' : '<span class="tag keep">원본 그대로</span>';
+        $("why").innerHTML = why || "";
+    }
+    function log(html) { var l = $("log"); l.innerHTML += html + "\n"; l.scrollTop = l.scrollHeight; }
+    function cmd(s) { return '<span class="c">&gt; ' + esc(s) + "</span>"; }
+    function ret(s, note) { return '<span class="r">&lt; ' + esc(s) + "</span>" + (note ? "   // " + esc(note) : ""); }
+    function outp(s) { log('<span class="r">' + esc(s) + "</span>"); }
+    function save() { hist.push({ n: cur, a: A().slice() }); if (hist.length > 50) hist.shift(); }
+    function useSu() { if (cur !== "suList") { cur = "suList"; draw(); } }
+    function oob(i, n) { return "java.lang.IndexOutOfBoundsException: Index " + i + " out of bounds for length " + n; }
+    function exc(code, msg, why) {
+        head(code, "err", why); res("IndexOutOfBoundsException", "err");
+        log(cmd(code) + '\n<span class="x">Exception in thread "main" ' + esc(msg) + "</span>");
+    }
+
+    var RUN = {
+        add: async function () {
+            useSu(); var a = A(), v = num("av"); save(); a.push(v);
+            head("suList.add(" + v + ")", true, "맨 <b>뒤</b>에 " + v + " 추가 → size() " + a.length + " · 돌려주는 값 <b>true</b>");
+            draw(marks(a.length, function (i) { return i === a.length - 1 ? "in" : ""; })); res(true);
+            log(cmd("suList.add(" + v + ")") + "\n" + ret("true"));
+        },
+        addAt: async function () {
+            useSu(); var a = A(), i = num("ai"), v = num("aj"), code = "suList.add(" + i + ", " + v + ")";
+            if (i < 0 || i > a.length) { exc(code, "java.lang.IndexOutOfBoundsException: Index: " + i + ", Size: " + a.length, "끼워 넣을 수 있는 자리는 <b>0 ~ size()(" + a.length + ")</b> — " + i + " 은 없는 자리 → <b>실행 중 예외</b> (📄 22쪽)"); draw(); return; }
+            draw(marks(a.length, function (k) { return k >= i ? "shift" : ""; })); await wait(380);
+            save(); a.splice(i, 0, v);
+            head(code, true, "[" + i + "] 자리에 " + v + " 를 <b>끼워 넣음</b> → 원래 [" + i + "] 부터는 <b>한 칸씩 뒤로</b> (덮어쓰지 않음) · 돌려주는 값 없음");
+            draw(marks(a.length, function (k) { return k === i ? "in" : k > i ? "shift" : ""; })); res(null, "void");
+            log(cmd(code) + "\n" + ret("(void)", "돌려주는 값 없음"));
+        },
+        removeAt: async function () {
+            useSu(); var a = A(), i = num("ri"), code = "suList.remove(" + i + ")";
+            if (i < 0 || i >= a.length) { exc(code, oob(i, a.length), "지울 수 있는 자리는 <b>0 ~ " + (a.length - 1) + "</b> → 실행 중 예외 (📄 22쪽 · 요소 3개일 때 remove(4))"); draw(); return; }
+            draw(marks(a.length, function (k) { return k === i ? "out" : k > i ? "shift" : ""; })); await wait(450);
+            save(); var v = a.splice(i, 1)[0];
+            head(code, true, "[" + i + "] 자리(" + show(v) + ")를 지움 → 뒤 요소가 <b>앞으로 당겨짐</b> · 돌려주는 값 = <b>지운 요소 " + show(v) + "</b>");
+            draw(marks(a.length, function (k) { return k >= i ? "shift" : ""; })); res(v);
+            log(cmd(code) + "\n" + ret(show(v), "지운 요소"));
+        },
+        removeObj: async function () {
+            useSu(); var a = A(), v = num("rv"), i = a.indexOf(v), code = "suList.remove(Integer.valueOf(" + v + "))";
+            if (i < 0) { head(code, false, v + " 이 없어서 아무것도 안 지움 → <b>false</b>"); draw(marks(a.length, function () { return "skip"; })); res(false); log(cmd(code) + "\n" + ret("false")); return; }
+            draw(marks(a.length, function (k) { return k === i ? "out" : ""; })); await wait(450);
+            save(); a.splice(i, 1);
+            head(code, true, "값이 " + v + " 인 <b>첫 요소</b>([" + i + "])를 지움 → <b>true</b> · 🤖 <code>remove(" + v + ")</code> 은 인덱스로 봐서 " + (v >= 0 && v < a.length + 1 ? "[" + v + "] 자리를 지워요" : "IndexOutOfBoundsException"));
+            draw(); res(true);
+            log(cmd(code) + "\n" + ret("true"));
+        },
+        clear: async function () {
+            useSu(); var a = A(); draw(marks(a.length, function () { return "out"; })); await wait(450);
+            save(); a.length = 0;
+            head("suList.clear()", true, "모든 요소 삭제 → size() = 0 · isEmpty() = true · ↺ 로 다시 채우기");
+            draw(); res(null, "void"); log(cmd("suList.clear()") + "\n" + ret("(void)"));
+        },
+        get: async function () {
+            useSu(); var a = A(), i = num("gi"), code = "suList.get(" + i + ")";
+            if (i < 0 || i >= a.length) { exc(code, oob(i, a.length), "있는 자리는 <b>0 ~ " + (a.length - 1) + "</b> → [" + i + "] 은 없음 → 실행 중 예외"); draw(); return; }
+            draw(marks(a.length, function (k) { return k === i ? "hit" : ""; }));
+            head(code, false, "[" + i + "] 자리 요소 → <b>" + show(a[i]) + "</b> (리스트는 그대로)"); res(a[i]);
+            log(cmd(code) + "\n" + ret(show(a[i])));
+        },
+        size: async function () { useSu(); var a = A(); head("suList.size()", false, "요소 개수 → <b>" + a.length + "</b> · 마지막 인덱스 = size() - 1 = " + (a.length - 1)); draw(); res(a.length); log(cmd("suList.size()") + "\n" + ret(String(a.length))); },
+        indexOf: async function () {
+            useSu(); var a = A(), v = num("xi"), i = a.indexOf(v), code = "suList.indexOf(" + v + ")";
+            await scan(function (x) { return x === v; });
+            head(code, false, i >= 0 ? "[" + i + "] 에서 처음 찾음 → <b>" + i + "</b>" : "끝까지 없음 → <b>-1</b>"); res(i);
+            log(cmd(code) + "\n" + ret(String(i)));
+        },
+        contains: async function () {
+            useSu(); var a = A(), v = num("ci"), ok = a.indexOf(v) >= 0, code = "suList.contains(" + v + ")";
+            await scan(function (x) { return x === v; });
+            head(code, false, ok ? "있어요 → <b>true</b>" : "없어요 → <b>false</b>"); res(ok);
+            log(cmd(code) + "\n" + ret(String(ok)));
+        },
+        isEmpty: async function () { useSu(); var a = A(), e = a.length === 0; head("suList.isEmpty()", false, e ? "비어 있음 → <b>true</b>" : "요소가 " + a.length + "개 → <b>false</b>"); draw(); res(e); log(cmd("suList.isEmpty()") + "\n" + ret(String(e))); },
+        forIdx: async function () { await loop(0, "for (int index = 0; index < suList.size(); index++)", "index"); },
+        forEach: async function () { await loop(0, "for (int hangae : suList)", "hangae"); },
+        forOne: async function () { await loop(1, "for (int index = 1; index < suList.size(); index++)", "index"); },
+        getSize: async function () { useSu(); var a = A(); exc("suList.get(suList.size())", oob(a.length, a.length), "size() = " + a.length + " → 마지막 인덱스는 <b>" + (a.length - 1) + "</b> · [" + a.length + "] 자리는 없음 → 실행 중 예외"); draw(); },
+        strInt: async function () {
+            head('ArrayList<String> nameList = …;  nameList.add(1);', "err", "<code>&lt;String&gt;</code> 리스트에는 String 만 — 정수 1 은 못 넣음 → <b>컴파일 오류</b> (실행 전에 막힘) · <code>nameList.add(\"RM\")</code> 처럼 글자로");
+            res("컴파일 오류", "cerr"); log(cmd("nameList.add(1);") + '\n<span class="x">error: incompatible types: int cannot be converted to String</span>');
+        },
+        capacity: async function () {
+            head("suList.capacity()", "err", "ArrayList 에는 capacity() 메소드가 없음 → <b>컴파일 오류</b> (📄 21쪽) · 개수는 <b>size()</b>");
+            res("컴파일 오류", "cerr"); log(cmd("suList.capacity()") + '\n<span class="x">error: cannot find symbol</span>');
+        }
+    };
+    async function scan(test) {
+        var a = A();
+        for (var i = 0; i < a.length; i++) {
+            var ok = test(a[i]);
+            draw(marks(a.length, function (k) { return k === i ? (ok ? "hit" : "scan") : k < i ? "skip" : ""; }));
+            await wait(360);
+            if (ok) return;
+        }
+        draw(marks(a.length, function () { return "skip"; }));
+    }
+    async function loop(from, code, name) {
+        useSu(); var a = A();
+        head(code, false, from ? "index 가 <b>1부터</b> → [0] 의 " + (a.length ? show(a[0]) : "요소") + " 를 <b>건너뜀</b> · 인덱스는 0부터!" : name === "hangae" ? "for-each — 앞에서부터 하나씩 <b>hangae</b> 에 꺼내 출력 (인덱스 없이)" : "인덱스 0 ~ size() - 1 → get(index) 로 하나씩 출력");
+        res("반복 — 아래 콘솔에 출력", "none"); log(cmd(code));
+        for (var i = 0; i < a.length; i++) {
+            if (i < from) { draw(marks(a.length, function (k) { return k === i ? "skip" : ""; })); log("  index = 0 → 건너뜀"); await wait(380); continue; }
+            draw(marks(a.length, function (k) { return k === i ? "scan" : k < from ? "skip" : ""; }));
+            outp(show(a[i])); await wait(380);
+        }
+        draw();
+    }
+
+    // ── 📄 수업 코드 한 줄씩 ──────────────────────────────
+    var PROG = {
+        ex1: [
+            { c: "ArrayList<Integer> suList = new ArrayList<Integer>();", r: function () { cur = "suList"; lists.suList = []; draw(); }, w: "정수를 담는 리스트 — 기본 타입 int 대신 <b>Integer</b> · 처음엔 비어 있음" },
+            { c: "suList.add(5);", r: function () { A().push(5); draw(marks(1, function () { return "in"; })); }, w: "[5]" },
+            { c: "suList.add(4);", r: function () { A().push(4); draw(marks(2, function (k) { return k === 1 ? "in" : ""; })); }, w: "[5, 4]" },
+            { c: "suList.add(-1);", r: function () { A().push(-1); draw(marks(3, function (k) { return k === 2 ? "in" : ""; })); }, w: "[5, 4, -1]" },
+            { c: "suList.add(2, 100);", r: function () { A().splice(2, 0, 100); draw(marks(4, function (k) { return k === 2 ? "in" : k > 2 ? "shift" : ""; })); }, w: "<b>2번 자리에 끼워 넣기</b> → [5, 4, 100, -1] (-1 은 한 칸 뒤로 밀림)" },
+            { c: 'System.out.println("리스트 객체 수 : " + suList.size());', r: function () { outp("리스트 객체 수 : " + A().length); draw(); }, w: "size() = 4" },
+            { c: "for (int index = 0; index < suList.size(); index++) { int result = suList.get(index); System.out.println(result); }", it: 4, r: function (k) { outp(show(A()[k])); draw(marks(A().length, function (j) { return j === k ? "scan" : ""; })); }, w: function (k) { return "index = " + k + " → get(" + k + ") = " + show(A()[k]) + (k < 3 ? " · ▶ 를 더 누르면 다음 칸" : " · 반복 끝"); } },
+            { c: 'System.out.println("위 for문과 아래 for문은 같음");', r: function () { outp("위 for문과 아래 for문은 같음"); draw(); }, w: "✍️ 수업 코드의 안내 문장" },
+            { c: "for (int hangae : suList) { System.out.println(hangae); }", it: 4, r: function (k) { outp(show(A()[k])); draw(marks(A().length, function (j) { return j === k ? "scan" : ""; })); }, w: function (k) { return "for-each — hangae = " + show(A()[k]) + (k < 3 ? " · ▶ 를 더 누르면 다음" : " · 위 for 와 같은 결과"); } }
+        ],
+        ex2: [
+            { c: "ArrayList<Point> ptList = new ArrayList<Point>();", r: function () { cur = "ptList"; lists.ptList = []; draw(); }, w: "<b>Point 객체</b>를 담는 리스트" },
+            { c: "ptList.add(new Point(2, 3));", r: function () { A().push(Pt(2, 3)); draw(marks(1, function () { return "in"; })); }, w: "0번" },
+            { c: "ptList.add(new Point(-5, 20));", r: function () { A().push(Pt(-5, 20)); draw(marks(2, function (k) { return k === 1 ? "in" : ""; })); }, w: "1번 (곧 지움)" },
+            { c: "ptList.add(new Point(30, -8));", r: function () { A().push(Pt(30, -8)); draw(marks(3, function (k) { return k === 2 ? "in" : ""; })); }, w: "2번" },
+            { c: "ptList.add(new Point(1, 2));", r: function () { A().push(Pt(1, 2)); draw(marks(4, function (k) { return k === 3 ? "in" : ""; })); }, w: "3번" },
+            { c: "ptList.remove(1);", r: function () { A().splice(1, 1); draw(marks(3, function (k) { return k >= 1 ? "shift" : ""; })); }, w: "<b>1번 (-5, 20) 삭제</b> → 뒤가 한 칸씩 <b>앞으로 당겨짐</b> → 크기 4 → 3" },
+            { c: "for (Point p : ptList) { System.out.println(p); }", it: 3, r: function (k) { outp(show(A()[k])); draw(marks(A().length, function (j) { return j === k ? "scan" : ""; })); }, w: function (k) { return "println(객체) → <b>toString()</b> 결과 = " + show(A()[k]); } }
+        ]
+    };
+    var prog = "ex1", pc = 0, it = 0, last = null, lastIt = 0;
+    function renderSrc() {
+        var L = PROG[prog];
+        $("src").innerHTML = L.map(function (x, k) {
+            var cls = k < pc ? "done" : ""; if (k === last) cls = "cur"; if (k === pc && pc < L.length) cls += " next";
+            return '<div class="ln ' + cls + '" data-k="' + k + '"><span class="no">' + (k + 1) + '</span><span class="tx">' + esc(x.c) + "</span></div>";
+        }).join("");
+        $("next").disabled = $("toEnd").disabled = pc >= L.length;
+        [].forEach.call(document.querySelectorAll("#progs button"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-p") === prog ? "true" : "false"); });
+        tell();
+    }
+    function stepOne(silent) {
+        var L = PROG[prog], x = L[pc]; if (!x) return;
+        if (x.it) { x.r(it); lastIt = it; it++; if (it >= x.it) { it = 0; pc++; } } else { x.r(); pc++; }
+        last = L.indexOf(x);
+        if (!silent || pc >= L.length) { head(x.c, /add|remove|new ArrayList/.test(x.c) && !x.it, typeof x.w === "function" ? x.w(lastIt) : x.w); if (/^System|^for/.test(x.c)) $("tag").innerHTML = ""; res("", "none"); }
+    }
+    function restart() { pc = 0; it = 0; last = null; lastIt = 0; if (prog === "ex1") { cur = "suList"; lists.suList = []; } else { cur = "ptList"; lists.ptList = []; } draw(); head(prog === "ex1" ? "ArrayListEx1" : "ArrayListEx2", false, "▶ 다음 줄을 눌러 시작 · 코드 줄을 누르면 그 줄까지"); $("tag").innerHTML = ""; renderSrc(); }
+    $("progs").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; prog = b.getAttribute("data-p"); restart(); log('<span class="c">// 📄 ' + (prog === "ex1" ? "ArrayListEx1" : "ArrayListEx2") + " 처음부터</span>"); });
+    $("next").addEventListener("click", function () { if (pc === 0 && it === 0) log('<span class="c">// 📄 ' + (prog === "ex1" ? "ArrayListEx1" : "ArrayListEx2") + "</span>"); stepOne(); renderSrc(); });
+    $("restart").addEventListener("click", restart);
+    $("toEnd").addEventListener("click", function () { while (pc < PROG[prog].length) stepOne(true); renderSrc(); });
+    $("src").addEventListener("click", function (e) { var ln = e.target.closest(".ln"); if (!ln) return; var k = +ln.getAttribute("data-k"); restart(); while (pc <= k && pc < PROG[prog].length) stepOne(pc < k); renderSrc(); });
+
+    function syncShow() {
+        [].forEach.call(document.querySelectorAll("[data-show]"), function (s) { s.textContent = num(s.getAttribute("data-show")); });
+    }
+    function setTab(t) {
+        [].forEach.call(document.querySelectorAll(".tab"), function (b) { b.setAttribute("aria-selected", b.getAttribute("data-tab") === t ? "true" : "false"); });
+        [].forEach.call(document.querySelectorAll(".pane"), function (p) { p.classList.toggle("on", p.getAttribute("data-pane") === t); });
+        if (t !== "class") useSu();
+        tell();
+    }
+    document.addEventListener("input", syncShow);
+    document.addEventListener("click", async function (e) {
+        var tb = e.target.closest && e.target.closest(".tab");
+        if (tb) { setTab(tb.getAttribute("data-tab")); return; }
+        var b = e.target.closest && e.target.closest("button.run");
+        if (!b || busy) return;
+        busy = true; [].forEach.call(document.querySelectorAll("button.run"), function (x) { x.disabled = true; });
+        try { await RUN[b.getAttribute("data-m")](); } finally { busy = false; [].forEach.call(document.querySelectorAll("button.run"), function (x) { x.disabled = false; }); }
+    });
+    $("undo").addEventListener("click", function () {
+        if (busy) return; var h = hist.pop();
+        if (!h) { head("되돌리기", false, "되돌릴 것이 없어요"); $("tag").innerHTML = ""; return; }
+        lists[h.n] = h.a; cur = h.n; draw(); head("되돌리기", false, "바로 전 상태로 돌아왔어요"); $("tag").innerHTML = "";
+        log('<span class="c">// ↶ 되돌리기 → ' + h.n + " = " + esc(list(h.a)) + "</span>");
+    });
+    $("reset").addEventListener("click", function () {
+        if (busy) return; save(); cur = "suList"; lists.suList = START.slice(); draw(); res("아래 버튼을 눌러 보세요", "none");
+        head("suList = [5, 4, 100, -1]", false, "수업 코드(ArrayListEx1)를 다 실행한 상태로"); $("tag").innerHTML = "";
+        log('<span class="c">// ↺ suList = [5, 4, 100, -1]</span>');
+    });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    var box = $("box");
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) { } }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    var q = /[?&]tab=(class|edit|read|loop)\b/.exec(location.search), hs = /^#(class|edit|read|loop)$/.exec(location.hash);
+    syncShow(); draw(); renderSrc();
+    setTab(q ? q[1] : hs ? hs[1] : "class");
+    head("ArrayList<Integer> suList = [5, 4, 100, -1]", false, "📄 수업 코드는 ▶ 다음 줄로 한 줄씩 · 🔧 🔍 🔁 탭은 버튼으로 바로 (suList = 수업 코드를 다 실행한 상태)"); $("tag").innerHTML = "";
+    log('<span class="c">// suList = [5, 4, 100, -1]</span>');
+})();
+</script>
+<script src="../../figink.js?v=202611260939"></script>
+</body>
+</html>
