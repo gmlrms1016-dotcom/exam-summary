@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>배열 메서드 실험실</title>
+<script>
+    // 사이트와 같은 테마 (theme.js 의 저장값 "exam-summary-theme" — 없으면 다크)
+    (function () {
+        function pick() { try { return localStorage.getItem("exam-summary-theme") === "light" ? "light" : "dark"; } catch (e) { return "dark"; } }
+        var forced = /[?&]theme=(light|dark)\b/.exec(location.search);
+        document.documentElement.setAttribute("data-theme", forced ? forced[1] : pick());
+        try { if (window.parent !== window) document.documentElement.classList.add("embed"); } catch (e) { }   // 주차 페이지 안(iframe)에서는 맨 아래 요약 표를 숨김 — 주차 페이지에 같은 표가 있음
+        window.addEventListener("storage", function (e) { if (e.key === "exam-summary-theme") document.documentElement.setAttribute("data-theme", pick()); });
+    })();
+</script>
+<style>
+    :root{--bg:#f4f6f4;--card:#fff;--line:#d7ddd7;--ink:#1d241e;--ink2:#5d6a60;--main:#2d6a4f;
+          --box:#eef3ff;--boxb:#7b93d6;--in:#16a34a;--out:#e5484d;--pick:#d97706;--scan:#2563eb;--skip:#9aa3a0;--code:#0f1b14;--codet:#dff5e6;}
+    html[data-theme=dark]{--bg:#0c1014;--card:#13171b;--line:#262a2f;--ink:#f5f5f5;--ink2:#a8a8a8;--main:#4cb5f9;
+          --box:#1b2433;--boxb:#5b7bd6;--in:#4cc38a;--out:#ff6369;--pick:#ffb547;--scan:#6b9cff;--skip:#5f6764;--code:#0b120e;--codet:#dff5e6;}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Apple SD Gothic Neo","맑은 고딕",sans-serif;}
+    .wrap{max-width:980px;margin:0 auto;padding:14px 14px 18px;}
+    h1{font-size:20px;margin:2px 0 4px;}
+    .sub{margin:0 0 12px;color:var(--ink2);font-size:13.5px;line-height:1.55;}
+    code{font-family:Consolas,"D2Coding",Menlo,monospace;}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;}
+    .codeline{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 8px;padding-bottom:8px;border-bottom:1px dashed var(--line);}
+    .code{font-family:Consolas,Menlo,monospace;font-size:16px;font-weight:800;overflow-wrap:anywhere;}
+    .tag{display:inline-block;border-radius:6px;padding:1px 8px;font-size:12.5px;font-weight:800;}
+    .tag.chg{background:color-mix(in srgb,var(--out) 20%,var(--card));color:var(--out);}
+    .tag.keep{background:color-mix(in srgb,var(--in) 20%,var(--card));color:var(--in);}
+    .tag.err{background:color-mix(in srgb,var(--pick) 22%,var(--card));color:var(--pick);}
+    .lbl{font-size:13px;color:var(--ink2);margin:2px 0 6px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;}
+    .lbl b{color:var(--ink);font-family:Consolas,Menlo,monospace;font-size:14.5px;overflow-wrap:anywhere;}
+    .row{display:flex;flex-wrap:wrap;gap:6px;min-height:58px;align-items:flex-end;margin-bottom:8px;}
+    .cell{display:flex;flex-direction:column;align-items:center;gap:2px;}
+    .cell i{font-style:normal;font-size:11px;color:var(--ink2);font-family:Consolas,Menlo,monospace;}
+    .cell span{min-width:52px;padding:9px 8px;text-align:center;border:2px solid var(--boxb);background:var(--box);border-radius:9px;font-family:Consolas,Menlo,monospace;font-size:15px;font-weight:700;transition:background .25s,border-color .25s,opacity .3s,transform .3s;}
+    .row.el .cell span{min-width:0;font-size:13px;padding:9px 7px;}
+    .cell.in span{border-color:var(--in);background:color-mix(in srgb,var(--in) 22%,var(--box));animation:pop .45s ease-out;}
+    .cell.out span{border-color:var(--out);background:color-mix(in srgb,var(--out) 25%,var(--box));transform:translateY(-14px) scale(.8);opacity:.25;}
+    .cell.pick span{border-color:var(--pick);background:color-mix(in srgb,var(--pick) 25%,var(--box));}
+    .cell.scan span{border-color:var(--scan);background:color-mix(in srgb,var(--scan) 25%,var(--box));transform:translateY(-6px);}
+    .cell.hit span{border-color:var(--in);background:color-mix(in srgb,var(--in) 30%,var(--box));transform:translateY(-6px);}
+    .cell.skip span{border-color:var(--skip);opacity:.4;}
+    .empty{color:var(--ink2);font-size:13px;padding:12px 2px;}
+    .val{font-family:Consolas,Menlo,monospace;font-size:20px;font-weight:800;padding:6px 12px;border-radius:9px;border:2px solid var(--in);background:color-mix(in srgb,var(--in) 15%,var(--card));animation:pop .45s ease-out;}
+    .val.err{border-color:var(--out);color:var(--out);background:color-mix(in srgb,var(--out) 12%,var(--card));}
+    @keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+    #why{font-size:13.5px;color:var(--ink2);line-height:1.6;min-height:1.6em;}
+    #why b{color:var(--ink);}
+    .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;}
+    .tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13.5px;font-weight:700;cursor:pointer;}
+    .tools label{font-size:13px;color:var(--ink2);display:flex;gap:6px;align-items:center;}
+    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;}
+    .tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 6px;font-size:14px;font-weight:800;cursor:pointer;line-height:1.3;}
+    .tab small{display:block;font-weight:600;font-size:11.5px;color:var(--ink2);}
+    .tab[aria-selected=true]{border-color:var(--main);box-shadow:inset 0 0 0 1px var(--main);background:color-mix(in srgb,var(--main) 16%,var(--card));}
+    .pane{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 12px;margin-bottom:12px;}
+    .pane.on{display:block;}
+    .m{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 0;border-top:1px dashed var(--line);}
+    .m:first-child{border-top:0;}
+    .m button.run{font-family:Consolas,Menlo,monospace;font-size:14px;font-weight:800;border:1px solid var(--main);background:var(--main);color:#fff;border-radius:9px;padding:7px 11px;cursor:pointer;max-width:100%;text-align:left;}
+    html[data-theme=dark] .m button.run{color:#06121c;}
+    .m button.run:disabled{opacity:.45;cursor:default;}
+    .m input,.m select{font-family:Consolas,Menlo,monospace;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 7px;max-width:100%;}
+    .m input{width:74px;} .m input.wide{width:104px;}
+    .m .d{flex-basis:100%;font-size:12.5px;color:var(--ink2);line-height:1.5;}
+    .m .d b{color:var(--ink);}
+    .chips{display:inline-flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none;}
+    .chips li{border:1px dashed var(--boxb);border-radius:8px;padding:4px 8px;font-size:13px;}
+    pre.log{margin:0 0 12px;background:var(--code);color:var(--codet);border-radius:10px;padding:10px 12px;font-family:Consolas,Menlo,monospace;font-size:13px;line-height:1.55;max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;}
+    pre.log .c{color:#8ab4ff;} pre.log .r{color:#7fd49a;} pre.log .x{color:#ff8a80;}
+    table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);}
+    th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle;}
+    th{background:color-mix(in srgb,var(--main) 14%,var(--card));}
+    html.embed table{display:none;}
+    @media (max-width:560px){.tabs{grid-template-columns:repeat(2,1fr);}}
+    @media (max-width:420px){.cell span{min-width:44px;padding:8px 6px;font-size:14px}.m input{width:62px}.code{font-size:15px}.tab small{display:none}.tab{padding:9px 4px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="box">
+    <h1>📦 배열 메서드 실험실</h1>
+    <p class="sub">버튼을 누르면 <code>arr</code> 가 어떻게 바뀌는지 · <b>돌려주는 값</b> · <b>원본이 바뀌는지</b>를 보여 줘요 — 10 · 11주차에 배운 배열 메서드 <b>13가지</b> + 수업 예제(객체 배열 · spread) · 진짜 자바스크립트로 실행</p>
+
+    <section class="stage">
+        <div class="codeline"><span class="code" id="code">let arr = [10, 20, 30, 40, 50];</span><span id="tag"></span></div>
+        <div class="lbl">원본 <b id="arrTxt">arr</b><span id="len"></span></div>
+        <div class="row" id="arr"></div>
+        <div class="lbl">돌려준 값 <b id="resTxt"></b></div>
+        <div class="row" id="res"><div class="empty">아래 버튼을 눌러 보세요</div></div>
+        <div id="why"></div>
+    </section>
+
+    <div class="tools">
+        <button type="button" id="undo">↶ 되돌리기</button>
+        <button type="button" id="reset">↺ 처음으로</button>
+        <label><input type="checkbox" id="fast"> ⚡ 움직임 끄기</label>
+    </div>
+
+    <div class="tabs" role="tablist">
+        <button type="button" class="tab" role="tab" data-tab="edit">🔧 요소 조작<small>10주차 · 원본 바뀜</small></button>
+        <button type="button" class="tab" role="tab" data-tab="new">✂️ 새 배열<small>10 · 11주차 · 원본 그대로</small></button>
+        <button type="button" class="tab" role="tab" data-tab="search">🔍 순회 · 탐색<small>10주차 · 원본 그대로</small></button>
+        <button type="button" class="tab" role="tab" data-tab="like">🔁 유사 배열 → 배열<small>11주차</small></button>
+    </div>
+
+    <div class="pane" data-pane="edit">
+        <div class="m"><button type="button" class="run" data-m="push">push(<span data-show="pv">60</span>)</button> 값 <input id="pv" value="60"><div class="d">맨 <b>뒤</b>에 추가 → 돌려주는 값 = <b>새 길이</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="pop">pop()</button><div class="d">맨 <b>뒤</b> 요소를 빼서 → 돌려주는 값 = <b>뺀 값</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="shift">shift()</button><div class="d">맨 <b>앞</b> 요소를 빼서 → 돌려주는 값 = <b>뺀 값</b> · 나머지 인덱스가 하나씩 앞으로</div></div>
+        <div class="m"><button type="button" class="run" data-m="unshift">unshift(<span data-show="uv">5</span>)</button> 값 <input id="uv" value="5"><div class="d">맨 <b>앞</b>에 추가 → 돌려주는 값 = <b>새 길이</b> · 나머지 인덱스가 하나씩 뒤로</div></div>
+    </div>
+    <div class="pane" data-pane="new">
+        <div class="m"><button type="button" class="run" data-m="slice">slice(1, 3)</button> 시작 <input id="ss" value="1"> 끝 <input id="se" value="3" placeholder="생략"><div class="d"><b>시작 ~ 끝 직전</b>까지 잘라 새 배열 · 끝을 비우면 끝까지 · 음수 = 뒤에서부터 (-3 → 길이 - 3)</div></div>
+        <div class="m"><button type="button" class="run" data-m="concat">concat([<span data-show="cv">60, 70</span>])</button> 배열 <input id="cv" class="wide" value="60, 70"><div class="d">두 배열을 이어 붙인 <b>새 배열</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="map">map(콜백)</button> <select id="mapcb"><option value="0">item =&gt; item * 2</option><option value="1">item =&gt; item + 1</option><option value="2">item =&gt; item &gt; 25</option><option value="3">item =&gt; "#" + item</option></select><div class="d">요소마다 콜백을 불러 <b>돌려준 값을 그대로 모은</b> 새 배열 (길이 같음)</div></div>
+        <div class="m"><button type="button" class="run" data-m="filter">filter(콜백)</button> <select id="filcb"><option value="0">item =&gt; item &gt; 25</option><option value="1">item =&gt; item % 20 === 0</option><option value="2">item =&gt; item !== 30</option><option value="3">item =&gt; item % 2 === 1</option></select><div class="d">콜백이 <b>true</b> 인 요소만 모은 <b>새 배열</b> (길이 같거나 짧음)</div></div>
+    </div>
+    <div class="pane" data-pane="search">
+        <div class="m"><button type="button" class="run" data-m="forEach">forEach(콜백)</button> <select id="fecb"><option value="0">(item, idx) =&gt; console.log(idx, item * 2)</option><option value="1">item =&gt; doubledArr.push(item * 2)</option><option value="2">item =&gt; console.log(item)</option></select><div class="d">요소마다 콜백을 한 번씩 · 돌려주는 값 = <b>undefined</b> → 결과를 모으려면 다른 배열에 push (수업 doubledArr)</div></div>
+        <div class="m"><button type="button" class="run" data-m="includes">includes(<span data-show="iv">30</span>)</button> 값 <input id="iv" value="30"><div class="d">있으면 <b>true</b> · 없으면 <b>false</b> · 따옴표를 붙여 <code>"30"</code> 으로 찾으면? (글자 ≠ 숫자)</div></div>
+        <div class="m"><button type="button" class="run" data-m="indexOf">indexOf(<span data-show="xv">30</span>)</button> 값 <input id="xv" value="30"><div class="d">처음 나오는 <b>인덱스</b> · 없으면 <b>-1</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="findIndex">findIndex(콜백)</button> <select id="ficb"><option value="0">item =&gt; item &gt; 25</option><option value="1">item =&gt; item === 30</option><option value="2">item =&gt; item &gt; 100</option></select><div class="d">콜백이 <b>처음 true</b> 인 인덱스 (거기서 멈춤) · 없으면 <b>-1</b></div></div>
+        <div class="m"><button type="button" class="run" data-m="objIndexOf">objectArr.indexOf({name:"에스파"})</button><div class="d">수업 <code>objectArr = [{name:"에스파"}, {name:"홍길동"}]</code> — 새로 쓴 객체는 <b>주소가 달라서</b> 못 찾음 → <b>-1</b> (수업 주석 “얕은 비교”)</div></div>
+        <div class="m"><button type="button" class="run" data-m="objFindIndex">objectArr.findIndex(item =&gt; item.name === "에스파")</button><div class="d">객체 안의 <b>name 값</b>을 비교하는 콜백 → <b>0</b></div></div>
+    </div>
+    <div class="pane" data-pane="like">
+        <div class="m"><ul id="demo" class="chips"><li>사과</li><li>바나나</li><li>포도</li></ul><div class="d">진짜 <code>&lt;ul&gt;</code> 이에요 — <code>ul.children</code> = <b>HTMLCollection</b>(유사 배열) → 길이 · 인덱스는 있지만 <code>.map</code> 이 없어요</div></div>
+        <div class="m"><button type="button" class="run" data-m="noMap">ul.children.map(li =&gt; li.textContent)</button><div class="d">그대로 부르면 → <b>TypeError</b> (수업 <code>liArray.map</code>)</div></div>
+        <div class="m"><button type="button" class="run" data-m="form">Array.form(ul.children)</button><div class="d">⚠️ 수업 파일 주석의 <b>오타</b> → TypeError</div></div>
+        <div class="m"><button type="button" class="run" data-m="from">Array.from(ul.children).map(li =&gt; li.textContent)</button><div class="d"><b>Array.from</b> = 진짜 배열로 바꾼 뒤 map</div></div>
+        <div class="m"><button type="button" class="run" data-m="spread">[...ul.children].map(li =&gt; li.textContent)</button><div class="d">수업 최종 코드 — <b>spread</b> <code>...</code>(7주차)로 펼쳐 새 배열 → map (메서드가 아니라 연산자)</div></div>
+    </div>
+
+    <div class="lbl">🖥️ 콘솔 (<code>&gt;</code> 실행 · <code>&lt;</code> 돌려준 값)</div>
+    <pre class="log" id="log"></pre>
+
+    <table>
+        <tr><th>메서드</th><th>원본</th><th>돌려주는 값</th></tr>
+        <tr><td><code>push</code> · <code>unshift</code></td><td>바뀜</td><td>새 길이</td></tr>
+        <tr><td><code>pop</code> · <code>shift</code></td><td>바뀜</td><td>뺀 값 (빈 배열이면 undefined)</td></tr>
+        <tr><td><code>slice</code> · <code>concat</code> · <code>map</code> · <code>filter</code></td><td>그대로</td><td>새 배열</td></tr>
+        <tr><td><code>forEach</code></td><td>그대로</td><td>undefined</td></tr>
+        <tr><td><code>includes</code></td><td>그대로</td><td>true / false</td></tr>
+        <tr><td><code>indexOf</code> · <code>findIndex</code></td><td>그대로</td><td>인덱스 (없으면 -1)</td></tr>
+        <tr><td><code>Array.from</code> · <code>[...]</code></td><td>그대로</td><td>새 배열 (유사 배열 → 진짜 배열)</td></tr>
+    </table>
+</div>
+<script>
+(function () {
+    "use strict";
+    var START = [10, 20, 30, 40, 50];
+    var arr = START.slice(), hist = [], busy = false;
+    var CB = {
+        mapcb: [
+            { t: "item => item * 2", f: function (item) { return item * 2; } },
+            { t: "item => item + 1", f: function (item) { return item + 1; } },
+            { t: "item => item > 25", f: function (item) { return item > 25; }, note: " · 콜백이 돌려준 <b>true / false 를 그대로</b> 모아요 — 걸러 내려면 filter" },
+            { t: 'item => "#" + item', f: function (item) { return "#" + item; } }
+        ],
+        filcb: [
+            { t: "item => item > 25", f: function (item) { return item > 25; } },
+            { t: "item => item % 20 === 0", f: function (item) { return item % 20 === 0; } },
+            { t: "item => item !== 30", f: function (item) { return item !== 30; } },
+            { t: "item => item % 2 === 1", f: function (item) { return item % 2 === 1; }, note: " · 수업 odd 예제 — 지금 배열에 홀수가 없으면 <b>빈 배열 [ ]</b>" }
+        ],
+        fecb: [
+            { t: "(item, idx) => console.log(idx, item * 2)", f: function (item, idx) { return idx + " " + (item * 2); } },
+            { t: "item => doubledArr.push(item * 2)", push: true, f: function (item) { return item * 2; } },
+            { t: "item => console.log(item)", f: function (item) { return String(item); } }
+        ],
+        ficb: [
+            { t: "item => item > 25", f: function (item) { return item > 25; } },
+            { t: "item => item === 30", f: function (item) { return item === 30; } },
+            { t: "item => item > 100", f: function (item) { return item > 100; } }
+        ]
+    };
+    var $ = function (id) { return document.getElementById(id); };
+    function val(s) { s = String(s).trim(); if (/^-?\d+(\.\d+)?$/.test(s)) return Number(s); return s.replace(/^["']|["']$/g, ""); }
+    function show(v) { return typeof v === "string" ? '"' + v + '"' : String(v); }
+    function list(a) { return "[" + a.map(show).join(", ") + "]"; }
+    function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+    function parseList(s) { return String(s).split(",").map(function (x) { return x.trim(); }).filter(function (x) { return x !== ""; }).map(val); }
+    function int(s) { var n = Math.trunc(Number(s)); return isFinite(n) ? n : 0; }
+    function typeNote(v) { return typeof v === "string" && /^-?\d+(\.\d+)?$/.test(v) ? " · 글자 " + esc(show(v)) + " ≠ 숫자 " + esc(v) + " — <b>자료형이 달라서</b> 못 찾아요" : ""; }
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, $("fast").checked ? 0 : ms); }); }
+    function marks(n, f) { var a = []; for (var k = 0; k < n; k++) a.push(f(k)); return a; }
+
+    function paint(rowId, texts, cls, emptyTxt, defCls) {
+        $(rowId).innerHTML = texts.length ? texts.map(function (t, i) {
+            var c = cls ? (cls[i] ? " " + cls[i] : "") : (defCls ? " " + defCls : "");
+            return '<div class="cell' + c + '"><span>' + esc(t) + "</span><i>[" + i + "]</i></div>";
+        }).join("") : '<div class="empty">' + emptyTxt + "</div>";
+    }
+    function drawArr(cls) {
+        $("arr").className = "row";
+        paint("arr", arr.map(show), cls, "빈 배열 [ ]");
+        $("arrTxt").textContent = "arr = " + list(arr);
+        $("len").textContent = "length " + arr.length;
+        tell();
+    }
+    function drawOther(name, texts, cls, note) {
+        $("arr").className = "row el";
+        paint("arr", texts, cls, "");
+        $("arrTxt").textContent = name;
+        $("len").textContent = note;
+        tell();
+    }
+    function drawRes(v, cls) {
+        if (Array.isArray(v)) { paint("res", v.map(show), cls, "빈 배열 [ ]", "in"); $("resTxt").textContent = list(v); }
+        else { $("res").innerHTML = '<div class="val">' + esc(v === undefined ? "undefined" : show(v)) + "</div>"; $("resTxt").textContent = v === undefined ? "undefined" : show(v); }
+        tell();
+    }
+    function drawErr(name) { $("res").innerHTML = '<div class="val err">' + esc(name) + "</div>"; $("resTxt").textContent = "오류 — 실행이 멈춤"; tell(); }
+    function head(code, state, why) {
+        $("code").textContent = code;
+        $("tag").innerHTML = state === "err" ? '<span class="tag err">오류</span>' : state ? '<span class="tag chg">원본 바뀜</span>' : '<span class="tag keep">원본 그대로</span>';
+        $("why").innerHTML = why || "";
+    }
+    function log(html) { var l = $("log"); l.innerHTML += html + "\n"; l.scrollTop = l.scrollHeight; }
+    function cmd(s) { return '<span class="c">&gt; ' + esc(s) + "</span>"; }
+    function ret(s, note) { return '\n<span class="r">&lt; ' + esc(s) + "</span>" + (note ? "   // " + esc(note) : ""); }
+    function save() { hist.push(arr.slice()); if (hist.length > 50) hist.shift(); }
+
+    // 왼쪽부터 하나씩 비교 — 찾으면 거기서 멈춤 (includes · indexOf · findIndex)
+    async function scanRow(n, draw, test, logText) {
+        for (var i = 0; i < n; i++) {
+            var ok = !!test(i);
+            draw(marks(n, function (k) { return k === i ? (ok ? "hit" : "scan") : (k < i ? "skip" : ""); }));
+            if (logText) log("  " + esc(logText(i)) + " → " + ok);
+            await wait(380);
+            if (ok) { await wait(300); draw(marks(n, function (k) { return k === i ? "hit" : ""; })); return i; }
+        }
+        draw(marks(n, function () { return "skip"; }));
+        return -1;
+    }
+    function liTexts() { return [].map.call($("demo").children, function (li) { return "<li>" + li.textContent + "</li>"; }); }
+    function drawUl() { drawOther("ul.children", liTexts(), null, "HTMLCollection · length " + $("demo").children.length + " · 배열 아님"); }
+    var OBJ_TXT = ['{name:"에스파"}', '{name:"홍길동"}'];
+    function drawObj(cls) { drawOther('objectArr = [{name:"에스파"}, {name:"홍길동"}]', OBJ_TXT, cls, "length 2 · 객체 배열"); }
+
+    var RUN = {
+        push: async function () {
+            var v = val($("pv").value); save();
+            var n = arr.push(v);
+            head("arr.push(" + show(v) + ")", true, "맨 <b>뒤</b>에 " + esc(show(v)) + " 추가 → <b>새 길이(" + n + ")</b>를 돌려줘요");
+            drawArr(marks(arr.length, function (i) { return i === arr.length - 1 ? "in" : ""; })); drawRes(n);
+            log(cmd("arr.push(" + show(v) + ")") + ret(String(n), "새 길이"));
+        },
+        pop: async function () {
+            if (!arr.length) { head("arr.pop()", false, "빈 배열이라 뺄 요소가 없어요 → <b>undefined</b>"); drawArr(); drawRes(undefined); log(cmd("arr.pop()") + ret("undefined")); return; }
+            drawArr(marks(arr.length, function (i) { return i === arr.length - 1 ? "out" : ""; })); await wait(450);
+            save(); var v = arr.pop();
+            head("arr.pop()", true, "맨 <b>뒤</b> 요소(" + esc(show(v)) + ")를 빼서 <b>그 값</b>을 돌려줘요");
+            drawArr(); drawRes(v);
+            log(cmd("arr.pop()") + ret(show(v), "뺀 값"));
+        },
+        shift: async function () {
+            if (!arr.length) { head("arr.shift()", false, "빈 배열이라 뺄 요소가 없어요 → <b>undefined</b>"); drawArr(); drawRes(undefined); log(cmd("arr.shift()") + ret("undefined")); return; }
+            drawArr(marks(arr.length, function (i) { return i === 0 ? "out" : ""; })); await wait(450);
+            save(); var v = arr.shift();
+            head("arr.shift()", true, "맨 <b>앞</b> 요소(" + esc(show(v)) + ")를 빼서 <b>그 값</b>을 돌려줘요 → 나머지 인덱스가 하나씩 앞으로");
+            drawArr(); drawRes(v);
+            log(cmd("arr.shift()") + ret(show(v), "뺀 값"));
+        },
+        unshift: async function () {
+            var v = val($("uv").value); save();
+            var n = arr.unshift(v);
+            head("arr.unshift(" + show(v) + ")", true, "맨 <b>앞</b>에 " + esc(show(v)) + " 추가 → 나머지 인덱스가 하나씩 뒤로 → <b>새 길이(" + n + ")</b>를 돌려줘요");
+            drawArr(marks(arr.length, function (i) { return i === 0 ? "in" : ""; })); drawRes(n);
+            log(cmd("arr.unshift(" + show(v) + ")") + ret(String(n), "새 길이"));
+        },
+        slice: async function () {
+            var s = int($("ss").value.trim()), eRaw = $("se").value.trim(), hasE = eRaw !== "", e = hasE ? int(eRaw) : undefined;
+            var out = hasE ? arr.slice(s, e) : arr.slice(s);
+            var len = arr.length, from = s < 0 ? Math.max(len + s, 0) : Math.min(s, len), to = !hasE ? len : (e < 0 ? Math.max(len + e, 0) : Math.min(e, len));
+            var code = "arr.slice(" + s + (hasE ? ", " + e : "") + ")";
+            var range = to > from ? "[" + from + "] ~ [" + (to - 1) + "] 까지 잘라 <b>새 배열</b>" : "자를 칸이 없어서 <b>빈 배열</b> (시작 [" + from + "] ≥ 끝 [" + to + "])";
+            var endNote = to <= from ? "" : hasE ? " · 끝 인덱스(" + e + ")는 <b>안 들어가요</b> (직전까지)" : " · 끝을 생략 → 끝까지";
+            var negNote = (s < 0 ? " · 시작 " + s + " → 길이 " + len + " + (" + s + ") = " + (len + s) + (len + s < 0 ? " → 0" : "") : "") + (hasE && e < 0 ? " · 끝 " + e + " → 길이 " + len + " + (" + e + ") = " + (len + e) + (len + e < 0 ? " → 0" : "") : "");
+            head(code, false, range + endNote + negNote + " · arr 는 그대로");
+            drawArr(marks(len, function (i) { return i >= from && i < to ? "pick" : ""; })); drawRes([]); await wait(350);
+            drawRes(out);
+            log(cmd(code) + ret(list(out), "새 배열 · arr 는 그대로 " + list(arr)));
+        },
+        concat: async function () {
+            var add = parseList($("cv").value), out = arr.concat(add);
+            head("arr.concat(" + list(add) + ")", false, "arr 뒤에 " + esc(list(add)) + " 요소를 이어 붙인 <b>새 배열</b> · arr 는 그대로");
+            drawArr();
+            drawRes(out, out.map(function (_, i) { return i >= arr.length ? "in" : ""; }));
+            log(cmd("arr.concat(" + list(add) + ")") + ret(list(out), "새 배열"));
+        },
+        map: async function () {
+            var cb = CB.mapcb[$("mapcb").value], out = [];
+            head("arr.map(" + cb.t + ")", false, "요소마다 콜백을 불러 <b>돌려준 값</b>을 모은 새 배열 (길이 " + arr.length + " 그대로)" + (cb.note || ""));
+            drawRes([]); log(cmd("arr.map(" + cb.t + ")"));
+            for (var i = 0; i < arr.length; i++) {
+                var r = cb.f(arr[i], i, arr);
+                out.push(r);
+                drawArr(marks(arr.length, function (k) { return k === i ? "scan" : ""; }));
+                drawRes(out, marks(out.length, function (k) { return k === i ? "in" : ""; }));
+                log("  item = " + esc(show(arr[i])) + " → " + esc(show(r)));
+                await wait(420);
+            }
+            var real = arr.map(cb.f);
+            drawArr(); drawRes(real, []);
+            log(ret(list(real), "새 배열 (길이 " + real.length + ") · arr 는 그대로").slice(1));
+        },
+        filter: async function () {
+            var cb = CB.filcb[$("filcb").value], out = [], mk = [];
+            head("arr.filter(" + cb.t + ")", false, "콜백이 <b>true</b> 인 요소만 모은 새 배열" + (cb.note || ""));
+            drawRes([]); log(cmd("arr.filter(" + cb.t + ")"));
+            for (var i = 0; i < arr.length; i++) {
+                var ok = !!cb.f(arr[i], i, arr);
+                mk[i] = ok ? "hit" : "skip";
+                if (ok) out.push(arr[i]);
+                drawArr(marks(arr.length, function (k) { return k < i ? mk[k] : k === i ? (ok ? "hit" : "scan") : ""; }));
+                drawRes(out, marks(out.length, function (k) { return ok && k === out.length - 1 ? "in" : ""; }));
+                log("  item = " + esc(show(arr[i])) + " → " + ok + (ok ? "   (남김)" : "   (뺌)"));
+                await wait(420);
+            }
+            var real = arr.filter(cb.f);
+            drawArr(mk); drawRes(real, []);
+            log(ret(list(real), "새 배열 · arr 는 그대로").slice(1));
+        },
+        forEach: async function () {
+            var cb = CB.fecb[$("fecb").value], doubledArr = [];
+            head("arr.forEach(" + cb.t + ")", false, "요소마다 콜백을 한 번씩 실행 · 돌려주는 값은 없음(<b>undefined</b>)" + (cb.push ? " → 결과는 콜백 안에서 push 한 <b>doubledArr</b> 에 모여요" : " → 결과를 모으려면 다른 배열에 push"));
+            drawRes(undefined);
+            log((cb.push ? cmd("let doubledArr = [];") + "\n" : "") + cmd("arr.forEach(" + cb.t + ")"));
+            for (var i = 0; i < arr.length; i++) {
+                drawArr(marks(arr.length, function (k) { return k === i ? "scan" : ""; }));
+                if (cb.push) { doubledArr.push(cb.f(arr[i], i, arr)); log("  item = " + esc(show(arr[i])) + " → doubledArr = " + esc(list(doubledArr))); }
+                else log("  " + esc(cb.f(arr[i], i, arr)));
+                await wait(420);
+            }
+            var real = arr.forEach(function () { });
+            drawArr(); drawRes(real);
+            log(ret(String(real), "forEach 가 돌려준 값").slice(1) + (cb.push ? "\n" + cmd("doubledArr") + ret(list(doubledArr)) : ""));
+        },
+        includes: async function () {
+            var v = val($("iv").value), found = arr.includes(v);
+            head("arr.includes(" + show(v) + ")", false, found ? "있어요 → <b>true</b>" : "없어요 → <b>false</b>" + typeNote(v));
+            await scanRow(arr.length, drawArr, function (i) { return arr[i] === v; });
+            drawRes(found);
+            log(cmd("arr.includes(" + show(v) + ")") + ret(String(found)));
+        },
+        indexOf: async function () {
+            var v = val($("xv").value), idx = arr.indexOf(v);
+            head("arr.indexOf(" + show(v) + ")", false, idx >= 0 ? "[" + idx + "] 에서 처음 찾음 → <b>" + idx + "</b>" : "끝까지 없음 → <b>-1</b>" + typeNote(v));
+            await scanRow(arr.length, drawArr, function (i) { return arr[i] === v; });
+            drawRes(idx);
+            log(cmd("arr.indexOf(" + show(v) + ")") + ret(String(idx)));
+        },
+        findIndex: async function () {
+            var cb = CB.ficb[$("ficb").value], idx = arr.findIndex(cb.f);
+            head("arr.findIndex(" + cb.t + ")", false, idx >= 0 ? "콜백이 처음 true 인 [" + idx + "] 에서 멈춤 → <b>" + idx + "</b>" : "true 가 한 번도 없음 → <b>-1</b>");
+            log(cmd("arr.findIndex(" + cb.t + ")"));
+            await scanRow(arr.length, drawArr, function (i) { return cb.f(arr[i], i, arr); }, function (i) { return "item = " + show(arr[i]); });
+            drawRes(idx);
+            log(ret(String(idx)).slice(1));
+        },
+        objIndexOf: async function () {
+            var objectArr = [{ name: "에스파" }, { name: "홍길동" }], target = { name: "에스파" }, idx = objectArr.indexOf(target);
+            head('objectArr.indexOf({name:"에스파"})', false, "괄호 안 <code>{name:\"에스파\"}</code> 는 <b>새로 만든 객체</b> — [0] 과 내용은 같아도 <b>주소(참조)</b>가 달라 <code>===</code> 가 false → <b>-1</b> · 배열 안의 그 객체를 넘기면 <code>objectArr.indexOf(objectArr[0])</code> → " + objectArr.indexOf(objectArr[0]));
+            log(cmd('objectArr.indexOf({name:"에스파"})'));
+            await scanRow(2, drawObj, function (i) { return objectArr[i] === target; }, function (i) { return "objectArr[" + i + '] === {name:"에스파"}'; });
+            drawRes(idx);
+            log(ret(String(idx), "주소가 다른 새 객체라 못 찾음").slice(1));
+        },
+        objFindIndex: async function () {
+            var objectArr = [{ name: "에스파" }, { name: "홍길동" }], test = function (item) { return item.name === "에스파"; }, idx = objectArr.findIndex(test);
+            head('objectArr.findIndex(item => item.name === "에스파")', false, "콜백이 객체 안의 <b>name 값(글자)</b>끼리 비교 → [" + idx + "] 에서 true → <b>" + idx + "</b>");
+            log(cmd('objectArr.findIndex(item => item.name === "에스파")'));
+            await scanRow(2, drawObj, function (i) { return test(objectArr[i]); }, function (i) { return "item.name = " + show(objectArr[i].name); });
+            drawRes(idx);
+            log(ret(String(idx)).slice(1));
+        },
+        noMap: async function () {
+            var ul = $("demo"), err = null;
+            try { ul.children.map(function (li) { return li.textContent; }); } catch (e) { err = e; }
+            head("ul.children.map(li => li.textContent)", "err", "<code>ul.children</code> = <b>HTMLCollection</b>(유사 배열) — 길이 · 인덱스는 있지만 배열 메서드(map)가 없어서 <b>TypeError</b> → Array.from 이나 spread 로 진짜 배열로 바꾼 뒤 map");
+            drawUl(); drawErr(err ? err.name : "오류 없음");
+            log(cmd("ul.children.map(li => li.textContent)") + '\n<span class="x">' + esc(err ? "Uncaught " + err.name + ": " + err.message : "") + "</span>");
+        },
+        form: async function () {
+            var ul = $("demo"), err = null;
+            try { Array.form(ul.children); } catch (e) { err = e; }
+            head("Array.form(ul.children)", "err", "⚠️ <b>from</b> 을 <b>form</b> 으로 잘못 씀 → Array 에 form 이라는 함수가 없어서 <b>TypeError</b>");
+            drawUl(); drawErr(err ? err.name : "오류 없음");
+            log(cmd("Array.form(ul.children)") + '\n<span class="x">' + esc(err ? "Uncaught " + err.name + ": " + err.message : "") + "</span>");
+        },
+        from: async function () {
+            var ul = $("demo"), real = Array.from(ul.children), out = real.map(function (li) { return li.textContent; });
+            head("Array.from(ul.children).map(li => li.textContent)", false, "① <b>Array.from</b> 이 HTMLCollection → 진짜 배열(li " + real.length + "개) ② <b>map</b> 으로 글자만 꺼낸 새 배열 · ul 은 그대로");
+            drawUl(); log(cmd("Array.from(ul.children)"));
+            paint("res", liTexts(), null, "", "in"); $("resTxt").textContent = "[li, li, li] — 진짜 배열"; tell();
+            log(ret("[li, li, li]", "Array.isArray → " + Array.isArray(real)).slice(1));
+            await wait(900);
+            drawRes(out);
+            log(cmd("Array.from(ul.children).map(li => li.textContent)") + ret(list(out)));
+        },
+        spread: async function () {
+            var ul = $("demo"), real = [...ul.children], out = real.map(function (li) { return li.textContent; });
+            head("[...ul.children].map(li => li.textContent)", false, "① <code>...</code> 가 HTMLCollection 안의 li 를 하나씩 꺼내 <code>[ ]</code> 안에 펼침 → 진짜 배열 ② <b>map</b> · Array.from 과 같은 결과");
+            drawUl(); log(cmd("[...ul.children]"));
+            paint("res", liTexts(), null, "", "in"); $("resTxt").textContent = "[li, li, li] — 진짜 배열"; tell();
+            log(ret("[li, li, li]", "Array.isArray → " + Array.isArray(real)).slice(1));
+            await wait(900);
+            drawRes(out);
+            log(cmd("[...ul.children].map(li => li.textContent)") + ret(list(out)));
+        }
+    };
+
+    function syncShow() {
+        [].forEach.call(document.querySelectorAll("[data-show]"), function (s) {
+            var k = s.getAttribute("data-show"), v = $(k).value.trim();
+            s.textContent = k === "cv" ? parseList(v).map(show).join(", ") : (v === "" ? "" : show(val(v)));
+        });
+        var e0 = $("se").value.trim();
+        document.querySelector('button[data-m="slice"]').textContent = "slice(" + int($("ss").value.trim()) + (e0 === "" ? "" : ", " + int(e0)) + ")";
+    }
+    function setTab(t) {
+        [].forEach.call(document.querySelectorAll(".tab"), function (b) { b.setAttribute("aria-selected", b.getAttribute("data-tab") === t ? "true" : "false"); });
+        [].forEach.call(document.querySelectorAll(".pane"), function (p) { p.classList.toggle("on", p.getAttribute("data-pane") === t); });
+        tell();
+    }
+    document.addEventListener("input", syncShow);
+    document.addEventListener("click", async function (e) {
+        var tb = e.target.closest && e.target.closest(".tab");
+        if (tb) { setTab(tb.getAttribute("data-tab")); return; }
+        var b = e.target.closest && e.target.closest("button.run");
+        if (!b || busy) return;
+        busy = true; [].forEach.call(document.querySelectorAll("button.run"), function (x) { x.disabled = true; });
+        try { await RUN[b.getAttribute("data-m")](); } finally {
+            busy = false; [].forEach.call(document.querySelectorAll("button.run"), function (x) { x.disabled = false; });
+        }
+    });
+    $("undo").addEventListener("click", function () {
+        if (busy) return;
+        var h = hist.pop();
+        if (!h) { head("되돌리기", false, "되돌릴 것이 없어요"); $("tag").innerHTML = ""; return; }
+        arr = h; drawArr(); head("되돌리기", false, "바로 전 상태로 돌아왔어요"); $("tag").innerHTML = "";
+        log('<span class="c">// ↶ 되돌리기 → arr = ' + esc(list(arr)) + "</span>");
+    });
+    $("reset").addEventListener("click", function () {
+        if (busy) return;
+        save(); arr = START.slice();
+        drawArr(); $("res").innerHTML = '<div class="empty">아래 버튼을 눌러 보세요</div>'; $("resTxt").textContent = "";
+        head("arr = [10, 20, 30, 40, 50]", false, "처음 배열로 돌아왔어요"); $("tag").innerHTML = "";
+        log('<span class="c">// ↺ arr = [10, 20, 30, 40, 50]</span>');
+    });
+
+    // 주차 페이지 iframe 높이 맞추기 (build_weeks.py 의 🎬 와 같은 약속)
+    var box = $("box");
+    function tell() { try { if (parent !== window) parent.postMessage({ wkAnimH: Math.ceil(box.getBoundingClientRect().height) + 4 }, "*"); } catch (e) { } }
+    if (window.ResizeObserver) new ResizeObserver(tell).observe(box);
+    window.addEventListener("load", tell);
+
+    // ?tab=edit|new|search|like (또는 #new) 로 처음 탭 고르기 — 주차 페이지에서 그 절에 맞는 탭으로
+    var q = /[?&]tab=(edit|new|search|like)\b/.exec(location.search), hs = /^#(edit|new|search|like)$/.exec(location.hash);
+    setTab(q ? q[1] : hs ? hs[1] : "edit");
+    syncShow(); drawArr();
+    log(cmd("let arr = [10, 20, 30, 40, 50];"));
+})();
+</script>
+<script src="../../figink.js?v=202611260939"></script>
+</body>
+</html>

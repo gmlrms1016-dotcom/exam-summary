@@ -269,6 +269,7 @@ slice : [3,4,5] [5] [3,4,5] 원본 [1,2,3,4,5]
 <div class="tip">🤖 외우기 — <b>push · pop = 뒤</b> · <b>shift · unshift = 앞</b> · 넣는 둘(push · unshift)은 <b>새 길이</b>, 빼는 둘(pop · shift)은 <b>뺀 값</b>을 돌려줘요 · slice · concat 만 원본을 안 바꾸고 새 배열을 줘요 (node 로 확인).</div>
 <div class="tip">🤖 <code>slice(-3)</code> — 음수는 <b>길이를 더해서</b> 계산해요: 5 + (−3) = 2 → <code>slice(2)</code> → <code>[3, 4, 5]</code> · <code>slice(2, 5)</code> 의 5 는 <b>포함 안 함</b>(직전까지).</div>
 <div class="tip">🤖 <code>const arr = [1]; arr.push(2);</code> 도 돼요 — const 는 <b>변수에 다시 넣는 것</b>(<code>arr = [3]</code> → <code>TypeError: Assignment to constant variable.</code>)만 막고, 배열 <b>안의 요소</b>를 바꾸는 건 막지 않아요 (node 로 확인).</div>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-배열메서드.html?tab=edit" title="📦 배열 메서드 실험실 — 요소 조작 6가지 직접 눌러 보기" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-배열메서드.html?tab=edit" target="_blank" rel="noopener">🎬 📦 배열 메서드 실험실 — 요소 조작 6가지 직접 눌러 보기 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s4">
 <h2>3. 배열 순회 · 탐색 — forEach · includes · indexOf · findIndex (1103_02_요소순회탐색.js)</h2>
@@ -339,6 +340,7 @@ findexIndex : 1
 <div class="tip">🤖 <code>arr3.indexOf(9)</code> → <b>-1</b> · <code>arr2.includes(5)</code> → <b>false</b> · <code>arr4.findIndex((item) =&gt; item === 9)</code> → <b>-1</b> · <code>arr1.forEach(…)</code> 의 결과를 찍으면 <b>undefined</b> (모두 node 로 확인).</div>
 <div class="tip">⚠️ <b>팩트체크</b> — 수업 주석 “못 찾음 얕은 비교이기 때문” → <code>indexOf</code> 는 <code>===</code> 로 비교해서 객체는 <b>주소(참조)</b> 가 같아야 같다고 봐요 (<a href="웹프로그래밍-7주차.html">7주차</a> <code>o3 === o4</code> → false 와 같은 이유) · <code>{name:"에스파"}</code> 를 새로 쓰면 <b>새 객체</b>라 배열 안의 객체와 주소가 달라 <b>-1</b> · 배열 안의 그 객체를 넘기면 <code>objectArr.indexOf(objectArr[0])</code> → <b>0</b> (node 로 확인) · 내용(name)으로 찾으려면 <code>findIndex</code> 에 비교 함수를 넘겨요.</div>
 <div class="tip">🤖 findIndex 의 콜백 <code>(item) =&gt; { if (item === 2) return true; }</code> 는 1 일 때 return 이 없어서 <b>undefined(거짓)</b> → 다음 요소로 · 2 일 때 true → 거기서 멈추고 인덱스 <b>1</b> · 한 줄 화살표 <code>(item) =&gt; item === 2</code> 는 <code>item === 2</code> 의 값(true / false)이 바로 반환돼요 → 같은 결과.</div>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-배열메서드.html?tab=search" title="📦 배열 메서드 실험실 — 순회 · 탐색 직접 눌러 보기" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-배열메서드.html?tab=search" target="_blank" rel="noopener">🎬 📦 배열 메서드 실험실 — 순회 · 탐색 직접 눌러 보기 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s5">
 <h2>4. ✍️ 프론트엔드 · 백엔드 · CRUD — 다음 주 예고</h2>
