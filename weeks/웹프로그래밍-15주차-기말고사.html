@@ -14,6 +14,11 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
+.wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
+.wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
+.wk-pick-wk ul{margin:0;padding-left:18px;}
+.wk-pick-wk li{margin:2px 0;line-height:1.6;}
 .wk-examtag{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;margin:14px 0 8px;padding:9px 14px;border:1.5px solid #e5484d;border-radius:12px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5;}
 .wk-examtag b{color:#e5484d;font-size:16px;}
 .wk-examtag small{font-size:12.5px;font-weight:600;opacity:.75;}
@@ -110,7 +115,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="웹프로그래밍-13주차.html">‹ 이전 · <b>13주차</b><br><small>&lt;11월 24일&gt; 콜백 · 콜백 지옥 · Promise · async / await · HTTP 메서드</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../웹프로그래밍-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip"><b>필기 + 실기 둘 다</b></span><span class="wk-chip">✍️ 12주차 “기말고사 필기와 실기 둘다 봄” — <b>필기</b> = 중간고사처럼 <b>이론 맞히기</b></span><span class="wk-chip"><b>실기</b> = <b>미니게임 만들기</b> (주제는 아직 안 정해짐)</span><span class="wk-chip">⚠️ 10주차엔 “필기가 아닌 실기로 시행함” 이었는데 12주차에 바뀜</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">9주차</span><b>이벤트 · 이벤트 소스 · 이벤트 핸들러 · 이벤트 객체</b> — ✍️ “기말고사에 나옴”</li><li><span class="wk-exam-wk">12주차</span><b>HTTP 메시지 구조</b> — 시작 줄 · 헤더 · 빈 줄 · 바디 (✍️ 구글 캡처 “시험문제”)</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip"><b>필기 + 실기 둘 다</b></span><span class="wk-chip">✍️ 12주차 “기말고사 필기와 실기 둘다 봄” — <b>필기</b> = 중간고사처럼 <b>이론 맞히기</b></span><span class="wk-chip"><b>실기</b> = <b>미니게임 만들기</b> (주제는 아직 안 정해짐)</span><span class="wk-chip">⚠️ 10주차엔 “필기가 아닌 실기로 시행함” 이었는데 12주차에 바뀜</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><div class="wk-pick"><div class="wk-pick-wk"><div class="wk-pick-h">9주차</div><ul><li><b>이벤트 · 이벤트 소스 · 이벤트 핸들러 · 이벤트 객체</b> — ✍️ “기말고사에 나옴”</li></ul></div><div class="wk-pick-wk"><div class="wk-pick-h">12주차</div><ul><li><b>HTTP 메시지 구조</b> — 시작 줄 · 헤더 · 빈 줄 · 바디 (✍️ 구글 캡처 “시험문제”)</li></ul></div></div></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
 <tbody>
 <tr><th>찍어 준 것</th><th>핵심 · 답</th></tr>
 <tr><td><b>HTTP 메시지 구조</b></td><td>클라이언트 · 서버가 주고받는 정해진 형식의 데이터 단위 · <b>요청 · 응답</b> 2가지 · 위에서부터 <b>① 시작 줄</b>(요청 <code>GET /users/1 HTTP/1.1</code> · 응답 <code>HTTP/1.1 200 OK</code>) <b>② 헤더</b>(부가 정보 <code>이름: 값</code>) <b>③ 빈 줄</b>(CRLF · 헤더 끝) <b>④ 바디</b>(데이터 · 선택 사항)</td></tr>

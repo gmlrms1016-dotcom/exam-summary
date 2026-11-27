@@ -137,6 +137,7 @@ def render_exam(block):
     줄 모양:  일시 :: 10월 22일(목) 14:00 · 6관 406호   (맨 위에 크게)
              🗂 범위 :: 1장 · 2장 · 3장                 (' · ' 로 나눈 조각을 칩으로)
              🔥 찍어 준 것 ::                           (값이 비면 아래 '  - ' 줄들을 번호 목록으로 · '  - [7주차] …' 은 주차 꼬리표)
+             └ 항목에 [N주차] 꼬리표가 있으면 주차가 낮은 순으로 묶어 주차마다 얇은 빨간 테두리 · 전체를 두꺼운 빨간 테두리 (2026-11-27 사용자)
              🔎 자세히 :: 부제                          (바로 위 칸 밑에 '자세히 보기' 버튼 · 아래 2칸 들여쓴 줄 = 펼치면 보이는 원고)
              ❌ 안 나옴 :: …                            (빨간 칩)
              📌 :: …                                    (키 없이 = 작은 설명 줄)"""
@@ -187,7 +188,18 @@ def render_exam(block):
         out.append("<dt>%s</dt><dd>" % inline(r["k"]))
         if r["v"]:
             out.append("".join('<span class="wk-chip%s">%s</span>' % (" bad" if bad else "", inline(c.strip())) for c in r["v"].split(" · ") if c.strip()))
-        if r["items"]:
+        if r["items"] and any(re.match(r"^\d+\s*주차", t) for t, _ in r["items"]):
+            # 🔥 찍어 준 것 — 주차가 낮은 순 · 주차마다 얇은 빨간 테두리 · 전체를 두꺼운 빨간 테두리로 (2026-11-27 사용자)
+            groups = {}
+            for t, x in r["items"]:
+                mw = re.match(r"^(\d+)\s*주차", t)
+                groups.setdefault(int(mw.group(1)) if mw else 999, []).append((t, x))
+            out.append('<div class="wk-pick">' + "".join(
+                '<div class="wk-pick-wk"><div class="wk-pick-h">%s</div><ul>%s</ul></div>' % (
+                    "%d주차" % k if k != 999 else "그 밖",
+                    "".join("<li>%s%s</li>" % ('<span class="wk-exam-wk">%s</span>' % html.escape(t) if (t and k == 999) else "", inline(x)) for t, x in groups[k]))
+                for k in sorted(groups)) + "</div>")
+        elif r["items"]:
             out.append('<ol class="wk-exam-list">' + "".join(
                 "<li>%s%s</li>" % ('<span class="wk-exam-wk">%s</span>' % html.escape(t) if t else "", inline(x)) for t, x in r["items"]) + "</ol>")
         out.append("</dd>")
@@ -872,6 +884,11 @@ def render_md(md):
 
 
 PAGE_CSS = """
+.wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
+.wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
+.wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
+.wk-pick-wk ul{margin:0;padding-left:18px;}
+.wk-pick-wk li{margin:2px 0;line-height:1.6;}
 .wk-examtag{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;margin:14px 0 8px;padding:9px 14px;border:1.5px solid #e5484d;border-radius:12px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5;}
 .wk-examtag b{color:#e5484d;font-size:16px;}
 .wk-examtag small{font-size:12.5px;font-weight:600;opacity:.75;}
