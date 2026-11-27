@@ -67,6 +67,10 @@
     .m button.run:disabled{opacity:.45;cursor:default;}
     .m input,.m select{font-family:Consolas,Menlo,monospace;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 7px;max-width:100%;}
     .m input{width:74px;} .m input.wide{width:104px;}
+    .stp{display:inline-flex;align-items:center;gap:3px;}
+    .stp input{width:58px;text-align:center;}
+    .stp button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;width:32px;height:32px;font-size:13px;font-weight:800;cursor:pointer;padding:0;touch-action:manipulation;}
+    .stp button:active{background:color-mix(in srgb,var(--main) 22%,var(--card));}
     .m .d{flex-basis:100%;font-size:12.5px;color:var(--ink2);line-height:1.5;}
     .m .d b{color:var(--ink);}
     .chips{display:inline-flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none;}
@@ -464,6 +468,35 @@
     // ?tab=edit|new|search|like (또는 #new) 로 처음 탭 고르기 — 주차 페이지에서 그 절에 맞는 탭으로
     var q = /[?&]tab=(edit|new|search|like)\b/.exec(location.search), hs = /^#(edit|new|search|like)$/.exec(location.hash);
     setTab(q ? q[1] : hs ? hs[1] : "edit");
+
+    // ◀ ▶ 로 숫자 바꾸기 (키보드 ↑ ↓ 도) — 값은 10씩 · 인덱스(slice)는 1씩 (2026-11-27 사용자: “키보드 말고 화살표로 편하게”)
+    var STEP = { pv: 10, uv: 5, ss: 1, se: 1, iv: 10, xv: 10 };
+    function stepBy(id, d) {
+        var inp = $(id), raw = inp.value.trim(), q = /^"(-?\d+)"$/.exec(raw), n;
+        if (raw === "" && id === "se") n = arr.length;               // 끝을 비워 둔 slice → 지금 길이부터
+        else if (q) n = Number(q[1]);                                 // "30" (글자) 도 숫자 부분만 바꾸고 따옴표는 그대로
+        else n = Number(raw);
+        if (!isFinite(n)) n = 0;
+        n += d * STEP[id];
+        inp.value = q ? '"' + n + '"' : String(n);
+        inp.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    Object.keys(STEP).forEach(function (id) {
+        var inp = $(id), w = document.createElement("span");
+        w.className = "stp";
+        inp.parentNode.insertBefore(w, inp);
+        var dn = document.createElement("button"), up = document.createElement("button");
+        dn.type = up.type = "button"; dn.textContent = "◀"; up.textContent = "▶";
+        dn.title = "−" + STEP[id]; up.title = "+" + STEP[id];
+        dn.setAttribute("aria-label", "줄이기 " + STEP[id]); up.setAttribute("aria-label", "늘리기 " + STEP[id]);
+        w.appendChild(dn); w.appendChild(inp); w.appendChild(up);
+        dn.addEventListener("click", function () { stepBy(id, -1); });
+        up.addEventListener("click", function () { stepBy(id, 1); });
+        inp.addEventListener("keydown", function (e) {
+            if (e.key === "ArrowUp") { e.preventDefault(); stepBy(id, 1); }
+            else if (e.key === "ArrowDown") { e.preventDefault(); stepBy(id, -1); }
+        });
+    });
     syncShow(); drawArr();
     log(cmd("let arr = [10, 20, 30, 40, 50];"));
 })();
