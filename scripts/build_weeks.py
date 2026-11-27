@@ -808,14 +808,17 @@ def render_md(md):
             secs.append(("s%d" % (len(secs) + 1), line[3:].strip()))
             parts.append('<section class="card" id="%s">\n<h2>%s</h2>' % (secs[-1][0], inline(line[3:].strip())))
             in_card = True
-        elif line.startswith(":::wkexam "):           # 📝 이 주차가 나오는 시험 (중간 1~7 · 기말 9~14 · 빨간 얇은 테두리 · 2026-11-27 사용자) — lift_top 이 넣음
+        elif line.startswith(":::wkpick "):            # 🔥 그 주차에 교수님이 찍어 준 것 — 얇은 빨간 테두리 (lift_top 이 시험 정리 카드에서 가져와 넣음)
             flush()
-            ex, rng, href = (line[10:].split("|") + ["", ""])[:3]
-            inner = "📝 <b>%s</b> 범위 <small>(%s)</small>" % (html.escape(ex, quote=False), html.escape(rng, quote=False))
-            if href.strip():
-                parts.append('<a class="wk-examtag" href="%s"><span>%s</span><span class="go">%s 정리 보기 ›</span></a>' % (html.escape(href.strip(), quote=True), inner, html.escape(ex, quote=False)))
-            else:
-                parts.append('<div class="wk-examtag"><span>%s</span></div>' % inner)
+            ex, _, wk = line[10:].partition("|")
+            its = []
+            i += 1
+            while i < len(lines) and lines[i].strip() != ":::":
+                if lines[i].strip().startswith("- "):
+                    its.append(lines[i].strip()[2:])
+                i += 1
+            parts.append('<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 %s — %s주차에 교수님이 찍어 준 것</div><ul>%s</ul></div>' % (
+                html.escape(ex.strip(), quote=False), html.escape(wk.strip(), quote=False), "".join("<li>%s</li>" % inline(x) for x in its)))
         elif line.strip() == ":::toc":                   # 바로 가기 칩 (## 절 목록 · 2026-10-17 운영체제 가독성)
             flush()
             parts.append("\x00TOC\x00")
@@ -889,11 +892,7 @@ PAGE_CSS = """
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
 .wk-pick-wk ul{margin:0;padding-left:18px;}
 .wk-pick-wk li{margin:2px 0;line-height:1.6;}
-.wk-examtag{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;margin:14px 0 8px;padding:9px 14px;border:1.5px solid #e5484d;border-radius:12px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5;}
-.wk-examtag b{color:#e5484d;font-size:16px;}
-.wk-examtag small{font-size:12.5px;font-weight:600;opacity:.75;}
-.wk-examtag .go{font-size:13px;font-weight:800;color:#e5484d;white-space:nowrap;}
-a.wk-examtag:hover{background:rgba(229,72,77,.06);}
+.wk-pick-solo{margin:14px 0 10px;}
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
 .wk-hint{font-size:12.5px;color:#6b776e;}
@@ -1020,7 +1019,29 @@ PAGE = """<!DOCTYPE html>
 LAB_LINE = re.compile(r"^🎬 \[[^\]]+\]\((anim/[^)?#\s]+)[^)\s]*\)$")
 
 
-def lift_top(md, subject, week, src_dir):
+def exam_picks(md):
+    """시험 정리 원고의 :::exam 카드에서 [N주차] 꼬리표가 붙은 항목 → [(주차, 글)] (🔎 자세히 아래 원고는 건너뜀)"""
+    lines, out, i = md.splitlines(), [], 0
+    while i < len(lines) and lines[i].strip() != ":::exam":
+        i += 1
+    raw = False
+    for ln in lines[i + 1:]:
+        if ln.strip() == ":::":
+            break
+        if raw:
+            if ln.startswith("  ") or not ln.strip():
+                continue
+            raw = False
+        if ln.lstrip().startswith("🔎") and "::" in ln:
+            raw = True
+            continue
+        m = re.match(r"^\s+- \[(\d+)\s*주차\]\s*(.*)$", ln)
+        if m:
+            out.append((int(m.group(1)), m.group(2)))
+    return out
+
+
+def lift_top(md, subject, week, src_dir, picks=()):
     """주차 페이지(시험 주차 말고) — 맨 위 🎨 그림 절 바로 아래에 ① 이 주차가 나오는 시험(중간 1~7 · 기말 9~14 · 빨간 얇은 테두리)
     ② 버튼 실험실(🎬 anim/… 중 -그림정리.html 말고 · 파일마다 처음 것 하나)을 올림. 원고 중간의 실험실 🎬 줄은 빼서 같은 iframe 이 두 번 안 나오게.
     그림 절이 없으면 첫 ## 절 앞에. (2026-11-27 사용자: “맨처음에 그림 → 중간 · 기말을 빨간 얇은 테두리로 그림 바로 밑에 → 그 밑에 실습예제”)"""
@@ -1036,10 +1057,11 @@ def lift_top(md, subject, week, src_dir):
                 keep.pop()
             continue
         keep.append(ln)
-    ew = 8 if week <= 7 else 15
-    exam = EXAMS[ew]
-    href = page_name(subject, ew) + ".html" if os.path.exists(os.path.join(src_dir, page_name(subject, ew) + ".md")) else ""
-    block = [":::wkexam %s|%s|%s" % (exam, "1 ~ 7주차" if ew == 8 else "9 ~ 14주차", href), ""]
+    block = []
+    for exam in ("중간고사", "기말고사"):                 # 그 주차에 교수님이 찍어 준 것 (2026-11-27 사용자: 범위 버튼 말고 그 주차에 찝어 준 문제를 그 페이지에)
+        its = [x for e, x in picks if e == exam]
+        if its:
+            block += [":::wkpick %s|%d" % (exam, week)] + ["  - " + x for x in its] + [":::", ""]
     for _, ln in labs:
         block += [ln, ""]
     fig = next((i for i, l in enumerate(keep) if l.startswith("## 🎨")), None)
@@ -1070,10 +1092,16 @@ def main(site_key=""):
     written = []
     for subject, emoji in SUBJECTS:
         weeks = {}
+        picks = {}                                     # 주차 → [(시험, 찍어 준 것)] — 중간 · 기말 정리 카드의 [N주차] 항목
+        for ew in (8, 15):
+            ep = os.path.join(SRC, page_name(subject, ew) + ".md")
+            if os.path.exists(ep):
+                for w, x in exam_picks(open(ep, encoding="utf-8").read()):
+                    picks.setdefault(w, []).append((EXAMS[ew], x))
         for week in range(1, 16):
             src = os.path.join(SRC, page_name(subject, week) + ".md")
             if os.path.exists(src):
-                weeks[week] = render_md(lift_top(open(src, encoding="utf-8").read(), subject, week, SRC))
+                weeks[week] = render_md(lift_top(open(src, encoding="utf-8").read(), subject, week, SRC, picks.get(week, [])))
         data[subject] = {w: t for w, (t, _) in weeks.items()}
         order = sorted(weeks)
         for idx, week in enumerate(order):
