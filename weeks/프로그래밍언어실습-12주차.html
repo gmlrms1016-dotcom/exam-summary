@@ -14,6 +14,11 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-examtag{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;margin:14px 0 8px;padding:9px 14px;border:1.5px solid #e5484d;border-radius:12px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5;}
+.wk-examtag b{color:#e5484d;font-size:16px;}
+.wk-examtag small{font-size:12.5px;font-weight:600;opacity:.75;}
+.wk-examtag .go{font-size:13px;font-weight:800;color:#e5484d;white-space:nowrap;}
+a.wk-examtag:hover{background:rgba(229,72,77,.06);}
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
 .wk-hint{font-size:12.5px;color:#6b776e;}
@@ -111,6 +116,8 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-그림정리.html?week=12" title="12주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-그림정리.html?week=12" target="_blank" rel="noopener">🎬 12주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 <ul><li>이중 포인터 <code>pptr → ptr → i</code> · 배열 포인터 <code>ptr + 1</code> = 한 줄(12바이트) · 포인터 배열 <code>ptr[0] → i</code> · <code>++ptr</code> = 자료형 크기만큼 · 함수 · void 포인터</li></ul>
+<a class="wk-examtag" href="프로그래밍언어실습-15주차-기말고사.html"><span>📝 <b>기말고사</b> 범위 <small>(9 ~ 14주차)</small></span><span class="go">기말고사 정리 보기 ›</span></a>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-포인터문자열.html#dbl" title="🧭 포인터 실험실 — 이중 포인터 한 줄씩 실행" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-포인터문자열.html#dbl" target="_blank" rel="noopener">🎬 🧭 포인터 실험실 — 이중 포인터 한 줄씩 실행 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s2">
 <h2>① 🔥 기말고사 — 5쪽 [실습 1-01] 포인터 변수</h2>
@@ -166,7 +173,6 @@ int main(void) {                                // (void) = '매개변수 없음
 <pre class="io"><code class="language-text">*ptr = 10
 i = 11, *ptr = 11, **ptr = 11</code></pre>
 <ul><li><code>pptr → ptr → i</code> — <code>*pptr</code> = ptr (i 의 주소) · <code>**pptr</code> = i</li><li><code>**pptr = 11;</code> 은 <b>i 를 바꿈</b> → i · <code>*ptr</code> · <code>**pptr</code> 모두 11</li><li>⚠️ <b>강의자료가 고쳐졌어요 (v1.0.1)</b> — 처음 올라온 판의 19쪽은 <code>int* ptr, i = 10;</code> 다음 줄에 <code>int *ptr;</code> 가 또 있고, <code>printf</code> 에 <code>**ptr</code> (ptr 은 <code>int*</code> 라 별 두 개 불가) → clang 컴파일 오류 3개 (<code>redefinition of 'ptr'</code> · <code>indirection requires pointer operand ('int' invalid)</code> × 2). 11/16 저녁 v1.0.1 에서 위 코드처럼 고쳐짐</li><li>✍️ 수업 main.c 는 예전 판을 보고 쳐서 <code>**pptr</code> 로는 고쳤지만 <code>int* ptr;</code> 가 두 번 → clang <code>redefinition of 'ptr'</code> 오류 · 두 번째 줄을 지우면 실행돼요 (첫 출력 줄은 <code>**ptr = 10</code>)</li></ul>
-<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-포인터문자열.html#dbl" title="🧭 포인터 실험실 — 이중 포인터 한 줄씩 실행" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-포인터문자열.html#dbl" target="_blank" rel="noopener">🎬 🧭 포인터 실험실 — 이중 포인터 한 줄씩 실행 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s4">
 <h2>③ 🔥 기말고사 — 수업 실행 ② 배열 포인터 (22쪽 [실습 3-03])</h2>
@@ -299,7 +305,6 @@ int main(void) {                                // (void) = '매개변수 없음
 ptr = 0x16eff5b6c
 ptr = 0x16eff5b70</code></pre>
 <ul><li>두 번째 주소 = 첫 번째 주소 <b>+ 4</b> (16진수 끝자리로 확인 · 예: <code>…cac</code> → <code>…cb0</code> = ac + 4 = b0 · c(12) + 4 = 16 → 0 쓰고 1 올림)</li><li>⚠️ 팩트체크 — 노션의 <code>printf("%p",++ptr); printf("%d %d",i,*ptr); //10 10</code> 은 아니에요. <code>++ptr</code> 은 <b>ptr 자체를 바꾸므로</b> 그 뒤 <code>*ptr</code> 은 i 가 아닌 다음 칸 → 쓰레기값(정의되지 않은 동작). ptr 을 그대로 두려면 <code>printf("%p", ptr + 1);</code> (<code>ptr + 1</code> 은 계산만 · ptr 은 그대로 → <code>*ptr</code> = 10)</li><li>⚠️ 팩트체크 — 노션 “포인터 변수의 연산: <code>+,-,*,/,++,--</code>” 중 <b><code>*</code> · <code>/</code> 는 안 돼요</b> (clang <code>ptr * 2</code> · <code>ptr / 2</code> → <code>invalid operands to binary expression ('int *' and 'int')</code>) · 📄 11쪽 “<code>*, -, ++, --</code>” 의 <code>*</code> 도 <code>+</code> 로 읽기 · 🤖 포인터끼리 빼기(<code>q - ptr</code>)는 됨 → 사이의 칸 수</li></ul>
-<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-포인터문자열.html#inc" title="🧭 포인터 실험실 — ++ptr 이 +4 · +1" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-포인터문자열.html#inc" target="_blank" rel="noopener">🎬 🧭 포인터 실험실 — ++ptr 이 +4 · +1 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s8">
 <h2>1. ✍️ [이론] 포인터 종류 (9쪽 표 · 노션 “공부하기”)</h2>

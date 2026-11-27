@@ -796,6 +796,14 @@ def render_md(md):
             secs.append(("s%d" % (len(secs) + 1), line[3:].strip()))
             parts.append('<section class="card" id="%s">\n<h2>%s</h2>' % (secs[-1][0], inline(line[3:].strip())))
             in_card = True
+        elif line.startswith(":::wkexam "):           # 📝 이 주차가 나오는 시험 (중간 1~7 · 기말 9~14 · 빨간 얇은 테두리 · 2026-11-27 사용자) — lift_top 이 넣음
+            flush()
+            ex, rng, href = (line[10:].split("|") + ["", ""])[:3]
+            inner = "📝 <b>%s</b> 범위 <small>(%s)</small>" % (html.escape(ex, quote=False), html.escape(rng, quote=False))
+            if href.strip():
+                parts.append('<a class="wk-examtag" href="%s"><span>%s</span><span class="go">%s 정리 보기 ›</span></a>' % (html.escape(href.strip(), quote=True), inner, html.escape(ex, quote=False)))
+            else:
+                parts.append('<div class="wk-examtag"><span>%s</span></div>' % inner)
         elif line.strip() == ":::toc":                   # 바로 가기 칩 (## 절 목록 · 2026-10-17 운영체제 가독성)
             flush()
             parts.append("\x00TOC\x00")
@@ -864,6 +872,11 @@ def render_md(md):
 
 
 PAGE_CSS = """
+.wk-examtag{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;margin:14px 0 8px;padding:9px 14px;border:1.5px solid #e5484d;border-radius:12px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5;}
+.wk-examtag b{color:#e5484d;font-size:16px;}
+.wk-examtag small{font-size:12.5px;font-weight:600;opacity:.75;}
+.wk-examtag .go{font-size:13px;font-weight:800;color:#e5484d;white-space:nowrap;}
+a.wk-examtag:hover{background:rgba(229,72,77,.06);}
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
 .wk-hint{font-size:12.5px;color:#6b776e;}
@@ -987,6 +1000,42 @@ PAGE = """<!DOCTYPE html>
 """
 
 
+LAB_LINE = re.compile(r"^🎬 \[[^\]]+\]\((anim/[^)?#\s]+)[^)\s]*\)$")
+
+
+def lift_top(md, subject, week, src_dir):
+    """주차 페이지(시험 주차 말고) — 맨 위 🎨 그림 절 바로 아래에 ① 이 주차가 나오는 시험(중간 1~7 · 기말 9~14 · 빨간 얇은 테두리)
+    ② 버튼 실험실(🎬 anim/… 중 -그림정리.html 말고 · 파일마다 처음 것 하나)을 올림. 원고 중간의 실험실 🎬 줄은 빼서 같은 iframe 이 두 번 안 나오게.
+    그림 절이 없으면 첫 ## 절 앞에. (2026-11-27 사용자: “맨처음에 그림 → 중간 · 기말을 빨간 얇은 테두리로 그림 바로 밑에 → 그 밑에 실습예제”)"""
+    if week in EXAMS:
+        return md
+    lines, keep, labs = md.split("\n"), [], []
+    for ln in lines:
+        m = LAB_LINE.match(ln.strip())
+        if m and "-그림정리.html" not in m.group(1):
+            if m.group(1) not in [k for k, _ in labs]:
+                labs.append((m.group(1), ln.strip()))
+            if keep and not keep[-1].strip():          # 빼고 난 자리에 빈 줄이 두 번 남지 않게
+                keep.pop()
+            continue
+        keep.append(ln)
+    ew = 8 if week <= 7 else 15
+    exam = EXAMS[ew]
+    href = page_name(subject, ew) + ".html" if os.path.exists(os.path.join(src_dir, page_name(subject, ew) + ".md")) else ""
+    block = [":::wkexam %s|%s|%s" % (exam, "1 ~ 7주차" if ew == 8 else "9 ~ 14주차", href), ""]
+    for _, ln in labs:
+        block += [ln, ""]
+    fig = next((i for i, l in enumerate(keep) if l.startswith("## 🎨")), None)
+    start = fig + 1 if fig is not None else 0
+    at = next((i for i in range(start, len(keep)) if keep[i].startswith("## ")), len(keep))
+    if fig is None:                                     # 그림 절이 없으면 첫 ## 절 앞 (제목 · 머리말 다음)
+        at = next((i for i, l in enumerate(keep) if l.startswith("## ")), len(keep))
+    if at > 0 and keep[at - 1].strip():
+        block = [""] + block
+    keep[at:at] = block
+    return "\n".join(keep)
+
+
 def page_name(subject, week):
     if week in EXAMS:
         return "%s-%d주차-%s" % (subject, week, EXAMS[week])
@@ -1007,7 +1056,7 @@ def main(site_key=""):
         for week in range(1, 16):
             src = os.path.join(SRC, page_name(subject, week) + ".md")
             if os.path.exists(src):
-                weeks[week] = render_md(open(src, encoding="utf-8").read())
+                weeks[week] = render_md(lift_top(open(src, encoding="utf-8").read(), subject, week, SRC))
         data[subject] = {w: t for w, (t, _) in weeks.items()}
         order = sorted(weeks)
         for idx, week in enumerate(order):

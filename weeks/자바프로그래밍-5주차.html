@@ -14,6 +14,11 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-examtag{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;margin:14px 0 8px;padding:9px 14px;border:1.5px solid #e5484d;border-radius:12px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5;}
+.wk-examtag b{color:#e5484d;font-size:16px;}
+.wk-examtag small{font-size:12.5px;font-weight:600;opacity:.75;}
+.wk-examtag .go{font-size:13px;font-weight:800;color:#e5484d;white-space:nowrap;}
+a.wk-examtag:hover{background:rgba(229,72,77,.06);}
 .wk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 14px;padding-right:58px;}
 .wk-bar a{color:var(--main);font-weight:800;text-decoration:none;font-size:14px;}
 .wk-hint{font-size:12.5px;color:#6b776e;}
@@ -106,6 +111,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">자료: 3장.pdf(4주차 자료) · 수업 소스 WhileSample · NestedLoop · ContinueExample · BreakExample · ArrayAccess · ForEx1~3 · 노션 필기(중요 슬라이드 캡처: 3장 p21)</div>
 <div class="tip">⭐ <b>수업 중 중요 표시</b> — 3장 p21 <b>자바 배열의 필요성과 모양</b>: 변수 10개 대신 <code>int i[] = new int[10];</code> 하나로 만들고 for 문에서 <code>sum += i[n];</code> 으로 한 번에 처리</div>
+<a class="wk-examtag" href="자바프로그래밍-8주차-중간고사.html"><span>📝 <b>중간고사</b> 범위 <small>(1 ~ 7주차)</small></span><span class="go">중간고사 정리 보기 ›</span></a>
 <section class="card" id="s1">
 <h2>1. while 실습 — -1 이 나올 때까지 평균 (예제 3-2)</h2>
 <div class="tip">📂 <b>5주차 (9/22)</b> — 수업은 4주차 강의자료 <b>3장</b>을 이어서 진행했고, 수업 중 작성한 소스 <b>WhileSample · NestedLoop · ContinueExample · BreakExample · ArrayAccess · ForEx1~3</b> 로 정리했어요 (노션 필기: “5주차 수업이지만 4주차 강의자료인 3장을 진도 나갔음”). 코드 주석과 ▶ 출력 결과은 전부 직접 컴파일·실행한 결과예요.</div>
