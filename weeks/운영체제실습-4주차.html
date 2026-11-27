@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -116,7 +119,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">강의자료 그림을 다시 그린 것 · 탭을 누르면 선이 그려지며 나타나고 <b>다음 ▶</b> 으로 한 단계씩 · 모든 주차 그림은 중간고사 정리 · 완전정리에</div>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/리눅스-그림정리.html?week=4" title="4주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/리눅스-그림정리.html?week=4" target="_blank" rel="noopener">🎬 4주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 중간고사 — 4주차에 교수님이 찍어 준 것</div><ul><li><b>DNF 작동 흐름도(그림 4-111)</b> — 수업 화면에 나온 시험문제</li></ul></div>
 </section>
 <section class="card" id="s2">
 <h2>1. 사용자 만들기 — useradd · passwd</h2>

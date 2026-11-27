@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -116,10 +119,9 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <h2>🎨 11주차 그림으로 보기</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-그림정리.html?week=11" title="11주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-그림정리.html?week=11" target="_blank" rel="noopener">🎬 11주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 기말고사 — 11주차에 교수님이 찍어 준 것</div><ul><li><b>직원 퀴즈 3번부터 시험문제</b> — Quiz 11-1 3 ~ 6번 (<code>COUNT(DISTINCT 직책)</code> · 직책별 <code>AVG</code> · <code>COUNT</code> · <code>WHERE</code> + <code>GROUP BY</code> + <code>HAVING</code>)</li><li><b>기말고사 문제 <code>SELECT sum(col2) FROM tab1;</code></b> — Quiz 11-3 NULL 과 SUM (실습 엑셀 “중요! 기말고사 시험문제” · 정답 ③)</li><li>예제5-8-2 <b>시험에 나옴</b> — <code>COUNT(*)</code> · <code>COUNT(주소)</code> · <code>COUNT(DISTINCT 주소)</code></li></ul></div>
-<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-조인하위질의.html#ep" title="🗄️ 조인 실험실 — 조인 6가지가 어떻게 짝지어지는지 (12주차 emp · project 로)" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-조인하위질의.html#ep" target="_blank" rel="noopener">🎬 🗄️ 조인 실험실 — 조인 6가지가 어떻게 짝지어지는지 (12주차 emp · project 로) — 새 창으로 크게 보기</a></p></div>
 </section>
-<section class="card" id="s2">
+<div class="wk-hot"><div class="wk-hot-h">🔥 기말고사 — 교수님이 찍어 준 문제</div>
+<section class="card wk-hot-sec" id="s2">
 <h2>1. 🔥 [Quiz 11-1] 직원 — 집계함수 · GROUP BY · HAVING (강의자료 4쪽) · 3번부터 시험</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — “직원테이블 퀴즈 3번문제(직책의 개수를 중복없이 검색하시오)부터 시험문제” → <b>3 · 4 · 5 · 6번</b></p>
 <table class="ref">
@@ -202,22 +204,7 @@ HAVING COUNT(*)&gt;=2;                                          -- ④ 그룹 �
 </tbody></table>
 <div class="tip">✍️ 내 SQL 답 6개 모두 ✅ (MySQL 8.4 로 실행) · 🤖 6) 에서 <code>WHERE 연봉&gt;=2500</code> 을 빼면 대리(2300 · 2400)도 2명이라 <b>과장 2 · 대리 2</b> 가 나와요 — “연봉이 2500 이상인 사원” = 행 조건 <b>WHERE</b> · “2명 이상인 직책” = 그룹 조건 <b>HAVING</b> (<a href="데이터베이스관리-9주차.html">9주차 실행 순서</a>) · AVG 는 MySQL 이 3600.0000 처럼 소수 4자리로 보여 줘요 · 그룹의 행 순서는 MySQL 이 정함 (ORDER BY 를 써야 보장).</div>
 </section>
-<section class="card" id="s3">
-<h2>2. [Quiz 11-0] 고객 = 10주차 Quiz 10-2 (강의자료 3쪽 · w10 1교시)</h2>
-<ul><li>수업요약 “[Quiz11-0] 고객 (w10 1교시 수업)” — 10주차 <b>Quiz 10-2 와 같은 문제</b> → 조건 · SQL · 결과는 <a href="데이터베이스관리-10주차.html">10주차 6번</a></li><li>✍️ 노션 10주차 페이지 맨 아래에 붙인 “실습한 SQL코드” (fruit 2-1 ~ 2-7 · 고객 2-1 ~ 2-4) 를 MySQL 8.4 로 다시 실행 → <b>10주차 페이지 결과와 모두 같아요</b> ✅</li></ul>
-<pre><code class="language-sql">SELECT 등급, AVG(적립금) FROM 고객                            -- ✍️ 고객 2-4 내 답 (AVG 뒤를 한 칸 띄움)
-GROUP BY 등급 HAVING AVG (적립금)&gt;=1000;                      -- AVG 는 띄워도 됨 → gold 3500 · vip 2500
-SELECT COUNT (*) FROM 고객;                                   -- 🤖 COUNT 를 띄우면 → ERROR 1064
-SELECT SUM (적립금) FROM 고객;                                -- 🤖 SUM 을 띄우면 → ERROR 1630 (FUNCTION …SUM does not exist)</code></pre>
-<table class="ref">
-<tbody>
-<tr><th>등급</th><th>AVG(적립금)</th></tr>
-<tr><td>gold</td><td>3500.0000</td></tr>
-<tr><td>vip</td><td>2500.0000</td></tr>
-</tbody></table>
-<div class="tip">🤖 MySQL 은 <code>COUNT</code> · <code>SUM</code> · <code>MAX</code> · <code>MIN</code> 같은 함수는 이름과 <code>(</code> 사이에 공백이 있으면 함수로 안 봐요 (<code>MAX (적립금)</code> 도 ERROR 1630 · 이 맥 MySQL 8.4 로 확인) · <code>AVG</code> 는 띄워도 되지만 시험 답안은 <b>붙여 쓰기</b> (<code>AVG(적립금)</code>) 가 안전해요.</div>
-</section>
-<section class="card" id="s4">
+<section class="card wk-hot-sec" id="s3">
 <h2>3. 🔥 [Quiz 11-3] NULL 과 SUM — 기말고사 문제 (강의자료 6쪽)</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — “-- 1) <b>기말고사 문제</b> <code>SELECT sum(col2) FROM tab1;</code>” · 실습 엑셀 quiz-3 시트 “<b>중요! 기말고사 시험문제</b>”</p>
 <div class="tip">다음 중 테이블 tab1 에 아래와 같은 데이터가 존재할 경우에 대한 설명으로 가장 적절한 것은? (각 칼럼의 타입은 number 이다.)<br>① <code>select sum(col2) from tab1</code> 의 결과는 NULL 이다. · ② <code>select sum(col1 + col2 + col3) from tab1</code> 의 결과는 185 이다. · ③ <code>select sum(col2 + col3) from tab1</code> 의 결과는 90 이다. · ④ <code>select sum(col2) + sum(col3) from tab1</code> 의 결과는 90 이다.</div>
@@ -529,6 +516,22 @@ function boot(){[].forEach.call(document.querySelectorAll(".xl"),init);}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 })();</script>
 </section>
+</div>
+<section class="card" id="s4">
+<h2>2. [Quiz 11-0] 고객 = 10주차 Quiz 10-2 (강의자료 3쪽 · w10 1교시)</h2>
+<ul><li>수업요약 “[Quiz11-0] 고객 (w10 1교시 수업)” — 10주차 <b>Quiz 10-2 와 같은 문제</b> → 조건 · SQL · 결과는 <a href="데이터베이스관리-10주차.html">10주차 6번</a></li><li>✍️ 노션 10주차 페이지 맨 아래에 붙인 “실습한 SQL코드” (fruit 2-1 ~ 2-7 · 고객 2-1 ~ 2-4) 를 MySQL 8.4 로 다시 실행 → <b>10주차 페이지 결과와 모두 같아요</b> ✅</li></ul>
+<pre><code class="language-sql">SELECT 등급, AVG(적립금) FROM 고객                            -- ✍️ 고객 2-4 내 답 (AVG 뒤를 한 칸 띄움)
+GROUP BY 등급 HAVING AVG (적립금)&gt;=1000;                      -- AVG 는 띄워도 됨 → gold 3500 · vip 2500
+SELECT COUNT (*) FROM 고객;                                   -- 🤖 COUNT 를 띄우면 → ERROR 1064
+SELECT SUM (적립금) FROM 고객;                                -- 🤖 SUM 을 띄우면 → ERROR 1630 (FUNCTION …SUM does not exist)</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>등급</th><th>AVG(적립금)</th></tr>
+<tr><td>gold</td><td>3500.0000</td></tr>
+<tr><td>vip</td><td>2500.0000</td></tr>
+</tbody></table>
+<div class="tip">🤖 MySQL 은 <code>COUNT</code> · <code>SUM</code> · <code>MAX</code> · <code>MIN</code> 같은 함수는 이름과 <code>(</code> 사이에 공백이 있으면 함수로 안 봐요 (<code>MAX (적립금)</code> 도 ERROR 1630 · 이 맥 MySQL 8.4 로 확인) · <code>AVG</code> 는 띄워도 되지만 시험 답안은 <b>붙여 쓰기</b> (<code>AVG(적립금)</code>) 가 안전해요.</div>
+</section>
 <section class="card" id="s5">
 <h2>4. [Quiz 11-4] 관계대수 — 집합 연산 R · S (강의자료 7쪽)</h2>
 <div class="tip">다음을 관계대수로 나타내고 SQL 문법과 실행결과를 작성하라 · 노트(엑셀)에 실행결과를 작성하시오</div>
@@ -583,6 +586,7 @@ SELECT * FROM R, S;                                          -- 4) 모든 짝</c
 <tr><td>외부조인</td><td>방법2 모양 — <code>FROM 테이블1 LEFT OUTER JOIN 테이블2 ON …</code> (수업 답안도 방법2)</td></tr>
 </tbody></table>
 <div class="tip">🤖 방법1 처럼 <code>WHERE 테이블1.키 = 테이블2.키</code> 로 짝을 맞추면 짝 없는 행은 빠져서 <b>내부조인</b>(동등조인) 결과가 돼요 — 짝 없는 행을 살리는 외부조인은 <code>LEFT/RIGHT OUTER JOIN … ON</code> 으로.</div>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-조인하위질의.html#ep" title="🗄️ 조인 실험실 — 조인 6가지가 어떻게 짝지어지는지 (12주차 emp · project 로)" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-조인하위질의.html#ep" target="_blank" rel="noopener">🎬 🗄️ 조인 실험실 — 조인 6가지가 어떻게 짝지어지는지 (12주차 emp · project 로) — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s7">
 <h2>6. [실습] freshman · dmember — 조인 6가지 (강의자료 13 ~ 19쪽)</h2>

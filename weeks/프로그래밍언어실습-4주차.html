@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -112,7 +115,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">자료: 메모장 필기 [이론] 연산자(operator).txt · WorkC w04/E00-op/ex01_00-op1.c · 수업 화면 사진(ex01_00-op2.c) · 강의자료 C-Lect04-ch05-연산자(쪽 번호 참고)</div>
 <div class="tip">🎯 <b>시험 포인트</b> — 필기 <b>“증감연산자(시험에 많이 나옴(중요!))”</b> · <b>#연산자 우선순위(시험문제)</b> · 수업 중 <b>“시험문제!”</b> ① <code>z = -x++ + ++y;</code> ② <code>++x, y++;</code> + <code>printf(..., x++, --y, z--)</code> ③ 비트 연산자 <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code> (a=60, b=13) → 7번</div>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 중간고사 — 4주차에 교수님이 찍어 준 것</div><ul><li><code>z = -x++ + ++y;</code> 실행 후 x·y·z · <code>++x, y++;</code> 와 <code>printf("...", x++, --y, z--);</code> 에 찍히는 값</li><li>비트 연산자 <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code> (a=60, b=13) · 필기 <b>“증감연산자 시험에 많이 나옴”</b> · <b>연산자 우선순위(시험문제)</b></li></ul></div>
 <section class="card" id="s1">
 <h2>1. 연산자 한눈에 · 우선순위 ★시험</h2>
 <div class="tip">📂 <b>4주차 자료</b> — 메모장 필기 <b>[이론] 연산자(operator).txt</b> · WorkC <b>w04/E00-op/ex01_00-op1.c</b> · 수업 화면 사진(<b>ex01_00-op2.c</b>)을 바탕으로 정리했고, 강의자료 <b>C-Lect04-ch05-연산자</b>는 쪽 번호 참고용입니다. 아래 코드의 주석과 <b>▶ 출력 결과</b>는 전부 직접 컴파일·실행한 값입니다.</div>

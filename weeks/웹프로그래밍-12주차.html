@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -116,9 +119,9 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <h2>🎨 12주차 그림으로 보기</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-그림정리.html?week=12" title="12주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-그림정리.html?week=12" target="_blank" rel="noopener">🎬 12주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 기말고사 — 12주차에 교수님이 찍어 준 것</div><ul><li><b>HTTP 메시지 구조</b> — 시작 줄 · 헤더 · 빈 줄 · 바디 (✍️ 구글 캡처 “시험문제”)</li></ul></div>
 </section>
-<section class="card" id="s2">
+<div class="wk-hot"><div class="wk-hot-h">🔥 기말고사 — 교수님이 찍어 준 문제</div>
+<section class="card wk-hot-sec" id="s2">
 <h2>1. 🔥 ✍️ 기말고사 — 필기 + 실기 둘 다</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — “기말고사 필기와 실기 둘다 봄 · 필기는 중간고사 처럼 이론 맞히기 · 실기는 미니게임 만들기 (주제는 아직 안 정해지고 뭐가 나올지 모름)”</p>
 <table class="ref">
@@ -129,7 +132,23 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li>⚠️ 10주차 필기 “기말고사는 필기가 아닌 실기로 시행함” → 오늘(12주차) <b>필기 + 실기 둘 다</b>로 바뀌었어요 · <a href="웹프로그래밍-15주차-기말고사.html">기말고사 정리</a> 맨 위 카드도 고쳤어요</li><li>🤖 실기 연습 = 11주차 미니게임 과제 (두더지게임 같은 미니게임 · 배운 내장객체 · 함수만 · 200줄 이하) — 과제의 뜻도 “배운 범위에서 1 ~ 2시간 안에 만들 수 있는 기말 문제 후보” 였어요 (11/15)</li></ul>
 </section>
-<section class="card" id="s3">
+<section class="card wk-hot-sec" id="s3">
+<h2>5. 🔥 HTTP 메시지 구조 (시험문제)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — 구글 검색 “http메시지 구조가 뭐야” 캡처 + “구글 검색 캡처한거 claude 가 그림 그려서 정리하고 사진은 지워도 됨 (<b>시험문제</b>)”</p>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-그림정리.html?week=12#httpmsg" title="🔥 HTTP 메시지 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-그림정리.html?week=12#httpmsg" target="_blank" rel="noopener">🎬 🔥 HTTP 메시지 그림 — 새 창으로 크게 보기</a></p></div>
+<ul><li><b>HTTP 메시지</b> = 클라이언트(웹 브라우저 등)와 서버가 데이터를 주고받을 때 쓰는 <b>정해진 형식의 데이터 단위</b></li><li>종류 <b>2가지</b> — <b>요청(Request) 메시지</b> (클라이언트 → 서버) · <b>응답(Response) 메시지</b> (서버 → 클라이언트)</li><li>구조 <b>4부분</b> — 위에서부터 순서대로 <b>시작 줄 → 헤더 → 빈 줄 → 바디</b></li></ul>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>순서</th><th>부분</th><th>하는 일</th><th>요청 예 (fetch users/1)</th><th>응답 예</th></tr>
+<tr><td>①</td><td><b>시작 줄</b> (Start Line)</td><td>메시지의 <b>목적</b> — 요청은 <b>방식 · 주소 · 버전</b> · 응답은 <b>버전 · 상태 코드 · 상태 글</b></td><td><code>GET /users/1 HTTP/1.1</code></td><td><code>HTTP/1.1 200 OK</code></td></tr>
+<tr><td>②</td><td><b>헤더</b> (Header)</td><td>메시지에 대한 <b>부가 정보</b>(메타데이터) · <code>이름: 값</code> 줄 여러 개</td><td><code>Host: jsonplaceholder.typicode.com</code></td><td><code>Content-Type: application/json; charset=utf-8</code></td></tr>
+<tr><td>③</td><td><b>빈 줄</b> (Empty Line · CRLF)</td><td><b>헤더가 끝났다</b>는 표시 → 헤더와 바디를 <b>구분</b></td><td>(빈 줄)</td><td>(빈 줄)</td></tr>
+<tr><td>④</td><td><b>바디</b> (Message Body)</td><td>실제로 보내거나 돌려받는 <b>데이터</b> (payload) · <b>선택 사항</b> — 없을 수도 있음</td><td>없음 (GET)</td><td><code>{"id": 1, "name": "Leanne Graham", …}</code></td></tr>
+</tbody></table>
+<ul><li>⚠️ <b>팩트체크</b> — 캡처(구글 AI 개요 · 출처 MDN) 내용은 MDN “HTTP messages” 와 같아요 (시작 줄은 <b>한 줄</b> · 헤더와 바디는 <b>선택</b> · 빈 줄로 헤더 끝을 알림) · 표의 요청 · 응답 줄은 curl 로 jsonplaceholder 에 직접 요청해서 받은 <b>실제 값</b>이에요 (헤더는 일부만)</li><li>🤖 <b>CRLF</b> = 줄 끝 표시 두 글자 <code>\r</code> (Carriage Return) + <code>\n</code> (Line Feed) — 빈 줄 = CRLF 만 있는 줄 · 🤖 응답 시작 줄의 <b>200</b> = 상태 코드(성공 · OK)</li><li>🤖 요청 방식(GET · POST …)은 요청 메시지 <b>시작 줄의 맨 앞</b>에 들어가요 (7번)</li></ul>
+</section>
+</div>
+<section class="card" id="s4">
 <h2>2. ✍️ 이벤트 — 클릭 · 스크롤 말고도 요청 · 응답 · onload</h2>
 <p><span class="wk-tag note">✍️ 필기</span> — “이벤트는 클릭, 스크롤 이외에도 리퀘스트, 리스판스도 이벤트임 onload 도”</p>
 <table class="ref">
@@ -142,7 +161,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <ul><li>⚠️ <b>팩트체크</b> — 맞아요, 이벤트 = 웹에서 일어나는 <b>사건</b>(9주차)이라 사용자 동작 말고도 로딩 끝 · 응답 도착도 이벤트로 다뤄요. 🤖 다만 오늘 쓴 <code>fetch</code> 는 응답 도착을 <code>click</code> 같은 <b>이벤트 이름이 아니라 Promise</b>(나중에 결과를 주겠다는 약속 객체)로 알려 줘요 — node 로 <code>fetch(…) instanceof Promise</code> → <code>true</code> (then 은 아직 안 배움)</li><li>⚠️ 필기 <code>리스판스</code> 는 보통 <b>리스폰스</b>(response · 응답)라고 써요</li></ul>
 </section>
-<section class="card" id="s4">
+<section class="card" id="s5">
 <h2>3. 이벤트 핸들러 등록 3가지 · window.onload (1117_01_event.html)</h2>
 <p><span class="wk-tag note">✍️ 필기</span> (수업 파일 주석) — “myButton 처럼 addEventListener 이 <b>많이 쓰고 활용하는 것을 가장 추천함</b> · 방식: 버블링” · 3번 버튼 <code>onclick</code> 속성 안에 “세미콜론 있어도 없어도 문제없음”</p>
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;                                                     &lt;!-- HTML5 문서 --&gt;
@@ -206,7 +225,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>🤖 다른 방법</td><td>script 를 <b>body 맨 끝</b>에 두기 — 오늘 버튼 코드처럼 (그때는 버튼이 이미 있음)</td></tr>
 </tbody></table>
 </section>
-<section class="card" id="s5">
+<section class="card" id="s6">
 <h2>4. fetch — 서버에 요청 보내기 (1117_02_fetch.html)</h2>
 <p><span class="wk-tag note">✍️ 필기</span> (수업 파일 주석) — “뜻: users 의 id 가 1번인 사람을 불러와 주세요 · 2번째 파라미터 생략 가능” · “.com 까지 URI 전체가 URL”</p>
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;                                                     &lt;!-- HTML5 문서 --&gt;
@@ -243,21 +262,6 @@ Connection: keep-alive
 <tr><td>경로</td><td><code>/users/1</code></td><td>서버 안에서 무엇을 — <b>users 중 1번</b></td></tr>
 </tbody></table>
 <ul><li>✍️ “2번째 파라미터 생략 가능” — 맞아요: <code>fetch(주소, 옵션)</code> 의 옵션을 빼면 요청 방식은 <b>GET</b> (node: <code>new Request(주소).method</code> → <code>GET</code> · <code>{ method: 'POST' }</code> 를 주면 → <code>POST</code>)</li><li>⚠️ <b>팩트체크</b> “.com 까지 URI 전체가 URL” — 이 말은 두 가지로 쓰여요. ① 표준(RFC 3986): <b>URI</b> = 자원을 가리키는 이름 전부 · <b>URL</b> = 그중 <b>위치(주소)</b> 로 가리키는 것 → <code>https://jsonplaceholder.typicode.com/users/1</code> <b>전체가 URL 이자 URI</b> ② HTTP 요청 시작 줄 <code>GET /users/1 HTTP/1.1</code> 에서는 <code>.com</code> 뒤의 <code>/users/1</code> 을 <b>요청 URI</b>(Request-URI · RFC 2616)라고 불러요 → 필기 “.com 까지 · 뒤는 URI · 전체가 URL” 은 ② 뜻으로 보면 맞아요 (교수님이 어느 뜻으로 말했는지는 확인 못 함) · 🤖 <code>.com</code> 까지(<code>https://jsonplaceholder.typicode.com</code>)는 <b>출처(origin)</b> = 프로토콜 + 도메인 (node <code>new URL(…).origin</code> 확인)</li></ul>
-</section>
-<section class="card" id="s6">
-<h2>5. 🔥 HTTP 메시지 구조 (시험문제)</h2>
-<p><span class="wk-tag note">✍️ 필기</span> — 구글 검색 “http메시지 구조가 뭐야” 캡처 + “구글 검색 캡처한거 claude 가 그림 그려서 정리하고 사진은 지워도 됨 (<b>시험문제</b>)”</p>
-<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-그림정리.html?week=12#httpmsg" title="🔥 HTTP 메시지 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-그림정리.html?week=12#httpmsg" target="_blank" rel="noopener">🎬 🔥 HTTP 메시지 그림 — 새 창으로 크게 보기</a></p></div>
-<ul><li><b>HTTP 메시지</b> = 클라이언트(웹 브라우저 등)와 서버가 데이터를 주고받을 때 쓰는 <b>정해진 형식의 데이터 단위</b></li><li>종류 <b>2가지</b> — <b>요청(Request) 메시지</b> (클라이언트 → 서버) · <b>응답(Response) 메시지</b> (서버 → 클라이언트)</li><li>구조 <b>4부분</b> — 위에서부터 순서대로 <b>시작 줄 → 헤더 → 빈 줄 → 바디</b></li></ul>
-<table class="ref">
-<tbody style="min-width:760px;">
-<tr><th>순서</th><th>부분</th><th>하는 일</th><th>요청 예 (fetch users/1)</th><th>응답 예</th></tr>
-<tr><td>①</td><td><b>시작 줄</b> (Start Line)</td><td>메시지의 <b>목적</b> — 요청은 <b>방식 · 주소 · 버전</b> · 응답은 <b>버전 · 상태 코드 · 상태 글</b></td><td><code>GET /users/1 HTTP/1.1</code></td><td><code>HTTP/1.1 200 OK</code></td></tr>
-<tr><td>②</td><td><b>헤더</b> (Header)</td><td>메시지에 대한 <b>부가 정보</b>(메타데이터) · <code>이름: 값</code> 줄 여러 개</td><td><code>Host: jsonplaceholder.typicode.com</code></td><td><code>Content-Type: application/json; charset=utf-8</code></td></tr>
-<tr><td>③</td><td><b>빈 줄</b> (Empty Line · CRLF)</td><td><b>헤더가 끝났다</b>는 표시 → 헤더와 바디를 <b>구분</b></td><td>(빈 줄)</td><td>(빈 줄)</td></tr>
-<tr><td>④</td><td><b>바디</b> (Message Body)</td><td>실제로 보내거나 돌려받는 <b>데이터</b> (payload) · <b>선택 사항</b> — 없을 수도 있음</td><td>없음 (GET)</td><td><code>{"id": 1, "name": "Leanne Graham", …}</code></td></tr>
-</tbody></table>
-<ul><li>⚠️ <b>팩트체크</b> — 캡처(구글 AI 개요 · 출처 MDN) 내용은 MDN “HTTP messages” 와 같아요 (시작 줄은 <b>한 줄</b> · 헤더와 바디는 <b>선택</b> · 빈 줄로 헤더 끝을 알림) · 표의 요청 · 응답 줄은 curl 로 jsonplaceholder 에 직접 요청해서 받은 <b>실제 값</b>이에요 (헤더는 일부만)</li><li>🤖 <b>CRLF</b> = 줄 끝 표시 두 글자 <code>\r</code> (Carriage Return) + <code>\n</code> (Line Feed) — 빈 줄 = CRLF 만 있는 줄 · 🤖 응답 시작 줄의 <b>200</b> = 상태 코드(성공 · OK)</li><li>🤖 요청 방식(GET · POST …)은 요청 메시지 <b>시작 줄의 맨 앞</b>에 들어가요 (7번)</li></ul>
 </section>
 <section class="card" id="s7">
 <h2>6. ✍️ DNS — 도메인 이름을 IP 주소로</h2>

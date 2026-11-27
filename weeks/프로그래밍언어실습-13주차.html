@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -117,10 +120,9 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-그림정리.html?week=13" title="13주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-그림정리.html?week=13" target="_blank" rel="noopener">🎬 13주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 <ul><li>⑲ argc · argv (포인터 배열) · ⑳ 🔥 Hello 2가지 (배열 · 포인터) · ㉑ strcpy · strcat · strlen · ㉒ 🔥 포인터로 같이 바뀜 · scanf 의 &amp;</li></ul>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 기말고사 — 13주차에 교수님이 찍어 준 것</div><ul><li>13페이지 Hello 를 출력하는 방법 2개(포인터로 출력) · 배열을 입력받는 scanf 에 &amp; 를 쓰면 오류 · b 가 a 를 포인터로 참조하면 값 하나만 바꿔도 2개가 바뀜</li></ul></div>
-<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-포인터문자열.html#same" title="🧭 포인터 실험실 — 포인터로 같이 바뀜" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-포인터문자열.html#same" target="_blank" rel="noopener">🎬 🧭 포인터 실험실 — 포인터로 같이 바뀜 — 새 창으로 크게 보기</a></p></div>
 </section>
-<section class="card" id="s2">
+<div class="wk-hot"><div class="wk-hot-h">🔥 기말고사 — 교수님이 찍어 준 문제</div>
+<section class="card wk-hot-sec" id="s2">
 <h2>① 🔥 기말고사 — 13쪽 [실습 1-06] Hello 를 출력하는 2가지</h2>
 <p>✍️ 노션 “강의자료 13페이지에 Hello 를 출력하는 방법을 2개 다 알기 — 예: 다음과 똑같이 출력이 되도록 포인터를 사용하여 출력하시오”</p>
 <pre><code class="language-c">// ex01_06-main.c — 📄 13쪽 [실습 1-06] 문자열 (🔥 ✍️ “Hello 를 출력하는 방법을 2개 다 알기”)
@@ -137,7 +139,7 @@ int main(void) {                                // (void) = '매개변수 없음
 a2: Hello</code></pre>
 <ul><li>📄 13쪽 — 문자열 = 리터럴 중 <code>" "</code> 에 묶여 있는 것 · char 타입의 배열로 관리하며 주로 포인터 변수를 사용 · <b>문자열을 받아올 때 = char 형 배열 · 직접 문자열을 적어 줄 때 = 포인터 변수</b> (기억장소가 마련되고 그 다음에 주소값을 받아옴)</li><li>🔥 “포인터를 사용하여 똑같이 출력” → <code>char* a2 = "Hello";</code> + <code>printf("a2: %s\n", a2);</code></li><li>🤖 배열은 <code>'\0'</code> 칸까지 세어 크기를 정해요 — <code>"Hello"</code> 는 5글자 + <code>'\0'</code> = <b>6칸</b></li></ul>
 </section>
-<section class="card" id="s3">
+<section class="card wk-hot-sec" id="s3">
 <h2>② 🔥 기말고사 — 문법오류 체크: 배열을 입력받는 scanf 에는 &amp; 를 쓰지 않음 (10 · 11쪽)</h2>
 <p>✍️ 노션 “다음 문제에 문법오류를 체크하시오 (예: 배열을 입력받는데 <code>scanf("%s", /*여기에 '&amp;' 를 쓰면 오류임*/)</code>)”</p>
 <pre><code class="language-c">// ex01_04-main.c — 📄 10쪽 [실습 1-04] 문자 입출력 scanf() (🔥 ✍️ “배열을 입력받는데 &amp; 를 쓰면 오류”)
@@ -159,7 +161,7 @@ int main(void) {                                // (void) = '매개변수 없음
 a1: abcd, a2: 100</code></pre>
 <ul><li>문자열(배열) → <code>scanf("%s", a1);</code> (배열 이름 = 첫 칸 주소) · 정수 같은 보통 변수 → <code>scanf("%d", &amp;a2);</code> (&amp; 로 주소)</li><li>📄 11쪽 [실습 1-05] — 한 번에 받기 <code>scanf("%s %d", a1, &amp;a2);</code> → <code>값 입력: 문자열 100</code> → <code>a1: 문자열, a2: 100</code> (띄어쓰기로 나눠 받음)</li><li>⚠️ 팩트체크 — <code>scanf("%s", &amp;a1);</code> 은 맥 clang 에서 <b>경고</b>(<code>format specifies type 'char *' but the argument has type 'char (*)[100]'</code>)만 나고 실행은 돼요 (가리키는 주소가 같아서). 하지만 형식이 맞지 않는 틀린 코드 → 시험에서는 교수님 말씀대로 “<b>&amp; 를 쓰면 오류</b>”</li></ul>
 </section>
-<section class="card" id="s4">
+<section class="card wk-hot-sec" id="s4">
 <h2>③ 🔥 기말고사 — 포인터로 참조하면 값을 하나만 바꿔도 변수 2개가 바뀜 (✍️ 노션)</h2>
 <p>✍️ 노션 “변수가 2개 있는데 a 의 변수를 b 가 포인터로 참조하고 있으면 값을 하나만 바꿔도 변수 2개가 바뀌는 것도 시험문제” — 🤖 11 · 12주차 포인터(<code>&amp;</code> · <code>*</code>)로 만든 예</p>
 <pre><code class="language-c">// 🤖 예제 — b 가 a 를 가리키면 (11주차 pointer-03 · 12주차 5쪽과 같은 원리)
@@ -177,7 +179,9 @@ int main(void) {                                // (void) = '매개변수 없음
 <pre class="io"><code class="language-text">20 20
 30 30</code></pre>
 <ul><li>⚠️ 팩트체크 — 실제로 바뀌는 칸은 <b>a 하나</b>예요. <code>*b</code> 는 b 가 가리키는 a 를 읽는 것이라 같이 바뀐 것처럼 보이고, b 에 든 주소(<code>&amp;a</code>)는 그대로예요</li></ul>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-포인터문자열.html#same" title="🧭 포인터 실험실 — 포인터로 같이 바뀜" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-포인터문자열.html#same" target="_blank" rel="noopener">🎬 🧭 포인터 실험실 — 포인터로 같이 바뀜 — 새 창으로 크게 보기</a></p></div>
 </section>
+</div>
 <section class="card" id="s5">
 <h2>1. [요약] main() 함수 매개변수 · [실습 1-01] 명령어 라인 인수 (6 · 7쪽 · ✍️ 수업 실행)</h2>
 <ul><li>📄 6쪽 — <code>int main(int argc, char *argv[])</code> · <b>argc</b> = 명령행에 있는 인수의 개수를 셈 · <b>argv</b> = 인수들의 값을 참조하는 <b>포인터 배열</b> (각 요소는 그 인수를 가리키는 문자열 포인터) · <b>argv 의 첫 번째 요소는 언제나 프로그램의 이름</b></li><li>📄 7쪽 — 명령어 라인 인수 = 실행 프로그램 이름 뒤에 쓰는 정보 (<code>project1 a.txt b.txt c.txt</code>)</li></ul>
@@ -267,6 +271,7 @@ int main(void) {                                // (void) = '매개변수 없음
 <pre class="io"><code class="language-text">abc + "def" = abcdef
 data_length =  6</code></pre>
 <ul><li>출력의 <code>=</code> 뒤 공백이 <b>2칸</b> — 형식 문자열의 공백 1칸 + <code>% d</code>(공백 플래그)가 양수 앞에 붙인 1칸 (📄 16쪽 실행 결과도 <code>data_length =  6</code>)</li><li>⚠️ 팩트체크 — 15 · 16쪽 코드엔 <code>#include &lt;string.h&gt;</code> 가 없어요. 수업 PC(VS)는 경고(C4013)만 내고 빌드됐지만, 맥 clang 은 <b>오류</b> (<code>call to undeclared library function 'strcpy'</code> — C99 부터 선언 없는 함수 호출은 허용 안 됨) → 문자열 함수를 쓰면 꼭 넣기</li><li>🤖 strlen 은 <b>바이트 수</b> — VS(한국어 · CP949)에서 한글은 2바이트(📄 14쪽), 맥 · 리눅스(UTF-8)에서는 3바이트</li></ul>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-포인터문자열.html#str" title="🧭 문자열 실험실 — strcpy · strcat · strlen 한 줄씩 실행" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-포인터문자열.html#str" target="_blank" rel="noopener">🎬 🧭 문자열 실험실 — strcpy · strcat · strlen 한 줄씩 실행 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s8">
 <h2>4. 📝 13주차 과제 — Quiz 1-01 ~ 1-12 (18 ~ 29쪽 · “다음 실행결과를 작성하시오”)</h2>

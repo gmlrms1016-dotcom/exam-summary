@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -116,7 +119,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <h2>🎨 10주차 그림으로 보기</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/데이터베이스관리-그림정리.html?week=10" title="10주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/데이터베이스관리-그림정리.html?week=10" target="_blank" rel="noopener">🎬 10주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 기말고사 — 10주차에 교수님이 찍어 준 것</div><ul><li><b>(MySQL) 기말고사에 합집합만 나옴</b> — 관계대수 집합 연산 중 <b>합집합 <code>UNION</code></b></li><li><b>강의자료 28페이지</b> — 프로젝션 π 예제</li></ul></div>
 </section>
 <section class="card" id="s2">
 <h2>1. ✍️ 널 값과 집계함수 — Quiz 10-3 · 10-4 (강의자료 6 · 7쪽)</h2>

@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -112,8 +115,8 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">수업: <b>10/13(화)</b> · 자료: 수업 소스 Car · CarMain · Book · BookMain · Student · StudentMain · Dog · DogMain · Movie · MovieMain + <code>4장-1(클래스)예제.txt</code> · 노션 필기. 코드 주석과 ▶ 출력 결과는 전부 javac · java 로 직접 실행한 결과예요 (수업 파일은 <code>package test;</code> 로 두 파일씩 나뉘어 있어서, 복사해 바로 실행되게 <code>연습.java</code> 한 파일로 합쳤어요).</div>
 <div class="tip">🔥 <b>시험범위 (✍️ 필기)</b> — “<b>오늘 한 Car, CarMain, Book, BookMain 까지가 시험범위</b>” · 그리고 시험에 볼 것: <b>자바 데이터타입 8가지 외우기</b> · <b>조건식 출력 true / false</b> · <b>for 문 · 배열</b> · <b>if · else</b> · <b>class 와 object</b> · <b>객체지향의 특성</b></div>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 중간고사 — 7주차에 교수님이 찍어 준 것</div><ul><li><b>자바 데이터타입 8가지 외우기</b></li><li><b>조건식 출력 true / false</b></li><li><b>for 문 · 배열</b> · <b>if · else</b></li><li><b>class 와 object</b> · <b>객체지향의 특성</b></li></ul></div>
-<section class="card" id="s1">
+<div class="wk-hot"><div class="wk-hot-h">🔥 중간고사 — 교수님이 찍어 준 문제</div>
+<section class="card wk-hot-sec" id="s1">
 <h2>1. 🔥 시험범위 한눈에</h2>
 <table class="ref">
 <tbody>
@@ -125,6 +128,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>class 와 object · 객체지향의 특성</td><td>클래스 = 설계도(틀) · 객체 = 찍어낸 실체 · 캡슐화 · 상속 · 다형성</td><td>5번 · <a href="자바프로그래밍-6주차.html">6주차</a></td></tr>
 </tbody></table>
 </section>
+</div>
 <section class="card" id="s2">
 <h2>2. 🔥 Car + CarMain — 생성자 2개 · this</h2>
 <pre><code class="language-java">// Car.java + CarMain.java 를 한 파일로 — 🔥 시험범위 (생성자 2개 · this · showInfo)

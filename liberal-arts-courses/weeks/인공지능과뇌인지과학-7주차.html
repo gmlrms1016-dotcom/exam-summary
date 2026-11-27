@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../../icon-180.png">
     <link rel="stylesheet" href="../../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -116,13 +119,13 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">강의자료 그림을 다시 그린 것 · 탭을 누르면 선이 그려지며 나타나고 <b>다음 ▶</b> 으로 한 단계씩 · 모든 주차 그림은 중간고사 정리 · 완전정리에</div>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/뇌인지-그림정리.html?week=7" title="7주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/뇌인지-그림정리.html?week=7" target="_blank" rel="noopener">🎬 7주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 중간고사 — 7주차에 교수님이 찍어 준 것</div><ul><li>✍️ <b>6장 시지각 1~9쪽 “여기까지 시험범위”</b> — 간상체 vs 추상체(개수 · 색소 · 분포 · 신경절 연결) · 소세포성 vs 대세포성 · 수용장 · 중심-주변 수용장 → 대비 향상</li></ul></div>
-<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/광수용체-연결.html" title="6쪽 그림 애니메이션 — 간상체 · 추상체와 신경절의 연결" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/광수용체-연결.html" target="_blank" rel="noopener">🎬 6쪽 그림 애니메이션 — 간상체 · 추상체와 신경절의 연결 — 새 창으로 크게 보기</a></p></div>
 </section>
-<section class="card" id="s2">
+<div class="wk-hot"><div class="wk-hot-h">🔥 중간고사 — 교수님이 찍어 준 문제</div>
+<section class="card wk-hot-sec" id="s2">
 <h2>🔥 시험 포인트</h2>
 <ul><li><span class="wk-tag note">✍️ 필기</span> 9쪽 <b>“여기까지 시험 범위”</b> → 6장 <b>1~9쪽</b> (서론 · 망막 · 광수용체 · 신경절세포 · 수용장)</li><li><span class="wk-tag note">✍️ 필기</span> 5쪽 간상체 = 로돕신 · <b>약한 빛에 민감</b>(형광펜) / 추상체 = 색지각 → ✍️ <b>“선명한 지각”</b> · ✍️ <b>추상체 ↔ 중심와(fovea)</b> 를 밑줄로 이음</li><li><span class="wk-tag note">✍️ 필기</span> 6쪽 간상체 : 신경절 = <b>다(多) : 1</b> → ✍️ <b>어두울 때 사용 · 선명도↓</b> / 추상체 : 신경절 = <b>소(小) : 1</b> → ✍️ <b>밝을 때 사용 · 선명도↑</b> · ✍️ <b>N:1 로 연결</b></li><li><span class="wk-tag note">✍️ 필기</span> 7쪽 신경절 세포의 종류 → ✍️ <b>“주변시: 움직임에 민감”</b> · English name 줄은 줄을 그어 지움</li><li><span class="wk-tag note">✍️ 필기</span> 9쪽 중심-주변 수용장 → <b>대비 향상</b> · ✍️ 그림에 <b>대비율↑ / 대비율↓</b></li><li><span class="wk-tag note">✍️ 필기</span> 3쪽 병렬처리에 동그라미 → <b>“참고”</b></li></ul>
 </section>
+</div>
 <section class="card" id="s3">
 <h2>서론 — 맹시 · 감각과 지각 (2 · 3쪽)</h2>
 <ul><li><b>맹시</b>(2쪽) — 의식적인 시각 자극 처리 없이 시각 능력의 일부를 보유하고 있는 현상<ul><li>우측 시각피질 손상으로 <b>좌시야장</b>의 모든 물체가 보이지 않는 Ron</li><li>그런데 좌시야장에 제시된 물체의 <b>움직임</b>을 파악할 수 있었다! → “본다”는 것의 진정한 의미가 무엇인가?</li></ul></li></ul>
@@ -166,6 +169,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td>선명도 (해상도)</td><td><b>↓</b> 흐릿</td><td><b>↑</b> 선명 → 밝을 때</td></tr>
 <tr><td>망막 위치</td><td>주변부</td><td>중심와</td></tr>
 </tbody></table>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/광수용체-연결.html" title="6쪽 그림 애니메이션 — 간상체 · 추상체와 신경절의 연결" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/광수용체-연결.html" target="_blank" rel="noopener">🎬 6쪽 그림 애니메이션 — 간상체 · 추상체와 신경절의 연결 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s6">
 <h2>✍️ 신경절세포 — 소세포성 · 대세포성 (7쪽)</h2>

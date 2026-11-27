@@ -746,6 +746,7 @@ def render_md(md):
     title, parts, in_card, i = "", [], False, 0
     para, tip, items = [], [], []
     secs = []                                   # ## 절 (바로 가기용 · :::toc)
+    hot = False                                 # :::hot 안 (🔥 시험 절 · 얇은 빨간 테두리)
 
     def flush():
         if para:
@@ -806,8 +807,22 @@ def render_md(md):
             if in_card:
                 parts.append("</section>")
             secs.append(("s%d" % (len(secs) + 1), line[3:].strip()))
-            parts.append('<section class="card" id="%s">\n<h2>%s</h2>' % (secs[-1][0], inline(line[3:].strip())))
+            parts.append('<section class="card%s" id="%s">\n<h2>%s</h2>' % (" wk-hot-sec" if hot else "", secs[-1][0], inline(line[3:].strip())))
             in_card = True
+        elif line.startswith(":::hot "):               # 🔥 교수님이 찍어 준 시험 절 묶음 시작 — 두꺼운 빨간 테두리 (lift_top 이 넣음)
+            flush()
+            if in_card:
+                parts.append("</section>")
+                in_card = False
+            hot = True
+            parts.append('<div class="wk-hot"><div class="wk-hot-h">🔥 %s — 교수님이 찍어 준 문제</div>' % html.escape(line[7:].strip(), quote=False))
+        elif line.strip() == ":::endhot":
+            flush()
+            if in_card:
+                parts.append("</section>")
+                in_card = False
+            hot = False
+            parts.append("</div>")
         elif line.startswith(":::wkpick "):            # 🔥 그 주차에 교수님이 찍어 준 것 — 얇은 빨간 테두리 (lift_top 이 시험 정리 카드에서 가져와 넣음)
             flush()
             ex, _, wk = line[10:].partition("|")
@@ -887,6 +902,9 @@ def render_md(md):
 
 
 PAGE_CSS = """
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -1041,38 +1059,35 @@ def exam_picks(md):
     return out
 
 
+HOT_H = re.compile(r"🔥.*(기말고사|중간고사|시험)|(기말고사|중간고사|시험).*🔥")
+
+
 def lift_top(md, subject, week, src_dir, picks=()):
-    """주차 페이지(시험 주차 말고) — 맨 위 🎨 그림 절 바로 아래에 ① 이 주차가 나오는 시험(중간 1~7 · 기말 9~14 · 빨간 얇은 테두리)
-    ② 버튼 실험실(🎬 anim/… 중 -그림정리.html 말고 · 파일마다 처음 것 하나)을 올림. 원고 중간의 실험실 🎬 줄은 빼서 같은 iframe 이 두 번 안 나오게.
-    그림 절이 없으면 첫 ## 절 앞에. (2026-11-27 사용자: “맨처음에 그림 → 중간 · 기말을 빨간 얇은 테두리로 그림 바로 밑에 → 그 밑에 실습예제”)"""
+    """주차 페이지(시험 주차 말고) — 교수님이 찍어 준 🔥 시험 절(제목에 🔥 + 기말고사 · 중간고사 · 시험 · ‘핵심 요약’ 은 빼고)을
+    🎨 그림 절 바로 밑으로 모아 올리고 통째로 두꺼운 빨간 테두리 · 절마다 얇은 빨간 테두리 (:::hot … :::endhot) · 나머지(실습 예제)는 그 밑에 원래 순서대로.
+    (2026-11-27 사용자: “맨처음에 그림 → 🔥 기말고사 절들을 빨간 테두리로 그림 바로 밑에 → 밑에 실습예제” · “🔥 기말고사 얘네들을 통째로 빨간 테두리로”)"""
     if week in EXAMS:
         return md
-    lines, keep, labs = md.split("\n"), [], []
-    for ln in lines:
-        m = LAB_LINE.match(ln.strip())
-        if m and "-그림정리.html" not in m.group(1):
-            if m.group(1) not in [k for k, _ in labs]:
-                labs.append((m.group(1), ln.strip()))
-            if keep and not keep[-1].strip():          # 빼고 난 자리에 빈 줄이 두 번 남지 않게
-                keep.pop()
-            continue
-        keep.append(ln)
-    block = []
-    for exam in ("중간고사", "기말고사"):                 # 그 주차에 교수님이 찍어 준 것 (2026-11-27 사용자: 범위 버튼 말고 그 주차에 찝어 준 문제를 그 페이지에)
-        its = [x for e, x in picks if e == exam]
-        if its:
-            block += [":::wkpick %s|%d" % (exam, week)] + ["  - " + x for x in its] + [":::", ""]
-    for _, ln in labs:
-        block += [ln, ""]
-    fig = next((i for i, l in enumerate(keep) if l.startswith("## 🎨")), None)
-    start = fig + 1 if fig is not None else 0
-    at = next((i for i in range(start, len(keep)) if keep[i].startswith("## ")), len(keep))
-    if fig is None:                                     # 그림 절이 없으면 첫 ## 절 앞 (제목 · 머리말 다음)
-        at = next((i for i, l in enumerate(keep) if l.startswith("## ")), len(keep))
-    if at > 0 and keep[at - 1].strip():
-        block = [""] + block
-    keep[at:at] = block
-    return "\n".join(keep)
+    head, secs, cur, fence = [], [], None, False
+    for ln in md.split("\n"):
+        if ln.startswith("```"):
+            fence = not fence
+        if ln.startswith("## ") and not fence:
+            cur = [ln]
+            secs.append(cur)
+        elif cur is None:
+            head.append(ln)
+        else:
+            cur.append(ln)
+    hot_of = lambda sec: bool(HOT_H.search(sec[0])) and "핵심 요약" not in sec[0]
+    hot = [x for x in secs if hot_of(x)]
+    if not hot:
+        return md
+    fig = [x for x in secs if not hot_of(x) and x[0].startswith("## 🎨")]
+    rest = [x for x in secs if not hot_of(x) and not x[0].startswith("## 🎨")]
+    exam = "기말고사" if week >= 9 else "중간고사"
+    out = head + sum(fig, []) + ["", ":::hot " + exam, ""] + sum(hot, []) + ["", ":::endhot", ""] + sum(rest, [])
+    return "\n".join(out)
 
 
 def page_name(subject, week):

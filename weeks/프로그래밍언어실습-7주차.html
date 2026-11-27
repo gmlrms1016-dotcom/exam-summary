@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -114,8 +117,8 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="tip">🔥 <b>시험 예고 (✍️ 필기)</b> — 유형 <b>괄호넣기 · 통으로 쓰기</b> · <b>마지막 문제는 통으로 낸다</b> · <b>03whilebasic = 10점짜리 문제!!!</b> · 나오는 것: <b>14쪽 첫 번째 문제(06arithswitch)</b> · <b>08scoreswitch</b> · <b>x, y, z 최대 수(lab1pay)</b> · <b>04incdecop</b> · <b>continue · break 꼭 나옴</b> · <b>7쪽 반복문 출력결과 맞히기</b> · 별 삼각형을 <b>반대로</b> 찍는 것도 나올 가능성 (강의자료에는 없음)</div>
 <div class="tip">📚 <b>범위 (✍️)</b> — “1부터 9장까지 … 9장도 함수에서 배열은 빼고 배열을 기말고사에” → 교재 <b>1 ~ 7장 · 9장 (함수)</b> · 8장 배열과 함수 속 배열은 <b>기말</b> · 주차로는 w02 · w03 변수 · 자료형 / w04 연산자 / w05 조건문 · 반복문 / w06 함수 — ✍️ <b>“조건문 반복문 위주”</b></div>
 <div class="tip">❌ <b>시험에 안 나옴 (✍️)</b> — 6쪽 메뉴(switch) · 10쪽 10char.c · 13쪽 운전면허(04nestedif) · 어르신 판별(05ageifelse) · 섭씨 화씨(01cel2far3 · 07forcel2far3)</div>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 중간고사 — 7주차에 교수님이 찍어 준 것</div><ul><li>✍️ <b>03whilebasic = 10점짜리!!!</b></li><li><b>14쪽 첫 번째 문제(06arithswitch)</b> · <b>08scoreswitch</b> · <b>x, y, z 최대 수(lab1pay)</b> · <b>04incdecop</b></li><li><b>continue · break 꼭</b> · <b>switch 와 for 안의 break 는 완전 다르다</b></li><li><b>7쪽 반복문 출력결과 맞히기</b> · <b>진수 변환</b> · 별 삼각형 <b>반대로</b> (강의자료에 없음)</li></ul></div>
-<section class="card" id="s1">
+<div class="wk-hot"><div class="wk-hot-h">🔥 중간고사 — 교수님이 찍어 준 문제</div>
+<section class="card wk-hot-sec" id="s1">
 <h2>1. 🔥 시험 예고 한눈에</h2>
 <table class="ref">
 <tbody style="min-width:760px;">
@@ -132,7 +135,170 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">🤖 <b>시험 유형 대비</b> — <b>괄호넣기</b> = 조건식 · <code>break</code> · <code>continue</code> · <code>%d</code> 같은 한 조각 / <b>통으로 쓰기</b> = 코드 전체를 손으로 → 위 🔥 코드는 <code>#include</code> 부터 <code>return 0;</code> 까지 <b>안 보고 쓸 수 있게</b> · 과목 페이지 🔒 실제시험에 같은 유형으로 넣어 두었어요.</div>
 </section>
-<section class="card" id="s2">
+<section class="card wk-hot-sec" id="s2">
+<h2>3. 🔥 시험 예고 문제 — 6 · 7장 HW01 + 5장</h2>
+<h3>① 🔥 03whilebasic.c — ✍️ “10점짜리 문제임!!!!!!” (17쪽)</h3>
+<pre><code class="language-c">// 03whilebasic.c                                  // 문자열을 3 번 반복 출력 · 끝난 뒤 count 는?
+#include &lt;stdio.h&gt;                                 // printf
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	int count = 1;                                 // 제어 변수 1 부터
+
+	while (count &lt;= 3) {                           // count 가 3 이하인 동안 → 1 · 2 · 3 일 때 실행
+		printf("반복, 재미있네요!\n");             // 3 번 출력
+		count++;                                   // 1 → 2 → 3 → 4
+	};                                             // 원본의 }; — 빈 문장 ; 이 하나 더 있을 뿐 오류 아님
+
+	printf("\n제어 변수 count =&gt; %d\n", count);    // 빈 줄 하나 뒤 → 4 (조건이 거짓이 된 값)
+
+	return 0;                                      // 정상 종료
+}                                                  // main 끝</code></pre>
+<pre class="io"><code class="language-text">반복, 재미있네요!
+반복, 재미있네요!
+반복, 재미있네요!
+
+제어 변수 count =&gt; 4</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>count (검사할 때)</th><th><code>count &lt;= 3</code> ?</th><th>한 일</th></tr>
+<tr><td>1</td><td>참</td><td>출력 → count 2</td></tr>
+<tr><td>2</td><td>참</td><td>출력 → count 3</td></tr>
+<tr><td>3</td><td>참</td><td>출력 → count 4</td></tr>
+<tr><td><b>4</b></td><td><b>거짓</b></td><td>반복 끝 → <code>\n제어 변수 count =&gt; 4</code></td></tr>
+</tbody></table>
+<div class="tip">10점짜리라 <b>통으로 쓰기</b>로 나올 수 있어요 — 포인트: ① <code>int count = 1;</code> ② <code>while (count &lt;= 3)</code> ③ 안에서 <code>count++</code> (빠지면 무한 반복) ④ 마지막 printf 의 <code>\n</code> 이 <b>앞</b>에 있어 빈 줄 하나 ⑤ 끝난 뒤 count 는 <b>4</b> · 원본의 <code>};</code> 는 빈 문장이 하나 더 있을 뿐 오류가 아니에요.</div>
+<h3>② 🔥 06arithswitch.c — ✍️ “14페이지 첫 번째 문제 나옴” — 입력: 2.5 2.5 / 3</h3>
+<pre><code class="language-c">// 06arithswitch.c                                 // 두 실수의 사칙연산 (switch)
+#define _CRT_SECURE_NO_WARNINGS                    // scanf 경고 끄기
+#include &lt;stdio.h&gt;                                 // printf · scanf
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	double x, y, result;                           // 실수 x · y (result 는 선언만)
+	int op;                                        // 연산 번호
+
+	printf("두 실수 입력: ");                      // 안내
+	scanf("%lf %lf", &amp;x, &amp;y);                      // ✍️ 2.5 2.5 → x = 2.5 · y = 2.5 (double 은 %lf)
+	printf("연산종류 번호선택 1(+), 2(-), 3(*), 4(/): ");   // 안내
+	scanf("%d", &amp;op);                              // ✍️ 3 → op = 3
+
+	switch (op) {                                  // op 값으로 case 고르기
+		case 1:                                    // 1 → 더하기
+			printf("%.2f + %.2f = %.2f\n", x, y, x + y);   // (실행 안 됨)
+			break;                                 // 빠져나감
+		case 2:                                    // 2 → 빼기
+			printf("%.2f - %.2f = %.2f\n", x, y, x - y);   // (실행 안 됨)
+			break;                                 // 빠져나감
+		case 3:                                    // ✍️ 3 → 곱하기
+			printf("%.2f * %.2f = %.2f\n", x, y, x * y);   // %.2f = 소수점 2자리 → 2.50 * 2.50 = 6.25
+			break;                                 // 빠져나감
+		case 4:                                    // 4 → 나누기
+			printf("%.2f / %.2f = %.2f\n", x, y, x / y);   // (실행 안 됨)
+			break;                                 // 빠져나감
+		default:                                   // 1 ~ 4 가 아니면
+			printf("번호를 잘못 선택했습니다.\n"); // 안내
+			break; //생략가능                      // 마지막 case 라 빠져도 결과 같음
+	}                                              // switch 끝
+
+	return 0;                                      // 정상 종료
+}                                                  // main 끝</code></pre>
+<pre class="io"><code class="language-text">두 실수 입력: 2.5 2.5
+연산종류 번호선택 1(+), 2(-), 3(*), 4(/): 3
+2.50 * 2.50 = 6.25</code></pre>
+<p>✍️ <b>펜 필기 (14쪽)</b> — 입력 <code>2.5 2.5</code> · 연산 <code>3</code> · <code>switch(op)</code> 와 <code>case 3</code> 에 동그라미 · <b>“%.2f = 소수점 2자리 출력”</b> · <b>“2.50 * 2.50 = 6.25”</b></p>
+<div class="tip">13쪽 아래 <code>// 06arithswitch.c</code> 에서 시작해 14쪽 <b>첫 번째 상자</b>로 이어지는 코드예요. <code>double</code> 은 scanf 에서 <b><code>%lf</code></b>, printf 에서는 <code>%f</code> · <code>%.2f</code> = 소수점 아래 2자리 → 2.5 → <b>2.50</b> · 1 ~ 4 가 아니면 default → <code>번호를 잘못 선택했습니다.</code></div>
+<h3>③ 🔥 08scoreswitch.c — ✍️ “08 scoreswitch 문제 나옴” — 입력: 5 10</h3>
+<pre><code class="language-c">// 08scoreswitch.c                                 // 조건 연산자 ? : — 최대 · 최소 · 절대값 · 짝홀
+#define _CRT_SECURE_NO_WARNINGS                    // scanf 경고 끄기
+#include &lt;stdio.h&gt;                                 // printf · scanf
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	int a = 0, b = 0;                              // 두 정수
+	printf("두 정수 입력 &gt;&gt; ");                    // 안내
+	scanf("%d%d", &amp;a, &amp;b);                         // ✍️ 5 10 → a = 5 · b = 10
+
+	printf("최대값: %d ", (a &gt; b) ? a : b);        // 5 &gt; 10 거짓 → b → 최대값: 10 (줄바꿈 없음)
+	printf("최소값: %d\n", (a &lt; b) ? a : b);       // 5 &lt; 10 참 → a → 최소값: 5
+	printf("절대값: %d ", (a &gt; 0) ? a : -a);       // 5 &gt; 0 참 → a → 절대값: 5
+	printf("절대값: %d\n", (b &gt; 0) ? b : -b);      // 10 &gt; 0 참 → b → 절대값: 10
+
+	((a % 2) == 0) ? printf("짝수 ") : printf("홀수 ");   // 5 % 2 = 1 → 0 이 아님 → 홀수
+	printf("%s\n", ((b % 2) == 0) ? "짝수" : "홀수");     // 10 % 2 = 0 → 짝수
+
+	return 0;                                      // 정상 종료
+}                                                  // main 끝</code></pre>
+<pre class="io"><code class="language-text">두 정수 입력 &gt;&gt; 5 10
+최대값: 10 최소값: 5
+절대값: 5 절대값: 10
+홀수 짝수</code></pre>
+<p>✍️ <b>펜 필기 (15쪽)</b> — 입력 <code>5 10</code> · 줄마다 <code>a</code> <code>b</code> 에 동그라미 · <b>“최대값: 10 최소값: 5”</b> · <b>“절대값: 5 절대값: 10”</b> · <b>“홀수”</b> · <b>“짝수”</b></p>
+<table class="ref">
+<tbody>
+<tr><th>식</th><th>a = 5, b = 10</th><th>결과</th></tr>
+<tr><td><code>(a &gt; b) ? a : b</code></td><td>5 &gt; 10 거짓 → b</td><td>최대값 <b>10</b></td></tr>
+<tr><td><code>(a &lt; b) ? a : b</code></td><td>5 &lt; 10 참 → a</td><td>최소값 <b>5</b></td></tr>
+<tr><td><code>(a &gt; 0) ? a : -a</code></td><td>5 &gt; 0 참 → a</td><td>절대값 <b>5</b></td></tr>
+<tr><td><code>((a % 2) == 0) ? printf("짝수 ") : printf("홀수 ")</code></td><td>5 % 2 = 1 → 거짓</td><td><b>홀수</b></td></tr>
+<tr><td><code>((b % 2) == 0) ? "짝수" : "홀수"</code></td><td>10 % 2 = 0 → 참</td><td><b>짝수</b></td></tr>
+</tbody></table>
+<div class="tip">5장의 <b>08condop</b> (25쪽) 도 이것과 <b>같은 코드</b>예요. <code>조건 ? 참일 때 : 거짓일 때</code> — 첫 printf 둘은 끝에 <code>\n</code> 이 없어서 한 줄에 이어 찍혀요.</div>
+<h3>④ 🔥 lab1pay.c — ✍️ “x, y, z 최대 수 구하는 문제 나옴” — 입력: 7 3 9</h3>
+<pre><code class="language-c">// lab1pay.c                                       // 세 정수 중 최대값 (중첩 if)
+#define _CRT_SECURE_NO_WARNINGS                    // scanf 경고 끄기
+#include &lt;stdio.h&gt;                                 // printf · scanf
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	int x, y, z;                                   // 세 정수
+
+	printf("세 정수를 입력: ");                    // 안내
+	scanf("%d %d %d", &amp;x, &amp;y, &amp;z);                 // 7 3 9 → x = 7 · y = 3 · z = 9
+
+	if (x &gt; y) {                                   // 7 &gt; 3 → 참 → x 와 z 만 비교하면 됨
+		if (x &gt; z)                                 // 7 &gt; 9 → 거짓
+			printf("최대 수: %d\n", x);            // (실행 안 됨)
+		else                                       // x 보다 z 가 크거나 같으면
+			printf("최대 수: %d\n", z);            // 최대 수: 9
+	} else {                                       // x &lt;= y 면 y 와 z 비교
+		if (y &gt; z)                                 // (검사 안 함)
+			printf("최대 수: %d\n", y);            // (실행 안 됨)
+		else                                       // y &lt;= z 면
+			printf("최대 수: %d\n", z);            // (실행 안 됨)
+	}                                              // 바깥 if 끝
+
+	return 0;                                      // 정상 종료
+}                                                  // main 끝</code></pre>
+<pre class="io"><code class="language-text">세 정수를 입력: 7 3 9
+최대 수: 9</code></pre>
+<div class="tip"><b>통으로 쓰기</b> 대비 — 바깥 if 로 <code>x &gt; y</code> 를 먼저 보고, 이긴 쪽만 <code>z</code> 와 비교해요. 바깥 4갈래 중 <b>하나만</b> 실행 · 🤖 다른 입력: <code>12 7 30</code> → 30 · <code>9 9 1</code> → x &gt; y 가 거짓 → y(9) &gt; z(1) → 9.</div>
+<h3>⑤ 🔥 04incdecop.c — ✍️ “04incdecop 문제 나옴” (24쪽)</h3>
+<pre><code class="language-c">// 04incdecop.c                                    // 전위 · 후위 증가 감소
+#include &lt;stdio.h&gt;                                 // printf
+
+int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+	int m = 1, n = 5;                              // m = 1 · n = 5
+
+	printf("%d %d\n", m++, ++n);                   // m++ = 1 을 쓰고 m = 2 · ++n = n 을 6 으로 먼저 → 1 6
+	printf("%d %d\n", m, n);                       // 2 6
+	printf("%d %d\n", m--, --n);                   // ⚠️ 원본은 끝 ; 가 빠짐(컴파일 오류) · m-- = 2 쓰고 m = 1 · --n = 5 → 2 5
+	printf("%d %d\n", m, n);                       // 1 5
+
+	return 0;                                      // 정상 종료
+}                                                  // main 끝</code></pre>
+<pre class="io"><code class="language-text">1 6
+2 6
+2 5
+1 5</code></pre>
+<table class="ref">
+<tbody style="min-width:608px;">
+<tr><th>줄</th><th>식</th><th>출력</th><th>실행 뒤 m · n</th></tr>
+<tr><td>1</td><td><code>m++</code> (쓰고 증가) · <code>++n</code> (증가하고 씀)</td><td><b>1 6</b></td><td>2 · 6</td></tr>
+<tr><td>2</td><td><code>m</code> · <code>n</code></td><td><b>2 6</b></td><td>2 · 6</td></tr>
+<tr><td>3</td><td><code>m--</code> (쓰고 감소) · <code>--n</code> (감소하고 씀)</td><td><b>2 5</b></td><td>1 · 5</td></tr>
+<tr><td>4</td><td><code>m</code> · <code>n</code></td><td><b>1 5</b></td><td>1 · 5</td></tr>
+</tbody></table>
+<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> (강의자료) — 24쪽 셋째 printf 가 <code>printf("%d %d\n", m--, --n)</code> 으로 <b>끝의 <code>;</code> 가 빠져</b> 있어요 → 그대로면 컴파일 오류 · 위 코드는 <code>;</code> 를 넣어 실행했어요.</div>
+</section>
+</div>
+<section class="card" id="s3">
 <h2>2. [복습] 1 ~ 7쪽 — 반복 · 조건 · 진수 · 증감</h2>
 <h3>① 구구단(for문) — 입력: 2</h3>
 <pre><code class="language-c">// 구구단(for문)                                   // 단을 입력받아 1 ~ 9 를 곱해 출력
@@ -628,168 +794,6 @@ int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방�
 <pre class="io"><code class="language-text">i: 11, result: 10
 i: 11, result: 11</code></pre>
 <div class="tip"><b>후위</b> <code>i++</code> = 지금 값을 <b>먼저 쓰고</b> 나중에 1 증가 → result 10 · <b>전위</b> <code>++i</code> = <b>먼저 1 증가</b>하고 씀 → result 11 · 두 경우 모두 i 는 11.</div>
-</section>
-<section class="card" id="s3">
-<h2>3. 🔥 시험 예고 문제 — 6 · 7장 HW01 + 5장</h2>
-<h3>① 🔥 03whilebasic.c — ✍️ “10점짜리 문제임!!!!!!” (17쪽)</h3>
-<pre><code class="language-c">// 03whilebasic.c                                  // 문자열을 3 번 반복 출력 · 끝난 뒤 count 는?
-#include &lt;stdio.h&gt;                                 // printf
-
-int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-	int count = 1;                                 // 제어 변수 1 부터
-
-	while (count &lt;= 3) {                           // count 가 3 이하인 동안 → 1 · 2 · 3 일 때 실행
-		printf("반복, 재미있네요!\n");             // 3 번 출력
-		count++;                                   // 1 → 2 → 3 → 4
-	};                                             // 원본의 }; — 빈 문장 ; 이 하나 더 있을 뿐 오류 아님
-
-	printf("\n제어 변수 count =&gt; %d\n", count);    // 빈 줄 하나 뒤 → 4 (조건이 거짓이 된 값)
-
-	return 0;                                      // 정상 종료
-}                                                  // main 끝</code></pre>
-<pre class="io"><code class="language-text">반복, 재미있네요!
-반복, 재미있네요!
-반복, 재미있네요!
-
-제어 변수 count =&gt; 4</code></pre>
-<table class="ref">
-<tbody>
-<tr><th>count (검사할 때)</th><th><code>count &lt;= 3</code> ?</th><th>한 일</th></tr>
-<tr><td>1</td><td>참</td><td>출력 → count 2</td></tr>
-<tr><td>2</td><td>참</td><td>출력 → count 3</td></tr>
-<tr><td>3</td><td>참</td><td>출력 → count 4</td></tr>
-<tr><td><b>4</b></td><td><b>거짓</b></td><td>반복 끝 → <code>\n제어 변수 count =&gt; 4</code></td></tr>
-</tbody></table>
-<div class="tip">10점짜리라 <b>통으로 쓰기</b>로 나올 수 있어요 — 포인트: ① <code>int count = 1;</code> ② <code>while (count &lt;= 3)</code> ③ 안에서 <code>count++</code> (빠지면 무한 반복) ④ 마지막 printf 의 <code>\n</code> 이 <b>앞</b>에 있어 빈 줄 하나 ⑤ 끝난 뒤 count 는 <b>4</b> · 원본의 <code>};</code> 는 빈 문장이 하나 더 있을 뿐 오류가 아니에요.</div>
-<h3>② 🔥 06arithswitch.c — ✍️ “14페이지 첫 번째 문제 나옴” — 입력: 2.5 2.5 / 3</h3>
-<pre><code class="language-c">// 06arithswitch.c                                 // 두 실수의 사칙연산 (switch)
-#define _CRT_SECURE_NO_WARNINGS                    // scanf 경고 끄기
-#include &lt;stdio.h&gt;                                 // printf · scanf
-
-int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-	double x, y, result;                           // 실수 x · y (result 는 선언만)
-	int op;                                        // 연산 번호
-
-	printf("두 실수 입력: ");                      // 안내
-	scanf("%lf %lf", &amp;x, &amp;y);                      // ✍️ 2.5 2.5 → x = 2.5 · y = 2.5 (double 은 %lf)
-	printf("연산종류 번호선택 1(+), 2(-), 3(*), 4(/): ");   // 안내
-	scanf("%d", &amp;op);                              // ✍️ 3 → op = 3
-
-	switch (op) {                                  // op 값으로 case 고르기
-		case 1:                                    // 1 → 더하기
-			printf("%.2f + %.2f = %.2f\n", x, y, x + y);   // (실행 안 됨)
-			break;                                 // 빠져나감
-		case 2:                                    // 2 → 빼기
-			printf("%.2f - %.2f = %.2f\n", x, y, x - y);   // (실행 안 됨)
-			break;                                 // 빠져나감
-		case 3:                                    // ✍️ 3 → 곱하기
-			printf("%.2f * %.2f = %.2f\n", x, y, x * y);   // %.2f = 소수점 2자리 → 2.50 * 2.50 = 6.25
-			break;                                 // 빠져나감
-		case 4:                                    // 4 → 나누기
-			printf("%.2f / %.2f = %.2f\n", x, y, x / y);   // (실행 안 됨)
-			break;                                 // 빠져나감
-		default:                                   // 1 ~ 4 가 아니면
-			printf("번호를 잘못 선택했습니다.\n"); // 안내
-			break; //생략가능                      // 마지막 case 라 빠져도 결과 같음
-	}                                              // switch 끝
-
-	return 0;                                      // 정상 종료
-}                                                  // main 끝</code></pre>
-<pre class="io"><code class="language-text">두 실수 입력: 2.5 2.5
-연산종류 번호선택 1(+), 2(-), 3(*), 4(/): 3
-2.50 * 2.50 = 6.25</code></pre>
-<p>✍️ <b>펜 필기 (14쪽)</b> — 입력 <code>2.5 2.5</code> · 연산 <code>3</code> · <code>switch(op)</code> 와 <code>case 3</code> 에 동그라미 · <b>“%.2f = 소수점 2자리 출력”</b> · <b>“2.50 * 2.50 = 6.25”</b></p>
-<div class="tip">13쪽 아래 <code>// 06arithswitch.c</code> 에서 시작해 14쪽 <b>첫 번째 상자</b>로 이어지는 코드예요. <code>double</code> 은 scanf 에서 <b><code>%lf</code></b>, printf 에서는 <code>%f</code> · <code>%.2f</code> = 소수점 아래 2자리 → 2.5 → <b>2.50</b> · 1 ~ 4 가 아니면 default → <code>번호를 잘못 선택했습니다.</code></div>
-<h3>③ 🔥 08scoreswitch.c — ✍️ “08 scoreswitch 문제 나옴” — 입력: 5 10</h3>
-<pre><code class="language-c">// 08scoreswitch.c                                 // 조건 연산자 ? : — 최대 · 최소 · 절대값 · 짝홀
-#define _CRT_SECURE_NO_WARNINGS                    // scanf 경고 끄기
-#include &lt;stdio.h&gt;                                 // printf · scanf
-
-int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-	int a = 0, b = 0;                              // 두 정수
-	printf("두 정수 입력 &gt;&gt; ");                    // 안내
-	scanf("%d%d", &amp;a, &amp;b);                         // ✍️ 5 10 → a = 5 · b = 10
-
-	printf("최대값: %d ", (a &gt; b) ? a : b);        // 5 &gt; 10 거짓 → b → 최대값: 10 (줄바꿈 없음)
-	printf("최소값: %d\n", (a &lt; b) ? a : b);       // 5 &lt; 10 참 → a → 최소값: 5
-	printf("절대값: %d ", (a &gt; 0) ? a : -a);       // 5 &gt; 0 참 → a → 절대값: 5
-	printf("절대값: %d\n", (b &gt; 0) ? b : -b);      // 10 &gt; 0 참 → b → 절대값: 10
-
-	((a % 2) == 0) ? printf("짝수 ") : printf("홀수 ");   // 5 % 2 = 1 → 0 이 아님 → 홀수
-	printf("%s\n", ((b % 2) == 0) ? "짝수" : "홀수");     // 10 % 2 = 0 → 짝수
-
-	return 0;                                      // 정상 종료
-}                                                  // main 끝</code></pre>
-<pre class="io"><code class="language-text">두 정수 입력 &gt;&gt; 5 10
-최대값: 10 최소값: 5
-절대값: 5 절대값: 10
-홀수 짝수</code></pre>
-<p>✍️ <b>펜 필기 (15쪽)</b> — 입력 <code>5 10</code> · 줄마다 <code>a</code> <code>b</code> 에 동그라미 · <b>“최대값: 10 최소값: 5”</b> · <b>“절대값: 5 절대값: 10”</b> · <b>“홀수”</b> · <b>“짝수”</b></p>
-<table class="ref">
-<tbody>
-<tr><th>식</th><th>a = 5, b = 10</th><th>결과</th></tr>
-<tr><td><code>(a &gt; b) ? a : b</code></td><td>5 &gt; 10 거짓 → b</td><td>최대값 <b>10</b></td></tr>
-<tr><td><code>(a &lt; b) ? a : b</code></td><td>5 &lt; 10 참 → a</td><td>최소값 <b>5</b></td></tr>
-<tr><td><code>(a &gt; 0) ? a : -a</code></td><td>5 &gt; 0 참 → a</td><td>절대값 <b>5</b></td></tr>
-<tr><td><code>((a % 2) == 0) ? printf("짝수 ") : printf("홀수 ")</code></td><td>5 % 2 = 1 → 거짓</td><td><b>홀수</b></td></tr>
-<tr><td><code>((b % 2) == 0) ? "짝수" : "홀수"</code></td><td>10 % 2 = 0 → 참</td><td><b>짝수</b></td></tr>
-</tbody></table>
-<div class="tip">5장의 <b>08condop</b> (25쪽) 도 이것과 <b>같은 코드</b>예요. <code>조건 ? 참일 때 : 거짓일 때</code> — 첫 printf 둘은 끝에 <code>\n</code> 이 없어서 한 줄에 이어 찍혀요.</div>
-<h3>④ 🔥 lab1pay.c — ✍️ “x, y, z 최대 수 구하는 문제 나옴” — 입력: 7 3 9</h3>
-<pre><code class="language-c">// lab1pay.c                                       // 세 정수 중 최대값 (중첩 if)
-#define _CRT_SECURE_NO_WARNINGS                    // scanf 경고 끄기
-#include &lt;stdio.h&gt;                                 // printf · scanf
-
-int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-	int x, y, z;                                   // 세 정수
-
-	printf("세 정수를 입력: ");                    // 안내
-	scanf("%d %d %d", &amp;x, &amp;y, &amp;z);                 // 7 3 9 → x = 7 · y = 3 · z = 9
-
-	if (x &gt; y) {                                   // 7 &gt; 3 → 참 → x 와 z 만 비교하면 됨
-		if (x &gt; z)                                 // 7 &gt; 9 → 거짓
-			printf("최대 수: %d\n", x);            // (실행 안 됨)
-		else                                       // x 보다 z 가 크거나 같으면
-			printf("최대 수: %d\n", z);            // 최대 수: 9
-	} else {                                       // x &lt;= y 면 y 와 z 비교
-		if (y &gt; z)                                 // (검사 안 함)
-			printf("최대 수: %d\n", y);            // (실행 안 됨)
-		else                                       // y &lt;= z 면
-			printf("최대 수: %d\n", z);            // (실행 안 됨)
-	}                                              // 바깥 if 끝
-
-	return 0;                                      // 정상 종료
-}                                                  // main 끝</code></pre>
-<pre class="io"><code class="language-text">세 정수를 입력: 7 3 9
-최대 수: 9</code></pre>
-<div class="tip"><b>통으로 쓰기</b> 대비 — 바깥 if 로 <code>x &gt; y</code> 를 먼저 보고, 이긴 쪽만 <code>z</code> 와 비교해요. 바깥 4갈래 중 <b>하나만</b> 실행 · 🤖 다른 입력: <code>12 7 30</code> → 30 · <code>9 9 1</code> → x &gt; y 가 거짓 → y(9) &gt; z(1) → 9.</div>
-<h3>⑤ 🔥 04incdecop.c — ✍️ “04incdecop 문제 나옴” (24쪽)</h3>
-<pre><code class="language-c">// 04incdecop.c                                    // 전위 · 후위 증가 감소
-#include &lt;stdio.h&gt;                                 // printf
-
-int main(void) {   // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
-	int m = 1, n = 5;                              // m = 1 · n = 5
-
-	printf("%d %d\n", m++, ++n);                   // m++ = 1 을 쓰고 m = 2 · ++n = n 을 6 으로 먼저 → 1 6
-	printf("%d %d\n", m, n);                       // 2 6
-	printf("%d %d\n", m--, --n);                   // ⚠️ 원본은 끝 ; 가 빠짐(컴파일 오류) · m-- = 2 쓰고 m = 1 · --n = 5 → 2 5
-	printf("%d %d\n", m, n);                       // 1 5
-
-	return 0;                                      // 정상 종료
-}                                                  // main 끝</code></pre>
-<pre class="io"><code class="language-text">1 6
-2 6
-2 5
-1 5</code></pre>
-<table class="ref">
-<tbody style="min-width:608px;">
-<tr><th>줄</th><th>식</th><th>출력</th><th>실행 뒤 m · n</th></tr>
-<tr><td>1</td><td><code>m++</code> (쓰고 증가) · <code>++n</code> (증가하고 씀)</td><td><b>1 6</b></td><td>2 · 6</td></tr>
-<tr><td>2</td><td><code>m</code> · <code>n</code></td><td><b>2 6</b></td><td>2 · 6</td></tr>
-<tr><td>3</td><td><code>m--</code> (쓰고 감소) · <code>--n</code> (감소하고 씀)</td><td><b>2 5</b></td><td>1 · 5</td></tr>
-<tr><td>4</td><td><code>m</code> · <code>n</code></td><td><b>1 5</b></td><td>1 · 5</td></tr>
-</tbody></table>
-<div class="tip"><span class="wk-tag fix">⚠️ 정정</span> (강의자료) — 24쪽 셋째 printf 가 <code>printf("%d %d\n", m--, --n)</code> 으로 <b>끝의 <code>;</code> 가 빠져</b> 있어요 → 그대로면 컴파일 오류 · 위 코드는 <code>;</code> 를 넣어 실행했어요.</div>
 </section>
 <section class="card" id="s4">
 <h2>4. 5장 연산자 실습 (23 ~ 27쪽)</h2>

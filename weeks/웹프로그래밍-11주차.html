@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -116,7 +119,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <h2>🎨 11주차 그림으로 보기</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-그림정리.html?week=11" title="11주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-그림정리.html?week=11" target="_blank" rel="noopener">🎬 11주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
-<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-배열메서드.html?tab=like" title="📦 배열 메서드 실험실 — 유사 배열 → 배열 직접 눌러 보기" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-배열메서드.html?tab=like" target="_blank" rel="noopener">🎬 📦 배열 메서드 실험실 — 유사 배열 → 배열 직접 눌러 보기 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s2">
 <h2>1. ✍️ 과제 — 자바스크립트 미니게임 구현하기 (11/17(화) 09:55까지)</h2>
@@ -317,6 +319,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <tr><td><code>[...liArray].map(…)</code></td><td>됨 (오늘 최종 코드)</td><td><code>...</code> <b>spread</b>(7주차)로 펼쳐 <b>새 배열</b>을 만든 뒤 map</td></tr>
 </tbody></table>
 <div class="tip">🤖 여기서 map 은 돌려받은 새 배열을 안 쓰고 “하나씩 실행”만 해서, 같은 일은 <b>forEach</b> 가 더 알맞아요 (관례 · 결과는 같음) — map 은 아래 4번처럼 <b>새 배열을 만들 때</b> 써요.</div>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-배열메서드.html?tab=like" title="📦 배열 메서드 실험실 — 유사 배열 → 배열 직접 눌러 보기" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-배열메서드.html?tab=like" target="_blank" rel="noopener">🎬 📦 배열 메서드 실험실 — 유사 배열 → 배열 직접 눌러 보기 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s5">
 <h2>4. ✍️ 앞으로 많이 쓸 함수 — 배열 변형 메서드 filter · map (1110_02.js)</h2>
@@ -349,6 +352,7 @@ console.log(nums.map((item) =&gt; item &gt; 3));               // map 은 콜백
 <tr><td><b>filter</b></td><td><b>true 인 요소만</b> 남김</td><td>길이가 <b>같거나 짧은</b> 새 배열</td><td>그대로</td></tr>
 <tr><td>forEach (10주차)</td><td>쓰지 않음</td><td><code>undefined</code> (하나씩 실행만)</td><td>그대로</td></tr>
 </tbody></table>
+<div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-배열메서드.html?tab=new" title="📦 배열 메서드 실험실 — map · filter 직접 눌러 보기" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-배열메서드.html?tab=new" target="_blank" rel="noopener">🎬 📦 배열 메서드 실험실 — map · filter 직접 눌러 보기 — 새 창으로 크게 보기</a></p></div>
 </section>
 <section class="card" id="s6">
 <h2>✏️ 문제로 확인하기</h2>

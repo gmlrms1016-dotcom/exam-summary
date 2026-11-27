@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -116,11 +119,24 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/리눅스-그림정리.html?week=11" title="11주차 그림" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/리눅스-그림정리.html?week=11" target="_blank" rel="noopener">🎬 11주차 그림 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 <ul><li>㉔ 텔넷 서버 → Windows 에서 접속 · ㉕ XRDP → 원격 데스크톱 · ㉖ 🔥 LVM — 물리 볼륨 · 볼륨 그룹 · 논리 볼륨</li></ul>
-<nav class="wk-toc"><span class="wk-toc-t">바로 가기</span><a href="#s1">🎨 11주차 그림으로 보기</a><a href="#s2">0. 배경</a><a href="#s3">1. 수업 필기 — ✍️ 원문 그대로</a><a href="#s4">2. 🔥 텔넷 서버 (수업 Server · 과제 8-1 Server(B))</a><a href="#s5">3. 🔥 XRDP — 원격 데스크톱 (수업 Server · 과제 8-2 Client)</a><a href="#s6">4. 원격 접속 한눈에</a><a href="#s7">5. 🔥 LVM 개념 (📖 6장 462 ~ 464쪽 · ✍️ “실습은 안 하지만 시험에 개념은 출제함”)</a><a href="#s8">6. 트러블슈팅 (학교 PC 기록 · 노션)</a><a href="#s9">7. 명령어 한 줄 사전</a><a href="#s10">8. 🔥 시험 대비 핵심 요약</a></nav>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 기말고사 — 11주차에 교수님이 찍어 준 것</div><ul><li>🔥 <b>LVM 개념</b> — ✍️ “LVM 실습은 안 하지만 시험에 개념은 출제함” → 물리 볼륨 · 볼륨 그룹 · 논리 볼륨 (📖 6장 462 ~ 464쪽)</li></ul></div>
+<nav class="wk-toc"><span class="wk-toc-t">바로 가기</span><a href="#s1">🎨 11주차 그림으로 보기</a><a href="#s2">5. 🔥 LVM 개념 (📖 6장 462 ~ 464쪽 · ✍️ “실습은 안 하지만 시험에 개념은 출제함”)</a><a href="#s3">0. 배경</a><a href="#s4">1. 수업 필기 — ✍️ 원문 그대로</a><a href="#s5">2. 🔥 텔넷 서버 (수업 Server · 과제 8-1 Server(B))</a><a href="#s6">3. 🔥 XRDP — 원격 데스크톱 (수업 Server · 과제 8-2 Client)</a><a href="#s7">4. 원격 접속 한눈에</a><a href="#s8">6. 트러블슈팅 (학교 PC 기록 · 노션)</a><a href="#s9">7. 명령어 한 줄 사전</a><a href="#s10">8. 🔥 시험 대비 핵심 요약</a></nav>
+</section>
+<div class="wk-hot"><div class="wk-hot-h">🔥 기말고사 — 교수님이 찍어 준 문제</div>
+<section class="card wk-hot-sec" id="s2">
+<h2>5. 🔥 LVM 개념 (📖 6장 462 ~ 464쪽 · ✍️ “실습은 안 하지만 시험에 개념은 출제함”)</h2>
+<ul><li>📖 <b>LVM</b>(Logical Volume Manager) = ‘<b>논리 디스크 관리자</b>’ · 앞에서 배운 <b>Linear RAID 와 비슷한</b> 기본 기능 + 더 많은 기능 · <b>Rocky Linux 는 기본적으로 LVM 으로 디스크를 분할해 설치</b></li><li>📖 NOTE — Server · Server(B) 는 LVM 없이 <b>표준 파티션</b> · Client 는 파티션 구성 기본값 <b>LVM</b> 으로 설치</li><li>📖 쓰임 — 여러 디스크를 합쳐 <b>1개의 파티션</b>으로 구성한 뒤 필요에 따라 <b>다시 나눠야</b> 할 때 · 예) 2TB 디스크 2개를 합친 뒤 1TB 와 3TB 로 나눔 · 디스크 1개로도 LVM 구성 가능</li></ul>
+<table class="ref">
+<tbody>
+<tr><th>📖 용어 3가지</th><th>뜻</th></tr>
+<tr><td><b>물리 볼륨</b> (Physical Volume)</td><td>/dev/sda1 · /dev/sdb1 등의 <b>파티션</b></td></tr>
+<tr><td><b>볼륨 그룹</b> (Volume Group)</td><td>물리 볼륨을 <b>합쳐서</b> 1개의 물리 그룹으로 만든 것</td></tr>
+<tr><td><b>논리 볼륨</b> (Logical Volume)</td><td>볼륨 그룹을 <b>1개 이상으로 나눈</b> 것 · 논리적 그룹이라고도 함</td></tr>
+</tbody></table>
+<ul><li>📖 그림 6-113 — 물리 볼륨 <b>2TB</b>(/dev/sdb) + <b>3TB</b>(/dev/sdc) → <b>5TB 볼륨 그룹</b> → 1TB · 3TB · 1TB 로 나눠 /lvm1 · /lvm2 · /lvm3 에 마운트</li><li>📖 결국 LVM = 여러 디스크(물리 볼륨)를 묶어 <b>1개의 볼륨 그룹</b>으로 만든 뒤 다시 필요한 용량의 파티션(<b>논리 그룹</b>)으로 나눠 쓰는 방식</li><li>📖 그림 6-114 구현 순서 — <code>fdisk</code>(타입 <b>LVM</b>) → <code>pvcreate</code>(/dev/sdb1 · /dev/sdc1) → <code>vgcreate</code>(/dev/myVG) → <code>lvcreate</code>(/dev/myVG/myLG1 ~ 3) → <code>mkfs.ext4</code> → <code>mount</code> → /etc/fstab 등록 → reboot</li><li>🤖 RAID 와 차이 — RAID = 속도 · 결함 허용(미러링 · 패리티)이 목적 · LVM = 용량을 <b>묶었다가 원하는 크기로 나누는</b> 유연한 관리가 목적</li></ul>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/운영체제실습-RAID-LVM.html#lvm" title="🧱 LVM 실험실 — 물리 볼륨 → 볼륨 그룹 → 논리 볼륨 한 단계씩" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/운영체제실습-RAID-LVM.html#lvm" target="_blank" rel="noopener">🎬 🧱 LVM 실험실 — 물리 볼륨 → 볼륨 그룹 → 논리 볼륨 한 단계씩 — 새 창으로 크게 보기</a></p></div>
 </section>
-<section class="card" id="s2">
+</div>
+<section class="card" id="s3">
 <h2>0. 배경</h2>
 <table class="ref">
 <tbody>
@@ -133,11 +149,11 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <p>---</p>
 </section>
-<section class="card" id="s3">
+<section class="card" id="s4">
 <h2>1. 수업 필기 — ✍️ 원문 그대로</h2>
 <ul><li>✍️ “LVM 실습은 안 하지만 시험에 개념은 출제함” → 🔥 5절</li><li>✍️ “오늘 실습 telnet service”</li><li>✍️ “윈도우에서 리눅스 telnet이 접속이 된 상황” (로그 중간 메모)</li></ul>
 </section>
-<section class="card" id="s4">
+<section class="card" id="s5">
 <h2>2. 🔥 텔넷 서버 (수업 Server · 과제 8-1 Server(B))</h2>
 <h3>흐름 한눈에</h3>
 <table class="ref">
@@ -230,7 +246,7 @@ $ whoami
 rocky
 </script></div>
 </section>
-<section class="card" id="s5">
+<section class="card" id="s6">
 <h2>3. 🔥 XRDP — 원격 데스크톱 (수업 Server · 과제 8-2 Client)</h2>
 <h3>흐름 한눈에</h3>
 <table class="ref">
@@ -278,7 +294,7 @@ success
 </script></div>
 <ul><li>🖼️ 05 <code>ifconfig ens160</code> → <b>192.168.111.128</b> · 🖼️ 06 Windows <code>mstsc /v:192.168.111.128</code> → <b>rocky</b> 로그인 → <code>whoami</code> · <code>pwd</code> · <code>ifconfig ens160</code></li><li>⚠️ Client 화면에 rocky 가 로그인돼 있으면 원격 접속이 바로 닫혔음 → Client 화면은 <b>로그아웃</b>(시스템 끄기 X) 한 뒤 접속 (학교 PC 기록 · 로그로 원인 확인은 못 함)</li></ul>
 </section>
-<section class="card" id="s6">
+<section class="card" id="s7">
 <h2>4. 원격 접속 한눈에</h2>
 <table class="ref">
 <tbody style="min-width:760px;">
@@ -289,18 +305,6 @@ success
 <tr><td>Windows 에서</td><td>PowerShell <code>telnet IP</code></td><td><code>ssh 사용자@IP</code></td><td>원격 데스크톱 연결 <code>mstsc</code></td></tr>
 <tr><td>암호화</td><td>🤖 <b>없음</b>(평문)</td><td>🤖 있음</td><td>—</td></tr>
 </tbody></table>
-</section>
-<section class="card" id="s7">
-<h2>5. 🔥 LVM 개념 (📖 6장 462 ~ 464쪽 · ✍️ “실습은 안 하지만 시험에 개념은 출제함”)</h2>
-<ul><li>📖 <b>LVM</b>(Logical Volume Manager) = ‘<b>논리 디스크 관리자</b>’ · 앞에서 배운 <b>Linear RAID 와 비슷한</b> 기본 기능 + 더 많은 기능 · <b>Rocky Linux 는 기본적으로 LVM 으로 디스크를 분할해 설치</b></li><li>📖 NOTE — Server · Server(B) 는 LVM 없이 <b>표준 파티션</b> · Client 는 파티션 구성 기본값 <b>LVM</b> 으로 설치</li><li>📖 쓰임 — 여러 디스크를 합쳐 <b>1개의 파티션</b>으로 구성한 뒤 필요에 따라 <b>다시 나눠야</b> 할 때 · 예) 2TB 디스크 2개를 합친 뒤 1TB 와 3TB 로 나눔 · 디스크 1개로도 LVM 구성 가능</li></ul>
-<table class="ref">
-<tbody>
-<tr><th>📖 용어 3가지</th><th>뜻</th></tr>
-<tr><td><b>물리 볼륨</b> (Physical Volume)</td><td>/dev/sda1 · /dev/sdb1 등의 <b>파티션</b></td></tr>
-<tr><td><b>볼륨 그룹</b> (Volume Group)</td><td>물리 볼륨을 <b>합쳐서</b> 1개의 물리 그룹으로 만든 것</td></tr>
-<tr><td><b>논리 볼륨</b> (Logical Volume)</td><td>볼륨 그룹을 <b>1개 이상으로 나눈</b> 것 · 논리적 그룹이라고도 함</td></tr>
-</tbody></table>
-<ul><li>📖 그림 6-113 — 물리 볼륨 <b>2TB</b>(/dev/sdb) + <b>3TB</b>(/dev/sdc) → <b>5TB 볼륨 그룹</b> → 1TB · 3TB · 1TB 로 나눠 /lvm1 · /lvm2 · /lvm3 에 마운트</li><li>📖 결국 LVM = 여러 디스크(물리 볼륨)를 묶어 <b>1개의 볼륨 그룹</b>으로 만든 뒤 다시 필요한 용량의 파티션(<b>논리 그룹</b>)으로 나눠 쓰는 방식</li><li>📖 그림 6-114 구현 순서 — <code>fdisk</code>(타입 <b>LVM</b>) → <code>pvcreate</code>(/dev/sdb1 · /dev/sdc1) → <code>vgcreate</code>(/dev/myVG) → <code>lvcreate</code>(/dev/myVG/myLG1 ~ 3) → <code>mkfs.ext4</code> → <code>mount</code> → /etc/fstab 등록 → reboot</li><li>🤖 RAID 와 차이 — RAID = 속도 · 결함 허용(미러링 · 패리티)이 목적 · LVM = 용량을 <b>묶었다가 원하는 크기로 나누는</b> 유연한 관리가 목적</li></ul>
 </section>
 <section class="card" id="s8">
 <h2>6. 트러블슈팅 (학교 PC 기록 · 노션)</h2>

@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
+.wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
+.wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
 .wk-pick{border:3px solid #e5484d;border-radius:14px;padding:10px;display:grid;gap:8px;margin:2px 0 4px;}
 .wk-pick-wk{border:1px solid #e5484d;border-radius:10px;padding:7px 12px 8px;}
 .wk-pick-h{font-weight:800;color:#e5484d;font-size:14px;margin:0 0 3px;}
@@ -112,7 +115,6 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 
 <div class="tip">자료: C-Lect03-ch03-변수상수-stu-pdf.pdf · 수업 필기 · gpt대화내용.txt · workC 실습 코드(w03 · w03_quiz01 · w03_extra)</div>
 <div class="tip">🎯 <b>시험 포인트</b> — 강의자료 <b>23p</b> [실습 1-05] sizeof 실행결과 쓰기 · <b>27p</b> [quiz 1-01] 빈칸채우기(printf 서식) + 오류 수정 · 수업 중 "시험문제!" sizeof 서식 고치기 (→ 8장)</div>
-<div class="wk-pick-wk wk-pick-solo"><div class="wk-pick-h">🔥 중간고사 — 3주차에 교수님이 찍어 준 것</div><ul><li>강의자료 <b>23p</b> [실습 1-05] <code>sizeof</code> <b>실행결과 쓰기</b> · <b>27p</b> [quiz 1-01] <b>빈칸채우기</b>(printf 서식) + <b>오류 수정</b></li><li>수업 중 "시험문제!" — <code>sizeof</code> 결과를 <code>%f</code> <code>%lf</code> <code>%c</code> 로 찍은 코드 고치기 → <b>전부 <code>%d</code></b></li></ul></div>
 <section class="card" id="s1">
 <h2>1. 변수와 상수 ★핵심</h2>
 <ul><li><span class="wk-tag star">⭐ 강조</span> — 변수(variable): 프로그램이 실행되는 동안 값이 바뀌는 정보, 데이터를 저장·처리하는 <b>기억장소</b></li><li><span class="wk-tag star">⭐ 강조</span> — 상수(constant): 한 번 정해지면 프로그램이 끝날 때까지 바뀌지 않는 정보 → <code>const</code></li><li><span class="wk-tag note">✍️ 필기</span> — 기억장소 할당 = 주소(address) = 번지. 컴파일 타임에 변수 이름이 기억장치 주소로 바뀐다 (예: <code>n</code> → 100번지, 메모리 주소 100 101 102 103 …)</li><li><span class="wk-tag note">✍️ 필기</span> — 소스(<code>.c</code>) → 컴파일(<code>.obj</code>) → 링크(<code>.exe</code>) → 실행 / 컴파일 타임 ↔ 런 타임</li><li>변수 선언: 저장공간 할당 / 변수 초기화: 선언하면서 초깃값 대입</li></ul>
