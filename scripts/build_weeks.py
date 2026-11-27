@@ -188,18 +188,7 @@ def render_exam(block):
         out.append("<dt>%s</dt><dd>" % inline(r["k"]))
         if r["v"]:
             out.append("".join('<span class="wk-chip%s">%s</span>' % (" bad" if bad else "", inline(c.strip())) for c in r["v"].split(" · ") if c.strip()))
-        if r["items"] and any(re.match(r"^\d+\s*주차", t) for t, _ in r["items"]):
-            # 🔥 찍어 준 것 — 주차가 낮은 순 · 주차마다 얇은 빨간 테두리 · 전체를 두꺼운 빨간 테두리로 (2026-11-27 사용자)
-            groups = {}
-            for t, x in r["items"]:
-                mw = re.match(r"^(\d+)\s*주차", t)
-                groups.setdefault(int(mw.group(1)) if mw else 999, []).append((t, x))
-            out.append('<div class="wk-pick">' + "".join(
-                '<div class="wk-pick-wk"><div class="wk-pick-h">%s</div><ul>%s</ul></div>' % (
-                    "%d주차" % k if k != 999 else "그 밖",
-                    "".join("<li>%s%s</li>" % ('<span class="wk-exam-wk">%s</span>' % html.escape(t) if (t and k == 999) else "", inline(x)) for t, x in groups[k]))
-                for k in sorted(groups)) + "</div>")
-        elif r["items"]:
+        if r["items"]:
             out.append('<ol class="wk-exam-list">' + "".join(
                 "<li>%s%s</li>" % ('<span class="wk-exam-wk">%s</span>' % html.escape(t) if t else "", inline(x)) for t, x in r["items"]) + "</ol>")
         out.append("</dd>")
@@ -809,6 +798,19 @@ def render_md(md):
             secs.append(("s%d" % (len(secs) + 1), line[3:].strip()))
             parts.append('<section class="card%s" id="%s">\n<h2>%s</h2>' % (" wk-hot-sec" if hot else "", secs[-1][0], inline(line[3:].strip())))
             in_card = True
+        elif line.startswith(":::hotall ") or line.startswith(":::hotweek ") or line.strip() in (":::endhotweek", ":::endhotall"):
+            flush()                                    # 시험 정리: 🔥 시험 절 묶음 — 전체 두꺼운 빨간 · 주차마다 얇은 빨간 (inject_hot 이 넣음)
+            if in_card:
+                parts.append("</section>")
+                in_card = False
+            if line.startswith(":::hotall "):
+                ex, _, rg = line[10:].partition("|")
+                parts.append('<div class="wk-hot"><div class="wk-hot-h">🔥 %s — 교수님이 찍어 준 문제 (%s)</div>' % (html.escape(ex.strip(), quote=False), html.escape(rg.strip(), quote=False)))
+            elif line.startswith(":::hotweek "):
+                wk, _, hf = line[11:].partition("|")
+                parts.append('<div class="wk-hotwk"><div class="wk-hotwk-h"><span>%s주차</span><a href="%s">%s주차 페이지 ›</a></div>' % (html.escape(wk.strip(), quote=False), html.escape(hf.strip(), quote=True), html.escape(wk.strip(), quote=False)))
+            else:
+                parts.append("</div>")
         elif line.startswith(":::hot "):               # 🔥 교수님이 찍어 준 시험 절 묶음 시작 — 두꺼운 빨간 테두리 (lift_top 이 넣음)
             flush()
             if in_card:
@@ -902,6 +904,10 @@ def render_md(md):
 
 
 PAGE_CSS = """
+.wk-hotwk{border:1px solid #e5484d;border-radius:14px;padding:8px 8px 0;margin:0 0 10px;}
+.wk-hotwk-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:800;color:#e5484d;font-size:15px;margin:2px 6px 8px;}
+.wk-hotwk-h a{font-size:12.5px;font-weight:700;color:#e5484d;text-decoration:none;}
+.wk-hotwk>section.card{margin-bottom:8px;}
 .wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
 .wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
 .wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
@@ -1090,6 +1096,43 @@ def lift_top(md, subject, week, src_dir, picks=()):
     return "\n".join(out)
 
 
+def hot_sections(md):
+    """주차 원고에서 lift_top 과 같은 🔥 시험 절(제목에 🔥 + 기말고사 · 중간고사 · 시험 · ‘핵심 요약’ 빼고)만 [줄들] 로 · 🎬 iframe 줄은 뺌"""
+    secs, cur, fence = [], None, False
+    for ln in md.split("\n"):
+        if ln.startswith("```"):
+            fence = not fence
+        if ln.startswith("## ") and not fence:
+            cur = [ln] if (HOT_H.search(ln) and "핵심 요약" not in ln) else None
+            if cur is not None:
+                secs.append(cur)
+        elif cur is not None and not ln.strip().startswith("🎬 ["):
+            cur.append(ln)
+    return secs
+
+
+def inject_hot(md, subject, week, src_dir):
+    """중간고사(8주차) 정리 = 1 ~ 7주차 · 기말고사(15주차) 정리 = 9 ~ 14주차 의 🔥 시험 절을 주차가 낮은 순으로 모아
+    주차마다 얇은 빨간 테두리 · 전체를 두꺼운 빨간 테두리로 — 시험 안내 카드(:::exam) 바로 다음에 (2026-11-27 사용자)"""
+    rng = range(1, 8) if week == 8 else range(9, 15)
+    blk = []
+    for w in rng:
+        src = os.path.join(src_dir, page_name(subject, w) + ".md")
+        if not os.path.exists(src):
+            continue
+        hs = hot_sections(open(src, encoding="utf-8").read())
+        if hs:
+            blk += [":::hotweek %d|%s.html" % (w, page_name(subject, w)), ""] + sum(hs, []) + ["", ":::endhotweek", ""]
+    if not blk:
+        return md
+    blk = ["", ":::hotall %s|%s" % (EXAMS[week], "1 ~ 7주차" if week == 8 else "9 ~ 14주차"), ""] + blk + [":::endhotall", ""]
+    lines = md.split("\n")
+    at = next((i + 1 for i, l in enumerate(lines) if l.strip() == ":::" and any(x.strip() == ":::exam" for x in lines[:i])), None)
+    if at is None:
+        at = next((i for i, l in enumerate(lines) if l.startswith("## ")), len(lines))
+    return "\n".join(lines[:at] + blk + lines[at:])
+
+
 def page_name(subject, week):
     if week in EXAMS:
         return "%s-%d주차-%s" % (subject, week, EXAMS[week])
@@ -1116,7 +1159,8 @@ def main(site_key=""):
         for week in range(1, 16):
             src = os.path.join(SRC, page_name(subject, week) + ".md")
             if os.path.exists(src):
-                weeks[week] = render_md(lift_top(open(src, encoding="utf-8").read(), subject, week, SRC, picks.get(week, [])))
+                raw = open(src, encoding="utf-8").read()
+                weeks[week] = render_md(inject_hot(raw, subject, week, SRC) if week in EXAMS else lift_top(raw, subject, week, SRC))
         data[subject] = {w: t for w, (t, _) in weeks.items()}
         order = sorted(weeks)
         for idx, week in enumerate(order):

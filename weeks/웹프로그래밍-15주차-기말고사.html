@@ -14,6 +14,10 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hotwk{border:1px solid #e5484d;border-radius:14px;padding:8px 8px 0;margin:0 0 10px;}
+.wk-hotwk-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:800;color:#e5484d;font-size:15px;margin:2px 6px 8px;}
+.wk-hotwk-h a{font-size:12.5px;font-weight:700;color:#e5484d;text-decoration:none;}
+.wk-hotwk>section.card{margin-bottom:8px;}
 .wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
 .wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
 .wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
@@ -114,24 +118,135 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="웹프로그래밍-13주차.html">‹ 이전 · <b>13주차</b><br><small>&lt;11월 24일&gt; 콜백 · 콜백 지옥 · Promise · async / await · HTTP 메서드</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../웹프로그래밍-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip"><b>필기 + 실기 둘 다</b></span><span class="wk-chip">✍️ 12주차 “기말고사 필기와 실기 둘다 봄” — <b>필기</b> = 중간고사처럼 <b>이론 맞히기</b></span><span class="wk-chip"><b>실기</b> = <b>미니게임 만들기</b> (주제는 아직 안 정해짐)</span><span class="wk-chip">⚠️ 10주차엔 “필기가 아닌 실기로 시행함” 이었는데 12주차에 바뀜</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><div class="wk-pick"><div class="wk-pick-wk"><div class="wk-pick-h">9주차</div><ul><li><b>이벤트 · 이벤트 소스 · 이벤트 핸들러 · 이벤트 객체</b> — ✍️ “기말고사에 나옴”</li></ul></div><div class="wk-pick-wk"><div class="wk-pick-h">12주차</div><ul><li><b>HTTP 메시지 구조</b> — 시작 줄 · 헤더 · 빈 줄 · 바디 (✍️ 구글 캡처 “시험문제”)</li></ul></div></div></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip"><b>필기 + 실기 둘 다</b></span><span class="wk-chip">✍️ 12주차 “기말고사 필기와 실기 둘다 봄” — <b>필기</b> = 중간고사처럼 <b>이론 맞히기</b></span><span class="wk-chip"><b>실기</b> = <b>미니게임 만들기</b> (주제는 아직 안 정해짐)</span><span class="wk-chip">⚠️ 10주차엔 “필기가 아닌 실기로 시행함” 이었는데 12주차에 바뀜</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">9주차</span><b>이벤트 · 이벤트 소스 · 이벤트 핸들러 · 이벤트 객체</b> — ✍️ “기말고사에 나옴”</li><li><span class="wk-exam-wk">12주차</span><b>HTTP 메시지 구조</b> — 시작 줄 · 헤더 · 빈 줄 · 바디 (✍️ 구글 캡처 “시험문제”)</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">찍어 준 것 — 답 · 핵심</span></summary><div class="wm-body"><table class="ref">
 <tbody>
 <tr><th>찍어 준 것</th><th>핵심 · 답</th></tr>
 <tr><td><b>HTTP 메시지 구조</b></td><td>클라이언트 · 서버가 주고받는 정해진 형식의 데이터 단위 · <b>요청 · 응답</b> 2가지 · 위에서부터 <b>① 시작 줄</b>(요청 <code>GET /users/1 HTTP/1.1</code> · 응답 <code>HTTP/1.1 200 OK</code>) <b>② 헤더</b>(부가 정보 <code>이름: 값</code>) <b>③ 빈 줄</b>(CRLF · 헤더 끝) <b>④ 바디</b>(데이터 · 선택 사항)</td></tr>
 <tr><td><b>이벤트 4요소</b></td><td><b>이벤트</b> = 웹에서 발생하는 사건 (<code>'click'</code>) · <b>이벤트 소스</b> = 이벤트가 발생한 근원지 (<code>addBtn</code> 버튼) · <b>이벤트 핸들러</b>(= 리스너) = 이벤트가 일어나면 실행되는 함수 (<code>function(){…}</code>) · <b>이벤트 객체</b> = 발생한 이벤트의 정보 (핸들러의 매개변수 <code>e</code> → <code>e.type</code> 은 click · <code>e.target</code> 은 누른 버튼)</td></tr>
 </tbody></table></div></details></dd><dd class="wk-exam-note">📌 일시 · 범위는 아직 안내 전 — 교수님이 알려 주면 이 카드에 더해요 · 필기 대비는 🔒 실제시험의 퀴즈 · 출력결과 · 실기(미니게임) 대비는 11주차 미니게임 과제 + 🔒 실제시험의 코드 작성 문제로.</dd></dl></section>
+<div class="wk-hot"><div class="wk-hot-h">🔥 기말고사 — 교수님이 찍어 준 문제 (9 ~ 14주차)</div>
+<div class="wk-hotwk"><div class="wk-hotwk-h"><span>9주차</span><a href="웹프로그래밍-9주차.html">9주차 페이지 ›</a></div>
 <section class="card" id="s1">
+<h2>1. 🔥 이벤트 4요소 — 기말고사에 나옴 (1027_01_event.html)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “(이벤트,이벤트소스,이벤트헨들러,이벤트객체) <b>기말고사에 나옴</b>”</p>
+<table class="ref">
+<tbody>
+<tr><th>4요소</th><th>뜻 (2주차 정리)</th><th>오늘 코드에서</th></tr>
+<tr><td><b>이벤트</b></td><td>웹에서 발생하는 <b>사건</b> (클릭 등)</td><td><code>'click'</code> — addEventListener 의 첫 번째 인자</td></tr>
+<tr><td><b>이벤트 소스</b></td><td>이벤트가 발생한 <b>근원지</b> (요소)</td><td><code>addBtn</code> — 목록 추가 버튼</td></tr>
+<tr><td><b>이벤트 핸들러</b> (= 리스너)</td><td>이벤트가 일어나면 <b>실행되는 코드(함수)</b></td><td><code>function(){ … }</code> — 두 번째 인자</td></tr>
+<tr><td><b>이벤트 객체</b></td><td>발생한 이벤트의 <b>정보</b>를 담은 객체</td><td>🤖 핸들러의 매개변수 <code>e</code> 로 받음 (오늘 코드는 받지 않음 · 아래 확인 코드)</td></tr>
+</tbody></table>
+<ul><li>⚠️ 필기 오타 <code>이벤트헨들러</code> → <b>이벤트 핸들러</b> (handler)</li><li>⚠️ <b>팩트체크</b> — 수업 코드 주석은 같은 함수를 <b>‘이벤트리스너’</b> 라고 했어요. MDN 정의: <b>리스너</b> = 이벤트가 일어나는지 기다리는 쪽(<code>addEventListener</code> 로 등록) · <b>핸들러</b> = 이벤트가 일어나면 <b>불리는 함수</b> → 둘이 함께 일하고, 수업에서는 같은 뜻으로 써요 (2주차 “이벤트 핸들러(=이벤트 리스너)”).</li></ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;                                                  &lt;!-- HTML5 문서라고 알림 --&gt;
+&lt;html lang="ko"&gt;                                                 &lt;!-- 문서 시작 · 한국어 --&gt;
+&lt;head&gt;                                                           &lt;!-- 문서 정보 시작 --&gt;
+    &lt;meta charset="UTF-8"&gt;                                       &lt;!-- 한글이 깨지지 않게 UTF-8 --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;   &lt;!-- 폰 화면 폭에 맞춤 --&gt;
+    &lt;title&gt;Document&lt;/title&gt;                                      &lt;!-- 탭 제목 --&gt;
+    &lt;style&gt;                                                      /* CSS 시작 */
+        #add-btn{                                                /* id 가 add-btn 인 버튼 */
+            padding: 5px 10px;                                   /* 안쪽 여백 위아래 5px · 좌우 10px */
+            border: 0;                                           /* 테두리 없앰 */
+            background: #f80;                                    /* 주황 배경 */
+            color: white;                                        /* 흰 글자 */
+            border-radius: 5px;                                  /* 모서리 둥글게 */
+        }                                                        /* #add-btn 끝 */
+        ul {                                                     /* 목록 */
+            padding: 0;                                          /* 왼쪽 들여쓰기 없앰 */
+            list-style-position: inside;                         /* 글머리 기호(•)를 안쪽에 */
+        }                                                        /* ul 끝 */
+        li {                                                     /* 목록 한 줄 */
+            border-bottom: 1px solid #999;                       /* 아래 회색 선 */
+            padding: 5px 0;                                      /* 위아래 여백 5px */
+        }                                                        /* li 끝 */
+        .active {                                                /* active 클래스 (오늘 코드에서는 아직 안 씀) */
+            background: #abc;                                    /* 연한 파랑 배경 */
+        }                                                        /* .active 끝 */
+    &lt;/style&gt;                                                     &lt;!-- CSS 끝 --&gt;
+&lt;/head&gt;                                                          &lt;!-- 문서 정보 끝 --&gt;
+&lt;body&gt;                                                           &lt;!-- 화면에 보이는 부분 --&gt;
+    &lt;h1 id="title"&gt;할일 목록&lt;/h1&gt;                                 &lt;!-- 제목 --&gt;
+    &lt;button id="add-btn"&gt;목록 추가&lt;/button&gt;                       &lt;!-- 🔥 이벤트 소스가 될 버튼 --&gt;
+    &lt;ul id="list"&gt;                                               &lt;!-- 할 일 목록 (새 li 가 끝에 붙는 곳) --&gt;
+        &lt;li&gt;제목 1&lt;/li&gt;                                           &lt;!-- 처음부터 있는 항목 1 --&gt;
+        &lt;li&gt;제목 2&lt;/li&gt;                                           &lt;!-- 항목 2 --&gt;
+        &lt;li&gt;제목 3&lt;/li&gt;                                           &lt;!-- 항목 3 --&gt;
+        &lt;li&gt;제목 4&lt;/li&gt;                                           &lt;!-- 항목 4 --&gt;
+    &lt;/ul&gt;                                                        &lt;!-- 목록 끝 --&gt;
+    &lt;script&gt;                                                     // 자바스크립트 시작 (위의 요소들이 이미 있어서 찾을 수 있음)
+        let title = document.getElementById('title');           // id 로 h1 찾기 (오늘 코드에서는 안 씀)
+        let list = document.getElementById('list');             // ul 요소 → 새 li 를 붙일 곳
+        let li = document.getElementsByTagName('li');           // li 요소들 → 지금 4개 · 추가하면 5개로 저절로 늘어남
+        let addBtn = document.getElementById('add-btn');        // 버튼 요소 → 🔥 이벤트 소스
+
+        addBtn.addEventListener('click',function(){ //이벤트,이벤트리스너,이벤트소스 ← 'click' = 이벤트 · function = 핸들러(리스너) · addBtn = 소스
+            let txt=prompt("할 일 입력");                         // 입력 창 → 입력한 글자가 txt 에 ("제목 5")
+            list.innerHTML+='&lt;li&gt;'+txt+'&lt;/li&gt;';                  // 원래 목록 HTML + "&lt;li&gt;제목 5&lt;/li&gt;" → 목록 끝에 추가
+        });                                                      // 핸들러 함수 끝 · addEventListener 끝
+    &lt;/script&gt;                                                    &lt;!-- 스크립트 끝 --&gt;
+&lt;/body&gt;                                                          &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                          &lt;!-- 문서 끝 --&gt;</code></pre>
+<div class="tip">▶ 크롬에서 직접 눌러 본 결과 — <b>목록 추가</b> 를 누르면 <code>할 일 입력</code> 창이 뜨고, <code>제목 5</code> 를 입력하면 목록 <b>맨 끝에 제목 5</b> 가 붙어요 (li 4개 → 5개) · <code>getElementsByTagName</code> 으로 받은 <code>li</code> 는 새로 붙은 li 까지 저절로 세어서 5 가 돼요.</div>
+<h3>🤖 이벤트 객체 e 확인 — 핸들러에 매개변수를 하나 받으면 브라우저가 넣어 줘요</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;                                         &lt;!-- HTML5 문서 --&gt;
+&lt;html lang="ko"&gt;                                        &lt;!-- 문서 시작 --&gt;
+&lt;body&gt;                                                  &lt;!-- 화면 --&gt;
+    &lt;button id="btn"&gt;눌러 보기&lt;/button&gt;                   &lt;!-- 이벤트 소스가 될 버튼 --&gt;
+    &lt;script&gt;                                            // 자바스크립트 시작
+        let btn = document.getElementById('btn');       // 버튼 요소를 찾아 btn 에
+        btn.addEventListener('click', function (e) {    // 'click' = 이벤트 · function = 핸들러 · e = 이벤트 객체 (브라우저가 넣어 줌)
+            console.log(e.type);                        // 무슨 이벤트? → click
+            console.log(e.target.id);                   // 이벤트가 일어난 요소(소스)의 id → btn
+        });                                             // 핸들러 끝 · addEventListener 끝
+    &lt;/script&gt;                                           &lt;!-- 스크립트 끝 --&gt;
+&lt;/body&gt;                                                 &lt;!-- 화면 끝 --&gt;
+&lt;/html&gt;                                                 &lt;!-- 문서 끝 --&gt;</code></pre>
+<pre class="io"><code class="language-text">click
+btn</code></pre>
+<div class="tip">MDN — 이벤트 객체는 핸들러에 <b>자동으로 전달</b>되고 이름은 <code>e</code> · <code>evt</code> · <code>event</code> 처럼 마음대로 · <code>e.target</code> = 이벤트가 <b>일어난 요소</b> (= 이벤트 소스) · 버튼을 누른 뒤 크롬 콘솔에 찍힌 값이에요.</div>
+</section>
+</div>
+<div class="wk-hotwk"><div class="wk-hotwk-h"><span>12주차</span><a href="웹프로그래밍-12주차.html">12주차 페이지 ›</a></div>
+<section class="card" id="s2">
+<h2>1. 🔥 ✍️ 기말고사 — 필기 + 실기 둘 다</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — “기말고사 필기와 실기 둘다 봄 · 필기는 중간고사 처럼 이론 맞히기 · 실기는 미니게임 만들기 (주제는 아직 안 정해지고 뭐가 나올지 모름)”</p>
+<table class="ref">
+<tbody>
+<tr><th>기말고사</th><th>내용 (필기 그대로)</th></tr>
+<tr><td><b>필기</b></td><td>중간고사처럼 <b>이론 맞히기</b></td></tr>
+<tr><td><b>실기</b></td><td><b>미니게임 만들기</b> — 주제는 아직 안 정해짐 (뭐가 나올지 모름)</td></tr>
+</tbody></table>
+<ul><li>⚠️ 10주차 필기 “기말고사는 필기가 아닌 실기로 시행함” → 오늘(12주차) <b>필기 + 실기 둘 다</b>로 바뀌었어요 · <a href="웹프로그래밍-15주차-기말고사.html">기말고사 정리</a> 맨 위 카드도 고쳤어요</li><li>🤖 실기 연습 = 11주차 미니게임 과제 (두더지게임 같은 미니게임 · 배운 내장객체 · 함수만 · 200줄 이하) — 과제의 뜻도 “배운 범위에서 1 ~ 2시간 안에 만들 수 있는 기말 문제 후보” 였어요 (11/15)</li></ul>
+</section>
+<section class="card" id="s3">
+<h2>5. 🔥 HTTP 메시지 구조 (시험문제)</h2>
+<p><span class="wk-tag note">✍️ 필기</span> — 구글 검색 “http메시지 구조가 뭐야” 캡처 + “구글 검색 캡처한거 claude 가 그림 그려서 정리하고 사진은 지워도 됨 (<b>시험문제</b>)”</p>
+<ul><li><b>HTTP 메시지</b> = 클라이언트(웹 브라우저 등)와 서버가 데이터를 주고받을 때 쓰는 <b>정해진 형식의 데이터 단위</b></li><li>종류 <b>2가지</b> — <b>요청(Request) 메시지</b> (클라이언트 → 서버) · <b>응답(Response) 메시지</b> (서버 → 클라이언트)</li><li>구조 <b>4부분</b> — 위에서부터 순서대로 <b>시작 줄 → 헤더 → 빈 줄 → 바디</b></li></ul>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>순서</th><th>부분</th><th>하는 일</th><th>요청 예 (fetch users/1)</th><th>응답 예</th></tr>
+<tr><td>①</td><td><b>시작 줄</b> (Start Line)</td><td>메시지의 <b>목적</b> — 요청은 <b>방식 · 주소 · 버전</b> · 응답은 <b>버전 · 상태 코드 · 상태 글</b></td><td><code>GET /users/1 HTTP/1.1</code></td><td><code>HTTP/1.1 200 OK</code></td></tr>
+<tr><td>②</td><td><b>헤더</b> (Header)</td><td>메시지에 대한 <b>부가 정보</b>(메타데이터) · <code>이름: 값</code> 줄 여러 개</td><td><code>Host: jsonplaceholder.typicode.com</code></td><td><code>Content-Type: application/json; charset=utf-8</code></td></tr>
+<tr><td>③</td><td><b>빈 줄</b> (Empty Line · CRLF)</td><td><b>헤더가 끝났다</b>는 표시 → 헤더와 바디를 <b>구분</b></td><td>(빈 줄)</td><td>(빈 줄)</td></tr>
+<tr><td>④</td><td><b>바디</b> (Message Body)</td><td>실제로 보내거나 돌려받는 <b>데이터</b> (payload) · <b>선택 사항</b> — 없을 수도 있음</td><td>없음 (GET)</td><td><code>{"id": 1, "name": "Leanne Graham", …}</code></td></tr>
+</tbody></table>
+<ul><li>⚠️ <b>팩트체크</b> — 캡처(구글 AI 개요 · 출처 MDN) 내용은 MDN “HTTP messages” 와 같아요 (시작 줄은 <b>한 줄</b> · 헤더와 바디는 <b>선택</b> · 빈 줄로 헤더 끝을 알림) · 표의 요청 · 응답 줄은 curl 로 jsonplaceholder 에 직접 요청해서 받은 <b>실제 값</b>이에요 (헤더는 일부만)</li><li>🤖 <b>CRLF</b> = 줄 끝 표시 두 글자 <code>\r</code> (Carriage Return) + <code>\n</code> (Line Feed) — 빈 줄 = CRLF 만 있는 줄 · 🤖 응답 시작 줄의 <b>200</b> = 상태 코드(성공 · OK)</li><li>🤖 요청 방식(GET · POST …)은 요청 메시지 <b>시작 줄의 맨 앞</b>에 들어가요 (7번)</li></ul>
+</section>
+</div>
+</div>
+<section class="card" id="s4">
 <h2>📦 배열 메서드 실험실 — 버튼으로 눌러 보기</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-배열메서드.html" title="📦 배열 메서드 실험실" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-배열메서드.html" target="_blank" rel="noopener">🎬 📦 배열 메서드 실험실 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 <ul><li>10 · 11주차에 배운 배열 메서드 <b>13가지</b> — 누르면 배열이 바뀌는 모습 · <b>돌려준 값</b> · <b>원본이 바뀌는지</b>가 보여요</li><li>🔧 요소 조작 push · pop · shift · unshift / ✂️ 새 배열 slice · concat · map · filter / 🔍 순회 · 탐색 forEach · includes · indexOf · findIndex / 🔁 유사 배열 → 배열 Array.from · spread</li></ul>
 </section>
-<section class="card" id="s2">
+<section class="card" id="s5">
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/웹프로그래밍-그림정리.html?weeks=9-15#event" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/웹프로그래밍-그림정리.html?weeks=9-15#event" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <ul><li>9주차 — ① 🔥 이벤트 4요소 · ② 요청 · 응답 · ③ 요소 순회</li><li>10주차 — ④ 누른 항목 선택 (이벤트 위임) · ⑤ 요소 조작 6가지 · ⑥ 순회 · 탐색 · ⑦ 프런트 · CRUD</li><li>11주차 — ⑧ 두더지 좌표 · ⑨ setInterval 흐름 · ⑩ map · filter · ⑪ 유사 배열 · 선택 삭제</li><li>12주차 — ⑫ 핸들러 3가지 · ⑬ onload 순서 · ⑭ 🔥 HTTP 메시지 · ⑮ DNS · URL · ⑯ 단일 · 멀티 스레드</li><li>13주차 — ⑰ 콜백 · 콜백 지옥 · ⑱ Promise 상태 · ⑲ 실행 순서</li></ul>
 </section>
-<section class="card" id="s3">
+<section class="card" id="s6">
 <h2>9주차 · 이벤트 4요소 · 요소 순회 · 요청과 응답</h2>
 <table class="ref">
 <tbody>
@@ -144,7 +259,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="웹프로그래밍-9주차.html">9주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s4">
+<section class="card" id="s7">
 <h2>10주차 · 🔥 기말 = 실기 (⚠️ 12주차: 필기 + 실기) · 누른 항목 선택 · 배열 메서드 · CRUD</h2>
 <table class="ref">
 <tbody>
@@ -162,7 +277,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="웹프로그래밍-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s5">
+<section class="card" id="s8">
 <h2>11주차 · 🎮 미니게임 과제 · 두더지잡기 · 선택 삭제 · map · filter</h2>
 <table class="ref">
 <tbody>
@@ -178,7 +293,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="웹프로그래밍-11주차.html">11주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s6">
+<section class="card" id="s9">
 <h2>12주차 · 🔥 HTTP 메시지 구조 · 이벤트 핸들러 3가지 · onload · fetch · DNS · 요청 방식 · CRUD</h2>
 <table class="ref">
 <tbody>
@@ -195,7 +310,7 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="웹프로그래밍-12주차.html">12주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s7">
+<section class="card" id="s10">
 <h2>13주차 · 콜백 · 콜백 지옥 · Promise · async / await · HTTP 메서드</h2>
 <table class="ref">
 <tbody>

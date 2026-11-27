@@ -14,6 +14,10 @@
     <link rel="apple-touch-icon" href="../icon-180.png">
     <link rel="stylesheet" href="../style.css?v=202611260939">
     <style>
+.wk-hotwk{border:1px solid #e5484d;border-radius:14px;padding:8px 8px 0;margin:0 0 10px;}
+.wk-hotwk-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:800;color:#e5484d;font-size:15px;margin:2px 6px 8px;}
+.wk-hotwk-h a{font-size:12.5px;font-weight:700;color:#e5484d;text-decoration:none;}
+.wk-hotwk>section.card{margin-bottom:8px;}
 .wk-hot{border:3px solid #e5484d;border-radius:18px;padding:10px 10px 0;margin:16px 0 18px;}
 .wk-hot-h{font-weight:800;color:#e5484d;font-size:15.5px;margin:2px 6px 10px;}
 .wk-hot>section.card.wk-hot-sec{border:1px solid #e5484d !important;margin-bottom:10px;}
@@ -114,25 +118,650 @@ pre.io.bits::before{content:"🧮 2진수로 풀어 보기";}
     <nav class="wk-pager"><a class="prev" href="프로그래밍언어실습-13주차.html">‹ 이전 · <b>13주차</b><br><small>문자열 (w13) — 명령행 인수 argc · argv · 문자 입출력 · 문자열 · 문자열 함수 + 🔥 기말고사 시험 방식</small></a><span></span></nav>
 
 <p class="wk-exambtn"><a href="../프로그래밍언어실습-실제시험.html"><span class="eb-ic">📝</span><span class="eb-body"><span class="eb-t">실제시험 모드</span><span class="eb-s">여기를 누르면 시험 화면으로 → 비밀번호 넣고 시작 · 관리자가 없으면 혼자 풀기</span></span><span class="eb-go">시작하기 →</span></a></p>
-<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">안내 전</span><span class="wk-exam-where">날짜 · 장소가 나오면 추가</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip">실행결과를 작성하시오</span><span class="wk-chip">미완성된 코드와 실행결과를 보고 코드 괄호넣기</span><span class="wk-chip">문법오류를 체크하시오</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">1장 ~ 12장</span><span class="wk-chip">구조체는 미출제</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><div class="wk-pick"><div class="wk-pick-wk"><div class="wk-pick-h">10주차</div><ul><li>8페이지 왼쪽 → 오른쪽 · 14페이지 sizeof</li></ul></div><div class="wk-pick-wk"><div class="wk-pick-h">11주차</div><ul><li>오류 수정 · 9페이지 · 12페이지 외우기 · 실습 코드 실행 결과 · pointer-03 숫자만 바꿔서</li></ul></div><div class="wk-pick-wk"><div class="wk-pick-h">12주차</div><ul><li>오늘 한 거 실행결과(이중 · 배열 · 함수 · void 포인터) · 강의자료 5페이지 · ++ptr 1004 / 1001 · 포인터 종류</li></ul></div><div class="wk-pick-wk"><div class="wk-pick-h">13주차</div><ul><li>13페이지 Hello 를 출력하는 방법 2개(포인터로 출력) · 배열을 입력받는 scanf 에 &amp; 를 쓰면 오류 · b 가 a 를 포인터로 참조하면 값 하나만 바꿔도 2개가 바뀜</li></ul></div></div></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">13주차에 찍어 준 것 — 답 한 줄</span></summary><div class="wm-body"><table class="ref">
+<section class="wk-exam" aria-label="교수님 시험 안내"><div class="wk-exam-head"><span class="wk-exam-badge">📋 교수님 시험 안내</span><span class="wk-exam-when">안내 전</span><span class="wk-exam-where">날짜 · 장소가 나오면 추가</span></div><dl class="wk-exam-grid"><dt>📝 시험 방식</dt><dd><span class="wk-chip">실행결과를 작성하시오</span><span class="wk-chip">미완성된 코드와 실행결과를 보고 코드 괄호넣기</span><span class="wk-chip">문법오류를 체크하시오</span></dd><dt>🗂 시험 범위</dt><dd><span class="wk-chip">1장 ~ 12장</span><span class="wk-chip">구조체는 미출제</span></dd><dt>🔥 교수님이 찍어 준 것</dt><dd><ol class="wk-exam-list"><li><span class="wk-exam-wk">10주차</span>8페이지 왼쪽 → 오른쪽 · 14페이지 sizeof</li><li><span class="wk-exam-wk">11주차</span>오류 수정 · 9페이지 · 12페이지 외우기 · 실습 코드 실행 결과 · pointer-03 숫자만 바꿔서</li><li><span class="wk-exam-wk">12주차</span>오늘 한 거 실행결과(이중 · 배열 · 함수 · void 포인터) · 강의자료 5페이지 · ++ptr 1004 / 1001 · 포인터 종류</li><li><span class="wk-exam-wk">13주차</span>13페이지 Hello 를 출력하는 방법 2개(포인터로 출력) · 배열을 입력받는 scanf 에 &amp; 를 쓰면 오류 · b 가 a 를 포인터로 참조하면 값 하나만 바꿔도 2개가 바뀜</li></ol></dd><dd class="wk-exam-more"><details><summary><span class="wm-open">🔎 자세히 보기</span><span class="wm-close">▲ 접기</span><span class="wm-sub">13주차에 찍어 준 것 — 답 한 줄</span></summary><div class="wm-body"><table class="ref">
 <tbody>
 <tr><th>찍어 준 것</th><th>핵심 · 답</th></tr>
 <tr><td>13쪽 Hello 2가지</td><td><code>char a1[6] = {'H','e','l','l','o','\0'};</code> (배열) · <b><code>char* a2 = "Hello";</code></b> (포인터) → 둘 다 <code>%s</code> 로 <code>Hello</code></td></tr>
 <tr><td>문법오류 체크</td><td><code>scanf("%s", a1);</code> 배열은 <b>&amp; 없이</b> · <code>scanf("%d", &amp;a2);</code> 보통 변수는 &amp; · <code>&amp;a1</code> 은 오류로 봄 (clang 은 경고)</td></tr>
 <tr><td>포인터로 같이 바뀜</td><td><code>int* b = &amp;a; *b = 20;</code> → <b>a = 20 · *b = 20</b> · <code>a = 30;</code> 이면 <code>*b</code> 도 30 (바뀌는 칸은 a 하나)</td></tr>
 </tbody></table></div></details></dd><dd class="wk-exam-note">📌 ✍️ 13주차 노션 — 시험 방식 3가지 · 범위 1 ~ 12장(구조체 X) · 중간고사 때 “9장도 함수에서 배열은 빼고 배열을 기말고사에” (7주차) → 8장 배열 · 함수 속 배열도 기말</dd></dl></section>
+<div class="wk-hot"><div class="wk-hot-h">🔥 기말고사 — 교수님이 찍어 준 문제 (9 ~ 14주차)</div>
+<div class="wk-hotwk"><div class="wk-hotwk-h"><span>10주차</span><a href="프로그래밍언어실습-10주차.html">10주차 페이지 ›</a></div>
 <section class="card" id="s1">
+<h2>① 🔥 기말고사 — 8쪽 왼쪽 코드 → 오른쪽 코드 (요소마다 printf → for 문)</h2>
+<p>📄 왼쪽 — 배열 요소마다 printf 를 한 줄씩</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int array1[3];                                  // int 3칸 배열 → array1[0] · array1[1] · array1[2]
+    array1[0] = 10;                                 // 0번 칸에 10
+    array1[1] = 20;                                 // 1번 칸에 20
+    array1[2] = 30;                                 // 2번 칸에 30
+
+    printf("array1[0]: %d\n", array1[0]);           // array1[0] = 10 → "array1[0]: 10"
+    printf("array1[1]: %d\n", array1[1]);           // array1[1] = 20 → "array1[1]: 20"
+    printf("array1[2]: %d\n", array1[2]);           // array1[2] = 30 → "array1[2]: 30"
+
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<p>📄 오른쪽 — 같은 출력을 <b>for 문 하나</b>로</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int array1[3];                                  // int 3칸 배열
+    int i;                                          // ✅ 반복에 쓸 첨자 변수 — 왼쪽에는 없던 줄
+    array1[0] = 10;                                 // 0번 칸에 10
+    array1[1] = 20;                                 // 1번 칸에 20
+    array1[2] = 30;                                 // 2번 칸에 30
+
+    for (i = 0; i &lt; 3; i++)                         // i = 0 → 1 → 2 (3번 · i &lt; 3 = 칸 수) — ✍️ "i 는 0부터 2까지 반복"
+        printf("array1[%d]: %d\n", i, array1[i]);   // %d 두 개 ← i 와 array1[i] → "array1[0]: 10" · "array1[1]: 20" · "array1[2]: 30"
+
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<p>▶ 왼쪽 · 오른쪽 출력이 <b>똑같아요</b></p>
+<pre class="io"><code class="language-text">array1[0]: 10
+array1[1]: 20
+array1[2]: 30</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>바꾸는 곳</th><th>왼쪽 (8쪽)</th><th>오른쪽 (8쪽)</th></tr>
+<tr><td>변수</td><td>배열만</td><td><b><code>int i;</code></b> 를 추가 (첨자로 씀)</td></tr>
+<tr><td>출력</td><td>printf <b>3줄</b> — 첨자 0 · 1 · 2 를 직접 씀</td><td><b><code>for (i = 0; i &lt; 3; i++)</code></b> + printf <b>1줄</b></td></tr>
+<tr><td>서식</td><td><code>"array1[0]: %d\n"</code> — 글자 <code>0</code> 이 서식 안에 박혀 있음</td><td><code>"array1[%d]: %d\n"</code> — 첨자도 <b><code>%d</code></b> 로 찍음</td></tr>
+<tr><td>값</td><td><code>array1[0]</code> · <code>array1[1]</code> · <code>array1[2]</code></td><td><b><code>i, array1[i]</code></b> (순서 주의: 첨자 → 값)</td></tr>
+</tbody></table>
+<ul><li>🔥 조건은 <b><code>i &lt; 3</code></b> (칸 수) — <code>i &lt;= 3</code> 이면 없는 칸 <code>array1[3]</code> 까지 읽어요 (첨자는 0 ~ 2)</li><li>같은 생각 — 📄 7쪽 <code>student[0] = 5; … student[3] = 5;</code> 4줄 → <code>for(i=0; i&lt;5; i++) student[i] = 5;</code> (반복문 사용 · 🤖 7쪽 왼쪽은 4칸, 오른쪽은 <code>i&lt;5</code> 라 5칸에 넣어요 — 자료 그대로)</li></ul>
+</section>
+<section class="card" id="s2">
+<h2>② 🔥 기말고사 — 14쪽 sizeof 문제 ([실습 1-01] array01.c)</h2>
+<pre><code class="language-c">#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int count[5];   // 정수형 1차원 배열            // int(4바이트) 5칸 → 4 × 5 = 20바이트
+    int i;                                          // 반복에 쓸 첨자
+
+    printf("배열의 전체크기:%d, 하나의 원소크기: %d\n",   // %d 두 개
+        sizeof(count), sizeof(count[0]));           // sizeof(배열 이름) = 전체 20 · sizeof(count[0]) = 원소 하나 4
+
+    count[0] = 100;   // 각각의 원소에 값을 할당    // 0번 칸 = 100
+    count[1] = 200;                                 // 1번 칸 = 200
+    count[2] = 300;                                 // 2번 칸 = 300
+    count[3] = 400;                                 // 3번 칸 = 400
+    count[4] = 500;                                 // 4번 칸 = 500 (마지막 칸 = 칸 수 - 1)
+
+    printf("\n%d, %d, %d, %d, %d \n",               // 맨 앞 \n → 빈 줄 하나 먼저 · 끝 %d 뒤에 칸 하나
+        count[0], count[1], count[2], count[3], count[4]);   // 100, 200, 300, 400, 500
+
+    for (i = 0; i &lt; 5; i++)                         // i = 0 ~ 4 (5번)
+        printf("%d, ", count[i]);                   // "100, " → "200, " → … → "500, " (한 줄로 이어짐)
+    printf("\n");                                   // 다 찍고 줄바꿈
+
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">배열의 전체크기:20, 하나의 원소크기: 4
+
+100, 200, 300, 400, 500 
+100, 200, 300, 400, 500, </code></pre>
+<ul><li>🔥 <b><code>sizeof(배열이름)</code> = 배열 전체 바이트</b> — <code>int count[5]</code> → 4바이트 × 5칸 = <b>20</b> · <b><code>sizeof(count[0])</code> = 원소 하나</b> → <b>4</b></li><li>🔥 <b>칸 수 = <code>sizeof(count) / sizeof(count[0])</code></b> = 20 / 4 = <b>5</b> (📄 과제 07arysize.c 와 같은 방법)</li><li>둘째 줄이 <b>빈 줄</b> — 두 번째 printf 서식이 <code>"\n%d, …"</code> 로 <b><code>\n</code> 부터</b> 시작해서 (시험 ✍️ “<code>\n</code> 있나 없나 주의”)</li><li>🤖 <code>sizeof</code> 의 결과는 <code>size_t</code>(부호 없는 정수)라 정확한 서식은 <code>%zu</code> · 수업 코드처럼 <code>%d</code> 로 찍어도 VS 에서 같은 값이 나와요 (경고만)</li><li>✍️ 필기 — <code>int count[5];</code> → int = 4byte 이므로 <b>20byte</b> 필요 · <code>short student[10];</code> → short = 2byte × 10 = <b>20byte</b></li></ul>
+</section>
+</div>
+<div class="wk-hotwk"><div class="wk-hotwk-h"><span>11주차</span><a href="프로그래밍언어실습-11주차.html">11주차 페이지 ›</a></div>
+<section class="card" id="s3">
+<h2>① 🔥 기말고사 — 오류 수정: 배열 크기는 컴파일 시간에 (4쪽)</h2>
+<p>✍️ 노션 “다음 코드를 보고 오류가 나는 곳을 수정하시오 — 1. 컴파일 시간 2. 런타임”</p>
+<p>📄 4쪽 주의 — 오류 나는 코드</p>
+<pre><code class="language-c">int count = 10;          // count 는 '변수' → 값이 실행할 때(런타임) 정해짐
+short student[count];    // ❌ error — 배열 칸 수는 컴파일할 때 알아야 하는데 변수로 줌</code></pre>
+<p>✅ 고친 코드 ① — 칸 수를 <b>숫자(상수)</b> 로</p>
+<pre><code class="language-c">short student[10];       // ✅ ok — 10 은 컴파일 시간에 정해진 값</code></pre>
+<p>✅ 고친 코드 ② — ✍️ <b><code>#define</code></b> 으로 이름 붙인 상수</p>
+<pre><code class="language-c">#define MAX 10           // 전처리기가 컴파일 전에 MAX 를 10 으로 바꿈
+short student[MAX];      // ✅ ok — 컴파일러가 보는 코드는 short student[10];</code></pre>
+<ul><li>📄 4쪽 — <b>일반 변수</b>는 컴파일 시간에 자료형으로 크기가 정해지지만, <b>배열 변수</b>는 크기를 알아야 하므로 <b>원소 개수를 컴파일 시간 전에 알 수 있어야</b> 한다 → <code>자료형 배열명[원소개수];</code></li><li>🤖 “1. 컴파일 시간 2. 런타임” = 배열 칸 수는 <b>컴파일 시간</b>에 정해져야 하는데 <code>count</code> 는 <b>실행(런타임)</b> 때 값이 정해지는 변수라서 오류</li><li>⚠️ 팩트체크 — <b>Visual Studio(수업 환경)는 컴파일 오류</b> (C2057 상수 식이 필요합니다). 🤖 gcc · clang 은 C99 의 <b>가변 길이 배열(VLA)</b> 로 지역 배열이면 통과해요 (직접 확인: <code>clang -std=c11</code> 통과 · <code>-std=c89 -pedantic-errors</code> 는 “variable length arrays are a C99 feature” 오류) → 시험 답은 수업대로 <b>상수로 고치기</b></li></ul>
+</section>
+<section class="card" id="s4">
+<h2>② 🔥 기말고사 — 9쪽 [실습 1-01] 매개변수가 배열 타입 (외우기)</h2>
+<p>📄 9쪽 · ✍️ “매개변수에 배열을 보냄 · <code>printf("%d", );</code> · <code>printf("%p", );</code>”</p>
+<pre><code class="language-c">// w11-ex01_01-array.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+void test(int v1[]) {                               // 매개변수가 배열 타입 — 받는 것은 배열의 '시작 주소'
+    int i;                                          // 반복에 쓸 첨자
+    for (i = 0; i &lt; 5; i++) {                       // i = 0 → 4 (5번)
+        printf("v1[%d]: %d\n", i, v1[i]);           // v1[0] = 보낸 배열의 0번 칸 → 10 (array2 면 100) …
+    }                                               // for 끝
+}                                                   // test 끝 (반환값 없음 → void)
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int array1[] = {10, 20, 30, 40, 50};            // 크기 생략 → 값 5개라 5칸
+    int array2[] = {100, 200, 300, 400, 500};       // 5칸
+    test(array1);                                   // 배열 이름 = 시작 주소 → test 의 v1 이 array1 을 가리킴
+    printf("--------------------\n");               // 구분선
+    test(array2);                                   // 이번엔 array2 의 시작 주소 → 100 ~ 500 출력
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">v1[0]: 10
+v1[1]: 20
+v1[2]: 30
+v1[3]: 40
+v1[4]: 50
+--------------------
+v1[0]: 100
+v1[1]: 200
+v1[2]: 300
+v1[3]: 400
+v1[4]: 500</code></pre>
+<ul><li>함수에 배열을 보낼 때는 <b>배열 이름만</b> (<code>test(array1)</code> · 대괄호 X) → 📄 8쪽 “함수 호출할 때 배열의 주소값을 전달하면 함수 안에서 배열을 사용할 수 있다”</li><li>✍️ <code>printf("%d", )</code> = <b>값</b>(정수) · <code>printf("%p", )</code> = <b>주소</b>(포인터) — 🤖 함수 안에서 <code>printf("%p\n", v1);</code> 을 찍으면 main 의 <code>printf("%p\n", array1);</code> 과 <b>같은 주소</b> (주소 자체는 실행마다 다름)</li></ul>
+</section>
+<section class="card" id="s5">
+<h2>③ 🔥 기말고사 — 12쪽 [실습 1-03] 매개변수가 포인터 (외우기)</h2>
+<pre><code class="language-c">// w11-ex01_03-pointer.c
+#include &lt;stdio.h&gt;                                  // printf 를 쓰기 위한 표준 입출력 헤더
+
+void test(int* v1) {                                // 매개변수가 포인터 — int 칸의 주소를 받음 (9쪽 int v1[] 와 같은 뜻)
+    int i;                                          // 반복에 쓸 첨자
+    for (i = 0; i &lt; 5; i++) {                       // i = 0 → 4 (5번)
+        printf("*(v1 + %d): %d\n", i, *(v1 + i));   // v1 + i = i칸 뒤 주소 → * 로 그 칸의 값 → 10, 20 … (array2 면 100 …)
+    }                                               // for 끝
+}                                                   // test 끝
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int array1[] = {10, 20, 30, 40, 50};            // 5칸
+    int array2[] = {100, 200, 300, 400, 500};       // 5칸
+    test(array1);                                   // array1 의 시작 주소를 v1 에
+    printf("--------------------\n");               // 구분선
+    test(array2);                                   // array2 의 시작 주소를 v1 에
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">*(v1 + 0): 10
+*(v1 + 1): 20
+*(v1 + 2): 30
+*(v1 + 3): 40
+*(v1 + 4): 50
+--------------------
+*(v1 + 0): 100
+*(v1 + 1): 200
+*(v1 + 2): 300
+*(v1 + 3): 400
+*(v1 + 4): 500</code></pre>
+<table class="ref">
+<tbody>
+<tr><th></th><th>9쪽 (배열 타입)</th><th>12쪽 (포인터)</th></tr>
+<tr><td>매개변수</td><td><b><code>int v1[]</code></b></td><td><b><code>int* v1</code></b></td></tr>
+<tr><td>칸 읽기</td><td><b><code>v1[i]</code></b></td><td><b><code>*(v1 + i)</code></b></td></tr>
+<tr><td>출력 서식</td><td><code>"v1[%d]: %d\n"</code></td><td><code>"*(v1 + %d): %d\n"</code></td></tr>
+<tr><td>받는 것</td><td>둘 다 <b>배열의 시작 주소</b> → 결과 값은 같음 (10 ~ 50 / 100 ~ 500)</td><td></td></tr>
+</tbody></table>
+</section>
+<section class="card" id="s6">
+<h2>④ 🔥 기말고사 — 강의자료에 없음 · 숫자만 바꿔서 (✍️ w11-ex01_05-pointer-03.c)</h2>
+<p>✍️ 수업 파일 맨 위 주석 “(강의자료에 없음)(숫자만 바꿔서 기말고사 시험문제)”</p>
+<pre><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;                                   // printf (&lt; 앞 공백은 없어도 됨)
+
+int main() {   // 원본 그대로 int main() — 괄호를 비워 둔 옛 방식 · int main(void) = '매개변수 없음'을 확실히 적음 — 실행 결과는 같음
+    int a1 = 100;                                   // 일반 변수 a1 = 100
+    int* a2 = &amp;a1;                                  // 포인터 변수 a2 = a1 의 '주소' → a2 가 a1 을 가리킴
+    int a3 = a1;                                    // 일반 변수 a3 = a1 의 '값' 100 을 복사 (주소 X)
+
+    a3 = 1000;                                      // a3 만 1000 으로 → 복사본이라 a1 은 그대로 100
+    printf("a1: %d\n", a1);                         // a1 = 100 → "a1: 100"
+    printf("a3: %d\n", a3);                         // a3 = 1000 → "a3: 1000"
+
+    *a2 = 2000;                                     // a2 가 가리키는 곳(= a1)에 2000 → a1 이 2000 으로 바뀜
+    printf("a1: %d\n", a1);                         // a1 = 2000 → "a1: 2000"
+    printf("*a2: %d\n", *a2);                       // *a2 = a2 가 가리키는 a1 의 값 = 2000 → "*a2: 2000"
+
+    return 0;                                       // 0(정상 종료)을 운영체제에 돌려주고 끝냄
+}                                                   // main 끝</code></pre>
+<pre class="io"><code class="language-text">a1: 100
+a3: 1000
+a1: 2000
+*a2: 2000</code></pre>
+<table class="ref">
+<tbody style="min-width:760px;">
+<tr><th>줄</th><th>a1</th><th>a3</th><th>a2 (가리키는 곳)</th><th>핵심</th></tr>
+<tr><td><code>int a1 = 100;</code></td><td>100</td><td></td><td></td><td></td></tr>
+<tr><td><code>int* a2 = &amp;a1;</code></td><td>100</td><td></td><td><b>a1</b></td><td><code>&amp;</code> = 주소</td></tr>
+<tr><td><code>int a3 = a1;</code></td><td>100</td><td>100</td><td>a1</td><td><b>값만 복사</b></td></tr>
+<tr><td><code>a3 = 1000;</code></td><td><b>100</b></td><td>1000</td><td>a1</td><td>복사본을 바꿔도 a1 은 그대로</td></tr>
+<tr><td><code>*a2 = 2000;</code></td><td><b>2000</b></td><td>1000</td><td>a1</td><td><code>*a2</code> 에 쓰면 = <b>a1 에 쓰는 것</b></td></tr>
+</tbody></table>
+<ul><li>🔥 숫자만 바꿔 연습 — <code>a1 = 7</code> · <code>a3 = 70</code> · <code>*a2 = 700</code> 이면 → <code>a1: 7</code> · <code>a3: 70</code> · <code>a1: 700</code> · <code>*a2: 700</code></li><li>🤖 일반 변수 복사(<code>a3 = a1</code>)는 <b>따로 노는 사본</b> · 포인터(<code>a2 = &amp;a1</code>)는 <b>같은 칸을 가리키는 열쇠</b> → ✍️ “일반 변수 = 값(value) · 참조 변수 = 방의 주소(key)”</li></ul>
+<h3>🎲 숫자만 바꿔서 풀어 보기 — 실행결과 쓰기</h3>
+<ul><li>원래 코드 → 🎲 다른 숫자로 (8가지) · 정답 = 맥에서 직접 실행한 결과 · 틀리면 📕 <a href="../오답노트.html">오답노트</a> · 다른 🔥 코드의 변형 문제는 <a href="프로그래밍언어실습-15주차-기말고사.html">기말 정리</a> 에</li></ul>
+<div class="vq" data-wn="vq:7e81b8dcc7ed"><div class="vq-head"><span class="vq-badge">🎲 숫자 바꾼 문제</span><b class="vq-title">pointer-03 — a1 · a3 · *a2</b><span class="vq-n">1 / 8 · 원래 코드</span></div><pre class="vq-code"><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;
+
+int main() {
+    int a1 = 100;
+    int* a2 = &amp;a1;
+    int a3 = a1;
+
+    a3 = 1000;
+    printf("a1: %d\n", a1);
+    printf("a3: %d\n", a3);
+
+    *a2 = 2000;
+    printf("a1: %d\n", a1);
+    printf("*a2: %d\n", *a2);
+
+    return 0;
+}</code></pre><pre class="vq-code" hidden><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;
+
+int main() {
+    int a1 = 250;
+    int* a2 = &amp;a1;
+    int a3 = a1;
+
+    a3 = 1000;
+    printf("a1: %d\n", a1);
+    printf("a3: %d\n", a3);
+
+    *a2 = 2500;
+    printf("a1: %d\n", a1);
+    printf("*a2: %d\n", *a2);
+
+    return 0;
+}</code></pre><pre class="vq-code" hidden><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;
+
+int main() {
+    int a1 = 300;
+    int* a2 = &amp;a1;
+    int a3 = a1;
+
+    a3 = 3000;
+    printf("a1: %d\n", a1);
+    printf("a3: %d\n", a3);
+
+    *a2 = 2000;
+    printf("a1: %d\n", a1);
+    printf("*a2: %d\n", *a2);
+
+    return 0;
+}</code></pre><pre class="vq-code" hidden><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;
+
+int main() {
+    int a1 = 500;
+    int* a2 = &amp;a1;
+    int a3 = a1;
+
+    a3 = 1500;
+    printf("a1: %d\n", a1);
+    printf("a3: %d\n", a3);
+
+    *a2 = 9000;
+    printf("a1: %d\n", a1);
+    printf("*a2: %d\n", *a2);
+
+    return 0;
+}</code></pre><pre class="vq-code" hidden><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;
+
+int main() {
+    int a1 = 100;
+    int* a2 = &amp;a1;
+    int a3 = a1;
+
+    a3 = 1000;
+    printf("a1: %d\n", a1);
+    printf("a3: %d\n", a3);
+
+    *a2 = 9000;
+    printf("a1: %d\n", a1);
+    printf("*a2: %d\n", *a2);
+
+    return 0;
+}</code></pre><pre class="vq-code" hidden><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;
+
+int main() {
+    int a1 = 500;
+    int* a2 = &amp;a1;
+    int a3 = a1;
+
+    a3 = 4000;
+    printf("a1: %d\n", a1);
+    printf("a3: %d\n", a3);
+
+    *a2 = 2000;
+    printf("a1: %d\n", a1);
+    printf("*a2: %d\n", *a2);
+
+    return 0;
+}</code></pre><pre class="vq-code" hidden><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;
+
+int main() {
+    int a1 = 700;
+    int* a2 = &amp;a1;
+    int a3 = a1;
+
+    a3 = 1000;
+    printf("a1: %d\n", a1);
+    printf("a3: %d\n", a3);
+
+    *a2 = 2500;
+    printf("a1: %d\n", a1);
+    printf("*a2: %d\n", *a2);
+
+    return 0;
+}</code></pre><pre class="vq-code" hidden><code class="language-c">// w11-ex01_05-pointer-03.c
+#include&lt;stdio.h&gt;
+
+int main() {
+    int a1 = 500;
+    int* a2 = &amp;a1;
+    int a3 = a1;
+
+    a3 = 4000;
+    printf("a1: %d\n", a1);
+    printf("a3: %d\n", a3);
+
+    *a2 = 6000;
+    printf("a1: %d\n", a1);
+    printf("*a2: %d\n", *a2);
+
+    return 0;
+}</code></pre><script type="text/plain" class="vq-out">a1: 100
+a3: 1000
+a1: 2000
+*a2: 2000
+</script><script type="text/plain" class="vq-out">a1: 250
+a3: 1000
+a1: 2500
+*a2: 2500
+</script><script type="text/plain" class="vq-out">a1: 300
+a3: 3000
+a1: 2000
+*a2: 2000
+</script><script type="text/plain" class="vq-out">a1: 500
+a3: 1500
+a1: 9000
+*a2: 9000
+</script><script type="text/plain" class="vq-out">a1: 100
+a3: 1000
+a1: 9000
+*a2: 9000
+</script><script type="text/plain" class="vq-out">a1: 500
+a3: 4000
+a1: 2000
+*a2: 2000
+</script><script type="text/plain" class="vq-out">a1: 700
+a3: 1000
+a1: 2500
+*a2: 2500
+</script><script type="text/plain" class="vq-out">a1: 500
+a3: 4000
+a1: 6000
+*a2: 6000
+</script><textarea class="vq-in" rows="4" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="실행 결과를 그대로 적어 보세요 (한 줄에 한 줄 · ⌘/Ctrl+Enter = 채점)"></textarea><div class="vq-btns"><button type="button" class="vq-b main" data-v="chk">✔ 채점</button><button type="button" class="vq-b" data-v="show">👁 정답 보기</button><button type="button" class="vq-b" data-v="next">🎲 다른 숫자로</button></div><div class="vq-res"></div></div>
+<style>
+.vq{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0;background:var(--card);}
+.vq-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-bottom:8px;}
+.vq-badge{background:#fdecdc;color:#a4520f;border-radius:6px;padding:2px 8px;font-size:12.5px;font-weight:800;}
+.vq-title{font-size:15px;}
+.vq-n{margin-left:auto;font-size:12.5px;color:#6b776e;}
+.vq-code[hidden]{display:none!important;}
+.vq-in{width:100%;box-sizing:border-box;min-height:88px;margin-top:6px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-family:Consolas,"D2Coding",Menlo,monospace;font-size:14px;line-height:1.5;}
+.vq-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.vq-b{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:800;cursor:pointer;}
+.vq-b.main{background:var(--main);border-color:var(--main);color:#fff;}
+.vq-res{margin-top:10px;font-size:14px;line-height:1.6;}
+.vq-res pre{margin:6px 0 0;padding:9px 12px;border-radius:10px;background:#0f1b14;color:#dff5e6;font-family:Consolas,"D2Coding",Menlo,monospace;font-size:13.5px;white-space:pre;overflow-x:auto;}
+.vq-res .vq-l{font-family:Consolas,"D2Coding",Menlo,monospace;font-size:13px;white-space:pre;}
+.vq-ok{color:#176c3a;font-weight:800;}.vq-no{color:#c0392b;font-weight:800;}
+html[data-theme=dark] .vq-ok{color:#7fd49a;}html[data-theme=dark] .vq-no{color:#ff8a80;}
+</style><script data-vq-js>(function(){if(window.__vq)return;window.__vq=1;
+var NL=String.fromCharCode(10);
+function lines(s,ex){s=String(s||"").replace(/\r\n?/g,NL);var L=s.split(NL).map(function(l){return ex?l.replace(/\s+$/,""):l.trim().replace(/[ \t]+/g," ");});if(ex){while(L.length&&L[L.length-1]==="")L.pop();return L;}return L.filter(function(l){return l!=="";});}
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+function cur(q){return +(q.dataset.i||0);}
+function data(q){var i=cur(q);return {code:q.querySelectorAll(".vq-code")[i],out:q.querySelectorAll(".vq-out")[i].textContent};}
+function title(q){return (q.querySelector(".vq-title")||{}).textContent||"";}
+function rec(q,my){var W=window.wrongNote;if(!W)return;var d=data(q);W.record({key:q.getAttribute("data-wn"),kind:"변형 (실행결과)",q:"[🎲 숫자 바꾼 문제] "+title(q)+NL+d.code.textContent.replace(/\s+$/,""),ans:"실행 결과:"+NL+d.out.replace(/\s+$/,""),my:my});}
+function chk(q){var ex=q.hasAttribute("data-exact"),d=data(q),ta=q.querySelector(".vq-in"),r=q.querySelector(".vq-res");
+ var E=lines(d.out,ex),M=lines(ta.value,ex);if(!M.length){r.innerHTML='<span class="vq-no">실행 결과를 적고 채점을 눌러 주세요</span>';return;}
+ var n=Math.max(E.length,M.length),good=0,rows=[];for(var i=0;i<n;i++){var ok=E[i]!==undefined&&M[i]===E[i];if(ok)good++;rows.push('<div class="vq-l">'+(ok?"✅ ":"❌ ")+(i+1)+"줄  "+esc(M[i]===undefined?"(안 씀)":M[i])+"</div>");}
+ var all=good===E.length&&M.length===E.length;
+ r.innerHTML=(all?'<span class="vq-ok">✅ 정답! ('+E.length+"줄 모두)</span>":'<span class="vq-no">❌ '+good+" / "+E.length+"줄 맞음"+(M.length!==E.length?" · 쓴 줄 "+M.length+" / 실제 "+E.length+"줄":"")+"</span>")+rows.join("")+(all?"":'<div style="margin-top:4px;font-size:13px;opacity:.8">💡 👁 정답 보기로 실제 출력과 비교 · 🎲 다른 숫자로 한 번 더</div>');
+ q.dataset.state=all?"ok":"no";
+ if(all){if(!q.__peek&&window.wrongNote)window.wrongNote.solve(q.getAttribute("data-wn"));}else rec(q,ta.value);}
+function show(q){var d=data(q),r=q.querySelector(".vq-res");q.__peek=1;r.innerHTML='<b>👁 실제 실행 결과</b>'+(q.hasAttribute("data-exact")?' <span style="font-size:12.5px;opacity:.8">(칸 수까지 채점)</span>':"")+"<pre>"+esc(d.out.replace(/\s+$/,""))+"</pre>";if(q.dataset.state!=="ok")rec(q,q.querySelector(".vq-in").value||"(👁 정답 보기)");}
+function next(q){var cs=q.querySelectorAll(".vq-code"),n=cs.length,i=(cur(q)+1)%n;cs.forEach(function(c,k){c.hidden=k!==i;});q.dataset.i=i;q.__peek=0;q.dataset.state="";q.querySelector(".vq-in").value="";q.querySelector(".vq-res").innerHTML="";q.querySelector(".vq-n").textContent=(i+1)+" / "+n+(i===0?" · 원래 코드":" · 숫자 바꿈");}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".vq [data-v]");if(!b)return;var q=b.closest(".vq"),v=b.getAttribute("data-v");if(v==="chk")chk(q);else if(v==="show")show(q);else next(q);});
+document.addEventListener("keydown",function(e){var t=e.target;if(!t.classList||!t.classList.contains("vq-in"))return;if(e.key==="Enter"&&(e.metaKey||e.ctrlKey)){e.preventDefault();chk(t.closest(".vq"));}});
+})();</script>
+</section>
+</div>
+<div class="wk-hotwk"><div class="wk-hotwk-h"><span>12주차</span><a href="프로그래밍언어실습-12주차.html">12주차 페이지 ›</a></div>
+<section class="card" id="s7">
+<h2>① 🔥 기말고사 — 5쪽 [실습 1-01] 포인터 변수</h2>
+<p>✍️ 노션 “강의자료 5페이지 기말고사 예상문제”</p>
+<pre><code class="language-c">// ex_01-pointer1.c — 📄 5쪽 [실습 1-01] 포인터 변수 (🔥 ✍️ “강의자료 5페이지 기말고사 예상문제”)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i = 10;                                 // 일반 변수 i ← 값 10
+    int* ptr;                                   // 포인터 변수 ptr — int 형 기억장소의 '주소'를 저장
+    ptr = &amp;i;                                   // &amp;i = i 의 주소 → ptr 에 저장 → ptr 이 i 를 가리킴
+    i = 50;                                     // i 를 직접 바꿈 → i = 50 (ptr 은 여전히 i 를 가리킴)
+    *ptr = 100;                                 // *ptr = ptr 이 가리키는 곳 = i → i 에 100 저장 → i = 100
+    printf("i = %d \n", i);                     // i = 100 → "i = 100 " (%d 뒤 공백도 그대로 찍힘)
+    printf("*ptr = %d\n", *ptr);                // *ptr → 가리키는 i 의 값 → 100
+    return 0;                                   // 0 을 돌려주며 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">i = 100 
+*ptr = 100</code></pre>
+<ul><li>순서: <code>i = 10</code> → <code>ptr = &amp;i</code> → <code>i = 50</code> → <code>*ptr = 100</code> (ptr 이 가리키는 <b>i 에</b> 씀) → <b>i 도 *ptr 도 100</b></li><li>첫 줄 끝에 공백이 하나 있어요 (<code>"i = %d \n"</code> 의 <code>%d</code> 뒤 공백)</li></ul>
+<h3>✍️ 노션 <code>//시험문제</code> — <code>printf("%d %d %d", *ptr, ptr, i)</code></h3>
+<pre><code class="language-c">// ✍️ 노션 “//시험문제” — 강의자료 5쪽 변형 (필기의 prt=&amp;i; 는 ptr=&amp;i; 오타)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i;                                      // 일반 변수 i
+    int *ptr;                                   // 포인터 변수 ptr
+    i = 10;                                     // i ← 10
+    ptr = &amp;i;                                   // ptr ← i 의 주소
+    printf("%d %d %d\n", *ptr, ptr, i);         // *ptr = 10 · ptr = 주소를 %d(10진수)로 → 실행마다 다름 · i = 10
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">10 1875614584 10</code></pre>
+<ul><li><b>첫째 · 셋째 = 10</b> (<code>*ptr</code> · <code>i</code>) · <b>가운데 = i 의 주소를 <code>%d</code>(10진수)로 찍은 값 → 실행마다 달라요</b></li><li>⚠️ 필기의 <code>prt=&amp;i;</code> 는 <code>ptr=&amp;i;</code> 오타 (prt 는 선언하지 않은 이름 → 컴파일 오류)</li><li>⚠️ 팩트체크 — 주소는 <code>%p</code> 로 찍는 게 맞아요. <code>%d</code> 에 포인터를 주면 clang 경고 <code>format specifies type 'int' but the argument has type 'int *'</code> (실행은 되지만 표준에서는 정의되지 않은 동작) → 시험 답은 “<b>10 · (i 의 주소) · 10</b>”</li></ul>
+</section>
+<section class="card" id="s8">
+<h2>② 🔥 기말고사 — 수업 실행 ① 이중 포인터 (19쪽 [실습 3-01])</h2>
+<p>✍️ 노션 “오늘 한 거 실행결과 기말고사 예상문제” · <code>ptr = &amp;i; //여기가 중요함</code></p>
+<pre><code class="language-c">// ex_05-pointer1.c — 📄 19쪽 [실습 3-01] 이중 포인터 (v1.0.1 · 🔥 ✍️ “오늘 한 거 실행결과 기말고사 예상문제”)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int i = 10;                                 // 일반 변수 i ← 10
+    int* ptr;                                   // 포인터 ptr — int 의 주소를 저장
+    int** pptr;                                 // 이중 포인터 pptr — int* 형 변수(ptr)의 주소를 저장
+    ptr = &amp;i;                                   // ✍️ “여기가 중요함” — ptr ← i 의 주소 → ptr 이 i 를 가리킴
+    pptr = &amp;ptr;                                // pptr ← ptr 의 주소 → pptr → ptr → i
+    printf("*ptr = %d\n", *ptr);                // *ptr = ptr 이 가리키는 i → 10
+    **pptr = 11;                                // *pptr = ptr → **pptr = *ptr = i → i 에 11 저장
+    printf("i = %d, *ptr = %d, **ptr = %d\n",  i, *ptr, **pptr); // i = 11 · *ptr = i = 11 · **pptr = i = 11
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">*ptr = 10
+i = 11, *ptr = 11, **ptr = 11</code></pre>
+<ul><li><code>pptr → ptr → i</code> — <code>*pptr</code> = ptr (i 의 주소) · <code>**pptr</code> = i</li><li><code>**pptr = 11;</code> 은 <b>i 를 바꿈</b> → i · <code>*ptr</code> · <code>**pptr</code> 모두 11</li><li>⚠️ <b>강의자료가 고쳐졌어요 (v1.0.1)</b> — 처음 올라온 판의 19쪽은 <code>int* ptr, i = 10;</code> 다음 줄에 <code>int *ptr;</code> 가 또 있고, <code>printf</code> 에 <code>**ptr</code> (ptr 은 <code>int*</code> 라 별 두 개 불가) → clang 컴파일 오류 3개 (<code>redefinition of 'ptr'</code> · <code>indirection requires pointer operand ('int' invalid)</code> × 2). 11/16 저녁 v1.0.1 에서 위 코드처럼 고쳐짐</li><li>✍️ 수업 main.c 는 예전 판을 보고 쳐서 <code>**pptr</code> 로는 고쳤지만 <code>int* ptr;</code> 가 두 번 → clang <code>redefinition of 'ptr'</code> 오류 · 두 번째 줄을 지우면 실행돼요 (첫 출력 줄은 <code>**ptr = 10</code>)</li></ul>
+</section>
+<section class="card" id="s9">
+<h2>③ 🔥 기말고사 — 수업 실행 ② 배열 포인터 (22쪽 [실습 3-03])</h2>
+<p>✍️ 노션 “강의자료 22페이지 <code>int (*ptr)[3];</code>” · 수업 main.c 는 <code>%2d</code></p>
+<pre><code class="language-c">// ex_07-pointer1.c — 📄 22쪽 [실습 3-03] 배열 포인터 (🔥 ✍️ 수업 main.c 는 %d 대신 %2d)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int nArray[2][3] = { {1,2,3}, {4,5,6} };    // 2행 3열 — 메모리에는 1 2 3 4 5 6 이 한 줄로 (행 우선)
+    int (*ptr)[3];                              // 배열 포인터 — '열이 3개인 int 배열' 한 줄(12바이트)을 가리킴
+    int i, j;                                   // i = 행 첨자 · j = 열 첨자
+    ptr = nArray;                               // 2차원 배열 이름 = 0행(int[3])의 시작 주소 → ptr 이 0행을 가리킴
+    for (i = 0; i &lt; 2; i++) {                   // i = 0, 1 → 행 2개
+        for (j = 0; j &lt; 3; j++) {               // j = 0, 1, 2 → 열 3개
+            printf("%2d", ptr[i][j]);           // ptr[i][j] = nArray[i][j] → 2칸 폭 오른쪽 정렬 (1 → " 1")
+        }                                       // 안쪽 for 끝 → 한 행을 다 찍음
+        printf("\n");                           // 한 행이 끝나면 줄바꿈
+    }                                           // 바깥 for 끝 → 다음 행
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text"> 1 2 3
+ 4 5 6</code></pre>
+<ul><li>강의자료 그대로 <code>printf("%d", ...)</code> 면 띄어쓰기 없이 <code>123</code> / <code>456</code> (✍️ 수업에서는 <code>%2d</code> → 2칸 오른쪽 정렬)</li><li><code>int (*ptr)[3]</code> = <b>열이 3개인 int 배열</b>을 가리키는 포인터 → <code>ptr[i][j]</code> 로 2차원 배열처럼 씀</li></ul>
+<h3>🖥️ 교수님 엑셀 (사진) — <code>ptr + 1</code> 은 한 줄(12바이트) 뒤</h3>
+<pre><code class="language-c">// 🤖 배열 포인터는 +1 하면 '한 줄(열 3개 = 12바이트)' 건너뜀 — 교수님 엑셀(ptr = 100 → ptr + 1 = 112) 확인
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int nArray[2][3] = { {1,2,3}, {4,5,6} };    // 2행 3열 배열
+    int (*ptr)[3] = nArray;                     // 배열 포인터 ← 0행의 주소
+    printf("%d\n", (int)sizeof(*ptr));          // *ptr = int[3] 한 줄 → 3 × 4 = 12
+    printf("%d\n", (int)((char*)(ptr + 1) - (char*)ptr)); // ptr + 1 은 몇 바이트 뒤? → 12 (100 → 112)
+    printf("%d %d %d\n", **ptr, *ptr[1], (*ptr)[1]); // **ptr = nArray[0][0] = 1 · *ptr[1] = *(ptr[1]) = nArray[1][0] = 4 · (*ptr)[1] = nArray[0][1] = 2
+    printf("%d %d\n", (*(ptr + 1))[0], *(*(ptr + 1) + 2)); // (*(ptr+1))[0] = nArray[1][0] = 4 · *(*(ptr+1)+2) = nArray[1][2] = 6
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">12
+12
+1 4 2
+4 6</code></pre>
+<table class="ref">
+<tbody>
+<tr><th>주소 (가정)</th><th>값</th><th>같은 칸을 부르는 이름</th></tr>
+<tr><td>100</td><td>1</td><td><code>nArray[0][0]</code> · <code>ptr[0][0]</code> · <code>(*ptr)[0]</code> · <code>**ptr</code></td></tr>
+<tr><td>104</td><td>2</td><td><code>nArray[0][1]</code> · <code>(*ptr)[1]</code></td></tr>
+<tr><td>108</td><td>3</td><td><code>nArray[0][2]</code> · <code>(*ptr)[2]</code></td></tr>
+<tr><td>112</td><td>4</td><td><code>nArray[1][0]</code> · <code>ptr[1][0]</code> · <code>*ptr[1]</code> · <code>(*(ptr+1))[0]</code></td></tr>
+<tr><td>116</td><td>5</td><td><code>nArray[1][1]</code> · <code>(*(ptr+1))[1]</code></td></tr>
+<tr><td>120</td><td>6</td><td><code>nArray[1][2]</code> · <code>(*(ptr+1))[2]</code></td></tr>
+</tbody></table>
+<ul><li>✍️ 교수님 화면 — 배열 포인터 = <b>순수 포인터</b> · 일정한 열의 크기를 가지는 2차원 배열의 기억장소 주소를 저장하는 포인터 변수 · 같은 자료형과 열의 개수를 가지는 배열의 주소를 저장</li><li>⚠️ 사진 속 엑셀의 112 칸 <code>(*ptr)[1]</code> 은 <b>104 칸(값 2)</b> 이에요 — 112 칸은 <code>*ptr[1]</code> (실행: <code>(*ptr)[1]</code> = 2 · <code>*ptr[1]</code> = 4) · 120 칸의 <code>nArray[0][2]</code> 는 <code>nArray[1][2]</code> 오타</li><li>⚠️ 엑셀 · 노션의 “포인터 변수 4byte” = 32비트 기준 · 이 맥(64비트)과 수업 PC 의 x64 빌드는 포인터가 <b>8바이트</b> (<code>sizeof(int*)</code> = 8 · 아래 ⑥)</li></ul>
+</section>
+<section class="card" id="s10">
+<h2>④ 🔥 기말고사 — 수업 실행 ③ 함수 포인터 (✍️ main.c · 16쪽 요약은 빈칸)</h2>
+<pre><code class="language-c">// ✍️ 수업 main.c — 함수 포인터 (🔥 오늘 실행결과 · 📄 16쪽 [요약] 함수 포인터는 빈칸 → 노션 필기)
+#include&lt;stdio.h&gt;                               // printf 를 쓰기 위한 표준 입출력 헤더 (&lt; 앞 공백은 없어도 됨)
+
+int add(int i) {                                // int 하나를 받아 int 를 돌려주는 함수
+    return i+1;                                 // 받은 값 + 1 을 돌려줌
+}                                               // add 끝
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int(*pfunc)(int);                           // 함수 포인터 — (int 를 받고 int 를 돌려주는) 함수의 주소를 저장
+    int result;                                 // 호출 결과를 담을 변수
+    pfunc=add;                                  // 함수 이름 add = 함수의 시작 주소 → pfunc 이 add 를 가리킴
+    result = pfunc(11);                         // pfunc(11) = add(11) 호출 → 11 + 1 → 12
+    printf("result = %d\n", result);            // result = 12
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">result = 12</code></pre>
+<ul><li>✍️ 함수 포인터 = 함수의 기억장소 주소를 저장하고 그 주소의 함수를 호출 · <b>반환할 자료형과 매개변수 형식이 모두 같아야</b> · 함수 포인터는 이름만 대신하는 것</li><li><code>int (*pfunc)(int)</code> 괄호가 꼭 필요 — 🤖 <code>int *pfunc(int);</code> 는 “int* 를 돌려주는 <b>함수 선언</b>”이 돼서 <code>pfunc = add;</code> 가 오류 (clang <code>non-object type 'int *(int)' is not assignable</code>)</li></ul>
+</section>
+<section class="card" id="s11">
+<h2>⑤ 🔥 기말고사 — 수업 실행 ④ void 형 포인터 (24쪽 [실습 3-04])</h2>
+<pre><code class="language-c">// ex_09-pointer1.c — 📄 24쪽 [실습 3-04] void 형 포인터 (🔥 오늘 실행결과 · ✍️ 수업 main.c 와 같음)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    void* vptr;                                 // void 형 포인터 — 어떤 자료형의 주소든 저장 (가리키는 '형'은 모름)
+    int i = 10;                                 // int 변수
+    char ch = 'a';                              // char 변수
+    float fr = 3.14f;                           // float 변수 (f = float 상수)
+    vptr = &amp;i;                                  // int 의 주소 저장 → 형변환 없이 대입 가능
+    printf("%d\n", *((int*)vptr));              // (int*) 로 형변환 → int 로 읽음 → 10
+    vptr = &amp;ch;                                 // 이번엔 char 의 주소 저장
+    printf("%c\n", *((char*)vptr));             // (char*) 로 형변환 → 'a'
+    vptr = &amp;fr;                                 // 이번엔 float 의 주소 저장
+    printf("%f\n", *((float*)vptr));            // (float*) 로 형변환 → 3.14 → %f 는 소수 6자리 → 3.140000
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">10
+a
+3.140000</code></pre>
+<ul><li>✍️ void 형 포인터 = <b>모든 자료형의 주소를 저장</b> · 단, 쓸 때 <b>반드시 형변환</b> (type casting)</li><li>⚠️ 팩트체크 — 형변환 없이 <code>*vptr</code> 하면 clang 오류 <code>argument type 'void' is incomplete</code> (가리키는 곳의 크기를 몰라서) → “반드시” 맞음</li><li><code>%f</code> 는 소수 6자리 → <code>3.140000</code></li></ul>
+</section>
+</div>
+<div class="wk-hotwk"><div class="wk-hotwk-h"><span>13주차</span><a href="프로그래밍언어실습-13주차.html">13주차 페이지 ›</a></div>
+<section class="card" id="s12">
+<h2>① 🔥 기말고사 — 13쪽 [실습 1-06] Hello 를 출력하는 2가지</h2>
+<p>✍️ 노션 “강의자료 13페이지에 Hello 를 출력하는 방법을 2개 다 알기 — 예: 다음과 똑같이 출력이 되도록 포인터를 사용하여 출력하시오”</p>
+<pre><code class="language-c">// ex01_06-main.c — 📄 13쪽 [실습 1-06] 문자열 (🔥 ✍️ “Hello 를 출력하는 방법을 2개 다 알기”)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    char a1[6] = {'H','e','l','l','o','\0'};    // ① 배열 — 칸 6개에 한 글자씩 · 마지막 '\0' = 문자열의 끝 표시
+    printf("a1: %s\n", a1);                     // a1 = 첫 칸의 주소 → %s 는 '\0' 앞까지 읽음 → a1: Hello
+    char* a2 = "Hello";                         // ② 포인터 — "Hello"(문자열 상수 · 끝에 '\0' 자동)가 따로 저장되고 a2 에는 그 주소
+    printf("a2: %s\n", a2);                     // a2 가 가리키는 곳부터 '\0' 앞까지 → a2: Hello
+    return 0;                                   // 0 을 돌려주며 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">a1: Hello
+a2: Hello</code></pre>
+<ul><li>📄 13쪽 — 문자열 = 리터럴 중 <code>" "</code> 에 묶여 있는 것 · char 타입의 배열로 관리하며 주로 포인터 변수를 사용 · <b>문자열을 받아올 때 = char 형 배열 · 직접 문자열을 적어 줄 때 = 포인터 변수</b> (기억장소가 마련되고 그 다음에 주소값을 받아옴)</li><li>🔥 “포인터를 사용하여 똑같이 출력” → <code>char* a2 = "Hello";</code> + <code>printf("a2: %s\n", a2);</code></li><li>🤖 배열은 <code>'\0'</code> 칸까지 세어 크기를 정해요 — <code>"Hello"</code> 는 5글자 + <code>'\0'</code> = <b>6칸</b></li></ul>
+</section>
+<section class="card" id="s13">
+<h2>② 🔥 기말고사 — 문법오류 체크: 배열을 입력받는 scanf 에는 &amp; 를 쓰지 않음 (10 · 11쪽)</h2>
+<p>✍️ 노션 “다음 문제에 문법오류를 체크하시오 (예: 배열을 입력받는데 <code>scanf("%s", /*여기에 '&amp;' 를 쓰면 오류임*/)</code>)”</p>
+<pre><code class="language-c">// ex01_04-main.c — 📄 10쪽 [실습 1-04] 문자 입출력 scanf() (🔥 ✍️ “배열을 입력받는데 &amp; 를 쓰면 오류”)
+#define _CRT_SECURE_NO_WARNINGS                 // VS 에서 scanf 보안 경고(C4996)를 끔
+#include &lt;stdio.h&gt;                              // printf · scanf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    char a1[100];                               // 문자열을 받을 char 배열 (100칸)
+    int a2;                                     // 정수를 받을 보통 변수
+    printf("문자열 입력: ");                     // 안내 글자 (줄바꿈 없음 → 같은 줄에서 입력)
+    scanf("%s", a1);                            // 📄 “배열이므로 a1 의 주소값이 들어간다” → &amp; 없이 · abcd → a1 = "abcd"
+    printf("숫자 입력: ");                       // 두 번째 안내
+    scanf("%d", &amp;a2);                           // 보통 변수는 &amp; 로 주소를 줌 → 100 → a2 = 100
+    printf("a1: %s, a2: %d\n", a1, a2);         // a1 = abcd · a2 = 100 → a1: abcd, a2: 100
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">문자열 입력: abcd
+숫자 입력: 100
+a1: abcd, a2: 100</code></pre>
+<ul><li>문자열(배열) → <code>scanf("%s", a1);</code> (배열 이름 = 첫 칸 주소) · 정수 같은 보통 변수 → <code>scanf("%d", &amp;a2);</code> (&amp; 로 주소)</li><li>📄 11쪽 [실습 1-05] — 한 번에 받기 <code>scanf("%s %d", a1, &amp;a2);</code> → <code>값 입력: 문자열 100</code> → <code>a1: 문자열, a2: 100</code> (띄어쓰기로 나눠 받음)</li><li>⚠️ 팩트체크 — <code>scanf("%s", &amp;a1);</code> 은 맥 clang 에서 <b>경고</b>(<code>format specifies type 'char *' but the argument has type 'char (*)[100]'</code>)만 나고 실행은 돼요 (가리키는 주소가 같아서). 하지만 형식이 맞지 않는 틀린 코드 → 시험에서는 교수님 말씀대로 “<b>&amp; 를 쓰면 오류</b>”</li></ul>
+</section>
+<section class="card" id="s14">
+<h2>③ 🔥 기말고사 — 포인터로 참조하면 값을 하나만 바꿔도 변수 2개가 바뀜 (✍️ 노션)</h2>
+<p>✍️ 노션 “변수가 2개 있는데 a 의 변수를 b 가 포인터로 참조하고 있으면 값을 하나만 바꿔도 변수 2개가 바뀌는 것도 시험문제” — 🤖 11 · 12주차 포인터(<code>&amp;</code> · <code>*</code>)로 만든 예</p>
+<pre><code class="language-c">// 🤖 예제 — b 가 a 를 가리키면 (11주차 pointer-03 · 12주차 5쪽과 같은 원리)
+#include &lt;stdio.h&gt;                              // printf 를 쓰기 위한 표준 입출력 헤더
+
+int main(void) {                                // (void) = '매개변수 없음'을 확실히 적음 · int main() 은 괄호를 비워 둔 옛 방식 — 실행 결과는 같음
+    int a = 10;                                 // a ← 10
+    int* b = &amp;a;                                // b ← a 의 주소 → b 가 a 를 가리킴
+    *b = 20;                                    // b 를 따라가 a 에 20 을 씀 → a = 20 · *b = 20
+    printf("%d %d\n", a, *b);                   // a = 20 · *b = a = 20 → 20 20
+    a = 30;                                     // 이번엔 a 를 직접 바꿈 → a = 30
+    printf("%d %d\n", a, *b);                   // *b 도 같은 칸(a)을 읽음 → 30 30
+    return 0;                                   // 정상 종료
+}                                               // main 끝</code></pre>
+<pre class="io"><code class="language-text">20 20
+30 30</code></pre>
+<ul><li>⚠️ 팩트체크 — 실제로 바뀌는 칸은 <b>a 하나</b>예요. <code>*b</code> 는 b 가 가리키는 a 를 읽는 것이라 같이 바뀐 것처럼 보이고, b 에 든 주소(<code>&amp;a</code>)는 그대로예요</li></ul>
+</section>
+</div>
+</div>
+<section class="card" id="s15">
 <h2>🧭 포인터 · 문자열 실험실 — 버튼으로 한 줄씩 실행</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-포인터문자열.html" title="🧭 포인터 · 문자열 실험실" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-포인터문자열.html" target="_blank" rel="noopener">🎬 🧭 포인터 · 문자열 실험실 — 새 창으로 크게 보기</a></p></div>
 <script data-wk-anim-size>window.addEventListener("message",function(e){var h=e.data&&e.data.wkAnimH;if(!h)return;document.querySelectorAll(".wk-anim iframe").forEach(function(f){if(f.contentWindow===e.source)f.style.height=Math.min(h,1400)+"px";});});</script>
 <ul><li>▶ 다음 줄을 누르면 수업 코드가 한 줄씩 실행되면서 <b>메모리 칸(값 · 주소)</b> · <b>실행 결과</b> · <b>줄마다 값 표</b>가 바뀌어요 — 코드 줄을 누르면 그 줄까지 바로</li><li>① 5쪽 포인터 변수 🔥 · ② pointer-03 숫자만 바꿔서 🔥(🎲) · ③ 같이 바뀜 🔥 · ④ 이중 포인터 🔥 · ⑤ ++ptr +4 · +1 · ⑥ 포인터로 배열 읽기 · ⑦ strcpy · strcat · strlen</li></ul>
 </section>
-<section class="card" id="s2">
+<section class="card" id="s16">
 <h2>🎨 그림으로 정리</h2>
 <div class="wk-anim" style="margin:12px 0 4px;"><iframe src="anim/프로그래밍언어실습-그림정리.html?weeks=9-15#build" title="그림 정리" loading="lazy" style="display:block;width:100%;height:min(660px,calc(50vw + 340px));border:1px solid var(--line);border-radius:14px;background:var(--card);"></iframe><p class="wk-lockbtn"><a href="anim/프로그래밍언어실습-그림정리.html?weeks=9-15#build" target="_blank" rel="noopener">🎬 그림 정리 — 새 창으로 크게 보기</a></p></div>
 <ul><li>9주차 — ① 빌드 · ② 메모리 4영역 · ③ 블록 범위 (scope1_5.c) · ④ 지역 우선 (02-1global.c)</li><li>10주차 — ⑤ 1차원 배열 · ⑥ 2차원 배열 · ⑦ 🔥 8쪽 for · ⑧ ✍️ 지그재그 · ⑨ 초기화 규칙</li><li>11주차 — ⑩ 배열명 = 주소 · ⑪ 🔥 배열 → 함수 (9쪽 · 12쪽) · ⑫ 🔥 &amp; · * (pointer-03) · ⑬ static</li><li>12주차 — ⑭ 🔥 이중 포인터 · ⑮ 🔥 배열 포인터 · ⑯ 포인터 배열 · ⑰ ✍️ ++ptr (1004 · 1001) · ⑱ 🔥 함수 · void 포인터</li><li>13주차 — ⑲ argc · argv · ⑳ 🔥 Hello 2가지 · ㉑ 문자열 함수 · ㉒ 🔥 포인터로 같이 바뀜 · scanf 의 &amp;</li></ul>
 </section>
-<section class="card" id="s3">
+<section class="card" id="s17">
 <h2>📗 엑셀 시험문제 — 직접 풀고 채점 (2문제)</h2>
 <div class="tip">시험 방식 ① “<b>실행결과를 작성하시오</b>” — 11주차 수업 퀴즈 2 · 3번 (✍️ 퀴즈를 풀어 제출 · 기말 정리 “수업 퀴즈 실행 결과”) 를 내 퀴즈 설명 엑셀(<code>w11-quiz-설명.xlsx</code>)처럼 한 단계씩 · 정답은 C 코드를 직접 실행해 반복마다 찍어 본 값<br>빠진 것 — Quiz 1번(배열을 0 으로 · 실행 결과가 단순) · C 다른 주차는 엑셀 파일 없음</div>
 <ul><li>📗 엑셀처럼 — 단계가 <b>한 시트에 세로로</b> (오른쪽에 코드) · 주황 테두리 빈칸 = 답 쓰는 칸 · 💡 앞 단계 배열 줄을 드래그 → ⌘/Ctrl+C → 다음 단계 첫 칸 → ⌘/Ctrl+V → 바뀌는 칸만 고치기 · ✔ 채점 (⌘/Ctrl+Enter) = 단계마다 ✅ ❌ · 👁 정답 보기 = 고른 단계의 답 · 출력은 띄어쓰기 상관없이 채점</li></ul>
@@ -413,7 +1042,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 <h3>2. 🔥 [11주차] Quiz 3 — q-pointer02.c</h3>
 <div class="xl xl-q"><div class="xl-title"><span class="xl-logo">X</span><span class="xl-name">q-pointer02.c — 🔥 Quiz 3 실행 순서 (엑셀) · ✏️ 직접 풀고 채점</span><span class="xl-app">- Excel</span></div><div class="xl-menu"><span>파일</span><span class="on">홈</span><span>삽입</span><span>페이지 레이아웃</span><span>수식</span><span>데이터</span><span>검토</span><span>보기</span></div><div class="xl-rib"><div class="xl-grp"><div class="xl-gb"><button type="button" class="xl-big" data-a="paste" title="붙여넣기 (⌘/Ctrl+V)"><i>📋</i>붙여넣기</button><div class="xl-col"><button type="button" data-a="cut" title="잘라내기 (⌘/Ctrl+X)">✂️ 잘라내기</button><button type="button" data-a="copy" title="복사 (⌘/Ctrl+C)">⧉ 복사</button></div></div><div class="xl-gl">클립보드</div></div><div class="xl-grp"><div class="xl-gb"><button type="button" class="xl-big" data-a="del" title="고른 행 삭제 — 아래 행이 올라옴 (행을 고르고 Del)"><i>🗑</i>행 삭제</button></div><div class="xl-gl">셀</div></div><div class="xl-grp"><div class="xl-gb"><div class="xl-col"><button type="button" data-a="clr" title="고른 칸 내용 지우기">🧽 지우기</button><button type="button" data-a="undo" title="실행 취소 (⌘/Ctrl+Z)">↶ 실행 취소</button><button type="button" data-a="redo" title="다시 실행 (⌘/Ctrl+Shift+Z)">↷ 다시 실행</button></div></div><div class="xl-gl">편집</div></div><div class="xl-grp"><div class="xl-gb"><button type="button" class="xl-big xl-chk" data-a="chk" title="채점 (⌘/Ctrl+Enter)"><i>✔</i>채점</button><div class="xl-col"><button type="button" data-a="show" title="고른 표의 답 보기 (표 밖을 고르면 시트 전체)">👁 정답 보기</button><button type="button" data-a="rst" title="모두 지우기 (⌘/Ctrl+Z 로 되돌리기)">↺ 다시 풀기</button></div></div><div class="xl-gl">채점</div></div></div><div class="xl-bar"><span class="xl-ref">A1</span><span class="xl-dots">⋮</span><button type="button" class="xl-bx" data-a="esc" title="취소 (Esc)" disabled>✕</button><button type="button" class="xl-bx" data-a="ent" title="입력 (Enter)" disabled>✓</button><span class="xl-fx">fx</span><span class="xl-f"></span></div><div class="xl-wrap"><table class="xl-sheet"><thead><tr><th class="xl-corner"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th>K</th><th>L</th><th>M</th><th>N</th><th>O</th><th>P</th><th>Q</th><th>R</th></tr></thead><tbody><tr><th>1</th><td data-r="A1" class="r ov"><span class="ov-t">-- 실행 결과는? 반복마다 i · x(if 뒤) · 배열 칸 → 출력 · ✔ 채점</span></td><td data-r="B1"></td><td data-r="C1"></td><td data-r="D1"></td><td data-r="E1"></td><td data-r="F1"></td><td data-r="G1"></td><td data-r="H1"></td><td data-r="I1"></td><td data-r="J1"></td><td data-r="K1"></td><td data-r="L1"></td><td data-r="M1"></td><td data-r="N1"></td><td data-r="O1"></td><td data-r="P1"></td><td data-r="Q1"></td><td data-r="R1"></td></tr><tr><th>2</th><td data-r="A2"></td><td data-r="B2"></td><td data-r="C2"></td><td data-r="D2"></td><td data-r="E2"></td><td data-r="F2"></td><td data-r="G2"></td><td data-r="H2"></td><td data-r="I2"></td><td data-r="J2"></td><td data-r="K2"></td><td data-r="L2"></td><td data-r="M2"></td><td data-r="N2"></td><td data-r="O2"></td><td data-r="P2"></td><td data-r="Q2"></td><td data-r="R2"></td></tr><tr><th>3</th><td data-r="A3" class="n ov"><span class="ov-t">0) 처음 — func(arr1) : a = arr1 (주소 100) · x = 1</span></td><td data-r="B3"></td><td data-r="C3"></td><td data-r="D3"></td><td data-r="E3"></td><td data-r="F3"></td><td data-r="G3"></td><td data-r="H3"></td><td data-r="I3"></td><td data-r="J3"></td><td data-r="K3"></td><td data-r="L3" class="m ov"><span class="ov-t">// q-pointer02.c</span></td><td data-r="M3"></td><td data-r="N3"></td><td data-r="O3"></td><td data-r="P3"></td><td data-r="Q3"></td><td data-r="R3"></td></tr><tr><th>4</th><td data-r="A4"></td><td data-r="B4"></td><td data-r="C4"></td><td data-r="D4"></td><td data-r="E4">[0]</td><td data-r="F4">[1]</td><td data-r="G4">[2]</td><td data-r="H4">[3]</td><td data-r="I4">[4]</td><td data-r="J4">배열</td><td data-r="K4"></td><td data-r="L4" class="m ov"><span class="ov-t">#include &lt;stdio.h&gt;</span></td><td data-r="M4"></td><td data-r="N4"></td><td data-r="O4"></td><td data-r="P4"></td><td data-r="Q4"></td><td data-r="R4"></td></tr><tr><th>5</th><td data-r="A5"></td><td data-r="B5">a</td><td data-r="C5" class="b num">100</td><td data-r="D5">─→ arr1</td><td data-r="E5" class="b num">1</td><td data-r="F5" class="b num">2</td><td data-r="G5" class="b num">3</td><td data-r="H5" class="b num">2</td><td data-r="I5" class="b num">1</td><td data-r="J5"></td><td data-r="K5"></td><td data-r="L5"></td><td data-r="M5"></td><td data-r="N5"></td><td data-r="O5"></td><td data-r="P5"></td><td data-r="Q5"></td><td data-r="R5"></td></tr><tr><th>6</th><td data-r="A6"></td><td data-r="B6"></td><td data-r="C6"></td><td data-r="D6"></td><td data-r="E6" class="num">100</td><td data-r="F6" class="num">104</td><td data-r="G6" class="num">108</td><td data-r="H6" class="num">112</td><td data-r="I6" class="num">116</td><td data-r="J6"></td><td data-r="K6"></td><td data-r="L6" class="m ov"><span class="ov-t">void func(int* a) {</span></td><td data-r="M6"></td><td data-r="N6"></td><td data-r="O6"></td><td data-r="P6"></td><td data-r="Q6"></td><td data-r="R6"></td></tr><tr><th>7</th><td data-r="A7"></td><td data-r="B7"></td><td data-r="C7"></td><td data-r="D7"></td><td data-r="E7" class="num">+0</td><td data-r="F7" class="num">+1</td><td data-r="G7" class="num">+2</td><td data-r="H7" class="num">+3</td><td data-r="I7" class="num">+4</td><td data-r="J7">포인터</td><td data-r="K7"></td><td data-r="L7" class="m ov"><span class="ov-t">    int x = 1;</span></td><td data-r="M7"></td><td data-r="N7"></td><td data-r="O7"></td><td data-r="P7"></td><td data-r="Q7"></td><td data-r="R7"></td></tr><tr><th>8</th><td data-r="A8"></td><td data-r="B8"></td><td data-r="C8"></td><td data-r="D8"></td><td data-r="E8"></td><td data-r="F8"></td><td data-r="G8"></td><td data-r="H8"></td><td data-r="I8"></td><td data-r="J8"></td><td data-r="K8"></td><td data-r="L8" class="m ov"><span class="ov-t">    for (int i = 0; i &gt;= 0; i += x) {</span></td><td data-r="M8"></td><td data-r="N8"></td><td data-r="O8"></td><td data-r="P8"></td><td data-r="Q8"></td><td data-r="R8"></td></tr><tr><th>9</th><td data-r="A9" class="xh ov" data-l="1) 반복 1"><span class="ov-t">✏️ 1) 반복 1</span></td><td data-r="B9"></td><td data-r="C9" class="ov"><span class="ov-t">i =</span></td><td data-r="D9" class="in"><input type="text" class="xl-in" size="1" data-ans="0" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D9 칸"></td><td data-r="E9" class="ov"><span class="ov-t">x =</span></td><td data-r="F9" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F9 칸"></td><td data-r="G9"></td><td data-r="H9"></td><td data-r="I9"></td><td data-r="J9"></td><td data-r="K9"></td><td data-r="L9" class="m ov"><span class="ov-t">        *(a + i) += i;</span></td><td data-r="M9"></td><td data-r="N9"></td><td data-r="O9"></td><td data-r="P9"></td><td data-r="Q9"></td><td data-r="R9"></td></tr><tr><th>10</th><td data-r="A10"></td><td data-r="B10"></td><td data-r="C10"></td><td data-r="D10"></td><td data-r="E10">[0]</td><td data-r="F10">[1]</td><td data-r="G10">[2]</td><td data-r="H10">[3]</td><td data-r="I10">[4]</td><td data-r="J10">배열</td><td data-r="K10"></td><td data-r="L10" class="m ov"><span class="ov-t">        if (i &gt;= 4)</span></td><td data-r="M10"></td><td data-r="N10"></td><td data-r="O10"></td><td data-r="P10"></td><td data-r="Q10"></td><td data-r="R10"></td></tr><tr><th>11</th><td data-r="A11"></td><td data-r="B11">a</td><td data-r="C11" class="b num">100</td><td data-r="D11">─→ arr1</td><td data-r="E11" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E11 칸"></td><td data-r="F11" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F11 칸"></td><td data-r="G11" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G11 칸"></td><td data-r="H11" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H11 칸"></td><td data-r="I11" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="I11 칸"></td><td data-r="J11"></td><td data-r="K11"></td><td data-r="L11" class="m ov"><span class="ov-t">            x = -1;</span></td><td data-r="M11"></td><td data-r="N11"></td><td data-r="O11"></td><td data-r="P11"></td><td data-r="Q11"></td><td data-r="R11"></td></tr><tr><th>12</th><td data-r="A12"></td><td data-r="B12"></td><td data-r="C12"></td><td data-r="D12"></td><td data-r="E12" class="num">100</td><td data-r="F12" class="num">104</td><td data-r="G12" class="num">108</td><td data-r="H12" class="num">112</td><td data-r="I12" class="num">116</td><td data-r="J12"></td><td data-r="K12"></td><td data-r="L12" class="m ov"><span class="ov-t">    }</span></td><td data-r="M12"></td><td data-r="N12"></td><td data-r="O12"></td><td data-r="P12"></td><td data-r="Q12"></td><td data-r="R12"></td></tr><tr><th>13</th><td data-r="A13"></td><td data-r="B13"></td><td data-r="C13"></td><td data-r="D13"></td><td data-r="E13" class="num">+0</td><td data-r="F13" class="num">+1</td><td data-r="G13" class="num">+2</td><td data-r="H13" class="num">+3</td><td data-r="I13" class="num">+4</td><td data-r="J13">포인터</td><td data-r="K13"></td><td data-r="L13" class="m ov"><span class="ov-t">}</span></td><td data-r="M13"></td><td data-r="N13"></td><td data-r="O13"></td><td data-r="P13"></td><td data-r="Q13"></td><td data-r="R13"></td></tr><tr><th>14</th><td data-r="A14"></td><td data-r="B14"></td><td data-r="C14"></td><td data-r="D14"></td><td data-r="E14"></td><td data-r="F14"></td><td data-r="G14"></td><td data-r="H14"></td><td data-r="I14"></td><td data-r="J14"></td><td data-r="K14"></td><td data-r="L14"></td><td data-r="M14"></td><td data-r="N14"></td><td data-r="O14"></td><td data-r="P14"></td><td data-r="Q14"></td><td data-r="R14"></td></tr><tr><th>15</th><td data-r="A15" class="xh ov" data-l="2) 반복 2"><span class="ov-t">✏️ 2) 반복 2</span></td><td data-r="B15"></td><td data-r="C15" class="ov"><span class="ov-t">i =</span></td><td data-r="D15" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D15 칸"></td><td data-r="E15" class="ov"><span class="ov-t">x =</span></td><td data-r="F15" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F15 칸"></td><td data-r="G15"></td><td data-r="H15"></td><td data-r="I15"></td><td data-r="J15"></td><td data-r="K15"></td><td data-r="L15" class="m ov"><span class="ov-t">main() {</span></td><td data-r="M15"></td><td data-r="N15"></td><td data-r="O15"></td><td data-r="P15"></td><td data-r="Q15"></td><td data-r="R15"></td></tr><tr><th>16</th><td data-r="A16"></td><td data-r="B16"></td><td data-r="C16"></td><td data-r="D16"></td><td data-r="E16">[0]</td><td data-r="F16">[1]</td><td data-r="G16">[2]</td><td data-r="H16">[3]</td><td data-r="I16">[4]</td><td data-r="J16">배열</td><td data-r="K16"></td><td data-r="L16" class="m ov"><span class="ov-t">    int arr1[] = {1,2,3,2,1};</span></td><td data-r="M16"></td><td data-r="N16"></td><td data-r="O16"></td><td data-r="P16"></td><td data-r="Q16"></td><td data-r="R16"></td></tr><tr><th>17</th><td data-r="A17"></td><td data-r="B17">a</td><td data-r="C17" class="b num">100</td><td data-r="D17">─→ arr1</td><td data-r="E17" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E17 칸"></td><td data-r="F17" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F17 칸"></td><td data-r="G17" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G17 칸"></td><td data-r="H17" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H17 칸"></td><td data-r="I17" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="I17 칸"></td><td data-r="J17"></td><td data-r="K17"></td><td data-r="L17" class="m ov"><span class="ov-t">    func(arr1);</span></td><td data-r="M17"></td><td data-r="N17"></td><td data-r="O17"></td><td data-r="P17"></td><td data-r="Q17"></td><td data-r="R17"></td></tr><tr><th>18</th><td data-r="A18"></td><td data-r="B18"></td><td data-r="C18"></td><td data-r="D18"></td><td data-r="E18" class="num">100</td><td data-r="F18" class="num">104</td><td data-r="G18" class="num">108</td><td data-r="H18" class="num">112</td><td data-r="I18" class="num">116</td><td data-r="J18"></td><td data-r="K18"></td><td data-r="L18" class="m ov"><span class="ov-t">    for (int i = 4; i &gt;= 0; i--) {</span></td><td data-r="M18"></td><td data-r="N18"></td><td data-r="O18"></td><td data-r="P18"></td><td data-r="Q18"></td><td data-r="R18"></td></tr><tr><th>19</th><td data-r="A19"></td><td data-r="B19"></td><td data-r="C19"></td><td data-r="D19"></td><td data-r="E19" class="num">+0</td><td data-r="F19" class="num">+1</td><td data-r="G19" class="num">+2</td><td data-r="H19" class="num">+3</td><td data-r="I19" class="num">+4</td><td data-r="J19">포인터</td><td data-r="K19"></td><td data-r="L19" class="m ov"><span class="ov-t">        printf("%d ", arr1[i]);</span></td><td data-r="M19"></td><td data-r="N19"></td><td data-r="O19"></td><td data-r="P19"></td><td data-r="Q19"></td><td data-r="R19"></td></tr><tr><th>20</th><td data-r="A20"></td><td data-r="B20"></td><td data-r="C20"></td><td data-r="D20"></td><td data-r="E20"></td><td data-r="F20"></td><td data-r="G20"></td><td data-r="H20"></td><td data-r="I20"></td><td data-r="J20"></td><td data-r="K20"></td><td data-r="L20" class="m ov"><span class="ov-t">    }</span></td><td data-r="M20"></td><td data-r="N20"></td><td data-r="O20"></td><td data-r="P20"></td><td data-r="Q20"></td><td data-r="R20"></td></tr><tr><th>21</th><td data-r="A21" class="xh ov" data-l="3) 반복 3"><span class="ov-t">✏️ 3) 반복 3</span></td><td data-r="B21"></td><td data-r="C21" class="ov"><span class="ov-t">i =</span></td><td data-r="D21" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D21 칸"></td><td data-r="E21" class="ov"><span class="ov-t">x =</span></td><td data-r="F21" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F21 칸"></td><td data-r="G21"></td><td data-r="H21"></td><td data-r="I21"></td><td data-r="J21"></td><td data-r="K21"></td><td data-r="L21" class="m ov"><span class="ov-t">}</span></td><td data-r="M21"></td><td data-r="N21"></td><td data-r="O21"></td><td data-r="P21"></td><td data-r="Q21"></td><td data-r="R21"></td></tr><tr><th>22</th><td data-r="A22"></td><td data-r="B22"></td><td data-r="C22"></td><td data-r="D22"></td><td data-r="E22">[0]</td><td data-r="F22">[1]</td><td data-r="G22">[2]</td><td data-r="H22">[3]</td><td data-r="I22">[4]</td><td data-r="J22">배열</td><td data-r="K22"></td><td data-r="L22"></td><td data-r="M22"></td><td data-r="N22"></td><td data-r="O22"></td><td data-r="P22"></td><td data-r="Q22"></td><td data-r="R22"></td></tr><tr><th>23</th><td data-r="A23"></td><td data-r="B23">a</td><td data-r="C23" class="b num">100</td><td data-r="D23">─→ arr1</td><td data-r="E23" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E23 칸"></td><td data-r="F23" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F23 칸"></td><td data-r="G23" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G23 칸"></td><td data-r="H23" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H23 칸"></td><td data-r="I23" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="I23 칸"></td><td data-r="J23"></td><td data-r="K23"></td><td data-r="L23"></td><td data-r="M23"></td><td data-r="N23"></td><td data-r="O23"></td><td data-r="P23"></td><td data-r="Q23"></td><td data-r="R23"></td></tr><tr><th>24</th><td data-r="A24"></td><td data-r="B24"></td><td data-r="C24"></td><td data-r="D24"></td><td data-r="E24" class="num">100</td><td data-r="F24" class="num">104</td><td data-r="G24" class="num">108</td><td data-r="H24" class="num">112</td><td data-r="I24" class="num">116</td><td data-r="J24"></td><td data-r="K24"></td><td data-r="L24"></td><td data-r="M24"></td><td data-r="N24"></td><td data-r="O24"></td><td data-r="P24"></td><td data-r="Q24"></td><td data-r="R24"></td></tr><tr><th>25</th><td data-r="A25"></td><td data-r="B25"></td><td data-r="C25"></td><td data-r="D25"></td><td data-r="E25" class="num">+0</td><td data-r="F25" class="num">+1</td><td data-r="G25" class="num">+2</td><td data-r="H25" class="num">+3</td><td data-r="I25" class="num">+4</td><td data-r="J25">포인터</td><td data-r="K25"></td><td data-r="L25"></td><td data-r="M25"></td><td data-r="N25"></td><td data-r="O25"></td><td data-r="P25"></td><td data-r="Q25"></td><td data-r="R25"></td></tr><tr><th>26</th><td data-r="A26"></td><td data-r="B26"></td><td data-r="C26"></td><td data-r="D26"></td><td data-r="E26"></td><td data-r="F26"></td><td data-r="G26"></td><td data-r="H26"></td><td data-r="I26"></td><td data-r="J26"></td><td data-r="K26"></td><td data-r="L26"></td><td data-r="M26"></td><td data-r="N26"></td><td data-r="O26"></td><td data-r="P26"></td><td data-r="Q26"></td><td data-r="R26"></td></tr><tr><th>27</th><td data-r="A27" class="xh ov" data-l="4) 반복 4"><span class="ov-t">✏️ 4) 반복 4</span></td><td data-r="B27"></td><td data-r="C27" class="ov"><span class="ov-t">i =</span></td><td data-r="D27" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D27 칸"></td><td data-r="E27" class="ov"><span class="ov-t">x =</span></td><td data-r="F27" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F27 칸"></td><td data-r="G27"></td><td data-r="H27"></td><td data-r="I27"></td><td data-r="J27"></td><td data-r="K27"></td><td data-r="L27"></td><td data-r="M27"></td><td data-r="N27"></td><td data-r="O27"></td><td data-r="P27"></td><td data-r="Q27"></td><td data-r="R27"></td></tr><tr><th>28</th><td data-r="A28"></td><td data-r="B28"></td><td data-r="C28"></td><td data-r="D28"></td><td data-r="E28">[0]</td><td data-r="F28">[1]</td><td data-r="G28">[2]</td><td data-r="H28">[3]</td><td data-r="I28">[4]</td><td data-r="J28">배열</td><td data-r="K28"></td><td data-r="L28"></td><td data-r="M28"></td><td data-r="N28"></td><td data-r="O28"></td><td data-r="P28"></td><td data-r="Q28"></td><td data-r="R28"></td></tr><tr><th>29</th><td data-r="A29"></td><td data-r="B29">a</td><td data-r="C29" class="b num">100</td><td data-r="D29">─→ arr1</td><td data-r="E29" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E29 칸"></td><td data-r="F29" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F29 칸"></td><td data-r="G29" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G29 칸"></td><td data-r="H29" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H29 칸"></td><td data-r="I29" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="I29 칸"></td><td data-r="J29"></td><td data-r="K29"></td><td data-r="L29"></td><td data-r="M29"></td><td data-r="N29"></td><td data-r="O29"></td><td data-r="P29"></td><td data-r="Q29"></td><td data-r="R29"></td></tr><tr><th>30</th><td data-r="A30"></td><td data-r="B30"></td><td data-r="C30"></td><td data-r="D30"></td><td data-r="E30" class="num">100</td><td data-r="F30" class="num">104</td><td data-r="G30" class="num">108</td><td data-r="H30" class="num">112</td><td data-r="I30" class="num">116</td><td data-r="J30"></td><td data-r="K30"></td><td data-r="L30"></td><td data-r="M30"></td><td data-r="N30"></td><td data-r="O30"></td><td data-r="P30"></td><td data-r="Q30"></td><td data-r="R30"></td></tr><tr><th>31</th><td data-r="A31"></td><td data-r="B31"></td><td data-r="C31"></td><td data-r="D31"></td><td data-r="E31" class="num">+0</td><td data-r="F31" class="num">+1</td><td data-r="G31" class="num">+2</td><td data-r="H31" class="num">+3</td><td data-r="I31" class="num">+4</td><td data-r="J31">포인터</td><td data-r="K31"></td><td data-r="L31"></td><td data-r="M31"></td><td data-r="N31"></td><td data-r="O31"></td><td data-r="P31"></td><td data-r="Q31"></td><td data-r="R31"></td></tr><tr><th>32</th><td data-r="A32"></td><td data-r="B32"></td><td data-r="C32"></td><td data-r="D32"></td><td data-r="E32"></td><td data-r="F32"></td><td data-r="G32"></td><td data-r="H32"></td><td data-r="I32"></td><td data-r="J32"></td><td data-r="K32"></td><td data-r="L32"></td><td data-r="M32"></td><td data-r="N32"></td><td data-r="O32"></td><td data-r="P32"></td><td data-r="Q32"></td><td data-r="R32"></td></tr><tr><th>33</th><td data-r="A33" class="xh ov" data-l="5) 반복 5"><span class="ov-t">✏️ 5) 반복 5</span></td><td data-r="B33"></td><td data-r="C33" class="ov"><span class="ov-t">i =</span></td><td data-r="D33" class="in"><input type="text" class="xl-in" size="1" data-ans="4" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D33 칸"></td><td data-r="E33" class="ov"><span class="ov-t">x =</span></td><td data-r="F33" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F33 칸"></td><td data-r="G33"></td><td data-r="H33"></td><td data-r="I33"></td><td data-r="J33"></td><td data-r="K33"></td><td data-r="L33"></td><td data-r="M33"></td><td data-r="N33"></td><td data-r="O33"></td><td data-r="P33"></td><td data-r="Q33"></td><td data-r="R33"></td></tr><tr><th>34</th><td data-r="A34"></td><td data-r="B34"></td><td data-r="C34"></td><td data-r="D34"></td><td data-r="E34">[0]</td><td data-r="F34">[1]</td><td data-r="G34">[2]</td><td data-r="H34">[3]</td><td data-r="I34">[4]</td><td data-r="J34">배열</td><td data-r="K34"></td><td data-r="L34"></td><td data-r="M34"></td><td data-r="N34"></td><td data-r="O34"></td><td data-r="P34"></td><td data-r="Q34"></td><td data-r="R34"></td></tr><tr><th>35</th><td data-r="A35"></td><td data-r="B35">a</td><td data-r="C35" class="b num">100</td><td data-r="D35">─→ arr1</td><td data-r="E35" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E35 칸"></td><td data-r="F35" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F35 칸"></td><td data-r="G35" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G35 칸"></td><td data-r="H35" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H35 칸"></td><td data-r="I35" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="I35 칸"></td><td data-r="J35"></td><td data-r="K35"></td><td data-r="L35"></td><td data-r="M35"></td><td data-r="N35"></td><td data-r="O35"></td><td data-r="P35"></td><td data-r="Q35"></td><td data-r="R35"></td></tr><tr><th>36</th><td data-r="A36"></td><td data-r="B36"></td><td data-r="C36"></td><td data-r="D36"></td><td data-r="E36" class="num">100</td><td data-r="F36" class="num">104</td><td data-r="G36" class="num">108</td><td data-r="H36" class="num">112</td><td data-r="I36" class="num">116</td><td data-r="J36"></td><td data-r="K36"></td><td data-r="L36"></td><td data-r="M36"></td><td data-r="N36"></td><td data-r="O36"></td><td data-r="P36"></td><td data-r="Q36"></td><td data-r="R36"></td></tr><tr><th>37</th><td data-r="A37"></td><td data-r="B37"></td><td data-r="C37"></td><td data-r="D37"></td><td data-r="E37" class="num">+0</td><td data-r="F37" class="num">+1</td><td data-r="G37" class="num">+2</td><td data-r="H37" class="num">+3</td><td data-r="I37" class="num">+4</td><td data-r="J37">포인터</td><td data-r="K37"></td><td data-r="L37"></td><td data-r="M37"></td><td data-r="N37"></td><td data-r="O37"></td><td data-r="P37"></td><td data-r="Q37"></td><td data-r="R37"></td></tr><tr><th>38</th><td data-r="A38"></td><td data-r="B38"></td><td data-r="C38"></td><td data-r="D38"></td><td data-r="E38"></td><td data-r="F38"></td><td data-r="G38"></td><td data-r="H38"></td><td data-r="I38"></td><td data-r="J38"></td><td data-r="K38"></td><td data-r="L38"></td><td data-r="M38"></td><td data-r="N38"></td><td data-r="O38"></td><td data-r="P38"></td><td data-r="Q38"></td><td data-r="R38"></td></tr><tr><th>39</th><td data-r="A39" class="xh ov" data-l="6) 반복 6"><span class="ov-t">✏️ 6) 반복 6</span></td><td data-r="B39"></td><td data-r="C39" class="ov"><span class="ov-t">i =</span></td><td data-r="D39" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D39 칸"></td><td data-r="E39" class="ov"><span class="ov-t">x =</span></td><td data-r="F39" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F39 칸"></td><td data-r="G39"></td><td data-r="H39"></td><td data-r="I39"></td><td data-r="J39"></td><td data-r="K39"></td><td data-r="L39"></td><td data-r="M39"></td><td data-r="N39"></td><td data-r="O39"></td><td data-r="P39"></td><td data-r="Q39"></td><td data-r="R39"></td></tr><tr><th>40</th><td data-r="A40"></td><td data-r="B40"></td><td data-r="C40"></td><td data-r="D40"></td><td data-r="E40">[0]</td><td data-r="F40">[1]</td><td data-r="G40">[2]</td><td data-r="H40">[3]</td><td data-r="I40">[4]</td><td data-r="J40">배열</td><td data-r="K40"></td><td data-r="L40"></td><td data-r="M40"></td><td data-r="N40"></td><td data-r="O40"></td><td data-r="P40"></td><td data-r="Q40"></td><td data-r="R40"></td></tr><tr><th>41</th><td data-r="A41"></td><td data-r="B41">a</td><td data-r="C41" class="b num">100</td><td data-r="D41">─→ arr1</td><td data-r="E41" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E41 칸"></td><td data-r="F41" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F41 칸"></td><td data-r="G41" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G41 칸"></td><td data-r="H41" class="in"><input type="text" class="xl-in" size="1" data-ans="8" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H41 칸"></td><td data-r="I41" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="I41 칸"></td><td data-r="J41"></td><td data-r="K41"></td><td data-r="L41"></td><td data-r="M41"></td><td data-r="N41"></td><td data-r="O41"></td><td data-r="P41"></td><td data-r="Q41"></td><td data-r="R41"></td></tr><tr><th>42</th><td data-r="A42"></td><td data-r="B42"></td><td data-r="C42"></td><td data-r="D42"></td><td data-r="E42" class="num">100</td><td data-r="F42" class="num">104</td><td data-r="G42" class="num">108</td><td data-r="H42" class="num">112</td><td data-r="I42" class="num">116</td><td data-r="J42"></td><td data-r="K42"></td><td data-r="L42"></td><td data-r="M42"></td><td data-r="N42"></td><td data-r="O42"></td><td data-r="P42"></td><td data-r="Q42"></td><td data-r="R42"></td></tr><tr><th>43</th><td data-r="A43"></td><td data-r="B43"></td><td data-r="C43"></td><td data-r="D43"></td><td data-r="E43" class="num">+0</td><td data-r="F43" class="num">+1</td><td data-r="G43" class="num">+2</td><td data-r="H43" class="num">+3</td><td data-r="I43" class="num">+4</td><td data-r="J43">포인터</td><td data-r="K43"></td><td data-r="L43"></td><td data-r="M43"></td><td data-r="N43"></td><td data-r="O43"></td><td data-r="P43"></td><td data-r="Q43"></td><td data-r="R43"></td></tr><tr><th>44</th><td data-r="A44"></td><td data-r="B44"></td><td data-r="C44"></td><td data-r="D44"></td><td data-r="E44"></td><td data-r="F44"></td><td data-r="G44"></td><td data-r="H44"></td><td data-r="I44"></td><td data-r="J44"></td><td data-r="K44"></td><td data-r="L44"></td><td data-r="M44"></td><td data-r="N44"></td><td data-r="O44"></td><td data-r="P44"></td><td data-r="Q44"></td><td data-r="R44"></td></tr><tr><th>45</th><td data-r="A45" class="xh ov" data-l="7) 반복 7"><span class="ov-t">✏️ 7) 반복 7</span></td><td data-r="B45"></td><td data-r="C45" class="ov"><span class="ov-t">i =</span></td><td data-r="D45" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D45 칸"></td><td data-r="E45" class="ov"><span class="ov-t">x =</span></td><td data-r="F45" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F45 칸"></td><td data-r="G45"></td><td data-r="H45"></td><td data-r="I45"></td><td data-r="J45"></td><td data-r="K45"></td><td data-r="L45"></td><td data-r="M45"></td><td data-r="N45"></td><td data-r="O45"></td><td data-r="P45"></td><td data-r="Q45"></td><td data-r="R45"></td></tr><tr><th>46</th><td data-r="A46"></td><td data-r="B46"></td><td data-r="C46"></td><td data-r="D46"></td><td data-r="E46">[0]</td><td data-r="F46">[1]</td><td data-r="G46">[2]</td><td data-r="H46">[3]</td><td data-r="I46">[4]</td><td data-r="J46">배열</td><td data-r="K46"></td><td data-r="L46"></td><td data-r="M46"></td><td data-r="N46"></td><td data-r="O46"></td><td data-r="P46"></td><td data-r="Q46"></td><td data-r="R46"></td></tr><tr><th>47</th><td data-r="A47"></td><td data-r="B47">a</td><td data-r="C47" class="b num">100</td><td data-r="D47">─→ arr1</td><td data-r="E47" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E47 칸"></td><td data-r="F47" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F47 칸"></td><td data-r="G47" class="in"><input type="text" class="xl-in" size="1" data-ans="7" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G47 칸"></td><td data-r="H47" class="in"><input type="text" class="xl-in" size="1" data-ans="8" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H47 칸"></td><td data-r="I47" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="I47 칸"></td><td data-r="J47"></td><td data-r="K47"></td><td data-r="L47"></td><td data-r="M47"></td><td data-r="N47"></td><td data-r="O47"></td><td data-r="P47"></td><td data-r="Q47"></td><td data-r="R47"></td></tr><tr><th>48</th><td data-r="A48"></td><td data-r="B48"></td><td data-r="C48"></td><td data-r="D48"></td><td data-r="E48" class="num">100</td><td data-r="F48" class="num">104</td><td data-r="G48" class="num">108</td><td data-r="H48" class="num">112</td><td data-r="I48" class="num">116</td><td data-r="J48"></td><td data-r="K48"></td><td data-r="L48"></td><td data-r="M48"></td><td data-r="N48"></td><td data-r="O48"></td><td data-r="P48"></td><td data-r="Q48"></td><td data-r="R48"></td></tr><tr><th>49</th><td data-r="A49"></td><td data-r="B49"></td><td data-r="C49"></td><td data-r="D49"></td><td data-r="E49" class="num">+0</td><td data-r="F49" class="num">+1</td><td data-r="G49" class="num">+2</td><td data-r="H49" class="num">+3</td><td data-r="I49" class="num">+4</td><td data-r="J49">포인터</td><td data-r="K49"></td><td data-r="L49"></td><td data-r="M49"></td><td data-r="N49"></td><td data-r="O49"></td><td data-r="P49"></td><td data-r="Q49"></td><td data-r="R49"></td></tr><tr><th>50</th><td data-r="A50"></td><td data-r="B50"></td><td data-r="C50"></td><td data-r="D50"></td><td data-r="E50"></td><td data-r="F50"></td><td data-r="G50"></td><td data-r="H50"></td><td data-r="I50"></td><td data-r="J50"></td><td data-r="K50"></td><td data-r="L50"></td><td data-r="M50"></td><td data-r="N50"></td><td data-r="O50"></td><td data-r="P50"></td><td data-r="Q50"></td><td data-r="R50"></td></tr><tr><th>51</th><td data-r="A51" class="xh ov" data-l="8) 반복 8"><span class="ov-t">✏️ 8) 반복 8</span></td><td data-r="B51"></td><td data-r="C51" class="ov"><span class="ov-t">i =</span></td><td data-r="D51" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D51 칸"></td><td data-r="E51" class="ov"><span class="ov-t">x =</span></td><td data-r="F51" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F51 칸"></td><td data-r="G51"></td><td data-r="H51"></td><td data-r="I51"></td><td data-r="J51"></td><td data-r="K51"></td><td data-r="L51"></td><td data-r="M51"></td><td data-r="N51"></td><td data-r="O51"></td><td data-r="P51"></td><td data-r="Q51"></td><td data-r="R51"></td></tr><tr><th>52</th><td data-r="A52"></td><td data-r="B52"></td><td data-r="C52"></td><td data-r="D52"></td><td data-r="E52">[0]</td><td data-r="F52">[1]</td><td data-r="G52">[2]</td><td data-r="H52">[3]</td><td data-r="I52">[4]</td><td data-r="J52">배열</td><td data-r="K52"></td><td data-r="L52"></td><td data-r="M52"></td><td data-r="N52"></td><td data-r="O52"></td><td data-r="P52"></td><td data-r="Q52"></td><td data-r="R52"></td></tr><tr><th>53</th><td data-r="A53"></td><td data-r="B53">a</td><td data-r="C53" class="b num">100</td><td data-r="D53">─→ arr1</td><td data-r="E53" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E53 칸"></td><td data-r="F53" class="in"><input type="text" class="xl-in" size="1" data-ans="4" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F53 칸"></td><td data-r="G53" class="in"><input type="text" class="xl-in" size="1" data-ans="7" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G53 칸"></td><td data-r="H53" class="in"><input type="text" class="xl-in" size="1" data-ans="8" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H53 칸"></td><td data-r="I53" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="I53 칸"></td><td data-r="J53"></td><td data-r="K53"></td><td data-r="L53"></td><td data-r="M53"></td><td data-r="N53"></td><td data-r="O53"></td><td data-r="P53"></td><td data-r="Q53"></td><td data-r="R53"></td></tr><tr><th>54</th><td data-r="A54"></td><td data-r="B54"></td><td data-r="C54"></td><td data-r="D54"></td><td data-r="E54" class="num">100</td><td data-r="F54" class="num">104</td><td data-r="G54" class="num">108</td><td data-r="H54" class="num">112</td><td data-r="I54" class="num">116</td><td data-r="J54"></td><td data-r="K54"></td><td data-r="L54"></td><td data-r="M54"></td><td data-r="N54"></td><td data-r="O54"></td><td data-r="P54"></td><td data-r="Q54"></td><td data-r="R54"></td></tr><tr><th>55</th><td data-r="A55"></td><td data-r="B55"></td><td data-r="C55"></td><td data-r="D55"></td><td data-r="E55" class="num">+0</td><td data-r="F55" class="num">+1</td><td data-r="G55" class="num">+2</td><td data-r="H55" class="num">+3</td><td data-r="I55" class="num">+4</td><td data-r="J55">포인터</td><td data-r="K55"></td><td data-r="L55"></td><td data-r="M55"></td><td data-r="N55"></td><td data-r="O55"></td><td data-r="P55"></td><td data-r="Q55"></td><td data-r="R55"></td></tr><tr><th>56</th><td data-r="A56"></td><td data-r="B56"></td><td data-r="C56"></td><td data-r="D56"></td><td data-r="E56"></td><td data-r="F56"></td><td data-r="G56"></td><td data-r="H56"></td><td data-r="I56"></td><td data-r="J56"></td><td data-r="K56"></td><td data-r="L56"></td><td data-r="M56"></td><td data-r="N56"></td><td data-r="O56"></td><td data-r="P56"></td><td data-r="Q56"></td><td data-r="R56"></td></tr><tr><th>57</th><td data-r="A57" class="xh ov" data-l="9) 반복 9"><span class="ov-t">✏️ 9) 반복 9</span></td><td data-r="B57"></td><td data-r="C57" class="ov"><span class="ov-t">i =</span></td><td data-r="D57" class="in"><input type="text" class="xl-in" size="1" data-ans="0" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D57 칸"></td><td data-r="E57" class="ov"><span class="ov-t">x =</span></td><td data-r="F57" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F57 칸"></td><td data-r="G57"></td><td data-r="H57"></td><td data-r="I57"></td><td data-r="J57"></td><td data-r="K57"></td><td data-r="L57"></td><td data-r="M57"></td><td data-r="N57"></td><td data-r="O57"></td><td data-r="P57"></td><td data-r="Q57"></td><td data-r="R57"></td></tr><tr><th>58</th><td data-r="A58"></td><td data-r="B58"></td><td data-r="C58"></td><td data-r="D58"></td><td data-r="E58">[0]</td><td data-r="F58">[1]</td><td data-r="G58">[2]</td><td data-r="H58">[3]</td><td data-r="I58">[4]</td><td data-r="J58">배열</td><td data-r="K58"></td><td data-r="L58"></td><td data-r="M58"></td><td data-r="N58"></td><td data-r="O58"></td><td data-r="P58"></td><td data-r="Q58"></td><td data-r="R58"></td></tr><tr><th>59</th><td data-r="A59"></td><td data-r="B59">a</td><td data-r="C59" class="b num">100</td><td data-r="D59">─→ arr1</td><td data-r="E59" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E59 칸"></td><td data-r="F59" class="in"><input type="text" class="xl-in" size="1" data-ans="4" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F59 칸"></td><td data-r="G59" class="in"><input type="text" class="xl-in" size="1" data-ans="7" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="G59 칸"></td><td data-r="H59" class="in"><input type="text" class="xl-in" size="1" data-ans="8" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="H59 칸"></td><td data-r="I59" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="I59 칸"></td><td data-r="J59"></td><td data-r="K59"></td><td data-r="L59"></td><td data-r="M59"></td><td data-r="N59"></td><td data-r="O59"></td><td data-r="P59"></td><td data-r="Q59"></td><td data-r="R59"></td></tr><tr><th>60</th><td data-r="A60"></td><td data-r="B60"></td><td data-r="C60"></td><td data-r="D60"></td><td data-r="E60" class="num">100</td><td data-r="F60" class="num">104</td><td data-r="G60" class="num">108</td><td data-r="H60" class="num">112</td><td data-r="I60" class="num">116</td><td data-r="J60"></td><td data-r="K60"></td><td data-r="L60"></td><td data-r="M60"></td><td data-r="N60"></td><td data-r="O60"></td><td data-r="P60"></td><td data-r="Q60"></td><td data-r="R60"></td></tr><tr><th>61</th><td data-r="A61"></td><td data-r="B61"></td><td data-r="C61"></td><td data-r="D61"></td><td data-r="E61" class="num">+0</td><td data-r="F61" class="num">+1</td><td data-r="G61" class="num">+2</td><td data-r="H61" class="num">+3</td><td data-r="I61" class="num">+4</td><td data-r="J61">포인터</td><td data-r="K61"></td><td data-r="L61"></td><td data-r="M61"></td><td data-r="N61"></td><td data-r="O61"></td><td data-r="P61"></td><td data-r="Q61"></td><td data-r="R61"></td></tr><tr><th>62</th><td data-r="A62"></td><td data-r="B62"></td><td data-r="C62"></td><td data-r="D62"></td><td data-r="E62"></td><td data-r="F62"></td><td data-r="G62"></td><td data-r="H62"></td><td data-r="I62"></td><td data-r="J62"></td><td data-r="K62"></td><td data-r="L62"></td><td data-r="M62"></td><td data-r="N62"></td><td data-r="O62"></td><td data-r="P62"></td><td data-r="Q62"></td><td data-r="R62"></td></tr><tr><th>63</th><td data-r="A63" class="xh ov" data-l="10) 끝 → main 출력"><span class="ov-t">✏️ 10) 끝 → main 출력</span></td><td data-r="B63"></td><td data-r="C63" class="ov"><span class="ov-t">i =</span></td><td data-r="D63" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D63 칸"></td><td data-r="E63"></td><td data-r="F63"></td><td data-r="G63"></td><td data-r="H63"></td><td data-r="I63"></td><td data-r="J63"></td><td data-r="K63"></td><td data-r="L63"></td><td data-r="M63"></td><td data-r="N63"></td><td data-r="O63"></td><td data-r="P63"></td><td data-r="Q63"></td><td data-r="R63"></td></tr><tr><th>64</th><td data-r="A64"></td><td data-r="B64" class="ov"><span class="ov-t">main: arr1[4] 부터 거꾸로 →</span></td><td data-r="C64"></td><td data-r="D64"></td><td data-r="E64"></td><td data-r="F64" class="in"><input type="text" class="xl-in" size="1" data-ans="5 8 7 4 1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F64 칸"></td><td data-r="G64"></td><td data-r="H64"></td><td data-r="I64"></td><td data-r="J64"></td><td data-r="K64"></td><td data-r="L64"></td><td data-r="M64"></td><td data-r="N64"></td><td data-r="O64"></td><td data-r="P64"></td><td data-r="Q64"></td><td data-r="R64"></td></tr><tr><th>65</th><td data-r="A65"></td><td data-r="B65"></td><td data-r="C65"></td><td data-r="D65"></td><td data-r="E65"></td><td data-r="F65"></td><td data-r="G65"></td><td data-r="H65"></td><td data-r="I65"></td><td data-r="J65"></td><td data-r="K65"></td><td data-r="L65"></td><td data-r="M65"></td><td data-r="N65"></td><td data-r="O65"></td><td data-r="P65"></td><td data-r="Q65"></td><td data-r="R65"></td></tr><tr><th>66</th><td data-r="A66" class="xh ov" data-l="중간과정 표"><span class="ov-t">✏️ 중간과정 표</span></td><td data-r="B66"></td><td data-r="C66"></td><td data-r="D66"></td><td data-r="E66"></td><td data-r="F66"></td><td data-r="G66"></td><td data-r="H66"></td><td data-r="I66"></td><td data-r="J66"></td><td data-r="K66"></td><td data-r="L66"></td><td data-r="M66"></td><td data-r="N66"></td><td data-r="O66"></td><td data-r="P66"></td><td data-r="Q66"></td><td data-r="R66"></td></tr><tr><th>67</th><td data-r="A67" class="h">단계</td><td data-r="B67" class="h">x</td><td data-r="C67" class="h">i</td><td data-r="D67" class="h">a[i] 새 값</td><td data-r="E67" class="h">i &gt;= 4 ?</td><td data-r="F67" class="h">다음 i</td><td data-r="G67"></td><td data-r="H67"></td><td data-r="I67"></td><td data-r="J67"></td><td data-r="K67"></td><td data-r="L67"></td><td data-r="M67"></td><td data-r="N67"></td><td data-r="O67"></td><td data-r="P67"></td><td data-r="Q67"></td><td data-r="R67"></td></tr><tr><th>68</th><td data-r="A68" class="num">1</td><td data-r="B68" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="B68 칸"></td><td data-r="C68" class="in"><input type="text" class="xl-in" size="1" data-ans="0" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C68 칸"></td><td data-r="D68" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D68 칸"></td><td data-r="E68" class="in"><input type="text" class="xl-in" size="1" data-ans="거짓/F/false/X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E68 칸"></td><td data-r="F68" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F68 칸"></td><td data-r="G68"></td><td data-r="H68"></td><td data-r="I68"></td><td data-r="J68"></td><td data-r="K68"></td><td data-r="L68"></td><td data-r="M68"></td><td data-r="N68"></td><td data-r="O68"></td><td data-r="P68"></td><td data-r="Q68"></td><td data-r="R68"></td></tr><tr><th>69</th><td data-r="A69" class="num">2</td><td data-r="B69" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="B69 칸"></td><td data-r="C69" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C69 칸"></td><td data-r="D69" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D69 칸"></td><td data-r="E69" class="in"><input type="text" class="xl-in" size="1" data-ans="거짓/F/false/X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E69 칸"></td><td data-r="F69" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F69 칸"></td><td data-r="G69"></td><td data-r="H69"></td><td data-r="I69"></td><td data-r="J69"></td><td data-r="K69"></td><td data-r="L69"></td><td data-r="M69"></td><td data-r="N69"></td><td data-r="O69"></td><td data-r="P69"></td><td data-r="Q69"></td><td data-r="R69"></td></tr><tr><th>70</th><td data-r="A70" class="num">3</td><td data-r="B70" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="B70 칸"></td><td data-r="C70" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C70 칸"></td><td data-r="D70" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D70 칸"></td><td data-r="E70" class="in"><input type="text" class="xl-in" size="1" data-ans="거짓/F/false/X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E70 칸"></td><td data-r="F70" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F70 칸"></td><td data-r="G70"></td><td data-r="H70"></td><td data-r="I70"></td><td data-r="J70"></td><td data-r="K70"></td><td data-r="L70"></td><td data-r="M70"></td><td data-r="N70"></td><td data-r="O70"></td><td data-r="P70"></td><td data-r="Q70"></td><td data-r="R70"></td></tr><tr><th>71</th><td data-r="A71" class="num">4</td><td data-r="B71" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="B71 칸"></td><td data-r="C71" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C71 칸"></td><td data-r="D71" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D71 칸"></td><td data-r="E71" class="in"><input type="text" class="xl-in" size="1" data-ans="거짓/F/false/X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E71 칸"></td><td data-r="F71" class="in"><input type="text" class="xl-in" size="1" data-ans="4" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F71 칸"></td><td data-r="G71"></td><td data-r="H71"></td><td data-r="I71"></td><td data-r="J71"></td><td data-r="K71"></td><td data-r="L71"></td><td data-r="M71"></td><td data-r="N71"></td><td data-r="O71"></td><td data-r="P71"></td><td data-r="Q71"></td><td data-r="R71"></td></tr><tr><th>72</th><td data-r="A72" class="num">5</td><td data-r="B72" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="B72 칸"></td><td data-r="C72" class="in"><input type="text" class="xl-in" size="1" data-ans="4" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C72 칸"></td><td data-r="D72" class="in"><input type="text" class="xl-in" size="1" data-ans="5" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D72 칸"></td><td data-r="E72" class="in"><input type="text" class="xl-in" size="1" data-ans="참/T/true/O/○" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E72 칸"></td><td data-r="F72" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F72 칸"></td><td data-r="G72"></td><td data-r="H72"></td><td data-r="I72"></td><td data-r="J72"></td><td data-r="K72"></td><td data-r="L72"></td><td data-r="M72"></td><td data-r="N72"></td><td data-r="O72"></td><td data-r="P72"></td><td data-r="Q72"></td><td data-r="R72"></td></tr><tr><th>73</th><td data-r="A73" class="num">6</td><td data-r="B73" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="B73 칸"></td><td data-r="C73" class="in"><input type="text" class="xl-in" size="1" data-ans="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C73 칸"></td><td data-r="D73" class="in"><input type="text" class="xl-in" size="1" data-ans="8" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D73 칸"></td><td data-r="E73" class="in"><input type="text" class="xl-in" size="1" data-ans="거짓/F/false/X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E73 칸"></td><td data-r="F73" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F73 칸"></td><td data-r="G73"></td><td data-r="H73"></td><td data-r="I73"></td><td data-r="J73"></td><td data-r="K73"></td><td data-r="L73"></td><td data-r="M73"></td><td data-r="N73"></td><td data-r="O73"></td><td data-r="P73"></td><td data-r="Q73"></td><td data-r="R73"></td></tr><tr><th>74</th><td data-r="A74" class="num">7</td><td data-r="B74" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="B74 칸"></td><td data-r="C74" class="in"><input type="text" class="xl-in" size="1" data-ans="2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C74 칸"></td><td data-r="D74" class="in"><input type="text" class="xl-in" size="1" data-ans="7" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D74 칸"></td><td data-r="E74" class="in"><input type="text" class="xl-in" size="1" data-ans="거짓/F/false/X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E74 칸"></td><td data-r="F74" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F74 칸"></td><td data-r="G74"></td><td data-r="H74"></td><td data-r="I74"></td><td data-r="J74"></td><td data-r="K74"></td><td data-r="L74"></td><td data-r="M74"></td><td data-r="N74"></td><td data-r="O74"></td><td data-r="P74"></td><td data-r="Q74"></td><td data-r="R74"></td></tr><tr><th>75</th><td data-r="A75" class="num">8</td><td data-r="B75" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="B75 칸"></td><td data-r="C75" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C75 칸"></td><td data-r="D75" class="in"><input type="text" class="xl-in" size="1" data-ans="4" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D75 칸"></td><td data-r="E75" class="in"><input type="text" class="xl-in" size="1" data-ans="거짓/F/false/X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E75 칸"></td><td data-r="F75" class="in"><input type="text" class="xl-in" size="1" data-ans="0" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F75 칸"></td><td data-r="G75"></td><td data-r="H75"></td><td data-r="I75"></td><td data-r="J75"></td><td data-r="K75"></td><td data-r="L75"></td><td data-r="M75"></td><td data-r="N75"></td><td data-r="O75"></td><td data-r="P75"></td><td data-r="Q75"></td><td data-r="R75"></td></tr><tr><th>76</th><td data-r="A76" class="num">9</td><td data-r="B76" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="B76 칸"></td><td data-r="C76" class="in"><input type="text" class="xl-in" size="1" data-ans="0" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C76 칸"></td><td data-r="D76" class="in"><input type="text" class="xl-in" size="1" data-ans="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="D76 칸"></td><td data-r="E76" class="in"><input type="text" class="xl-in" size="1" data-ans="거짓/F/false/X/✕/×" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="E76 칸"></td><td data-r="F76" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="F76 칸"></td><td data-r="G76"></td><td data-r="H76"></td><td data-r="I76"></td><td data-r="J76"></td><td data-r="K76"></td><td data-r="L76"></td><td data-r="M76"></td><td data-r="N76"></td><td data-r="O76"></td><td data-r="P76"></td><td data-r="Q76"></td><td data-r="R76"></td></tr><tr><th>77</th><td data-r="A77" class="num">10</td><td data-r="B77" class="num">-1</td><td data-r="C77" class="in"><input type="text" class="xl-in" size="1" data-ans="-1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="C77 칸"></td><td data-r="D77">—</td><td data-r="E77" class="ov"><span class="ov-t">i &gt;= 0 거짓 → for 끝</span></td><td data-r="F77"></td><td data-r="G77"></td><td data-r="H77"></td><td data-r="I77"></td><td data-r="J77"></td><td data-r="K77"></td><td data-r="L77"></td><td data-r="M77"></td><td data-r="N77"></td><td data-r="O77"></td><td data-r="P77"></td><td data-r="Q77"></td><td data-r="R77"></td></tr></tbody></table></div><div class="xl-tabs"><span class="xl-nav"><button type="button" data-nav="-1" title="이전 시트">◀</button><button type="button" data-nav="1" title="다음 시트">▶</button></span><button type="button" class="xl-tab on">✏️ Quiz 3</button><span class="xl-plus" title="시트">⊕</span></div><div class="xl-status"><span class="xl-mode">준비</span><span class="xl-msg">✏️ 주황 테두리 칸(입력)에 답 · 드래그 · Shift+방향키로 여러 칸 · ⌘/Ctrl + C · V · X · 행 번호를 누르거나 행을 끌어 고르고 Del = 행 삭제 · ⌘/Ctrl+Z · ⌘/Ctrl+Enter = 채점 · 결과 표는 행 순서 상관없이 채점 · 빈 값은 NULL</span><span class="xl-stat"></span><span class="xl-zoom">－ ━━━●━━━ ＋ 100%</span></div></div>
 </section>
-<section class="card" id="s4">
+<section class="card" id="s18">
 <h2>🎲 숫자 바꾼 변형 문제 — 실행결과 쓰기 (11문제)</h2>
 <div class="tip">✍️ 교수님 “<b>숫자만 바꿔서</b> 기말고사 시험문제” (11주차 pointer-03) · 시험 방식 ① “실행결과를 작성하시오” → 🔥 표시된 실습 · 퀴즈 코드를 숫자만 바꿔 <b>8가지씩</b> · 1번째 = 원래 코드 · 🎲 다른 숫자로 = 다음 변형 · 정답 = 맥에서 C 코드를 직접 컴파일 · 실행한 결과</div>
 <ul><li>채점 = 줄 앞뒤 공백 · 빈 줄 무시 (배열 포인터 <code>%2d</code> 만 칸 수까지) · ⌘/Ctrl+Enter = 채점 · 틀리거나 👁 정답을 본 문제는 📕 <a href="../오답노트.html">오답노트</a> 에 저절로 담기고 다시 맞히면 빠져요</li></ul>
@@ -587,42 +1216,6 @@ a3: 4000
 a1: 6000
 *a2: 6000
 </script><textarea class="vq-in" rows="4" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="실행 결과를 그대로 적어 보세요 (한 줄에 한 줄 · ⌘/Ctrl+Enter = 채점)"></textarea><div class="vq-btns"><button type="button" class="vq-b main" data-v="chk">✔ 채점</button><button type="button" class="vq-b" data-v="show">👁 정답 보기</button><button type="button" class="vq-b" data-v="next">🎲 다른 숫자로</button></div><div class="vq-res"></div></div>
-<style>
-.vq{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0;background:var(--card);}
-.vq-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-bottom:8px;}
-.vq-badge{background:#fdecdc;color:#a4520f;border-radius:6px;padding:2px 8px;font-size:12.5px;font-weight:800;}
-.vq-title{font-size:15px;}
-.vq-n{margin-left:auto;font-size:12.5px;color:#6b776e;}
-.vq-code[hidden]{display:none!important;}
-.vq-in{width:100%;box-sizing:border-box;min-height:88px;margin-top:6px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-family:Consolas,"D2Coding",Menlo,monospace;font-size:14px;line-height:1.5;}
-.vq-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
-.vq-b{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:800;cursor:pointer;}
-.vq-b.main{background:var(--main);border-color:var(--main);color:#fff;}
-.vq-res{margin-top:10px;font-size:14px;line-height:1.6;}
-.vq-res pre{margin:6px 0 0;padding:9px 12px;border-radius:10px;background:#0f1b14;color:#dff5e6;font-family:Consolas,"D2Coding",Menlo,monospace;font-size:13.5px;white-space:pre;overflow-x:auto;}
-.vq-res .vq-l{font-family:Consolas,"D2Coding",Menlo,monospace;font-size:13px;white-space:pre;}
-.vq-ok{color:#176c3a;font-weight:800;}.vq-no{color:#c0392b;font-weight:800;}
-html[data-theme=dark] .vq-ok{color:#7fd49a;}html[data-theme=dark] .vq-no{color:#ff8a80;}
-</style><script data-vq-js>(function(){if(window.__vq)return;window.__vq=1;
-var NL=String.fromCharCode(10);
-function lines(s,ex){s=String(s||"").replace(/\r\n?/g,NL);var L=s.split(NL).map(function(l){return ex?l.replace(/\s+$/,""):l.trim().replace(/[ \t]+/g," ");});if(ex){while(L.length&&L[L.length-1]==="")L.pop();return L;}return L.filter(function(l){return l!=="";});}
-function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
-function cur(q){return +(q.dataset.i||0);}
-function data(q){var i=cur(q);return {code:q.querySelectorAll(".vq-code")[i],out:q.querySelectorAll(".vq-out")[i].textContent};}
-function title(q){return (q.querySelector(".vq-title")||{}).textContent||"";}
-function rec(q,my){var W=window.wrongNote;if(!W)return;var d=data(q);W.record({key:q.getAttribute("data-wn"),kind:"변형 (실행결과)",q:"[🎲 숫자 바꾼 문제] "+title(q)+NL+d.code.textContent.replace(/\s+$/,""),ans:"실행 결과:"+NL+d.out.replace(/\s+$/,""),my:my});}
-function chk(q){var ex=q.hasAttribute("data-exact"),d=data(q),ta=q.querySelector(".vq-in"),r=q.querySelector(".vq-res");
- var E=lines(d.out,ex),M=lines(ta.value,ex);if(!M.length){r.innerHTML='<span class="vq-no">실행 결과를 적고 채점을 눌러 주세요</span>';return;}
- var n=Math.max(E.length,M.length),good=0,rows=[];for(var i=0;i<n;i++){var ok=E[i]!==undefined&&M[i]===E[i];if(ok)good++;rows.push('<div class="vq-l">'+(ok?"✅ ":"❌ ")+(i+1)+"줄  "+esc(M[i]===undefined?"(안 씀)":M[i])+"</div>");}
- var all=good===E.length&&M.length===E.length;
- r.innerHTML=(all?'<span class="vq-ok">✅ 정답! ('+E.length+"줄 모두)</span>":'<span class="vq-no">❌ '+good+" / "+E.length+"줄 맞음"+(M.length!==E.length?" · 쓴 줄 "+M.length+" / 실제 "+E.length+"줄":"")+"</span>")+rows.join("")+(all?"":'<div style="margin-top:4px;font-size:13px;opacity:.8">💡 👁 정답 보기로 실제 출력과 비교 · 🎲 다른 숫자로 한 번 더</div>');
- q.dataset.state=all?"ok":"no";
- if(all){if(!q.__peek&&window.wrongNote)window.wrongNote.solve(q.getAttribute("data-wn"));}else rec(q,ta.value);}
-function show(q){var d=data(q),r=q.querySelector(".vq-res");q.__peek=1;r.innerHTML='<b>👁 실제 실행 결과</b>'+(q.hasAttribute("data-exact")?' <span style="font-size:12.5px;opacity:.8">(칸 수까지 채점)</span>':"")+"<pre>"+esc(d.out.replace(/\s+$/,""))+"</pre>";if(q.dataset.state!=="ok")rec(q,q.querySelector(".vq-in").value||"(👁 정답 보기)");}
-function next(q){var cs=q.querySelectorAll(".vq-code"),n=cs.length,i=(cur(q)+1)%n;cs.forEach(function(c,k){c.hidden=k!==i;});q.dataset.i=i;q.__peek=0;q.dataset.state="";q.querySelector(".vq-in").value="";q.querySelector(".vq-res").innerHTML="";q.querySelector(".vq-n").textContent=(i+1)+" / "+n+(i===0?" · 원래 코드":" · 숫자 바꿈");}
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".vq [data-v]");if(!b)return;var q=b.closest(".vq"),v=b.getAttribute("data-v");if(v==="chk")chk(q);else if(v==="show")show(q);else next(q);});
-document.addEventListener("keydown",function(e){var t=e.target;if(!t.classList||!t.classList.contains("vq-in"))return;if(e.key==="Enter"&&(e.metaKey||e.ctrlKey)){e.preventDefault();chk(t.closest(".vq"));}});
-})();</script>
 <h3>2. 🔥 [11주차] 9쪽 외우기 — 배열을 함수에 (v1[i])</h3>
 <div class="vq" data-wn="vq:d4239aa25436"><div class="vq-head"><span class="vq-badge">🎲 숫자 바꾼 문제</span><b class="vq-title">9쪽 — test(array1) · test(array2)</b><span class="vq-n">1 / 8 · 원래 코드</span></div><pre class="vq-code"><code class="language-c">// w11-ex01_01-array.c
 #include &lt;stdio.h&gt;
@@ -2052,7 +2645,7 @@ int main() {
 100, 200, 30, 40, 500, 
 </script><textarea class="vq-in" rows="4" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="실행 결과를 그대로 적어 보세요 (한 줄에 한 줄 · ⌘/Ctrl+Enter = 채점)"></textarea><div class="vq-btns"><button type="button" class="vq-b main" data-v="chk">✔ 채점</button><button type="button" class="vq-b" data-v="show">👁 정답 보기</button><button type="button" class="vq-b" data-v="next">🎲 다른 숫자로</button></div><div class="vq-res"></div></div>
 </section>
-<section class="card" id="s5">
+<section class="card" id="s19">
 <h2>9주차 · 빌드 · 메모리 공간 · 변수의 유효범위</h2>
 <table class="ref">
 <tbody>
@@ -2066,7 +2659,7 @@ int main() {
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-9주차.html">9주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s6">
+<section class="card" id="s20">
 <h2>10주차 · 배열 (ch08) — 🔥 ✍️ “8페이지 왼쪽 → 오른쪽 = 기말고사 문제” · “14페이지 sizeof”</h2>
 <table class="ref">
 <tbody>
@@ -2082,7 +2675,7 @@ int main() {
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-10주차.html">10주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s7">
+<section class="card" id="s21">
 <h2>11주차 · 포인터 1 — 🔥 ✍️ “오류 수정 · 9페이지 · 12페이지 외우기 · 실습 코드 = 실행 결과 문제 · pointer-03 숫자만 바꿔서”</h2>
 <table class="ref">
 <tbody>
@@ -2107,7 +2700,7 @@ int main() {
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-11주차.html">11주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s8">
+<section class="card" id="s22">
 <h2>12주차 · 포인터 2 — 🔥 ✍️ “오늘 한 거 실행결과 = 기말고사 예상문제 · 강의자료 5페이지 · ++ptr 1004 / 1001 · 포인터 종류 공부하기”</h2>
 <table class="ref">
 <tbody>
@@ -2125,7 +2718,7 @@ int main() {
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-12주차.html">12주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s9">
+<section class="card" id="s23">
 <h2>13주차 · 문자열 — 🔥 ✍️ “시험 방식 3가지 · 범위 1 ~ 12장(구조체 X) · 13페이지 Hello 2가지 · scanf &amp; 오류 · 포인터로 같이 바뀜”</h2>
 <table class="ref">
 <tbody>
@@ -2140,7 +2733,7 @@ int main() {
 </tbody></table>
 <div class="tip">자세한 코드 · 실행 결과는 <a href="프로그래밍언어실습-13주차.html">13주차</a> · 문제는 🔒 실제시험.</div>
 </section>
-<section class="card" id="s10">
+<section class="card" id="s24">
 <h2>🔥 포인터 익히기 10단계 — 출력결과 맞히기</h2>
 <div class="tip">시험 방식 ① “실행결과를 작성하시오” 연습 — 1단계(&amp; · *) → 10단계(문자열) 순서로 조금씩 어려워져요 · 코드 줄마다 주석에 값 → 과정 → 결과 · 결과는 이 맥(clang)에서 직접 실행한 값 · <b>주석 없이 풀어 보기 = 🔒 실제시험 “15주차 — 포인터 익히기 10단계”</b> (채점까지)</div>
 <h3>1단계 · 주소와 값 (&amp; · *)</h3>
@@ -2368,7 +2961,7 @@ Jello</code></pre>
 <ul><li>💡 a1 = 배열 · a2 = 포인터 → 둘 다 <code>%s</code> 로 Hello · <code>a2 + 1</code> = 1번 글자부터 → <b>ello</b> · <code>*a2</code> = 'H' · <code>*(a2 + 4)</code> = 'o' → <b>Ho</b> · 배열은 글자를 바꿀 수 있음 <code>a1[0] = 'J'</code> → <b>Jello</b> (⚠️ <code>a2[0] = 'J'</code> 처럼 문자열 상수를 바꾸면 이 맥에서는 실행 중 멈춤(Bus error) · C 표준에서 정의되지 않은 동작)</li></ul>
 </details>
 </section>
-<section class="card" id="s11">
+<section class="card" id="s25">
 <h2>🎓 튜터링 3회차 (10/29) — 배열 합 · 0~9 중 가장 많이 나온 수</h2>
 <div class="tip">자료: <code>8주차_중간고사/튜터링/3회차/c.c</code> (CP949 저장) — 프로그램 2개가 한 파일에 있어요(앞의 1개는 주석 처리). 아래 결과는 전부 <b>직접 컴파일 · 실행</b>한 값이에요.<br>기말 범위 <b>8장 배열</b>과 이어지는 문제 (중간고사 때 ✍️ “배열을 기말고사에”). <code>#define _CRT_SECURE_NO_WARNINGS</code> 는 이번엔 밑줄까지 맞게 썼어요 (1회차 정정 참고).</div>
 <h3>① 정수 4개 입력 → 그대로 출력 · 합</h3>
